@@ -32,11 +32,10 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
 
-            @if ($item->category->parent->id)
-                <li class="breadcrumb-item"><a href="/boards/{{ $item->category->parent->id }}">{{ $item->category->parent->name }}</a></li>
-            @endif
+            @foreach ($item->category->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ $item->title }}</li>
         </ol>
     </nav>

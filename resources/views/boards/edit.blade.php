@@ -8,11 +8,10 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
 
-            @if ($item->category->parent->id)
-                <li class="breadcrumb-item"><a href="/boards/{{ $item->category->parent->id }}">{{ $item->category->parent->name }}</a></li>
-            @endif
+            @foreach ($item->category->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/items/{{ $item->id }}">{{ $item->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('boards.edit_item') }}</li>
         </ol>
@@ -42,17 +41,11 @@
 
                 <?php $inputCategory = (int) getInput('bid', $item->board_id); ?>
                 <select class="form-select" id="inputCategory" name="bid">
-
                     @foreach ($boards as $data)
-                        <option value="{{ $data->id }}"{{ ($inputCategory === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
-
-                        @if ($data->children->isNotEmpty())
-                            @foreach ($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ ($inputCategory === $datasub->id && ! $data->closed) ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->name }}</option>
-                            @endforeach
-                        @endif
+                        <option value="{{ $data->id }}"{{ ($inputCategory === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $data->depth) }} {{ $data->name }}
+                        </option>
                     @endforeach
-
                 </select>
                 <div class="invalid-feedback">{{ textError('bid') }}</div>
             </div>

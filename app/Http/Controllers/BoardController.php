@@ -94,11 +94,7 @@ class BoardController extends Controller
             abort(403);
         }
 
-        $boards = Board::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $boards = (new Board())->getChildren();
 
         if ($boards->isEmpty()) {
             abort(200, __('boards.categories_not_created'));
@@ -237,11 +233,7 @@ class BoardController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        $boards = Board::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $boards = $item->category->getChildren();
 
         return view('boards/edit', compact('item', 'boards'));
     }

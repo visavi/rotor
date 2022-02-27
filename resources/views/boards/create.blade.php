@@ -20,16 +20,10 @@
 
             <select class="form-select" id="inputCategory" name="bid">
                 @foreach ($boards as $board)
-
-                    <option value="{{ $board->id }}"{{ ($bid === $board->id && ! $board->closed) ? ' selected' : '' }}{{ $board->closed ? ' disabled' : '' }}>{{ $board->name }}</option>
-
-                    @if ($board->children->isNotEmpty())
-                        @foreach ($board->children as $boardsub)
-                            <option value="{{ $boardsub->id }}"{{ $bid === $boardsub->id && ! $boardsub->closed ? ' selected' : '' }}{{ $boardsub->closed ? ' disabled' : '' }}>– {{ $boardsub->name }}</option>
-                        @endforeach
-                    @endif
+                    <option value="{{ $board->id }}"{{ ($bid === $board->id && ! $board->closed) ? ' selected' : '' }}{{ $board->closed ? ' disabled' : '' }}>
+                        {{ str_repeat('–', $board->depth) }} {{ $board->name }}
+                    </option>
                 @endforeach
-
             </select>
             <div class="invalid-feedback">{{ textError('category') }}</div>
         </div>

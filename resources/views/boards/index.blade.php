@@ -28,14 +28,13 @@
             @if ($board)
                 <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
 
-                @if ($board->parent->id)
-                    <li class="breadcrumb-item"><a href="/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
-                @endif
-                <li class="breadcrumb-item active">{{ $board->name }}</li>
-
-                @if (isAdmin())
-                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id  }}?page={{ $items->currentPage() }}">{{ __('main.management') }}</a></li>
-                @endif
+                @foreach ($board->getParents() as $parent)
+                    @if ($loop->last)
+                        <li class="breadcrumb-item active">{{ $parent->name }}</li>
+                    @else
+                        <li class="breadcrumb-item"><a href="/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                    @endif
+                @endforeach
             @else
                 <li class="breadcrumb-item active">{{ __('index.boards') }}</li>
             @endif

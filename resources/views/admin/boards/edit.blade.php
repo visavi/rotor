@@ -10,11 +10,10 @@
             <li class="breadcrumb-item"><a href="/admin/boards">{{ __('index.boards') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/boards/categories">{{ __('boards.categories') }}</a></li>
 
-            @if ($board->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->parent->id }}">{{ $board->parent->name }}</a></li>
-            @endif
+            @foreach ($board->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/admin/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/admin/boards/{{ $board->id }}">{{ $board->name }}</a></li>
             <li class="breadcrumb-item active">{{ __('boards.edit_category') }}</li>
         </ol>
     </nav>
@@ -33,12 +32,9 @@
                     <option value="0">---</option>
 
                     @foreach ($boards as $data)
-
-                        @if ($data->id === $board->id)
-                            @continue
-                        @endif
-
-                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->name }}</option>
+                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed || $data->id === $board->id ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $data->depth) }} {{ $data->name }}
+                        </option>
                     @endforeach
 
                 </select>

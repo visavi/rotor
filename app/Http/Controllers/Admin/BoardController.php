@@ -132,11 +132,6 @@ class BoardController extends AdminController
             abort(404, __('boards.category_not_exist'));
         }
 
-        $boards = Board::query()
-            ->where('parent_id', 0)
-            ->orderBy('sort')
-            ->get();
-
         if ($request->isMethod('post')) {
             $parent = int($request->input('parent'));
             $name   = $request->input('name');
@@ -167,6 +162,8 @@ class BoardController extends AdminController
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
+
+        $boards = $board->getChildren();
 
         return view('admin/boards/edit', compact('boards', 'board'));
     }
@@ -276,11 +273,7 @@ class BoardController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $boards = Board::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $boards = $item->category->getChildren();
 
         return view('/admin/boards/edit_item', compact('item', 'boards'));
     }
