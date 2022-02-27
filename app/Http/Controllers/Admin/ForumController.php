@@ -94,11 +94,6 @@ class ForumController extends AdminController
             abort(404, __('forums.forum_not_exist'));
         }
 
-        $forums = Forum::query()
-            ->where('parent_id', 0)
-            ->orderBy('sort')
-            ->get();
-
         if ($request->isMethod('post')) {
             $parent      = int($request->input('parent'));
             $title       = $request->input('title');
@@ -132,6 +127,8 @@ class ForumController extends AdminController
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
+
+        $forums = $forum->getChildren();
 
         return view('admin/forums/edit', compact('forums', 'forum'));
     }
@@ -346,11 +343,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $forums = Forum::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $forums = $topic->forum->getChildren();
 
         return view('admin/forums/move_topic', compact('forums', 'topic'));
     }

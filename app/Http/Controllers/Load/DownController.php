@@ -77,11 +77,7 @@ class DownController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $categories = Load::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $categories = (new Load())->getChildren();
 
         if ($categories->isEmpty()) {
             abort(200, __('loads.empty_loads'));
@@ -280,11 +276,7 @@ class DownController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        $categories = Load::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $categories = $down->category->getChildren();
 
         return view('loads/edit', compact('categories', 'down', 'cid'));
     }

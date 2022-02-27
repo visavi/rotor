@@ -17,11 +17,10 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/loads">{{ __('index.loads') }}</a></li>
 
-            @if ($down->category->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/loads/{{ $down->category->parent->id }}">{{ $down->category->parent->name }}</a></li>
-            @endif
+            @foreach ($down->category->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/admin/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/admin/loads/{{ $down->category->id }}">{{ $down->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.edit_down') }}</li>
         </ol>
     </nav>

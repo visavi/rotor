@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\CategoryTreeTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Forum extends BaseModel
 {
+    use CategoryTreeTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -88,9 +91,9 @@ class Forum extends BaseModel
             ->first();
 
         $this->update([
-            'count_topics'  => $topic ? (int) $topic->count_topics : 0,
-            'count_posts'   => $topic ? (int) $topic->count_posts : 0,
-            'last_topic_id' => $lastTopic ? $lastTopic->id : 0,
+            'count_topics'  => (int) $topic?->count_topics,
+            'count_posts'   => (int) $topic?->count_posts,
+            'last_topic_id' => $lastTopic->id ?? 0,
         ]);
 
         if ($this->parent->id) {
@@ -103,7 +106,7 @@ class Forum extends BaseModel
                 ->first();
 
             $this->parent()->update([
-                'last_topic_id' => $lastTopic ? $lastTopic->id : 0
+                'last_topic_id' => $lastTopic->id ?? 0
             ]);
         }
     }

@@ -12,11 +12,10 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
 
-            @if ($article->category->parent->id)
-                <li class="breadcrumb-item"><a href="/blogs/{{ $article->category->parent->id }}">{{ $article->category->parent->name }}</a></li>
-            @endif
+            @foreach ($article->category->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.comments') }}</li>
         </ol>

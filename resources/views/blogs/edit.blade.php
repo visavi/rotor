@@ -8,11 +8,10 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
 
-            @if ($article->category->parent->id)
-                <li class="breadcrumb-item"><a href="/blogs/{{ $article->category->parent->id }}">{{ $article->category->parent->name }}</a></li>
-            @endif
+            @foreach ($article->category->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_edit_article') }}</li>
         </ol>
@@ -30,13 +29,9 @@
                 <select class="form-select" id="inputCategory" name="cid">
 
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
-
-                        @if ($category->children->isNotEmpty())
-                            @foreach ($category->children as $categoriesub)
-                                <option value="{{ $categoriesub->id }}"{{ ($inputCategory === $categoriesub->id && ! $category->closed) ? ' selected' : '' }}{{ $categoriesub->closed ? ' disabled' : '' }}>– {{ $categoriesub->name }}</option>
-                            @endforeach
-                        @endif
+                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $category->depth) }} {{ $category->name }}
+                        </option>
                     @endforeach
 
                 </select>

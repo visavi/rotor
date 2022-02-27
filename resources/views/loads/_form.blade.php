@@ -5,13 +5,9 @@
 
         <select class="form-select" id="inputCategory" name="category">
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}"{{ ($cid === $category->id || $down->category_id === $category->id) && ! $category->closed ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
-
-                @if ($category->children->isNotEmpty())
-                    @foreach ($category->children as $child)
-                        <option value="{{ $child->id }}"{{ ($cid === $child->id || $down->category_id === $child->id) && ! $child->closed ? ' selected' : '' }}{{ $child->closed ? ' disabled' : '' }}>– {{ $child->name }}</option>
-                    @endforeach
-                @endif
+                <option value="{{ $category->id }}"{{ ($cid === $category->id || $down->category_id === $category->id) && ! $category->closed ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>
+                    {{ str_repeat('–', $category->depth) }} {{ $category->name }}
+                </option>
             @endforeach
         </select>
         <div class="invalid-feedback">{{ textError('category') }}</div>

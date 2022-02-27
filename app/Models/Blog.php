@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\CategoryTreeTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class Blog extends BaseModel
 {
+    use CategoryTreeTrait;
+
     /**
      * Indicates if the model should be timestamped.
      *

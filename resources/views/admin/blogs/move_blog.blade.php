@@ -9,11 +9,10 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/blogs">{{ __('index.blogs') }}</a></li>
 
-            @if ($article->category->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $article->category->parent->id }}">{{ $article->category->parent->name }}</a></li>
-            @endif
+            @foreach ($article->category->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/admin/blogs/{{ $article->category->id }}">{{ $article->category->name }}</a></li>
             <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_move_article') }}</li>
         </ol>
@@ -31,13 +30,9 @@
                 <select class="form-select" id="inputCategory" name="cid">
 
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
-
-                        @if ($category->children->isNotEmpty())
-                            @foreach ($category->children as $categorysub)
-                                <option value="{{ $categorysub->id }}"{{ ($inputCategory === $categorysub->id && !$categorysub->closed) ? ' selected' : '' }}{{ $categorysub->closed ? ' disabled' : '' }}>– {{ $categorysub->name }}</option>
-                            @endforeach
-                        @endif
+                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed && $category->id !== $article->category_id) ? ' selected' : '' }}{{ $category->closed || $category->id === $article->category_id ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $category->depth) }} {{ $category->name }}
+                        </option>
                     @endforeach
 
                 </select>

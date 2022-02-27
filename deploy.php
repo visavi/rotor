@@ -46,7 +46,7 @@ set('writable_dirs', [
 ]);
 set('allow_anonymous_stats', false);
 
-set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --classmap-authoritative');
+set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader');
 
 set('artisan', static function () {
     return parse('{{bin/php}} {{release_path}}/artisan');
@@ -69,12 +69,6 @@ host('hostname')
     ]);
 
 // Tasks
-desc('PHP reload');
-task('reload:php-fpm', static function () {
-    run('sudo /usr/sbin/service php8.0-fpm reload');
-})
-    ->select('role=php');
-
 desc('Env copy');
 task('deploy:env:copy', static function () {
     run('cp -n {{release_path}}/.env.example {{release_path}}/.env');
@@ -104,29 +98,19 @@ task('cache:data', static function () {
     ->select('stage=production')
     ->once();
 
-desc('Deploy your project');
-task('deploy', [
-    'deploy:info',
-    'deploy:prepare',
-    'deploy:lock',
-    'deploy:release',
-    'deploy:update_code',
-    'deploy:env:copy',
-    'deploy:shared',
-    'deploy:writable',
-    'deploy:vendors',
-    'deploy:clear_paths',
-    'deploy:symlink',
-    'deploy:unlock',
-    'deploy:cleanup',
-    'deploy:success'
-]);
+desc('PHP reload');
+task('reload:php-fpm', static function () {
+    run('sudo /usr/sbin/service php8.0-fpm reload');
+})
+    ->select('role=php');
+
+after('deploy:update_code', 'deploy:env:copy');
 
 // Npm ci and run
 after('deploy:update_code', 'deploy:npm');
 
-// [Optional] If deploy fails automatically unlock.
-after('deploy:failed', 'deploy:unlock');
+// Migrate database before symlink new release.
+before('deploy:symlink', 'database:migrate');
 
 // Cache
 before('deploy:success', 'cache:data');
@@ -134,5 +118,12 @@ before('deploy:success', 'cache:data');
 // Reload php-fpm
 before('deploy:success', 'reload:php-fpm');
 
-// Migrate database before symlink new release.
-before('deploy:symlink', 'database:migrate');
+// If deploy fails automatically unlock.
+after('deploy:failed', 'deploy:unlock');
+
+desc('Deploy your project');
+task('deploy', [
+    'deploy:prepare',
+    'deploy:vendors',
+    'deploy:publish'
+]);

@@ -18,16 +18,53 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/forums">{{ __('index.forums') }}</a></li>
 
-            @if ($forum->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/forums/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a></li>
-            @endif
-
-            <li class="breadcrumb-item active">{{ $forum->title }}</li>
+            @foreach ($forum->getParents() as $parent)
+                @if ($loop->last)
+                    <li class="breadcrumb-item active">{{ $parent->title }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="/admin/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+                @endif
+            @endforeach
         </ol>
     </nav>
 @stop
 
 @section('content')
+    @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
+        @foreach ($forum->children as $child)
+            <div class="section mb-3 shadow border-start border-info border-5">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="section-title">
+                            <i class="fa fa-file-alt fa-lg text-muted"></i>
+                            <a href="/admin/forums/{{ $child->id }}">{{ $child->title }}</a>
+                            ({{ $child->count_topics }}/{{ $child->count_posts }})
+                        </div>
+                    </div>
+
+                    @if (isAdmin('boss'))
+                        <div class="float-end">
+                            <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/forums/delete/{{ $forum->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                        </div>
+                    @endif
+                </div>
+
+                @if ($child->lastTopic->id)
+                    <div class="section-content">
+                        {{ __('forums.topic') }}: <a href="/admin/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
+                        @if ($child->lastTopic->lastPost->id)
+                            {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                        @endif
+                    </div>
+                @else
+                    <div>{{ __('forums.empty_topics') }}</div>
+                @endif
+            </div>
+        @endforeach
+        <hr>
+    @endif
+
     @if ($topics->isNotEmpty())
         @foreach ($topics as $topic)
             <div class="section mb-3 shadow" id="topic_{{ $topic->id }}">

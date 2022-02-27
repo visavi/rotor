@@ -24,11 +24,13 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
 
-            @if ($forum->parent->id)
-                <li class="breadcrumb-item"><a href="/forums/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a></li>
-            @endif
-
-            <li class="breadcrumb-item active">{{ $forum->title }}</li>
+            @foreach ($forum->getParents() as $parent)
+                @if ($loop->last)
+                    <li class="breadcrumb-item active">{{ $parent->title }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+                @endif
+            @endforeach
         </ol>
     </nav>
 @stop

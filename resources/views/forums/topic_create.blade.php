@@ -21,13 +21,9 @@
                 <select class="form-select" id="inputForum" name="fid">
 
                     @foreach ($forums as $data)
-                        <option value="{{ $data->id }}"{{ $fid === $data->id  && ! $data->closed ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->title }}</option>
-
-                        @if ($data->children->isNotEmpty())
-                            @foreach ($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ $fid === $datasub->id  && ! $datasub->closed ? ' selected' : '' }}{{ $datasub->closed ? ' disabled' : '' }}>– {{ $datasub->title }}</option>
-                            @endforeach
-                        @endif
+                        <option value="{{ $data->id }}"{{ $fid === $data->id  && ! $data->closed ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $data->depth) }} {{ $data->title }}
+                        </option>
                     @endforeach
 
                 </select>

@@ -147,7 +147,7 @@ class Article extends BaseModel
      */
     public function shortText(int $words = 100): HtmlString
     {
-        $more = view('app/_more', ['link' => '/articles/'. $this->id]);
+        $more = view('app/_more', ['link' => '/articles/' . $this->id]);
 
         if (strpos($this->text, '[cut]') !== false) {
             $this->text = bbCode(current(explode('[cut]', $this->text)));

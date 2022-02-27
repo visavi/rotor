@@ -23,13 +23,12 @@
                 <?php $inputParent = (int) getInput('parent', $forum->parent_id); ?>
 
                 <select class="form-select" id="parent" name="parent">
-                    <option value="0">---</option>
-                    @foreach ($forums as $data)
-                        @if ($data->id === $forum->id)
-                            @continue
-                        @endif
+                    <option value="0">–––</option>
 
-                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed ? ' disabled' : '' }}>{{ $data->title }}</option>
+                    @foreach ($forums as $data)
+                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed)  ? ' selected' : '' }}{{ $data->closed || $data->id === $forum->id ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $data->depth) }} {{ $data->title }}
+                        </option>
                     @endforeach
                 </select>
                 <div class="invalid-feedback">{{ textError('parent') }}</div>

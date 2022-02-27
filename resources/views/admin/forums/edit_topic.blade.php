@@ -9,11 +9,10 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/forums">{{ __('index.forums') }}</a></li>
 
-            @if ($topic->forum->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/forums/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
-            @endif
+            @foreach ($topic->forum->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/admin/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/admin/forums/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/topics/{{ $topic->id }}">{{ $topic->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_edit_topic') }}</li>
         </ol>

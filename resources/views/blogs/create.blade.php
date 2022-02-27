@@ -23,13 +23,9 @@
                 <select class="form-select" id="inputCategory" name="cid">
 
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>{{ $category->name }}</option>
-
-                        @if ($category->children->isNotEmpty())
-                            @foreach ($category->children as $categorysub)
-                                <option value="{{ $categorysub->id }}"{{ ($inputCategory === $categorysub->id && ! $categorysub->closed) ? ' selected' : '' }}{{ $categorysub->closed ? ' disabled' : '' }}>– {{ $categorysub->name }}</option>
-                            @endforeach
-                        @endif
+                        <option value="{{ $category->id }}"{{ ($inputCategory === $category->id && ! $category->closed) ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $category->depth) }} {{ $category->name }}
+                        </option>
                     @endforeach
 
                 </select>

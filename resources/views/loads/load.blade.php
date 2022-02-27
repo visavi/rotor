@@ -25,11 +25,13 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
 
-            @if ($category->parent->id)
-                <li class="breadcrumb-item"><a href="/loads/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
-            @endif
-
-            <li class="breadcrumb-item active">{{ $category->name }}</li>
+            @foreach ($category->getParents() as $parent)
+                @if ($loop->last)
+                    <li class="breadcrumb-item active">{{ $parent->name }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                @endif
+            @endforeach
         </ol>
     </nav>
 @stop

@@ -86,15 +86,11 @@ class ForumController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood)
+    public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         $fid = int($request->input('fid'));
 
-        $forums = Forum::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $forums = (new Forum())->getChildren();
 
         if ($forums->isEmpty()) {
             abort(200, __('forums.empty_forums'));

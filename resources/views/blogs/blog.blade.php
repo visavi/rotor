@@ -24,16 +24,35 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
 
-            @if ($category->parent->id)
-                <li class="breadcrumb-item"><a href="/blogs/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
-            @endif
-
-            <li class="breadcrumb-item active">{{ $category->name }}</li>
+            @foreach ($category->getParents() as $parent)
+                @if ($loop->last)
+                    <li class="breadcrumb-item active">{{ $parent->name }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                @endif
+            @endforeach
         </ol>
     </nav>
 @stop
 
 @section('content')
+    @if ($articles->onFirstPage() && $category->children->isNotEmpty())
+        @foreach ($category->children as $child)
+            <div class="section mb-3 shadow border-start border-info border-5">
+                <div class="section-header d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="section-title">
+                            <i class="fa fa-file-alt fa-lg text-muted"></i>
+                            <a href="/blogs/{{ $child->id }}">{{ $child->name }}</a>
+                            ({{ $child->count_articles }})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+        <hr>
+    @endif
+
     @if ($articles->isNotEmpty())
         @foreach ($articles as $article)
             <div class="section mb-3 shadow">

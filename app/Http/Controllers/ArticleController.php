@@ -116,7 +116,7 @@ class ArticleController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -177,11 +177,7 @@ class ArticleController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        $categories = Blog::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $categories = $article->category->getChildren();
 
         return view('blogs/edit', compact('article', 'categories'));
     }
@@ -213,7 +209,7 @@ class ArticleController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood)
+    public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         $cid = int($request->input('cid'));
 
@@ -225,13 +221,9 @@ class ArticleController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $categories = Blog::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $categories = (new Blog())->getChildren();
 
-        if (! $categories) {
+        if ($categories->isEmpty()) {
             abort(404, __('blogs.categories_not_created'));
         }
 
@@ -310,7 +302,7 @@ class ArticleController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         /** @var Article $article */
         $article = Article::query()->find($id);
@@ -375,7 +367,7 @@ class ArticleController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator)
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -548,7 +540,7 @@ class ArticleController extends Controller
      *
      * @return View|RedirectResponse
      */
-    public function searchTag(string $tag, Request $request)
+    public function searchTag(string $tag, Request $request): View|RedirectResponse
     {
         $tag = urldecode($tag);
 

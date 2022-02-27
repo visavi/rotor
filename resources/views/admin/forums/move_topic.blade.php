@@ -9,11 +9,10 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/forums">{{ __('index.forums') }}</a></li>
 
-            @if ($topic->forum->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/forums/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
-            @endif
+            @foreach ($topic->forum->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/admin/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+            @endforeach
 
-            <li class="breadcrumb-item"><a href="/admin/forums/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_move_topic') }} {{ $topic->title }}</li>
         </ol>
     </nav>
@@ -30,15 +29,10 @@
             <div class="mb-3{{ hasError('fid') }}">
                 <label for="fid" class="form-label">{{ __('forums.forum') }}:</label>
                 <select class="form-select" id="fid" name="fid">
-
                     @foreach ($forums as $data)
-                        <option value="{{ $data->id }}"{{ $data->closed || $topic->forum_id === $data->id ? ' disabled' : '' }}>{{ $data->title }}</option>
-
-                        @if ($data->children->isNotEmpty())
-                            @foreach ($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{{ $datasub->closed || $topic->forum_id === $datasub->id ? ' disabled' : '' }}>– {{ $datasub->title }}</option>
-                            @endforeach
-                        @endif
+                        <option value="{{ $data->id }}"{{ $data->closed || $topic->forum_id === $data->id ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $data->depth) }} {{ $data->title }}
+                        </option>
                     @endforeach
 
                 </select>

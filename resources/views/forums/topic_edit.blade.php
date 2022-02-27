@@ -8,11 +8,9 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
 
-            @if ($topic->forum->parent->id)
-                <li class="breadcrumb-item"><a href="/forums/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a></li>
-            @endif
-
-            <li class="breadcrumb-item"><a href="/forums/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a></li>
+            @foreach ($topic->forum->getParents() as $parent)
+                <li class="breadcrumb-item"><a href="/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+            @endforeach
 
             <li class="breadcrumb-item"><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_edit_topic') }}</li>

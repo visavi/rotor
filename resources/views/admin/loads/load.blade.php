@@ -20,11 +20,13 @@
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/loads">{{ __('index.loads') }}</a></li>
 
-            @if ($category->parent->id)
-                <li class="breadcrumb-item"><a href="/admin/loads/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
-            @endif
-
-            <li class="breadcrumb-item active">{{ $category->name }}</li>
+            @foreach ($category->getParents() as $parent)
+                @if ($loop->last)
+                    <li class="breadcrumb-item active">{{ $parent->name }}</li>
+                @else
+                    <li class="breadcrumb-item"><a href="/admin/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                @endif
+            @endforeach
         </ol>
     </nav>
 @stop

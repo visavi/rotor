@@ -91,10 +91,7 @@ class ArticleController extends AdminController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $categories = Blog::query()
-            ->where('parent_id', 0)
-            ->orderBy('sort')
-            ->get();
+        $categories = $category->getChildren();
 
         if ($request->isMethod('post')) {
             $parent = int($request->input('parent'));
@@ -319,11 +316,7 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $categories = Blog::query()
-            ->where('parent_id', 0)
-            ->with('children')
-            ->orderBy('sort')
-            ->get();
+        $categories = (new Blog())->getChildren();
 
         return view('admin/blogs/move_blog', compact('article', 'categories'));
     }

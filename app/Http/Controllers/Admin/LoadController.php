@@ -92,11 +92,6 @@ class LoadController extends AdminController
             abort(404, __('loads.load_not_exist'));
         }
 
-        $loads = Load::query()
-            ->where('parent_id', 0)
-            ->orderBy('sort')
-            ->get();
-
         if ($request->isMethod('post')) {
             $parent = int($request->input('parent'));
             $name   = $request->input('name');
@@ -127,6 +122,8 @@ class LoadController extends AdminController
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
+
+        $loads = $load->getChildren();
 
         return view('admin/loads/edit', compact('loads', 'load'));
     }
@@ -332,11 +329,7 @@ class LoadController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $categories = Load::query()
-            ->where('parent_id', 0)
-            ->with('children', 'new', 'children.new')
-            ->orderBy('sort')
-            ->get();
+        $categories = $down->category->getChildren();
 
         return view('admin/loads/edit_down', compact('categories', 'down', 'cid'));
     }
