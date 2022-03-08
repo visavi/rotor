@@ -1033,6 +1033,17 @@ function truncateDescription($value, int $words = 20, string $end = ''): string
 }
 
 /**
+ * Get the number of words a string contains.
+ *
+ * @param  string  $string
+ * @return int
+ */
+function wordCount($string): int
+{
+    return count(preg_split('/[^\s*+]+/u', $string));
+}
+
+/**
  * Возвращает код платной рекламы
  *
  * @param string $place

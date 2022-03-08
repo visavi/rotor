@@ -170,8 +170,10 @@ class Down extends BaseModel
      */
     public function shortText(int $words = 50): HtmlString
     {
-        if (strlen($this->text) > $words) {
+        if (wordCount($this->text) > $words) {
             $this->text = bbCodeTruncate($this->text, $words);
+        } else {
+            $this->text = bbCode($this->text);
         }
 
         return new HtmlString($this->text);

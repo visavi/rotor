@@ -97,7 +97,7 @@ class News extends BaseModel
     {
         $more = null;
 
-        if (strpos($this->text, '[cut]') !== false) {
+        if (str_contains($this->text, '[cut]')) {
             $this->text = current(explode('[cut]', $this->text));
             $more = view('app/_more', ['link' => '/news/' . $this->id]);
         }

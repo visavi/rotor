@@ -149,13 +149,19 @@ class Article extends BaseModel
     {
         $more = view('app/_more', ['link' => '/articles/' . $this->id]);
 
-        if (strpos($this->text, '[cut]') !== false) {
+        if (str_contains($this->text, '[cut]')) {
             $this->text = bbCode(current(explode('[cut]', $this->text)));
-        } else {
-            $this->text = bbCodeTruncate($this->text, $words);
+
+            return new HtmlString($this->text . $more);
         }
 
-        return new HtmlString($this->text . $more);
+        if (wordCount($this->text) > $words) {
+            $this->text = bbCodeTruncate($this->text, $words);
+
+            return new HtmlString($this->text . $more);
+        }
+
+        return new HtmlString(bbCode($this->text));
     }
 
     /**
