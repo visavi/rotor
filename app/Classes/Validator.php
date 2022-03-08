@@ -364,7 +364,7 @@ class Validator
         }
 
         $validator = new EmailValidator();
-        $checkEmail = $validator->isValid($input, new RFCValidation());
+        $checkEmail = $validator->isValid((string) $input, new RFCValidation());
 
         if (! $checkEmail || filter_var($input, FILTER_VALIDATE_EMAIL) === false) {
             $this->addError($label);
