@@ -15,7 +15,6 @@
 
 @section('content')
     @foreach ($boards as $board)
-
         <div class="section mb-3 shadow">
             <div class="section-title">
                 <i class="fa fa-folder-open"></i> <a href="/admin/boards/{{ $board->id }}">{{ $board->name }}</a>
