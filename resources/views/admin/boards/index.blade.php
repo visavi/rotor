@@ -41,8 +41,10 @@
                     <div class="col-md-3 col-6">
                         <a href="/admin/boards/{{ $board->id }}">{{ $board->name }}</a> {{ $board->count_items }}
 
-                        <a href="/admin/boards/edit/{{ $board->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/boards/delete/{{ $board->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                        @if (isAdmin('boss'))
+                            <a href="/admin/boards/edit/{{ $board->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/boards/delete/{{ $board->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                        @endif
                     </div>
                 @endforeach
             @endforeach

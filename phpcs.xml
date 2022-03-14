@@ -5,7 +5,7 @@
     <arg name="colors"/>
     <arg name="encoding" value="utf-8"/>
     <config name="installed_paths" value="../../slevomat/coding-standard"/>
-    <config name="php_version" value="7.3"/>
+    <config name="php_version" value="8.0"/>
 
     <!-- Стандартный набор правил PSR2  -->
     <rule ref="PSR2">
@@ -44,4 +44,20 @@
     <rule ref="Generic.PHP.DisallowShortOpenTag"/> <!-- Запрет коротких тегов  -->
 
     <file>app</file>
+    <file>config</file>
+    <file>public</file>
+    <file>resources</file>
+    <file>routes</file>
+    <file>tests</file>
+
+    <exclude-pattern>*/database/*</exclude-pattern>
+    <exclude-pattern>*/cache/*</exclude-pattern>
+    <exclude-pattern>*/*.js</exclude-pattern>
+    <exclude-pattern>*/*.css</exclude-pattern>
+    <exclude-pattern>*/*.xml</exclude-pattern>
+    <exclude-pattern>*/*.blade.php</exclude-pattern>
+    <exclude-pattern>*/autoload.php</exclude-pattern>
+    <exclude-pattern>*/storage/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/migrations/*</exclude-pattern>
 </ruleset>
