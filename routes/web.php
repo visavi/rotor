@@ -929,7 +929,7 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
     });
 });
 
-if (class_exists(InstallController::class)) {
+if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
     Route::controller(InstallController::class)
         ->prefix('install')
         ->withoutMiddleware('web')

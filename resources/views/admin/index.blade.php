@@ -102,7 +102,7 @@
         </div>
     @endif
 
-    @if (class_exists(\App\Http\Controllers\InstallController::class))
+    @if (file_exists(app_path('Http/Controllers/InstallController.php')))
         <div class="alert alert-danger">
             <i class="fas fa-exclamation-triangle"></i> {!! __('admin.exists_install') !!}
         </div>
