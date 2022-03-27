@@ -260,7 +260,7 @@
                 {{ bbCode($post->text) }}
             </div>
 
-            @if ($post->files->isNotEmpty())
+            @if ($post->links || $post->files->isNotEmpty())
                 @foreach ($post->getFiles() as $file)
                     <div class="media-file mb-3">
                         @if ($file->hash && file_exists(public_path($file->hash)))
@@ -288,10 +288,10 @@
                 @endforeach
 
                 @if ($post->links && $allowDownload)
-                    @foreach ($post->links as $link)
+                    @foreach ($post->links as $linkId => $link)
                         <div class="media-file mb-3">
                             <b>{{ basename($link) }}</b><br>
-                            <a class="btn btn-sm btn-success" href="{{ $link }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
+                            <a class="btn btn-sm btn-success" href="/downs/download/{{ $post->id }}/{{ $linkId }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                         </div>
                     @endforeach
                 @endif

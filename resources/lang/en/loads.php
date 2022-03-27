@@ -46,6 +46,7 @@ return [
     'down_closed'           => 'Uploading files is prohibited by the site administration!',
     'load_not_exist'        => 'This section does not exist!',
     'down_not_exist'        => 'This file does not exist!',
+    'link_not_exist'        => 'This link does not exist!',
     'downs_not_found'       => 'Files not found!',
     'down_not_verified'     => 'This file has not yet been verified by the moderator!',
     'down_verified'         => 'This file has already been checked by the moderator!',

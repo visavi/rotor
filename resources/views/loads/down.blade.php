@@ -86,10 +86,10 @@
             @endforeach
 
             @if ($down->links && $allowDownload)
-                @foreach ($down->links as $link)
+                @foreach ($down->links as $linkId => $link)
                     <div class="media-file mb-3">
                         <b>{{ basename($link) }}</b><br>
-                        <a class="btn btn-success" href="{{ $link }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
+                        <a class="btn btn-success" href="/downs/download/{{ $down->id }}/{{ $linkId }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
                     </div>
                 @endforeach
             @endif

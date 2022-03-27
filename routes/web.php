@@ -287,9 +287,10 @@ Route::prefix('downs')->group(function () {
     Route::get('/comments', [LoadNewController::class, 'comments']);
     Route::get('/active/files', [LoadActiveController::class, 'files']);
     Route::get('/active/comments', [LoadActiveController::class, 'comments']);
+    Route::get('/download/{id}', [DownController::class, 'download']);
+    Route::get('/download/{id}/{lid}', [DownController::class, 'downloadLink'])->whereNumber('lid');
     Route::match(['get', 'post'], '/edit/{id}', [DownController::class, 'edit']);
     Route::match(['get', 'post'], '/create', [DownController::class, 'create']);
-    Route::match(['get', 'post'], '/download/{id}', [DownController::class, 'download']);
     Route::match(['get', 'post'], '/comments/{id}', [DownController::class, 'comments']);
     Route::match(['get', 'post'], '/edit/{id}/{cid}', [DownController::class, 'editComment'])->whereNumber('cid');
 });

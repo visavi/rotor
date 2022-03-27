@@ -352,6 +352,45 @@ class DownController extends Controller
     }
 
     /**
+     * Скачивание файла по ссылке
+     *
+     * @param int       $id
+     * @param int       $linkId
+     * @param Validator $validator
+     *
+     * @return Response
+     */
+    public function downloadLink(int $id, int $linkId, Validator $validator): Response
+    {
+        /** @var Down $down */
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, __('loads.down_not_exist'));
+        }
+
+        if (! (getUser() || setting('down_guest_download'))) {
+            abort(403, __('loads.download_authorized'));
+        }
+
+        if (! $down->active && ! isAdmin(User::ADMIN)) {
+            abort(200, __('loads.down_not_verified'));
+        }
+
+        $validator->true($down->links[$linkId] ?? false, __('loads.down_not_exist'));
+
+        if ($validator->isValid()) {
+            Reader::countingStat($down);
+
+            return response()->redirectTo($down->links[$linkId]);
+        }
+
+        setFlash('danger', $validator->getErrors());
+
+        return redirect('downs/' . $down->id);
+    }
+
+    /**
      * Комментарии
      *
      * @param int       $id
