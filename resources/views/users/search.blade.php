@@ -25,33 +25,33 @@
         </form>
     </div>
 
-    <a class="badge rounded-pill bg-success" href="/searchusers/1">0-9</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/a">A</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/b">B</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/c">C</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/d">D</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/e">E</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/f">F</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/g">G</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/h">H</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/i">I</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/j">J</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/k">K</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/l">L</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/m">M</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/n">N</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/o">O</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/p">P</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/q">Q</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/r">R</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/s">S</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/t">T</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/u">U</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/v">V</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/w">W</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/x">X</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/y">Y</a>
-    <a class="badge rounded-pill bg-success" href="/searchusers/z">Z</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/1">0-9</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/a">A</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/b">B</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/c">C</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/d">D</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/e">E</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/f">F</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/g">G</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/h">H</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/i">I</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/j">J</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/k">K</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/l">L</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/m">M</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/n">N</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/o">O</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/p">P</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/q">Q</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/r">R</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/s">S</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/t">T</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/u">U</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/v">V</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/w">W</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/x">X</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/y">Y</a>
+    <a class="badge rounded-pill bg-success" href="/searchusers/sort/z">Z</a>
     <br><br>
 
     <p class="text-muted fst-italic">

@@ -362,7 +362,7 @@ Route::controller(UserSearchController::class)
     ->prefix('searchusers')
     ->group(function () {
         Route::get('/', 'index');
-        Route::get('/{letter}', 'sort')->where('letter', '[0-9a-z]+');
+        Route::get('/sort/{letter}', 'sort')->where('letter', '[0-9a-z]+');
         Route::match(['get', 'post'], '/search', 'search');
     });
 
