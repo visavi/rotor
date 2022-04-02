@@ -47,6 +47,13 @@ class DeletePending extends Command
             foreach ($users as $user) {
                 $user->delete();
             }
+        } else {
+            User::query()
+                ->where('level', User::PENDED)
+                ->update([
+                    'confirmregkey' => null,
+                    'level'         => User::USER,
+                ]);
         }
 
         $this->info('Pending user successfully deleted.');
