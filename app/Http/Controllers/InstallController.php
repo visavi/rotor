@@ -50,7 +50,7 @@ class InstallController extends Controller
         ];
 
         $versions = [
-            'php'   => '7.3.0',
+            'php'   => '8.0.2',
             'mysql' => '5.7.8',
             'maria' => '10.2.7',
             'pgsql' => '9.2',
