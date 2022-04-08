@@ -3,6 +3,7 @@
 return [
     'basic_fields'            => 'Basic fields',
     'custom_fields'           => 'Custom fields',
+    'empty_custom_fields'     => 'No custom fields',
 
     'change_email'            => 'Change email',
     'email'                   => 'Email',
@@ -37,7 +38,7 @@ return [
     'ban_text2' => '
     By systematically ignoring administration alerts, your profile may be deleted<br>
     Recovering a profile or data after that will be impossible<br>
-    Be careful not to break more rules<br>',
+    Be careful not to break more rules<br>',
 
     'welcome'              => 'Welcome :login!',
     'confirm_enter_code'   => 'To confirm registration, you need to enter the code that was sent to you by email',
@@ -46,7 +47,7 @@ return [
     'old_code_invalid'     => 'When you resend, the old verification code will become invalid',
     'confirm_text'         => '
     Until you confirm the registration, you will not be able to log in to the site <br>
-    Account activation must be completed within 24 hours <br>
+    Account activation must be completed within 24 hours <br>
     After 24 hours, unverified accounts are automatically deleted.',
     'logout'               => 'Logout',
 
@@ -98,7 +99,7 @@ return [
     'login_requirements'        => 'Only Latin characters, numbers and hyphens (3 to 20 characters)',
     'password_requirements'     => 'Minimum password length 6 characters',
     'register_text' => '
-    Registering on the site means that you are familiar with and agree to the <b> <a href="/rules">rules</a></b> of our site<br>
+    Registering on the site means that you are familiar with and agree to the <b><a href="/rules">rules</a></b> of our site<br>
     All fields are required, you can add more complete information about yourself in your profile after registration<br>
     Indicate the correct email, registration data will be sent to it',
 

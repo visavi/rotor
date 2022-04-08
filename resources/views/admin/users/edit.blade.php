@@ -177,7 +177,7 @@
 
              </div>
             <div class="tab-pane fade py-3" id="nav-custom-fields">
-                @foreach($fields as $field)
+                @forelse($fields as $field)
                     <div class="mb-3{{ $field->required ? ' form-required' : null }}{{ hasError('field' . $field->id) }}">
                         <label for="{{ 'field' . $field->id }}" class="form-label">{{ $field->name }}:</label>
                         @if ($field->type === 'textarea')
@@ -187,7 +187,11 @@
                         @endif
                         <div class="invalid-feedback">{{ textError('field' . $field->id) }}</div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="alert alert-danger">
+                        {{ __('users.empty_custom_fields') }}
+                    </div>
+                @endforelse
             </div>
         </div>
 
