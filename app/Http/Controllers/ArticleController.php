@@ -526,8 +526,8 @@ class ArticleController extends Controller
             return $allTags;
         });
 
-        $max = max($tags);
-        $min = min($tags);
+        $max = $tags ? max($tags) : 0;
+        $min = $tags ? min($tags) : 0;
 
         return view('blogs/tags', compact('tags', 'max', 'min'));
     }

@@ -13,11 +13,15 @@
 @stop
 
 @section('content')
-    <div style="text-align:center">
-        @foreach ($tags as $key => $val)
-            <?php $fontsize = App\Models\Article::logTagSize($val, $min, $max); ?>
+    @if ($tags)
+        <div style="text-align:center">
+            @foreach ($tags as $key => $val)
+                <?php $fontsize = App\Models\Article::logTagSize($val, $min, $max); ?>
 
-            <a href="/blogs/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}pt">{{ $key }}</span></a>
-        @endforeach
-    </div>
+                <a href="/blogs/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}pt">{{ $key }}</span></a>
+            @endforeach
+        </div>
+    @else
+        <div class="alert alert-danger">{{ __('blogs.empty_tag_cloud') }}</div>
+    @endif
 @stop
