@@ -63,7 +63,7 @@ class MailController extends Controller
                     setFlash('danger', __('mails.failed_sent'));
                 }
 
-                return redirect('/');
+                return redirect('/mails');
             }
 
             setInput($request->all());
