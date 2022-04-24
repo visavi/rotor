@@ -33,5 +33,10 @@ class AppServiceProvider extends ServiceProvider
         if (setting('app_installed')) {
             $this->loadMigrationsFrom([database_path('upgrades')]);
         }
+
+        // If the public directory is renamed to public_html
+        /*$this->app->bind('path.public', function () {
+            return base_path('public_html');
+        });*/
     }
 }
