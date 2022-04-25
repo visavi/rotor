@@ -104,9 +104,15 @@ If you set `APP_ENV = production`, then routes and project configuration setting
 
 There are 2 ways to install the engine on a regular hosting
 
-1. Default. All files are placed in the public_html directory. htaccess in the root of the site, redirects all requests to the public directory. htaccess inside public handles all requests and redirects them to index.php
+Default. All files are placed in the public_html directory. htaccess in the root of the site, redirects all requests to the public directory.
 
-2. If method 1 is not suitable or does not work well, then you can place all files on the same level as public_html, and transfer all files from public to public_html. You also need to specify that public_html, for this you need to uncomment the code in the `app/Providers/AppServiceProvider.php` file. htaccess at the root of the engine can be removed.
+.htaccess inside public handles all requests and redirects them to index.php
+
+If method 1 is not suitable or does not work well, then you can place all files on the same level as public_html, and transfer all files from public to public_html.
+
+You also need to specify that public_html will be instead of the public directory, for this you need to uncomment the code in the `app/Providers/AppServiceProvider.php` file.
+
+.htaccess at the root of the engine can be removed.
 
 ### Nginx settings
 
