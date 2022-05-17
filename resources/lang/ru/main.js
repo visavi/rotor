@@ -9,6 +9,11 @@ translate_ru = {
     photo_count: 'Фото {current} из {total}',
     copied: 'Скопировано!',
 
+    buttons: {
+        'ok': 'OK',
+        'cancel': 'Отмена',
+    },
+
     editor: {
         bold: 'Жирный текст',
         italic: 'Наклонный текст',

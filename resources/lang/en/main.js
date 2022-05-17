@@ -9,6 +9,11 @@ translate_en = {
     photo_count: 'Photo {current} of {total}',
     copied: 'Copied!',
 
+    buttons: {
+        'ok': 'OK',
+        'cancel': 'Cancel',
+    },
+
     editor: {
         bold: 'Bold text',
         italic: 'Oblique text',

@@ -3,7 +3,18 @@ $(function () {
     translate = window['translate_' + currentLang];
 
     prettyPrint();
-    bootbox.setDefaults({ locale: 'ru' });
+
+    bootbox.addLocale('my', {
+        OK : translate.buttons.ok,
+        CANCEL : translate.buttons.cancel,
+        CONFIRM : translate.buttons.ok,
+    });
+
+    bootbox.setDefaults({
+        locale: 'my',
+        closeButton: false,
+        backdrop: true,
+    });
 
     toastr.options = {
         'toastClass' : 'toastr',
