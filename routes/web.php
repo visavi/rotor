@@ -114,6 +114,9 @@ Route::controller(HomeController::class)
         Route::get('/captcha', 'captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+');
         Route::match(['get', 'post'], '/ipban', 'ipban');
+
+        Route::get('/403', 'error403');
+        Route::get('/404', 'error404');
     });
 
 /* Карта сайта */

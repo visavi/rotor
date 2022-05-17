@@ -146,4 +146,20 @@ class HomeController extends Controller
 
         return redirect($return ?? '/');
     }
+
+    /**
+     * @return View
+     */
+    public function error403(): View
+    {
+        abort(403);
+    }
+
+    /**
+     * @return View
+     */
+    public function error404(): View
+    {
+        abort(404);
+    }
 }

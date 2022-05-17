@@ -45,7 +45,8 @@ class SearchController extends Controller
             ->where('login', 'like', '%' . $find . '%')
             ->orWhere('name', 'like', '%' . $find . '%')
             ->orderByDesc('point')
-            ->paginate(setting('usersearch'));
+            ->paginate(setting('usersearch'))
+            ->appends(compact('find'));
 
         return view('users/search_result', compact('users'));
     }

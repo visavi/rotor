@@ -362,16 +362,6 @@ textarea.form-control {
         -10deg);
 }
 
-/* Fix close button bootbox 5.5.2 */
-.bootbox-close-button {
-    margin: -0.8rem -0.5rem -0.5rem auto;
-    border: 0;
-    opacity: 0.5;
-    float: right;
-    font-size: 30px;
-    background-color: transparent;
-}
-
 /* Fix input width in form-group */
 .form-control-color {
     max-width: 3rem;
