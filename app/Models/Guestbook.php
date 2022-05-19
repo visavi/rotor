@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int created_at
  * @property string reply
  * @property int edit_user_id
+ * @property bool active
  * @property int updated_at
  */
 class Guestbook extends BaseModel

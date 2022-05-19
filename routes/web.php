@@ -547,6 +547,7 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
             Route::match(['get', 'post'], '/edit/{id}', 'edit');
             Route::match(['get', 'post'], '/reply/{id}', 'reply');
             Route::post('/delete', 'delete');
+            Route::post('/publish', 'publish');
             Route::get('/clear', 'clear');
         });
 

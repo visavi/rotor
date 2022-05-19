@@ -53,6 +53,7 @@ return [
 
     'guestbook_guests_allow' => 'Allow guests to write in guestbook',
     'guestbook_points_add'   => 'To earn points in the guest room',
+    'guestbook_moderation'   => 'Message moderation for guests',
     'guestbook_per_page'     => 'Guest posts on page',
     'guestbook_symbols'      => 'Characters in guest message',
 

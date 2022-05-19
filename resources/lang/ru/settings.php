@@ -53,6 +53,7 @@ return [
 
     'guestbook_guests_allow' => 'Разрешить гостям писать в гостевой',
     'guestbook_points_add'   => 'Начислять баллы в гостевой',
+    'guestbook_moderation'   => 'Модерация сообщений для гостей',
     'guestbook_per_page'     => 'Сообщений в гостевой на стр',
     'guestbook_symbols'      => 'Символов в сообщении гостевой',
 

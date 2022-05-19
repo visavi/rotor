@@ -23,7 +23,9 @@ class GuestbookController extends AdminController
             ->with('user', 'editUser')
             ->paginate(setting('bookpost'));
 
-        return view('admin/guestbook/index', compact('posts'));
+        $unpublished = Guestbook::query()->where('active', false)->count();
+
+        return view('admin/guestbook/index', compact('posts', 'unpublished'));
     }
 
     /**
@@ -123,7 +125,7 @@ class GuestbookController extends AdminController
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
-        $del  = intar($request->input('del'));
+        $del  = intar($request->input('chosen'));
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true($del, __('validator.deletion'));
@@ -133,6 +135,36 @@ class GuestbookController extends AdminController
 
             clearCache('statGuestbook');
             setFlash('success', __('main.messages_deleted_success'));
+        } else {
+            setFlash('danger', $validator->getErrors());
+        }
+
+        return redirect('admin/guestbook?page=' . $page);
+    }
+
+    /**
+     * Активация сообщений
+     *
+     * @param Request   $request
+     * @param Validator $validator
+     *
+     * @return RedirectResponse
+     */
+    public function publish(Request $request, Validator $validator): RedirectResponse
+    {
+        $page   = int($request->input('page', 1));
+        $active = intar($request->input('chosen'));
+
+        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            ->true($active, __('validator.published'));
+
+        if ($validator->isValid()) {
+            Guestbook::query()->whereIn('id', $active)->update([
+                'active' => true,
+            ]);
+
+            clearCache('statGuestbook');
+            setFlash('success', __('main.messages_published_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

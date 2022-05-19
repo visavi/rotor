@@ -18,6 +18,7 @@ return [
     'email'        => 'Invalid email address! Example: name@site.domain',
     'login'        => 'Invalid characters in login. Latin characters, numbers, and hyphens are allowed!',
     'deletion'     => 'No records selected for deletion!',
+    'published'    => 'No records selected for publication!',
     'not_ajax'     => 'This is not an ajax request!',
 
     'length_min'          => 'At least :length char.',

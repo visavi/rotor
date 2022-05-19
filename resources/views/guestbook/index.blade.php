@@ -27,6 +27,12 @@
 
 @section('content')
     @if ($posts->isNotEmpty())
+        @if ($unpublished && isAdmin())
+            <div class="alert alert-info">
+                {{ __('guestbook.require_publish') }}: {{ $unpublished }}
+            </div>
+        @endif
+
         @foreach ($posts as $post)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">

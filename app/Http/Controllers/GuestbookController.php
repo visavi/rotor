@@ -21,11 +21,14 @@ class GuestbookController extends Controller
     public function index(): View
     {
         $posts = Guestbook::query()
+            ->where('active', true)
             ->orderByDesc('created_at')
             ->with('user', 'editUser')
             ->paginate(10);
 
-        return view('guestbook/index', compact('posts'));
+        $unpublished = Guestbook::query()->where('active', false)->count();
+
+        return view('guestbook/index', compact('posts', 'unpublished'));
     }
 
     /**
@@ -49,7 +52,7 @@ class GuestbookController extends Controller
         /* Проверка для гостей */
         if (! $user && setting('bookadds')) {
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-            $validator->true(strpos($msg ?? '', '//') === false, ['msg' => __('guestbook.without_links')]);
+            $validator->true(! str_contains($msg ?? '', '//'), ['msg' => __('guestbook.without_links')]);
             $validator->length($request->input('guest_name'), 3, 20, ['guest_name' => __('users.name_short_or_long')], false);
         } else {
             $validator->true($user, ['msg' => __('main.not_authorized')]);
@@ -57,9 +60,11 @@ class GuestbookController extends Controller
 
         if ($validator->isValid()) {
             $msg       = antimat($msg);
+            $active    = ! setting('guest_moderation');
             $guestName = $request->input('guest_name');
 
             if ($user) {
+                $active = true;
                 $guestName  = null;
                 $bookscores = setting('bookscores') ? 1 : 0;
 
@@ -74,6 +79,7 @@ class GuestbookController extends Controller
                 'ip'         => getIp(),
                 'brow'       => getBrowser(),
                 'guest_name' => $guestName,
+                'active'     => $active,
                 'created_at' => SITETIME,
             ]);
 
@@ -81,7 +87,7 @@ class GuestbookController extends Controller
             $flood->saveState();
 
             sendNotify($msg, '/guestbook', __('index.guestbook'));
-            setFlash('success', __('main.message_added_success'));
+            setFlash('success', $active ? __('main.message_added_success') : __('main.message_publish_moderation'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());

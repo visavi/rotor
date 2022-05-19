@@ -668,6 +668,7 @@ function statsGuestbook(): string
         $total = Guestbook::query()->count();
 
         $totalNew = Guestbook::query()
+            ->where('active', true)
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 

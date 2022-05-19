@@ -9,4 +9,6 @@ return [
     'without_links'            => 'The message text must not contain links!',
     'answer_success_added'     => 'Answer successfully added!',
     'messages_success_cleared' => 'Messages cleared successfully!',
+    'require_publish'          => 'Require publish',
+    'not_publish'              => 'Not publish',
 ];

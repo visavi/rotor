@@ -93,14 +93,9 @@ $(function () {
         $('.colorpicker').val(this.value);
     });
 
-/*    $('.colorpick').colorpicker({
-        useAlpha: false,
-        format: 'hex'
-    });*/
-
-    $('.carousel').carousel({
+    /*$('.carousel').carousel({
         interval: false
-    });
+    });*/
 
     $('.phone').mask('0 000 000-00-00-00');
     $('.birthday').mask('00.00.0000');
