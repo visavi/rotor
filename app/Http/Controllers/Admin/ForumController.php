@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
+use App\Models\File;
 use App\Models\Forum;
 use App\Models\Post;
 use App\Models\Topic;
@@ -524,7 +525,14 @@ class ForumController extends AdminController
             }
         }
 
-        return view('admin/forums/topic', compact('topic', 'posts', 'vote'));
+        $files = File::query()
+            ->where('relate_type', Post::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', getUser('id'))
+            ->orderBy('created_at')
+            ->get();
+
+        return view('admin/forums/topic', compact('topic', 'posts', 'vote', 'files'));
     }
 
     /**
@@ -548,8 +556,7 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $msg     = $request->input('msg');
-            $delfile = intar($request->input('delfile'));
+            $msg = $request->input('msg');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
@@ -562,19 +569,6 @@ class ForumController extends AdminController
                     'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
                 ]);
-
-                // ------ Удаление загруженных файлов -------//
-                if ($delfile) {
-                    $files = $post->files()
-                        ->whereIn('id', $delfile)
-                        ->get();
-
-                    if ($files->isNotEmpty()) {
-                        foreach ($files as $file) {
-                            $file->delete();
-                        }
-                    }
-                }
 
                 setFlash('success', __('main.message_edited_success'));
 

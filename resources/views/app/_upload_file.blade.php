@@ -1,3 +1,13 @@
+<?php
+$display = $files->isEmpty() ? 'none' : 'block';
+?>
+
+@if ($files->isEmpty())
+    <span class="float-end js-attach-button">
+        <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
+    </span>
+@endif
+
 <div class="js-files mb-3">
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
@@ -29,15 +39,15 @@
     </span>
 </div>
 
-<div class="mb-3">
+<div class="mb-3 js-attach-form" style="display: {{ $display }};">
     <label class="btn btn-sm btn-secondary mb-1" for="file">
         <input id="file" type="file" name="file" onchange="return submitFile(this);" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}" hidden>
         {{ __('main.attach_file') }}&hellip;
     </label>
-</div>
 
-<p class="text-muted fst-italic">
-    {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-    {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-    {{ __('main.valid_file_extensions') }}: {{ setting('file_extensions') }}<br>
-</p>
+    <div class="text-muted fst-italic">
+        {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
+        {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
+        {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}<br>
+    </div>
+</div>

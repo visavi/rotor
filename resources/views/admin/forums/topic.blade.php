@@ -183,48 +183,25 @@
 
     {{ $posts->links() }}
 
-    @if (getUser())
-        @if (empty($topic->closed))
-            <div class="section-form mb-3 shadow">
-                <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-3{{ hasError('msg') }}">
-                        <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
-                        <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ __('forums.post') }}" required>{{ getInput('msg') }}</textarea>
-                        <div class="invalid-feedback">{{ textError('msg') }}</div>
-                        <span class="js-textarea-counter"></span>
-                    </div>
+    @if (empty($topic->closed))
+        <div class="section-form mb-3 shadow">
+            <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-3{{ hasError('msg') }}">
+                    <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ __('forums.post') }}" required>{{ getInput('msg') }}</textarea>
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
+                    <span class="js-textarea-counter"></span>
+                </div>
 
-                    <div class="js-attach-form" style="display: none;">
-                        <div class="mb-3{{ hasError('files') }}">
-                            <label class="btn btn-sm btn-secondary" for="files">
-                                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
-                                {{ __('main.attach_files') }}&hellip;
-                            </label>
-                            <span class="badge bg-info" id="upload-file-info"></span>
-                            <div class="invalid-feedback">{{ textError('files') }}</div>
-                        </div>
+                @include('app/_upload_file', ['files' => $files, 'type' => App\Models\Post::$morphName])
 
-                        <p class="text-muted fst-italic">
-                            {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-                            {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-                            {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}
-                        </p>
-                    </div>
+                <button class="btn btn-primary">{{ __('main.write') }}</button>
+            </form>
+        </div>
 
-                    <span class="float-end js-attach-button">
-                        <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
-                    </span>
-
-                    <button class="btn btn-primary">{{ __('main.write') }}</button>
-                </form>
-            </div>
-
-        @else
-            {{ showError(trans_choice('forums.topic_closed_user', $topic->closeUser->id, ['login' => $topic->closeUser->getName()])) }}
-        @endif
     @else
-        {{ showError(__('main.not_authorized')) }}
+        {{ showError(trans_choice('forums.topic_closed_user', $topic->closeUser->id, ['login' => $topic->closeUser->getName()])) }}
     @endif
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /

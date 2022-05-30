@@ -110,9 +110,19 @@ class TopicController extends Controller
             }
         }
 
+        $files       = [];
         $description = $firstPost ? truncateDescription(bbCode($firstPost->text, false)) : $topic->title;
 
-        return view('forums/topic', compact('topic', 'posts', 'vote', 'description'));
+        if ($user) {
+            $files = File::query()
+                ->where('relate_type', Post::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+                ->get();
+        }
+
+        return view('forums/topic', compact('topic', 'posts', 'vote', 'description', 'files'));
     }
 
     /**
@@ -127,8 +137,7 @@ class TopicController extends Controller
      */
     public function create(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
-        $msg   = $request->input('msg');
-        $files = (array) $request->file('files');
+        $msg = $request->input('msg');
 
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -154,31 +163,31 @@ class TopicController extends Controller
         $post = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->first();
         $validator->notEqual($msg, $post->text, ['msg' => __('forums.post_repeat')]);
 
-        if ($files && $validator->isValid()) {
-            $validator
-                ->lte(count($files), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
-
-            $rules = [
-                'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', setting('file_extensions')),
-            ];
-
-            foreach ($files as $file) {
-                $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
-            }
-        }
-
         if ($validator->isValid()) {
             $msg = antimat($msg);
+
+            $countFiles = File::query()
+                ->where('relate_type', Post::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+                ->count();
 
             if (
                 $post
                 && $post->created_at + 600 > SITETIME
                 && $user->id === $post->user_id
+                && $countFiles + $post->files->count() <= setting('maxfiles')
                 && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
-                && count($files) + $post->files->count() <= setting('maxfiles')
             ) {
-                $newpost = $post->text . PHP_EOL . PHP_EOL . '[i][size=1]' . __('forums.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)]) . '[/size][/i]' . PHP_EOL . $msg;
+                $newpost = $post->text
+                    . PHP_EOL
+                    . PHP_EOL
+                    . '[i][size=1]'
+                    . __('forums.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)])
+                    . '[/size][/i]'
+                    . PHP_EOL
+                    . $msg;
 
                 $post->update(['text' => $newpost]);
             } else {
@@ -214,15 +223,15 @@ class TopicController extends Controller
                 }
             }
 
+            File::query()
+                ->where('relate_type', Post::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->update(['relate_id' => $post->id]);
+
             clearCache(['statForums', 'recentTopics']);
             $flood->saveState();
             sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
-
-            if ($files) {
-                foreach ($files as $file) {
-                    $post->uploadFile($file);
-                }
-            }
 
             setFlash('success', __('main.message_added_success'));
         } else {
@@ -544,8 +553,7 @@ class TopicController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $msg     = $request->input('msg');
-            $delfile = intar($request->input('delfile'));
+            $msg = $request->input('msg');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
@@ -556,19 +564,6 @@ class TopicController extends Controller
                     'edit_user_id' => $user->id,
                     'updated_at'   => SITETIME,
                 ]);
-
-                // ------ Удаление загруженных файлов -------//
-                if ($delfile) {
-                    $files = $post->files()
-                        ->whereIn('id', $delfile)
-                        ->get();
-
-                    if ($files->isNotEmpty()) {
-                        foreach ($files as $file) {
-                            $file->delete();
-                        }
-                    }
-                }
 
                 setFlash('success', __('main.message_edited_success'));
 

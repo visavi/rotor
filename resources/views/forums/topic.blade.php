@@ -231,26 +231,7 @@
                         <span class="js-textarea-counter"></span>
                     </div>
 
-                    <div class="js-attach-form" style="display: none;">
-                        <div class="mb-3{{ hasError('files') }}">
-                            <label for="files" class="btn btn-sm btn-secondary form-label">
-                                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
-                                {{ __('main.attach_files') }}&hellip;
-                            </label>
-                            <span class="badge bg-info" id="upload-file-info"></span>
-                            <div class="invalid-feedback">{{ textError('files') }}</div>
-                        </div>
-
-                        <p class="text-muted fst-italic">
-                            {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-                            {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-                            {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('file_extensions')) }}
-                        </p>
-                    </div>
-
-                    <span class="float-end js-attach-button">
-                        <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
-                    </span>
+                    @include('app/_upload_file', ['files' => $files, 'type' => App\Models\Post::$morphName])
 
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>

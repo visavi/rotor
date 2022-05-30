@@ -253,7 +253,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Загружает изображение
+     * Загружает файлы
      *
      * @param Request   $request
      * @param Validator $validator
@@ -270,6 +270,7 @@ class AjaxController extends Controller
 
         $fileTypes = [
             Message::$morphName,
+            Post::$morphName,
         ];
 
         $id   = int($request->input('id'));
@@ -321,7 +322,14 @@ class AjaxController extends Controller
                 'extensions' => explode(',', setting('file_extensions')),
             ];
 
-            $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
+            $validator->file($file, $rules, __('validator.file_upload_failed'));
+        }
+
+        if ($validator->isValid()) {
+            $extension = strtolower($file->getClientOriginalExtension());
+            if ($isImageType && ! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
+                $validator->addError(__('validator.extension'));
+            }
         }
 
         if ($validator->isValid()) {
@@ -357,7 +365,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Удаляет изображение
+     * Удаляет файлы
      *
      * @param Request   $request
      * @param Validator $validator
@@ -371,6 +379,7 @@ class AjaxController extends Controller
             Item::$morphName,
             Photo::$morphName,
             Message::$morphName,
+            Post::$morphName,
         ];
 
         $id   = int($request->input('id'));

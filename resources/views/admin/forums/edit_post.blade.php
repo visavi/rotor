@@ -35,14 +35,7 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            @if ($post->files->isNotEmpty())
-                <i class="fa fa-paperclip"></i> <b>{{ __('main.deleting_files') }}:</b><br>
-                @foreach ($post->files as $file)
-                    <input type="checkbox" class="form-check-input" name="delfile[]" value="{{ $file->id }}">
-                    <a href="{{ $file->hash }}" target="_blank">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
-                @endforeach
-                <br>
-            @endif
+            @include('app/_upload_file', ['id' => $post->id, 'files' => $post->files, 'type' => App\Models\Post::$morphName])
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
