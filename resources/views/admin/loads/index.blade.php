@@ -33,6 +33,10 @@
                         ({{ $category->count_downs }})
                     @endif
 
+                    @if ($category->closed)
+                        <span class="badge bg-danger">{{ __('loads.closed_load') }}</span>
+                    @endif
+
                     @if (isAdmin('boss'))
                         <div class="float-end">
                             <a href="/admin/loads/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
@@ -52,8 +56,8 @@
                             @endif
 
                             @if (isAdmin('boss'))
-                                    <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                    <a href="/admin/loads/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                                <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="/admin/loads/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
                             @endif
                             <br>
                         @endforeach

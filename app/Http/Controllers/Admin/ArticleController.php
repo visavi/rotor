@@ -103,10 +103,6 @@ class ArticleController extends AdminController
                 ->length($name, 3, 50, ['title' => __('validator.text')])
                 ->notEqual($parent, $category->id, ['parent' => __('blogs.category_not_exist')]);
 
-            if (! empty($parent) && $category->children->isNotEmpty()) {
-                $validator->addError(['parent' => __('blogs.category_has_subcategories')]);
-            }
-
             if ($validator->isValid()) {
                 $category->update([
                     'parent_id' => $parent,

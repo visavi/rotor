@@ -26,16 +26,15 @@
                 <select class="form-select" id="parent" name="parent">
                     <option value="0">---</option>
 
-                    @foreach ($loads as $data)
-                        <option value="{{ $data->id }}"{{ ($inputParent === $data->id && ! $data->closed) ? ' selected' : '' }}{{ $data->closed || $data->id === $load->id ? ' disabled' : '' }}>
-                            {{ str_repeat('–', $data->depth) }} {{ $data->name }}
+                    @foreach ($loads as $category)
+                        <option value="{{ $category->id }}"{{ $inputParent === $category->id ? ' selected' : '' }}{{ $category->closed && $category->id !== $load->parent_id ? ' disabled' : '' }}>
+                            {{ str_repeat('–', $category->depth) }} {{ $category->name }}
                         </option>
                     @endforeach
 
                 </select>
                 <div class="invalid-feedback">{{ textError('parent') }}</div>
             </div>
-
 
             <div class="mb-3{{ hasError('name') }}">
                 <label for="name" class="form-label">{{ __('main.title') }}:</label>

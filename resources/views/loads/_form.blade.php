@@ -5,7 +5,7 @@
 
         <select class="form-select" id="inputCategory" name="category">
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}"{{ ($cid === $category->id || $down->category_id === $category->id) && ! $category->closed ? ' selected' : '' }}{{ $category->closed ? ' disabled' : '' }}>
+                <option value="{{ $category->id }}"{{ $cid === $category->id || $down->category_id === $category->id ? ' selected' : '' }}{{ $category->closed && $category->id !== $down->category_id ? ' disabled' : '' }}>
                     {{ str_repeat('–', $category->depth) }} {{ $category->name }}
                 </option>
             @endforeach

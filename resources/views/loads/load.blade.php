@@ -91,10 +91,6 @@
         {{ showError(__('loads.empty_downs')) }}
     @endif
 
-    @if ($category->closed)
-        {{ showError(__('loads.closed_load')) }}
-    @endif
-
     {{ $downs->links() }}
 
     <a href="/loads/top">{{ __('loads.top_downs') }}</a> /

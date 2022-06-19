@@ -10,7 +10,7 @@ return [
     'empty_loads'            => 'Download sections not yet created!',
     'empty_downs'            => 'Files not yet uploaded!',
     'empty_archive'          => 'There are no files in this archive!',
-    'closed_load'            => 'Uploading files is prohibited in this category!',
+    'closed_load'            => 'Closed',
     'new_downs'              => 'New files',
     'new_comments'           => 'New comments',
     'active_downs'           => 'File List :user',

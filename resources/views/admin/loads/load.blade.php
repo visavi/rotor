@@ -53,6 +53,17 @@
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
                     <a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs }})
+
+                    @if ($child->closed)
+                        <span class="badge bg-danger">{{ __('loads.closed_load') }}</span>
+                    @endif
+
+                    @if (isAdmin('boss'))
+                        <div class="float-end">
+                            <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/loads/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforeach
@@ -89,10 +100,6 @@
         @endforeach
     @elseif (! $category->closed)
         {{ showError(__('loads.empty_downs')) }}
-    @endif
-
-    @if ($category->closed)
-        {{ showError(__('loads.closed_load')) }}
     @endif
 
     {{ $downs->links() }}

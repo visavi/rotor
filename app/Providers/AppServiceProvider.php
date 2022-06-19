@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
         if (setting('app_installed')) {
             $this->loadMigrationsFrom([database_path('upgrades')]);
         }
+
+        Schema::defaultStringLength(191);
 
         // If the public directory is renamed to public_html
         /*$this->app->bind('path.public', function () {

@@ -102,10 +102,6 @@ class LoadController extends AdminController
                 ->length($name, 3, 50, ['title' => __('validator.text')])
                 ->notEqual($parent, $load->id, ['parent' => __('loads.load_parent_invalid')]);
 
-            if (! empty($parent) && $load->children->isNotEmpty()) {
-                $validator->addError(['parent' => __('loads.load_has_subcategories')]);
-            }
-
             if ($validator->isValid()) {
                 $load->update([
                     'parent_id' => $parent,
