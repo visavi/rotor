@@ -47,6 +47,13 @@ class Guestbook extends BaseModel
     protected $guarded = [];
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'guestbook';
+
+    /**
      * Возвращает связь пользователей
      *
      * @return BelongsTo
@@ -55,11 +62,4 @@ class Guestbook extends BaseModel
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }
-
-    /**
-     * Morph name
-     *
-     * @var string
-     */
-    public static $morphName = 'guestbook';
 }

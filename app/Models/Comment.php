@@ -35,6 +35,13 @@ class Comment extends BaseModel
     protected $guarded = [];
 
     /**
+     * Morph name
+     *
+     * @var string
+     */
+    public static $morphName = 'comments';
+
+    /**
      * Возвращает связанные объекты
      *
      * @return MorphTo
@@ -43,11 +50,4 @@ class Comment extends BaseModel
     {
         return $this->morphTo('relate');
     }
-
-    /**
-     * Morph name
-     *
-     * @var string
-     */
-    public static $morphName = 'comments';
 }
