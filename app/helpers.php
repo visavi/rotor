@@ -960,13 +960,13 @@ function closeTags(string $html): string
 /**
  * Возвращает обрезанный текст с закрытием тегов
  *
- * @param string $value
- * @param int    $words
- * @param string $end
+ * @param string|null $value
+ * @param int         $words
+ * @param string      $end
  *
  * @return HtmlString
  */
-function bbCodeTruncate(string $value, int $words = 20, string $end = '...'): HtmlString
+function bbCodeTruncate(?string $value, int $words = 20, string $end = '...'): HtmlString
 {
     $value  = Str::words($value, $words, $end);
     $bbText = bbCode(closeTags($value));
@@ -1809,12 +1809,12 @@ function plural(int $num, mixed $forms): string
 /**
  * Обрабатывает BB-код
  *
- * @param string $text  Необработанный текст
- * @param bool   $parse Обрабатывать или вырезать код
+ * @param string|null $text  Необработанный текст
+ * @param bool        $parse Обрабатывать или вырезать код
  *
  * @return HtmlString Обработанный текст
  */
-function bbCode(string $text, bool $parse = true): HtmlString
+function bbCode(?string $text, bool $parse = true): HtmlString
 {
     $bbCode = new BBCode();
     $checkText = check($text);
