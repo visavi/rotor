@@ -25,6 +25,7 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "cbschuld/browser.php": "~1.9",
+        "doctrine/dbal": "^3.3",
         "fruitcake/laravel-cors": "^2.2",
         "google/recaptcha": "~1.2",
         "gregwar/captcha": "^1.1",
