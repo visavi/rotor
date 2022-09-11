@@ -182,7 +182,7 @@ class BBCode
 
         $target = '';
         if ($match[2] !== '/') {
-            if (strpos($match[1], siteDomain(config('app.url'))) !== false) {
+            if (str_contains($match[1], siteDomain(config('app.url')))) {
                 $match[1] = '//' . str_replace($match[2], '', $match[1]);
             } else {
                 $target = ' target="_blank" rel="nofollow"';
@@ -212,7 +212,7 @@ class BBCode
             $list[] = '<li>' . $l . '</li>';
         }
 
-        $tag  = strpos($match[0], '[list]') === false ? 'ol' : 'ul';
+        $tag  = str_contains($match[0], '[list]') ? 'ul' : 'ol';
 
         return '<' . $tag . '>' . implode($list) . '</' . $tag . '>';
     }

@@ -38,7 +38,7 @@ class Setting extends Model
      *
      * @var array
      */
-    private static $settings = [];
+    private static array $settings = [];
 
     /**
      * Возвращает список допустимых страниц настроек
@@ -84,7 +84,7 @@ class Setting extends Model
                 $settings = Setting::query()->pluck('value', 'name')->all();
                 return array_map(static function ($value) {
                     if (is_numeric($value)) {
-                        return strpos($value, '.') === false ? (int) $value : (float) $value;
+                        return ! str_contains($value, '.') ? (int) $value : (float) $value;
                     }
 
                     if ($value === '') {

@@ -85,7 +85,8 @@
                     <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>
                     <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>
                     <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
-                    <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}"><i class="fas fa-sign-out-alt fa-lg"></i> {{ __('index.logout') }}</a></li>
+                    <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)"><i class="fas fa-sign-out-alt fa-lg"></i> {{ __('index.logout') }}</a>
+                    </li>
                 </ul>
             </li>
         @endif
