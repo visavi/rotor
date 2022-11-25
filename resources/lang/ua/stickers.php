@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'empty_categories' => 'Категорії ще не створені!',
+    'empty_stickers' => 'Стікери не знайдені!',
+    'total_stickers' => 'Всього стікерів',
+    'upload' => 'Завантажити',
+    'confirm_delete_category' => 'Ви впевнені, що хочете видалити цю категорію?',
+    'confirm_delete_sticker' => 'Ви впевнені, що хочете видалити цей стікер?',
+    'create_sticker' => 'Додавання стікера',
+    'category' => 'Категорія',
+    'sticker_code' => 'Код стікера',
+    'valid_sticker_code' => 'Код стікера повинен починатися зі знака двокрапки',
+    'edit_category' => 'Редагування категорії',
+    'edit_sticker' => 'Редагування наклейки',
+    'category_not_exist' => 'Цей категорії не існує!',
+    'sticker_not_exist' => 'Цього стікера не існує!',
+    'category_success_created' => 'Нову категорію успішно створено!',
+    'category_success_changed' => 'Категорія успішно змінена!',
+    'category_has_stickers' => 'У даній категорії є стікери!',
+    'category_success_deleted' => 'Категорія успішно видалена!',
+    'sticker_length' => 'Занадто довгий або короткий код стікера!',
+    'sticker_exists' => 'Стикер з цим кодом вже є у списку!',
+    'sticker_success_created' => 'Стикер успішно завантажений!',
+    'sticker_requirements' => 'Код стікера повинен починатися з двокрапки. Дозволено літери, цифри та дефіс!',
+    'sticker_success_changed' => 'Стикер успішно змінено!',
+    'sticker_success_deleted' => 'Стикер успішно видалено!',
+];
