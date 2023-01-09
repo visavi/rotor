@@ -6556,16 +6556,16 @@
         },
         {
             "name": "deployer/deployer",
-            "version": "v7.0.2",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/deployphp/deployer.git",
-                "reference": "99a57a9035cfe0eeae5dba5befe5411ac0f3ac72"
+                "reference": "28934ad0af2b70dbd9cc60b33c5454778b3dd6c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/deployphp/deployer/zipball/99a57a9035cfe0eeae5dba5befe5411ac0f3ac72",
-                "reference": "99a57a9035cfe0eeae5dba5befe5411ac0f3ac72",
+                "url": "https://api.github.com/repos/deployphp/deployer/zipball/28934ad0af2b70dbd9cc60b33c5454778b3dd6c1",
+                "reference": "28934ad0af2b70dbd9cc60b33c5454778b3dd6c1",
                 "shasum": ""
             },
             "bin": [
@@ -6595,7 +6595,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-10T07:44:30+00:00"
+            "time": "2023-01-09T10:14:17+00:00"
         },
         {
             "name": "doctrine/instantiator",
