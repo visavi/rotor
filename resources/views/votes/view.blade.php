@@ -44,7 +44,7 @@
     @endif
 
     @if ($vote->description)
-        <div class="section-body border-bottom mb-3">
+        <div class="section-body mb-3">
             {{ bbCode($vote->description) }}
         </div>
     @endif
