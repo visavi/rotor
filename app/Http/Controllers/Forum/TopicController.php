@@ -229,7 +229,7 @@ class TopicController extends Controller
                 ->where('user_id', $user->id)
                 ->update(['relate_id' => $post->id]);
 
-            clearCache(['statForums', 'recentTopics']);
+            clearCache(['statForums', 'recentTopics', 'TopicFeed']);
             $flood->saveState();
             sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
 

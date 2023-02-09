@@ -152,7 +152,7 @@ class DownController extends Controller
 
                 if (isAdmin(User::ADMIN)) {
                     $down->category->increment('count_downs');
-                    clearCache(['statLoads', 'recentDowns']);
+                    clearCache(['statLoads', 'recentDowns', 'DownFeed']);
                 } else {
                     $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
@@ -266,7 +266,7 @@ class DownController extends Controller
                     $down->uploadAndConvertFile($file);
                 }
 
-                clearCache(['statLoads', 'recentDowns']);
+                clearCache(['statLoads', 'recentDowns', 'DownFeed']);
                 setFlash('success', __('loads.down_edited_success'));
 
                 return redirect('downs/' . $down->id);

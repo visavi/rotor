@@ -112,7 +112,7 @@ class PhotoController extends Controller
                     ->where('user_id', $user->id)
                     ->update(['relate_id' => $photo->id]);
 
-                clearCache(['statPhotos', 'recentPhotos']);
+                clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);
                 $flood->saveState();
 
                 setFlash('success', __('photos.photo_success_uploaded'));

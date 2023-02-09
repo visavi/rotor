@@ -167,7 +167,7 @@ class ArticleController extends Controller
                     'tags'        => $tags,
                 ]);
 
-                clearCache(['statArticles', 'recentArticles']);
+                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
 
                 return redirect('articles/' . $article->id);
@@ -271,7 +271,7 @@ class ArticleController extends Controller
                     ->where('user_id', $user->id)
                     ->update(['relate_id' => $article->id]);
 
-                clearCache(['statArticles', 'recentArticles']);
+                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 $flood->saveState();
 
                 setFlash('success', __('blogs.article_success_created'));

@@ -248,7 +248,7 @@ class ArticleController extends AdminController
                     'tags'  => $tags,
                 ]);
 
-                clearCache(['statArticles', 'recentArticles']);
+                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
 
                 return redirect('articles/' . $article->id);
@@ -345,7 +345,7 @@ class ArticleController extends AdminController
 
             $article->category->decrement('count_articles');
 
-            clearCache(['statArticles', 'recentArticles']);
+            clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
             setFlash('success', __('blogs.article_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
