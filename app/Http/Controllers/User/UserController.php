@@ -214,6 +214,7 @@ class UserController extends Controller
                     if ($invitation && setting('invite')) {
                         $invitation->update([
                             'used'           => 1,
+                            'used_at'        => SITETIME,
                             'invite_user_id' => $user->id,
                         ]);
                     }

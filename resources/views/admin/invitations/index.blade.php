@@ -16,17 +16,17 @@
     @if (! setting('invite'))
         <div class="mb-3 fw-bold">
             <i class="fa fa-exclamation-circle"></i>
-            <span class="text-danger fw-bold">{{ __('admin.invitations.hint') }}</span>
+            <span class="text-danger fw-bold">{{ __('invitations.hint') }}</span>
         </div>
     @endif
 
     <div class="mb-3">
         @if ($used)
-            <a class="btn btn-light btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a>
-            <a class="btn btn-primary btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
+            <a class="btn btn-light btn-sm" href="/admin/invitations">{{ __('invitations.unused') }}</a>
+            <a class="btn btn-primary btn-sm" href="/admin/invitations?used=1">{{ __('invitations.used') }}</a>
         @else
-            <a class="btn btn-primary btn-sm" href="/admin/invitations">{{ __('admin.invitations.unused') }}</a>
-            <a class="btn btn-light btn-sm" href="/admin/invitations?used=1">{{ __('admin.invitations.used') }}</a>
+            <a class="btn btn-primary btn-sm" href="/admin/invitations">{{ __('invitations.unused') }}</a>
+            <a class="btn btn-light btn-sm" href="/admin/invitations?used=1">{{ __('invitations.used') }}</a>
         @endif
     </div>
 
@@ -36,7 +36,7 @@
             @foreach ($invites as $invite)
                 <div class="section mb-3 shadow">
                     <div class="section-title">
-                        {{ $invite->hash }}
+                        <i class="fa-solid fa-key"></i> {{ $invite->hash }}
 
                         <div class="float-end">
                             <input type="checkbox" class="form-check-input" name="del[]" value="{{ $invite->id }}">
@@ -44,10 +44,14 @@
                     </div>
 
                     <div class="section-content">
-                        {{ __('admin.invitations.owner') }}: {{ $invite->user->getProfile() }}<br>
+                        {{ __('invitations.owner') }}: {{ $invite->user->getProfile() }}<br>
 
                         @if ($invite->invite_user_id)
-                            {{ __('admin.invitations.invited') }}: {{ $invite->inviteUser->getProfile() }}<br>
+                            {{ __('invitations.invited') }}: {{ $invite->inviteUser->getProfile() }}<br>
+                        @endif
+
+                        @if ($invite->used_at)
+                            {{ __('main.used') }}: {{ dateFixed($invite->used_at) }}<br>
                         @endif
 
                         {{ __('main.created') }}: {{ dateFixed($invite->created_at) }}<br>
@@ -66,9 +70,8 @@
             {{ __('main.total') }}: <b>{{ $invites->total() }}</b>
         </div>
     @else
-        {{ showError(__('admin.invitations.empty_invitations')) }}
+        {{ showError(__('invitations.empty_invitations')) }}
     @endif
 
-    <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ __('admin.invitations.create_keys') }}</a><br>
-    <i class="fa fa-key"></i> <a href="/admin/invitations/keys">{{ __('admin.invitations.list_keys') }}</a><br>
+    <i class="fa fa-check"></i> <a href="/admin/invitations/create">{{ __('invitations.create_keys') }}</a><br>
 @stop

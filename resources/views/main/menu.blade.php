@@ -44,6 +44,10 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/ratings/{{ getUser('login') }}">{{ __('index.reputation_history') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/authlogs">{{ __('index.auth_history') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/transfers">{{ __('index.money_transfer') }}</a><br>
+
+        @if (setting('invite') && getUser('rating') >= setting('invite_rating'))
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/invitations">{{ __('index.invitations') }}</a><br>
+        @endif
     </div>
 </div>
 

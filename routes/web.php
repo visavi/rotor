@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\FileController as AdminFileController;
 use App\Http\Controllers\Admin\ForumController as AdminForumController;
 use App\Http\Controllers\Admin\GuestbookController as AdminGuestbookController;
-use App\Http\Controllers\Admin\InvitationController;
+use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LoadController as AdminLoadController;
 use App\Http\Controllers\Admin\LogController;
@@ -60,6 +60,7 @@ use App\Http\Controllers\GuestbookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IgnoreController;
 use App\Http\Controllers\InstallController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\Load\ActiveController as LoadActiveController;
 use App\Http\Controllers\Load\DownController;
 use App\Http\Controllers\Load\LoadController;
@@ -424,6 +425,13 @@ Route::controller(TransferController::class)
         Route::post('/send', 'send');
     });
 
+Route::controller(InvitationController::class)
+    ->prefix('invitations')
+    ->group(function () {
+        Route::get('/', 'index');
+        Route::post('/create', 'store');
+    });
+
 /* Личные заметки */
 Route::controller(NotebookController::class)
     ->prefix('notebooks')
@@ -697,12 +705,11 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
             });
 
         /* Приглашения */
-        Route::controller(InvitationController::class)
+        Route::controller(AdminInvitationController::class)
             ->prefix('invitations')
             ->group(function () {
                 Route::get('/', 'index');
                 Route::match(['get', 'post'], '/create', 'create');
-                Route::get('/keys', 'keys');
                 Route::post('/send', 'send');
                 Route::post('/mail', 'mail');
                 Route::post('/delete', 'delete');

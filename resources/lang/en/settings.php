@@ -194,4 +194,8 @@ return [
     'feed_photos_rating'    => 'Hide rated photos',
     'feed_articles_rating'  => 'Hide rated articles',
     'feed_downs_rating'     => 'Hide rated downloads',
+
+    'invite_days'   => 'Number of days to receive new keys',
+    'invite_rating' => 'Rating required to receive keys',
+    'invite_count'  => 'Number of keys received by the user',
 ];

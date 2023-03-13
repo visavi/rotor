@@ -19,8 +19,8 @@
     </div>
 @endif
 
-@if ($message = session()->get('error'))
-    <div class="alert alert-error alert-dismissible fade show" role="alert">
+@if ($message = session()->get('danger'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <div>{{ $message }}</div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>

@@ -16,6 +16,7 @@ return [
     'complain'          => 'Complain',
     'create'            => 'Create',
     'created'           => 'Created',
+    'used'              => 'Used',
     'upload'            => 'Upload',
     'edit'              => 'Edit',
     'change'            => 'Change',

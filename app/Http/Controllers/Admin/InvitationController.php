@@ -36,22 +36,6 @@ class InvitationController extends AdminController
     }
 
     /**
-     * Список ключей
-     *
-     * @return View
-     */
-    public function keys(): View
-    {
-        $keys = Invite::query()
-            ->where('user_id', getUser('id'))
-            ->where('used', 0)
-            ->orderByDesc('created_at')
-            ->get();
-
-        return view('admin/invitations/keys', compact('keys'));
-    }
-
-    /**
      * Создание ключей
      *
      * @param Request   $request
