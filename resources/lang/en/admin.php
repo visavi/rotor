@@ -165,7 +165,6 @@ return [
     ],
 
     'invitations' => [
-        'creation_keys'         => 'Key creation',
         'key_generation'        => 'Generation of new keys',
         'send_to_user'          => 'Send key to user',
         'sending_keys'          => 'Key distribution',
