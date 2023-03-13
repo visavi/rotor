@@ -17,7 +17,7 @@
         "@popperjs/core": "^2.11.6",
         "bootbox": "^6.0.0",
         "bootstrap": "^5.2.3",
-        "jquery": "^3.6.3",
+        "jquery": "^3.6.4",
         "jquery-colorbox": "^1.6.4",
         "jquery-mask-plugin": "^1.14.16",
         "toastr": "^2.1.4"
