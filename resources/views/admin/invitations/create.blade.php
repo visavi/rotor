@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('admin.invitations.creation_keys'))
+@section('title', __('invitations.create_keys'))
 
 @section('breadcrumb')
     <nav>
@@ -8,7 +8,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/invitations">{{ __('index.invitations') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('admin.invitations.creation_keys') }}</li>
+            <li class="breadcrumb-item active">{{ __('invitations.create_keys') }}</li>
         </ol>
     </nav>
 @stop
