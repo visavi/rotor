@@ -25,7 +25,7 @@ class InvitationController extends Controller
         $this->middleware('check.user');
         $this->user = getUser();
 
-        if ($this->user->rating < setting('invite_rating')) {
+        if ($this->user && $this->user->rating < setting('invite_rating')) {
             abort(403, __('invitations.access'));
         }
     }
