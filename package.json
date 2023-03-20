@@ -29,7 +29,7 @@
         "postcss": "^8.4.21",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.59.3",
-        "sass-loader": "^13.2.0",
+        "sass-loader": "^13.2.1",
         "webpack": "^5.76.2"
     },
     "repository": {
