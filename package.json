@@ -30,7 +30,7 @@
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.59.2",
         "sass-loader": "^13.2.0",
-        "webpack": "^5.76.1"
+        "webpack": "^5.76.2"
     },
     "repository": {
         "type": "git",
