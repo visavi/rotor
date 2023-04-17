@@ -395,6 +395,7 @@ class PhotoController extends Controller
             ->join('users', 'photos.user_id', 'users.id')
             ->groupBy('user_id')
             ->orderByDesc('cnt')
+            ->with('user')
             ->paginate(setting('photogroup'));
 
         return view('photos/albums', compact('albums'));
@@ -418,7 +419,7 @@ class PhotoController extends Controller
         $photos = Photo::query()
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
-            ->with('user')
+            ->with('user', 'files')
             ->paginate(setting('fotolist'));
 
         $moder = getUser() && getUser('id') === $user->id ? 1 : 0;
@@ -445,7 +446,7 @@ class PhotoController extends Controller
 
         $photos = Photo::query()
             ->orderByDesc($order)
-            ->with('user')
+            ->with('user', 'files')
             ->paginate(setting('fotolist'))
             ->appends(['sort' => $sort]);
 
@@ -464,7 +465,7 @@ class PhotoController extends Controller
             ->where('relate_type', Photo::$morphName)
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
-            ->with('user')
+            ->with('user', 'relate')
             ->paginate(setting('comments_per_page'));
 
         return view('photos/all_comments', compact('comments'));
@@ -477,7 +478,7 @@ class PhotoController extends Controller
      *
      * @return View
      */
-    public function UserComments(string $login): View
+    public function userComments(string $login): View
     {
         $user = getUserByLogin($login);
 
@@ -491,7 +492,7 @@ class PhotoController extends Controller
             ->where('comments.user_id', $user->id)
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
-            ->with('user')
+            ->with('user', 'relate')
             ->paginate(setting('comments_per_page'));
 
         return view('photos/user_comments', compact('comments', 'user'));

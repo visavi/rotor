@@ -22,7 +22,7 @@ class PhotoController extends AdminController
     {
         $photos = Photo::query()
             ->orderByDesc('created_at')
-            ->with('user')
+            ->with('user', 'files')
             ->paginate(setting('fotolist'));
 
         return view('admin/photos/index', compact('photos'));
