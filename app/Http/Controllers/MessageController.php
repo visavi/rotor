@@ -104,7 +104,7 @@ class MessageController extends Controller
             ->where('d.user_id', $this->user->id)
             ->where('d.author_id', $user->id)
             ->orderByDesc('d.created_at')
-            ->with('user', 'author')
+            ->with('user', 'author', 'files')
             ->paginate(setting('privatpost'));
 
         Dialogue::query()
@@ -196,20 +196,19 @@ class MessageController extends Controller
     {
         $page = int($request->input('page', 1));
 
-        $total = Dialogue::query()
+        $dialogues = Dialogue::query()
             ->where('user_id', $this->user->id)
             ->where('author_id', $uid)
-            ->count();
+            ->get();
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->notEmpty($total, ['user' => __('messages.empty_dialogue')])
+            ->notEmpty($dialogues->count(), ['user' => __('messages.empty_dialogue')])
             ->empty(getUser('newprivat'), __('messages.unread_messages'));
 
         if ($validator->isValid()) {
-            Dialogue::query()
-                ->where('user_id', getUser('id'))
-                ->where('author_id', $uid)
-                ->delete();
+            foreach ($dialogues as $dialogue) {
+                $dialogue->delete();
+            }
 
             setFlash('success', __('messages.success_deleted'));
         } else {

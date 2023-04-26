@@ -28,9 +28,9 @@
         "lodash": "^4.17.21",
         "postcss": "^8.4.23",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.62.0",
+        "sass": "^1.62.1",
         "sass-loader": "^13.2.2",
-        "webpack": "^5.79.0"
+        "webpack": "^5.81.0"
     },
     "repository": {
         "type": "git",

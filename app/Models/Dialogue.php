@@ -9,13 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Dialogue
  *
- * @property int id
- * @property int message_id
- * @property int user_id
- * @property int author_id
- * @property string type
- * @property int reading
- * @property int created_at
+ * @property int $id
+ * @property int $message_id
+ * @property int $user_id
+ * @property int $author_id
+ * @property string $type
+ * @property int $reading
+ * @property int $created_at
+ *
+ * @property-read User $author
+ * @property-read Message $message
  */
 class Dialogue extends BaseModel
 {
@@ -44,5 +47,30 @@ class Dialogue extends BaseModel
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id')->withDefault();
+    }
+
+    /**
+     * Message
+     *
+     * @return BelongsTo
+     */
+    public function message(): BelongsTo
+    {
+        return $this->belongsTo(Message::class, 'message_id')->withDefault();
+    }
+
+    /**
+     * Удаление собщений диалога
+     *
+     * @return bool|null
+     */
+    public function delete(): ?bool
+    {
+        // Если сообщение осталось только у одного пользователя
+        if ($this->message->dialogues->count() === 1) {
+            $this->message->delete();
+        }
+
+        return parent::delete();
     }
 }

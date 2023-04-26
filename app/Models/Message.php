@@ -8,16 +8,22 @@ use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 
 /**
- * Class Inbox
+ * Class Message
  *
- * @property int id
- * @property int user_id
- * @property int author_id
- * @property string text
- * @property int created_at
+ * @property int $id
+ * @property int $user_id
+ * @property int $author_id
+ * @property string $text
+ * @property int $created_at
+ *
+ * @property-read User $author
+ * @property-read Collection<File> $files
+ * @property-read Collection<Dialogue> $dialogues
  */
 class Message extends BaseModel
 {
@@ -75,6 +81,14 @@ class Message extends BaseModel
     }
 
     /**
+     * @return HasMany
+     */
+    public function dialogues(): HasMany
+    {
+        return $this->hasMany(Dialogue::class);
+    }
+
+    /**
      * Create dialogue
      *
      * @param User      $user
@@ -117,5 +131,19 @@ class Message extends BaseModel
         $user->increment('newprivat');
 
         return $message;
+    }
+
+    /**
+     * Удаление сообщения и загруженных файлов
+     *
+     * @return bool|null
+     */
+    public function delete(): ?bool
+    {
+        $this->files->each(static function (File $file) {
+            $file->delete();
+        });
+
+        return parent::delete();
     }
 }
