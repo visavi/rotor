@@ -46,7 +46,7 @@ use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '11.0';
+const ROTOR_VERSION = '11.1';
 define('SITETIME', time());
 
 /**
