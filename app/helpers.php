@@ -141,13 +141,13 @@ function utfLower(string $str): string
  *
  * @return string Обрезанная строка
  */
-function utfSubstr($str, int $start, ?int $length = null): string
+function utfSubstr(mixed $str, int $start, ?int $length = null): string
 {
     if (! $length) {
         $length = utfStrlen($str);
     }
 
-    return mb_substr($str, $start, $length, 'utf-8');
+    return mb_substr((string) $str, $start, $length, 'utf-8');
 }
 
 /**

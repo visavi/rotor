@@ -21,10 +21,12 @@ final class CreateGuestbookTable extends Migration
                 $table->text('reply')->nullable();
                 $table->string('guest_name', 20)->nullable();
                 $table->integer('edit_user_id')->nullable();
+                $table->boolean('active')->default(true);
                 $table->integer('updated_at')->nullable();
                 $table->integer('created_at');
 
                 $table->index('created_at');
+                $table->index(['active', 'created_at']);
             });
         }
     }
