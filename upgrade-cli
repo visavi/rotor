@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+if ($argc < 3 ) {
+    exit('Usage: upgrade <tag1> <tag2>' . PHP_EOL);
+}
+
+[, $commit1, $commit2] = $argv;
+
+$baseDir = __DIR__;
+
+$directory = $baseDir . '/upgrades';
+if (! file_exists($directory)) {
+    mkdir($directory, 0777);
+}
+
+exec('git pull');
+$command = shell_exec('git diff ' . $commit1 . ' ' . $commit2 . ' --name-only');
+$files   = explode(PHP_EOL, $command);
+
+foreach ($files as $file) {
+    if ($file && file_exists($baseDir . '/' . $file)) {
+
+        if (! file_exists($directory . '/' . dirname($file))) {
+            mkdir($directory . '/' . dirname($file), 0777, true);
+        }
+
+        echo 'copy: ' . $baseDir . '/' . $file . PHP_EOL;
+        copy($baseDir . '/' . $file, $directory . '/' . dirname($file) . '/' . basename($file));
+    }
+}
+
+echo 'success' . PHP_EOL;

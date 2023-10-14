@@ -9,7 +9,7 @@
         @endif--}}
 
         @if ($paginator->currentPage() > 3)
-            <li class="page-item"><a class="page-link" href="{{ $paginator->url(1) }}">1</a></li>
+            <li class="page-item"><a class="page-link" href="{{ preg_replace('/(\?|\&)page=[1]$/', '', $paginator->url(1)) }}">1</a></li>
         @endif
 
         @if ($paginator->currentPage() > 4)
@@ -26,7 +26,7 @@
             @if ($page === $paginator->currentPage())
                 <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
             @else
-                <li class="page-item"><a class="page-link" href="{{ $paginator->url($page) }}">{{ $page }}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ preg_replace('/(\?|\&)page=[1]$/', '', $paginator->url($page)) }}">{{ $page }}</a></li>
             @endif
         @endforeach
 
