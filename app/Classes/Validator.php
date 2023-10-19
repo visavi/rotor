@@ -7,7 +7,6 @@ namespace App\Classes;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Illuminate\Http\UploadedFile;
-use function Deployer\Support\starts_with;
 
 /**
  * Class Validation data
