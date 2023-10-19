@@ -7,6 +7,7 @@ namespace App\Classes;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Illuminate\Http\UploadedFile;
+use function Deployer\Support\starts_with;
 
 /**
  * Class Validation data
@@ -443,12 +444,7 @@ class Validator
             return $this;
         }
 
-        $key = is_array($label) ? key($label) : 0;
-
-        if (empty($rules['extensions'])) {
-            $rules['extensions'] = ['jpg', 'jpeg', 'gif', 'png'];
-        }
-
+        $key       = is_array($label) ? key($label) : 0;
         $extension = strtolower($input->getClientOriginalExtension());
 
         if (! in_array($extension, $rules['extensions'], true)) {
@@ -459,7 +455,7 @@ class Validator
             $this->addError([$key => __('validator.size_max', ['size' => formatSize($rules['maxsize'])])]);
         }
 
-        if (in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
+        if (str_starts_with($input->getMimeType(), 'image')) {
             [$width, $height] = getimagesize($input->getPathname());
 
             if (isset($rules['maxweight'])) {

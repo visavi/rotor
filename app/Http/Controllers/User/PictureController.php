@@ -46,8 +46,9 @@ class PictureController extends Controller
             $validator->equal($request->input('_token'), csrf_token(), ['photo' => __('validator.token')]);
 
             $rules = [
-                'maxsize'   => setting('filesize'),
-                'minweight' => 100,
+                'maxsize'    => setting('filesize'),
+                'extensions' => explode(',', setting('image_extensions')),
+                'minweight'  => 100,
             ];
             $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);
 

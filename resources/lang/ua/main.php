@@ -130,6 +130,7 @@ return [
     'min_image_size'        => 'Мінімальний розмір зображення',
     'max_image_size'        => 'Максимальний розмір зображення',
     'valid_file_extensions' => 'Припустимі розширення файлів',
+    'valid_image_extensions' => 'Припустимі розширення зображення',
     'attached_files'        => 'Прикріплені файли',
     'attach_files'          => 'Прикріпити файли',
     'attach_file'           => 'Прикріпити файл',

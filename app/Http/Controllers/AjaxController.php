@@ -316,20 +316,15 @@ class AjaxController extends Controller
         }
 
         if ($validator->isValid()) {
+            $allowedExt = $isImageType ? setting('image_extensions') : setting('file_extensions');
+
             $rules = [
                 'minweight'  => 100,
                 'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', setting('file_extensions')),
+                'extensions' => explode(',', $allowedExt),
             ];
 
             $validator->file($file, $rules, __('validator.file_upload_failed'));
-        }
-
-        if ($validator->isValid()) {
-            $extension = strtolower($file->getClientOriginalExtension());
-            if ($isImageType && ! in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true)) {
-                $validator->addError(__('validator.extension'));
-            }
         }
 
         if ($validator->isValid()) {

@@ -60,8 +60,9 @@ class NewsController extends AdminController
                 ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
             $rules = [
-                'maxsize'   => setting('filesize'),
-                'minweight' => 100,
+                'maxsize'    => setting('filesize'),
+                'extensions' => explode(',', setting('image_extensions')),
+                'minweight'  => 100,
             ];
 
             $validator->file($image, $rules, ['image' => __('validator.image_upload_failed')], false);
@@ -116,8 +117,9 @@ class NewsController extends AdminController
                 ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
             $rules = [
-                'maxsize'   => setting('filesize'),
-                'minweight' => 100,
+                'maxsize'    => setting('filesize'),
+                'extensions' => explode(',', setting('image_extensions')),
+                'minweight'  => 100,
             ];
 
             $validator->file($image, $rules, ['image' => __('validator.image_upload_failed')], false);

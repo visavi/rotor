@@ -28,7 +28,7 @@ trait UploadTrait
         $filename  = uniqueName($extension);
         $path      = $this->uploadPath . '/' . $filename;
         $fullPath  = public_path($path);
-        $isImage   = in_array($extension, ['jpg', 'jpeg', 'gif', 'png'], true);
+        $isImage   = str_starts_with($file->getMimeType(), 'image');
 
         if ($isImage) {
             $img = Image::make($file);

@@ -891,6 +891,7 @@ function icons(string $ext): HtmlString
         case 'wbmp':
         case 'gif':
         case 'png':
+        case 'webp':
             $ico = 'file-image';
             break;
         case 'ttf':
@@ -1447,7 +1448,7 @@ function deleteFile(string $path): bool
         unlink($path);
     }
 
-    if (in_array(getExtension($path), ['jpg', 'jpeg', 'gif', 'png'], true)) {
+    if (in_array(getExtension($path), explode(',', setting('image_extensions')), true)) {
         $thumb = ltrim(str_replace([public_path(), '/'], ['', '_'], $path), '_');
         $thumb = public_path('uploads/thumbnails/' . $thumb);
 

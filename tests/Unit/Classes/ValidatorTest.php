@@ -453,6 +453,7 @@ class ValidatorTest extends \Tests\TestCase
         $image3 = UploadedFile::fake()->image('avatar.tiff');
 
         $rules = [
+            'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'wepb'],
             'maxweight' => 50,
         ];
 
@@ -471,6 +472,7 @@ class ValidatorTest extends \Tests\TestCase
         self::assertFalse($this->validator->isValid());
 
         $rules = [
+            'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'wepb'],
             'maxsize' => 1,
         ];
 
@@ -479,6 +481,7 @@ class ValidatorTest extends \Tests\TestCase
         self::assertFalse($this->validator->isValid());
 
         $rules = [
+            'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'wepb'],
             'minweight' => 50,
         ];
 

@@ -130,6 +130,7 @@ return [
     'min_image_size'        => 'Minimum image size',
     'max_image_size'        => 'Maximum image size',
     'valid_file_extensions' => 'Valid file extensions',
+    'valid_image_extensions' => 'Valid image extensions',
     'attached_files'        => 'Attached files',
     'attach_files'          => 'Attach files',
     'attach_file'           => 'Attach file',
