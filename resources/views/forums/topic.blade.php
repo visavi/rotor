@@ -179,7 +179,7 @@
                             @foreach ($post->files as $file)
                                 <div class="media-file">
                                     @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
+                                        <a href="{{ $file->hash }}" data-fancybox="{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                                     @endif
 
                                     @if ($file->isAudio())

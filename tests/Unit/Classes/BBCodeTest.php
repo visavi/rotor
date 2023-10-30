@@ -203,7 +203,7 @@ class BBCodeTest extends \Tests\TestCase
         $text      = '[img]https://visavi.net/assets/images/img/logo.png[/img]';
         $parseText = $this->bbCode->parse($text);
 
-        self::assertSame('<div class="media-file"><a href="https://visavi.net/assets/images/img/logo.png" class="gallery"><img src="https://visavi.net/assets/images/img/logo.png" class="img-fluid" alt="image"></a></div>', $parseText);
+        self::assertSame('<div class="media-file"><a href="https://visavi.net/assets/images/img/logo.png" data-fancybox><img src="https://visavi.net/assets/images/img/logo.png" class="img-fluid" alt="image"></a></div>', $parseText);
     }
 
     /**

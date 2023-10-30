@@ -6,7 +6,6 @@ translate_en = {
     confirm_message_delete: 'Are you sure you want to delete the record?',
     message_deleted: 'Message successfully deleted!',
     record_deleted: 'Record successfully deleted!',
-    photo_count: 'Photo {current} of {total}',
     copied: 'Copied!',
 
     buttons: {

@@ -69,23 +69,6 @@ $(function () {
         $(this).nextAll(".news-text:first").slideToggle();
     });
 
-    $('a.gallery').colorbox({
-        maxWidth: '100%',
-        maxHeight: '100%',
-        onComplete : function () {
-            $(this).colorbox.resize();
-        }
-    }).colorbox({
-        rel: function () {
-            return $(this).data('group');
-        },
-        current: translate.photo_count
-    });
-
-    $(window).resize(function () {
-        $.colorbox.resize();
-    });
-
     $('.colorpicker').on('input', function () {
         $('.colorpicker-addon').val(this.value);
     });

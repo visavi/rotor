@@ -62,7 +62,7 @@
                                     {{ icons($file->extension) }}
                                     <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                                     @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" class="gallery" data-group="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                        <a href="{{ $file->hash }}" data-fancybox="{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
                                     @endif
                                 </div>
                             @endforeach

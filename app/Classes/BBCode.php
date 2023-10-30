@@ -40,7 +40,7 @@ class BBCode
         ],
         'image' => [
             'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
-            'replace' => '<div class="media-file"><a href="$1" class="gallery"><img src="$1" class="img-fluid" alt="image"></a></div>',
+            'replace' => '<div class="media-file"><a href="$1" data-fancybox><img src="$1" class="img-fluid" alt="image"></a></div>',
         ],
         'bold' => [
             'pattern' => '/\[b\](.+?)\[\/b\]/s',

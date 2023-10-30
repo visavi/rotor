@@ -18,7 +18,7 @@ $countFiles = $files->count();
                     @php
                         $image = resizeImage($file->hash, ['alt' => $model->title, 'class' => 'w-100']);
                     @endphp
-                    <a href="{{ $file->hash }}" class="gallery" data-group="{{ $model->id }}">{{ $image }}</a>
+                    <a href="{{ $file->hash }}" data-fancybox="{{ $model->id }}">{{ $image }}</a>
                 </div>
             @endforeach
         </div>

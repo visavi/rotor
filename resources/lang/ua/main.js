@@ -6,7 +6,6 @@ translate_ua = {
     confirm_message_delete: 'Ви дійсно хочете видалити запис?',
     message_deleted: 'Повідомлення успішно видалено!',
     record_deleted: 'Запис успішно видалено!',
-    photo_count: 'Фото {current} з {total}',
     copied: 'Скопійовано!',
 
     buttons: {

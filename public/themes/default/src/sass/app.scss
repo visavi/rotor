@@ -12,7 +12,7 @@
 @import 'sidebar';
 @import 'footer';
 
-// This styles are optional based on your preferance
+// This styles are optional based on your preference
 @import 'component/badge';
 @import 'component/dropdown';
 @import 'component/button';
@@ -23,7 +23,7 @@
 @import '@fortawesome/fontawesome-free/scss/regular';
 @import '@fortawesome/fontawesome-free/scss/solid';
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
-@import 'css/colorbox/colorbox';
+@import "@fancyapps/ui/dist/fancybox.css";
 @import 'css/markitup';
 @import 'css/toastr';
 @import 'css/prettify';
