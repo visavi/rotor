@@ -1,35 +1,25 @@
-.prettyprint .com { color: #93a1a1; }
-.prettyprint .lit { color: #F60; }
-.prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: #93a1a1; }
-.prettyprint .fun { color: #dc322f; }
-.prettyprint .str { color: #D14; }
-.prettyprint .atv { color: #d44950; }
-.prettyprint .kwd { color: #0A8; }
-.prettyprint .tag { color: #2f6f9f; }
-.prettyprint .typ, .prettyprint .dec, .prettyprint .var { color: teal; }
-.prettyprint .atn { color: #4f9fcf; }
-.prettyprint .pln { color: #069; }
+.prettyprint .com { color: var(--base-comment); }
+.prettyprint .lit { color: var(--base-number); }
+.prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: var(--base-emphasis); }
+.prettyprint .fun { color: var(--base-fun); }
+.prettyprint .str { color: var(--base-str); }
+.prettyprint .atv { color: var(--base-atv); }
+.prettyprint .kwd { color: var(--base-attr); }
+.prettyprint .tag { color: var(--base-tag); }
+.prettyprint .typ, .prettyprint .var { color: var(--base-class); }
+.prettyprint .dec { color: var(--base-dec); }
+.prettyprint .atn { color: var(--base-symbol); }
+.prettyprint .pln { color: var(--base-code); }
 
 .prettyprint {
-  padding: 0;
-  margin: 0;
+  background: var(--base-bg);
+  color: var(--base-color);
   display: block;
   white-space: pre;
-  overflow: auto;
+  overflow-x:auto;
   word-wrap: normal;
   tab-size: 2;
-  font-size: 87.5%;
-  background-color: #f7f7f9;
-}
-
-/* Specify class=linenums on a pre to get line numbering */
-.prettyprint ol.linenums {
-  margin: 0;
-  padding: .5rem 3rem;
-  box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
-}
-
-.prettyprint ol.linenums li {
-  color: #bebec5;
-  line-height: 18px;
+  padding: 10px;
+  font-size: 90%;
+  margin: 0.5rem 0;
 }

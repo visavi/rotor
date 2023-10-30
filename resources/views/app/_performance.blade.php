@@ -16,7 +16,7 @@
     </ul>
 
 @if (config('app.debug'))
-<pre class="js-queries text-start prettyprint linenums pre-scrollable" style="display: none">
+<pre class="js-queries text-start prettyprint" style="display: none">
 @foreach ($queries as $key => $query)
 {{ $query['query'] }} ({{ number_format($query['time'] / 1000, 4) }} {{ __('index.seconds') }})
 @endforeach

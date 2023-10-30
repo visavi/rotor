@@ -1,7 +1,7 @@
 // Page common styles
 
 ::selection {
-  color: $white;
+  color: var(--bs-body-bg);
   background-color: darken($primary-color, 10%);
 }
 
@@ -31,7 +31,7 @@ h3 {
 .app {
   // On large devices make sidebar visible by default
   // adding sidenav-toggled class will close sidebar
-  background-color: $app-bg;
+  background-color: var(--base-bg);
   max-width: $app-width;
   margin-left: auto;
   margin-right: auto;
@@ -65,7 +65,7 @@ h3 {
   flex: 1 0 auto;
   margin-top: 50px;
   padding: 30px;
-  background-color: $body-bg;
+  background-color: var(--bs-body-bg);
   transition: margin-left 0.3s ease;
   @media(min-width: 768px) {
     margin-left: $sidebar-width;

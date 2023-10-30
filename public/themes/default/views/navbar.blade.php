@@ -17,6 +17,32 @@
             </form>
         </li>
 
+        <li class="dropdown">
+            <a href="#" class="app-nav__item" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                <i class="fa-solid fa-circle-half-stroke fa-lg" id="theme-icon-active"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end"  style="--bs-dropdown-min-width: 8rem;">
+                <li>
+                    <a type="button" class="dropdown-item" data-bs-theme-value="light">
+                        <i class="fa-solid fa-sun fa-lg"></i>
+                        Светлая
+                    </a>
+                </li>
+                <li>
+                    <a type="button" class="dropdown-item" data-bs-theme-value="dark">
+                        <i class="fa-solid fa-moon fa-lg"></i>
+                        Темная
+                    </a>
+                </li>
+                <li>
+                    <a type="button" class="dropdown-item" data-bs-theme-value="auto">
+                        <i class="fa-solid fa-circle-half-stroke fa-lg"></i>
+                        Авто
+                    </a>
+                </li>
+            </ul>
+        </li>
+
         <!--Notification Menu-->
         @if ($user = getUser())
             @if (isAdmin())

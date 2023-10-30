@@ -2,7 +2,7 @@
 
 .app-footer {
   flex: 0 0 auto;
-  background-color: $body-bg;
+  background-color: var(--bs-body-bg);
   padding: 10px 30px;
   transition: margin-left 0.3s ease;
 

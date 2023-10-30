@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" data-bs-theme="auto">
 <head>
     <meta charset="utf-8">
     <meta name="theme-color" content="#2e8cc2">
@@ -11,6 +11,7 @@
     <link href="/favicon.ico" rel="icon">
     <link href="/assets/img/images/icon.png" rel="image_src">
     <link href="/news/rss" title="RSS News" type="application/rss+xml" rel="alternate">
+    <script src="{{ mix('/assets/js/dist/theme-switcher.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
     @stack('styles')
 </head>

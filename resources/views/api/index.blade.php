@@ -23,7 +23,7 @@
     <br>{{ __('api.text_description') }}<br><br>
 
     {{ __('api.text_example') }}
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
 GET https://visavi.net/api/forums/1
 {
   "token": "key",
@@ -35,7 +35,7 @@ GET https://visavi.net/api/forums/1
 </pre>
 
     {{ __('api.text_return') }}
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
 {
   "success": true,
   "data": {

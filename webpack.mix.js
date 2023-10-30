@@ -32,6 +32,9 @@ mix
     /* lang */
     .js('resources/lang/*/main.js', 'public/assets/js/dist/lang.js')
 
+    /* Theme toggler */
+    .js('public/assets/js/theme-switcher.js', 'public/assets/js/dist/theme-switcher.js')
+
     .extract()
     .version();
 

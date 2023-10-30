@@ -1,5 +1,5 @@
 .section {
-  background: #fff;
+  background: var(--bs-body-bg);
   padding: 15px;
   overflow: hidden;
 }
@@ -29,7 +29,7 @@
 }
 
 .section-form {
-  background: #fff;
+  background: var(--base-bg);
   padding: 15px;
 }
 
@@ -136,11 +136,12 @@ textarea.form-control {
 }
 
 .blockquote {
-  padding: 8px 15px;
-  font-size: 95%;
-  background:#f7f7f9;
-  border-left: 5px solid #ddd;
-  font-style:italic;
+    padding: 8px 15px;
+    font-size: 90%;
+    background: var(--base-bg);
+    border-left: 5px solid;
+    border-color: rgba(var(--bs-primary-rgb), 0.5);
+    font-style:italic;
 }
 
 .blockquote-footer {
@@ -204,14 +205,15 @@ textarea.form-control {
 
 .spoiler-text {
   padding: 10px 15px;
-  margin: 5px 0;
-  background-color: #f7f7f9;
+  margin: 0.5rem 0;
+  background-color: var(--base-bg);
 }
 
 .hidden-text {
-  padding: 10px 15px;
-  margin: 5px 0;
-  background-color: #f7f7f9;
+  padding: 10px;
+  margin: 0.5rem 0;
+  background-color: var(--base-bg);
+  font-size: 90%;
 }
 
 .post-rating-up.active {
@@ -273,8 +275,8 @@ textarea.form-control {
 }
 
 .performance {
-  background-color: #f8f9fa;
-  border: 1px solid #e1e1e8;
+  background-color: var(--base-bg);
+  border: 1px solid var(--bs-border-color);
   margin: 10px 0;
   padding: 10px;
 }

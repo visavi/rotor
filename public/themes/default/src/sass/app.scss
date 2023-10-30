@@ -2,7 +2,6 @@
 
 // This files are essential for the theme
 @import 'variables';
-@import 'customize-bootstrap';
 @import 'bootstrap/scss/bootstrap';
 
 // This styles are essential for theme
@@ -25,7 +24,7 @@
 @import '@fortawesome/fontawesome-free/scss/solid';
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
 @import 'css/colorbox/colorbox';
-@import 'css/markitup/markitup';
+@import 'css/markitup';
 @import 'css/toastr';
 @import 'css/prettify';
 

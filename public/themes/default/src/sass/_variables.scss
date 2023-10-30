@@ -1,3 +1,39 @@
+:root,
+[data-bs-theme=light] {
+    --base-bg: #f2f2f2;
+    --base-color: #000;
+    --base-tag: #00f;
+    --base-emphasis: #a8a8a2;
+    --base-number: #f92672;
+    --base-code: green;
+    --base-attr: #00f;
+    --base-symbol: #66d9ef;
+    --base-class: #a31515;
+    --base-str: #d14;
+    --base-comment: #75715e;
+    --base-doc: grey;
+    --base-fun: #dc322f;
+    --base-atv: #d44950;
+    --base-dec: #75715e;
+}
+[data-bs-theme=dark] {
+    --base-bg: #282c34;
+    --base-color: #f8f8f2;
+    --base-tag: #66d9ef;
+    --base-emphasis: #a8a8a2;
+    --base-number: #ae81ff;
+    --base-code: #a6e22e;
+    --base-attr: #f92672;
+    --base-symbol: #66d9ef;
+    --base-class: #f8f8f2;
+    --base-str: #e6db74;
+    --base-comment: #75715e;
+    --base-doc: grey;
+    --base-fun: #dc322f;
+    --base-atv: #d44950;
+    --base-dec: #75715e;
+}
+
 //
 // Application Variables
 //-----------------------------------------------------
@@ -9,6 +45,7 @@ $body-font: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
 // Background color
 //
 $body-bg: #fff;
+$body-bg-dark: #2b3035;
 
 $app-bg: #f1f4f5;
 
@@ -23,15 +60,6 @@ $app-bg: #f1f4f5;
 // Purple: #673AB7
 
 $primary-color: #297dad;
-
-//
-// Theme Colors
-//
-$white: #fff;
-
-// Complementry color is used to indecate the loading bar on the top
-// of the page with pace.js plugin
-$complementry-color: adjust_hue($primary-color, 180);
 
 // ------- App Width --------
 $app-width: 1200px;
@@ -65,3 +93,42 @@ $sidebar-light-link-color: #333;
 
 // Fontawesome fonts path
 $fa-font-path: '/assets/fonts';
+
+//
+// Customize bootstrap variables to match
+// look and feel of the theme
+//-----------------------------------------------------
+
+$primary: $primary-color;
+
+// Customize typographic styles
+$font-size-base: 0.9rem;
+$small-font-size: 0.8em;
+$font-family-sans-serif: $body-font;
+$link-color: $primary-color;
+$link-decoration: none;
+$link-hover-decoration: underline;
+$headings-font-weight: bold;
+
+// Customize Dropdown styles
+$dropdown-padding-y: 0;
+$dropdown-spacer: 0;
+$dropdown-border-width: 0;
+$dropdown-item-padding-y: 8px;
+$dropdown-item-padding-x: 20px;
+
+// Customize button styles
+$btn-border-radius: 3px;
+$btn-border-radius-lg: 3px;
+$btn-border-radius-sm: 3px;
+$btn-font-weight: 700;
+$btn-transition: box-shadow 0.3s cubic-bezier(0.35, 0, 0.25, 1), transform 0.2s cubic-bezier(0.35, 0, 0.25, 1), background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+
+// Custmize form component styles
+$input-border-radius: 4px;
+$input-border-radius-lg: 4px;
+$input-border-radius-sm: 4px;
+$input-focus-border-color: $primary-color;
+$input-btn-border-width: 2px;
+$input-btn-focus-box-shadow: none;
+$input-btn-focus-width: 0;

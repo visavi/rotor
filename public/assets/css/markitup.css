@@ -6,31 +6,30 @@
     margin:0; padding:0;
     outline:none;
 }
+
 .markItUp a:link,
 .markItUp a:visited {
-    #color:#000;
     text-decoration:none;
     border: none;
 }
-.markItUpContainer {
-    font:11px Verdana, Arial, Helvetica, sans-serif;
-}
+
 .markItUpEditor {
     padding:5px;
     clear:both;
     display:block;
     overflow:auto;
 }
-.markItUpPreviewFrame {
-    padding:5px 0;
-    overflow:auto;
-    background-color:#FFFFFF;
-    width:99.9%;
-    margin:5px 0;
-    border: 2px solid #ced4da;
-    border-radius: 4px;
-}
 
+.markItUpPreviewFrame {
+    overflow: auto;
+    width: 100%;
+    margin: 5px 0;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: 0.25rem;
+}
+.markItUpPreviewFrame body{
+    color: #fff;
+}
 /***************************************************************************************/
 /* first row of buttons */
 .markItUpHeader ul li {
@@ -40,11 +39,17 @@
 }
 .markItUpHeader ul li:hover > ul {
     display:block;
+    background-color: var(--base-bg);
+    z-index: 1;
 }
-.markItUpHeader ul .markItUpDropMenu {
-    background: transparent url(/assets/css/markitup/images/menu.png) no-repeat 115% 50%;
-    padding-right: 5px;
+
+.markItUpHeader ul .markItUpDropMenu:after {
+    content: "\f0d7";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 10px;
 }
+
 .markItUpHeader ul .markItUpDropMenu li {
     margin-right:0;
 }
@@ -52,24 +57,27 @@
 .markItUpHeader ul ul {
     display:none;
     position:absolute;
-    top:18px; left:0;
+    top:22px; left:0;
     background: #fff;
-    border:1px solid #ccc;
+    border: 1px solid var(--bs-border-color);
     border-radius: 5px;
 }
 .markItUpHeader ul ul li {
     float:none;
-    border-bottom:1px solid #ccc;
+    border-bottom: 1px solid var(--bs-border-color);
 }
-.markItUpHeader ul ul .markItUpDropMenu {
-    background:#FFF url(/assets/css/markitup/images/submenu.png) no-repeat 100% 50%;
+
+.markItUpHeader ul ul .markItUpDropMenu:after {
+    content: "\f0da";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
 }
 .markItUpHeader ul .markItUpSeparator {
-    margin:0 5px;
-    width:1px;
-    height:16px;
-    overflow:hidden;
-    background-color:#CCC;
+    margin: 5px;
+    width: 1px;
+    height: 20px;
+    overflow: hidden;
+    background-color: #CCC;
     text-indent: -10000px;
 }
 .markItUpHeader ul ul .markItUpSeparator {
@@ -91,39 +99,39 @@
 }
 .markItUpHeader ul ul a {
     display:block;
-    color: #333;
-    font-size: 12px;
     text-indent:0;
     width:100px;
     padding: 2px 5px;
     background-position:2px 50%;
 }
 .markItUpHeader ul ul a:hover  {
-    color: #bbb;
+    background-color: var(--bs-tertiary-bg);
 }
 
 /* ------------------------------------------------------------------- */
 .markItUp .markItUpButton a {
     font-size: 15px;
     cursor: pointer;
-    color: #333;
+    color: var(--bs-body-color);
 }
+
 .markItUp .bb-color ul {
-    width:80px;
-    padding:1px;
+    width: 80px;
+    padding: 1px;
 }
 .markItUp .bb-color  li {
-    border:1px solid white;
-    width:25px;
-    height:25px;
-    overflow:hidden;
-    padding:0; margin:0;
-    float:left;
+    border: 1px solid var(--bs-border-color);
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    float: left;
 }
 .markItUp .bb-color ul a {
-    width:25px;
-    height:25px;
-    text-indent:-10000px;
+    width: 25px;
+    height: 25px;
+    text-indent: -10000px;
 }
 
 .markItUp .bb-color .col1-1 a {
@@ -156,10 +164,14 @@
     background: #00ffff;
 }
 
-.markItUp .bb-sticker a {
-    background: transparent url(/assets/css/markitup/images/menu.png) no-repeat 115% 50%;
-    padding-right: 7px;
+.markItUp .bb-sticker a:after {
+    content: "\f0d7";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 10px;
+    margin-left: 3px;
 }
+
 .markItUp .bb-cutpage a {
     display: none;
 }
