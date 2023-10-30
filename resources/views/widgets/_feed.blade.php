@@ -44,7 +44,7 @@
                     @foreach ($post->lastPost->files as $file)
                         <div class="media-file">
                             @if ($file->isImage())
-                                <a href="{{ $file->hash }}" data-fancybox="{{ $post->lastPost->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
+                                <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $post->lastPost->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                             @endif
 
                             @if ($file->isAudio())
@@ -100,7 +100,7 @@
                 <div class="section-message">
                     @if ($post->image)
                         <div class="media-file mb-3">
-                            <a href="{{ $post->image }}" data-fancybox>{{ resizeImage($post->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $post->title]) }}</a>
+                            <a href="{{ $post->image }}" data-fancybox="gallery-{{ $post->id }}">{{ resizeImage($post->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $post->title]) }}</a>
                         </div>
                     @endif
 

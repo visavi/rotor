@@ -46,7 +46,7 @@
         @if ($down->getImages()->isNotEmpty())
             @foreach ($down->getImages() as $image)
                 <div class="media-file mb-3">
-                    <a href="{{ $image->hash }}" data-fancybox="{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
+                    <a href="{{ $image->hash }}" data-fancybox="gallery-{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
                 </div>
             @endforeach
         @endif
