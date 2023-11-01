@@ -12,6 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Move .env file
+        run: mv .env.example .env
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
