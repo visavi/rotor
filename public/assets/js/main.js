@@ -1,9 +1,3 @@
-import {Fancybox} from "@fancyapps/ui";
-
-Fancybox.bind('[data-fancybox="gallery"]', {
-    groupAttr: false,
-});
-
 $(function () {
     var currentLang = $('html').attr('lang');
     translate = window['translate_' + currentLang];
