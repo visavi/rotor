@@ -35,8 +35,14 @@ jobs:
       - name: Build and run production scripts
         run: npm run prod
 
+      - name: Remove node_modules
+        run: rm -r node_modules
+
+      - name: Clear vendor
+        run: php vendor/bin/cleanup
+
       - name: Create Archive
-        run: zip -r archive.zip *
+        run: zip -r archive.zip .
 
       - name: Upload Archive
         uses: actions/upload-artifact@v3

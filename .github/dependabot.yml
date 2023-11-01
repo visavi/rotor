@@ -11,7 +11,7 @@ updates:
       - "dependencies"
     allow:
       - dependency-type: "all"
-        update-type: "security"
+        security-updates: true
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -21,7 +21,7 @@ updates:
       - "dependencies"
     allow:
       - dependency-type: "all"
-        update-type: "security"
+        security-updates: true
 
   - package-ecosystem: "composer"
     directory: "/"
@@ -31,4 +31,4 @@ updates:
       - "dependencies"
     allow:
       - dependency-type: "all"
-        update-type: "security"
+        security-updates: true
