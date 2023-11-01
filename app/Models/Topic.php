@@ -162,12 +162,13 @@ class Topic extends BaseModel
                     'page' => $i,
                     'title' => $i . ' страница',
                     'name' => $i,
+                    'url' => $i > 1 ? $link . '?page=' . $i  : $link,
                 ];
             }
         }
 
-        if (5 < $pg_cnt) {
-            if (6 < $pg_cnt) {
+        if ($pg_cnt > 5) {
+            if ($pg_cnt > 6) {
                 $pages[] = [
                     'separator' => true,
                     'name' => ' ... ',
@@ -175,13 +176,14 @@ class Topic extends BaseModel
             }
 
             $pages[] = [
-                'page' => $pg_cnt,
+                'page'  => $pg_cnt,
                 'title' => $pg_cnt . ' страница',
-                'name' => $pg_cnt,
+                'name'  => $pg_cnt,
+                'url'   => $link . '?page=' . $i,
             ];
         }
 
-        return new HtmlString(view('forums/_pagination', compact('pages', 'link')));
+        return new HtmlString(view('forums/_pagination', compact('pages')));
     }
 
     /**

@@ -8,7 +8,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev">@lang('main.previous')</a>
+                    <a class="page-link" href="{{ preg_replace('/(\?|\&)page=[1]$/', '', $paginator->previousPageUrl()) }}" rel="prev">@lang('main.previous')</a>
                 </li>
             @endif
 
