@@ -9,6 +9,9 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
+    allow:
+      - dependency-type: "all"
+        update-type: "security"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -16,6 +19,9 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
+    allow:
+      - dependency-type: "all"
+        update-type: "security"
 
   - package-ecosystem: "composer"
     directory: "/"
@@ -23,3 +29,6 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
+    allow:
+      - dependency-type: "all"
+        update-type: "security"

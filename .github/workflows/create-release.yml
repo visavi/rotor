@@ -1,0 +1,41 @@
+name: Build release
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0.2
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev -o --prefer-dist --ignore-platform-reqs
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and run production scripts
+        run: npm run prod
+
+      - name: Create Archive
+        run: zip -r archive.zip *
+
+      - name: Upload Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: composer-archive
+          path: archive.zip
