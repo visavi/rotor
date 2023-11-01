@@ -12,13 +12,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Move .env file
-        run: mv .env.example .env
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
+          
+      - name: Move .env file
+        run: mv .env.example .env
 
       - name: Install Composer dependencies
         run: composer install --no-dev -o --prefer-dist --ignore-platform-reqs
