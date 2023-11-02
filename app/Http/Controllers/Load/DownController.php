@@ -630,7 +630,7 @@ class DownController extends Controller
 
             if (
                 $document->getUncompressedSize() > 0
-                && preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $document->getName())
+                && preg_match("/\.(gif|png|bmp|jpg|jpeg|webp)$/", $document->getName())
             ) {
                 $ext = getExtension($document->getName());
 

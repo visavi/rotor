@@ -55,7 +55,7 @@ class ModuleController extends AdminController
         $moduleConfig = include $modulePath . '/module.php';
 
         if (file_exists($modulePath . '/screenshots')) {
-            $moduleConfig['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+            $moduleConfig['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg,webp}', GLOB_BRACE);
         }
 
         if (file_exists($modulePath . '/migrations')) {

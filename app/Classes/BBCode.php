@@ -39,7 +39,7 @@ class BBCode
             'callback' => 'urlReplace',
         ],
         'image' => [
-            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
+            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg|webp))\[/img\]%s',
             'replace' => '<div class="media-file"><a href="$1" data-fancybox="gallery"><img src="$1" class="img-fluid" alt="image"></a></div>',
         ],
         'bold' => [

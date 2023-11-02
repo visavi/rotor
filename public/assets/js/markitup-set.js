@@ -15,9 +15,9 @@ mySettings = {
         {title: translate.editor.strike, name: '<i class="fa fa-strikethrough"></i>', className: 'bb-strike', key: 'S', openWith: '[s]', closeWith: '[/s]'},
 
         {separator: '---------------'},
-        {title: translate.editor.link, name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '[url=[![' + translate.editor.link + ':!:http://]!]]', closeWith: '[/url]', placeHolder: translate.editor.link_text},
+        {title: translate.editor.link, name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '[url=[![' + translate.editor.link + ':!:https://]!]]', closeWith: '[/url]', placeHolder: translate.editor.link_text},
 
-        {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-image', openWith: '[img][![' + translate.editor.image_text + ':!:http://]!]', closeWith: '[/img]'},
+        {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-image', openWith: '[img][![' + translate.editor.image_text + ':!:https://]!]', closeWith: '[/img]'},
 
         {title: translate.editor.video, name: '<i class="fab fa-youtube"></i>', className: 'bb-youtube', openWith: '[youtube][![' + translate.editor.video_link + ']!]', closeWith: '[/youtube]'},
         {title: translate.editor.color, name: '<i class="fa fa-th"></i>', className: 'bb-color', openWith: '[color=[![' + translate.editor.color_code + ']!]]', closeWith: '[/color]',
@@ -114,8 +114,8 @@ myHtmlSettings = {
         {title: 'Ol', name: '<i class="fa fa-list-ol"></i>', className: 'bb-ol', openWith: '<ol>\n', closeWith: '</ol>\n'},
         {title: 'Li', name: '<i class="fa fa-minus"></i>', className: 'bb-li', openWith: '<li>', closeWith: '</li>'},
         {separator: '---------------'},
-        {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-picture', key: 'P', replaceWith: '<img src="[![' + translate.editor.image_text + ':!:http://]!]" alt="[![' + translate.editor.alt + ']!]" />'},
-        {title: translate.editor.link, name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '<a href="[![' + translate.editor.link + ':!:http://]!]"(!( title="[![Title]!]")!)>', closeWith: '</a>', placeHolder: translate.editor.link_text},
+        {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-picture', key: 'P', replaceWith: '<img src="[![' + translate.editor.image_text + ':!:https://]!]" alt="[![' + translate.editor.alt + ']!]" />'},
+        {title: translate.editor.link, name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '<a href="[![' + translate.editor.link + ':!:https://]!]"(!( title="[![Title]!]")!)>', closeWith: '</a>', placeHolder: translate.editor.link_text},
         {separator: '---------------'},
         {title: translate.editor.clean, name: '<i class="fa fa-eraser"></i>', classname: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } }
     ]

@@ -84,7 +84,7 @@
 
 @media (max-width: 768px) {
   .section, .section-form {
-    padding: 5px;
+    padding: 10px 15px;
   }
 
   .user-avatar {

@@ -49,7 +49,7 @@
 
     <p class="text-muted fst-italic">
         {{ __('stickers.valid_sticker_code') }}<br>
-        {{ __('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
+        {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('image_extensions')) }}<br>
         {{ __('main.max_file_weight') }}: {{ formatSize(setting('stickermaxsize')) }}<br>
         {{ __('main.max_image_size') }}: {{ setting('stickermaxweight') }} px<br><br>
     </p>

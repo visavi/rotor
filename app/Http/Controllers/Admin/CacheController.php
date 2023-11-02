@@ -23,7 +23,7 @@ class CacheController extends AdminController
         $type = $request->input('type', 'files');
 
         if ($type === 'images') {
-            $files = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg}'), GLOB_BRACE);
+            $files = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg,webp}'), GLOB_BRACE);
             $files = paginate($files, 20, compact('type'));
         } elseif ($type === 'views') {
             $files = glob(storage_path('framework/views/*.php'), GLOB_BRACE);

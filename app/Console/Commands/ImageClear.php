@@ -37,7 +37,7 @@ class ImageClear extends Command
      */
     public function handle()
     {
-        $images = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg}'), GLOB_BRACE);
+        $images = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg,webp}'), GLOB_BRACE);
 
         if ($images) {
             foreach ($images as $image) {

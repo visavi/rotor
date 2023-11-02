@@ -33,7 +33,7 @@
         </form>
     </div>
 
-    {{ __('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
+    {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('image_extensions')) }}<br>
     {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
     {{ __('main.min_image_size') }}: 100px<br>
     {{ __('users.avatar_generation') }}<br>

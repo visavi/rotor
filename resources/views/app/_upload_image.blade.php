@@ -31,6 +31,6 @@ $pointer = empty($paste)  ? null : 'cursor-pointer';
 <p class="text-muted fst-italic">
     {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
     {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-    {{ __('main.valid_file_extensions') }}: jpg, jpeg, gif, png<br>
+    {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('image_extensions')) }}<br>
     {{ __('main.min_image_size') }}: 100px
 </p>
