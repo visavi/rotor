@@ -9,6 +9,7 @@
   display: flex;
   background-color: $navbar-color;
   z-index: 1030;
+  padding-right: 10px;
   @media print { display: none; }
 }
 
@@ -99,6 +100,7 @@
     background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
   }
+  @media(max-width: 767px) { padding: 15px 10px; }
 }
 
 .app-search {
