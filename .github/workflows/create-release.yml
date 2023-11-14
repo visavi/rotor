@@ -35,17 +35,11 @@ jobs:
       - name: Build and run production scripts
         run: npm run prod
 
-      - name: Remove node_modules
-        run: rm -r node_modules
-
-      - name: Remove .github
-        run: rm -r .github
-
       - name: Clear vendor
         run: php vendor/bin/cleanup
 
       - name: Create Archive
-        run: zip -r release.zip .
+        run: zip -r release.zip -x '*.git*' -x '*node_modules*' .
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
