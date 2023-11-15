@@ -35,17 +35,16 @@ jobs:
       - name: Build and run production scripts
         run: npm run prod
 
-      - name: Remove node_modules
-        run: rm -r node_modules
-
       - name: Clear vendor
         run: php vendor/bin/cleanup
 
       - name: Create Archive
-        run: zip -r archive.zip .
+        run: zip -r release.zip -x '*.git*' -x '*node_modules*' .
 
-      - name: Upload Archive
-        uses: actions/upload-artifact@v3
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: composer-archive
-          path: archive.zip
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: release.zip
+          asset_name: rotor-release-$tag.zip
+          tag: ${{ github.ref }}
