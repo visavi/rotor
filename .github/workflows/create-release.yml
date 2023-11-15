@@ -39,7 +39,7 @@ jobs:
         run: php vendor/bin/cleanup
 
       - name: Create Archive
-        run: zip -r release.zip -x '*.git*' -x '*node_modules*' .
+        run: zip -r release.zip . -x .git/\* -x node_modules/\* -x tests/\*
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
