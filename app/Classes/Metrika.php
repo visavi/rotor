@@ -41,6 +41,11 @@ class Metrika
             $pos = 42;
         }
 
+        if ($online > 1000) {
+            $pos = 40;
+            $online = round($online / 1000, 1) . 'K';
+        }
+
         imagettftext($img, 6, 0, 14, 7, $color, public_path('assets/fonts/font.ttf'), (string) formatShortNum($counter->dayhosts));
         imagettftext($img, 6, 0, 14, 13, $color, public_path('assets/fonts/font.ttf'), (string) formatShortNum($counter->dayhits));
         imagettftext($img, 12, 0, $pos, 13, $color, public_path('assets/fonts/font.ttf'), (string) $online);
