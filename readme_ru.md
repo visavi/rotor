@@ -73,7 +73,7 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Требования
 
-Минимальная версия PHP необходимая для работы движка PHP 8.0.2, MySQL 5.7.8, MariaDB 10.2.7 или Postgres 9.2 
+Минимальная версия PHP необходимая для работы движка PHP 8.1, MySQL 5.7.8, MariaDB 10.2.7 или Postgres 9.2 
 
 ### Миграции и заполнение БД
 

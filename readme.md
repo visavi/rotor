@@ -73,7 +73,7 @@ composer create-project --stability=dev visavi/rotor .
 
 ### Requirements
 
-Minimal PHP version required for PHP 8.0.2, MySQL 5.7.8, MariaDB 10.2.7 or Postgres 9.2
+Minimal PHP version required for PHP 8.1, MySQL 5.7.8, MariaDB 10.2.7 or Postgres 9.2
 
 ### Migrations and database seeder
 
