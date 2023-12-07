@@ -7,6 +7,15 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        if (! setting('app_installed')) {
+            self::markTestSkipped(
+                'App not installed'
+            );
+        }
+    }
+
     /**
      * A basic test example.
      *
