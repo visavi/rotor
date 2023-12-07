@@ -9,6 +9,27 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: ['8.1', '8.2', '8.3']
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: test
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_DATABASE: test
+      DB_USERNAME: root
+      DB_PASSWORD: root
 
     name: PHP ${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
@@ -29,6 +50,18 @@ jobs:
 
       - name: Install PHP dependencies
         run: composer update --prefer-stable --no-interaction --no-progress
+
+      - name: Set up MySQL
+        run: |
+          sudo systemctl start mysql
+          mysql -e 'CREATE DATABASE test;' -uroot -proot
+          mysql -e 'SHOW DATABASES;' -uroot -proot
+
+      - name: Migrations
+        run: |
+          php artisan key:generate
+          php artisan migrate
+          php artisan db:seed
 
       - name: Unit Tests
         run: composer test
