@@ -24,6 +24,9 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Move .env file
+        run: mv .env.example .env
+
       - name: Install PHP dependencies
         run: composer update --prefer-stable --no-interaction --no-progress
 
