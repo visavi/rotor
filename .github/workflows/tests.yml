@@ -24,6 +24,7 @@ jobs:
           --health-retries 5
 
     env:
+      APP_ENV: testing
       DB_CONNECTION: mysql
       DB_HOST: localhost
       DB_PORT: 3306
@@ -54,7 +55,7 @@ jobs:
       - name: Set up MySQL
         run: |
           sudo systemctl start mysql
-          mysql -e 'CREATE DATABASE test;' -uroot -proot
+          mysql -e 'CREATE DATABASE IF NOT EXISTS test;' -uroot -proot
           mysql -e 'SHOW DATABASES;' -uroot -proot
 
       - name: Migrations
