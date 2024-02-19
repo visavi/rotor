@@ -326,6 +326,7 @@ Route::controller(AjaxController::class)
         Route::post('/complaint', 'complaint');
         Route::post('/file/upload', 'uploadFile');
         Route::post('/file/delete', 'deleteFile');
+        Route::post('/set-theme', 'setTheme')->withoutMiddleware('check.user');
     });
 
 /* Голосования */

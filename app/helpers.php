@@ -2133,7 +2133,7 @@ function ipBan(bool $clear = false): array
  *
  * @return mixed Данные
  */
-function setting(?string $key = null, mixed $default = null)
+function setting(?string $key = null, mixed $default = null): mixed
 {
     static $settings;
 

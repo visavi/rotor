@@ -394,8 +394,8 @@ class AjaxController extends Controller
 
         if (! $file) {
             return response()->json([
-                'success'  => false,
-                'message'  => 'File not found'
+                'success' => false,
+                'message' => 'File not found',
             ]);
         }
 
@@ -435,6 +435,27 @@ class AjaxController extends Controller
         return response()->json([
             'success'  => true,
             'stickers' => $view,
+        ]);
+    }
+
+    /**
+     * Set theme
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function setTheme(Request $request): JsonResponse
+    {
+        cookie()->queue(
+            cookie()->forever(
+                'theme',
+                $request->input('theme') === 'dark' ? 'dark' : 'light',
+            )
+        );
+
+        return response()->json([
+            'success' => true,
         ]);
     }
 }

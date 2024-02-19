@@ -1,5 +1,5 @@
 $(function () {
-    var currentLang = $('html').attr('lang');
+    let currentLang = $('html').attr('lang');
     translate = window['translate_' + currentLang];
 
     prettyPrint();
@@ -109,10 +109,36 @@ $(function () {
     $('.js-messages-block').on('show.bs.dropdown', function () {
         getNewMessages();
     })
+
+    $('[data-bs-theme-value]').click(function() {
+        let currentTheme = $(this).data('bs-theme-value');
+        let activeThemeClass = $(this).find('i').attr('class');
+
+        $('html').attr('data-bs-theme', currentTheme);
+
+        $('[data-bs-theme-value]').removeClass('active');
+        $(this).addClass('active');
+        $('#theme-icon-active').attr('class', activeThemeClass);
+
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/set-theme',
+            data: {
+                theme: currentTheme,
+            }
+        });
+    });
+
+    let theme = $('html').data('bs-theme');
+    let currentTheme = $("[data-bs-theme-value='" + theme + "']");
+    let activeThemeClass = currentTheme.find('i').attr('class');
+
+    currentTheme.addClass('active');
+    $('#theme-icon-active').attr('class', activeThemeClass);
 });
 
 /* Вывод уведомлений */
-notification = function (type, title, message, optionsOverride) {
+notification = (type, title, message, optionsOverride) => {
     return toastr[type](message, title, optionsOverride);
 };
 
