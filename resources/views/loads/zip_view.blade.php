@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('loads.view_file') . ' ' . $document->getName())
+@section('title', __('loads.view_file') . ' ' . $document['name'])
 
 @section('breadcrumb')
     <nav>
@@ -20,7 +20,7 @@
 @stop
 
 @section('content')
-    {{ __('loads.file_size') }}: {{ formatSize($document->getUncompressedSize()) }}
+    {{ __('loads.file_size') }}: {{ formatSize($document['size']) }}
     <hr>
 
     @if ($content)

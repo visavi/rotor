@@ -14,8 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\HtmlString;
-use PhpZip\Exception\ZipException;
-use PhpZip\ZipFile;
+use ZipArchive;
 
 /**
  * Class Down
@@ -78,7 +77,7 @@ class Down extends BaseModel
      *
      * @var array
      */
-    public static $viewExt = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'webp', 'env', 'gitignore', 'json', 'yml', 'md'];
+    public array $viewExt = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'webp', 'env', 'gitignore', 'json', 'yml', 'md'];
 
     /**
      * Morph name
@@ -184,15 +183,16 @@ class Down extends BaseModel
      *
      * @return array
      */
-    public static function getViewExt(): array
+    public function getViewExt(): array
     {
-        return self::$viewExt;
+        return $this->viewExt;
     }
 
     /**
      * Загружает файл
      *
-     * @param  UploadedFile $file
+     * @param UploadedFile $file
+     *
      * @return array
      */
     public function uploadAndConvertFile(UploadedFile $file): array
@@ -279,14 +279,12 @@ class Down extends BaseModel
             && ! str_contains(setting('archive_file_path'), '..')
             && file_exists(public_path(setting('archive_file_path')))
         ) {
-            $archive = new ZipFile();
-            try {
-                $archive->openFile(public_path($file['path']));
-                $archive->addFile(public_path(setting('archive_file_path')));
-                $archive->saveAsFile(public_path($file['path']));
+            $archive = new ZipArchive();
+            $opened = $archive->open(public_path($file['path']));
+
+            if ($opened === true) {
+                $archive->addFile(public_path(setting('archive_file_path')), basename(setting('archive_file_path')));
                 $archive->close();
-            } catch (ZipException) {
-                // nothing
             }
         }
     }

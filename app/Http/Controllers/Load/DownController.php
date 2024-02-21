@@ -17,9 +17,8 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use PhpZip\Exception\ZipException;
-use PhpZip\ZipFile;
 use Symfony\Component\HttpFoundation\Response;
+use ZipArchive;
 
 class DownController extends Controller
 {
@@ -298,14 +297,16 @@ class DownController extends Controller
             abort(404, __('loads.down_not_exist'));
         }
 
+        if ($down->active) {
+            abort(200, __('loads.down_verified'));
+        }
+
         /** @var File $file */
         $file = $down->files()->find($fid);
 
         if (! $file) {
             abort(404, __('loads.down_not_exist'));
         }
-
-        deleteFile(public_path($file->hash));
 
         setFlash('success', __('loads.file_deleted_success'));
         $file->delete();
@@ -557,12 +558,13 @@ class DownController extends Controller
     {
         /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $down = $file?->relate;
 
-        if (! $file || ! $file->relate) {
+        if (! $file || ! $down) {
             abort(404, __('loads.down_not_exist'));
         }
 
-        if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
+        if (! $down->active && ! isAdmin(User::ADMIN)) {
             abort(200, __('loads.down_not_verified'));
         }
 
@@ -570,21 +572,64 @@ class DownController extends Controller
             abort(200, __('loads.archive_only_zip'));
         }
 
-        try {
-            $archive = new ZipFile();
-            $archive->openFile(public_path($file->hash));
-            $entries = array_values($archive->getEntries());
+        $archive = new ZipArchive();
+        $opened = $archive->open(public_path($file->hash), ZipArchive::RDONLY);
 
-            $down      = $file->relate;
-            $viewExt   = Down::getViewExt();
-            $documents = paginate($entries, setting('ziplist'));
-
-            $archive->close();
-        } catch (ZipException) {
+        if ($opened !== true) {
             abort(200, __('loads.archive_not_open'));
         }
 
-        return view('loads/zip', compact('down', 'file', 'documents', 'viewExt'));
+        $documents = [];
+        for ($i = 0; $i < $archive->count(); $i++) {
+            $stat = $archive->statIndex($i);
+
+            $documents[] = [
+                'index' => $stat['index'],
+                'name'  => $stat['name'],
+                'size'  => $stat['size'],
+                'isDir' => str_ends_with($stat['name'], '/'),
+                'ext'   => getExtension($stat['name']),
+            ];
+        }
+
+        $archive->close();
+
+        /* uasort($documents, static function ($a, $b) {
+            if ($a['isDir'] && ! $b['isDir']) {
+                return -1;
+            }
+            if (! $a['isDir'] && $b['isDir']) {
+                return 1;
+            }
+
+            return strcmp($a['name'], $b['name']);
+        });*/
+
+        /*$tree = [];
+        foreach ($documents as $key => $document) {
+            $path = $archive->getNameIndex($key);
+            $pathBySlash = array_filter(explode('/', $path));
+            $count = count($pathBySlash) - 1;
+            $temp = &$tree;
+
+            for ($j = 0; $j < $count; $j++) {
+                if (! isset($temp[$pathBySlash[$j]])) {
+                    $temp[$pathBySlash[$j]] = [];
+                }
+
+                $temp = &$temp[$pathBySlash[$j]];
+            }
+
+            if (str_ends_with($path, '/')) {
+                $temp[$pathBySlash[$count]] = [];
+            } else {
+                $temp[] = $pathBySlash[$count];
+            }
+        }*/
+
+        $documents = paginate($documents, setting('ziplist'));
+
+        return view('loads/zip', compact('down', 'file', 'documents'));
     }
 
     /**
@@ -599,12 +644,13 @@ class DownController extends Controller
     {
         /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $down = $file?->relate;
 
-        if (! $file || ! $file->relate) {
+        if (! $file || ! $down) {
             abort(404, __('loads.down_not_exist'));
         }
 
-        if (! $file->relate->active && ! isAdmin(User::ADMIN)) {
+        if (! $down->active && ! isAdmin(User::ADMIN)) {
             abort(200, __('loads.down_not_verified'));
         }
 
@@ -612,41 +658,39 @@ class DownController extends Controller
             abort(200, __('loads.archive_only_zip'));
         }
 
-        try {
-            $viewExt = Down::getViewExt();
+        $archive = new ZipArchive();
+        $opened = $archive->open(public_path($file->hash), ZipArchive::RDONLY);
 
-            $archive = new ZipFile();
-            $archive->openFile(public_path($file->hash));
-            $entries = array_values($archive->getEntries());
+        if ($opened !== true) {
+            abort(200, __('loads.archive_not_open'));
+        }
+        $content = $archive->getFromIndex($fid);
+        $document = $archive->statIndex($fid);
 
-            $document = $entries[$fid] ?? null;
-            $ext      = getExtension($document->getName());
-            $content  = $archive[$document->getName()];
-            $archive->close();
-
-            if (! in_array($ext, $viewExt, true)) {
-                abort(200, __('loads.file_not_read'));
-            }
-
-            if (
-                $document->getUncompressedSize() > 0
-                && preg_match("/\.(gif|png|bmp|jpg|jpeg|webp)$/", $document->getName())
-            ) {
-                $ext = getExtension($document->getName());
-
-                header('Content-type: image/' . $ext);
-                header('Content-Length: ' . strlen($content));
-                header('Content-Disposition: inline; filename="' . $document->getName() . '";');
-                exit($content);
-            }
-
-            if (! isUtf($content)) {
-                $content = winToUtf($content);
-            }
-
-            $down = $file->relate;
-        } catch (ZipException) {
+        if ($content === false) {
             abort(200, __('loads.file_not_read'));
+        }
+
+        $archive->close();
+
+        $ext = getExtension($document['name']);
+
+        if (! in_array($ext, $down->getViewExt(), true)) {
+            abort(200, __('loads.file_not_read'));
+        }
+
+        if (
+            $document['size'] > 0
+            && preg_match("/\.(gif|png|bmp|jpg|jpeg|webp)$/", $document['name'])
+        ) {
+            header('Content-type: image/' . $ext);
+            header('Content-Length: ' . strlen($content));
+            header('Content-Disposition: inline; filename="' . $document['name'] . '";');
+            exit($content);
+        }
+
+        if (! isUtf($content)) {
+            $content = winToUtf($content);
         }
 
         return view('loads/zip_view', compact('down', 'file', 'document', 'content'));

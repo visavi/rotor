@@ -46,7 +46,7 @@ use Intervention\Image\Constraint;
 use Intervention\Image\ImageManagerStatic as Image;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '11.2';
+const ROTOR_VERSION = '12.0';
 define('SITETIME', time());
 
 /**
@@ -849,41 +849,41 @@ function icons(string $ext): HtmlString
 {
     switch ($ext) {
         case 'php':
-            $ico = 'file-code';
+            $ico = 'fa-regular fa-file-code';
             break;
         case 'ppt':
-            $ico = 'file-powerpoint';
+            $ico = 'fa-regular fa-file-powerpoint';
             break;
         case 'doc':
         case 'docx':
-            $ico = 'file-word';
+            $ico = 'fa-regular fa-file-word';
             break;
         case 'xls':
         case 'xlsx':
-            $ico = 'file-excel';
+            $ico = 'fa-regular fa-file-excel';
             break;
         case 'txt':
         case 'css':
         case 'dat':
         case 'html':
         case 'htm':
-            $ico = 'file-alt';
+            $ico = 'fa-regular fa-file-alt';
             break;
         case 'wav':
         case 'amr':
         case 'mp3':
         case 'mid':
-            $ico = 'file-audio';
+            $ico = 'fa-regular fa-file-audio';
             break;
         case 'zip':
         case 'rar':
         case '7z':
         case 'gz':
-            $ico = 'file-archive';
+            $ico = 'fa-regular fa-file-archive';
             break;
         case '3gp':
         case 'mp4':
-            $ico = 'file-video';
+            $ico = 'fa-regular fa-file-video';
             break;
         case 'jpg':
         case 'jpeg':
@@ -892,18 +892,21 @@ function icons(string $ext): HtmlString
         case 'gif':
         case 'png':
         case 'webp':
-            $ico = 'file-image';
+            $ico = 'fa-regular fa-file-image';
             break;
         case 'ttf':
-            $ico = 'font';
+            $ico = 'fa-solid fa-font';
             break;
         case 'pdf':
-            $ico = 'file-pdf';
+            $ico = 'fa-regular fa-file-pdf';
+            break;
+        case 'csv':
+            $ico = 'fa-regular fa-file-csv';
             break;
         default:
-            $ico = 'file';
+            $ico = 'fa-regular fa-file';
     }
-    return new HtmlString('<i class="far fa-' . $ico . '"></i>');
+    return new HtmlString('<i class="' . $ico . '"></i>');
 }
 
 /**

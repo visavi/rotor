@@ -153,7 +153,7 @@ class SettingSeeder extends Seeder
             ['name'  => 'userlist', 'value' => 10],
             ['name'  => 'usersearch', 'value' => 30],
             ['name'  => 'wallpost', 'value' => 10],
-            ['name'  => 'ziplist', 'value' => 20],
+            ['name'  => 'ziplist', 'value' => 50],
         ];
 
         Setting::query()->truncate();
