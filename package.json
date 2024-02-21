@@ -13,7 +13,7 @@
         "production": "mix --production"
     },
     "dependencies": {
-        "@fancyapps/ui": "^4.0.31",
+        "@fancyapps/ui": "^5.0.27",
         "@fortawesome/fontawesome-free": "^6.4",
         "@popperjs/core": "^2.11.8",
         "bootbox": "^6.0.0",
