@@ -22,6 +22,11 @@ $(function () {
         "positionClass": "toast-top-full-width"
     };
 
+    const {Fancybox} = require("@fancyapps/ui");
+    Fancybox.bind("[data-fancybox]", {
+        // Your custom options
+    });
+
     $('.markItUp').markItUp(mySettings).on('input', function () {
         var maxlength = $(this).attr('maxlength');
         var text      = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n");
