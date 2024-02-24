@@ -1,10 +1,10 @@
 window.$ = window.jQuery = require('jquery');
-window.bootbox = require('bootbox');
-window.toastr = require('toastr');
+bootbox = require('bootbox');
+toastr = require('toastr');
+fancybox = require("@fancyapps/ui").Fancybox;
 
 require('bootstrap');
 require('jquery-mask-plugin');
-require("@fancyapps/ui");
 require('js/jquery.caret.min');
 require('js/markitup');
 require('js/markitup-set');

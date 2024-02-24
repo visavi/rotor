@@ -31,7 +31,7 @@
     <script>
         $(".js-answer-add").click(function () {
             if ($(".js-answer-list input").length >= 10) {
-                notification('error', "{{ __('votes.hint_answers') }}");
+                toastr.error("{{ __('votes.hint_answers') }}");
 
                 return false;
             }

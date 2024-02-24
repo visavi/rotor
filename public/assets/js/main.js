@@ -1,5 +1,6 @@
-$(function () {
-    let currentLang = $('html').attr('lang');
+$(() => {
+    let html = $('html');
+    let currentLang = html.attr('lang');
     translate = window['translate_' + currentLang];
 
     prettyPrint();
@@ -22,12 +23,11 @@ $(function () {
         "positionClass": "toast-top-full-width"
     };
 
-    const {Fancybox} = require("@fancyapps/ui");
-    Fancybox.bind("[data-fancybox]", {
+    fancybox.bind("[data-fancybox]", {
         // Your custom options
     });
 
-    $('.markItUp').markItUp(mySettings).on('input', function () {
+    $('.markItUp').markItUp(mySettings).on('input', () => {
         var maxlength = $(this).attr('maxlength');
         var text      = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n");
 
@@ -53,7 +53,7 @@ $(function () {
     $('[data-bs-toggle="popover"]').popover();
 
     // Hide popover poppers anywhere
-    $('body').on('click', function (e) {
+    $('body').on('click', (e) => {
         //did not click a popover toggle or popover
         if ($(e.target).data('bs-toggle') !== 'popover'
             && $(e.target).parents('.popover.in').length === 0) {
@@ -62,22 +62,22 @@ $(function () {
     });
 
     // Spoiler
-    $('.spoiler-title').on('click', function () {
+    $('.spoiler-title').on('click', () => {
         var spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
 
     /* Show news on the main */
-    $('.news-title').on('click', function () {
+    $('.news-title').on('click', () => {
         $(this).toggleClass('fa-rotate-180');
         $(this).nextAll(".news-text:first").slideToggle();
     });
 
-    $('.colorpicker').on('input', function () {
+    $('.colorpicker').on('input', () => {
         $('.colorpicker-addon').val(this.value);
     });
-    $('.colorpicker-addon').on('input', function () {
+    $('.colorpicker-addon').on('input', () => {
         $('.colorpicker').val(this.value);
     });
 
@@ -89,7 +89,7 @@ $(function () {
     $('.birthday').mask('00.00.0000');
 
     // Scroll up
-    $(window).scroll(function () {
+    $(window).scroll(() => {
         if ($(this).scrollTop() > 200) {
             $('.scrollup').fadeIn();
         } else {
@@ -97,25 +97,24 @@ $(function () {
         }
     });
 
-    $('.scrollup').click(function () {
+    $('.scrollup').click(() => {
         $("html, body").animate({
             scrollTop: 0
         }, 100);
         return false;
     });
 
-
- /*   if ($('.markItUpEditor').val().length > 0) {
-        window.onbeforeunload = function() {
+    /*if ($('.markItUpEditor').val().length > 0) {
+        window.onbeforeunload = () => {
             return "You're about to end your session, are you sure?";
         }
     }*/
 
-    $('.js-messages-block').on('show.bs.dropdown', function () {
+    $('.js-messages-block').on('show.bs.dropdown', () => {
         getNewMessages();
     })
 
-    $('[data-bs-theme-value]').click(function() {
+    $('[data-bs-theme-value]').click(() => {
         let currentTheme = $(this).data('bs-theme-value');
         let activeThemeClass = $(this).find('i').attr('class');
 
@@ -134,7 +133,7 @@ $(function () {
         });
     });
 
-    let theme = $('html').data('bs-theme');
+    let theme = html.data('bs-theme');
     let currentTheme = $("[data-bs-theme-value='" + theme + "']");
     let activeThemeClass = currentTheme.find('i').attr('class');
 
@@ -142,13 +141,8 @@ $(function () {
     $('#theme-icon-active').attr('class', activeThemeClass);
 });
 
-/* Вывод уведомлений */
-notification = (type, title, message, optionsOverride) => {
-    return toastr[type](message, title, optionsOverride);
-};
-
 /* Показ формы загрузки файла */
-showAttachForm = function () {
+showAttachForm = () => {
     $('.js-attach-button').hide();
     $('.js-attach-form').slideDown();
 
@@ -156,14 +150,14 @@ showAttachForm = function () {
 };
 
 /* Переход к форме ввода */
-postJump = function () {
+postJump = () => {
     $('html, body').animate({
         scrollTop: ($('.section-form').offset().top)
     }, 100);
 };
 
 /* Ответ на сообщение */
-postReply = function (el) {
+postReply = (el) => {
     postJump();
 
     var field  = $('.markItUpEditor');
@@ -179,20 +173,20 @@ postReply = function (el) {
 };
 
 /* Цитирование сообщения */
-postQuote = function (el) {
+postQuote = (el) => {
     postJump();
 
-    var field   = $('.markItUpEditor');
-    var post    = $(el).closest('.section');
-    var author  = post.find('.section-author').data('login');
-    var date    = post.find('.section-date').text();
-    var text    = post.find('.section-message').clone();
-    var message = $.trim(text.find('blockquote').remove().end().text());
+    let field   = $('.markItUpEditor');
+    let post    = $(el).closest('.section');
+    let author  = post.find('.section-author').data('login');
+    let date    = post.find('.section-date').text();
+    let text    = post.find('.section-message').clone();
+    let message = $.trim(text.find('blockquote').remove().end().text());
 
-    var $lastSymbol = field.val().slice(field.val().length - 1);
-    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
+    let $lastSymbol = field.val().slice(field.val().length - 1);
+    let separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
 
-    if (!message) {
+    if (! message) {
         field.focus().val(field.val() + separ + author + ', ');
 
         return false;
@@ -204,8 +198,8 @@ postQuote = function (el) {
 };
 
 /* Выход с сайта */
-logout = function (el) {
-    bootbox.confirm(translate.confirm_logout, function (result) {
+logout = (el) => {
+    bootbox.confirm(translate.confirm_logout, (result) => {
         if (result) {
             window.location = $(el).attr("href");
         }
@@ -215,8 +209,8 @@ logout = function (el) {
 };
 
 /* Отправка жалобы на спам */
-sendComplaint = function (el) {
-    bootbox.confirm(translate.confirm_complain_submit, function (result) {
+sendComplaint = (el) => {
+    bootbox.confirm(translate.confirm_complain_submit, (result) => {
         if (result) {
             $.ajax({
                 data: {
@@ -226,17 +220,14 @@ sendComplaint = function (el) {
                     _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ajax/complaint',
-                success: function (data) {
+                success: (data) => {
 
                     $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
-                    if (! data.success) {
-                        notification('error', data.message);
-                        return false;
-                    }
-
                     if (data.success) {
-                        notification('success', translate.complain_submitted);
+                        toastr.success(translate.complain_submitted);
+                    } else {
+                        toastr.error(data.message);
                     }
                 }
             });
@@ -247,28 +238,28 @@ sendComplaint = function (el) {
 };
 
 /* Добавление или удаление закладок */
-bookmark = function (el) {
+bookmark = (el) => {
     $.ajax({
         data: {
             tid: $(el).data('tid'),
             _token: $(el).data('token')
         },
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
-        success: function (data) {
+        success: (data) => {
 
             if (! data.success) {
-                notification('error', data.message);
+                toastr.error(data.message);
                 return false;
             }
 
             if (data.success) {
                 if (data.type === 'added') {
-                    notification('success', data.message);
+                    toastr.success(data.message);
                     $(el).text($(el).data('from'));
                 }
 
                 if (data.type === 'deleted') {
-                    notification('success', data.message);
+                    toastr.success(data.message);
                     $(el).text($(el).data('to'));
                 }
             }
@@ -279,18 +270,18 @@ bookmark = function (el) {
 };
 
 /* Удаление записей */
-deletePost = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
+deletePost = (el) => {
+    bootbox.confirm(translate.confirm_message_delete, (result) => {
         if (result) {
             $.ajax({
                 data: {_token: $(el).data('token'),},
                 dataType: 'json', type: 'delete', url: $(el).attr('href'),
-                success: function (data) {
+                success: (data) => {
                     if (data.success) {
-                        notification('success', data.message);
+                        toastr.success(data.message);
                         $(el).closest('.section').hide('slow');
                     } else {
-                        notification('error', data.message);
+                        toastr.error(data.message);
                     }
                 }
             });
@@ -301,8 +292,8 @@ deletePost = function (el) {
 }
 
 /* Удаление комментариев */
-deleteComment = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
+deleteComment = (el) => {
+    bootbox.confirm(translate.confirm_message_delete, (result) => {
         if (result) {
             $.ajax({
                 data: {
@@ -312,13 +303,12 @@ deleteComment = function (el) {
                     _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ajax/delcomment',
-                success: function (data) {
+                success: (data) => {
                     if (data.success) {
-                        notification('success', translate.message_deleted);
+                        toastr.success(translate.message_deleted);
                         $(el).closest('.section').hide('slow');
                     } else {
-                        notification('error', data.message);
-                        return false;
+                        toastr.error(data.message);
                     }
                 }
             });
@@ -329,7 +319,7 @@ deleteComment = function (el) {
 };
 
 /* Изменение рейтинга */
-changeRating = function (el) {
+changeRating = (el) => {
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -340,7 +330,7 @@ changeRating = function (el) {
         dataType: 'json',
         type: 'post',
         url: '/ajax/rating',
-        success: function (data) {
+        success: (data) => {
             if (data.success) {
                 const rating = $(el).closest('.js-rating').find('b');
 
@@ -353,9 +343,8 @@ changeRating = function (el) {
                 rating.html($(data.rating));
             } else {
                 if (data.message) {
-                    notification('error', data.message);
+                    toastr.error(data.message);
                 }
-                return false;
             }
         }
     });
@@ -366,8 +355,8 @@ changeRating = function (el) {
 /**
  * Удаляет запись из истории рейтинга
  */
-deleteRating = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
+deleteRating = (el) => {
+    bootbox.confirm(translate.confirm_message_delete, (result) => {
         if (result) {
             $.ajax({
                 data: {
@@ -375,13 +364,12 @@ deleteRating = function (el) {
                     _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ratings/delete',
-                success: function (data) {
+                success: (data)=> {
                     if (data.success) {
-                        notification('success', translate.record_deleted);
+                        toastr.success(translate.record_deleted);
                         $(el).closest('.section').hide('slow');
                     } else {
-                        notification('error', data.message);
-                        return false;
+                        toastr.error(data.message);
                     }
                 }
             });
@@ -394,17 +382,16 @@ deleteRating = function (el) {
 /**
  * Удаляет запись из списка жалоб
  */
-deleteSpam = function (el) {
+deleteSpam = (el) => {
     $.ajax({
         data: {id: $(el).data('id'), _token: $(el).data('token')},
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
-        success: function (data) {
+        success: (data) => {
             if (data.success) {
-                notification('success', translate.record_deleted);
+                toastr.success(translate.record_deleted);
                 $(el).closest('.section').hide('slow');
             } else {
-                notification('error', data.message);
-                return false;
+                toastr.error(data.message);
             }
         }
     });
@@ -415,19 +402,18 @@ deleteSpam = function (el) {
 /**
  * Удаляет запись со стены сообщений
  */
-deleteWall = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
+deleteWall = (el) => {
+    bootbox.confirm(translate.confirm_message_delete, (result) => {
         if (result) {
             $.ajax({
                 data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
                 dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
-                success: function (data) {
+                success: (data) => {
                     if (data.success) {
-                        notification('success', translate.record_deleted);
+                        toastr.success(translate.record_deleted);
                         $(el).closest('.section').hide('slow');
                     } else {
-                        notification('error', data.message);
-                        return false;
+                        toastr.error(data.message);
                     }
                 }
             });
@@ -438,15 +424,15 @@ deleteWall = function (el) {
 };
 
 /* Показ формы создания голосования */
-showVoteForm = function () {
+showVoteForm = () => {
     $('.js-vote-form').toggle();
 
     return false;
 };
 
 /* Копирует текст в input */
-copyToClipboard = function (el) {
-    var form = $(el).closest('.input-group');
+copyToClipboard = (el) => {
+    let form = $(el).closest('.input-group');
     form.find('input').select();
 
     form.find('.input-group-text')
@@ -460,8 +446,8 @@ copyToClipboard = function (el) {
 };
 
 /* Загрузка изображения */
-submitFile = function (el) {
-    var form = new FormData();
+submitFile = (el) => {
+    let form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
@@ -474,28 +460,28 @@ submitFile = function (el) {
         processData: false,
         dataType: 'json',
         url: '/ajax/file/upload',
-        beforeSend: function () {
+        beforeSend: () => {
             $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
         },
-        complete: function () {
+        complete: () => {
             $('.fa-spinner').remove();
         },
-        success: function (data) {
+        success: (data) => {
             if (! data.success) {
-                notification('error', data.message);
+                toastr.error(data.message);
                 return false;
             }
 
             if (data.success) {
                 if (data.type === 'image') {
-                    var template = $('.js-image-template').clone();
+                    let template = $('.js-image-template').clone();
 
                     template.find('img').attr({
                         'src'         : data.path,
                         'data-source' : data.source
                     });
                 } else {
-                    var template = $('.js-file-template').clone();
+                    let template = $('.js-file-template').clone();
 
                     template.find('.js-file-link').attr({
                         'href' : data.path
@@ -514,8 +500,8 @@ submitFile = function (el) {
 };
 
 /* Загрузка изображения */
-submitImage = function (el, paste) {
-    var form = new FormData();
+submitImage = (el, paste) => {
+    let form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
@@ -528,20 +514,20 @@ submitImage = function (el, paste) {
         processData: false,
         dataType: 'json',
         url: '/ajax/file/upload',
-        beforeSend: function () {
+        beforeSend: () => {
             $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
         },
-        complete: function () {
+        complete: () => {
             $('.fa-spinner').remove();
         },
-        success: function (data) {
+        success: (data) => {
             if (! data.success) {
-                notification('error', data.message);
+                toastr.error(data.message);
                 return false;
             }
 
             if (data.success) {
-                var template = $('.js-image-template').clone();
+                let template = $('.js-image-template').clone();
 
                 template.find('img').attr({
                     'src'         : data.path,
@@ -563,24 +549,24 @@ submitImage = function (el, paste) {
 };
 
 /* Вставка изображения в форму */
-pasteImage = function (el) {
-    var field = $('.markItUpEditor');
-    var paste = '[img]' + $(el).find('img').data('source') + '[/img]';
+pasteImage = (el) => {
+    let field = $('.markItUpEditor');
+    let paste = '[img]' + $(el).find('img').data('source') + '[/img]';
 
     field.focus().caret(paste);
 };
 
 /* Удаление изображения из формы */
-cutImage = function (path) {
-    var field = $('.markItUpEditor');
-    var text  = field.val();
-    var cut   = '[img]' + path + '[/img]';
+cutImage = (path) => {
+    let field = $('.markItUpEditor');
+    let text  = field.val();
+    let cut   = '[img]' + path + '[/img]';
 
     field.val(text.replace(cut, ''));
 };
 
 /* Удаление файла */
-deleteFile = function (el) {
+deleteFile = (el) => {
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -590,9 +576,9 @@ deleteFile = function (el) {
         dataType: 'json',
         type: 'post',
         url: '/ajax/file/delete',
-        success: function (data) {
+        success: (data) => {
             if (! data.success) {
-                notification('error', data.message);
+                toastr.error(data.message);
                 return false;
             }
 
@@ -607,7 +593,7 @@ deleteFile = function (el) {
 };
 
 /* Показывает форму для повторной отправки кода подтверждения */
-resendingCode = function () {
+resendingCode = () => {
     $('.js-resending-link').hide();
     $('.js-resending-form').show();
 
@@ -615,12 +601,12 @@ resendingCode = function () {
 };
 
 /* Показывает панель с запросами */
-showQueries = function () {
+showQueries = () => {
     $('.js-queries').slideToggle();
 };
 
 /* Get new messages */
-getNewMessages = function () {
+getNewMessages = () => {
     const notify_item = $('.js-messages-block .app-nav__item');
     const notify_badge = notify_item.find('.badge');
     const notify_span = $('.app-notification__title span');
@@ -629,13 +615,13 @@ getNewMessages = function () {
         dataType: 'json',
         type: 'get',
         url: '/messages/new',
-        beforeSend: function () {
+        beforeSend: () => {
             $('.js-messages').append('<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>');
         },
-        complete: function () {
+        complete: () => {
             $('.js-message-spin').remove();
         },
-        success: function (data) {
+        success: (data) => {
             if (data.success) {
                 if (notify_badge.length > 0) {
                     notify_badge.html(data.countMessages);
@@ -658,9 +644,9 @@ getNewMessages = function () {
     return false;
 };
 
-var checkTimeout;
+let checkTimeout;
 /* Проверка логина */
-checkLogin = function (el) {
+checkLogin = (el) => {
     const block = $(el).closest('.mb-3');
     const message = block.find('.invalid-feedback');
 
@@ -673,7 +659,7 @@ checkLogin = function (el) {
 
     clearTimeout(checkTimeout);
 
-    checkTimeout = setTimeout(function () {
+    checkTimeout = setTimeout(() => {
         $.ajax({
             data: {
                 login: $(el).val()
@@ -681,7 +667,7 @@ checkLogin = function (el) {
             dataType: 'json',
             type: 'post',
             url: '/check-login',
-            success: function (data) {
+            success: (data) => {
                 if (data.success) {
                     block.removeClass('is-invalid').addClass('is-valid');
                     message.empty();

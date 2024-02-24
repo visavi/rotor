@@ -52,7 +52,7 @@ class SpamController extends AdminController
      */
     public function index(): View
     {
-        $type  = $this->type;
+        $type = $this->type;
         $types = $this->types;
 
         /** @var Spam $records */
