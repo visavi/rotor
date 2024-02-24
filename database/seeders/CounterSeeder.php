@@ -15,7 +15,7 @@ class CounterSeeder extends Seeder
     public function run()
     {
         Counter::query()->updateOrCreate([
-            'id' => 1
+            'id' => 1,
         ], [
             'period'   => date('Y-m-d H:00:00'),
             'allhosts' => 0,

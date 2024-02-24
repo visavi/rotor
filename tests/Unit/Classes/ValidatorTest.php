@@ -11,7 +11,7 @@ class ValidatorTest extends \Tests\TestCase
     /**
      * @var Validator
      */
-    private $validator;
+    private Validator $validator;
 
     public function setUp(): void
     {
@@ -448,13 +448,13 @@ class ValidatorTest extends \Tests\TestCase
      */
     public function testFile(): void
     {
-        $image  = UploadedFile::fake()->image('avatar.jpg');
+        $image = UploadedFile::fake()->image('avatar.jpg');
         $image2 = UploadedFile::fake()->image('avatar.jpg', 100, 100);
         $image3 = UploadedFile::fake()->image('avatar.tiff');
 
         $rules = [
             'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'wepb'],
-            'maxweight' => 50,
+            'maxweight'  => 50,
         ];
 
         $this->validator->file(null, $rules, 'error', false);
@@ -473,7 +473,7 @@ class ValidatorTest extends \Tests\TestCase
 
         $rules = [
             'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'wepb'],
-            'maxsize' => 1,
+            'maxsize'    => 1,
         ];
 
         $this->validator->clearErrors();
@@ -482,7 +482,7 @@ class ValidatorTest extends \Tests\TestCase
 
         $rules = [
             'extensions' => ['jpg', 'jpeg', 'gif', 'png', 'wepb'],
-            'minweight' => 50,
+            'minweight'  => 50,
         ];
 
         $this->validator->clearErrors();

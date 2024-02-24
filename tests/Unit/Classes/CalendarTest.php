@@ -9,7 +9,7 @@ class CalendarTest extends \Tests\TestCase
     /**
      * @var calendar
      */
-    private $calendar;
+    private Calendar $calendar;
 
     public function setUp(): void
     {

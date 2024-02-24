@@ -5,8 +5,7 @@ declare(strict_types=1);
 use App\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
 
-final class AddGuestModerationToSettings extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -30,4 +29,4 @@ final class AddGuestModerationToSettings extends Migration
     {
         Setting::query()->where('name', 'guest_moderation')->delete();
     }
-}
+};
