@@ -14,21 +14,21 @@ trait UploadTrait
     /**
      * Загружает изображение
      *
-     * @param  UploadedFile $file   Объект изображения
-     * @param  bool         $record
+     * @param UploadedFile $file   Объект изображения
+     * @param bool         $record
      *
      * @return array
      */
     public function uploadFile(UploadedFile $file, bool $record = true): array
     {
-        $mime      = $file->getClientMimeType();
+        $mime = $file->getClientMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
-        $basename  = getBodyName($file->getClientOriginalName());
-        $basename  = utfSubstr($basename, 0, 50) . '.' . $extension;
-        $filename  = uniqueName($extension);
-        $path      = $this->uploadPath . '/' . $filename;
-        $fullPath  = public_path($path);
-        $isImage   = str_starts_with($file->getMimeType(), 'image');
+        $basename = getBodyName($file->getClientOriginalName());
+        $basename = utfSubstr($basename, 0, 50) . '.' . $extension;
+        $filename = uniqueName($extension);
+        $path = $this->uploadPath . '/' . $filename;
+        $fullPath = public_path($path);
+        $isImage = str_starts_with($file->getMimeType(), 'image');
 
         if ($isImage) {
             $img = Image::make($file);

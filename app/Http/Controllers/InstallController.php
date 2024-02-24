@@ -58,7 +58,7 @@ class InstallController extends Controller
 
         $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR);
         $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
-        $dirs    = [public_path('assets/modules'), base_path('bootstrap/cache')];
+        $dirs = [public_path('assets/modules'), base_path('bootstrap/cache')];
 
         $dirs = array_merge($storage, $uploads, $dirs);
         $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
@@ -131,11 +131,11 @@ class InstallController extends Controller
      */
     public function account(Request $request, Validator $validator)
     {
-        $lang      = $request->input('lang', 'ru');
-        $login     = $request->input('login');
-        $password  = $request->input('password');
+        $lang = $request->input('lang', 'ru');
+        $login = $request->input('login');
+        $password = $request->input('password');
         $password2 = $request->input('password2');
-        $email     = strtolower((string) $request->input('email'));
+        $email = strtolower((string) $request->input('email'));
 
         if ($request->isMethod('post')) {
             $validator->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
@@ -233,8 +233,8 @@ class InstallController extends Controller
         phpinfo(INFO_MODULES);
         $s = ob_get_clean();
         $s = strip_tags($s, '<h2><th><td>');
-        $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', "<info>\\1</info>", $s);
-        $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
+        $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\\1</info>', $s);
+        $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', '<info>\\1</info>', $s);
         $vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
         $vModules = [];
         $iMax = count($vTmp);

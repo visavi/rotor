@@ -17,8 +17,9 @@ abstract class TestCase extends BaseTestCase
      * @param string $methodName Method name to call
      * @param array  $parameters Array of parameters to pass into method.
      *
-     * @return mixed Method return.
      * @throws ReflectionException
+     *
+     * @return mixed Method return.
      */
     public function callMethod(object $object, string $methodName, array $parameters = []): mixed
     {

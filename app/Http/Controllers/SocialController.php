@@ -36,8 +36,9 @@ class SocialController extends Controller
      *
      * @param Request $request
      *
-     * @return View|RedirectResponse
      * @throws GuzzleException
+     *
+     * @return View|RedirectResponse
      */
     public function index(Request $request)
     {
@@ -47,8 +48,8 @@ class SocialController extends Controller
             $response = $client->get('//ulogin.ru/token.php', [
                 'query' => [
                     'token' => $request->input('token'),
-                    'host' => $_SERVER['HTTP_HOST'],
-                ]
+                    'host'  => $_SERVER['HTTP_HOST'],
+                ],
             ]);
 
             if ($response->getStatusCode() === 200) {

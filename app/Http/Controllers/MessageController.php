@@ -11,10 +11,10 @@ use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Message;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -137,7 +137,7 @@ class MessageController extends Controller
     public function send(Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
         $login = $request->input('user');
-        $msg   = $request->input('msg');
+        $msg = $request->input('msg');
 
         $user = getUserByLogin($login);
 

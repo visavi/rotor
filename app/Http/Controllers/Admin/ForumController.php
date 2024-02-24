@@ -96,11 +96,11 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $parent      = int($request->input('parent'));
-            $title       = $request->input('title');
+            $parent = int($request->input('parent'));
+            $title = $request->input('title');
             $description = $request->input('description');
-            $sort        = int($request->input('sort'));
-            $closed      = empty($request->input('closed')) ? 0 : 1;
+            $sort = int($request->input('sort'));
+            $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -249,11 +249,11 @@ class ForumController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $title       = $request->input('title');
-            $note        = $request->input('note');
-            $moderators  = (string) $request->input('moderators');
-            $locked      = empty($request->input('locked')) ? 0 : 1;
-            $closed      = empty($request->input('closed')) ? 0 : 1;
+            $title = $request->input('title');
+            $note = $request->input('note');
+            $moderators = (string) $request->input('moderators');
+            $locked = empty($request->input('locked')) ? 0 : 1;
+            $closed = empty($request->input('closed')) ? 0 : 1;
             $closeUserId = $closed ? getUser('id') : null;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -386,7 +386,7 @@ class ForumController extends AdminController
 
                 case 'open':
                     $topic->update([
-                        'closed' => 0,
+                        'closed'        => 0,
                         'close_user_id' => null,
                     ]);
 
@@ -592,9 +592,9 @@ class ForumController extends AdminController
      */
     public function deletePosts(Request $request, Validator $validator): RedirectResponse
     {
-        $tid  = int($request->input('tid'));
+        $tid = int($request->input('tid'));
         $page = int($request->input('page', 1));
-        $del  = intar($request->input('del'));
+        $del = intar($request->input('del'));
 
         $topic = Topic::query()->where('id', $tid)->first();
 

@@ -40,7 +40,7 @@ class AppPermission extends Command
     {
         $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR);
         $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
-        $dirs    = [public_path('assets/modules'), base_path('bootstrap/cache')];
+        $dirs = [public_path('assets/modules'), base_path('bootstrap/cache')];
 
         $dirs = array_merge($storage, $uploads, $dirs);
 

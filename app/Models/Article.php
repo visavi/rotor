@@ -81,6 +81,7 @@ class Article extends BaseModel
      * Возвращает последнии комментарии к статье
      *
      * @param int $limit
+     *
      * @return HasMany
      */
     public function lastComments(int $limit = 15): HasMany
@@ -180,7 +181,7 @@ class Article extends BaseModel
         $minCount = log($minCount + 1);
         $maxCount = log($maxCount + 1);
 
-        $diffSize  = $maxSize - $minSize;
+        $diffSize = $maxSize - $minSize;
         $diffCount = $maxCount - $minCount;
 
         if (empty($diffCount)) {

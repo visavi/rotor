@@ -105,13 +105,13 @@ class VoteController extends Controller
         }
 
         $voted = Arr::pluck($vote->answers, 'result', 'answer');
-        $max   = max($voted);
+        $max = max($voted);
 
         arsort($voted);
 
         $info['voted'] = $voted;
-        $info['sum']   = $vote->count > 0 ? $vote->count : 1;
-        $info['max']   = $max > 0 ? $max : 1;
+        $info['sum'] = $vote->count > 0 ? $vote->count : 1;
+        $info['max'] = $max > 0 ? $max : 1;
 
         return view('votes/view', compact('vote', 'show', 'info'));
     }
@@ -186,13 +186,13 @@ class VoteController extends Controller
         }
 
         $voted = Arr::pluck($vote->answers, 'result', 'answer');
-        $max   = max($voted);
+        $max = max($voted);
 
         arsort($voted);
 
         $info['voted'] = $voted;
-        $info['sum']   = $vote->count > 0 ? $vote->count : 1;
-        $info['max']   = $max > 0 ? $max : 1;
+        $info['sum'] = $vote->count > 0 ? $vote->count : 1;
+        $info['max'] = $max > 0 ? $max : 1;
 
         return view('votes/view_history', compact('vote', 'info'));
     }
@@ -208,9 +208,9 @@ class VoteController extends Controller
     public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
-            $question    = $request->input('question');
+            $question = $request->input('question');
             $description = $request->input('description');
-            $answers     = (array) $request->input('answers');
+            $answers = (array) $request->input('answers');
 
             $answers = array_unique(array_diff($answers, ['']));
 
@@ -238,7 +238,7 @@ class VoteController extends Controller
                 foreach ($answers as $answer) {
                     $prepareAnswers[] = [
                         'vote_id' => $vote->id,
-                        'answer'  => $answer
+                        'answer'  => $answer,
                     ];
                 }
 

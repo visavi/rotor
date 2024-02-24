@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -22,11 +21,11 @@ use Illuminate\Support\Facades\Cache;
  */
 class PaidAdvert extends BaseModel
 {
-    public const TOP_ALL    = 'top_all';
-    public const TOP        = 'top';
-    public const FORUM      = 'forum';
+    public const TOP_ALL = 'top_all';
+    public const TOP = 'top';
+    public const FORUM = 'forum';
     public const BOTTOM_ALL = 'bottom_all';
-    public const BOTTOM     = 'bottom';
+    public const BOTTOM = 'bottom';
 
     /**
      * Места размещения
@@ -89,7 +88,7 @@ class PaidAdvert extends BaseModel
                             $link = '<b>' . $link . '</b>';
                         }
 
-                        $sites[] =  $link;
+                        $sites[] = $link;
                     }
 
                     $links[$val->place][] = $sites;

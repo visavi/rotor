@@ -23,7 +23,7 @@ class ReglistController extends AdminController
     public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
-            $page   = int($request->input('page', 1));
+            $page = int($request->input('page', 1));
             $choice = intar($request->input('choice'));
             $action = $request->input('action');
 
@@ -36,7 +36,7 @@ class ReglistController extends AdminController
                     User::query()
                         ->whereIn('id', $choice)
                         ->update([
-                            'level' => User::USER
+                            'level' => User::USER,
                         ]);
 
                     setFlash('success', __('admin.reglists.users_success_approved'));

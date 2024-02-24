@@ -102,7 +102,7 @@ class BoardController extends Controller
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
             $price = int($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
 
@@ -187,9 +187,9 @@ class BoardController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $bid   = int($request->input('bid'));
+            $bid = int($request->input('bid'));
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
             $price = int($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
 
@@ -272,7 +272,7 @@ class BoardController extends Controller
 
                 $item->category->decrement('count_items');
             } else {
-                $status  = __('boards.item_success_published');
+                $status = __('boards.item_success_published');
                 $expired = strtotime('+1 month', $item->updated_at) <= SITETIME;
 
                 $item->update([

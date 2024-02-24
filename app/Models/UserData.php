@@ -14,7 +14,6 @@ use Illuminate\Support\Collection;
  * @property int user_id
  * @property int field_id
  * @property string value
- *
  * @property Collection<UserField> field
  */
 class UserData extends BaseModel

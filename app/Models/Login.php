@@ -16,7 +16,7 @@ namespace App\Models;
  */
 class Login extends BaseModel
 {
-    public const AUTH   = 'auth';
+    public const AUTH = 'auth';
     public const COOKIE = 'cookie';
     public const SOCIAL = 'social';
 

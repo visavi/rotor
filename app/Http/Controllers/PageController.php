@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Rule;
+use App\Models\Status;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
-use App\Models\Status;
 use App\Models\Surprise;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -125,10 +125,10 @@ class PageController extends Controller
      */
     public function surprise(): RedirectResponse
     {
-        $money  = mt_rand(10000, 50000);
-        $point  = mt_rand(150, 250);
+        $money = mt_rand(10000, 50000);
+        $point = mt_rand(150, 250);
         $rating = mt_rand(3, 10);
-        $year   = date('Y', strtotime('+3 days', SITETIME));
+        $year = date('Y', strtotime('+3 days', SITETIME));
 
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -158,9 +158,9 @@ class PageController extends Controller
         $user->update(['rating' => $user->posrating - $user->negrating]);
 
         $text = textNotice('surprise', [
-            'year' => $year,
-            'point' => plural($point, setting('scorename')),
-            'money' => plural($money, setting('moneyname')),
+            'year'   => $year,
+            'point'  => plural($point, setting('scorename')),
+            'money'  => plural($money, setting('moneyname')),
             'rating' => $rating,
         ]);
         $user->sendMessage(null, $text);

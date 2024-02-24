@@ -1,43 +1,43 @@
 <?php
 
+use App\Classes\{BBCode, Calendar, CloudFlare, Metrika};
 use App\Models\AdminAdvert;
-use App\Models\PaidAdvert;
-use App\Classes\{BBCode, Calendar, Metrika, CloudFlare};
+use App\Models\Advert;
 use App\Models\Antimat;
+use App\Models\Article;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\BlackList;
-use App\Models\Article;
-use App\Models\Item;
-use App\Models\Load;
 use App\Models\Chat;
 use App\Models\Counter;
 use App\Models\Down;
+use App\Models\Error;
 use App\Models\Guestbook;
 use App\Models\Invite;
-use App\Models\Error;
+use App\Models\Item;
+use App\Models\Load;
 use App\Models\News;
 use App\Models\Notice;
 use App\Models\Offer;
 use App\Models\Online;
+use App\Models\PaidAdvert;
 use App\Models\Photo;
 use App\Models\Post;
-use App\Models\Advert;
 use App\Models\Setting;
-use App\Models\Sticker;
 use App\Models\Spam;
+use App\Models\Sticker;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use GuzzleHttp\Client;
-use Illuminate\Mail\Message;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -78,14 +78,14 @@ function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $origin
         $timestamp = SITETIME;
     }
 
-    $shift     = getUser('timezone') * 3600;
+    $shift = getUser('timezone') * 3600;
     $dateStamp = date($format, $timestamp + $shift);
 
     if ($original) {
         return $dateStamp;
     }
 
-    $today     = date('d.m.Y', SITETIME + $shift);
+    $today = date('d.m.Y', SITETIME + $shift);
     $yesterday = date('d.m.Y', strtotime('-1 day', SITETIME + $shift));
 
     $replaces = [
@@ -240,8 +240,8 @@ function intar($numbers): ?array
 function formatSize(int $bytes, int $precision = 2): string
 {
     $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
-    $pow   = floor(($bytes ? log($bytes) : 0) / log(1000));
-    $pow   = min($pow, count($units) - 1);
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1000));
+    $pow = min($pow, count($units) - 1);
 
     $bytes /= (1 << (10 * $pow));
 
@@ -291,7 +291,7 @@ function formatTime(int $time, int $crumbs = 2): string
 
     foreach ($units as $unit => $seconds) {
         $format = floor($time / $seconds);
-        $time  %= $seconds;
+        $time %= $seconds;
 
         if ($format >= 1) {
             $return[] = plural($format, $unit);
@@ -341,9 +341,9 @@ function statsOnline(): array
             ->whereNotNull('user_id')
             ->get();
 
-        $usersCount  = $users->count();
+        $usersCount = $users->count();
         $guestsCount = Online::query()->whereNull('user_id')->count();
-        $total       = $usersCount + $guestsCount;
+        $total = $usersCount + $guestsCount;
 
         $metrika = new Metrika();
         $metrika->getCounter($usersCount + $guestsCount);
@@ -422,7 +422,7 @@ function statsUsers(): string
 {
     return Cache::remember('statUsers', 1800, static function () {
         $stat = User::query()->count();
-        $new  = User::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
+        $new = User::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
         if ($new) {
             $stat .= '/+' . $new;
@@ -505,10 +505,10 @@ function statsIpBanned(): int
 function statsPhotos(): string
 {
     return Cache::remember('statPhotos', 900, static function () {
-        $stat     = Photo::query()->count();
+        $stat = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
-        return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -526,7 +526,7 @@ function statsNews(): string
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
-        return formatShortNum($total) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($total) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -589,7 +589,7 @@ function statsChecker()
  */
 function statsInvite(): string
 {
-    $invited     = Invite::query()->where('used', 0)->count();
+    $invited = Invite::query()->where('used', 0)->count();
     $usedInvited = Invite::query()->where('used', 1)->count();
 
     return $invited . '/' . $usedInvited;
@@ -631,10 +631,10 @@ function photoNavigation(int $id): ?array
 function statsBlog(): string
 {
     return Cache::remember('statArticles', 900, static function () {
-        $stat     = Article::query()->count();
+        $stat = Article::query()->count();
         $totalNew = Article::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
-        return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -647,13 +647,13 @@ function statsForum(): string
 {
     return Cache::remember('statForums', 600, static function () {
         $topics = Topic::query()->count();
-        $posts  = Post::query()->count();
+        $posts = Post::query()->count();
 
         $totalNew = Post::query()
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
-        return formatShortNum($topics) . '/' . formatShortNum($posts) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($topics) . '/' . formatShortNum($posts) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -672,7 +672,7 @@ function statsGuestbook(): string
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
-        return formatShortNum($total) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($total) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -690,7 +690,7 @@ function statsChat(): string
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
-        return formatShortNum($total) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($total) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -740,10 +740,10 @@ function statsNewLoad(): int
 function statsBoard(): string
 {
     return Cache::remember('statBoards', 900, static function () {
-        $stat      = formatShortNum(Item::query()->where('expires_at', '>', SITETIME)->count());
-        $totalNew  = Item::query()->where('updated_at', '>', strtotime('-1 day', SITETIME))->count();
+        $stat = formatShortNum(Item::query()->where('expires_at', '>', SITETIME)->count());
+        $totalNew = Item::query()->where('updated_at', '>', strtotime('-1 day', SITETIME))->count();
 
-        return formatShortNum($stat) . ($totalNew  ? '/+' . $totalNew : '');
+        return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
     });
 }
 
@@ -756,11 +756,11 @@ function statsBoard(): string
  */
 function cryptMail(string $email): string
 {
-    $output  = '';
+    $output = '';
     $symbols = mb_str_split($email);
 
     foreach ($symbols as $symbol) {
-        $output  .= '&#' . ord($symbol) . ';';
+        $output .= '&#' . ord($symbol) . ';';
     }
 
     return $output;
@@ -972,7 +972,7 @@ function closeTags(string $html): string
  */
 function bbCodeTruncate(?string $value, int $words = 20, string $end = '...'): HtmlString
 {
-    $value  = Str::words($value, $words, $end);
+    $value = Str::words($value, $words, $end);
     $bbText = bbCode(closeTags($value));
 
     return new HtmlString(preg_replace('/\[(.*?)\]/', '', $bbText));
@@ -1040,7 +1040,8 @@ function truncateDescription($value, int $words = 20, string $end = ''): string
 /**
  * Get the number of words a string contains.
  *
- * @param  string  $string
+ * @param string $string
+ *
  * @return int
  */
 function wordCount($string): int
@@ -1081,7 +1082,7 @@ function getAdvertAdmin(): ?HtmlString
     $adverts = AdminAdvert::statAdverts();
 
     if ($adverts) {
-        $result  = Arr::random($adverts);
+        $result = Arr::random($adverts);
 
         return new HtmlString(view('adverts/_admin_links', compact('result')));
     }
@@ -1100,9 +1101,9 @@ function getAdvertUser(): ?HtmlString
 
     if ($adverts) {
         $total = count($adverts);
-        $show  = setting('rekusershow') > $total ? $total : setting('rekusershow');
+        $show = setting('rekusershow') > $total ? $total : setting('rekusershow');
 
-        $links  = Arr::random($adverts, $show);
+        $links = Arr::random($adverts, $show);
         $result = implode('<br>', $links);
 
         return new HtmlString(view('adverts/_links', compact('result')));
@@ -1218,7 +1219,7 @@ function recentBoards(int $show = 5): HtmlString
 function statsOffers(): string
 {
     return Cache::remember('offers', 600, static function () {
-        $offers   = Offer::query()->where('type', 'offer')->count();
+        $offers = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
 
         return $offers . '/' . $problems;
@@ -1795,7 +1796,7 @@ function plural(int $num, mixed $forms): string
         return $num . ' ' . $forms[0];
     }
 
-    if ($num % 100 > 10 &&  $num % 100 < 15) {
+    if ($num % 100 > 10 && $num % 100 < 15) {
         return $num . ' ' . $forms[2];
     }
 

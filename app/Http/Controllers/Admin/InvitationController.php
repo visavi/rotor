@@ -98,7 +98,7 @@ class InvitationController extends AdminController
             ->notEmpty($userkeys, ['userkeys' => __('admin.invitations.keys_not_amount')]);
 
         if ($validator->isValid()) {
-            $newKeys  = [];
+            $newKeys = [];
             $listKeys = [];
 
             for ($i = 0; $i < $userkeys; $i++) {
@@ -186,9 +186,9 @@ class InvitationController extends AdminController
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
-        $page  = int($request->input('page', 1));
-        $del   = intar($request->input('del'));
-        $used  = $request->input('used') ? 1 : 0;
+        $page = int($request->input('page', 1));
+        $del = intar($request->input('del'));
+        $used = $request->input('used') ? 1 : 0;
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true($del, __('validator.deletion'));

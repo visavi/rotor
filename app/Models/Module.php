@@ -93,8 +93,8 @@ class Module extends BaseModel
      */
     public function createSymlink(string $modulePath): void
     {
-        $filesystem  = new Filesystem();
-        $originPath  = public_path($this->getLinkName($modulePath));
+        $filesystem = new Filesystem();
+        $originPath = public_path($this->getLinkName($modulePath));
         $modulesPath = $modulePath . '/resources/assets';
 
         if (! file_exists($modulesPath)) {
@@ -129,6 +129,7 @@ class Module extends BaseModel
      * Получает название директории для симлинка
      *
      * @param string $modulePath
+     *
      * @return string
      */
     public function getLinkName(string $modulePath): string

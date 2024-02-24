@@ -91,7 +91,7 @@ class OfferController extends Controller
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -102,7 +102,7 @@ class OfferController extends Controller
 
             if ($validator->isValid()) {
                 $title = antimat($title);
-                $text  = antimat($text);
+                $text = antimat($text);
 
                 /** @var Offer $offer */
                 $offer = Offer::query()->create([
@@ -159,8 +159,8 @@ class OfferController extends Controller
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
-            $type  = $request->input('type');
+            $text = $request->input('text');
+            $type = $request->input('type');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -169,7 +169,7 @@ class OfferController extends Controller
 
             if ($validator->isValid()) {
                 $title = antimat($title);
-                $text  = antimat($text);
+                $text = antimat($text);
 
                 $offer->update([
                     'type'       => $type,
@@ -224,11 +224,11 @@ class OfferController extends Controller
 
                 /** @var Comment $comment */
                 $comment = $offer->comments()->create([
-                    'text'        => $msg,
-                    'user_id'     => getUser('id'),
-                    'created_at'  => SITETIME,
-                    'ip'          => getIp(),
-                    'brow'        => getBrowser(),
+                    'text'       => $msg,
+                    'user_id'    => getUser('id'),
+                    'created_at' => SITETIME,
+                    'ip'         => getIp(),
+                    'brow'       => getBrowser(),
                 ]);
 
                 $user = getUser();
@@ -296,7 +296,7 @@ class OfferController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $msg  = $request->input('msg');
+            $msg = $request->input('msg');
             $page = int($request->input('page', 1));
 
             $validator

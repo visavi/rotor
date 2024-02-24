@@ -25,7 +25,7 @@ class CheckerController extends AdminController
             $files = $this->scanFiles(base_path());
             $filesScan = json_decode(file_get_contents(storage_path('framework/cache/checker.php')), true);
 
-            $diff['left']  = array_diff($files, $filesScan);
+            $diff['left'] = array_diff($files, $filesScan);
             $diff['right'] = array_diff($filesScan, $files);
         }
 
@@ -67,7 +67,7 @@ class CheckerController extends AdminController
         $excludeFiles = preg_filter('/^/', '*.', explode(',', setting('nocheck')));
 
         $finder = new Finder();
-        $files  = $finder->in($dir)
+        $files = $finder->in($dir)
             ->files()
             ->exclude(basename(storage_path()))
             ->notName($excludeFiles);

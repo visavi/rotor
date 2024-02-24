@@ -19,19 +19,19 @@ class Calendar
     public function getCalendar(int $time = SITETIME): View
     {
         [$date['day'], $date['month'], $date['year']] = explode('.', dateFixed($time, 'j.n.Y', true));
-        $date       = array_map('intval', $date);
+        $date = array_map('intval', $date);
         $startMonth = mktime(0, 0, 0, $date['month'], 1, $date['year']);
-        $endMonth   = strtotime('+1 month', $startMonth);
+        $endMonth = strtotime('+1 month', $startMonth);
 
         $news = News::query()
             ->where('created_at', '>=', $startMonth)
             ->where('created_at', '<', $endMonth)
             ->get();
 
-        $newsIds  = [];
+        $newsIds = [];
         if ($news->isNotEmpty()) {
             foreach ($news as $data) {
-                $curDay           = dateFixed($data->created_at, 'j');
+                $curDay = dateFixed($data->created_at, 'j');
                 $newsIds[$curDay] = $data->id;
             }
         }
@@ -57,7 +57,7 @@ class Calendar
             $date = 7;
         }
 
-        $n = - ($date-2);
+        $n = - ($date - 2);
         $cal = [];
         for ($y = 0; $y < 6; $y++) {
             $row = [];

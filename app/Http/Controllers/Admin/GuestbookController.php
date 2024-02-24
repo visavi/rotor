@@ -125,7 +125,7 @@ class GuestbookController extends AdminController
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
-        $del  = intar($request->input('chosen'));
+        $del = intar($request->input('chosen'));
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true($del, __('validator.deletion'));
@@ -152,7 +152,7 @@ class GuestbookController extends AdminController
      */
     public function publish(Request $request, Validator $validator): RedirectResponse
     {
-        $page   = int($request->input('page', 1));
+        $page = int($request->input('page', 1));
         $active = intar($request->input('chosen'));
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

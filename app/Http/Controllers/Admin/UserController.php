@@ -72,10 +72,10 @@ class UserController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        $allThemes   = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR));
+        $allThemes = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR));
         $adminGroups = User::ADMIN_GROUPS;
 
-        $allGroups   = [];
+        $allGroups = [];
         foreach (User::ALL_GROUPS as $level) {
             $allGroups[$level] = User::getLevelByKey($level);
         }
@@ -91,24 +91,24 @@ class UserController extends AdminController
             ->get();
 
         if ($request->isMethod('post')) {
-            $level     = $request->input('level');
-            $password  = $request->input('password');
-            $email     = $request->input('email');
-            $name      = $request->input('name');
-            $country   = $request->input('country');
-            $city      = $request->input('city');
-            $phone    = preg_replace('/\D/', '', $request->input('phone') ?? '');
-            $site      = $request->input('site');
-            $birthday  = $request->input('birthday');
-            $point     = int($request->input('point'));
-            $money     = int($request->input('money'));
-            $status    = $request->input('status');
+            $level = $request->input('level');
+            $password = $request->input('password');
+            $email = $request->input('email');
+            $name = $request->input('name');
+            $country = $request->input('country');
+            $city = $request->input('city');
+            $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
+            $site = $request->input('site');
+            $birthday = $request->input('birthday');
+            $point = int($request->input('point'));
+            $money = int($request->input('money'));
+            $status = $request->input('status');
             $posrating = int($request->input('posrating'));
             $negrating = int($request->input('negrating'));
-            $themes    = $request->input('themes');
-            $gender    = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-            $info      = $request->input('info');
-            $created   = $request->input('created');
+            $themes = $request->input('themes');
+            $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
+            $info = $request->input('info');
+            $created = $request->input('created');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
@@ -134,17 +134,17 @@ class UserController extends AdminController
 
             if ($validator->isValid()) {
                 if ($password) {
-                    $text     = __('users.user_new_password', ['password' => $password]);
+                    $text = __('users.user_new_password', ['password' => $password]);
                     $password = password_hash($password, PASSWORD_BCRYPT);
                 } else {
-                    $text     = null;
+                    $text = null;
                     $password = $user->password;
                 }
 
-                $name    = utfSubstr($name, 0, 20);
+                $name = utfSubstr($name, 0, 20);
                 $country = utfSubstr($country, 0, 30);
-                $city    = utfSubstr($city, 0, 50);
-                $rating  = $posrating - $negrating;
+                $city = utfSubstr($city, 0, 50);
+                $rating = $posrating - $negrating;
 
                 $user->update([
                     'password'   => $password,
@@ -213,12 +213,12 @@ class UserController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $loginblack  = empty($request->input('loginblack')) ? 0 : 1;
-            $mailblack   = empty($request->input('mailblack')) ? 0 : 1;
-            $deltopics   = empty($request->input('deltopics')) ? 0 : 1;
-            $delposts    = empty($request->input('delposts')) ? 0 : 1;
+            $loginblack = empty($request->input('loginblack')) ? 0 : 1;
+            $mailblack = empty($request->input('mailblack')) ? 0 : 1;
+            $deltopics = empty($request->input('deltopics')) ? 0 : 1;
+            $delposts = empty($request->input('delposts')) ? 0 : 1;
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
-            $delimages   = empty($request->input('delimages')) ? 0 : 1;
+            $delimages = empty($request->input('delimages')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
@@ -251,7 +251,7 @@ class UserController extends AdminController
                 // Удаление тем форума
                 if ($deltopics) {
                     $topics = Topic::query()->where('user_id', $user->id)->pluck('id')->all();
-                    $posts  = Post::query()->whereIn('topic_id', $topics)->pluck('id')->all();
+                    $posts = Post::query()->whereIn('topic_id', $topics)->pluck('id')->all();
 
                     // Удаление загруженных файлов
                     if ($posts) {
@@ -274,7 +274,7 @@ class UserController extends AdminController
 
                 // Удаление постов форума
                 if ($delposts) {
-                    $posts  = Post::query()->where('user_id', $user->id)->pluck('id')->all();
+                    $posts = Post::query()->where('user_id', $user->id)->pluck('id')->all();
 
                     // Удаление загруженных файлов
                     if ($posts) {

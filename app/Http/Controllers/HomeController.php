@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ban;
-use Gregwar\Captcha\PhraseBuilder;
 use Gregwar\Captcha\CaptchaBuilder;
+use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
-use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
 use Visavi\Captcha\CaptchaBuilder as AnimatedCaptchaBuilder;
+use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
 
 class HomeController extends Controller
 {
@@ -131,7 +131,7 @@ class HomeController extends Controller
      */
     public function language(string $lang, Request $request): RedirectResponse
     {
-        $return    = $request->input('return');
+        $return = $request->input('return');
         $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
 
         if (preg_match('/^[a-z]+$/', $lang) && in_array($lang, $languages, true)) {

@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\DB;
  * Класс обработки BB-кодов
  *
  * @license Code and contributions have MIT License
+ *
  * @link    https://visavi.net
+ *
  * @author  Alexander Grigorev <admin@visavi.net>
  */
 class BBCode
@@ -24,7 +26,7 @@ class BBCode
     protected static $parsers = [
         'code' => [
             'pattern'  => '/\[code\](.+?)\[\/code\]/s',
-            'callback' => 'highlightCode'
+            'callback' => 'highlightCode',
         ],
         'http' => [
             'pattern'  => '%\b(((?<=^|\s)\w+://)[^\s()<>\[\]]+)%s',
@@ -149,9 +151,9 @@ class BBCode
     private function clearBreakLines(string $source): string
     {
         $tags = [
-            '</div><br>'           => '</div>',
-            '</pre><br>'           => '</pre>',
-            '</blockquote><br>'    => '</blockquote>',
+            '</div><br>'        => '</div>',
+            '</pre><br>'        => '</pre>',
+            '</blockquote><br>' => '</blockquote>',
         ];
 
         return strtr($source, $tags);
@@ -212,7 +214,7 @@ class BBCode
             $list[] = '<li>' . $l . '</li>';
         }
 
-        $tag  = str_contains($match[0], '[list]') ? 'ul' : 'ol';
+        $tag = str_contains($match[0], '[list]') ? 'ul' : 'ol';
 
         return '<' . $tag . '>' . implode($list) . '</' . $tag . '>';
     }
@@ -256,7 +258,7 @@ class BBCode
     public function spoilerText(array $match): string
     {
         $title = empty($match[2]) ? __('main.expand_view') : $match[1];
-        $text  = empty($match[2]) ? $match[1] : $match[2];
+        $text = empty($match[2]) ? $match[1] : $match[2];
 
         return '<div class="spoiler">
                 <b class="spoiler-title">' . $title . '</b>
@@ -328,7 +330,7 @@ class BBCode
                     ->orderByDesc(DB::raw('CHAR_LENGTH(code)'))
                     ->get()
                     ->pluck('name', 'code')
-                    ->map(function ($item, $key) {
+                    ->map(function ($item) {
                         return '<img src="' . $item . '" alt="' . getBodyName($item) . '">';
                     })
                     ->toArray();
@@ -351,18 +353,18 @@ class BBCode
     {
         self::$parsers[$name] = [
             'pattern' => $pattern,
-            'replace' => $replace
+            'replace' => $replace,
         ];
     }
 
     /**
      * Устанавливает список доступных парсеров
      *
-     * @param mixed $only parsers
+     * @param mixed|null $only parsers
      *
      * @return BBCode object
      */
-    public function only($only = null): self
+    public function only(mixed $only = null): self
     {
         $only = is_array($only) ? $only : func_get_args();
         self::$parsers = $this->arrayOnly($only);
@@ -373,11 +375,11 @@ class BBCode
     /**
      * Исключает парсеры из набора
      *
-     * @param mixed $except parsers
+     * @param mixed|null $except parsers
      *
      * @return BBCode object
      */
-    public function except($except = null): self
+    public function except(mixed $except = null): self
     {
         $except = is_array($except) ? $except : func_get_args();
         self::$parsers = $this->arrayExcept($except);

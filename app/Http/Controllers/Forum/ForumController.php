@@ -12,11 +12,11 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -101,11 +101,11 @@ class ForumController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $title    = $request->input('title');
-            $msg      = $request->input('msg');
-            $vote     = empty($request->input('vote')) ? 0 : 1;
+            $title = $request->input('title');
+            $msg = $request->input('msg');
+            $vote = empty($request->input('vote')) ? 0 : 1;
             $question = $request->input('question');
-            $answers  = (array) $request->input('answers');
+            $answers = (array) $request->input('answers');
 
             /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
@@ -138,7 +138,7 @@ class ForumController extends Controller
 
             if ($validator->isValid()) {
                 $title = antimat($title);
-                $msg   = antimat($msg);
+                $msg = antimat($msg);
 
                 $user->increment('allforum');
                 $user->increment('point');
@@ -175,7 +175,7 @@ class ForumController extends Controller
                 // Обновление родительского форума
                 if ($forum->parent->id) {
                     $forum->parent->update([
-                        'last_topic_id' => $topic->id
+                        'last_topic_id' => $topic->id,
                     ]);
                 }
 
@@ -192,7 +192,7 @@ class ForumController extends Controller
                     foreach ($answers as $answer) {
                         $prepareAnswers[] = [
                             'vote_id' => $vote->id,
-                            'answer'  => $answer
+                            'answer'  => $answer,
                         ];
                     }
 

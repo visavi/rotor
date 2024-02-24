@@ -131,7 +131,7 @@ class NoticeSeeder extends Seeder
                 'created_at' => SITETIME,
                 'updated_at' => SITETIME,
                 'protect'    => 1,
-            ]
+            ],
         ];
 
         Notice::query()->truncate();

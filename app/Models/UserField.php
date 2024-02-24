@@ -17,7 +17,6 @@ use Illuminate\Support\Collection;
  * @property int min
  * @property int max
  * @property bool required
- *
  * @property Collection<UserData> data
  */
 class UserField extends BaseModel
@@ -25,7 +24,7 @@ class UserField extends BaseModel
     /**
      * Type fields
      */
-    public const INPUT    = 'input';
+    public const INPUT = 'input';
     public const TEXTAREA = 'textarea';
 
     /**

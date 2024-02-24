@@ -25,11 +25,11 @@ class MailController extends Controller
     {
         if ($request->isMethod('post')) {
             $message = $request->input('message');
-            $name    = $request->input('name');
-            $email   = $request->input('email');
+            $name = $request->input('name');
+            $email = $request->input('email');
 
             if ($user = getUser()) {
-                $name  = $user->login;
+                $name = $user->login;
                 $email = $user->email;
             }
 
@@ -101,7 +101,7 @@ class MailController extends Controller
                 ->lte($user->timepasswd, SITETIME, ['user' => __('mails.password_recovery_time')]);
 
             if ($validator->isValid()) {
-                $resetKey  = Str::random();
+                $resetKey = Str::random();
                 $resetLink = config('app.url') . '/restore?key=' . $resetKey;
 
                 $user->update([
@@ -162,7 +162,7 @@ class MailController extends Controller
             ->gte($user->timepasswd, SITETIME, __('mails.secret_key_expired'));
 
         if ($validator->isValid()) {
-            $newpass    = Str::random();
+            $newpass = Str::random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
             $user->update([

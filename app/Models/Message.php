@@ -15,12 +15,11 @@ use Illuminate\Support\Collection;
 /**
  * Class Message
  *
- * @property int $id
- * @property int $user_id
- * @property int $author_id
+ * @property int    $id
+ * @property int    $user_id
+ * @property int    $author_id
  * @property string $text
- * @property int $created_at
- *
+ * @property int    $created_at
  * @property-read User $author
  * @property-read Collection<File> $files
  * @property-read Collection<Dialogue> $dialogues
@@ -29,8 +28,8 @@ class Message extends BaseModel
 {
     use UploadTrait;
 
-    public const IN   = 'in';   // Принятые
-    public const OUT  = 'out';  // Отправленные
+    public const IN = 'in';   // Принятые
+    public const OUT = 'out';  // Отправленные
 
     /**
      * Indicates if the model should be timestamped.

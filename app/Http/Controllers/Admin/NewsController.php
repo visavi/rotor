@@ -49,11 +49,11 @@ class NewsController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $title  = $request->input('title');
-            $text   = $request->input('text');
-            $image  = $request->file('image');
+            $title = $request->input('title');
+            $text = $request->input('text');
+            $image = $request->file('image');
             $closed = empty($request->input('closed')) ? 0 : 1;
-            $top    = empty($request->input('top')) ? 0 : 1;
+            $top = empty($request->input('top')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
@@ -106,11 +106,11 @@ class NewsController extends AdminController
     public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
-            $title  = $request->input('title');
-            $text   = $request->input('text');
-            $image  = $request->file('image');
+            $title = $request->input('title');
+            $text = $request->input('text');
+            $image = $request->file('image');
             $closed = empty($request->input('closed')) ? 0 : 1;
-            $top    = empty($request->input('top')) ? 0 : 1;
+            $top = empty($request->input('top')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])

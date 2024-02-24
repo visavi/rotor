@@ -23,7 +23,7 @@ class ErrorController extends AdminController
      */
     public function __construct(Request $request)
     {
-        $this->code  = int($request->input('code', 404));
+        $this->code = int($request->input('code', 404));
         $this->lists = [
             401 => 401,
             403 => 403,
@@ -49,7 +49,7 @@ class ErrorController extends AdminController
     public function index(): View
     {
         $lists = $this->lists;
-        $code  = $this->code;
+        $code = $this->code;
 
         $logs = Error::query()
             ->where('code', $code)

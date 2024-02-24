@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Forum;
 
+use App\Classes\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Bookmark;
 use App\Models\File;
+use App\Models\Flood;
 use App\Models\Polling;
 use App\Models\Post;
-use App\Models\Bookmark;
 use App\Models\Reader;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\Flood;
-use App\Classes\Validator;
 use App\Models\VoteAnswer;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class TopicController extends Controller
@@ -110,7 +110,7 @@ class TopicController extends Controller
             }
         }
 
-        $files       = [];
+        $files = [];
         $description = $firstPost ? truncateDescription(bbCode($firstPost->text, false)) : $topic->title;
 
         if ($user) {
@@ -253,8 +253,8 @@ class TopicController extends Controller
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        $del   = intar($request->input('del'));
-        $page  = int($request->input('page'));
+        $del = intar($request->input('del'));
+        $page = int($request->input('page'));
 
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -427,10 +427,10 @@ class TopicController extends Controller
         $vote = Vote::query()->where('topic_id', $id)->first();
 
         if ($request->isMethod('post')) {
-            $title    = $request->input('title');
-            $msg      = $request->input('msg');
+            $title = $request->input('title');
+            $msg = $request->input('msg');
             $question = $request->input('question');
-            $answers  = (array) $request->input('answers');
+            $answers = (array) $request->input('answers');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')]);
@@ -460,7 +460,7 @@ class TopicController extends Controller
 
             if ($validator->isValid()) {
                 $title = antimat($title);
-                $msg   = antimat($msg);
+                $msg = antimat($msg);
 
                 $topic->update(['title' => $title]);
 

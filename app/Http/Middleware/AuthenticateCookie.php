@@ -65,7 +65,7 @@ class AuthenticateCookie
             && $request->hasCookie('password')
             && $request->session()->missing('id')
         ) {
-            $login    = $request->cookie('login');
+            $login = $request->cookie('login');
             $password = $request->cookie('password');
 
             $user = getUserByLogin($login);
@@ -84,7 +84,7 @@ class AuthenticateCookie
      * Устанавливает настройки
      *
      * @param User|false $user
-     * @param Request   $request
+     * @param Request    $request
      *
      * @return void
      */

@@ -21,7 +21,7 @@ class ActiveController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $login      = $request->input('user', getUser('login'));
+            $login = $request->input('user', getUser('login'));
             $this->user = getUserByLogin($login);
 
             if (! $this->user) {
@@ -42,7 +42,7 @@ class ActiveController extends Controller
     public function files(Request $request): View
     {
         $active = int($request->input('active', 1));
-        $user   = $this->user;
+        $user = $this->user;
 
         if (getUser() && getUser('id') !== $user->id) {
             $active = 1;

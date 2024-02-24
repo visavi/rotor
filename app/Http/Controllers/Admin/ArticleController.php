@@ -54,8 +54,8 @@ class ArticleController extends AdminController
 
             /** @var Blog $category */
             $category = Blog::query()->create([
-                'name'  => $name,
-                'sort'  => $max,
+                'name' => $name,
+                'sort' => $max,
             ]);
 
             setFlash('success', __('blogs.category_success_created'));
@@ -95,8 +95,8 @@ class ArticleController extends AdminController
 
         if ($request->isMethod('post')) {
             $parent = int($request->input('parent'));
-            $name   = $request->input('name');
-            $sort   = int($request->input('sort'));
+            $name = $request->input('name');
+            $sort = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -232,8 +232,8 @@ class ArticleController extends AdminController
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
-            $tags  = $request->input('tags');
+            $text = $request->input('text');
+            $tags = $request->input('tags');
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))

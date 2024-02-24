@@ -106,7 +106,7 @@ class Forum extends BaseModel
                 ->first();
 
             $this->parent()->update([
-                'last_topic_id' => $lastTopic->id ?? 0
+                'last_topic_id' => $lastTopic->id ?? 0,
             ]);
         }
     }

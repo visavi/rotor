@@ -8,8 +8,8 @@ use App\Classes\Validator;
 use App\Models\Transfer;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class TransferController extends Controller
@@ -24,7 +24,7 @@ class TransferController extends Controller
         $this->middleware('check.user');
 
         $this->middleware(function ($request, $next) {
-            $login      = $request->input('user');
+            $login = $request->input('user');
             $this->user = getUserByLogin($login);
 
             return $next($request);
@@ -52,7 +52,7 @@ class TransferController extends Controller
     public function send(Request $request, Validator $validator): RedirectResponse
     {
         $money = int($request->input('money'));
-        $msg   = $request->input('msg');
+        $msg = $request->input('msg');
 
         $validator
             ->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
@@ -83,7 +83,7 @@ class TransferController extends Controller
                     'recipient_id' => $this->user->id,
                     'text'         => $comment,
                     'total'        => $money,
-                    'created_at'   => SITETIME
+                    'created_at'   => SITETIME,
                 ]);
             });
 

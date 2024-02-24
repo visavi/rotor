@@ -17,7 +17,7 @@ class CounterController extends Controller
      */
     public function index(): View
     {
-        $count  = statsCounter();
+        $count = statsCounter();
         $online = statsOnline();
 
         $counts31 = [];
@@ -33,8 +33,8 @@ class CounterController extends Controller
                 return $item->period === $curDate;
             });
 
-            $counts31['hits'][]   = $cnt->hits ?? 0;
-            $counts31['hosts'][]  = $cnt->hosts ?? 0;
+            $counts31['hits'][] = $cnt->hits ?? 0;
+            $counts31['hosts'][] = $cnt->hosts ?? 0;
             $counts31['labels'][] = date('M j', strtotime($curDate));
         }
 
@@ -51,8 +51,8 @@ class CounterController extends Controller
                 return $item->period === $curHour;
             });
 
-            $counts24['hits'][]   = $cnt->hits ?? 0;
-            $counts24['hosts'][]  = $cnt->hosts ?? 0;
+            $counts24['hits'][] = $cnt->hits ?? 0;
+            $counts24['hosts'][] = $cnt->hosts ?? 0;
             $counts24['labels'][] = date('H', strtotime($curHour));
         }
 

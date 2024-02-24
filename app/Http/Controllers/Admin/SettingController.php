@@ -29,9 +29,9 @@ class SettingController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $sets  = $request->input('sets');
-            $mods  = $request->input('mods');
-            $opt   = $request->input('opt');
+            $sets = $request->input('sets');
+            $mods = $request->input('mods');
+            $opt = $request->input('opt');
 
             $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
                 ->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
@@ -77,8 +77,8 @@ class SettingController extends AdminController
         ];
 
         $protects = [
-            'graphical'    =>  __('settings.graphical'),
-            'animated'     =>  __('settings.animated'),
+            'graphical'    => __('settings.graphical'),
+            'animated'     => __('settings.animated'),
             'recaptcha_v2' => 'Recaptcha v2',
             'recaptcha_v3' => 'Recaptcha v3',
         ];

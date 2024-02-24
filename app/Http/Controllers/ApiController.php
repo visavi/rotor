@@ -79,7 +79,7 @@ class ApiController extends Controller
     /**
      * Api пользователей
      *
-     * @param string  $login
+     * @param string $login
      *
      * @return Response
      */
@@ -170,7 +170,7 @@ class ApiController extends Controller
                 'next' => $dialogues->nextPageUrl(),
                 'prev' => $dialogues->previousPageUrl(),
             ],
-            'meta'    => [
+            'meta' => [
                 'current_page' => $dialogues->currentPage(),
                 'last_page'    => $dialogues->lastPage(),
                 'path'         => $dialogues->path(),
@@ -246,7 +246,7 @@ class ApiController extends Controller
                 'next' => $messages->nextPageUrl(),
                 'prev' => $messages->previousPageUrl(),
             ],
-            'meta'    => [
+            'meta' => [
                 'current_page' => $messages->currentPage(),
                 'last_page'    => $messages->lastPage(),
                 'path'         => $messages->path(),
@@ -304,7 +304,7 @@ class ApiController extends Controller
                 'next' => $topics->nextPageUrl(),
                 'prev' => $topics->previousPageUrl(),
             ],
-            'meta'    => [
+            'meta' => [
                 'current_page' => $topics->currentPage(),
                 'last_page'    => $topics->lastPage(),
                 'path'         => $topics->path(),
@@ -356,7 +356,7 @@ class ApiController extends Controller
                 'next' => $posts->nextPageUrl(),
                 'prev' => $posts->previousPageUrl(),
             ],
-            'meta'    => [
+            'meta' => [
                 'current_page' => $posts->currentPage(),
                 'last_page'    => $posts->lastPage(),
                 'path'         => $posts->path(),

@@ -43,11 +43,11 @@ class FileController extends AdminController
      */
     public function index(): View
     {
-        $path  = $this->path;
+        $path = $this->path;
         $elements = preg_grep('/^([^.])/', scandir(resource_path('views/' . $path . $this->file), SCANDIR_SORT_ASCENDING));
 
         $folders = [];
-        $files   = [];
+        $files = [];
 
         foreach ($elements as $element) {
             if (is_dir(resource_path('views/' . $path . '/' . $element))) {
@@ -74,8 +74,8 @@ class FileController extends AdminController
      */
     public function edit(Request $request, Validator $validator)
     {
-        $path     = $this->path;
-        $file     = $path ? '/' . $this->file : $this->file;
+        $path = $this->path;
+        $file = $path ? '/' . $this->file : $this->file;
         $writable = is_writable(resource_path('views/' . $path . $file . '.blade.php'));
 
         if (
@@ -128,10 +128,10 @@ class FileController extends AdminController
 
         if ($request->isMethod('post')) {
             $filename = check($request->input('filename'));
-            $dirname  = check($request->input('dirname'));
+            $dirname = check($request->input('dirname'));
 
             $fileName = $this->path ? '/' . $filename : $filename;
-            $dirName  = $this->path ? '/' . $dirname : $dirname;
+            $dirName = $this->path ? '/' . $dirname : $dirname;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
@@ -185,10 +185,10 @@ class FileController extends AdminController
         }
 
         $filename = check($request->input('filename'));
-        $dirname  = check($request->input('dirname'));
+        $dirname = check($request->input('dirname'));
 
         $fileName = $this->path ? '/' . $filename : $filename;
-        $dirName  = $this->path ? '/' . $dirname : $dirname;
+        $dirName = $this->path ? '/' . $dirname : $dirname;
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 

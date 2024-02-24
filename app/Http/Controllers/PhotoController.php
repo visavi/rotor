@@ -80,8 +80,8 @@ class PhotoController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $title  = $request->input('title');
-            $text   = $request->input('text');
+            $title = $request->input('title');
+            $text = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -158,8 +158,8 @@ class PhotoController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $title  = $request->input('title');
-            $text   = $request->input('text');
+            $title = $request->input('title');
+            $text = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -209,7 +209,7 @@ class PhotoController extends Controller
 
         if ($request->isMethod('post')) {
             $user = getUser();
-            $msg  = $request->input('msg');
+            $msg = $request->input('msg');
 
             $validator
                 ->true($user, __('main.not_authorized'))
@@ -223,11 +223,11 @@ class PhotoController extends Controller
 
                 /** @var Comment $comment */
                 $comment = $photo->comments()->create([
-                    'text'        => $msg,
-                    'user_id'     => $user->id,
-                    'created_at'  => SITETIME,
-                    'ip'          => getIp(),
-                    'brow'        => getBrowser(),
+                    'text'       => $msg,
+                    'user_id'    => $user->id,
+                    'created_at' => SITETIME,
+                    'ip'         => getIp(),
+                    'brow'       => getBrowser(),
                 ]);
 
                 $user->increment('allcomments');

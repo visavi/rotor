@@ -40,7 +40,7 @@ class Flood extends BaseModel
         }
 
         $userPoint = getUser('point');
-        $period    = setting('floodstime');
+        $period = setting('floodstime');
 
         if ($userPoint >= 100) {
             $period = round(setting('floodstime') / 2);
@@ -84,6 +84,7 @@ class Flood extends BaseModel
      * Сохраняет состояние
      *
      * @param int $period
+     *
      * @return void
      */
     public function saveState(int $period = 0): void

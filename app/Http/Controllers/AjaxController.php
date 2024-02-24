@@ -20,10 +20,10 @@ use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Sticker;
 use App\Models\Wall;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AjaxController extends Controller
@@ -52,11 +52,11 @@ class AjaxController extends Controller
      */
     public function complaint(Request $request, Validator $validator): JsonResponse
     {
-        $path  = null;
+        $path = null;
         $model = false;
-        $id    = int($request->input('id'));
-        $type  = $request->input('type');
-        $page  = $request->input('page');
+        $id = int($request->input('id'));
+        $type = $request->input('type');
+        $page = $request->input('page');
 
         switch ($type) :
             case Guestbook::$morphName:
@@ -132,8 +132,8 @@ class AjaxController extends Controller
         }
 
         $type = $request->input('type');
-        $rid  = int($request->input('rid'));
-        $id   = int($request->input('id'));
+        $rid = int($request->input('rid'));
+        $id = int($request->input('id'));
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
@@ -181,7 +181,7 @@ class AjaxController extends Controller
             Down::$morphName,
         ];
 
-        $id   = int($request->input('id'));
+        $id = int($request->input('id'));
         $type = $request->input('type');
         $vote = $request->input('vote');
 
@@ -233,9 +233,9 @@ class AjaxController extends Controller
             $cancel = true;
         } else {
             $post->polling()->create([
-                'user_id'     => getUser('id'),
-                'vote'        => $vote,
-                'created_at'  => SITETIME,
+                'user_id'    => getUser('id'),
+                'vote'       => $vote,
+                'created_at' => SITETIME,
             ]);
         }
 
@@ -273,7 +273,7 @@ class AjaxController extends Controller
             Post::$morphName,
         ];
 
-        $id   = int($request->input('id'));
+        $id = int($request->input('id'));
         $file = $request->file('file');
         $type = $request->input('type');
 
@@ -377,7 +377,7 @@ class AjaxController extends Controller
             Post::$morphName,
         ];
 
-        $id   = int($request->input('id'));
+        $id = int($request->input('id'));
         $type = $request->input('type');
 
         if (! in_array($type, $types, true)) {

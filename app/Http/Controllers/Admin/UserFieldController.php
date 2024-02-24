@@ -40,8 +40,6 @@ class UserFieldController extends AdminController
     }
 
     /**
-     *
-     *
      * @param StoreUserFieldRequest $request
      *
      * @return RedirectResponse

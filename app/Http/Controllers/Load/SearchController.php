@@ -23,7 +23,7 @@ class SearchController extends Controller
      */
     public function index(Request $request, Validator $validator)
     {
-        $find  = $request->input('find');
+        $find = $request->input('find');
         $downs = collect();
 
         if ($find) {

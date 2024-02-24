@@ -134,10 +134,10 @@ class ArticleController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $cid   = int($request->input('cid'));
+            $cid = int($request->input('cid'));
             $title = $request->input('title');
-            $text  = $request->input('text');
-            $tags  = $request->input('tags');
+            $text = $request->input('text');
+            $tags = $request->input('tags');
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
@@ -229,8 +229,8 @@ class ArticleController extends Controller
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
-            $tags  = $request->input('tags');
+            $text = $request->input('text');
+            $tags = $request->input('tags');
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
@@ -313,7 +313,7 @@ class ArticleController extends Controller
 
         if ($request->isMethod('post')) {
             $user = getUser();
-            $msg  = $request->input('msg');
+            $msg = $request->input('msg');
 
             $validator
                 ->true($user, __('main.not_authorized'))
@@ -324,11 +324,11 @@ class ArticleController extends Controller
             if ($validator->isValid()) {
                 /** @var Comment $comment */
                 $comment = $article->comments()->create([
-                    'text'        => antimat($msg),
-                    'user_id'     => $user->id,
-                    'created_at'  => SITETIME,
-                    'ip'          => getIp(),
-                    'brow'        => getBrowser(),
+                    'text'       => antimat($msg),
+                    'user_id'    => $user->id,
+                    'created_at' => SITETIME,
+                    'ip'         => getIp(),
+                    'brow'       => getBrowser(),
                 ]);
 
                 $user->increment('allcomments');
@@ -396,7 +396,7 @@ class ArticleController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $msg  = $request->input('msg');
+            $msg = $request->input('msg');
             $page = int($request->input('page', 1));
 
             $validator
@@ -517,7 +517,7 @@ class ArticleController extends Controller
 
             $stingTag = implode(',', $allTags);
             $dumptags = preg_split('/[\s]*[,][\s]*/', $stingTag, -1, PREG_SPLIT_NO_EMPTY);
-            $allTags  = array_count_values(array_map('utfLower', $dumptags));
+            $allTags = array_count_values(array_map('utfLower', $dumptags));
 
             arsort($allTags);
             array_splice($allTags, 100);
@@ -622,7 +622,7 @@ class ArticleController extends Controller
     public function userArticles(Request $request): View
     {
         $login = $request->input('user', getUser('login'));
-        $user  = getUserByLogin($login);
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -647,7 +647,7 @@ class ArticleController extends Controller
     public function userComments(Request $request): View
     {
         $login = $request->input('user', getUser('login'));
-        $user  = getUserByLogin($login);
+        $user = getUserByLogin($login);
 
         if (! $user) {
             abort(404, __('validator.user'));
@@ -730,7 +730,7 @@ class ArticleController extends Controller
      */
     public function search(Request $request, Validator $validator)
     {
-        $find     = check($request->input('find'));
+        $find = check($request->input('find'));
         $articles = collect();
 
         if ($find) {

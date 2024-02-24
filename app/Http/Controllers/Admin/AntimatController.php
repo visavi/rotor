@@ -35,7 +35,7 @@ class AntimatController extends AdminController
 
             if ($validator->isValid()) {
                 Antimat::query()->create([
-                    'string' => $word
+                    'string' => $word,
                 ]);
 
                 setFlash('success', __('main.record_added_success'));

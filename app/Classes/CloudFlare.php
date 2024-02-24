@@ -12,6 +12,7 @@ class CloudFlare
 {
     /**
      * List of IP's used by CloudFlare.
+     *
      * @const array
      */
     protected const IPS = [
@@ -62,7 +63,7 @@ class CloudFlare
     /**
      * Executes a callback on a trusted request.
      *
-     * @param  Closure $callback
+     * @param Closure $callback
      *
      * @return mixed
      */

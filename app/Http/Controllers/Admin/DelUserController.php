@@ -21,9 +21,9 @@ class DelUserController extends AdminController
      */
     public function index(Request $request): View
     {
-        $users  = collect();
+        $users = collect();
         $period = int($request->input('period'));
-        $point  = int($request->input('point'));
+        $point = int($request->input('point'));
 
         if ($request->isMethod('post')) {
             if ($period < 180) {
@@ -56,7 +56,7 @@ class DelUserController extends AdminController
     public function clear(Request $request, Validator $validator): RedirectResponse
     {
         $period = int($request->input('period'));
-        $point  = int($request->input('point'));
+        $point = int($request->input('point'));
 
         $validator
             ->equal($request->input('_token'), csrf_token(), __('validator.token'))

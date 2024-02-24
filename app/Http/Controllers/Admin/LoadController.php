@@ -94,8 +94,8 @@ class LoadController extends AdminController
 
         if ($request->isMethod('post')) {
             $parent = int($request->input('parent'));
-            $name   = $request->input('name');
-            $sort   = int($request->input('sort'));
+            $name = $request->input('name');
+            $sort = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -246,7 +246,7 @@ class LoadController extends AdminController
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
             $files = (array) $request->file('files');
             $links = (array) $request->input('links');
 
@@ -264,7 +264,7 @@ class LoadController extends AdminController
             $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + count($links) + $existFiles , ['files' => __('validator.file_upload_one')]);
+            $validator->notEmpty(count($files) + count($links) + $existFiles, ['files' => __('validator.file_upload_one')]);
             $validator->lte(count($files) + count($links) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
@@ -341,7 +341,7 @@ class LoadController extends AdminController
     public function deleteDown(int $id, Request $request): RedirectResponse
     {
         /** @var Down $down */
-        $down  = Down::query()->find($id);
+        $down = Down::query()->find($id);
 
         if (! $down) {
             abort(404, __('loads.down_not_exist'));
@@ -425,7 +425,7 @@ class LoadController extends AdminController
     public function publish(int $id, Request $request): RedirectResponse
     {
         /** @var Down $down */
-        $down  = Down::query()->find($id);
+        $down = Down::query()->find($id);
 
         if (! $down) {
             abort(404, __('loads.down_not_exist'));

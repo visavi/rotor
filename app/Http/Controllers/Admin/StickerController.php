@@ -8,8 +8,8 @@ use App\Classes\Validator;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class StickerController extends AdminController
@@ -191,7 +191,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code    = utfLower($request->input('code'));
+            $code = utfLower($request->input('code'));
             $sticker = $request->file('sticker');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -215,7 +215,7 @@ class StickerController extends AdminController
 
             if ($validator->isValid()) {
                 $newName = uniqueName($sticker->getClientOriginalExtension());
-                $path    = (new Sticker())->uploadPath . '/' . $newName;
+                $path = (new Sticker())->uploadPath . '/' . $newName;
                 $sticker->move(public_path((new Sticker())->uploadPath), $newName);
 
                 Sticker::query()->create([
@@ -250,15 +250,15 @@ class StickerController extends AdminController
     {
         /** @var Sticker $sticker */
         $sticker = Sticker::query()->find($id);
-        $page    = int($request->input('page', 1));
+        $page = int($request->input('page', 1));
 
         if (! $sticker) {
             abort(404, __('stickers.sticker_not_exist'));
         }
 
         if ($request->isMethod('post')) {
-            $code  = utfLower($request->input('code'));
-            $cid   = int($request->input('cid'));
+            $code = utfLower($request->input('code'));
+            $cid = int($request->input('cid'));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
@@ -312,7 +312,7 @@ class StickerController extends AdminController
             abort(404, __('stickers.sticker_not_exist'));
         }
 
-        $page     = int($request->input('page', 1));
+        $page = int($request->input('page', 1));
         $category = $sticker->category->id;
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Load;
 
-use App\Http\Controllers\Controller;
-use App\Models\File;
-use App\Models\Load;
-use App\Models\User;
 use App\Classes\Validator;
+use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Down;
+use App\Models\File;
 use App\Models\Flood;
+use App\Models\Load;
 use App\Models\Reader;
+use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -84,7 +84,7 @@ class DownController extends Controller
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
             $files = (array) $request->file('files');
             $links = (array) $request->input('links');
 
@@ -206,7 +206,7 @@ class DownController extends Controller
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
             $files = (array) $request->file('files');
             $links = (array) $request->input('links');
 
@@ -225,7 +225,7 @@ class DownController extends Controller
             $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
             $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + count($links) + $existFiles , ['files' => __('validator.file_upload_one')]);
+            $validator->notEmpty(count($files) + count($links) + $existFiles, ['files' => __('validator.file_upload_one')]);
             $validator->lte(count($files) + count($links) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
@@ -426,11 +426,11 @@ class DownController extends Controller
             if ($validator->isValid()) {
                 /** @var Comment $comment */
                 $comment = $down->comments()->create([
-                    'text'        => antimat($msg),
-                    'user_id'     => getUser('id'),
-                    'created_at'  => SITETIME,
-                    'ip'          => getIp(),
-                    'brow'        => getBrowser(),
+                    'text'       => antimat($msg),
+                    'user_id'    => getUser('id'),
+                    'created_at' => SITETIME,
+                    'ip'         => getIp(),
+                    'brow'       => getBrowser(),
                 ]);
 
                 $user = getUser();
@@ -498,7 +498,7 @@ class DownController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $msg  = $request->input('msg');
+            $msg = $request->input('msg');
             $page = int($request->input('page', 1));
 
             $validator

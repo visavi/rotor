@@ -36,9 +36,9 @@ class StatusController extends AdminController
     {
         if ($request->isMethod('post')) {
             $topoint = int($request->input('topoint'));
-            $point   = int($request->input('point'));
-            $name    = $request->input('name');
-            $color   = $request->input('color');
+            $point = int($request->input('point'));
+            $name = $request->input('name');
+            $color = $request->input('color');
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -85,9 +85,9 @@ class StatusController extends AdminController
 
         if ($request->isMethod('post')) {
             $topoint = int($request->input('topoint'));
-            $point   = int($request->input('point'));
-            $name    = $request->input('name');
-            $color   = $request->input('color');
+            $point = int($request->input('point'));
+            $name = $request->input('name');
+            $color = $request->input('color');
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))

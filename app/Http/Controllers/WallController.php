@@ -119,7 +119,7 @@ class WallController extends Controller
      */
     public function delete(string $login, Request $request, Validator $validator): JsonResponse
     {
-        $id   = int($request->input('id'));
+        $id = int($request->input('id'));
         $user = getUserByLogin($login);
 
         if (! $user) {

@@ -29,9 +29,9 @@ use Illuminate\Support\HtmlString;
  */
 class Offer extends BaseModel
 {
-    public const DONE    = 'done';
-    public const WAIT    = 'wait';
-    public const CANCEL  = 'cancel';
+    public const DONE = 'done';
+    public const WAIT = 'wait';
+    public const CANCEL = 'cancel';
     public const PROCESS = 'process';
 
     /**
@@ -110,6 +110,7 @@ class Offer extends BaseModel
      * Возвращает последнии комментарии
      *
      * @param int $limit
+     *
      * @return HasMany
      */
     public function lastComments(int $limit = 15): HasMany

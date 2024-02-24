@@ -59,7 +59,7 @@ class PictureController extends Controller
                     deleteFile(public_path($this->user->avatar));
 
                     $this->user->picture = null;
-                    $this->user->avatar  = null;
+                    $this->user->avatar = null;
                     $this->user->save();
                 }
 
@@ -73,7 +73,7 @@ class PictureController extends Controller
                 $img->save(public_path($avatar));
 
                 $this->user->picture = $file['path'];
-                $this->user->avatar  = $avatar;
+                $this->user->avatar = $avatar;
                 $this->user->save();
 
                 setFlash('success', __('users.photo_success_uploaded'));
@@ -111,7 +111,7 @@ class PictureController extends Controller
             deleteFile(public_path($this->user->avatar));
 
             $this->user->picture = null;
-            $this->user->avatar  = null;
+            $this->user->avatar = null;
             $this->user->save();
 
             setFlash('success', __('users.photo_success_deleted'));

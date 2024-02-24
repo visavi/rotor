@@ -38,9 +38,9 @@ class NoticeController extends AdminController
     public function create(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
-            $type    = $request->input('type');
-            $name    = $request->input('name');
-            $text    = $request->input('text');
+            $type = $request->input('type');
+            $name = $request->input('name');
+            $text = $request->input('text');
             $protect = empty($request->input('protect')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -95,8 +95,8 @@ class NoticeController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $name    = $request->input('name');
-            $text    = $request->input('text');
+            $name = $request->input('name');
+            $text = $request->input('text');
             $protect = empty($request->input('protect')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

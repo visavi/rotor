@@ -24,9 +24,9 @@ class SearchController extends Controller
      */
     public function index(Request $request, Validator $validator)
     {
-        $find  = $request->input('find');
+        $find = $request->input('find');
         $type = $request->input('type') === 'title' ? 'title' : 'text';
-        $data  = collect();
+        $data = collect();
 
         if ($find) {
             $find = rawurldecode(trim(preg_replace('/[^\w\x7F-\xFF\s]/', ' ', $find)));

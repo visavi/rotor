@@ -30,7 +30,7 @@ class Metrika
         }
 
         // ----------------------------------------------------------------------//
-        $img   = imagecreatefrompng(public_path('assets/img/images/counter.png'));
+        $img = imagecreatefrompng(public_path('assets/img/images/counter.png'));
         $color = imagecolorallocate($img, 62, 62, 62);
 
         $pos = 66;
@@ -77,14 +77,14 @@ class Metrika
         }
 
         $period = date('Y-m-d H:00:00', SITETIME);
-        $day    = date('Y-m-d 00:00:00', SITETIME);
+        $day = date('Y-m-d 00:00:00', SITETIME);
 
         Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
 
-        $user   = getUser();
-        $ip     = getIp();
-        $brow   = getBrowser();
-        $uid    = md5($ip . $brow);
+        $user = getUser();
+        $ip = getIp();
+        $brow = getBrowser();
+        $uid = md5($ip . $brow);
 
         if ($user) {
             $user->update(['updated_at' => SITETIME]);

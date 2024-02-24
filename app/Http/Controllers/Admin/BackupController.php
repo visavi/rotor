@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BackupController extends AdminController
@@ -52,7 +52,7 @@ class BackupController extends AdminController
         if ($request->isMethod('post')) {
             $sheets = check($request->input('sheets'));
             $method = $request->input('method');
-            $level  = int($request->input('level'));
+            $level = int($request->input('level'));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->notEmpty($sheets, ['sheets' => __('admin.backup.no_tables_save')])
@@ -62,7 +62,7 @@ class BackupController extends AdminController
             if ($validator->isValid()) {
                 $selectTables = DB::select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
 
-                $limit    = 3000;
+                $limit = 3000;
                 $filename = 'backup_'.$this->date.'.sql';
 
                 $fp = $this->fopen(storage_path('backups/'.$filename), 'w', $method, $level);

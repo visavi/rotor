@@ -72,7 +72,6 @@ use Illuminate\Support\HtmlString;
  * @property int timeban
  * @property int updated_at
  * @property int created_at
- *
  * @property Collection<UserData> data
  */
 class User extends BaseModel implements
@@ -88,11 +87,11 @@ class User extends BaseModel implements
     use Notifiable;
     use UploadTrait;
 
-    public const BOSS   = 'boss';   // Владелец
-    public const ADMIN  = 'admin';  // Админ
-    public const MODER  = 'moder';  // Модератор
+    public const BOSS = 'boss';   // Владелец
+    public const ADMIN = 'admin';  // Админ
+    public const MODER = 'moder';  // Модератор
     public const EDITOR = 'editor'; // Редактор
-    public const USER   = 'user';   // Пользователь
+    public const USER = 'user';   // Пользователь
     public const PENDED = 'pended'; // Ожидающий
     public const BANNED = 'banned'; // Забаненный
 
@@ -133,7 +132,7 @@ class User extends BaseModel implements
     /**
      * Genders
      */
-    public const MALE   = 'male';
+    public const MALE = 'male';
     public const FEMALE = 'female';
 
     /**
@@ -240,7 +239,7 @@ class User extends BaseModel implements
     {
         if ($this->id) {
             $admin = null;
-            $name  = check($this->getName());
+            $name = check($this->getName());
 
             if ($this->color) {
                 $name = '<span style="color:' . $this->color . '">' . $name . '</span>';
@@ -277,9 +276,9 @@ class User extends BaseModel implements
     /**
      * Авторизует пользователя
      *
-     * @param  string $login    Логин
-     * @param  string $password Пароль пользователя
-     * @param  bool   $remember Запомнить пароль
+     * @param string $login    Логин
+     * @param string $password Пароль пользователя
+     * @param bool   $remember Запомнить пароль
      *
      * @return User|bool
      */
@@ -315,8 +314,9 @@ class User extends BaseModel implements
      *
      * @param string $token идентификатор Ulogin
      *
-     * @return User|bool
      * @throws GuzzleException
+     *
+     * @return User|bool
      */
     public static function socialAuth(string $token)
     {
@@ -326,7 +326,7 @@ class User extends BaseModel implements
             'query' => [
                 'token' => $token,
                 'host'  => $_SERVER['HTTP_HOST'],
-            ]
+            ],
         ]);
 
         if ($response->getStatusCode() === 200) {
@@ -355,7 +355,8 @@ class User extends BaseModel implements
     /**
      * Возвращает название уровня по ключу
      *
-     * @param  string $level
+     * @param string $level
+     *
      * @return string
      */
     public static function getLevelByKey(string $level): string
@@ -531,8 +532,8 @@ class User extends BaseModel implements
      */
     private function getAvatarDefault(): HtmlString
     {
-        $name   = $this->getName();
-        $color  = '#' . substr(dechex(crc32($this->login)), 0, 6);
+        $name = $this->getName();
+        $color = '#' . substr(dechex(crc32($this->login)), 0, 6);
         $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
         return new HtmlString('<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>');
@@ -579,8 +580,9 @@ class User extends BaseModel implements
     /**
      * Возвращает находится ли пользователь в контакатх
      *
-     * @param  User $user объект пользователя
-     * @return bool       находится ли в контактах
+     * @param User $user объект пользователя
+     *
+     * @return bool находится ли в контактах
      */
     public function isContact(User $user): bool
     {
@@ -599,8 +601,9 @@ class User extends BaseModel implements
     /**
      * Возвращает находится ли пользователь в игноре
      *
-     * @param  User $user объект пользователя
-     * @return bool       находится ли в игноре
+     * @param User $user объект пользователя
+     *
+     * @return bool находится ли в игноре
      */
     public function isIgnore(User $user): bool
     {
@@ -690,7 +693,7 @@ class User extends BaseModel implements
     /**
      * Удаляет записи пользователя из всех таблиц
      *
-     * @return bool|null  Результат удаления
+     * @return bool|null Результат удаления
      */
     public function delete(): ?bool
     {

@@ -27,10 +27,10 @@ class AdminAdvertController extends AdminController
             ->firstOrNew();
 
         if ($request->isMethod('post')) {
-            $site  = $request->input('site');
-            $name  = $request->input('name');
+            $site = $request->input('site');
+            $name = $request->input('name');
             $color = $request->input('color');
-            $bold  = empty($request->input('bold')) ? 0 : 1;
+            $bold = empty($request->input('bold')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
@@ -41,10 +41,10 @@ class AdminAdvertController extends AdminController
             if ($validator->isValid()) {
                 AdminAdvert::query()
                     ->updateOrCreate([], [
-                        'site'  => $site,
-                        'name'  => $name,
-                        'color' => $color,
-                        'bold'  => $bold,
+                        'site'       => $site,
+                        'name'       => $name,
+                        'color'      => $color,
+                        'bold'       => $bold,
                         'user_id'    => getUser('id'),
                         'created_at' => SITETIME,
                         'deleted_at' => SITETIME + 7 * 86400,

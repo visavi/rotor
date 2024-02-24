@@ -97,7 +97,7 @@ class Feed
             ->sortByDesc('created_at')
             ->take(setting('feed_total'));
 
-        $user  = $this->user;
+        $user = $this->user;
         $posts = simplePaginate($posts, setting('feed_per_page'));
         $allowDownload = $user || setting('down_guest_download');
 

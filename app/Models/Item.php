@@ -96,6 +96,7 @@ class Item extends BaseModel
      * Возвращает сокращенный текст объявления
      *
      * @param int $words
+     *
      * @return HtmlString
      */
     public function shortText(int $words = 50): HtmlString

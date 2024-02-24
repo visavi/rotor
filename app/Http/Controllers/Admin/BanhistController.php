@@ -62,8 +62,8 @@ class BanhistController extends AdminController
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
-        $page  = int($request->input('page', 1));
-        $del   = intar($request->input('del'));
+        $page = int($request->input('page', 1));
+        $del = intar($request->input('del'));
         $login = $request->input('user');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

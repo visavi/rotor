@@ -12,7 +12,9 @@ use Illuminate\Http\UploadedFile;
  * Class Validation data
  *
  * @license Code and contributions have MIT License
+ *
  * @link    https://visavi.net
+ *
  * @author  Alexander Grigorev <admin@visavi.net>
  */
 class Validator
@@ -443,7 +445,7 @@ class Validator
             return $this;
         }
 
-        $key       = is_array($label) ? key($label) : 0;
+        $key = is_array($label) ? key($label) : 0;
         $extension = strtolower($input->getClientOriginalExtension());
 
         if (! in_array($extension, $rules['extensions'], true)) {
@@ -488,7 +490,7 @@ class Validator
         $key = 0;
 
         if (is_array($error)) {
-            $key   = key($error);
+            $key = key($error);
             $error = current($error);
         }
 

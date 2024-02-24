@@ -37,12 +37,13 @@ class Social extends BaseModel
      *
      * @param StdClass $network
      * @param string   $delimiter
+     *
      * @return mixed
      */
     public function generateLogin($network, $delimiter = '-')
     {
-        $firstName   = ucfirst(Str::slug($network->first_name, $delimiter));
-        $lastName    = ucfirst(Str::slug($network->last_name, $delimiter));
+        $firstName = ucfirst(Str::slug($network->first_name, $delimiter));
+        $lastName = ucfirst(Str::slug($network->last_name, $delimiter));
         $firstLetter = $firstName[0];
 
         $variants = [];
@@ -109,7 +110,7 @@ class Social extends BaseModel
         $i = 0;
         while (true) {
             $firstName = utfSubstr($firstName, 0, 18);
-            $login     = $firstName . ++$i;
+            $login = $firstName . ++$i;
 
             if (! getUserByLogin($login)) {
                 return $login;

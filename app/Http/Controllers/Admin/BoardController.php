@@ -95,8 +95,8 @@ class BoardController extends AdminController
 
             /** @var Board $board */
             $board = Board::query()->create([
-                'name'  => $name,
-                'sort'  => $max,
+                'name' => $name,
+                'sort' => $max,
             ]);
 
             setFlash('success', __('boards.category_success_created'));
@@ -134,8 +134,8 @@ class BoardController extends AdminController
 
         if ($request->isMethod('post')) {
             $parent = int($request->input('parent'));
-            $name   = $request->input('name');
-            $sort   = int($request->input('sort'));
+            $name = $request->input('name');
+            $sort = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -228,9 +228,9 @@ class BoardController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $bid   = int($request->input('bid'));
+            $bid = int($request->input('bid'));
             $title = $request->input('title');
-            $text  = $request->input('text');
+            $text = $request->input('text');
             $price = int($request->input('price'));
             $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
 

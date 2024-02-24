@@ -118,6 +118,7 @@ class Down extends BaseModel
      * Возвращает последнии комментарии к файлу
      *
      * @param int $limit
+     *
      * @return HasMany
      */
     public function lastComments(int $limit = 15): HasMany
@@ -165,6 +166,7 @@ class Down extends BaseModel
      * Возвращает сокращенный текст описания
      *
      * @param int $words
+     *
      * @return HtmlString
      */
     public function shortText(int $words = 50): HtmlString
@@ -208,6 +210,7 @@ class Down extends BaseModel
      * Конвертирует видео
      *
      * @param array $file
+     *
      * @return void
      */
     private function convertVideo(array $file): void

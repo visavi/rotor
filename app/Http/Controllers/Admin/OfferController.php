@@ -25,7 +25,7 @@ class OfferController extends AdminController
      */
     public function index(Request $request, string $type = Offer::OFFER): View
     {
-        $otherType  = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
+        $otherType = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
         $otherCount = Offer::query()->where('type', $otherType)->count();
 
         $sort = check($request->input('sort', 'rating'));
@@ -84,9 +84,9 @@ class OfferController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $title  = $request->input('title');
-            $text   = $request->input('text');
-            $type   = $request->input('type');
+            $title = $request->input('title');
+            $text = $request->input('text');
+            $type = $request->input('type');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -96,7 +96,7 @@ class OfferController extends AdminController
 
             if ($validator->isValid()) {
                 $title = antimat($title);
-                $text  = antimat($text);
+                $text = antimat($text);
 
                 $offer->update([
                     'type'       => $type,
@@ -136,7 +136,7 @@ class OfferController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $reply  = $request->input('reply');
+            $reply = $request->input('reply');
             $status = $request->input('status');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
@@ -204,7 +204,7 @@ class OfferController extends AdminController
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
         $page = int($request->input('page', 1));
-        $del  = intar($request->input('del'));
+        $del = intar($request->input('del'));
         $type = $request->input('type') === Offer::OFFER ? Offer::OFFER : Offer::ISSUE;
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

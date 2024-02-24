@@ -27,7 +27,7 @@ class ChatController extends AdminController
 
         if ($user->newchat !== statsNewChat()) {
             $user->update([
-                'newchat' => statsNewChat()
+                'newchat' => statsNewChat(),
             ]);
         }
 
@@ -149,7 +149,7 @@ class ChatController extends AdminController
             ->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
         if ($validator->isValid()) {
-             Chat::query()->truncate();
+            Chat::query()->truncate();
 
             setFlash('success', __('admin.chat.success_cleared'));
         } else {

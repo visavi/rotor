@@ -78,10 +78,10 @@ class AdvertController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $site  = $request->input('site');
-            $name  = $request->input('name');
+            $site = $request->input('site');
+            $name = $request->input('name');
             $color = $request->input('color');
-            $bold  = empty($request->input('bold')) ? 0 : 1;
+            $bold = empty($request->input('bold')) ? 0 : 1;
 
             $price = setting('rekuserprice');
 

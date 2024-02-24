@@ -39,7 +39,7 @@ class PhotoController extends AdminController
      */
     public function edit(int $id, Request $request, Validator $validator)
     {
-        $page  = int($request->input('page', 1));
+        $page = int($request->input('page', 1));
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
@@ -47,8 +47,8 @@ class PhotoController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $title  = $request->input('title');
-            $text   = $request->input('text');
+            $title = $request->input('title');
+            $text = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -61,7 +61,7 @@ class PhotoController extends AdminController
                 $photo->update([
                     'title'  => $title,
                     'text'   => $text,
-                    'closed' => $closed
+                    'closed' => $closed,
                 ]);
 
                 clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);

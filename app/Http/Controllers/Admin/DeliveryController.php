@@ -24,8 +24,8 @@ class DeliveryController extends AdminController
     public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
-            $msg   = $request->input('msg');
-            $type  = int($request->input('type'));
+            $msg = $request->input('msg');
+            $type = int($request->input('type'));
             $users = collect();
 
             $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])

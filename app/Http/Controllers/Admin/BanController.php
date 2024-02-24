@@ -44,8 +44,8 @@ class BanController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $time   = int($request->input('time'));
-            $type   = $request->input('type');
+            $time = int($request->input('time'));
+            $type = $request->input('type');
             $reason = $request->input('reason');
             $notice = $request->input('notice');
 
@@ -119,10 +119,10 @@ class BanController extends AdminController
 
         if ($request->isMethod('post')) {
             $timeban = int($request->input('timeban'));
-            $reason  = $request->input('reason');
+            $reason = $request->input('reason');
 
             $timeban = strtotime($timeban);
-            $term    = $timeban - SITETIME;
+            $term = $timeban - SITETIME;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->gt($term, 0, ['timeban' => __('admin.bans.time_empty')])

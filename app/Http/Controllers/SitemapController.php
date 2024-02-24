@@ -23,7 +23,7 @@ class SitemapController extends Controller
     /**
      * Генерируем главную страницу
      *
-     *  @return View
+     * @return View
      */
     public function index(): View
     {

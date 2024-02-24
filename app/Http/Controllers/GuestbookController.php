@@ -42,7 +42,7 @@ class GuestbookController extends Controller
      */
     public function add(Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
-        $msg  = $request->input('msg');
+        $msg = $request->input('msg');
         $user = getUser();
 
         $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
@@ -59,13 +59,13 @@ class GuestbookController extends Controller
         }
 
         if ($validator->isValid()) {
-            $msg       = antimat($msg);
-            $active    = ! setting('guest_moderation');
+            $msg = antimat($msg);
+            $active = ! setting('guest_moderation');
             $guestName = $request->input('guest_name');
 
             if ($user) {
                 $active = true;
-                $guestName  = null;
+                $guestName = null;
                 $bookscores = setting('bookscores') ? 1 : 0;
 
                 $user->increment('allguest');

@@ -142,7 +142,8 @@ class Topic extends BaseModel
     /**
      * Генерирует постраничную навигация для форума
      *
-     * @param  string $url
+     * @param string $url
+     *
      * @return HtmlString|null сформированный блок
      */
     public function pagination(string $url = '/topics'): ?HtmlString
@@ -159,10 +160,10 @@ class Topic extends BaseModel
         for ($i = 1; $i <= 5; $i++) {
             if ($i <= $pg_cnt) {
                 $pages[] = [
-                    'page' => $i,
+                    'page'  => $i,
                     'title' => $i . ' страница',
-                    'name' => $i,
-                    'url' => $i > 1 ? $link . '?page=' . $i  : $link,
+                    'name'  => $i,
+                    'url'   => $i > 1 ? $link . '?page=' . $i : $link,
                 ];
             }
         }
@@ -171,7 +172,7 @@ class Topic extends BaseModel
             if ($pg_cnt > 6) {
                 $pages[] = [
                     'separator' => true,
-                    'name' => ' ... ',
+                    'name'      => ' ... ',
                 ];
             }
 

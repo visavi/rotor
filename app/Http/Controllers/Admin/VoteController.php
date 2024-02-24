@@ -9,8 +9,8 @@ use App\Models\User;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class VoteController extends AdminController
@@ -65,9 +65,9 @@ class VoteController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $question    = $request->input('question');
+            $question = $request->input('question');
             $description = $request->input('description');
-            $answers     = (array) $request->input('answers');
+            $answers = (array) $request->input('answers');
 
             $answers = array_unique(array_diff($answers, ['']));
 
@@ -169,7 +169,7 @@ class VoteController extends AdminController
         }
 
         if ($request->input('_token') === csrf_token()) {
-            $status   = __('votes.voting_success_open');
+            $status = __('votes.voting_success_open');
             $closed = $vote->closed ^ 1;
 
             $vote->update([

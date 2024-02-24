@@ -81,8 +81,8 @@ class ModuleController extends AdminController
     public function install(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
-        $enable     = int($request->input('enable'));
-        $update     = int($request->input('update'));
+        $enable = int($request->input('enable'));
+        $update = int($request->input('update'));
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
@@ -110,7 +110,7 @@ class ModuleController extends AdminController
 
             if ($enable) {
                 $module->update([
-                    'disabled' => 0,
+                    'disabled'   => 0,
                     'updated_at' => SITETIME,
                 ]);
                 $result = __('admin.modules.module_success_enabled');
@@ -138,7 +138,7 @@ class ModuleController extends AdminController
     public function uninstall(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
-        $disable    = int($request->input('disable'));
+        $disable = int($request->input('disable'));
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {

@@ -102,11 +102,11 @@ class NewsController extends Controller
 
                 /** @var Comment $comment */
                 $comment = $news->comments()->create([
-                    'text'        => $msg,
-                    'user_id'     => getUser('id'),
-                    'created_at'  => SITETIME,
-                    'ip'          => getIp(),
-                    'brow'        => getBrowser(),
+                    'text'       => $msg,
+                    'user_id'    => getUser('id'),
+                    'created_at' => SITETIME,
+                    'ip'         => getIp(),
+                    'brow'       => getBrowser(),
                 ]);
 
                 $user = getUser();

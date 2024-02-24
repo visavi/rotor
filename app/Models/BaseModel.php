@@ -12,8 +12,10 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * Class BaseModel
  *
  * @property User user
+ *
  * @method increment(string $field, $amount = 1, array $extra = [])
  * @method decrement(string $field, $amount = 1, array $extra = [])
+ *
  * @package App\Models
  */
 class BaseModel extends Model

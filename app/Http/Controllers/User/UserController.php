@@ -16,8 +16,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -104,8 +104,9 @@ class UserController extends Controller
      * @param Request   $request
      * @param Validator $validator
      *
-     * @return View|RedirectResponse
      * @throws GuzzleException
+     *
+     * @return View|RedirectResponse
      */
     public function register(Request $request, Validator $validator)
     {
@@ -119,17 +120,17 @@ class UserController extends Controller
 
         if ($request->isMethod('post')) {
             if ($request->has(['login', 'password'])) {
-                $login        = $request->input('login');
-                $password     = $request->input('password');
-                $password2    = $request->input('password2');
-                $invite       = setting('invite') ? $request->input('invite') : '';
-                $email        = strtolower((string) $request->input('email'));
-                $domain       = utfSubstr(strrchr($email, '@'), 1);
-                $gender       = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-                $level        = User::USER;
+                $login = $request->input('login');
+                $password = $request->input('password');
+                $password2 = $request->input('password2');
+                $invite = setting('invite') ? $request->input('invite') : '';
+                $email = strtolower((string) $request->input('email'));
+                $domain = utfSubstr(strrchr($email, '@'), 1);
+                $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
+                $level = User::USER;
                 $activateLink = null;
-                $activateKey  = null;
-                $invitation   = null;
+                $activateKey = null;
+                $invitation = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
@@ -188,9 +189,9 @@ class UserController extends Controller
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
                     if (setting('regkeys')) {
-                        $activateKey  = Str::random();
+                        $activateKey = Str::random();
                         $activateLink = config('app.url') . '/key?code=' . $activateKey;
-                        $level        = User::PENDED;
+                        $level = User::PENDED;
                     }
 
                     /* @var User $user */
@@ -267,8 +268,9 @@ class UserController extends Controller
      * @param Validator $validator
      * @param Flood     $flood
      *
-     * @return View|RedirectResponse
      * @throws GuzzleException
+     *
+     * @return View|RedirectResponse
      */
     public function login(Request $request, Validator $validator, Flood $flood)
     {
@@ -279,7 +281,7 @@ class UserController extends Controller
         }
 
         $cookieLogin = $request->cookie('login');
-        $isFlood     = $flood->isFlood();
+        $isFlood = $flood->isFlood();
 
         if ($request->isMethod('post')) {
             if ($request->has(['login', 'password'])) {
@@ -288,7 +290,7 @@ class UserController extends Controller
                 }
 
                 if ($validator->isValid()) {
-                    $login    = utfLower($request->input('login'));
+                    $login = utfLower($request->input('login'));
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
@@ -366,14 +368,14 @@ class UserController extends Controller
             ->get();
 
         if ($request->isMethod('post')) {
-            $info     = $request->input('info');
-            $name     = $request->input('name');
-            $country  = $request->input('country');
-            $city     = $request->input('city');
-            $phone    = preg_replace('/\D/', '', $request->input('phone') ?? '');
-            $site     = $request->input('site');
+            $info = $request->input('info');
+            $name = $request->input('name');
+            $country = $request->input('country');
+            $city = $request->input('city');
+            $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
+            $site = $request->input('site');
             $birthday = $request->input('birthday');
-            $gender   = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
+            $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->url($site, ['site' => __('validator.site')], false)
@@ -394,7 +396,7 @@ class UserController extends Controller
 
             if ($validator->isValid()) {
                 $country = utfSubstr($country, 0, 30);
-                $city    = utfSubstr($city, 0, 50);
+                $city = utfSubstr($city, 0, 50);
 
                 $user->update([
                     'name'     => $name,
@@ -453,7 +455,7 @@ class UserController extends Controller
 
         /* Повторная отправка */
         if ($request->has('email') && $request->isMethod('post')) {
-            $email  = strtolower((string) $request->input('email'));
+            $email = strtolower((string) $request->input('email'));
             $domain = utfSubstr(strrchr($email, '@'), 1);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -470,7 +472,7 @@ class UserController extends Controller
             $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
 
             if ($validator->isValid()) {
-                $activateKey  = Str::random();
+                $activateKey = Str::random();
                 $activateLink = config('app.url') . '/key?code=' . $activateKey;
 
                 $user->update([
@@ -535,15 +537,15 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $setting['themes']    = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR));
+        $setting['themes'] = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR));
         $setting['languages'] = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {
-            $themes    = $request->input('themes');
-            $timezone  = $request->input('timezone', 0);
-            $language  = $request->input('language');
-            $notify    = $request->input('notify') ? 1 : 0;
+            $themes = $request->input('themes');
+            $timezone = $request->input('timezone', 0);
+            $language = $request->input('language');
+            $notify = $request->input('notify') ? 1 : 0;
             $subscribe = $request->input('subscribe') ? Str::random(32) : null;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -602,7 +604,7 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $email    = strtolower((string) $request->input('email'));
+        $email = strtolower((string) $request->input('email'));
         $password = $request->input('password');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -717,7 +719,7 @@ class UserController extends Controller
 
         $status = $request->input('status');
         $status = ! empty($status) ? $status : null;
-        $cost   = $status ? setting('editstatusmoney') : 0;
+        $cost = $status ? setting('editstatusmoney') : 0;
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
@@ -758,7 +760,7 @@ class UserController extends Controller
 
         $color = $request->input('color');
         $color = ! empty($color) ? $color : null;
-        $cost  = $color ? setting('editcolormoney') : 0;
+        $cost = $color ? setting('editcolormoney') : 0;
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEqual($color, $user->color, ['color' => __('users.color_different')])
@@ -795,9 +797,9 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $newpass  = $request->input('newpass');
+        $newpass = $request->input('newpass');
         $newpass2 = $request->input('newpass2');
-        $oldpass  = $request->input('oldpass');
+        $oldpass = $request->input('oldpass');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true(password_verify((string) $oldpass, $user->password), ['oldpass' => __('users.password_different')])
@@ -818,9 +820,9 @@ class UserController extends Controller
             $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
 
             $data = [
-                'to'        => $user->email,
-                'subject'   => $subject,
-                'text'      => $message,
+                'to'      => $user->email,
+                'subject' => $subject,
+                'text'    => $message,
             ];
 
             sendMail('mailer.default', $data);
@@ -852,7 +854,7 @@ class UserController extends Controller
         }
 
         if ($request->input('_token') === csrf_token()) {
-            $apiKey  = md5($user->login . Str::random());
+            $apiKey = md5($user->login . Str::random());
             $message = __('users.token_success_changed');
 
             if ($request->input('action') === 'create') {
@@ -865,7 +867,7 @@ class UserController extends Controller
             }
 
             $user->update([
-                'apikey' => $apiKey
+                'apikey' => $apiKey,
             ]);
 
             setFlash('success', $message);

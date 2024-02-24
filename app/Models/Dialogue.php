@@ -9,21 +9,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Dialogue
  *
- * @property int $id
- * @property int $message_id
- * @property int $user_id
- * @property int $author_id
+ * @property int    $id
+ * @property int    $message_id
+ * @property int    $user_id
+ * @property int    $author_id
  * @property string $type
- * @property int $reading
- * @property int $created_at
- *
+ * @property int    $reading
+ * @property int    $created_at
  * @property-read User $author
  * @property-read Message $message
  */
 class Dialogue extends BaseModel
 {
-    public const IN   = 'in';   // Принятые
-    public const OUT  = 'out';  // Отправленные
+    public const IN = 'in';   // Принятые
+    public const OUT = 'out';  // Отправленные
 
     /**
      * Indicates if the model should be timestamped.

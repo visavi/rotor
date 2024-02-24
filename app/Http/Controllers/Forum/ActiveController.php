@@ -21,7 +21,7 @@ class ActiveController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $login      = $request->input('user', getUser('login'));
+            $login = $request->input('user', getUser('login'));
             $this->user = getUserByLogin($login);
 
             if (! $this->user) {
