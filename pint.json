@@ -1,13 +1,7 @@
 {
     "preset": "psr12",
     "exclude": [
-        ".github",
-        "bootstrap",
-        "public",
-        "resources",
-        "storage",
-        "vendor",
-        "node_modules"
+        "storage"
     ],
     "rules": {
         "single_trait_insert_per_statement": false,
@@ -18,6 +12,9 @@
             "operators": {
                 "=>": "align_single_space_minimal"
             }
+        },
+        "new_with_braces": {
+            "anonymous_class": false
         },
         "array_syntax": {
             "syntax": "short"

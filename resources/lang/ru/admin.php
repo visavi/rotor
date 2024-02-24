@@ -245,8 +245,8 @@ return [
     ],
 
     'spam' => [
-        'go_to_message'     => 'Перейти к сообщению',
-        'empty_spam'        => 'Жалоб еще нет!',
+        'go_to_message' => 'Перейти к сообщению',
+        'empty_spam'    => 'Жалоб еще нет!',
     ],
 
     'paid_adverts' => [

@@ -25,7 +25,7 @@ return [
     'attached'        => 'Поле :attribute вже прикріплено.',
     'before'          => 'У полі :attribute має бути дата раніше :date.',
     'before_or_equal' => 'У полі :attribute має бути дата раніше або дорівнювати :date.',
-    'between' => [
+    'between'         => [
         'array'   => 'Кількість елементів у полі :attribute має бути між :min і :max.',
         'file'    => 'Розмір файлу в полі :attribute повинен бути між :min та :max Кілобайт(а).',
         'numeric' => 'Поле :attribute має бути між :min та :max.',
@@ -47,7 +47,7 @@ return [
     'exists'           => 'Вибране значення для :attribute неправильне.',
     'file'             => 'Поле :attribute має бути файлом.',
     'filled'           => 'Поле :attribute обов\'язково для заповнення.',
-    'gt' => [
+    'gt'               => [
         'array'   => 'Кількість елементів у полі :attribute має бути більшою :value.',
         'file'    => 'Розмір файлу в полі :attribute повинен бути більшим :value Кілобайт(а).',
         'numeric' => 'Поле :attribute має бути більше :value.',
@@ -67,7 +67,7 @@ return [
     'ipv4'     => 'Поле :attribute має бути дійсною IPv4-адресою.',
     'ipv6'     => 'Поле :attribute має бути дійсною IPv6-адресою.',
     'json'     => 'Поле :attribute має бути рядком JSON.',
-    'lt' => [
+    'lt'       => [
         'array'   => 'Кількість елементів у полі :attribute має бути меншою :value.',
         'file'    => 'Розмір файлу в полі :attribute повинен бути меншим :value Кілобайт(а).',
         'numeric' => 'Поле :attribute має бути менше :value.',
@@ -87,7 +87,7 @@ return [
     ],
     'mimes'     => 'Поле :attribute має бути файлом одного з таких типів: :values.',
     'mimetypes' => 'Поле :attribute має бути файлом одного з таких типів: :values.',
-    'min' => [
+    'min'       => [
         'array'   => 'Кількість елементів у полі :attribute повинна бути не меншою :min.',
         'file'    => 'Розмір файлу в полі :attribute повинен бути не меншим :min Кілобайт(а).',
         'numeric' => 'Поле :attribute має бути не менше :min.',
@@ -111,8 +111,8 @@ return [
     'required_with_all'    => 'Поле :attribute обов\'язково для заповнення, коли :values вказано.',
     'required_without'     => 'Поле :attribute обов\'язково для заповнення, коли :values не вказано.',
     'required_without_all' => 'Поле :attribute обов\'язково для заповнення, коли жодне з :values не вказано.',
-    'same' => 'Значення полів :attribute і :other повинні збігатися.',
-    'size' => [
+    'same'                 => 'Значення полів :attribute і :other повинні збігатися.',
+    'size'                 => [
         'array'   => 'Кількість елементів у полі :attribute повинна бути рівною :size.',
         'file'    => 'Розмір файлу в полі :attribute повинен дорівнювати :size Кілобайт(а).',
         'numeric' => 'Поле :attribute має бути рівним :size.',
@@ -140,7 +140,7 @@ return [
     'custom' => [
         '_token' => [
             'in' => 'Невірний ідентифікатор сесії, повторіть дію!',
-        ]
+        ],
     ],
 
     /*

@@ -26,5 +26,3 @@ return [
     'sticker_success_changed'  => 'Стикер успешно изменен!',
     'sticker_success_deleted'  => 'Стикер успешно удален!',
 ];
-
-

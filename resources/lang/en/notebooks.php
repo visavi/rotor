@@ -6,6 +6,6 @@ return [
     'last_edited' => 'Last edited',
     'empty_note'  => 'This note is empty or missing!',
 
-    'title_edit'  => 'Editing notebook',
-    'info_edit'   => 'Private note are available only to you',
+    'title_edit' => 'Editing notebook',
+    'info_edit'  => 'Private note are available only to you',
 ];

@@ -39,11 +39,11 @@ return [
     'welcome'               => 'Welcome!',
     'text_message'          => 'Hello :login! Congratulations on the successful installation of our Rotor engine.
     New versions, upgrades, as well as many other add-ons can be found on our website. [url=https://visavi.net]visavi.net[/url]',
-    'text_news'             => 'Welcome to the Rotor engine demo page
+    'text_news' => 'Welcome to the Rotor engine demo page
     Rotor is a functionally complete open source content management system written in PHP. It uses a MySQL database to store the contents of your site. Rotor is a flexible, powerful and intuitive system with minimal hosting requirements, a high level of protection and is an excellent choice for building a site of any complexity
     The main feature of Rotor is the low load on system resources, even with a very large audience of the site, the server load will not be minimal, and you will not experience any problems with the display of information.
     You can download the Rotor engine on the official website [url=https://visavi.net]visavi.net[/url]',
-    'success_install'       => 'Congratulations, Rotor has been successfully installed!',
-    'success_update'        => 'Congratulations, Rotor has been successfully updated!',
-    'main_page'             => 'Go to the main page of the site',
+    'success_install' => 'Congratulations, Rotor has been successfully installed!',
+    'success_update'  => 'Congratulations, Rotor has been successfully updated!',
+    'main_page'       => 'Go to the main page of the site',
 ];

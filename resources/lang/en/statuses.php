@@ -18,5 +18,3 @@ return [
     'status_text5'   => 'The site administration may assign special statuses to the most active users',
     'empty_statuses' => 'Statuses not yet assigned!',
 ];
-
-

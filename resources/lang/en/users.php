@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'basic_fields'            => 'Basic fields',
-    'custom_fields'           => 'Custom fields',
-    'empty_custom_fields'     => 'No custom fields',
+    'basic_fields'        => 'Basic fields',
+    'custom_fields'       => 'Custom fields',
+    'empty_custom_fields' => 'No custom fields',
 
     'change_email'            => 'Change email',
     'email'                   => 'Email',
@@ -40,28 +40,28 @@ return [
     Recovering a profile or data after that will be impossible<br>
     Be careful not to break more rules<br>',
 
-    'welcome'              => 'Welcome :login!',
-    'confirm_enter_code'   => 'To confirm registration, you need to enter the code that was sent to you by email',
-    'confirm_code'         => 'Confirmation code',
-    'resend_code'          => 'Resend code',
-    'old_code_invalid'     => 'When you resend, the old verification code will become invalid',
-    'confirm_text'         => '
+    'welcome'            => 'Welcome :login!',
+    'confirm_enter_code' => 'To confirm registration, you need to enter the code that was sent to you by email',
+    'confirm_code'       => 'Confirmation code',
+    'resend_code'        => 'Resend code',
+    'old_code_invalid'   => 'When you resend, the old verification code will become invalid',
+    'confirm_text'       => '
     Until you confirm the registration, you will not be able to log in to the site <br>
     Account activation must be completed within 24 hours <br>
     After 24 hours, unverified accounts are automatically deleted.',
-    'logout'               => 'Logout',
+    'logout' => 'Logout',
 
     'social_auth_text' => '
     The profile is not associated with any account on the site. Log in or register to link your account with a social network profile.<br>
     Or select another social network to enter.',
-    'login_or_email'     => 'Login or email',
-    'login'              => 'Login',
-    'password'           => 'Password',
-    'password_hint'      => 'Leave blank if you do not need to change',
-    'remember_me'        => 'To remember me',
-    'enter'              => 'To come in',
-    'forgot_password'    => 'Forgot your password?',
-    'invitation_key'     => 'Invitation Key',
+    'login_or_email'  => 'Login or email',
+    'login'           => 'Login',
+    'password'        => 'Password',
+    'password_hint'   => 'Leave blank if you do not need to change',
+    'remember_me'     => 'To remember me',
+    'enter'           => 'To come in',
+    'forgot_password' => 'Forgot your password?',
+    'invitation_key'  => 'Invitation Key',
 
     'avatar_generation' => 'Avatar is automatically generated from your photo',
 
@@ -98,7 +98,7 @@ return [
     'invite_registration_hint'  => 'User registration is possible only with special invitation keys',
     'login_requirements'        => 'Only Latin characters, numbers and hyphens (3 to 20 characters)',
     'password_requirements'     => 'Minimum password length 6 characters',
-    'register_text' => '
+    'register_text'             => '
     Registering on the site means that you are familiar with and agree to the <b><a href="/rules">rules</a></b> of our site<br>
     All fields are required, you can add more complete information about yourself in your profile after registration<br>
     Indicate the correct email, registration data will be sent to it',
