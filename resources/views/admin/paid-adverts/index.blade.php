@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-success" href="/admin/paid-adverts/create">{{ __('main.create') }}</a>
+        <a class="btn btn-success" href="/admin/paid-adverts/create?place={{ $place }}">{{ __('main.create') }}</a>
     </div>
 
     <h1>{{ __('index.paid_adverts') }}</h1>

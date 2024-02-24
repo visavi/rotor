@@ -20,7 +20,7 @@ class StoreUserFieldRequest extends FormRequest
             'name'     => 'required|max:50',
             'min'      => 'required',
             'max'      => 'required',
-            'required' => 'boolean'
+            'required' => 'boolean',
         ];
     }
 }

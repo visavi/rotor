@@ -32,13 +32,18 @@ class SpamController extends AdminController
         ];
 
         $type = $request->input('type');
-        $this->type = isset($this->types[$type]) ? $type : 'posts';
 
         $spam = Spam::query()
             ->selectRaw('relate_type, count(*) as total')
             ->groupBy('relate_type')
             ->pluck('total', 'relate_type')
             ->all();
+
+        if ($type) {
+            $this->type = isset($this->types[$type]) ? $type : 'posts';
+        } else {
+            $this->type = array_search(max($spam), $spam, true);
+        }
 
         foreach ($this->types as $key => $value) {
             $this->total[$key] = $spam[$key] ?? 0;

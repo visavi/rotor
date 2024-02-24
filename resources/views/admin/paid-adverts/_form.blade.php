@@ -3,7 +3,7 @@
     <div class="mb-3{{ hasError('place') }}">
         <label for="place" class="form-label">{{ __('admin.paid_adverts.place') }}:</label>
 
-        <?php $inputPlace = getInput('place', $advert->place); ?>
+        <?php $inputPlace = getInput('place', $place ?? $advert->place); ?>
         <select class="form-select" name="place" id="place">
             @foreach ($places as $place)
                 <?php $selected = ($place === $inputPlace) ? ' selected' : ''; ?>

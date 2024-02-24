@@ -60,17 +60,17 @@ class PaidAdvertController extends AdminController
     {
         $places = PaidAdvert::PLACES;
         $advert = new PaidAdvert();
+        $place = $request->input('place');
 
         if ($request->isMethod('post')) {
-            $site  = $request->input('site');
-            $place = $request->input('place');
+            $site = $request->input('site');
             $names = (array) $request->input('names');
             $color = $request->input('color');
-            $bold  = empty($request->input('bold')) ? 0 : 1;
-            $term  = (string) $request->input('term');
+            $bold = empty($request->input('bold')) ? 0 : 1;
+            $term = (string) $request->input('term');
             $comment = $request->input('comment');
 
-            $term  = strtotime($term);
+            $term = strtotime($term);
             $names = array_unique(array_diff($names, ['']));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -100,16 +100,16 @@ class PaidAdvertController extends AdminController
                 ]);
 
                 clearCache('paidAdverts');
-                setFlash('success', __('main.record_added_success'));
 
-                return redirect('admin/paid-adverts?place=' . $place);
+                return redirect('admin/paid-adverts?place=' . $place)
+                    ->with('success', __('main.record_added_success'));
             }
 
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('admin/paid-adverts/create', compact('advert', 'places'));
+        return view('admin/paid-adverts/create', compact('advert', 'places', 'place'));
     }
 
     /**
@@ -132,16 +132,17 @@ class PaidAdvertController extends AdminController
             abort(404, __('admin.paid_adverts.not_found'));
         }
 
+        $place = $request->input('place');
+
         if ($request->isMethod('post')) {
-            $site  = $request->input('site');
-            $place = $request->input('place');
+            $site = $request->input('site');
             $names = (array) $request->input('names');
             $color = $request->input('color');
-            $bold  = empty($request->input('bold')) ? 0 : 1;
-            $term  = (string) $request->input('term');
+            $bold = empty($request->input('bold')) ? 0 : 1;
+            $term = (string) $request->input('term');
             $comment = $request->input('comment');
 
-            $term  = strtotime($term);
+            $term = strtotime($term);
             $names = array_unique(array_diff($names, ['']));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -169,16 +170,16 @@ class PaidAdvertController extends AdminController
                 ]);
 
                 clearCache('paidAdverts');
-                setFlash('success', __('main.record_saved_success'));
 
-                return redirect('admin/paid-adverts?place=' . $place);
+                return redirect('admin/paid-adverts?place=' . $place)
+                    ->with('success', __('main.record_saved_success'));
             }
 
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('admin/paid-adverts/edit', compact('advert', 'places'));
+        return view('admin/paid-adverts/edit', compact('advert', 'places', 'place'));
     }
 
     /**

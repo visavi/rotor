@@ -245,8 +245,8 @@ return [
     ],
 
     'spam' => [
-        'go_to_message'     => 'Go to post',
-        'empty_spam'        => 'There are no complaints yet!',
+        'go_to_message' => 'Go to post',
+        'empty_spam'    => 'There are no complaints yet!',
     ],
 
     'paid_adverts' => [
