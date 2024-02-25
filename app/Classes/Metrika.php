@@ -113,9 +113,9 @@ class Metrika
 
         if (date('Y-m-d 00:00:00', strtotime($counter->period)) !== $day) {
             Counter31::query()->insertOrIgnore([
-               'period' => $period,
-               'hosts'  => $counter->dayhosts,
-               'hits'   => $counter->dayhits,
+                'period' => $period,
+                'hosts'  => $counter->dayhosts,
+                'hits'   => $counter->dayhits,
             ]);
 
             $counter->update([

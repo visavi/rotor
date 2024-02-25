@@ -80,7 +80,7 @@ class NewsController extends AdminController
                     'closed' => $closed,
                     'top'    => $top,
                     'image'  => $file['path'] ?? $news->image,
-                 ]);
+                ]);
 
                 clearCache(['statNews', 'lastNews', 'NewsFeed']);
                 setFlash('success', __('news.news_success_edited'));
