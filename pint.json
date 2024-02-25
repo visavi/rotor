@@ -4,10 +4,6 @@
         "storage"
     ],
     "rules": {
-        "single_trait_insert_per_statement": false,
-        "visibility_required": false,
-        "blank_line_between_import_groups": false,
-        "ordered_class_elements": false,
         "binary_operator_spaces": {
             "operators": {
                 "=>": "align_single_space_minimal"
@@ -23,21 +19,20 @@
             "strategy": "no_multi_line"
         },
         "echo_tag_syntax": {
-            "format": "long"
+            "format": "short"
         },
-        "no_unused_imports": true,
         "trailing_comma_in_multiline": {
             "elements": [
                 "arrays"
             ]
         },
+        "no_unused_imports": true,
         "phpdoc_indent": true,
         "phpdoc_align": true,
         "phpdoc_order": true,
         "phpdoc_separation": true,
         "phpdoc_scalar": true,
         "phpdoc_trim": true,
-        "return_type_declaration": true,
         "single_quote": true,
         "ordered_imports": {
             "sort_algorithm": "alpha"
