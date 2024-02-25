@@ -196,7 +196,6 @@ class Topic extends BaseModel
             $newPosts = ' <span style="color:#00aa00">+' . ($this->count_posts - $this->bookmark_posts) . '</span>';
         }
 
-
         return new HtmlString($this->count_posts . $newPosts);
     }
 }

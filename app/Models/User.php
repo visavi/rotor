@@ -680,7 +680,6 @@ class User extends BaseModel implements
         return parent::delete();
     }
 
-
     /**
      * Updates count messages
      */

@@ -56,7 +56,6 @@ class StickerController extends AdminController
      */
     public function create(Request $request, Validator $validator): RedirectResponse
     {
-
         $name = $request->input('name');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

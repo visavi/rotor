@@ -37,12 +37,26 @@
         "ordered_imports": {
             "sort_algorithm": "alpha"
         },
-
         "array_indentation": true,
         "no_superfluous_phpdoc_tags": true,
         "whitespace_after_comma_in_array": true,
         "concat_space": {
             "spacing": "one"
+        },
+        "no_extra_blank_lines": {
+            "tokens": [
+                "attribute",
+                "case",
+                "continue",
+                "curly_brace_block",
+                "default",
+                "extra",
+                "parenthesis_brace_block",
+                "square_brace_block",
+                "switch",
+                "throw",
+                "use"
+            ]
         }
     }
 }

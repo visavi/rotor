@@ -60,7 +60,6 @@ class ListController extends Controller
                 ++$position;
                 $end = ceil($position / setting('userlist'));
 
-
                 setFlash('success', __('users.rating_position', ['position' => $position]));
 
                 return redirect('users?page=' . $end . '&user=' . $user . '&type=' . $type . '&sort=' . $sort);

@@ -459,7 +459,6 @@ class ValidatorTest extends \Tests\TestCase
         $this->validator->file(null, $rules, 'error', false);
         self::assertTrue($this->validator->isValid());
 
-
         $this->validator->file($image, $rules, 'error');
         self::assertTrue($this->validator->isValid());
 

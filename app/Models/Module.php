@@ -77,7 +77,6 @@ class Module extends BaseModel
         }
     }
 
-
     /**
      * Создает симлинки модулей
      */

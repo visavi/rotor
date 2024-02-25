@@ -16,7 +16,6 @@ class CalendarTest extends \Tests\TestCase
         $this->calendar = new Calendar();
     }
 
-
     /**
      * Testing makeCalendar
      */

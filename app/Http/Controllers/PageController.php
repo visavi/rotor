@@ -166,7 +166,6 @@ class PageController extends Controller
         return view('pages/faq');
     }
 
-
     /**
      * FAQ по статусам
      */

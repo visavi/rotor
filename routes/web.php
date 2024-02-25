@@ -127,7 +127,6 @@ Route::controller(SitemapController::class)
         Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+');
     });
 
-
 /* Категории объявления */
 Route::controller(BoardController::class)
     ->prefix('boards')

@@ -18,6 +18,7 @@ return new class extends Migration {
 
         clearCache('settings');
     }
+
     /**
      * Reverse the migrations.
      */
