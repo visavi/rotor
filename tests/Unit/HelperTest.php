@@ -101,7 +101,7 @@ class HelperTest extends \Tests\TestCase
         self::assertSame('&amp;lt;br&amp;gt;', check('&lt;br&gt;'));
         self::assertSame('&lt;br&gt;', check('&lt;br&gt;', false));
         self::assertSame(['&lt;br&gt;', '&lt;html&gt;'], check(['<br>', '<html>']));
-        self::assertSame('', check(chr(0). "\x00". "\x1A". chr(226) . chr(128) . chr(174)));
+        self::assertSame('', check(chr(0) . "\x00" . "\x1A" . chr(226) . chr(128) . chr(174)));
         self::assertSame(' test ', check(' test '));
     }
 

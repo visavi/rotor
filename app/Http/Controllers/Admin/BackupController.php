@@ -59,14 +59,14 @@ class BackupController extends AdminController
                 $selectTables = DB::select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
 
                 $limit = 3000;
-                $filename = 'backup_'.$this->date.'.sql';
+                $filename = 'backup_' . $this->date . '.sql';
 
-                $fp = $this->fopen(storage_path('backups/'.$filename), 'w', $method, $level);
+                $fp = $this->fopen(storage_path('backups/' . $filename), 'w', $method, $level);
 
                 foreach ($selectTables as $table) {
                     $show = DB::selectOne("SHOW CREATE TABLE `{$table->Name}`");
                     $columnsFields = DB::select("SHOW COLUMNS FROM `{$table->Name}`");
-                    $columns = '(' .implode(',', array_column($columnsFields, 'Field')) . ')';
+                    $columns = '(' . implode(',', array_column($columnsFields, 'Field')) . ')';
 
                     $this->fwrite($fp, "--\n-- Structure table `{$table->Name}`\n--\n\n", $method);
                     $this->fwrite($fp, "DROP TABLE IF EXISTS `{$table->Name}`;\n{$show->{'Create Table'}};\n\n", $method);

@@ -139,6 +139,6 @@ class ContactController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('contacts?page='.$page);
+        return redirect('contacts?page=' . $page);
     }
 }

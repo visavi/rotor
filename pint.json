@@ -39,6 +39,10 @@
         },
 
         "array_indentation": true,
-        "no_superfluous_phpdoc_tags": true
+        "no_superfluous_phpdoc_tags": true,
+        "whitespace_after_comma_in_array": true,
+        "concat_space": {
+            "spacing": "one"
+        }
     }
 }

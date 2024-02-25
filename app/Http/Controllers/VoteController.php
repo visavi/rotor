@@ -92,7 +92,7 @@ class VoteController extends Controller
 
                 setFlash('success', __('votes.voting_success'));
 
-                return redirect('votes/'.$vote->id);
+                return redirect('votes/' . $vote->id);
             }
 
             setInput($request->all());

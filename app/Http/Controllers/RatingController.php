@@ -98,7 +98,7 @@ class RatingController extends Controller
 
                 setFlash('success', __('ratings.reputation_success_changed'));
 
-                return redirect('users/'.$user->login);
+                return redirect('users/' . $user->login);
             }
 
             setInput($request->all());

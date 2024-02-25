@@ -63,7 +63,7 @@ class ListController extends Controller
 
                 setFlash('success', __('users.rating_position', ['position' => $position]));
 
-                return redirect('users?page=' . $end . '&user=' . $user . '&type=' . $type. '&sort=' . $sort);
+                return redirect('users?page=' . $end . '&user=' . $user . '&type=' . $type . '&sort=' . $sort);
             }
 
             setFlash('danger', __('validator.user'));
