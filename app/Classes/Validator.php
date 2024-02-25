@@ -326,11 +326,13 @@ class Validator
 
         if (! $input instanceof UploadedFile) {
             $this->addError($label);
+
             return $this;
         }
 
         if (! $input->isValid()) {
             $this->addError($input->getErrorMessage());
+
             return $this;
         }
 

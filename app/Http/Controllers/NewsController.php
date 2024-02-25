@@ -189,6 +189,7 @@ class NewsController extends Controller
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
+
         return view('news/editcomment', compact('news', 'comment', 'page'));
     }
 

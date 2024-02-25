@@ -206,6 +206,7 @@ class MailController extends Controller
         $user->save();
 
         setFlash('success', __('mails.success_unsubscribed'));
+
         return redirect('/');
     }
 }

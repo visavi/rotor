@@ -73,6 +73,7 @@ class Calendar
 
             $cal[] = $row;
         }
+
         return $cal;
     }
 }

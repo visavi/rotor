@@ -164,6 +164,7 @@ class PhotoController extends Controller
                 ]);
 
                 setFlash('success', __('photos.photo_success_edited'));
+
                 return redirect('photos/albums/' . $user->login . '?page=' . $page);
             }
 
@@ -297,6 +298,7 @@ class PhotoController extends Controller
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
+
         return view('photos/editcomment', compact('photo', 'comment', 'page'));
     }
 
@@ -349,6 +351,7 @@ class PhotoController extends Controller
         $total = $photo->comments()->count();
 
         $end = ceil($total / setting('comments_per_page'));
+
         return redirect('photos/comments/' . $photo->id . '?page=' . $end);
     }
 

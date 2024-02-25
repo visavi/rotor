@@ -895,6 +895,7 @@ function icons(string $ext): HtmlString
         default:
             $ico = 'fa-regular fa-file';
     }
+
     return new HtmlString('<i class="' . $ico . '"></i>');
 }
 

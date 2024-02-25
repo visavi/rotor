@@ -137,6 +137,7 @@ class SitemapController extends Controller
                 'priority'   => $new ? '1.0' : '0.5',
             ];
         }
+
         return view('sitemap/url', compact('locs'));
     }
 

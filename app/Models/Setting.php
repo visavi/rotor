@@ -66,6 +66,7 @@ class Setting extends BaseModel
         try {
             $settings = Cache::rememberForever('settings', static function () {
                 $settings = Setting::query()->pluck('value', 'name')->all();
+
                 return array_map(static function ($value) {
                     if (is_numeric($value)) {
                         return ! str_contains($value, '.') ? (int) $value : (float) $value;

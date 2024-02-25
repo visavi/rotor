@@ -48,6 +48,7 @@ class SearchController extends Controller
                 if ($data->isEmpty()) {
                     setInput($request->all());
                     setFlash('danger', __('main.empty_found'));
+
                     return redirect('forums/search');
                 }
             } else {

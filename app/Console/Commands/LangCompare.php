@@ -32,11 +32,13 @@ class LangCompare extends Command
 
         if (! file_exists(resource_path('lang/' . $lang1))) {
             $this->error('Lang "' . $lang1 . '" not found');
+
             return 1;
         }
 
         if (! file_exists(resource_path('lang/' . $lang2))) {
             $this->error('Lang "' . $lang2 . '" not found');
+
             return 1;
         }
 
