@@ -21,16 +21,6 @@ class LangCompare extends Command
     protected $description = 'Compare lang files';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
@@ -40,12 +30,12 @@ class LangCompare extends Command
         $lang1 = $this->argument('lang1');
         $lang2 = $this->argument('lang2');
 
-        if (!file_exists(resource_path('lang/' . $lang1))) {
+        if (! file_exists(resource_path('lang/' . $lang1))) {
             $this->error('Lang "' . $lang1 . '" not found');
             return 1;
         }
 
-        if (!file_exists(resource_path('lang/' . $lang2))) {
+        if (! file_exists(resource_path('lang/' . $lang2))) {
             $this->error('Lang "' . $lang2 . '" not found');
             return 1;
         }

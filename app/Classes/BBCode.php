@@ -20,10 +20,7 @@ use Illuminate\Support\Facades\DB;
  */
 class BBCode
 {
-    /**
-     * @var array
-     */
-    protected static $parsers = [
+    protected static array $parsers = [
         'code' => [
             'pattern'  => '/\[code\](.+?)\[\/code\]/s',
             'callback' => 'highlightCode',
@@ -138,6 +135,7 @@ class BBCode
                 }
             }
         }
+
         return $this->clearBreakLines($source);
     }
 

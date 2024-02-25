@@ -1500,7 +1500,7 @@ function performance(): ?HtmlString
 function clearCache(array|string $keys = null): bool
 {
     if ($keys) {
-        if (!is_array($keys)) {
+        if (! is_array($keys)) {
             $keys = [$keys];
         }
 

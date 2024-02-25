@@ -11,7 +11,7 @@ final class CreateGuestbookTable extends Migration
      */
     public function up(): void
     {
-        if (!  Schema::hasTable('guestbook')) {
+        if (! Schema::hasTable('guestbook')) {
             Schema::create('guestbook', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('user_id')->nullable();

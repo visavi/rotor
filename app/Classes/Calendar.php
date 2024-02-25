@@ -49,11 +49,11 @@ class Calendar
     {
         $date = date('w', mktime(0, 0, 0, $month, 1, $year));
 
-        if ($date === 0) {
+        if ($date === '0') {
             $date = 7;
         }
 
-        $n = - ($date - 2);
+        $n = -($date - 2);
         $cal = [];
         for ($y = 0; $y < 6; $y++) {
             $row = [];

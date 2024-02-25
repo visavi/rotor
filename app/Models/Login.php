@@ -35,7 +35,10 @@ class Login extends BaseModel
      */
     protected $guarded = [];
 
-    public function getType()
+    /**
+     * Get type
+     */
+    public function getType(): string
     {
         return __('logins.' . $this->type);
     }
