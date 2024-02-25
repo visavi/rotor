@@ -53,11 +53,11 @@ class TopicController extends Controller
             ->where('topic_id', $topic->id)
             ->when($user, static function (Builder $query) use ($user) {
                 $query->select('posts.*', 'pollings.vote')
-                ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                    $join->on('posts.id', 'pollings.relate_id')
-                        ->where('pollings.relate_type', Post::$morphName)
-                        ->where('pollings.user_id', $user->id);
-                });
+                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
+                        $join->on('posts.id', 'pollings.relate_id')
+                            ->where('pollings.relate_type', Post::$morphName)
+                            ->where('pollings.user_id', $user->id);
+                    });
             })
             ->with('files', 'user', 'editUser')
             ->orderBy('created_at')

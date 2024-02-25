@@ -64,6 +64,8 @@
             }
         },
         "unary_operator_spaces": true,
-        "not_operator_with_successor_space": true
+        "not_operator_with_successor_space": true,
+        "method_chaining_indentation": true,
+        "nullable_type_declaration_for_default_null_value": true
     }
 }

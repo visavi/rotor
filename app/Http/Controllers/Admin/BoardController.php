@@ -18,7 +18,7 @@ class BoardController extends AdminController
     /**
      * Главная страница
      */
-    public function index(int $id = null): View
+    public function index(?int $id = null): View
     {
         $board = null;
 

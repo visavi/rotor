@@ -1497,7 +1497,7 @@ function performance(): ?HtmlString
  *
  * @return bool Результат выполнения
  */
-function clearCache(array|string $keys = null): bool
+function clearCache(array|string|null $keys = null): bool
 {
     if ($keys) {
         if (! is_array($keys)) {
@@ -1799,7 +1799,7 @@ function getIp(): string
  *
  * @return string Браузер и версия браузера
  */
-function getBrowser(string $userAgent = null): string
+function getBrowser(?string $userAgent = null): string
 {
     $browser = new Browser();
     if ($userAgent) {
@@ -1994,7 +1994,7 @@ function imageBase64(string $path, array $params = []): HtmlString
 /**
  * Выводит прогресс-бар
  */
-function progressBar(int $percent, float|int|string $title = null): HtmlString
+function progressBar(int $percent, float|int|string|null $title = null): HtmlString
 {
     if (! $title) {
         $title = $percent . '%';
@@ -2125,7 +2125,7 @@ function captchaVerify(): bool
 /**
  * Возвращает уникальное имя
  */
-function uniqueName(string $extension = null): string
+function uniqueName(?string $extension = null): string
 {
     if ($extension) {
         $extension = '.' . $extension;

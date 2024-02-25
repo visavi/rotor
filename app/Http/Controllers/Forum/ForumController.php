@@ -58,10 +58,10 @@ class ForumController extends Controller
             ->where('forum_id', $forum->id)
             ->when($user, static function (Builder $query) use ($user) {
                 $query->select('topics.*', 'bookmarks.count_posts as bookmark_posts')
-                ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
-                    $join->on('topics.id', 'bookmarks.topic_id')
-                        ->where('bookmarks.user_id', $user->id);
-                });
+                    ->leftJoin('bookmarks', static function (JoinClause $join) use ($user) {
+                        $join->on('topics.id', 'bookmarks.topic_id')
+                            ->where('bookmarks.user_id', $user->id);
+                    });
             })
             ->orderByDesc('locked')
             ->orderByDesc('updated_at')
