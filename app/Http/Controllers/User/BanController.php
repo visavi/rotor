@@ -17,8 +17,6 @@ class BanController extends Controller
     /**
      * User Ban
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

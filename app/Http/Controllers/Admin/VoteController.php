@@ -17,8 +17,6 @@ class VoteController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,8 +31,6 @@ class VoteController extends AdminController
 
     /**
      * Архив голосований
-     *
-     * @return View
      */
     public function history(): View
     {
@@ -50,9 +46,6 @@ class VoteController extends AdminController
     /**
      * Редактирование голосования
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -119,11 +112,6 @@ class VoteController extends AdminController
 
     /**
      * Удаление голосования
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request): RedirectResponse
     {
@@ -154,11 +142,6 @@ class VoteController extends AdminController
 
     /**
      * Открытие-закрытие голосования
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function close(int $id, Request $request): RedirectResponse
     {
@@ -195,10 +178,6 @@ class VoteController extends AdminController
 
     /**
      * Пересчет голосов
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {

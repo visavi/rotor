@@ -15,8 +15,6 @@ class GuestbookController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,12 +31,6 @@ class GuestbookController extends Controller
 
     /**
      * Добавление сообщения
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return RedirectResponse
      */
     public function add(Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
@@ -99,9 +91,6 @@ class GuestbookController extends Controller
     /**
      * Редактирование сообщения
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

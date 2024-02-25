@@ -16,8 +16,6 @@ class DeliveryController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

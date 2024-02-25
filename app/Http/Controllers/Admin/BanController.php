@@ -15,8 +15,6 @@ class BanController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -26,8 +24,6 @@ class BanController extends AdminController
     /**
      * Бан пользователя
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -100,8 +96,6 @@ class BanController extends AdminController
     /**
      * Изменение бана
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -157,11 +151,6 @@ class BanController extends AdminController
 
     /**
      * Снятие бана
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function unban(Request $request, Validator $validator): RedirectResponse
     {

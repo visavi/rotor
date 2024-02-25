@@ -22,8 +22,6 @@ class UserController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -36,10 +34,6 @@ class UserController extends AdminController
 
     /**
      * Поиск пользователей
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function search(Request $request): View
     {
@@ -58,11 +52,6 @@ class UserController extends AdminController
 
     /**
      * Редактирование пользователя
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
@@ -198,11 +187,6 @@ class UserController extends AdminController
 
     /**
      * Удаление пользователя
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function delete(Request $request, Validator $validator): View|RedirectResponse
     {

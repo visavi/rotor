@@ -17,8 +17,6 @@ class LoadController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -33,11 +31,6 @@ class LoadController extends AdminController
 
     /**
      * Создание раздела
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function create(Request $request, Validator $validator): RedirectResponse
     {
@@ -73,9 +66,6 @@ class LoadController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -126,12 +116,6 @@ class LoadController extends AdminController
 
     /**
      * Удаление раздела
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -167,10 +151,6 @@ class LoadController extends AdminController
 
     /**
      * Пересчет данных
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {
@@ -191,11 +171,6 @@ class LoadController extends AdminController
 
     /**
      * Просмотр загрузок раздела
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return View
      */
     public function load(int $id, Request $request): View
     {
@@ -227,9 +202,6 @@ class LoadController extends AdminController
     /**
      * Редактирование загрузки
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -332,11 +304,6 @@ class LoadController extends AdminController
 
     /**
      * Удаление загрузки
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function deleteDown(int $id, Request $request): RedirectResponse
     {
@@ -370,11 +337,6 @@ class LoadController extends AdminController
 
     /**
      * Удаление файла
-     *
-     * @param int $id
-     * @param int $fid
-     *
-     * @return RedirectResponse
      */
     public function deleteFile(int $id, int $fid): RedirectResponse
     {
@@ -400,8 +362,6 @@ class LoadController extends AdminController
 
     /**
      * Новые публикации
-     *
-     * @return View
      */
     public function new(): View
     {
@@ -416,11 +376,6 @@ class LoadController extends AdminController
 
     /**
      * Публикация загрузки
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function publish(int $id, Request $request): RedirectResponse
     {

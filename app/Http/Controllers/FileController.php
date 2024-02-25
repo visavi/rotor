@@ -11,10 +11,6 @@ class FileController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @param string $page
-     *
-     * @return View
      */
     public function index(string $page = 'index'): View
     {

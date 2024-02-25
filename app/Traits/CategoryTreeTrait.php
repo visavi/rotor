@@ -11,8 +11,6 @@ trait CategoryTreeTrait
 {
     /**
      * Get parents
-     *
-     * @return Collection
      */
     public function getParents(): Collection
     {
@@ -23,8 +21,6 @@ trait CategoryTreeTrait
 
     /**
      * Get children
-     *
-     * @return Collection
      */
     public function getChildren(): Collection
     {
@@ -40,11 +36,6 @@ trait CategoryTreeTrait
 
     /**
      * Build parent categories flat
-     *
-     * @param Model $category
-     * @param array $tree
-     *
-     * @return array
      */
     private function buildParentCategoriesFlat(Model $category, array &$tree = []): array
     {
@@ -59,12 +50,6 @@ trait CategoryTreeTrait
 
     /**
      * Build all categories tree
-     *
-     * @param Collection $categories
-     * @param int        $parentId
-     * @param int        $depth
-     *
-     * @return array
      */
     private function buildAllCategoriesTree(Collection $categories, int $parentId = 0, int $depth = 0): array
     {
@@ -89,11 +74,6 @@ trait CategoryTreeTrait
 
     /**
      * Build all categories flat
-     *
-     * @param array $categories
-     * @param array $flat
-     *
-     * @return array
      */
     private function buildAllCategoriesFlat(array $categories, array &$flat = []): array
     {

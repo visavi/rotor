@@ -14,8 +14,6 @@ class NoticeController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -30,8 +28,6 @@ class NoticeController extends AdminController
     /**
      * Создание шаблона
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -79,9 +75,6 @@ class NoticeController extends AdminController
     /**
      * Редактирование шаблона
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -126,12 +119,6 @@ class NoticeController extends AdminController
 
     /**
      * Удаление шаблона
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {

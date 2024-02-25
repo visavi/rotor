@@ -15,8 +15,6 @@ class PhotoController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -31,9 +29,6 @@ class PhotoController extends AdminController
     /**
      * Редактирование ссылки
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -79,12 +74,6 @@ class PhotoController extends AdminController
 
     /**
      * Удаление записей
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -118,10 +107,6 @@ class PhotoController extends AdminController
 
     /**
      * Пересчет комментариев
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {

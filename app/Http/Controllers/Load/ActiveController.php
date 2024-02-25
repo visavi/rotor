@@ -34,10 +34,6 @@ class ActiveController extends Controller
 
     /**
      * Мои файлы
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function files(Request $request): View
     {
@@ -64,8 +60,6 @@ class ActiveController extends Controller
 
     /**
      * Мои комментарии
-     *
-     * @return View
      */
     public function comments(): View
     {

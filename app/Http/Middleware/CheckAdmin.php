@@ -10,12 +10,6 @@ class CheckAdmin
 {
     /**
      * Handle an incoming request.
-     *
-     * @param Request     $request
-     * @param Closure     $next
-     * @param string|null $level
-     *
-     * @return mixed
      */
     public function handle(Request $request, Closure $next, ?string $level = null)
     {

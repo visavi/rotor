@@ -33,8 +33,6 @@ class PictureController extends Controller
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -92,11 +90,6 @@ class PictureController extends Controller
 
     /**
      * Удаление фотографии
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

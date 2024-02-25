@@ -31,8 +31,6 @@ class Feed
 
     /**
      * Get feed
-     *
-     * @return HtmlString
      */
     public function getFeed(): HtmlString
     {
@@ -106,11 +104,6 @@ class Feed
 
     /**
      * Get polling
-     *
-     * @param array  $ids
-     * @param string $morphName
-     *
-     * @return array
      */
     private function getPolling(array $ids, string $morphName): array
     {

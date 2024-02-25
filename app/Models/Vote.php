@@ -26,29 +26,21 @@ class Vote extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'votes';
+    public static string $morphName = 'votes';
 
     /**
      * Возвращает топик
-     *
-     * @return BelongsTo
      */
     public function topic(): BelongsTo
     {
@@ -57,8 +49,6 @@ class Vote extends BaseModel
 
     /**
      * Возвращает варианты ответов
-     *
-     * @return HasMany
      */
     public function answers(): HasMany
     {

@@ -35,8 +35,6 @@ class AdvertController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -52,8 +50,6 @@ class AdvertController extends Controller
     /**
      * Покупка рекламы
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

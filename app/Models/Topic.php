@@ -35,36 +35,26 @@ class Topic extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Counting field
-     *
-     * @var string
      */
-    public $countingField = 'visits';
+    public string $countingField = 'visits';
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'topics';
+    public static string $morphName = 'topics';
 
     /**
      * Возвращает сообщения
-     *
-     * @return HasMany
      */
     public function posts(): HasMany
     {
@@ -73,8 +63,6 @@ class Topic extends BaseModel
 
     /**
      * Возвращает закладки
-     *
-     * @return HasMany
      */
     public function bookmarks(): HasMany
     {
@@ -83,8 +71,6 @@ class Topic extends BaseModel
 
     /**
      * Возвращает голосование
-     *
-     * @return hasOne
      */
     public function vote(): hasOne
     {
@@ -93,8 +79,6 @@ class Topic extends BaseModel
 
     /**
      * Возвращает последнее сообщение
-     *
-     * @return BelongsTo
      */
     public function lastPost(): BelongsTo
     {
@@ -103,8 +87,6 @@ class Topic extends BaseModel
 
     /**
      * Возвращает раздел форума
-     *
-     * @return BelongsTo
      */
     public function forum(): BelongsTo
     {
@@ -113,8 +95,6 @@ class Topic extends BaseModel
 
     /**
      * Возвращает связь пользователей
-     *
-     * @return BelongsTo
      */
     public function closeUser(): BelongsTo
     {
@@ -142,7 +122,6 @@ class Topic extends BaseModel
     /**
      * Генерирует постраничную навигация для форума
      *
-     * @param string $url
      *
      * @return HtmlString|null сформированный блок
      */
@@ -189,8 +168,6 @@ class Topic extends BaseModel
 
     /**
      * Пересчет темы
-     *
-     * @return void
      */
     public function restatement(): void
     {
@@ -211,8 +188,6 @@ class Topic extends BaseModel
 
     /**
      * Get count posts
-     *
-     * @return HtmlString
      */
     public function getCountPosts(): HtmlString
     {

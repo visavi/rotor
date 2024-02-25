@@ -13,8 +13,6 @@ class NewController extends Controller
 {
     /**
      * Вывод тем
-     *
-     * @return View
      */
     public function topics(): View
     {
@@ -32,8 +30,6 @@ class NewController extends Controller
 
     /**
      * Вывод сообшений
-     *
-     * @return View
      */
     public function posts(): View
     {

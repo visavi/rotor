@@ -28,36 +28,26 @@ class Photo extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/photos';
+    public string $uploadPath = '/uploads/photos';
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'photos';
+    public static string $morphName = 'photos';
 
     /**
      * Возвращает комментарии фотографий
-     *
-     * @return MorphMany
      */
     public function comments(): MorphMany
     {
@@ -66,8 +56,6 @@ class Photo extends BaseModel
 
     /**
      * Возвращает загруженные файлы
-     *
-     * @return MorphMany
      */
     public function files(): MorphMany
     {
@@ -76,8 +64,6 @@ class Photo extends BaseModel
 
     /**
      * Возвращает связь с голосованием
-     *
-     * @return morphOne
      */
     public function polling(): morphOne
     {
@@ -86,8 +72,6 @@ class Photo extends BaseModel
 
     /**
      * Удаление фото и загруженных файлов
-     *
-     * @return bool|null
      */
     public function delete(): ?bool
     {

@@ -20,15 +20,11 @@ class Social extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
@@ -36,11 +32,8 @@ class Social extends BaseModel
      * Генерирует уникальный логин
      *
      * @param StdClass $network
-     * @param string   $delimiter
-     *
-     * @return mixed
      */
-    public function generateLogin($network, $delimiter = '-')
+    public function generateLogin($network, string $delimiter = '-'): ?string
     {
         $firstName = ucfirst(Str::slug($network->first_name, $delimiter));
         $lastName = ucfirst(Str::slug($network->last_name, $delimiter));

@@ -17,22 +17,16 @@ class Reader extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Counting stat
-     *
-     * @param BaseModel $model
      */
     public static function countingStat(BaseModel $model): void
     {

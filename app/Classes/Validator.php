@@ -26,14 +26,6 @@ class Validator
 
     /**
      * Проверяет длину строки
-     *
-     * @param mixed $input
-     * @param int   $min
-     * @param int   $max
-     * @param mixed $label
-     * @param bool  $required
-     *
-     * @return Validator
      */
     public function length($input, int $min, int $max, $label, bool $required = true): Validator
     {
@@ -58,9 +50,6 @@ class Validator
      * @param int|float $input
      * @param int|float $min
      * @param int|float $max
-     * @param mixed     $label
-     *
-     * @return Validator
      */
     public function between($input, $min, $max, $label): Validator
     {
@@ -76,9 +65,6 @@ class Validator
      *
      * @param int|float $input
      * @param int|float $input2
-     * @param mixed     $label
-     *
-     * @return Validator
      */
     public function gt($input, $input2, $label): Validator
     {
@@ -94,9 +80,6 @@ class Validator
      *
      * @param int|float $input
      * @param int|float $input2
-     * @param mixed     $label
-     *
-     * @return Validator
      */
     public function gte($input, $input2, $label): Validator
     {
@@ -112,9 +95,6 @@ class Validator
      *
      * @param int|float $input
      * @param int|float $input2
-     * @param mixed     $label
-     *
-     * @return Validator
      */
     public function lt($input, $input2, $label): Validator
     {
@@ -130,9 +110,6 @@ class Validator
      *
      * @param int|float $input
      * @param int|float $input2
-     * @param mixed     $label
-     *
-     * @return Validator
      */
     public function lte($input, $input2, $label): Validator
     {
@@ -145,12 +122,6 @@ class Validator
 
     /**
      * Проверяет эквивалентны ли данные
-     *
-     * @param mixed $input
-     * @param mixed $input2
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function equal($input, $input2, $label): Validator
     {
@@ -163,12 +134,6 @@ class Validator
 
     /**
      * Проверяет не эквивалентны ли данные
-     *
-     * @param mixed $input
-     * @param mixed $input2
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function notEqual($input, $input2, $label): Validator
     {
@@ -181,11 +146,6 @@ class Validator
 
     /**
      * Проверяет пустые ли данные
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function empty($input, $label): Validator
     {
@@ -198,11 +158,6 @@ class Validator
 
     /**
      * Проверяет не пустые ли данные
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function notEmpty($input, $label): Validator
     {
@@ -215,11 +170,6 @@ class Validator
 
     /**
      * Проверяет на true
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function true($input, $label): Validator
     {
@@ -232,11 +182,6 @@ class Validator
 
     /**
      * Проверяет на false
-     *
-     * @param mixed $input
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function false($input, $label): Validator
     {
@@ -249,12 +194,6 @@ class Validator
 
     /**
      * Проверяет на вхождение в массив
-     *
-     * @param mixed $input
-     * @param array $haystack
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function in($input, array $haystack, $label): Validator
     {
@@ -267,12 +206,6 @@ class Validator
 
     /**
      * Проверяет на не вхождение в массив
-     *
-     * @param mixed $input
-     * @param array $haystack
-     * @param mixed $label
-     *
-     * @return Validator
      */
     public function notIn($input, array $haystack, $label): Validator
     {
@@ -285,13 +218,6 @@ class Validator
 
     /**
      * Проверяет по регулярному выражению
-     *
-     * @param mixed  $input
-     * @param string $pattern
-     * @param mixed  $label
-     * @param bool   $required
-     *
-     * @return Validator
      */
     public function regex($input, string $pattern, $label, bool $required = true): Validator
     {
@@ -308,12 +234,6 @@ class Validator
 
     /**
      * Check float
-     *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
-     *
-     * @return Validator
      */
     public function float($input, $label, bool $required = true): Validator
     {
@@ -330,12 +250,6 @@ class Validator
 
     /**
      * Проверяет адрес сайта
-     *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
-     *
-     * @return Validator
      */
     public function url($input, $label, bool $required = true): Validator
     {
@@ -352,12 +266,6 @@ class Validator
 
     /**
      * Проверяет email
-     *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
-     *
-     * @return Validator
      */
     public function email($input, $label, bool $required = true): Validator
     {
@@ -377,12 +285,6 @@ class Validator
 
     /**
      * Check IP address
-     *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
-     *
-     * @return Validator
      */
     public function ip($input, $label, bool $required = true): Validator
     {
@@ -399,12 +301,6 @@ class Validator
 
     /**
      * Check phone
-     *
-     * @param mixed $input
-     * @param mixed $label
-     * @param bool  $required
-     *
-     * @return Validator
      */
     public function phone($input, $label, bool $required = true): Validator
     {
@@ -421,13 +317,6 @@ class Validator
 
     /**
      * Проверяет файл
-     *
-     * @param UploadedFile|null $input
-     * @param array             $rules
-     * @param mixed             $label
-     * @param bool              $required
-     *
-     * @return Validator
      */
     public function file(?UploadedFile $input, array $rules, $label, bool $required = true): Validator
     {
@@ -480,10 +369,7 @@ class Validator
     /**
      * Добавляет ошибки в массив
      *
-     * @param mixed       $error       текст ошибки
-     * @param string|null $description
-     *
-     * @return void
+     * @param mixed $error текст ошибки
      */
     public function addError($error, ?string $description = null): void
     {
@@ -503,8 +389,6 @@ class Validator
 
     /**
      * Возвращает список ошибок
-     *
-     * @return array
      */
     public function getErrors(): array
     {
@@ -513,8 +397,6 @@ class Validator
 
     /**
      * Очищает список ошибок
-     *
-     * @return void
      */
     public function clearErrors(): void
     {
@@ -523,8 +405,6 @@ class Validator
 
     /**
      * Возвращает успешность валидации
-     *
-     * @return bool
      */
     public function isValid(): bool
     {

@@ -11,10 +11,6 @@ class Calendar
 {
     /**
      * Возвращает календарь
-     *
-     * @param int $time
-     *
-     * @return View
      */
     public function getCalendar(int $time = SITETIME): View
     {

@@ -18,8 +18,6 @@ class HomeController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -42,8 +40,6 @@ class HomeController extends Controller
 
     /**
      * Поиск по сайту
-     *
-     * @return View
      */
     public function search(): View
     {
@@ -52,10 +48,6 @@ class HomeController extends Controller
 
     /**
      * Бан по IP
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function ipban(Request $request): Response
     {
@@ -88,10 +80,6 @@ class HomeController extends Controller
 
     /**
      * Защитная картинка
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function captcha(Request $request): Response
     {
@@ -123,11 +111,6 @@ class HomeController extends Controller
 
     /**
      * Быстрое изменение языка
-     *
-     * @param string  $lang
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function language(string $lang, Request $request): RedirectResponse
     {
@@ -148,7 +131,6 @@ class HomeController extends Controller
     }
 
     /**
-     * @return View
      */
     public function error403(): View
     {
@@ -156,7 +138,6 @@ class HomeController extends Controller
     }
 
     /**
-     * @return View
      */
     public function error404(): View
     {

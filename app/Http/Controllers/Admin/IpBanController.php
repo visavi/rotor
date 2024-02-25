@@ -16,8 +16,6 @@ class IpBanController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -60,11 +58,6 @@ class IpBanController extends AdminController
 
     /**
      * Удаление ip
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
@@ -88,11 +81,6 @@ class IpBanController extends AdminController
 
     /**
      * Очистка ip
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request, Validator $validator): RedirectResponse
     {

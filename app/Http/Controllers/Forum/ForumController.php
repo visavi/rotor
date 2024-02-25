@@ -23,8 +23,6 @@ class ForumController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -44,10 +42,6 @@ class ForumController extends Controller
 
     /**
      * Страница списка тем
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function forum(int $id): View
     {
@@ -79,12 +73,6 @@ class ForumController extends Controller
 
     /**
      * Создание новой темы
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return View|RedirectResponse
      */
     public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
@@ -216,8 +204,6 @@ class ForumController extends Controller
 
     /**
      * RSS всех топиков
-     *
-     * @return View
      */
     public function rss(): View
     {
@@ -237,10 +223,6 @@ class ForumController extends Controller
 
     /**
      * RSS постов
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function rssPosts(int $id): View
     {
@@ -263,8 +245,6 @@ class ForumController extends Controller
 
     /**
      * Последние темы
-     *
-     * @return View
      */
     public function topTopics(): View
     {
@@ -283,10 +263,6 @@ class ForumController extends Controller
 
     /**
      * Последние сообщения
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function topPosts(Request $request): View
     {

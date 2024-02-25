@@ -22,8 +22,6 @@ class BaseModel extends Model
 {
     /**
      * The attributes that should be cast to native types.
-     *
-     * @var array
      */
     protected $casts = [
         'user_id' => 'int',
@@ -57,8 +55,6 @@ class BaseModel extends Model
 
     /**
      * Возвращает связь пользователей
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -69,8 +65,6 @@ class BaseModel extends Model
      * Возвращает логин пользователя
      *
      * @param string|null $value
-     *
-     * @return string
      */
     public function getLoginAttribute($value): string
     {

@@ -22,29 +22,21 @@ class Comment extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'comments';
+    public static string $morphName = 'comments';
 
     /**
      * Возвращает связанные объекты
-     *
-     * @return MorphTo
      */
     public function relate(): MorphTo
     {

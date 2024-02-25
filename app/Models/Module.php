@@ -24,27 +24,21 @@ class Module extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Assets modules path
      */
-    public $assetsPath = '/assets/modules/';
+    public string $assetsPath = '/assets/modules/';
 
     /**
      * Выполняет применение миграции
-     *
-     * @param string $modulePath
      */
     public function migrate(string $modulePath): void
     {
@@ -61,8 +55,6 @@ class Module extends BaseModel
 
     /**
      * Выполняет откат миграций
-     *
-     * @param string $modulePath
      */
     public function rollback(string $modulePath): void
     {
@@ -88,8 +80,6 @@ class Module extends BaseModel
 
     /**
      * Создает симлинки модулей
-     *
-     * @param string $modulePath
      */
     public function createSymlink(string $modulePath): void
     {
@@ -110,8 +100,6 @@ class Module extends BaseModel
 
     /**
      * Удаляет симлинки модулей
-     *
-     * @param string $modulePath
      */
     public function deleteSymlink(string $modulePath): void
     {
@@ -127,10 +115,6 @@ class Module extends BaseModel
 
     /**
      * Получает название директории для симлинка
-     *
-     * @param string $modulePath
-     *
-     * @return string
      */
     public function getLinkName(string $modulePath): string
     {
@@ -139,8 +123,6 @@ class Module extends BaseModel
 
     /**
      * Get enabled modules
-     *
-     * @return array
      */
     public static function getEnabledModules(): array
     {

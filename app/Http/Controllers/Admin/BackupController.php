@@ -28,8 +28,6 @@ class BackupController extends AdminController
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -42,8 +40,6 @@ class BackupController extends AdminController
     /**
      * Создание нового бэкапа
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -128,11 +124,6 @@ class BackupController extends AdminController
 
     /**
      * Удаляет сохраненный бэкап
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
@@ -157,10 +148,6 @@ class BackupController extends AdminController
     /**
      * Открывает поток
      *
-     * @param string $name
-     * @param string $mode
-     * @param string $method
-     * @param int    $level
      *
      * @return bool|resource
      */
@@ -181,8 +168,6 @@ class BackupController extends AdminController
      * Записывает данные в поток
      *
      * @param resource $fp
-     * @param string   $str
-     * @param string   $method
      */
     private function fwrite($fp, string $str, string $method): void
     {
@@ -199,7 +184,6 @@ class BackupController extends AdminController
      * Закрывает поток
      *
      * @param resource $fp
-     * @param string   $method
      */
     private function fclose($fp, string $method): void
     {

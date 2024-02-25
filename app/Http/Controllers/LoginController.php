@@ -19,8 +19,6 @@ class LoginController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {

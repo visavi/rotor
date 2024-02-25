@@ -34,43 +34,31 @@ class Article extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/articles';
+    public string $uploadPath = '/uploads/articles';
 
     /**
      * Counting field
-     *
-     * @var string
      */
-    public $countingField = 'visits';
+    public string $countingField = 'visits';
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'articles';
+    public static string $morphName = 'articles';
 
     /**
      * Возвращает комментарии блогов
-     *
-     * @return MorphMany
      */
     public function comments(): MorphMany
     {
@@ -79,10 +67,6 @@ class Article extends BaseModel
 
     /**
      * Возвращает последнии комментарии к статье
-     *
-     * @param int $limit
-     *
-     * @return HasMany
      */
     public function lastComments(int $limit = 15): HasMany
     {
@@ -95,8 +79,6 @@ class Article extends BaseModel
 
     /**
      * Возвращает связь категории блога
-     *
-     * @return BelongsTo
      */
     public function category(): BelongsTo
     {
@@ -105,8 +87,6 @@ class Article extends BaseModel
 
     /**
      * Возвращает загруженные файлы
-     *
-     * @return MorphMany
      */
     public function files(): MorphMany
     {
@@ -115,8 +95,6 @@ class Article extends BaseModel
 
     /**
      * Возвращает связь с голосованием
-     *
-     * @return morphOne
      */
     public function polling(): morphOne
     {
@@ -141,10 +119,6 @@ class Article extends BaseModel
 
     /**
      * Возвращает сокращенный текст статьи
-     *
-     * @param int $words
-     *
-     * @return HtmlString
      */
     public function shortText(int $words = 100): HtmlString
     {
@@ -173,8 +147,6 @@ class Article extends BaseModel
      * @param float $maxCount
      * @param int   $minSize
      * @param int   $maxSize
-     *
-     * @return int
      */
     public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30): int
     {
@@ -193,8 +165,6 @@ class Article extends BaseModel
 
     /**
      * Удаление статьи и загруженных файлов
-     *
-     * @return bool|null
      */
     public function delete(): ?bool
     {

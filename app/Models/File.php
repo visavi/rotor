@@ -24,22 +24,16 @@ class File extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Возвращает связанные объекты
-     *
-     * @return MorphTo
      */
     public function relate(): MorphTo
     {
@@ -48,8 +42,6 @@ class File extends BaseModel
 
     /**
      * Возвращает расширение файла
-     *
-     * @return string
      */
     public function getExtensionAttribute(): string
     {
@@ -58,8 +50,6 @@ class File extends BaseModel
 
     /**
      * Является ли файл картинкой
-     *
-     * @return bool
      */
     public function isImage(): bool
     {
@@ -68,8 +58,6 @@ class File extends BaseModel
 
     /**
      * Является ли файл аудио
-     *
-     * @return bool
      */
     public function isAudio(): bool
     {
@@ -78,8 +66,6 @@ class File extends BaseModel
 
     /**
      * Удаление записи и загруженных файлов
-     *
-     * @return bool|null
      */
     public function delete(): ?bool
     {

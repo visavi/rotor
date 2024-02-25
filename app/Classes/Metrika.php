@@ -16,10 +16,6 @@ class Metrika
 {
     /**
      * Генерирует счетчик
-     *
-     * @param int $online
-     *
-     * @return void
      */
     public function getCounter(int $online): void
     {
@@ -65,8 +61,6 @@ class Metrika
 
     /**
      * Сохраняет статистику
-     *
-     * @return void
      */
     public function saveStatistic(): void
     {
@@ -164,8 +158,6 @@ class Metrika
 
     /**
      * Returns counter result
-     *
-     * @return object|null
      */
     private function getResultCounter(): ?object
     {

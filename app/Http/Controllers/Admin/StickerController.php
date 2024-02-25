@@ -16,8 +16,6 @@ class StickerController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -34,10 +32,6 @@ class StickerController extends AdminController
 
     /**
      * Просмотр стикеров по категориям
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function category(int $id): View
     {
@@ -59,11 +53,6 @@ class StickerController extends AdminController
 
     /**
      * Создание категории
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function create(Request $request, Validator $validator): RedirectResponse
     {
@@ -94,9 +83,6 @@ class StickerController extends AdminController
     /**
      * Редактирование категории
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -134,12 +120,6 @@ class StickerController extends AdminController
 
     /**
      * Удаление категории
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -171,8 +151,6 @@ class StickerController extends AdminController
     /**
      * Добавление стикера
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -240,9 +218,6 @@ class StickerController extends AdminController
     /**
      * Редактирование стикера
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -294,9 +269,6 @@ class StickerController extends AdminController
     /**
      * Удаление стикера
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return RedirectResponse
      s*/

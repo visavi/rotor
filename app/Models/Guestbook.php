@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -22,40 +20,28 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Guestbook extends BaseModel
 {
-    use HasFactory;
-
     /**
      * The table associated with the model.
-     *
-     * @var string
      */
     protected $table = 'guestbook';
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'guestbook';
+    public static string $morphName = 'guestbook';
 
     /**
      * Возвращает связь пользователей
-     *
-     * @return BelongsTo
      */
     public function editUser(): BelongsTo
     {

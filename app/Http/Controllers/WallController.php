@@ -17,10 +17,6 @@ class WallController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function index(string $login): View
     {
@@ -49,13 +45,6 @@ class WallController extends Controller
 
     /**
      * Добавление сообщения
-     *
-     * @param string    $login
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return RedirectResponse
      */
     public function create(string $login, Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
@@ -110,12 +99,6 @@ class WallController extends Controller
 
     /**
      * Удаление сообщений
-     *
-     * @param string    $login
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function delete(string $login, Request $request, Validator $validator): JsonResponse
     {

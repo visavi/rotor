@@ -9,10 +9,6 @@ class InviteService
 {
     /**
      * Get last invite by userId
-     *
-     * @param int $userId
-     *
-     * @return Model|null
      */
     public function getLastInviteByUserId(int $userId): ?Model
     {

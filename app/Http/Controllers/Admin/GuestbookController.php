@@ -31,9 +31,6 @@ class GuestbookController extends AdminController
     /**
      * Редактирование сообщения
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -76,9 +73,6 @@ class GuestbookController extends AdminController
     /**
      * Ответ на сообщение
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -116,11 +110,6 @@ class GuestbookController extends AdminController
 
     /**
      * Удаление сообщений
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
@@ -144,11 +133,6 @@ class GuestbookController extends AdminController
 
     /**
      * Активация сообщений
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function publish(Request $request, Validator $validator): RedirectResponse
     {
@@ -174,11 +158,6 @@ class GuestbookController extends AdminController
 
     /**
      * Очистка сообщений
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request, Validator $validator): RedirectResponse
     {

@@ -14,8 +14,6 @@ class SearchController extends Controller
 {
     /**
      * Main page
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -25,7 +23,6 @@ class SearchController extends Controller
     /**
      * User search
      *
-     * @param Request $request
      *
      * @return View|RedirectResponse
      */
@@ -53,10 +50,6 @@ class SearchController extends Controller
 
     /**
      * First letter search
-     *
-     * @param string $letter
-     *
-     * @return View
      */
     public function sort(string $letter): View
     {

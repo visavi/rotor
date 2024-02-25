@@ -20,8 +20,6 @@ class ApiController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -30,10 +28,6 @@ class ApiController extends Controller
 
     /**
      * Api пользователей
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function user(Request $request): Response
     {
@@ -78,10 +72,6 @@ class ApiController extends Controller
 
     /**
      * Api пользователей
-     *
-     * @param string $login
-     *
-     * @return Response
      */
     public function users(string $login): Response
     {
@@ -122,10 +112,6 @@ class ApiController extends Controller
 
     /**
      * Api диалогов
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function dialogues(Request $request): Response
     {
@@ -182,11 +168,6 @@ class ApiController extends Controller
 
     /**
      * Api приватных сообщений
-     *
-     * @param string  $login
-     * @param Request $request
-     *
-     * @return Response
      */
     public function talk(string $login, Request $request): Response
     {
@@ -258,10 +239,6 @@ class ApiController extends Controller
 
     /**
      * Api форума
-     *
-     * @param int $id
-     *
-     * @return Response
      */
     public function forums(int $id): Response
     {
@@ -316,10 +293,6 @@ class ApiController extends Controller
 
     /**
      * Api постов темы в форуме
-     *
-     * @param int $id
-     *
-     * @return Response
      */
     public function topics(int $id): Response
     {

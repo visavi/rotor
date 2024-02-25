@@ -13,8 +13,6 @@ class LogController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -28,10 +26,6 @@ class LogController extends AdminController
 
     /**
      * Очистка логов
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request): RedirectResponse
     {

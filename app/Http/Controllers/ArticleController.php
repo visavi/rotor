@@ -21,8 +21,6 @@ class ArticleController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -41,10 +39,6 @@ class ArticleController extends Controller
 
     /**
      * Список статей
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function blog(int $id): View
     {
@@ -71,10 +65,6 @@ class ArticleController extends Controller
 
     /**
      * Просмотр статьи
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function view(int $id): View
     {
@@ -109,12 +99,6 @@ class ArticleController extends Controller
 
     /**
      * Редактирование статьи
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
@@ -184,8 +168,6 @@ class ArticleController extends Controller
 
     /**
      * Просмотр по категориям
-     *
-     * @return View
      */
     public function authors(): View
     {
@@ -202,12 +184,6 @@ class ArticleController extends Controller
 
     /**
      * Создание статьи
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return View|RedirectResponse
      */
     public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
@@ -294,13 +270,6 @@ class ArticleController extends Controller
 
     /**
      * Комментарии
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return View|RedirectResponse
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
@@ -359,13 +328,6 @@ class ArticleController extends Controller
 
     /**
      * Подготовка к редактированию комментария
-     *
-     * @param int       $id
-     * @param int       $cid
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
@@ -424,10 +386,6 @@ class ArticleController extends Controller
 
     /**
      * Переадресация на последнюю страницу
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {
@@ -447,10 +405,6 @@ class ArticleController extends Controller
 
     /**
      * Печать
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function print(int $id): View
     {
@@ -466,8 +420,6 @@ class ArticleController extends Controller
 
     /**
      * RSS всех блогов
-     *
-     * @return View
      */
     public function rss(): View
     {
@@ -486,10 +438,6 @@ class ArticleController extends Controller
 
     /**
      * RSS комментариев к блогу
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function rssComments(int $id): View
     {
@@ -504,8 +452,6 @@ class ArticleController extends Controller
 
     /**
      * Вывод всех тегов
-     *
-     * @return View
      */
     public function tags(): View
     {
@@ -534,11 +480,6 @@ class ArticleController extends Controller
 
     /**
      * Поиск по тегам
-     *
-     * @param string  $tag
-     * @param Request $request
-     *
-     * @return View|RedirectResponse
      */
     public function searchTag(string $tag, Request $request): View|RedirectResponse
     {
@@ -581,8 +522,6 @@ class ArticleController extends Controller
 
     /**
      * Новые статьи
-     *
-     * @return View
      */
     public function newArticles(): View
     {
@@ -596,8 +535,6 @@ class ArticleController extends Controller
 
     /**
      * Новые комментарии
-     *
-     * @return View
      */
     public function newComments(): View
     {
@@ -614,10 +551,6 @@ class ArticleController extends Controller
 
     /**
      * Статьи пользователя
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function userArticles(Request $request): View
     {
@@ -639,10 +572,6 @@ class ArticleController extends Controller
 
     /**
      * Комментарии пользователя
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function userComments(Request $request): View
     {
@@ -668,11 +597,6 @@ class ArticleController extends Controller
 
     /**
      * Переход к сообщению
-     *
-     * @param int $id
-     * @param int $cid
-     *
-     * @return RedirectResponse
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {
@@ -695,10 +619,6 @@ class ArticleController extends Controller
 
     /**
      * Топ статей
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function top(Request $request): View
     {
@@ -723,8 +643,6 @@ class ArticleController extends Controller
     /**
      * Поиск
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -761,8 +679,6 @@ class ArticleController extends Controller
 
     /**
      * Список всех блогов (Для вывода на главную страницу)
-     *
-     * @return View
      */
     public function main(): View
     {

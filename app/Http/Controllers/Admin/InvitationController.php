@@ -16,10 +16,6 @@ class InvitationController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -38,8 +34,6 @@ class InvitationController extends AdminController
     /**
      * Создание ключей
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -80,11 +74,6 @@ class InvitationController extends AdminController
 
     /**
      * Отправка ключей пользователю
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function send(Request $request, Validator $validator): RedirectResponse
     {
@@ -131,11 +120,6 @@ class InvitationController extends AdminController
 
     /**
      * Отправка ключей активным пользователям
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function mail(Request $request, Validator $validator): RedirectResponse
     {
@@ -178,11 +162,6 @@ class InvitationController extends AdminController
 
     /**
      * Удаление ключей
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

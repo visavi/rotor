@@ -34,36 +34,26 @@ class Item extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/boards';
+    public string $uploadPath = '/uploads/boards';
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'items';
+    public static string $morphName = 'items';
 
     /**
      * Возвращает категорию объявлений
-     *
-     * @return BelongsTo
      */
     public function category(): BelongsTo
     {
@@ -94,10 +84,6 @@ class Item extends BaseModel
 
     /**
      * Возвращает сокращенный текст объявления
-     *
-     * @param int $words
-     *
-     * @return HtmlString
      */
     public function shortText(int $words = 50): HtmlString
     {
@@ -112,8 +98,6 @@ class Item extends BaseModel
 
     /**
      * Удаление объявления и загруженных файлов
-     *
-     * @return bool|null
      */
     public function delete(): ?bool
     {

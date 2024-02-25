@@ -14,11 +14,6 @@ class AuthenticateCookie
 {
     /**
      * Handle an incoming request.
-     *
-     * @param Request $request
-     * @param Closure $next
-     *
-     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
@@ -53,10 +48,6 @@ class AuthenticateCookie
 
     /**
      * Авторизует по кукам
-     *
-     * @param Request $request
-     *
-     * @return void
      */
     private function cookieAuth(Request $request): void
     {
@@ -84,9 +75,6 @@ class AuthenticateCookie
      * Устанавливает настройки
      *
      * @param User|false $user
-     * @param Request    $request
-     *
-     * @return void
      */
     private function setSetting($user, Request $request): void
     {

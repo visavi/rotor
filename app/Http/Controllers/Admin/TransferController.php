@@ -12,8 +12,6 @@ class TransferController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -27,10 +25,6 @@ class TransferController extends AdminController
 
     /**
      * Просмотр всех переводов
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function view(Request $request): View
     {

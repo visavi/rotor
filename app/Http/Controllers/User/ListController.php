@@ -16,7 +16,6 @@ class ListController extends Controller
     /**
      * Users list
      *
-     * @param Request $request
      *
      * @return View|RedirectResponse
      */

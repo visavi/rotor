@@ -52,8 +52,6 @@ class CloudFlare
 
     /**
      * Checks if current request is coming from CloudFlare servers.
-     *
-     * @return bool
      */
     public function isTrustedRequest(): bool
     {
@@ -62,10 +60,6 @@ class CloudFlare
 
     /**
      * Executes a callback on a trusted request.
-     *
-     * @param Closure $callback
-     *
-     * @return mixed
      */
     public function onTrustedRequest(Closure $callback)
     {
@@ -76,8 +70,6 @@ class CloudFlare
 
     /**
      * Determines "the real" IP address from the current request.
-     *
-     * @return string
      */
     public function ip(): string
     {
@@ -88,8 +80,6 @@ class CloudFlare
 
     /**
      * Determines country from the current request.
-     *
-     * @return string
      */
     public function country(): string
     {

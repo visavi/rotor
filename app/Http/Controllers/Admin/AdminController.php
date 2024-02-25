@@ -13,8 +13,6 @@ class AdminController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function main(): View
     {
@@ -27,8 +25,6 @@ class AdminController extends Controller
 
     /**
      * Проверка обновлений
-     *
-     * @return View
      */
     public function upgrade(): View
     {
@@ -40,8 +36,6 @@ class AdminController extends Controller
 
     /**
      * Просмотр информации о PHP
-     *
-     * @return View
      */
     public function phpinfo(): View
     {

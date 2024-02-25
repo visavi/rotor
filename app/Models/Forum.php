@@ -31,22 +31,16 @@ class Forum extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Возвращает связь родительского форума
-     *
-     * @return BelongsTo
      */
     public function parent(): BelongsTo
     {
@@ -55,8 +49,6 @@ class Forum extends BaseModel
 
     /**
      * Возвращает связь подкатегорий форума
-     *
-     * @return HasMany
      */
     public function children(): HasMany
     {
@@ -65,8 +57,6 @@ class Forum extends BaseModel
 
     /**
      * Возвращает связь последней темы
-     *
-     * @return BelongsTo
      */
     public function lastTopic(): BelongsTo
     {
@@ -75,8 +65,6 @@ class Forum extends BaseModel
 
     /**
      * Пересчет раздела
-     *
-     * @return void
      */
     public function restatement(): void
     {

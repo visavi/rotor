@@ -17,10 +17,6 @@ class BoardController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @param int|null $id
-     *
-     * @return View
      */
     public function index(int $id = null): View
     {
@@ -53,8 +49,6 @@ class BoardController extends AdminController
 
     /**
      * Категории объявлений
-     *
-     * @return View
      */
     public function categories(): View
     {
@@ -73,11 +67,6 @@ class BoardController extends AdminController
 
     /**
      * Создание раздела
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function create(Request $request, Validator $validator): RedirectResponse
     {
@@ -113,9 +102,6 @@ class BoardController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -170,12 +156,6 @@ class BoardController extends AdminController
 
     /**
      * Удаление раздела
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -212,9 +192,6 @@ class BoardController extends AdminController
     /**
      * Редактирование объявления
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -280,12 +257,6 @@ class BoardController extends AdminController
 
     /**
      * Удаление объявления
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function deleteItem(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -313,10 +284,6 @@ class BoardController extends AdminController
 
     /**
      * Пересчет голосов
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {

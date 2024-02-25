@@ -17,8 +17,6 @@ class FileController extends AdminController
 
     /**
      * Конструктор
-     *
-     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -38,8 +36,6 @@ class FileController extends AdminController
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -67,8 +63,6 @@ class FileController extends AdminController
     /**
      * Редактирование файла
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -115,8 +109,6 @@ class FileController extends AdminController
     /**
      * Создание файла
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -172,11 +164,6 @@ class FileController extends AdminController
 
     /**
      * Удаление файла
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

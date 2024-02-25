@@ -18,10 +18,6 @@ class BoardController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @param int|null $id
-     *
-     * @return View
      */
     public function index(int $id = null): View
     {
@@ -54,10 +50,6 @@ class BoardController extends Controller
 
     /**
      * Просмотр объявления
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function view(int $id): View
     {
@@ -80,9 +72,6 @@ class BoardController extends Controller
     /**
      * Создание объявления
      *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @return View|RedirectResponse
      */
@@ -167,9 +156,6 @@ class BoardController extends Controller
     /**
      * Редактирование объявления
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -240,12 +226,6 @@ class BoardController extends Controller
 
     /**
      * Снятие / Публикация объявления
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function close(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -293,12 +273,6 @@ class BoardController extends Controller
 
     /**
      * Удаление объявления
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -332,8 +306,6 @@ class BoardController extends Controller
 
     /**
      * Мои объявления
-     *
-     * @return View
      */
     public function active(): View
     {

@@ -57,29 +57,21 @@ class Offer extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'offers';
+    public static string $morphName = 'offers';
 
     /**
      * Возвращает связь с голосованием
-     *
-     * @return morphOne
      */
     public function polling(): morphOne
     {
@@ -88,8 +80,6 @@ class Offer extends BaseModel
 
     /**
      * Возвращает связь с комментариями
-     *
-     * @return MorphMany
      */
     public function comments(): MorphMany
     {
@@ -98,8 +88,6 @@ class Offer extends BaseModel
 
     /**
      * Возвращает связь пользователей
-     *
-     * @return BelongsTo
      */
     public function replyUser(): BelongsTo
     {
@@ -108,10 +96,6 @@ class Offer extends BaseModel
 
     /**
      * Возвращает последнии комментарии
-     *
-     * @param int $limit
-     *
-     * @return HasMany
      */
     public function lastComments(int $limit = 15): HasMany
     {
@@ -124,8 +108,6 @@ class Offer extends BaseModel
 
     /**
      * Возвращает статус записи
-     *
-     * @return HtmlString
      */
     public function getStatus(): HtmlString
     {

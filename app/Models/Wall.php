@@ -19,29 +19,21 @@ class Wall extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'walls';
+    public static string $morphName = 'walls';
 
     /**
      * Возвращает связь пользователей
-     *
-     * @return BelongsTo
      */
     public function author(): BelongsTo
     {

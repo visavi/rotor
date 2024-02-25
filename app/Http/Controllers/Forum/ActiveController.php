@@ -34,8 +34,6 @@ class ActiveController extends Controller
 
     /**
      * Вывод тем
-     *
-     * @return View
      */
     public function topics(): View
     {
@@ -53,8 +51,6 @@ class ActiveController extends Controller
 
     /**
      * Вывод сообщений
-     *
-     * @return View
      */
     public function posts(): View
     {
@@ -72,10 +68,6 @@ class ActiveController extends Controller
 
     /**
      * Удаление сообщений
-     *
-     * @param int $id
-     *
-     * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {

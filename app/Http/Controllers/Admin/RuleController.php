@@ -14,8 +14,6 @@ class RuleController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -35,8 +33,6 @@ class RuleController extends AdminController
     /**
      * Редактирование правил
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

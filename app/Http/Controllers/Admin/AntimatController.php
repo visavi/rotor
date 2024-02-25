@@ -16,8 +16,6 @@ class AntimatController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -54,11 +52,6 @@ class AntimatController extends AdminController
 
     /**
      * Удаление слова из списка
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
@@ -82,11 +75,6 @@ class AntimatController extends AdminController
 
     /**
      * Очистка списка слов
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request, Validator $validator): RedirectResponse
     {

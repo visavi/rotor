@@ -33,9 +33,6 @@ class RatingController extends Controller
     /**
      * Изменение рейтинга
      *
-     * @param string    $login
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -113,10 +110,6 @@ class RatingController extends Controller
 
     /**
      *  Полученные голоса
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function received(string $login): View
     {
@@ -137,10 +130,6 @@ class RatingController extends Controller
 
     /**
      *  Отданные голоса
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function gave(string $login): View
     {
@@ -161,11 +150,6 @@ class RatingController extends Controller
 
     /**
      *  Удаление истории
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function delete(Request $request, Validator $validator): JsonResponse
     {

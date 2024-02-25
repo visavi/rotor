@@ -38,6 +38,7 @@
             "sort_algorithm": "alpha"
         },
 
-        "array_indentation" : true
+        "array_indentation": true,
+        "no_superfluous_phpdoc_tags": true
     }
 }

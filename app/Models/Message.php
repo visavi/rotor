@@ -28,41 +28,31 @@ class Message extends BaseModel
 {
     use UploadTrait;
 
-    public const IN = 'in';   // Принятые
-    public const OUT = 'out';  // Отправленные
+    public const IN = 'in'; // Принятые
+    public const OUT = 'out'; // Отправленные
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'messages';
+    public static string $morphName = 'messages';
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/messages';
+    public string $uploadPath = '/uploads/messages';
 
     /**
      * Возвращает связь пользователей
-     *
-     * @return BelongsTo
      */
     public function author(): BelongsTo
     {
@@ -71,8 +61,6 @@ class Message extends BaseModel
 
     /**
      * Возвращает загруженные файлы
-     *
-     * @return MorphMany
      */
     public function files(): MorphMany
     {
@@ -80,7 +68,6 @@ class Message extends BaseModel
     }
 
     /**
-     * @return HasMany
      */
     public function dialogues(): HasMany
     {
@@ -90,10 +77,6 @@ class Message extends BaseModel
     /**
      * Create dialogue
      *
-     * @param User      $user
-     * @param User|null $author
-     * @param string    $text
-     * @param bool      $withAuthor
      *
      * @return Builder|Model
      */
@@ -134,8 +117,6 @@ class Message extends BaseModel
 
     /**
      * Удаление сообщения и загруженных файлов
-     *
-     * @return bool|null
      */
     public function delete(): ?bool
     {

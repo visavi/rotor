@@ -12,8 +12,6 @@ class CounterController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {

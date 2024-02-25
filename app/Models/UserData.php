@@ -20,8 +20,6 @@ class UserData extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
@@ -37,8 +35,6 @@ class UserData extends BaseModel
 
     /**
      * Return field
-     *
-     * @return BelongsTo
      */
     public function field(): BelongsTo
     {

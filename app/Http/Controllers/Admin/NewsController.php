@@ -16,8 +16,6 @@ class NewsController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -32,9 +30,6 @@ class NewsController extends AdminController
     /**
      * Редактирование новости
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -98,8 +93,6 @@ class NewsController extends AdminController
     /**
      * Создание новости
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -161,10 +154,6 @@ class NewsController extends AdminController
 
     /**
      * Пересчет комментариев
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {
@@ -185,12 +174,6 @@ class NewsController extends AdminController
 
     /**
      * Удаление новостей
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {

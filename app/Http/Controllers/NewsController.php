@@ -17,8 +17,6 @@ class NewsController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -40,8 +38,6 @@ class NewsController extends Controller
      * Вывод новости
      *
      * @param int
-     *
-     * @return View
      */
     public function view(int $id): View
     {
@@ -72,10 +68,6 @@ class NewsController extends Controller
     /**
      * Комментарии
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @return View|RedirectResponse
      */
@@ -143,10 +135,6 @@ class NewsController extends Controller
     /**
      * Редактирование комментария
      *
-     * @param int       $id
-     * @param int       $cid
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -206,10 +194,6 @@ class NewsController extends Controller
 
     /**
      * Переадресация на последнюю страницу
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {
@@ -227,8 +211,6 @@ class NewsController extends Controller
 
     /**
      * Rss новостей
-     *
-     * @return View
      */
     public function rss(): View
     {
@@ -243,8 +225,6 @@ class NewsController extends Controller
 
     /**
      * Все комментарии
-     *
-     * @return View
      */
     public function allComments(): View
     {
@@ -261,11 +241,6 @@ class NewsController extends Controller
 
     /**
      * Переход к сообщению
-     *
-     * @param int $id
-     * @param int $cid
-     *
-     * @return RedirectResponse
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {

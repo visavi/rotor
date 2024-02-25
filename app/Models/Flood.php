@@ -16,22 +16,16 @@ class Flood extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Определяет время антифлуда
-     *
-     * @return int
      */
     public function getPeriod(): int
     {
@@ -61,8 +55,6 @@ class Flood extends BaseModel
      * Проверяет сообщение на флуд
      *
      * @param int $attempts кол. попыток
-     *
-     * @return bool
      */
     public function isFlood(int $attempts = 1): bool
     {
@@ -82,10 +74,6 @@ class Flood extends BaseModel
 
     /**
      * Сохраняет состояние
-     *
-     * @param int $period
-     *
-     * @return void
      */
     public function saveState(int $period = 0): void
     {
@@ -105,8 +93,6 @@ class Flood extends BaseModel
 
     /**
      * Get uid
-     *
-     * @return string
      */
     private function getUid(): string
     {

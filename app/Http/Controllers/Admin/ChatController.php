@@ -16,8 +16,6 @@ class ChatController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -84,9 +82,6 @@ class ChatController extends AdminController
     /**
      * Редактирование сообщения
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -136,11 +131,6 @@ class ChatController extends AdminController
 
     /**
      * Очистка чата
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request, Validator $validator): RedirectResponse
     {

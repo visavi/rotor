@@ -32,10 +32,6 @@ class InvitationController extends Controller
 
     /**
      * Главная страница
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -57,7 +53,6 @@ class InvitationController extends Controller
     /**
      * Создание ключей
      *
-     * @param StoreRequest $request
      *
      * @return RedirectResponse
      */

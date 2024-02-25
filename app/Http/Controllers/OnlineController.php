@@ -12,8 +12,6 @@ class OnlineController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -37,8 +35,6 @@ class OnlineController extends Controller
 
     /**
      * Список всех пользователей
-     *
-     * @return View
      */
     public function all(): View
     {

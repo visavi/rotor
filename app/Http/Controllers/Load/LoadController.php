@@ -14,8 +14,6 @@ class LoadController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -34,11 +32,6 @@ class LoadController extends Controller
 
     /**
      * Список файлов в категории
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return View
      */
     public function load(int $id, Request $request): View
     {
@@ -69,8 +62,6 @@ class LoadController extends Controller
 
     /**
      * RSS всех файлов
-     *
-     * @return View
      */
     public function rss(): View
     {

@@ -166,8 +166,6 @@ function utfStrlen($str): int
  * Является ли кодировка utf-8
  *
  * @param string $str строка
- *
- * @return bool
  */
 function isUtf(string $str): bool
 {
@@ -316,7 +314,6 @@ function antimat(?string $str): string
 /**
  * Возвращает календарь
  *
- * @param int $time
  *
  * @return HtmlString календарь
  */
@@ -354,8 +351,6 @@ function statsOnline(): array
 
 /**
  * Возвращает количество пользователей онлайн
- *
- * @return HtmlString|null
  */
 function showOnline(): ?HtmlString
 {
@@ -396,8 +391,6 @@ function statsCounter(): array
 
 /**
  * Выводит счетчик посещений
- *
- * @return HtmlString|null
  */
 function showCounter(): ?HtmlString
 {
@@ -768,10 +761,6 @@ function cryptMail(string $email): string
 
 /**
  * Частично скрывает email
- *
- * @param string $email
- *
- * @return string
  */
 function hideMail(string $email): string
 {
@@ -934,10 +923,6 @@ function shuffleAssoc(array &$array): bool
 
 /**
  * Закрывает bb-теги
- *
- * @param string $html
- *
- * @return string
  */
 function closeTags(string $html): string
 {
@@ -963,12 +948,6 @@ function closeTags(string $html): string
 
 /**
  * Возвращает обрезанный текст с закрытием тегов
- *
- * @param string|null $value
- * @param int         $words
- * @param string      $end
- *
- * @return HtmlString
  */
 function bbCodeTruncate(?string $value, int $words = 20, string $end = '...'): HtmlString
 {
@@ -983,7 +962,6 @@ function bbCodeTruncate(?string $value, int $words = 20, string $end = '...'): H
  *
  * @param HtmlString|string $value Исходная строка
  * @param int               $limit Максимальное количество символов в результате
- * @param string            $end
  *
  * @return string Обрезанная строка
  */
@@ -1010,7 +988,6 @@ function truncateString($value, int $limit = 100, string $end = '...'): string
  *
  * @param HtmlString|string $value Исходная строка
  * @param int               $words Максимальное количество слов в результате
- * @param string            $end
  *
  * @return string Обрезанная строка
  */
@@ -1025,10 +1002,6 @@ function truncateWord($value, int $words = 20, string $end = '...'): string
  * Возвращает обрезанную строку с удалением перевода строки
  *
  * @param HtmlString|string $value
- * @param int               $words
- * @param string            $end
- *
- * @return string
  */
 function truncateDescription($value, int $words = 20, string $end = ''): string
 {
@@ -1041,8 +1014,6 @@ function truncateDescription($value, int $words = 20, string $end = ''): string
  * Get the number of words a string contains.
  *
  * @param string $string
- *
- * @return int
  */
 function wordCount($string): int
 {
@@ -1051,10 +1022,6 @@ function wordCount($string): int
 
 /**
  * Возвращает код платной рекламы
- *
- * @param string $place
- *
- * @return HtmlString|null
  */
 function getAdvertPaid(string $place): ?HtmlString
 {
@@ -1074,8 +1041,6 @@ function getAdvertPaid(string $place): ?HtmlString
 
 /**
  * Возвращает код админской рекламы
- *
- * @return HtmlString|null
  */
 function getAdvertAdmin(): ?HtmlString
 {
@@ -1092,8 +1057,6 @@ function getAdvertAdmin(): ?HtmlString
 
 /**
  * Возвращает код пользовательской рекламы
- *
- * @return HtmlString|null
  */
 function getAdvertUser(): ?HtmlString
 {
@@ -1313,10 +1276,6 @@ function formatNum($num): HtmlString
 
 /**
  * Форматирует вывод числа
- *
- * @param int $num
- *
- * @return float|int|string
  */
 function formatShortNum(int $num): float|int|string
 {
@@ -1443,8 +1402,6 @@ function deleteDir(string $dir)
  * Удаляет файл
  *
  * @param string $path Путь к файлу
- *
- * @return bool
  */
 function deleteFile(string $path): bool
 {
@@ -1537,7 +1494,6 @@ function performance(): ?HtmlString
 /**
  * Очистка кеш-файлов
  *
- * @param array|string|null $keys
  *
  * @return bool Результат выполнения
  */
@@ -1563,7 +1519,6 @@ function clearCache(array|string $keys = null): bool
 /**
  * Возвращает текущую страницу
  *
- * @param string|null $url
  *
  * @return string|null Текущая страница
  */
@@ -1583,8 +1538,6 @@ function returnUrl(?string $url = null): ?string
 /**
  * Saves error logs
  *
- * @param int         $code
- * @param string|null $message
  *
  * @return void
  */
@@ -1621,7 +1574,6 @@ function showError(string|array $errors): HtmlString
 }
 
 /**
- * @return HtmlString
  */
 function getCaptcha(): HtmlString
 {
@@ -1658,8 +1610,7 @@ function setInput(array $data)
 /**
  * Возвращает значение из POST данных
  *
- * @param string $key     Имя поля
- * @param mixed  $default
+ * @param string $key Имя поля
  *
  * @return mixed Сохраненное значение
  *
@@ -1721,8 +1672,6 @@ function textError(string $field): ?string
 /**
  * Отправляет уведомления на email
  *
- * @param string $view
- * @param array  $data
  *
  * @return bool Результат отправки
  */
@@ -1847,7 +1796,6 @@ function getIp(): string
 /**
  * Определяет браузер
  *
- * @param string|null $userAgent
  *
  * @return string Браузер и версия браузера
  */
@@ -1896,8 +1844,6 @@ function access(string $level): bool
 
 /**
  * Возвращает текущего пользователя
- *
- * @return User|null
  */
 function getUserFromSession(): ?User
 {
@@ -1916,8 +1862,6 @@ function getUserFromSession(): ?User
  * Возвращает объект пользователя по логину
  *
  * @param string|null $login Логин пользователя
- *
- * @return Builder|User|null
  */
 function getUserByLogin(?string $login): Builder|User|null
 {
@@ -1928,8 +1872,6 @@ function getUserByLogin(?string $login): Builder|User|null
  * Возвращает объект пользователя по id
  *
  * @param int|null $id ID пользователя
- *
- * @return Builder|User|null
  */
 function getUserById(?int $id): Builder|User|null
 {
@@ -1940,8 +1882,6 @@ function getUserById(?int $id): Builder|User|null
  * Возвращает объект пользователя по токену
  *
  * @param string $token Логин пользователя
- *
- * @return Builder|User|null
  */
 function getUserByToken(string $token): Builder|User|null
 {
@@ -1952,8 +1892,6 @@ function getUserByToken(string $token): Builder|User|null
  * Возвращает объект пользователя по логину или email
  *
  * @param string|null $login Логин или email пользователя
- *
- * @return Builder|User|null
  */
 function getUserByLoginOrEmail(?string $login): Builder|User|null
 {
@@ -1982,12 +1920,6 @@ function getUser(?string $key = null): mixed
 
 /**
  * Разбивает данные по страницам
- *
- * @param array|Collection $items
- * @param int              $perPage
- * @param array            $appends
- *
- * @return LengthAwarePaginator
  */
 function paginate(array|Collection $items, int $perPage, array $appends = []): LengthAwarePaginator
 {
@@ -2010,12 +1942,6 @@ function paginate(array|Collection $items, int $perPage, array $appends = []): L
 
 /**
  * Разбивает данные по страницам
- *
- * @param array|Collection $items
- * @param int              $perPage
- * @param array            $appends
- *
- * @return Paginator
  */
 function simplePaginate(array|Collection $items, int $perPage, array $appends = []): Paginator
 {
@@ -2067,11 +1993,6 @@ function imageBase64(string $path, array $params = []): HtmlString
 
 /**
  * Выводит прогресс-бар
- *
- * @param int                   $percent
- * @param float|int|string|null $title
- *
- * @return HtmlString
  */
 function progressBar(int $percent, float|int|string $title = null): HtmlString
 {
@@ -2084,8 +2005,6 @@ function progressBar(int $percent, float|int|string $title = null): HtmlString
 
 /**
  * Возвращает форматированный список запросов
- *
- * @return array
  */
 function getQueryLog(): array
 {
@@ -2162,10 +2081,6 @@ function siteDomain(string $url): string
 
 /**
  * Получает версию
- *
- * @param string $version
- *
- * @return string
  */
 function parseVersion(string $version): string
 {
@@ -2176,8 +2091,6 @@ function parseVersion(string $version): string
 
 /**
  * Проверяет captcha
- *
- * @return bool
  */
 function captchaVerify(): bool
 {
@@ -2211,10 +2124,6 @@ function captchaVerify(): bool
 
 /**
  * Возвращает уникальное имя
- *
- * @param string|null $extension
- *
- * @return string
  */
 function uniqueName(string $extension = null): string
 {
@@ -2227,8 +2136,6 @@ function uniqueName(string $extension = null): string
 
 /**
  * Возвращает курсы валют
- *
- * @return HtmlString|null
  */
 function getCourses(): ?HtmlString
 {

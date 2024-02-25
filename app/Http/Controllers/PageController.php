@@ -17,10 +17,6 @@ class PageController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @param string $page
-     *
-     * @return View
      */
     public function index(string $page = 'index'): View
     {
@@ -37,8 +33,6 @@ class PageController extends Controller
 
     /**
      * Меню
-     *
-     * @return View
      */
     public function menu(): View
     {
@@ -51,8 +45,6 @@ class PageController extends Controller
 
     /**
      * Теги
-     *
-     * @return View
      */
     public function tags(): View
     {
@@ -61,8 +53,6 @@ class PageController extends Controller
 
     /**
      * Правила
-     *
-     * @return View
      */
     public function rules(): View
     {
@@ -77,8 +67,6 @@ class PageController extends Controller
 
     /**
      * Стикеры
-     *
-     * @return View
      */
     public function stickers(): View
     {
@@ -95,10 +83,6 @@ class PageController extends Controller
 
     /**
      * Стикеры
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function stickersCategory(int $id): View
     {
@@ -120,8 +104,6 @@ class PageController extends Controller
 
     /**
      * Ежегодный сюрприз
-     *
-     * @return RedirectResponse
      */
     public function surprise(): RedirectResponse
     {
@@ -178,8 +160,6 @@ class PageController extends Controller
 
     /**
      * FAQ по сайту
-     *
-     * @return View
      */
     public function faq(): View
     {
@@ -189,8 +169,6 @@ class PageController extends Controller
 
     /**
      * FAQ по статусам
-     *
-     * @return View
      */
     public function statusfaq(): View
     {

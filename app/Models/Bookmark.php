@@ -18,22 +18,16 @@ class Bookmark extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Возвращает топик
-     *
-     * @return BelongsTo
      */
     public function topic(): BelongsTo
     {

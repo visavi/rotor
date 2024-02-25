@@ -36,11 +36,6 @@ class ForumController extends AdminController
 
     /**
      * Создание раздела
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function create(Request $request, Validator $validator): RedirectResponse
     {
@@ -76,9 +71,6 @@ class ForumController extends AdminController
     /**
      * Редактирование форума
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -136,12 +128,6 @@ class ForumController extends AdminController
 
     /**
      * Удаление раздела
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -177,10 +163,6 @@ class ForumController extends AdminController
 
     /**
      * Пересчет данных
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {
@@ -201,10 +183,6 @@ class ForumController extends AdminController
 
     /**
      * Просмотр тем раздела
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function forum(int $id): View
     {
@@ -233,9 +211,6 @@ class ForumController extends AdminController
     /**
      * Редактирование темы
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -295,9 +270,6 @@ class ForumController extends AdminController
     /**
      * Перенос темы
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -351,11 +323,6 @@ class ForumController extends AdminController
 
     /**
      * Закрытие и закрепление тем
-     *
-     * @param int     $id
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function actionTopic(int $id, Request $request): RedirectResponse
     {
@@ -419,12 +386,6 @@ class ForumController extends AdminController
 
     /**
      * Удаление тем
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function deleteTopic(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -474,10 +435,6 @@ class ForumController extends AdminController
 
     /**
      * Просмотр темы
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function topic(int $id): View
     {
@@ -538,9 +495,6 @@ class ForumController extends AdminController
     /**
      * Редактирование сообщения
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -584,11 +538,6 @@ class ForumController extends AdminController
 
     /**
      * Удаление тем
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function deletePosts(Request $request, Validator $validator): RedirectResponse
     {
@@ -627,10 +576,6 @@ class ForumController extends AdminController
 
     /**
      * Переадресация к последнему сообщению
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {

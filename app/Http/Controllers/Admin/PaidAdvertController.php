@@ -14,10 +14,6 @@ class PaidAdvertController extends AdminController
 {
     /**
      * List adverts
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -50,11 +46,6 @@ class PaidAdvertController extends AdminController
 
     /**
      * Create advert
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function create(Request $request, Validator $validator): View|RedirectResponse
     {
@@ -114,12 +105,6 @@ class PaidAdvertController extends AdminController
 
     /**
      * Change advert
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
@@ -184,12 +169,6 @@ class PaidAdvertController extends AdminController
 
     /**
      * Delete adverts
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {

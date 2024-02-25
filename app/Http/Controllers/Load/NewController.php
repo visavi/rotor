@@ -13,8 +13,6 @@ class NewController extends Controller
 {
     /**
      * Новые файлы
-     *
-     * @return View
      */
     public function files(): View
     {
@@ -29,8 +27,6 @@ class NewController extends Controller
 
     /**
      * Новые комментарии
-     *
-     * @return View
      */
     public function comments(): View
     {

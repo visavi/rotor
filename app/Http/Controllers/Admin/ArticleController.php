@@ -16,8 +16,6 @@ class ArticleController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -32,11 +30,6 @@ class ArticleController extends AdminController
 
     /**
      * Создание раздела
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function create(Request $request, Validator $validator): RedirectResponse
     {
@@ -72,9 +65,6 @@ class ArticleController extends AdminController
     /**
      * Редактирование раздела
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -125,12 +115,6 @@ class ArticleController extends AdminController
 
     /**
      * Удаление раздела
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -166,10 +150,6 @@ class ArticleController extends AdminController
 
     /**
      * Пересчет данных
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {
@@ -190,10 +170,6 @@ class ArticleController extends AdminController
 
     /**
      * Список блогов
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function blog(int $id): View
     {
@@ -215,9 +191,6 @@ class ArticleController extends AdminController
     /**
      * Редактирование статьи
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -264,9 +237,6 @@ class ArticleController extends AdminController
     /**
      * Перенос статьи
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -319,12 +289,6 @@ class ArticleController extends AdminController
 
     /**
      * Удаление статьи
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function deleteArticle(int $id, Request $request, Validator $validator): RedirectResponse
     {

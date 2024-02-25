@@ -143,10 +143,6 @@ class BBCode
 
     /**
      * Clear break lines
-     *
-     * @param string $source
-     *
-     * @return string
      */
     private function clearBreakLines(string $source): string
     {
@@ -283,10 +279,6 @@ class BBCode
 
     /**
      * Обрабатывает логины пользователей
-     *
-     * @param array $match
-     *
-     * @return string
      */
     public function userReplace(array $match): string
     {
@@ -315,7 +307,6 @@ class BBCode
     /**
      * Обрабатывет стикеры
      *
-     * @param string $source
      *
      * @return string Обработанный текст
      */
@@ -346,8 +337,6 @@ class BBCode
      * @param string $name    Parser name
      * @param string $pattern Pattern
      * @param string $replace Replace pattern
-     *
-     * @return void
      */
     public function setParser(string $name, string $pattern, string $replace): void
     {
@@ -412,7 +401,6 @@ class BBCode
     /**
      * Removes the parsers that you don´t want
      *
-     * @param array $excepts
      *
      * @return array parsers
      */

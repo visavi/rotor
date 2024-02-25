@@ -25,10 +25,6 @@ class UserController extends Controller
 {
     /**
      * User profile
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function index(string $login): View
     {
@@ -57,9 +53,6 @@ class UserController extends Controller
     /**
      * Note
      *
-     * @param string    $login
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -101,8 +94,6 @@ class UserController extends Controller
     /**
      * Registration
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @throws GuzzleException
      *
@@ -264,9 +255,6 @@ class UserController extends Controller
     /**
      * Login
      *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @throws GuzzleException
      *
@@ -326,10 +314,6 @@ class UserController extends Controller
 
     /**
      * Exit
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function logout(Request $request): RedirectResponse
     {
@@ -346,8 +330,6 @@ class UserController extends Controller
     /**
      * Profile editing
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -433,8 +415,6 @@ class UserController extends Controller
     /**
      * Confirmation of registration
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -526,8 +506,6 @@ class UserController extends Controller
     /**
      * Settings
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -578,8 +556,6 @@ class UserController extends Controller
 
     /**
      * User data
-     *
-     * @return View
      */
     public function account(): View
     {
@@ -592,11 +568,6 @@ class UserController extends Controller
 
     /**
      * Initialize email change
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function changeMail(Request $request, Validator $validator): RedirectResponse
     {
@@ -656,11 +627,6 @@ class UserController extends Controller
 
     /**
      * Email change
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function editMail(Request $request, Validator $validator): RedirectResponse
     {
@@ -705,11 +671,6 @@ class UserController extends Controller
 
     /**
      * Status change
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function editStatus(Request $request, Validator $validator): RedirectResponse
     {
@@ -746,11 +707,6 @@ class UserController extends Controller
 
     /**
      * Color change
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function editColor(Request $request, Validator $validator): RedirectResponse
     {
@@ -785,11 +741,6 @@ class UserController extends Controller
 
     /**
      * Password change
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function editPassword(Request $request, Validator $validator): RedirectResponse
     {
@@ -842,10 +793,6 @@ class UserController extends Controller
 
     /**
      * Key generation
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function apikey(Request $request): RedirectResponse
     {
@@ -880,11 +827,6 @@ class UserController extends Controller
 
     /**
      * Проверка доступности логина
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function checkLogin(Request $request, Validator $validator): JsonResponse
     {

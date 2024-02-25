@@ -14,11 +14,6 @@ class CheckAccessSite
 {
     /**
      * Handle an incoming request.
-     *
-     * @param Request $request
-     * @param Closure $next
-     *
-     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
@@ -61,10 +56,6 @@ class CheckAccessSite
 
     /**
      * Проверка на ip-бан
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
     private function isBanned(Request $request): bool
     {
@@ -75,8 +66,6 @@ class CheckAccessSite
 
     /**
      * Ограничение частоты запросов
-     *
-     * @return void
      */
     private function frequencyLimit(): void
     {

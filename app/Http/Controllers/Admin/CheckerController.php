@@ -14,8 +14,6 @@ class CheckerController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -34,10 +32,6 @@ class CheckerController extends AdminController
 
     /**
      * Сканирование сайта
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function scan(Request $request): RedirectResponse
     {
@@ -56,10 +50,6 @@ class CheckerController extends AdminController
 
     /**
      * Сканирует директорию сайта
-     *
-     * @param string $dir
-     *
-     * @return array
      */
     private function scanFiles(string $dir): array
     {

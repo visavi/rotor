@@ -18,8 +18,6 @@ class ErrorController extends AdminController
 
     /**
      * Конструктор
-     *
-     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -43,8 +41,6 @@ class ErrorController extends AdminController
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -63,11 +59,6 @@ class ErrorController extends AdminController
 
     /**
      * Очистка логов
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request, Validator $validator): RedirectResponse
     {

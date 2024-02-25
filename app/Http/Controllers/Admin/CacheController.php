@@ -13,10 +13,6 @@ class CacheController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -38,10 +34,6 @@ class CacheController extends AdminController
 
     /**
      * Очистка кеша
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request): RedirectResponse
     {

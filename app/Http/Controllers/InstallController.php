@@ -31,8 +31,6 @@ class InstallController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -68,8 +66,6 @@ class InstallController extends Controller
 
     /**
      * Проверка статуса
-     *
-     * @return View
      */
     public function status(): View
     {
@@ -85,8 +81,6 @@ class InstallController extends Controller
 
     /**
      * Выполнение миграций
-     *
-     * @return View
      */
     public function migrate(): View
     {
@@ -106,8 +100,6 @@ class InstallController extends Controller
 
     /**
      * Заполнение БД
-     *
-     * @return View
      */
     public function seed(): View
     {
@@ -124,8 +116,6 @@ class InstallController extends Controller
     /**
      * Создание администратора
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -205,8 +195,6 @@ class InstallController extends Controller
 
     /**
      * Завершение установки
-     *
-     * @return View
      */
     public function finish(): View
     {
@@ -224,8 +212,6 @@ class InstallController extends Controller
 
     /**
      * Parse PHP modules
-     *
-     * @return array
      */
     private static function parsePhpModules(): array
     {
@@ -261,11 +247,6 @@ class InstallController extends Controller
 
     /**
      * Get PHP module setting
-     *
-     * @param string $pModuleName
-     * @param array  $pSettings
-     *
-     * @return string
      */
     public static function getModuleSetting(string $pModuleName, array $pSettings): string
     {

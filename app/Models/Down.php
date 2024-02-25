@@ -41,8 +41,6 @@ class Down extends BaseModel
 
     /**
      * The attributes that should be cast to native types.
-     *
-     * @var array
      */
     protected $casts = [
         'links' => 'array',
@@ -50,15 +48,11 @@ class Down extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
@@ -74,22 +68,16 @@ class Down extends BaseModel
 
     /**
      * Список расширений доступных для просмотра в архиве
-     *
-     * @var array
      */
     public array $viewExt = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'webp', 'env', 'gitignore', 'json', 'yml', 'md'];
 
     /**
      * Morph name
-     *
-     * @var string
      */
-    public static $morphName = 'downs';
+    public static string $morphName = 'downs';
 
     /**
      * Возвращает категорию загрузок
-     *
-     * @return BelongsTo
      */
     public function category(): BelongsTo
     {
@@ -106,8 +94,6 @@ class Down extends BaseModel
 
     /**
      * Возвращает связь с голосованием
-     *
-     * @return morphOne
      */
     public function polling(): morphOne
     {
@@ -116,10 +102,6 @@ class Down extends BaseModel
 
     /**
      * Возвращает последнии комментарии к файлу
-     *
-     * @param int $limit
-     *
-     * @return HasMany
      */
     public function lastComments(int $limit = 15): HasMany
     {
@@ -140,8 +122,6 @@ class Down extends BaseModel
 
     /**
      * Возвращает файлы
-     *
-     * @return Collection
      */
     public function getFiles(): Collection
     {
@@ -152,8 +132,6 @@ class Down extends BaseModel
 
     /**
      * Возвращает картинки
-     *
-     * @return Collection
      */
     public function getImages(): Collection
     {
@@ -164,10 +142,6 @@ class Down extends BaseModel
 
     /**
      * Возвращает сокращенный текст описания
-     *
-     * @param int $words
-     *
-     * @return HtmlString
      */
     public function shortText(int $words = 50): HtmlString
     {
@@ -182,8 +156,6 @@ class Down extends BaseModel
 
     /**
      * Возвращает массив доступных расширений для просмотра в архиве
-     *
-     * @return array
      */
     public function getViewExt(): array
     {
@@ -192,10 +164,6 @@ class Down extends BaseModel
 
     /**
      * Загружает файл
-     *
-     * @param UploadedFile $file
-     *
-     * @return array
      */
     public function uploadAndConvertFile(UploadedFile $file): array
     {
@@ -208,10 +176,6 @@ class Down extends BaseModel
 
     /**
      * Конвертирует видео
-     *
-     * @param array $file
-     *
-     * @return void
      */
     private function convertVideo(array $file): void
     {
@@ -259,8 +223,6 @@ class Down extends BaseModel
 
     /**
      * Удаление загрузки и загруженных файлов
-     *
-     * @return bool|null
      */
     public function delete(): ?bool
     {

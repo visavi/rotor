@@ -11,8 +11,6 @@ class BanlistController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {

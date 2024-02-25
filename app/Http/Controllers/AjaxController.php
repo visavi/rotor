@@ -30,10 +30,6 @@ class AjaxController extends Controller
 {
     /**
      * Возвращает bbCode для предпросмотра
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function bbCode(Request $request): View
     {
@@ -44,11 +40,6 @@ class AjaxController extends Controller
 
     /**
      * Отправляет жалобу на сообщение
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function complaint(Request $request, Validator $validator): JsonResponse
     {
@@ -116,11 +107,6 @@ class AjaxController extends Controller
 
     /**
      * Удаляет комментарии
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function delComment(Request $request, Validator $validator): JsonResponse
     {
@@ -165,10 +151,6 @@ class AjaxController extends Controller
 
     /**
      * Изменяет рейтинг
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function rating(Request $request): JsonResponse
     {
@@ -254,11 +236,6 @@ class AjaxController extends Controller
 
     /**
      * Загружает файлы
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
@@ -361,11 +338,6 @@ class AjaxController extends Controller
 
     /**
      * Удаляет файлы
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function deleteFile(Request $request, Validator $validator): JsonResponse
     {
@@ -419,8 +391,6 @@ class AjaxController extends Controller
 
     /**
      * Вставляет стикер
-     *
-     * @return JsonResponse
      */
     public function getStickers(): JsonResponse
     {
@@ -440,10 +410,6 @@ class AjaxController extends Controller
 
     /**
      * Set theme
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function setTheme(Request $request): JsonResponse
     {

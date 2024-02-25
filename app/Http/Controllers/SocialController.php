@@ -34,7 +34,6 @@ class SocialController extends Controller
     /**
      * Главная страница
      *
-     * @param Request $request
      *
      * @throws GuzzleException
      *
@@ -88,12 +87,6 @@ class SocialController extends Controller
 
     /**
      * Удаление привязки
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {

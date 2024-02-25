@@ -84,11 +84,6 @@ class LangCompare extends Command
 
     /**
      * Recursive array diff key
-     *
-     * @param array $array1
-     * @param array $array2
-     *
-     * @return array
      */
     private function arrayDiffKeyRecursive(array $array1, array $array2): array
     {

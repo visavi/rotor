@@ -13,10 +13,6 @@ class TopController extends Controller
 {
     /**
      * Топ файлов
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request): View
     {

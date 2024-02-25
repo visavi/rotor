@@ -9,7 +9,6 @@ use stdClass;
 class ValidatorTest extends \Tests\TestCase
 {
     /**
-     * @var Validator
      */
     private Validator $validator;
 

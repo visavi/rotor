@@ -137,22 +137,16 @@ class User extends BaseModel implements
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
-     *
-     * @var array
      */
     protected $hidden = [
         'password',
@@ -161,22 +155,16 @@ class User extends BaseModel implements
 
     /**
      * Директория загрузки файлов
-     *
-     * @var string
      */
-    public $uploadPath = '/uploads/pictures';
+    public string $uploadPath = '/uploads/pictures';
 
     /**
      * Директория загрузки аватаров
-     *
-     * @var string
      */
-    public $uploadAvatarPath = '/uploads/avatars';
+    public string $uploadAvatarPath = '/uploads/avatars';
 
     /**
      * Связь с таблицей online
-     *
-     * @return BelongsTo
      */
     public function online(): BelongsTo
     {
@@ -185,8 +173,6 @@ class User extends BaseModel implements
 
     /**
      * Возвращает последний бан
-     *
-     * @return hasOne
      */
     public function lastBan(): hasOne
     {
@@ -198,8 +184,6 @@ class User extends BaseModel implements
 
     /**
      * Возвращает заметку пользователя
-     *
-     * @return hasOne
      */
     public function note(): HasOne
     {
@@ -208,8 +192,6 @@ class User extends BaseModel implements
 
     /**
      * Возвращает дополнительные поля
-     *
-     * @return HasMany
      */
     public function data(): HasMany
     {
@@ -218,8 +200,6 @@ class User extends BaseModel implements
 
     /**
      * Возвращает имя или логин пользователя
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -354,10 +334,6 @@ class User extends BaseModel implements
 
     /**
      * Возвращает название уровня по ключу
-     *
-     * @param string $level
-     *
-     * @return string
      */
     public static function getLevelByKey(string $level): string
     {
@@ -402,8 +378,6 @@ class User extends BaseModel implements
 
     /**
      * Is user online
-     *
-     * @return bool
      */
     public function isOnline(): bool
     {
@@ -439,8 +413,6 @@ class User extends BaseModel implements
 
     /**
      * Get last visit
-     *
-     * @return string
      */
     public function getVisit(): string
     {
@@ -499,8 +471,6 @@ class User extends BaseModel implements
 
     /**
      * Возвращает изображение аватара
-     *
-     * @return HtmlString
      */
     public function getAvatarImage(): HtmlString
     {
@@ -517,8 +487,6 @@ class User extends BaseModel implements
 
     /**
      * Get guest avatar
-     *
-     * @return HtmlString
      */
     public function getAvatarGuest(): HtmlString
     {
@@ -543,8 +511,6 @@ class User extends BaseModel implements
      * Кеширует статусы пользователей
      *
      * @param int $seconds время кеширования
-     *
-     * @return array
      */
     public function getStatuses(int $seconds): array
     {
@@ -675,8 +641,6 @@ class User extends BaseModel implements
 
     /**
      * Удаляет альбом пользователя
-     *
-     * @return void
      */
     public function deleteAlbum(): void
     {
@@ -719,8 +683,6 @@ class User extends BaseModel implements
 
     /**
      * Updates count messages
-     *
-     * @return void
      */
     public function updatePrivate(): void
     {
@@ -741,8 +703,6 @@ class User extends BaseModel implements
 
     /**
      * Check user banned
-     *
-     * @return bool
      */
     public function isBanned(): bool
     {
@@ -751,8 +711,6 @@ class User extends BaseModel implements
 
     /**
      * Check user pended
-     *
-     * @return bool
      */
     public function isPended(): bool
     {
@@ -761,8 +719,6 @@ class User extends BaseModel implements
 
     /**
      * Check user active
-     *
-     * @return bool
      */
     public function isActive(): bool
     {
@@ -771,8 +727,6 @@ class User extends BaseModel implements
 
     /**
      * Getting daily bonus
-     *
-     * @return void
      */
     public function gettingBonus(): void
     {
@@ -786,10 +740,6 @@ class User extends BaseModel implements
 
     /**
      * Сохраняет посещения
-     *
-     * @param string $type
-     *
-     * @return void
      */
     public function saveVisit(string $type): void
     {
@@ -813,9 +763,6 @@ class User extends BaseModel implements
 
     /**
      * Remember user
-     *
-     * @param User $user
-     * @param bool $remember
      */
     private function rememberUser(User $user, bool $remember = false): void
     {

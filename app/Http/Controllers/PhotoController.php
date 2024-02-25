@@ -18,8 +18,6 @@ class PhotoController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -39,10 +37,6 @@ class PhotoController extends Controller
 
     /**
      * Просмотр полной фотографии
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function view(int $id): View
     {
@@ -67,9 +61,6 @@ class PhotoController extends Controller
     /**
      * Форма загрузки фото
      *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @return View|RedirectResponse
      */
@@ -136,9 +127,6 @@ class PhotoController extends Controller
     /**
      * Редактирование фото
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -191,10 +179,6 @@ class PhotoController extends Controller
     /**
      * Список комментариев
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @return View|RedirectResponse
      */
@@ -259,10 +243,6 @@ class PhotoController extends Controller
     /**
      * Редактирование комментария
      *
-     * @param int       $id
-     * @param int       $cid
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -322,12 +302,6 @@ class PhotoController extends Controller
 
     /**
      * Удаление фотографий
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -362,10 +336,6 @@ class PhotoController extends Controller
 
     /**
      * Переадресация на последнюю страницу
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {
@@ -384,8 +354,6 @@ class PhotoController extends Controller
 
     /**
      * Альбомы пользователей
-     *
-     * @return View
      */
     public function albums(): View
     {
@@ -403,10 +371,6 @@ class PhotoController extends Controller
 
     /**
      * Альбом пользователя
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function album(string $login): View
     {
@@ -429,10 +393,6 @@ class PhotoController extends Controller
 
     /**
      * Альбом пользователя
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function top(Request $request): View
     {
@@ -455,8 +415,6 @@ class PhotoController extends Controller
 
     /**
      * Выводит все комментарии
-     *
-     * @return View
      */
     public function allComments(): View
     {
@@ -473,10 +431,6 @@ class PhotoController extends Controller
 
     /**
      * Выводит комментарии пользователя
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function userComments(string $login): View
     {
@@ -500,11 +454,6 @@ class PhotoController extends Controller
 
     /**
      * Переход к сообщению
-     *
-     * @param int $id
-     * @param int $cid
-     *
-     * @return RedirectResponse
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {

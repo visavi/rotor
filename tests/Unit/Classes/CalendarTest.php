@@ -7,7 +7,6 @@ use App\Classes\Calendar;
 class CalendarTest extends \Tests\TestCase
 {
     /**
-     * @var calendar
      */
     private Calendar $calendar;
 

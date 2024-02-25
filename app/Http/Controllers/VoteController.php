@@ -17,8 +17,6 @@ class VoteController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -34,9 +32,6 @@ class VoteController extends Controller
     /**
      * Просмотр голосования
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -118,10 +113,6 @@ class VoteController extends Controller
 
     /**
      * Проголосовавшие
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function voters(int $id): View
     {
@@ -142,8 +133,6 @@ class VoteController extends Controller
 
     /**
      * История голосований
-     *
-     * @return View
      */
     public function history(): View
     {
@@ -158,10 +147,6 @@ class VoteController extends Controller
 
     /**
      * Результаты истории голосований
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function viewHistory(int $id): View
     {
@@ -200,8 +185,6 @@ class VoteController extends Controller
     /**
      * Создание голосования
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

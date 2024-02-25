@@ -16,8 +16,6 @@ class BlacklistController extends AdminController
 
     /**
      * Конструктор
-     *
-     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -33,8 +31,6 @@ class BlacklistController extends AdminController
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -94,11 +90,6 @@ class BlacklistController extends AdminController
 
     /**
      * Удаление записей
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

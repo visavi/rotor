@@ -33,8 +33,6 @@ class TransferController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -43,11 +41,6 @@ class TransferController extends Controller
 
     /**
      * Перевод денег
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function send(Request $request, Validator $validator): RedirectResponse
     {

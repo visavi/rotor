@@ -28,22 +28,16 @@ class Load extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
      * Возвращает связь родительской категории
-     *
-     * @return BelongsTo
      */
     public function parent(): BelongsTo
     {
@@ -52,8 +46,6 @@ class Load extends BaseModel
 
     /**
      * Возвращает связь подкатегорий
-     *
-     * @return HasMany
      */
     public function children(): HasMany
     {
@@ -62,8 +54,6 @@ class Load extends BaseModel
 
     /**
      * Возвращает количество загрузок за последние 3 дней
-     *
-     * @return hasOne
      */
     public function new(): hasOne
     {

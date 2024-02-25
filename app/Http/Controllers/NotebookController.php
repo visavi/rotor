@@ -34,8 +34,6 @@ class NotebookController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -45,8 +43,6 @@ class NotebookController extends Controller
     /**
      * Редактирование
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

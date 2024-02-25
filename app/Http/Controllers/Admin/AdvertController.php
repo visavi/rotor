@@ -14,8 +14,6 @@ class AdvertController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -31,9 +29,6 @@ class AdvertController extends AdminController
     /**
      * Редактирование ссылки
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -81,11 +76,6 @@ class AdvertController extends AdminController
 
     /**
      * Удаление записей
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

@@ -24,10 +24,6 @@ class DownController extends Controller
 {
     /**
      * Просмотр загрузки
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function index(int $id): View
     {
@@ -57,12 +53,6 @@ class DownController extends Controller
 
     /**
      * Создание загрузки
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return View|RedirectResponse
      */
     public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
@@ -182,12 +172,6 @@ class DownController extends Controller
 
     /**
      * Редактирование загрузки
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
@@ -282,11 +266,6 @@ class DownController extends Controller
 
     /**
      * Удаление файла
-     *
-     * @param int $id
-     * @param int $fid
-     *
-     * @return RedirectResponse
      */
     public function deleteFile(int $id, int $fid): RedirectResponse
     {
@@ -316,11 +295,6 @@ class DownController extends Controller
 
     /**
      * Скачивание файла
-     *
-     * @param int       $id
-     * @param Validator $validator
-     *
-     * @return Response
      */
     public function download(int $id, Validator $validator): Response
     {
@@ -354,12 +328,6 @@ class DownController extends Controller
 
     /**
      * Скачивание файла по ссылке
-     *
-     * @param int       $id
-     * @param int       $linkId
-     * @param Validator $validator
-     *
-     * @return Response
      */
     public function downloadLink(int $id, int $linkId, Validator $validator): Response
     {
@@ -393,13 +361,6 @@ class DownController extends Controller
 
     /**
      * Комментарии
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return View|RedirectResponse
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
@@ -462,13 +423,6 @@ class DownController extends Controller
 
     /**
      * Подготовка к редактированию комментария
-     *
-     * @param int       $id
-     * @param int       $cid
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return View|RedirectResponse
      */
     public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
@@ -526,10 +480,6 @@ class DownController extends Controller
 
     /**
      * Переадресация на последнюю страницу
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {
@@ -549,10 +499,6 @@ class DownController extends Controller
 
     /**
      * Просмотр zip архива
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function zip(int $id): View
     {
@@ -634,11 +580,6 @@ class DownController extends Controller
 
     /**
      * Просмотр файла в zip архиве
-     *
-     * @param int $id
-     * @param int $fid
-     *
-     * @return View
      */
     public function zipView(int $id, int $fid): View
     {
@@ -698,10 +639,6 @@ class DownController extends Controller
 
     /**
      * RSS комментариев
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function rss(int $id): View
     {
@@ -716,11 +653,6 @@ class DownController extends Controller
 
     /**
      * Переход к сообщению
-     *
-     * @param int $id
-     * @param int $cid
-     *
-     * @return RedirectResponse
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {

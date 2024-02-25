@@ -17,11 +17,6 @@ class OfferController extends Controller
 {
     /**
      * Главная страница
-     *
-     * @param Request $request
-     * @param string  $type
-     *
-     * @return View
      */
     public function index(Request $request, string $type = 'offer'): View
     {
@@ -48,10 +43,6 @@ class OfferController extends Controller
 
     /**
      * Просмотр записи
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function view(int $id): View
     {
@@ -75,9 +66,6 @@ class OfferController extends Controller
     /**
      * Создание записи
      *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @return View|RedirectResponse
      */
@@ -132,9 +120,6 @@ class OfferController extends Controller
     /**
      * Редактирование записи
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -193,10 +178,6 @@ class OfferController extends Controller
     /**
      * Комментарии
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
      *
      * @return View|RedirectResponse
      */
@@ -260,10 +241,6 @@ class OfferController extends Controller
     /**
      * Подготовка к редактированию комментария
      *
-     * @param int       $id
-     * @param int       $cid
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -324,10 +301,6 @@ class OfferController extends Controller
 
     /**
      * Переадресация на последнюю страницу
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {
@@ -347,11 +320,6 @@ class OfferController extends Controller
 
     /**
      * Переход к сообщению
-     *
-     * @param int $id
-     * @param int $cid
-     *
-     * @return RedirectResponse
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {

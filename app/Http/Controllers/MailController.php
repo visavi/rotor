@@ -16,8 +16,6 @@ class MailController extends Controller
     /**
      * Главная страница
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -76,8 +74,6 @@ class MailController extends Controller
     /**
      * Восстановление пароля
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -136,8 +132,6 @@ class MailController extends Controller
     /**
      * Восстановление пароля
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -193,10 +187,6 @@ class MailController extends Controller
 
     /**
      * Отписка от рассылки
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function unsubscribe(Request $request): RedirectResponse
     {

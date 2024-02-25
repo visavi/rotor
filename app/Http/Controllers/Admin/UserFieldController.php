@@ -14,8 +14,6 @@ class UserFieldController extends AdminController
 {
     /**
      * List user fields
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -28,8 +26,6 @@ class UserFieldController extends AdminController
 
     /**
      * Create advert
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -40,9 +36,7 @@ class UserFieldController extends AdminController
     }
 
     /**
-     * @param StoreUserFieldRequest $request
      *
-     * @return RedirectResponse
      */
     public function store(StoreUserFieldRequest $request): RedirectResponse
     {
@@ -53,10 +47,6 @@ class UserFieldController extends AdminController
 
     /**
      * Change advert
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function edit(int $id): View
     {
@@ -73,10 +63,7 @@ class UserFieldController extends AdminController
     }
 
     /**
-     * @param int                   $id
-     * @param StoreUserFieldRequest $request
      *
-     * @return RedirectResponse
      */
     public function update(int $id, StoreUserFieldRequest $request): RedirectResponse
     {
@@ -93,10 +80,6 @@ class UserFieldController extends AdminController
 
     /**
      * Delete field
-     *
-     * @param int $id
-     *
-     * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
     {

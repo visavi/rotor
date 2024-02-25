@@ -17,8 +17,6 @@ class SearchController extends Controller
     /**
      * Поиск
      *
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */

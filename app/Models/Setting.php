@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Exception;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -15,35 +13,20 @@ use Illuminate\Support\Facades\Cache;
  * @property string name
  * @property string value
  */
-class Setting extends Model
+class Setting extends BaseModel
 {
-    use HasFactory;
-
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
-     *
-     * @var array
      */
     protected $guarded = [];
 
     /**
-     * Custom settings
-     *
-     * @var array
-     */
-    private static array $settings = [];
-
-    /**
      * Возвращает список допустимых страниц настроек
-     *
-     * @return array
      */
     public static function getActions(): array
     {

@@ -18,8 +18,6 @@ class SpamController extends AdminController
 
     /**
      * SpamController constructor.
-     *
-     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -52,8 +50,6 @@ class SpamController extends AdminController
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -81,11 +77,6 @@ class SpamController extends AdminController
 
     /**
      * Удаление жалоб
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return JsonResponse
      */
     public function delete(Request $request, Validator $validator): JsonResponse
     {

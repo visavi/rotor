@@ -46,8 +46,6 @@ class UserField extends BaseModel
 
     /**
      * Indicates if the model should be timestamped.
-     *
-     * @var bool
      */
     public $timestamps = false;
 
@@ -67,8 +65,6 @@ class UserField extends BaseModel
 
     /**
      * Возвращает данные
-     *
-     * @return HasMany
      */
     public function data(): HasMany
     {

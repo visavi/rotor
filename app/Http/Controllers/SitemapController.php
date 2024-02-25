@@ -22,8 +22,6 @@ class SitemapController extends Controller
 
     /**
      * Генерируем главную страницу
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -41,10 +39,6 @@ class SitemapController extends Controller
 
     /**
      * Вызывает страницу
-     *
-     * @param string $page
-     *
-     * @return View
      */
     public function page(string $page): View
     {
@@ -57,8 +51,6 @@ class SitemapController extends Controller
 
     /**
      * Генерируем статьи
-     *
-     * @return View
      */
     private function articles(): View
     {
@@ -93,8 +85,6 @@ class SitemapController extends Controller
 
     /**
      * Генерируем новости
-     *
-     * @return View
      */
     private function news(): View
     {
@@ -129,8 +119,6 @@ class SitemapController extends Controller
 
     /**
      * Генерируем темы форума
-     *
-     * @return View
      */
     private function topics(): View
     {
@@ -154,8 +142,6 @@ class SitemapController extends Controller
 
     /**
      * Генерируем загрузки
-     *
-     * @return View
      */
     private function downs(): View
     {

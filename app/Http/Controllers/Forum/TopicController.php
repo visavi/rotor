@@ -28,10 +28,6 @@ class TopicController extends Controller
 {
     /**
      * Main page
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function index(int $id): View
     {
@@ -127,13 +123,6 @@ class TopicController extends Controller
 
     /**
      * Message creation
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return RedirectResponse
      */
     public function create(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
@@ -244,12 +233,6 @@ class TopicController extends Controller
 
     /**
      * Delete messages
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -302,12 +285,6 @@ class TopicController extends Controller
 
     /**
      * Close topic
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function close(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -345,12 +322,6 @@ class TopicController extends Controller
 
     /**
      * Open topic
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function open(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -388,9 +359,6 @@ class TopicController extends Controller
     /**
      * Topic editing
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -513,9 +481,6 @@ class TopicController extends Controller
     /**
      * Post editing
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -579,12 +544,6 @@ class TopicController extends Controller
 
     /**
      * Voting
-     *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function vote(int $id, Request $request, Validator $validator): RedirectResponse
     {
@@ -644,10 +603,6 @@ class TopicController extends Controller
 
     /**
      * Print topic
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function print(int $id): View
     {
@@ -671,11 +626,6 @@ class TopicController extends Controller
 
     /**
      * Forward to message
-     *
-     * @param int $id
-     * @param int $pid
-     *
-     * @return RedirectResponse
      */
     public function viewpost(int $id, int $pid): RedirectResponse
     {
@@ -695,10 +645,6 @@ class TopicController extends Controller
 
     /**
      * Forward to the last message
-     *
-     * @param int $id
-     *
-     * @return RedirectResponse
      */
     public function end(int $id): RedirectResponse
     {

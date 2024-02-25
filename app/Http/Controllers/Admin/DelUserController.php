@@ -14,10 +14,6 @@ class DelUserController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -47,11 +43,6 @@ class DelUserController extends AdminController
 
     /**
      * Очистка пользователей
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function clear(Request $request, Validator $validator): RedirectResponse
     {

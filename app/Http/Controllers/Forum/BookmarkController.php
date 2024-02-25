@@ -25,8 +25,6 @@ class BookmarkController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -43,11 +41,6 @@ class BookmarkController extends Controller
 
     /**
      * Добавление / удаление закладок
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return Response
      */
     public function perform(Request $request, Validator $validator): Response
     {
@@ -100,11 +93,6 @@ class BookmarkController extends Controller
 
     /**
      * Удаление закладок
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

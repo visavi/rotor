@@ -36,8 +36,6 @@ class MessageController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -71,10 +69,6 @@ class MessageController extends Controller
 
     /**
      * Диалог
-     *
-     * @param string $login
-     *
-     * @return View
      */
     public function talk(string $login): View
     {
@@ -127,12 +121,6 @@ class MessageController extends Controller
 
     /**
      * Отправка сообщений
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     * @param Flood     $flood
-     *
-     * @return RedirectResponse
      */
     public function send(Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
@@ -185,12 +173,6 @@ class MessageController extends Controller
 
     /**
      * Удаление переписки
-     *
-     * @param int       $uid
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(int $uid, Request $request, Validator $validator): RedirectResponse
     {
@@ -220,10 +202,6 @@ class MessageController extends Controller
 
     /**
      * New messages
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function newMessages(Request $request): Response
     {

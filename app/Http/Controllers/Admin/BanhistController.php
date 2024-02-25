@@ -14,8 +14,6 @@ class BanhistController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -29,10 +27,6 @@ class BanhistController extends AdminController
 
     /**
      * История банов
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function view(Request $request): View
     {
@@ -54,11 +48,6 @@ class BanhistController extends AdminController
 
     /**
      * Удаление банов
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {

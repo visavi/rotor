@@ -14,8 +14,6 @@ class ModuleController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -38,10 +36,6 @@ class ModuleController extends AdminController
 
     /**
      * Просмотр модуля
-     *
-     * @param Request $request
-     *
-     * @return View
      */
     public function module(Request $request): View
     {
@@ -73,10 +67,6 @@ class ModuleController extends AdminController
 
     /**
      * Установка модуля
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function install(Request $request): RedirectResponse
     {
@@ -130,10 +120,6 @@ class ModuleController extends AdminController
 
     /**
      * Удаление/Выключение модуля
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function uninstall(Request $request): RedirectResponse
     {

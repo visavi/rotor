@@ -17,11 +17,6 @@ class OfferController extends AdminController
 {
     /**
      * Главная страница
-     *
-     * @param string  $type
-     * @param Request $request
-     *
-     * @return View
      */
     public function index(Request $request, string $type = Offer::OFFER): View
     {
@@ -48,10 +43,6 @@ class OfferController extends AdminController
 
     /**
      * Просмотр записи
-     *
-     * @param int $id
-     *
-     * @return View
      */
     public function view(int $id): View
     {
@@ -69,9 +60,6 @@ class OfferController extends AdminController
     /**
      * Редактирование записи
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -121,9 +109,6 @@ class OfferController extends AdminController
     /**
      * Ответ на предложение
      *
-     * @param int       $id
-     * @param Request   $request
-     * @param Validator $validator
      *
      * @return View|RedirectResponse
      */
@@ -171,10 +156,6 @@ class OfferController extends AdminController
 
     /**
      * Пересчет комментариев
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
      */
     public function restatement(Request $request): RedirectResponse
     {
@@ -195,11 +176,6 @@ class OfferController extends AdminController
 
     /**
      * Удаление записей
-     *
-     * @param Request   $request
-     * @param Validator $validator
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Validator $validator): RedirectResponse
     {
