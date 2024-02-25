@@ -70,7 +70,7 @@ class SitemapController extends Controller
             $changeTime = ($article->last_time > $article->created_at) ? $article->last_time : $article->created_at;
 
             // Обновлено менее 1 месяца
-            $new = SITETIME < strtotime('+1 month', $changeTime);
+            $new = strtotime('+1 month', $changeTime) > SITETIME;
 
             $locs[] = [
                 'loc'        => config('app.url') . '/articles/' . $article->id,
@@ -104,7 +104,7 @@ class SitemapController extends Controller
             $changeTime = ($news->last_time > $news->created_at) ? $news->last_time : $news->created_at;
 
             // Обновлено менее 1 месяца
-            $new = SITETIME < strtotime('+1 month', $changeTime);
+            $new = strtotime('+1 month', $changeTime) > SITETIME;
 
             $locs[] = [
                 'loc'        => config('app.url') . '/news/' . $news->id,
@@ -128,7 +128,7 @@ class SitemapController extends Controller
 
         foreach ($topics as $topic) {
             // Обновлено менее 1 месяца
-            $new = SITETIME < strtotime('+1 month', $topic->updated_at);
+            $new = strtotime('+1 month', $topic->updated_at) > SITETIME;
 
             $locs[] = [
                 'loc'        => config('app.url') . '/topics/' . $topic->id,
@@ -161,7 +161,7 @@ class SitemapController extends Controller
             $changeTime = ($down->last_time > $down->created_at) ? $down->last_time : $down->created_at;
 
             // Обновлено менее 1 месяца
-            $new = SITETIME < strtotime('+1 month', $changeTime);
+            $new = strtotime('+1 month', $changeTime) > SITETIME;
 
             $locs[] = [
                 'loc'        => config('app.url') . '/downs/' . $down->id,

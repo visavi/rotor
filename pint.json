@@ -73,6 +73,12 @@
                 "return"
             ]
         },
-        "no_alternative_syntax": true
+        "no_alternative_syntax": true,
+        "yoda_style" : {
+            "equal": false,
+            "identical": false,
+            "less_and_greater": false
+        },
+        "include": true
     }
 }
