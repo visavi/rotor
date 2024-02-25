@@ -6,8 +6,6 @@ use App\Classes\Calendar;
 
 class CalendarTest extends \Tests\TestCase
 {
-    /**
-     */
     private Calendar $calendar;
 
     public function setUp(): void

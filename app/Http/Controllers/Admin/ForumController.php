@@ -336,7 +336,7 @@ class ForumController extends AdminController
         }
 
         if ($request->input('_token') === csrf_token()) {
-            switch ($request->input('type')) :
+            switch ($request->input('type')) {
                 case 'closed':
                     $topic->update([
                         'closed'        => 1,
@@ -376,7 +376,7 @@ class ForumController extends AdminController
 
                 default:
                     setFlash('danger', __('main.action_not_selected'));
-            endswitch;
+            }
         } else {
             setFlash('danger', __('validator.token'));
         }

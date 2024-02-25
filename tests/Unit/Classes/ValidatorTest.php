@@ -8,8 +8,6 @@ use stdClass;
 
 class ValidatorTest extends \Tests\TestCase
 {
-    /**
-     */
     private Validator $validator;
 
     public function setUp(): void

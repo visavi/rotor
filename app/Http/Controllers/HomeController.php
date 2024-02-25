@@ -130,15 +130,11 @@ class HomeController extends Controller
         return redirect($return ?? '/');
     }
 
-    /**
-     */
     public function error403(): View
     {
         abort(403);
     }
 
-    /**
-     */
     public function error404(): View
     {
         abort(404);

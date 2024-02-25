@@ -35,9 +35,6 @@ class UserFieldController extends AdminController
         return view('admin/user-fields/create', compact('field', 'types'));
     }
 
-    /**
-     *
-     */
     public function store(StoreUserFieldRequest $request): RedirectResponse
     {
         UserField::query()->create($request->all());
@@ -62,9 +59,6 @@ class UserFieldController extends AdminController
         return view('admin/user-fields/edit', compact('field', 'types'));
     }
 
-    /**
-     *
-     */
     public function update(int $id, StoreUserFieldRequest $request): RedirectResponse
     {
         $field = UserField::query()->find($id);

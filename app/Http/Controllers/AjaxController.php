@@ -49,7 +49,7 @@ class AjaxController extends Controller
         $type = $request->input('type');
         $page = $request->input('page');
 
-        switch ($type) :
+        switch ($type) {
             case Guestbook::$morphName:
                 $model = Guestbook::query()->find($id);
                 $path = '/guestbook?page=' . $page;
@@ -78,7 +78,7 @@ class AjaxController extends Controller
                 $path = '/' . $model->relate_type . '/comments/' . $model->relate_id . '?page=' . $page;
                 $type = 'comments';
                 break;
-        endswitch;
+        }
 
         $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 

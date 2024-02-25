@@ -1574,8 +1574,6 @@ function showError(string|array $errors): HtmlString
     return new HtmlString(view('app/_error', compact('errors')));
 }
 
-/**
- */
 function getCaptcha(): HtmlString
 {
     return new HtmlString(view('app/_captcha'));
