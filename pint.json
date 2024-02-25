@@ -12,6 +12,9 @@
         "new_with_braces": {
             "anonymous_class": false
         },
+        "braces_position": {
+            "allow_single_line_empty_anonymous_classes": false
+        },
         "array_syntax": {
             "syntax": "short"
         },
@@ -79,6 +82,10 @@
             "identical": false,
             "less_and_greater": false
         },
-        "include": true
+        "include": true,
+        "increment_style": {
+            "style": "post"
+        },
+        "phpdoc_no_package": true
     }
 }

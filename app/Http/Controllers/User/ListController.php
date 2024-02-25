@@ -57,7 +57,7 @@ class ListController extends Controller
                 ->first();
 
             if ($position !== null) {
-                ++$position;
+                $position++;
                 $end = ceil($position / setting('userlist'));
 
                 setFlash('success', __('users.rating_position', ['position' => $position]));
