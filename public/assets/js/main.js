@@ -19,8 +19,8 @@ $(() => {
 
     toastr.options = {
         'toastClass' : 'toastr',
-        "progressBar": true,
-        "positionClass": "toast-top-full-width"
+        'progressBar': true,
+        'positionClass': 'toast-top-full-width'
     };
 
     fancybox.bind("[data-fancybox]", {
@@ -496,6 +496,8 @@ submitFile = (el) => {
         }
     });
 
+    el.value = '';
+
     return false;
 };
 
@@ -544,6 +546,8 @@ submitImage = (el, paste) => {
             }
         }
     });
+
+    el.value = '';
 
     return false;
 };

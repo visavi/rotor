@@ -38,7 +38,7 @@ class BBCode
             'callback' => 'urlReplace',
         ],
         'image' => [
-            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|png|gif|jpeg|webp))\[/img\]%s',
+            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|jpeg|png|gif|webp))\[/img\]%s',
             'replace' => '<div class="media-file"><a href="$1" data-fancybox="gallery"><img src="$1" class="img-fluid" alt="image"></a></div>',
         ],
         'bold' => [
@@ -162,7 +162,7 @@ class BBCode
      */
     public function clear(string $source): string
     {
-        return preg_replace('/\[(.*?)\]/', '', $source);
+        return preg_replace('/\[(.*?)]/', '', $source);
     }
 
     /**
@@ -327,6 +327,31 @@ class BBCode
         }
 
         return strtr($source, $listStickers);
+    }
+
+    /**
+     * Закрывает bb-теги
+     */
+    public function closeTags(string $text): string
+    {
+        preg_match_all('#\[([a-z]+)(?:=.*)?(?<!/)]#iU', $text, $result);
+        $openTags = $result[1];
+
+        preg_match_all('#\[/([a-z]+)]#iU', $text, $result);
+        $closedTags = $result[1];
+
+        if ($openTags === $closedTags) {
+            return $text;
+        }
+
+        $diff = array_diff_assoc($openTags, $closedTags);
+        $tags = array_reverse($diff);
+
+        foreach ($tags as $value) {
+            $text .= '[/' . $value . ']';
+        }
+
+        return $text;
     }
 
     /**

@@ -923,39 +923,16 @@ function shuffleAssoc(array &$array): bool
 }
 
 /**
- * Закрывает bb-теги
- */
-function closeTags(string $html): string
-{
-    preg_match_all('#\[([a-z]+)(?:=.*)?(?<![/])\]#iU', $html, $result);
-    $openTags = $result[1];
-
-    preg_match_all('#\[/([a-z]+)\]#iU', $html, $result);
-    $closedTags = $result[1];
-
-    if ($openTags === $closedTags) {
-        return $html;
-    }
-
-    $diff = array_diff_assoc($openTags, $closedTags);
-    $tags = array_reverse($diff);
-
-    foreach ($tags as $value) {
-        $html .= '[/' . $value . ']';
-    }
-
-    return $html;
-}
-
-/**
  * Возвращает обрезанный текст с закрытием тегов
  */
-function bbCodeTruncate(?string $value, int $words = 20, string $end = '...'): HtmlString
+function bbCodeTruncate(?string $text, int $words = 20, string $end = '...'): HtmlString
 {
-    $value = Str::words($value, $words, $end);
-    $bbText = bbCode(closeTags($value));
+    $bbCode = new BBCode();
 
-    return new HtmlString(preg_replace('/\[(.*?)\]/', '', $bbText));
+    $text = Str::words($text, $words, $end);
+    $bbText = bbCode($bbCode->closeTags($text));
+
+    return new HtmlString(preg_replace('/\[(.*?)]/', '', $bbText));
 }
 
 /**
