@@ -42,8 +42,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
-use Intervention\Image\Constraint;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
 use ReCaptcha\ReCaptcha;
 
 const ROTOR_VERSION = '12.0';
@@ -1319,13 +1318,10 @@ function resizeProcess(?string $path, array $params = []): array
     $thumb = ltrim(str_replace('/', '_', $path), '_');
 
     if (! file_exists(public_path('uploads/thumbnails/' . $thumb))) {
-        $img = Image::make(public_path($path));
-        $img->resize(setting('previewsize'), setting('previewsize'), static function (Constraint $constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-
-        $img->save(public_path('uploads/thumbnails/' . $thumb));
+        $imageManager = app(ImageManager::class);
+        $image = $imageManager->read(public_path($path));
+        $image->scaleDown(setting('previewsize'), setting('previewsize'));
+        $image->save(public_path('uploads/thumbnails/' . $thumb));
     }
 
     return [

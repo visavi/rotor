@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
 
 class PictureController extends Controller
 {
@@ -33,11 +33,13 @@ class PictureController extends Controller
     /**
      * Главная страница
      *
-     *
      * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
-    {
+    public function index(
+        Request $request,
+        Validator $validator,
+        ImageManager $imageManager,
+    ) {
         if ($request->isMethod('post')) {
             $photo = $request->file('photo');
 
@@ -66,9 +68,10 @@ class PictureController extends Controller
 
                 //-------- Генерируем аватар -------//
                 $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
-                $img = Image::make($photo);
-                $img->fit(64);
-                $img->save(public_path($avatar));
+
+                $image = $imageManager->read($photo);
+                $image->coverDown(64, 64);
+                $image->save(public_path($avatar));
 
                 $this->user->picture = $file['path'];
                 $this->user->avatar = $avatar;

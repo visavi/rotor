@@ -6,8 +6,7 @@ namespace App\Traits;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\Constraint;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
 
 trait UploadTrait
 {
@@ -28,21 +27,24 @@ trait UploadTrait
         $isImage = str_starts_with($file->getMimeType(), 'image');
 
         if ($isImage) {
-            $img = Image::make($file);
+            $imageManager = app(ImageManager::class);
+            $image = $imageManager->read($file);
 
-            if ($img->getWidth() <= 100 && $img->getHeight() <= 100) {
+            if ($image->width() <= 100 && $image->height() <= 100) {
                 $file->move(public_path($this->uploadPath), $filename);
             } else {
-                $img->resize(setting('screensize'), setting('screensize'), static function (Constraint $constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
+                $image->scaleDown(setting('screensize'), setting('screensize'));
 
                 if (setting('copyfoto')) {
-                    $img->insert(public_path('assets/img/images/watermark.png'), 'bottom-right', 10, 10);
+                    $image->place(
+                        public_path('assets/img/images/watermark.png'),
+                        'bottom-right',
+                        10,
+                        10
+                    );
                 }
 
-                $img->save($fullPath);
+                $image->save($fullPath);
             }
         } else {
             $file->move(public_path($this->uploadPath), $filename);
