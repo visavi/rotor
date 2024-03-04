@@ -71,6 +71,7 @@ class PictureController extends Controller
 
                 $image = $imageManager->read($photo);
                 $image->coverDown(64, 64);
+                $image->toPng();
                 $image->save(public_path($avatar));
 
                 $this->user->picture = $file['path'];
