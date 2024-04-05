@@ -259,7 +259,7 @@ textarea.form-control {
 
 .message-block:hover,
 .message-block:focus {
-  background-color: #eee;
+  background-color: var(--base-bg);
 }
 
 .pagination {

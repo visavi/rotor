@@ -57,7 +57,7 @@ class MessageController extends Controller
             })
             ->leftJoin('dialogues as d3', function ($join) {
                 $join->on('d.user_id', 'd3.author_id')
-                    ->whereRaw('d.message_id = d3.message_id');
+                    ->whereColumn('d.message_id', 'd3.message_id');
             })
             ->where('d.user_id', $this->user->id)
             ->orderByDesc('d.created_at')
@@ -93,7 +93,7 @@ class MessageController extends Controller
             ->join('dialogues as d', 'd.message_id', 'm.id')
             ->leftJoin('dialogues as d2', function ($join) {
                 $join->on('d.user_id', 'd2.author_id')
-                    ->whereRaw('d.message_id = d2.message_id');
+                    ->whereColumn('d.message_id', 'd2.message_id');
             })
             ->where('d.user_id', $this->user->id)
             ->where('d.author_id', $user->id)

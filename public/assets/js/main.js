@@ -114,7 +114,7 @@ $(() => {
         getNewMessages();
     })
 
-    $('[data-bs-theme-value]').click(() => {
+    $('[data-bs-theme-value]').click(function() {
         let currentTheme = $(this).data('bs-theme-value');
         let activeThemeClass = $(this).find('i').attr('class');
 

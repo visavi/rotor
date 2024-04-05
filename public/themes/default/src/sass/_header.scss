@@ -159,12 +159,11 @@
   padding: 8px 20px;
   text-align: center;
   background-color: transparentize($navbar-color, 0.6);
-  color: #333;
 }
 .app-notification__footer {
   padding: 8px 20px;
   text-align: center;
-  background-color: #eee;
+  background-color: var(--bs-body-bg);
 }
 .app-notification__content {
   max-height: 220px;
