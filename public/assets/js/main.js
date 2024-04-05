@@ -1,4 +1,4 @@
-$(() => {
+$(function () {
     let html = $('html');
     let currentLang = html.attr('lang');
     translate = window['translate_' + currentLang];
@@ -27,7 +27,7 @@ $(() => {
         // Your custom options
     });
 
-    $('.markItUp').markItUp(mySettings).on('input', () => {
+    $('.markItUp').markItUp(mySettings).on('input', function () {
         var maxlength = $(this).attr('maxlength');
         var text      = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n");
 
@@ -53,7 +53,7 @@ $(() => {
     $('[data-bs-toggle="popover"]').popover();
 
     // Hide popover poppers anywhere
-    $('body').on('click', (e) => {
+    $('body').on('click', function (e) {
         //did not click a popover toggle or popover
         if ($(e.target).data('bs-toggle') !== 'popover'
             && $(e.target).parents('.popover.in').length === 0) {
@@ -62,22 +62,22 @@ $(() => {
     });
 
     // Spoiler
-    $('.spoiler-title').on('click', () => {
-        var spoiler = $(this).parent();
+    $('.spoiler-title').on('click', function () {
+        let spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
         spoiler.find('.spoiler-text:first').slideToggle();
     });
 
     /* Show news on the main */
-    $('.news-title').on('click', () => {
+    $('.news-title').on('click', function () {
         $(this).toggleClass('fa-rotate-180');
         $(this).nextAll(".news-text:first").slideToggle();
     });
 
-    $('.colorpicker').on('input', () => {
+    $('.colorpicker').on('input', function () {
         $('.colorpicker-addon').val(this.value);
     });
-    $('.colorpicker-addon').on('input', () => {
+    $('.colorpicker-addon').on('input', function () {
         $('.colorpicker').val(this.value);
     });
 
@@ -89,7 +89,7 @@ $(() => {
     $('.birthday').mask('00.00.0000');
 
     // Scroll up
-    $(window).scroll(() => {
+    $(window).scroll(function () {
         if ($(this).scrollTop() > 200) {
             $('.scrollup').fadeIn();
         } else {
@@ -97,7 +97,7 @@ $(() => {
         }
     });
 
-    $('.scrollup').click(() => {
+    $('.scrollup').click(function () {
         $("html, body").animate({
             scrollTop: 0
         }, 100);
@@ -105,12 +105,12 @@ $(() => {
     });
 
     /*if ($('.markItUpEditor').val().length > 0) {
-        window.onbeforeunload = () => {
+        window.onbeforeunload = function () {
             return "You're about to end your session, are you sure?";
         }
     }*/
 
-    $('.js-messages-block').on('show.bs.dropdown', () => {
+    $('.js-messages-block').on('show.bs.dropdown', function () {
         getNewMessages();
     })
 
@@ -142,7 +142,7 @@ $(() => {
 });
 
 /* Показ формы загрузки файла */
-showAttachForm = () => {
+showAttachForm = function () {
     $('.js-attach-button').hide();
     $('.js-attach-form').slideDown();
 
@@ -150,14 +150,14 @@ showAttachForm = () => {
 };
 
 /* Переход к форме ввода */
-postJump = () => {
+postJump = function () {
     $('html, body').animate({
         scrollTop: ($('.section-form').offset().top)
     }, 100);
 };
 
 /* Ответ на сообщение */
-postReply = (el) => {
+postReply = function (el) {
     postJump();
 
     var field  = $('.markItUpEditor');
@@ -173,7 +173,7 @@ postReply = (el) => {
 };
 
 /* Цитирование сообщения */
-postQuote = (el) => {
+postQuote = function (el) {
     postJump();
 
     let field   = $('.markItUpEditor');
@@ -198,8 +198,8 @@ postQuote = (el) => {
 };
 
 /* Выход с сайта */
-logout = (el) => {
-    bootbox.confirm(translate.confirm_logout, (result) => {
+logout = function (el) {
+    bootbox.confirm(translate.confirm_logout, function (result) {
         if (result) {
             window.location = $(el).attr("href");
         }
@@ -209,8 +209,8 @@ logout = (el) => {
 };
 
 /* Отправка жалобы на спам */
-sendComplaint = (el) => {
-    bootbox.confirm(translate.confirm_complain_submit, (result) => {
+sendComplaint = function (el) {
+    bootbox.confirm(translate.confirm_complain_submit, function (result) {
         if (result) {
             $.ajax({
                 data: {
@@ -220,7 +220,7 @@ sendComplaint = (el) => {
                     _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ajax/complaint',
-                success: (data) => {
+                success: function (data) {
 
                     $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
@@ -238,14 +238,14 @@ sendComplaint = (el) => {
 };
 
 /* Добавление или удаление закладок */
-bookmark = (el) => {
+bookmark = function (el) {
     $.ajax({
         data: {
             tid: $(el).data('tid'),
             _token: $(el).data('token')
         },
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
-        success: (data) => {
+        success: function (data) {
 
             if (! data.success) {
                 toastr.error(data.message);
@@ -270,13 +270,13 @@ bookmark = (el) => {
 };
 
 /* Удаление записей */
-deletePost = (el) => {
-    bootbox.confirm(translate.confirm_message_delete, (result) => {
+deletePost = function (el) {
+    bootbox.confirm(translate.confirm_message_delete, function (result) {
         if (result) {
             $.ajax({
                 data: {_token: $(el).data('token'),},
                 dataType: 'json', type: 'delete', url: $(el).attr('href'),
-                success: (data) => {
+                success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
                         $(el).closest('.section').hide('slow');
@@ -292,8 +292,8 @@ deletePost = (el) => {
 }
 
 /* Удаление комментариев */
-deleteComment = (el) => {
-    bootbox.confirm(translate.confirm_message_delete, (result) => {
+deleteComment = function (el) {
+    bootbox.confirm(translate.confirm_message_delete, function (result) {
         if (result) {
             $.ajax({
                 data: {
@@ -303,7 +303,7 @@ deleteComment = (el) => {
                     _token: $(el).data('token')
                 },
                 dataType: 'json', type: 'post', url: '/ajax/delcomment',
-                success: (data) => {
+                success: function (data) {
                     if (data.success) {
                         toastr.success(translate.message_deleted);
                         $(el).closest('.section').hide('slow');
@@ -319,7 +319,7 @@ deleteComment = (el) => {
 };
 
 /* Изменение рейтинга */
-changeRating = (el) => {
+changeRating = function (el) {
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -330,7 +330,7 @@ changeRating = (el) => {
         dataType: 'json',
         type: 'post',
         url: '/ajax/rating',
-        success: (data) => {
+        success: function (data) {
             if (data.success) {
                 const rating = $(el).closest('.js-rating').find('b');
 
@@ -355,8 +355,8 @@ changeRating = (el) => {
 /**
  * Удаляет запись из истории рейтинга
  */
-deleteRating = (el) => {
-    bootbox.confirm(translate.confirm_message_delete, (result) => {
+deleteRating = function (el) {
+    bootbox.confirm(translate.confirm_message_delete, function (result) {
         if (result) {
             $.ajax({
                 data: {
@@ -382,11 +382,11 @@ deleteRating = (el) => {
 /**
  * Удаляет запись из списка жалоб
  */
-deleteSpam = (el) => {
+deleteSpam = function (el) {
     $.ajax({
         data: {id: $(el).data('id'), _token: $(el).data('token')},
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
-        success: (data) => {
+        success: function (data) {
             if (data.success) {
                 toastr.success(translate.record_deleted);
                 $(el).closest('.section').hide('slow');
@@ -402,13 +402,13 @@ deleteSpam = (el) => {
 /**
  * Удаляет запись со стены сообщений
  */
-deleteWall = (el) => {
-    bootbox.confirm(translate.confirm_message_delete, (result) => {
+deleteWall = function (el) {
+    bootbox.confirm(translate.confirm_message_delete, function (result) {
         if (result) {
             $.ajax({
                 data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
                 dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
-                success: (data) => {
+                success: function (data) {
                     if (data.success) {
                         toastr.success(translate.record_deleted);
                         $(el).closest('.section').hide('slow');
@@ -424,14 +424,14 @@ deleteWall = (el) => {
 };
 
 /* Показ формы создания голосования */
-showVoteForm = () => {
+showVoteForm = function () {
     $('.js-vote-form').toggle();
 
     return false;
 };
 
 /* Копирует текст в input */
-copyToClipboard = (el) => {
+copyToClipboard = function (el) {
     let form = $(el).closest('.input-group');
     form.find('input').select();
 
@@ -446,7 +446,7 @@ copyToClipboard = (el) => {
 };
 
 /* Загрузка изображения */
-submitFile = (el) => {
+submitFile = function (el) {
     let form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
@@ -460,13 +460,13 @@ submitFile = (el) => {
         processData: false,
         dataType: 'json',
         url: '/ajax/file/upload',
-        beforeSend: () => {
+        beforeSend: function () {
             $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
         },
-        complete: () => {
+        complete: function () {
             $('.fa-spinner').remove();
         },
-        success: (data) => {
+        success: function (data) {
             if (! data.success) {
                 toastr.error(data.message);
                 return false;
@@ -502,7 +502,7 @@ submitFile = (el) => {
 };
 
 /* Загрузка изображения */
-submitImage = (el, paste) => {
+submitImage = function (el, paste) {
     let form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
@@ -516,13 +516,13 @@ submitImage = (el, paste) => {
         processData: false,
         dataType: 'json',
         url: '/ajax/file/upload',
-        beforeSend: () => {
+        beforeSend: function () {
             $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
         },
-        complete: () => {
+        complete: function () {
             $('.fa-spinner').remove();
         },
-        success: (data) => {
+        success: function (data) {
             if (! data.success) {
                 toastr.error(data.message);
                 return false;
@@ -553,7 +553,7 @@ submitImage = (el, paste) => {
 };
 
 /* Вставка изображения в форму */
-pasteImage = (el) => {
+pasteImage = function (el) {
     let field = $('.markItUpEditor');
     let paste = '[img]' + $(el).find('img').data('source') + '[/img]';
 
@@ -561,7 +561,7 @@ pasteImage = (el) => {
 };
 
 /* Удаление изображения из формы */
-cutImage = (path) => {
+cutImage = function (path) {
     let field = $('.markItUpEditor');
     let text  = field.val();
     let cut   = '[img]' + path + '[/img]';
@@ -570,7 +570,7 @@ cutImage = (path) => {
 };
 
 /* Удаление файла */
-deleteFile = (el) => {
+deleteFile = function (el) {
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -580,7 +580,7 @@ deleteFile = (el) => {
         dataType: 'json',
         type: 'post',
         url: '/ajax/file/delete',
-        success: (data) => {
+        success: function (data) {
             if (! data.success) {
                 toastr.error(data.message);
                 return false;
@@ -597,7 +597,7 @@ deleteFile = (el) => {
 };
 
 /* Показывает форму для повторной отправки кода подтверждения */
-resendingCode = () => {
+resendingCode = function () {
     $('.js-resending-link').hide();
     $('.js-resending-form').show();
 
@@ -605,12 +605,12 @@ resendingCode = () => {
 };
 
 /* Показывает панель с запросами */
-showQueries = () => {
+showQueries = function () {
     $('.js-queries').slideToggle();
 };
 
 /* Get new messages */
-getNewMessages = () => {
+getNewMessages = function () {
     const notify_item = $('.js-messages-block .app-nav__item');
     const notify_badge = notify_item.find('.badge');
     const notify_span = $('.app-notification__title span');
@@ -619,13 +619,13 @@ getNewMessages = () => {
         dataType: 'json',
         type: 'get',
         url: '/messages/new',
-        beforeSend: () => {
+        beforeSend: function () {
             $('.js-messages').append('<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>');
         },
-        complete: () => {
+        complete: function () {
             $('.js-message-spin').remove();
         },
-        success: (data) => {
+        success: function (data) {
             if (data.success) {
                 if (notify_badge.length > 0) {
                     notify_badge.html(data.countMessages);
@@ -650,7 +650,7 @@ getNewMessages = () => {
 
 let checkTimeout;
 /* Проверка логина */
-checkLogin = (el) => {
+checkLogin = function (el) {
     const block = $(el).closest('.mb-3');
     const message = block.find('.invalid-feedback');
 
@@ -663,7 +663,7 @@ checkLogin = (el) => {
 
     clearTimeout(checkTimeout);
 
-    checkTimeout = setTimeout(() => {
+    checkTimeout = setTimeout(function () {
         $.ajax({
             data: {
                 login: $(el).val()
@@ -671,7 +671,7 @@ checkLogin = (el) => {
             dataType: 'json',
             type: 'post',
             url: '/check-login',
-            success: (data) => {
+            success: function (data) {
                 if (data.success) {
                     block.removeClass('is-invalid').addClass('is-valid');
                     message.empty();
