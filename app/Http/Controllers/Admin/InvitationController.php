@@ -23,7 +23,7 @@ class InvitationController extends AdminController
 
         $invites = Invite::query()
             ->where('used', $used)
-            ->orderByDesc('created_at')
+            ->orderByDesc($used ? 'used_at' : 'created_at')
             ->with('user', 'inviteUser')
             ->paginate(setting('listinvite'))
             ->appends(['used' => $used]);
