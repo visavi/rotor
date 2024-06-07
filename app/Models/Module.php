@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Exception;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class Module
@@ -90,11 +90,7 @@ class Module extends BaseModel
             return;
         }
 
-        if (function_exists('symlink')) {
-            $filesystem->symlink($modulesPath, $originPath, true);
-        } else {
-            $filesystem->mirror($modulesPath, $originPath, null, ['override' => true, 'delete' => true]);
-        }
+        $filesystem->link($modulesPath, $originPath);
     }
 
     /**
@@ -109,7 +105,7 @@ class Module extends BaseModel
         }
 
         $filesystem = new Filesystem();
-        $filesystem->remove($originPath);
+        $filesystem->delete($originPath);
     }
 
     /**
