@@ -168,7 +168,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code = utfLower($request->input('code'));
+            $code = utfLower((string) $request->input('code'));
             $sticker = $request->file('sticker');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -231,7 +231,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code = utfLower($request->input('code'));
+            $code = utfLower((string) $request->input('code'));
             $cid = int($request->input('cid'));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

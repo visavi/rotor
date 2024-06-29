@@ -22,7 +22,7 @@ class AntimatController extends AdminController
     public function index(Request $request, Validator $validator)
     {
         if ($request->isMethod('post')) {
-            $word = utfLower($request->input('word'));
+            $word = utfLower((string) $request->input('word'));
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))

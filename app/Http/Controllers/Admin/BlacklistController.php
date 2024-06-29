@@ -39,7 +39,7 @@ class BlacklistController extends AdminController
         $type = $this->type;
 
         if ($request->isMethod('post')) {
-            $value = utfLower($request->input('value'));
+            $value = utfLower((string) $request->input('value'));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($value, 1, 100, ['value' => __('validator.text')]);

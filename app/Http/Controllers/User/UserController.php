@@ -278,7 +278,7 @@ class UserController extends Controller
                 }
 
                 if ($validator->isValid()) {
-                    $login = utfLower($request->input('login'));
+                    $login = utfLower((string) $request->input('login'));
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
