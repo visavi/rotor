@@ -1,6 +1,9 @@
 <?php
 
-use App\Classes\{BBCode, Calendar, CloudFlare, Metrika};
+use App\Classes\BBCode;
+use App\Classes\Calendar;
+use App\Classes\CloudFlare;
+use App\Classes\Metrika;
 use App\Models\AdminAdvert;
 use App\Models\Advert;
 use App\Models\Antimat;
@@ -37,6 +40,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
@@ -64,28 +68,30 @@ function makeTime(int $time): string
 
 /**
  * Форматирует время с учетом часовых поясов
- *
- * @param int|null $timestamp Секунды
- * @param string   $format    Формат времени
- * @param bool     $original  Формат без изменения
- *
- * @return string Форматированный вывод
  */
-function dateFixed(?int $timestamp, string $format = 'd.m.Y / H:i', bool $original = false): string
-{
-    if (! is_numeric($timestamp)) {
+function dateFixed(
+    DateTimeInterface|int|null $timestamp,
+    string $format = 'd.m.Y / H:i',
+    bool $original = false,
+): string {
+    if ($timestamp === null) {
         $timestamp = SITETIME;
     }
+    if (is_numeric($timestamp)) {
+        $date = Date::createFromTimestamp($timestamp);
+    } else {
+        $date = Date::parse($timestamp);
+    }
 
-    $shift = getUser('timezone') * 3600;
-    $dateStamp = date($format, $timestamp + $shift);
+    $shift = getUser('timezone');
+    $dateStamp = $date->addHours($shift)->format($format);
 
     if ($original) {
         return $dateStamp;
     }
 
-    $today = date('d.m.Y', SITETIME + $shift);
-    $yesterday = date('d.m.Y', strtotime('-1 day', SITETIME + $shift));
+    $today = Date::now()->addHours($shift)->format('d.m.Y');
+    $yesterday = Date::now()->addHours($shift)->subDay()->format('d.m.Y');
 
     $replaces = [
         $today      => __('main.today'),
