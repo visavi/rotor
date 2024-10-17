@@ -221,12 +221,14 @@ function int($num): int
  */
 function intar($numbers): ?array
 {
-    if ($numbers) {
-        if (is_array($numbers)) {
-            $numbers = array_map('intval', $numbers);
-        } else {
-            $numbers = [(int) $numbers];
-        }
+    if (! $numbers) {
+        return null;
+    }
+
+    if (is_array($numbers)) {
+        $numbers = array_map('intval', $numbers);
+    } else {
+        $numbers = [(int) $numbers];
     }
 
     return $numbers;
