@@ -21,10 +21,10 @@
         "ext-curl": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
+        "ext-intl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
-        "ext-intl": "*",
         "ext-zip": "*",
         "cbschuld/browser.php": "~1.9",
         "doctrine/dbal": "^3.8",
@@ -35,7 +35,8 @@
         "laravel/framework": "^10.45",
         "php-ffmpeg/php-ffmpeg": "^1.2",
         "visavi/captcha": "^3.0",
-        "visavi/cleanup": "^1.5"
+        "visavi/cleanup": "^1.5",
+        "yoomoney/yookassa-sdk-php": "^3.5"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^2.0",
