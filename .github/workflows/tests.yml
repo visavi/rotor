@@ -15,7 +15,6 @@ jobs:
         env:
           MYSQL_DATABASE: test
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_ROOT_HOST: '%'
         ports:
           - 3306:3306
         options: >-
@@ -52,16 +51,8 @@ jobs:
       - name: Install PHP dependencies
         run: composer update --prefer-stable --no-interaction --no-progress
 
-      - name: Wait for MySQL
-        run: |
-          until mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot; do
-            echo "Waiting for MySQL to be ready..."
-            sleep 2
-          done
-
       - name: Set up MySQL
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'SET GLOBAL host_cache_size=0;'
           mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'CREATE DATABASE IF NOT EXISTS test;'
           mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'SHOW DATABASES;'
 
