@@ -120,7 +120,7 @@ class Topic extends BaseModel
     }
 
     /**
-     * Генерирует постраничную навигация для форума
+     * Генерирует постраничную навигацию для форума
      *
      *
      * @return HtmlString|null сформированный блок
@@ -159,7 +159,7 @@ class Topic extends BaseModel
                 'page'  => $pg_cnt,
                 'title' => $pg_cnt . ' страница',
                 'name'  => $pg_cnt,
-                'url'   => $link . '?page=' . $i,
+                'url'   => $link . '?page=' . $pg_cnt,
             ];
         }
 
