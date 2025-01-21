@@ -60,8 +60,8 @@ jobs:
 
       - name: Set up MySQL
         run: |
-          mysql -e 'CREATE DATABASE IF NOT EXISTS test;' -u root -proot
-          mysql -e 'SHOW DATABASES;' -u root -proot
+          mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'CREATE DATABASE IF NOT EXISTS test;'
+          mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'SHOW DATABASES;'
 
       - name: Migrations
         run: |
