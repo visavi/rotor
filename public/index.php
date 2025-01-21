@@ -1,4 +1,5 @@
 <?php
+
 /*
 | Rotor - Mobile content management system
 |
