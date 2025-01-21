@@ -447,7 +447,7 @@ copyToClipboard = function (el) {
 
 /* Загрузка изображения */
 submitFile = function (el) {
-    let form = new FormData();
+    const form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
@@ -467,32 +467,28 @@ submitFile = function (el) {
             $('.fa-spinner').remove();
         },
         success: function (data) {
-            if (! data.success) {
+            if (!data.success) {
                 toastr.error(data.message);
-                return false;
+                return;
             }
 
-            if (data.success) {
-                if (data.type === 'image') {
-                    let template = $('.js-image-template').clone();
+            const template = $(data.type === 'image' ? '.js-image-template' : '.js-file-template').clone();
 
-                    template.find('img').attr({
-                        'src'         : data.path,
-                        'data-source' : data.source
-                    });
-                } else {
-                    let template = $('.js-file-template').clone();
-
-                    template.find('.js-file-link').attr({
-                        'href' : data.path
-                    }).text(data.name);
-
-                    template.find('.js-file-size').text(data.size);
-                }
-
-                template.find('.js-file-delete').attr('data-id', data.id);
-                $('.js-files').append(template.html());
+            if (data.type === 'image') {
+                template.find('img').attr({
+                    'src': data.path,
+                    'data-source': data.source
+                });
+            } else {
+                template.find('.js-file-link').attr('href', data.path).text(data.name);
+                template.find('.js-file-size').text(data.size);
             }
+
+            template.find('.js-file-delete').attr('data-id', data.id);
+            $('.js-files').append(template.html());
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('Ошибка загрузки файла: ' + textStatus);
         }
     });
 
@@ -503,7 +499,7 @@ submitFile = function (el) {
 
 /* Загрузка изображения */
 submitImage = function (el, paste) {
-    let form = new FormData();
+    const form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
@@ -523,27 +519,25 @@ submitImage = function (el, paste) {
             $('.fa-spinner').remove();
         },
         success: function (data) {
-            if (! data.success) {
+            if (!data.success) {
                 toastr.error(data.message);
-                return false;
+                return;
             }
 
-            if (data.success) {
-                let template = $('.js-image-template').clone();
+            const template = $('.js-image-template').clone();
+            template.find('img').attr({
+                'src': data.path,
+                'data-source': data.source
+            });
+            template.find('a').attr('data-id', data.id);
+            $('.js-files').append(template.html());
 
-                template.find('img').attr({
-                    'src'         : data.path,
-                    'data-source' : data.source
-                });
-
-                template.find('a').attr('data-id', data.id);
-
-                $('.js-files').append(template.html());
-
-                if (paste) {
-                    pasteImage(template);
-                }
+            if (paste) {
+                pasteImage(template);
             }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('Ошибка загрузки файла: ' + textStatus);
         }
     });
 
@@ -571,25 +565,26 @@ cutImage = function (path) {
 
 /* Удаление файла */
 deleteFile = function (el) {
+    const id = $(el).data('id');
+    const type = $(el).data('type');
+    const token = $(el).data('token');
+
     $.ajax({
-        data: {
-            id: $(el).data('id'),
-            type: $(el).data('type'),
-            _token: $(el).data('token')
-        },
+        data: { id, type, _token: token },
         dataType: 'json',
         type: 'post',
         url: '/ajax/file/delete',
         success: function (data) {
-            if (! data.success) {
+            if (!data.success) {
                 toastr.error(data.message);
-                return false;
+                return;
             }
 
-            if (data.success) {
-                cutImage(data.path);
-                $(el).closest('.js-file').hide('fast');
-            }
+            cutImage(data.path);
+            $(el).closest('.js-file').hide('fast');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('Ошибка удаления файла: ' + textStatus);
         }
     });
 
