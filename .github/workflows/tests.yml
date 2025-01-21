@@ -22,11 +22,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     env:
       APP_ENV: testing
       DB_CONNECTION: mysql
-      DB_HOST: localhost
+      DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_DATABASE: test
       DB_USERNAME: root
@@ -52,11 +51,17 @@ jobs:
       - name: Install PHP dependencies
         run: composer update --prefer-stable --no-interaction --no-progress
 
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 2
+          done
+
       - name: Set up MySQL
         run: |
-          sudo systemctl start mysql
-          mysql -e 'CREATE DATABASE IF NOT EXISTS test;' -uroot -proot
-          mysql -e 'SHOW DATABASES;' -uroot -proot
+          mysql -e 'CREATE DATABASE IF NOT EXISTS test;' -u root -proot
+          mysql -e 'SHOW DATABASES;' -u root -proot
 
       - name: Migrations
         run: |
