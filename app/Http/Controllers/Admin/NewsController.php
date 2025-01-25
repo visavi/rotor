@@ -118,10 +118,6 @@ class NewsController extends AdminController
             $validator->file($image, $rules, ['image' => __('validator.image_upload_failed')], false);
 
             if ($validator->isValid()) {
-                if ($image) {
-                    $file = (new News())->uploadFile($image, false);
-                }
-
                 /** @var News $news */
                 $news = News::query()->create([
                     'user_id'    => getUser('id'),
@@ -129,9 +125,15 @@ class NewsController extends AdminController
                     'text'       => $text,
                     'closed'     => $closed,
                     'top'        => $top,
-                    'image'      => $file['path'] ?? null,
                     'created_at' => SITETIME,
                 ]);
+
+                if ($image) {
+                    $file = $news->uploadFile($image, false);
+                    $news->update([
+                        'image' => $file['path'],
+                    ]);
+                }
 
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {

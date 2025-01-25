@@ -69,7 +69,7 @@ class TopicController extends Controller
             $firstPost = Post::query()->where('topic_id', $topic->id)->orderBy('created_at')->first();
         }
 
-        if (isset($topic->bookmark_posts) && $topic->count_posts > $topic->bookmark_posts) {
+        if ($topic->bookmark_posts && $topic->count_posts > $topic->bookmark_posts) {
             Bookmark::query()
                 ->where('topic_id', $topic->id)
                 ->where('user_id', $user->id)

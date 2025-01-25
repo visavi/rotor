@@ -192,7 +192,7 @@ class Topic extends BaseModel
     public function getCountPosts(): HtmlString
     {
         $newPosts = null;
-        if (isset($this->bookmark_posts) && $this->count_posts > $this->bookmark_posts) {
+        if ($this->bookmark_posts && $this->count_posts > $this->bookmark_posts) {
             $newPosts = ' <span style="color:#00aa00">+' . ($this->count_posts - $this->bookmark_posts) . '</span>';
         }
 

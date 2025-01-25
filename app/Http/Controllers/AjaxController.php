@@ -306,7 +306,6 @@ class AjaxController extends Controller
 
         if ($validator->isValid()) {
             $fileData = $model->uploadFile($file);
-
             if ($isImageType) {
                 $imageData = resizeProcess($fileData['path'], ['size' => 100]);
                 $data = [
@@ -317,6 +316,7 @@ class AjaxController extends Controller
                     'type'    => $fileData['type'],
                 ];
             } else {
+                $model->convertVideo($fileData);
                 $data = [
                     'success' => true,
                     'id'      => $fileData['id'],
@@ -395,7 +395,7 @@ class AjaxController extends Controller
     public function getStickers(): JsonResponse
     {
         $stickers = Sticker::query()
-            //->where('category_id', $id)
+            // ->where('category_id', $id)
             ->orderBy(DB::raw('CHAR_LENGTH(code)'))
             ->orderBy('name')
             ->get();

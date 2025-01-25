@@ -61,7 +61,6 @@ class PhotoController extends Controller
     /**
      * Форма загрузки фото
      *
-     *
      * @return View|RedirectResponse
      */
     public function create(Request $request, Validator $validator, Flood $flood)
@@ -127,7 +126,6 @@ class PhotoController extends Controller
     /**
      * Редактирование фото
      *
-     *
      * @return View|RedirectResponse
      */
     public function edit(int $id, Request $request, Validator $validator)
@@ -179,7 +177,6 @@ class PhotoController extends Controller
 
     /**
      * Список комментариев
-     *
      *
      * @return View|RedirectResponse
      */
@@ -243,7 +240,6 @@ class PhotoController extends Controller
 
     /**
      * Редактирование комментария
-     *
      *
      * @return View|RedirectResponse
      */

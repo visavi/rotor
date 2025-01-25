@@ -47,11 +47,18 @@
                                 <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $post->lastPost->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                             @endif
 
+                            @if ($file->isVideo())
+                                <div>
+                                    <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                                </div>
+                            @endif
+
                             @if ($file->isAudio())
                                 <div>
                                     <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
                                 </div>
                             @endif
+
                             {{ icons($file->extension) }}
                             <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                         </div>
@@ -264,18 +271,19 @@
                 @foreach ($post->getFiles() as $file)
                     <div class="media-file mb-3">
                         @if ($file->hash && file_exists(public_path($file->hash)))
-                            @if ($file->extension === 'mp3')
+                            @if ($file->isAudio())
                                 <div>
                                     <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
                                 </div>
                             @endif
 
-                            @if ($file->extension === 'mp4')
+                            @if ($file->isVideo())
                                 <div>
                                     <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
                                 </div>
                             @endif
 
+                            {{ icons($file->extension) }}
                             <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
 
                             @if ($allowDownload)

@@ -182,11 +182,18 @@
                                         <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                                     @endif
 
+                                    @if ($file->isVideo())
+                                        <div>
+                                            <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                                        </div>
+                                    @endif
+
                                     @if ($file->isAudio())
                                         <div>
                                             <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
                                         </div>
                                     @endif
+
                                     {{ icons($file->extension) }}
                                     <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                                 </div>

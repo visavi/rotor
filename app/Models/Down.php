@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
-use FFMpeg\FFProbe;
-use FFMpeg\Format\Video\X264;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,6 +36,7 @@ use ZipArchive;
  */
 class Down extends BaseModel
 {
+    use ConvertVideoTrait;
     use UploadTrait;
 
     /**
@@ -172,53 +172,6 @@ class Down extends BaseModel
         $this->addFileToArchive($uploadFile);
 
         return $uploadFile;
-    }
-
-    /**
-     * Конвертирует видео
-     */
-    private function convertVideo(array $file): void
-    {
-        $isVideo = str_contains($file['mime'], 'video/');
-
-        // Обработка видео
-        if ($isVideo && config('ffmpeg.enabled')) {
-            $ffconfig = [
-                'ffmpeg.binaries'  => config('ffmpeg.path'),
-                'ffprobe.binaries' => config('ffmpeg.ffprobe.path'),
-                'ffmpeg.threads'   => config('ffmpeg.threads'),
-                'timeout'          => config('ffmpeg.timeout'),
-            ];
-
-            // Сохраняем скрин с 5 секунды
-            /*$ffmpeg = FFMpeg::create($ffconfig);
-            $video = $ffmpeg->open(public_path($file['path']));
-
-            $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save(public_path($file['path'] . '.jpg'));
-
-            $this->files()->create([
-                'hash'       => $file['path'] . '.jpg',
-                'name'       => 'screenshot.jpg',
-                'size'       => filesize(public_path($file['path'] . '.jpg')),
-                'user_id'    => getUser('id'),
-                'created_at' => SITETIME,
-            ]);*/
-
-            // Перекодируем видео в h264
-            $ffprobe = FFProbe::create($ffconfig);
-            $video = $ffprobe
-                ->streams(public_path($file['path']))
-                ->videos()
-                ->first();
-
-            if ($video && $file['extension'] === 'mp4' && $video->get('codec_name') !== 'h264') {
-                $format = new X264('libmp3lame', 'libx264');
-                $video->save($format, public_path($file['path'] . '.convert'));
-
-                rename(public_path($file['path'] . '.convert'), public_path($file['path']));
-            }
-        }
     }
 
     /**

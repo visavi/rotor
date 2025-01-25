@@ -22,6 +22,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class File extends BaseModel
 {
+    public const VIDEO_EXTENSIONS = ['mp4', 'webm'];
+    public const AUDIO_EXTENSIONS = ['mp3', 'wav', 'ogg'];
+    public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
+
     /**
      * Indicates if the model should be timestamped.
      */
@@ -53,7 +57,7 @@ class File extends BaseModel
      */
     public function isImage(): bool
     {
-        return in_array($this->extension, explode(',', setting('image_extensions')), true);
+        return in_array($this->extension, self::IMAGE_EXTENSIONS, true);
     }
 
     /**
@@ -61,7 +65,15 @@ class File extends BaseModel
      */
     public function isAudio(): bool
     {
-        return $this->extension === 'mp3';
+        return in_array($this->extension, self::AUDIO_EXTENSIONS, true);
+    }
+
+    /**
+     * Является ли файл видео
+     */
+    public function isVideo(): bool
+    {
+        return in_array($this->extension, self::VIDEO_EXTENSIONS, true);
     }
 
     /**

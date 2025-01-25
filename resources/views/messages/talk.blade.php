@@ -59,11 +59,23 @@
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
                             @foreach ($data->files as $file)
                                 <div class="media-file">
-                                    {{ icons($file->extension) }}
-                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})<br>
                                     @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a>
+                                        <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
                                     @endif
+
+                                    @if ($file->isVideo())
+                                        <div>
+                                            <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                                        </div>
+                                    @endif
+
+                                    @if ($file->isAudio())
+                                        <div>
+                                            <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                                        </div>
+                                    @endif
+                                    {{ icons($file->extension) }}
+                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                                 </div>
                             @endforeach
                         </div>

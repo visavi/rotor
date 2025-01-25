@@ -53,7 +53,7 @@ class PictureController extends Controller
             $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);
 
             if ($validator->isValid()) {
-                //-------- Удаляем старое фото и аватар ----------//
+                // -------- Удаляем старое фото и аватар ----------//
                 if ($this->user->picture) {
                     deleteFile(public_path($this->user->picture));
                     deleteFile(public_path($this->user->avatar));
@@ -63,10 +63,10 @@ class PictureController extends Controller
                     $this->user->save();
                 }
 
-                //-------- Загружаем фото ----------//
+                // -------- Загружаем фото ----------//
                 $file = $this->user->uploadFile($photo, false);
 
-                //-------- Генерируем аватар -------//
+                // -------- Генерируем аватар -------//
                 $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
 
                 $image = $imageManager->read($photo);

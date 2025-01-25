@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,7 @@ use Illuminate\Support\Collection;
  */
 class Message extends BaseModel
 {
+    use ConvertVideoTrait;
     use UploadTrait;
 
     public const IN = 'in'; // Принятые
