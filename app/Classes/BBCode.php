@@ -106,11 +106,40 @@ class BBCode
             'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
             'replace' => '<div class="media-file ratio ratio-16x9"><iframe src="//www.youtube.com/embed/$2" allowfullscreen></iframe></div>',
         ],
+        'video' => [
+            'pattern'  => '/\[video\](.+?)\[\/video\]/',
+            'callback' => 'videoReplace',
+        ],
         'username' => [
             'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
             'callback' => 'userReplace',
         ],
     ];
+
+    public function videoReplace(array $match)
+    {
+        // Проверяем, является ли ссылка YouTube
+        if (preg_match('/youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=|embed\/|watch\?v=))([\w-]{11})/i', $match[1], $youtubeMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//www.youtube.com/embed/' . $youtubeMatches[1] . '" allowfullscreen></iframe></div>';
+        }
+
+        // Проверяем, является ли ссылка VK
+        if (preg_match('/vk\.com\/video(-?\d+)_(\d+)/i', $match[1], $vkMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//vk.com/video_ext.php?oid=' . $vkMatches[1] . '&id=' . $vkMatches[2] . '&hash=515a06e22f3b6a8c" allowfullscreen></iframe></div>';
+        }
+
+        // Проверяем, является ли ссылка Rutube
+        if (preg_match('/rutube\.ru\/(?:video\/|play\/embed\/)([a-zA-Z0-9]+)/i', $match[1], $rutubeMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//rutube.ru/play/embed/' . $rutubeMatches[1] . '" allowfullscreen></iframe></div>';
+        }
+
+        // Проверяем, является ли ссылка Яндекс.Видео
+        if (preg_match('/yandex\.ru\/video\/(?:preview|embed|touch\/preview)\/(\d+)/i', $match[1], $yandexMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//yandex.ru/video/embed/' . $yandexMatches[1] . '" allowfullscreen></iframe></div>';
+        }
+
+        return $match[0];
+    }
 
     /**
      * Обрабатывает текст
@@ -212,7 +241,7 @@ class BBCode
      */
     public function highlightCode(array $match): string
     {
-        //Чтобы bb-код, стикеры и логины не работали внутри тега [code]
+        // Чтобы bb-код, стикеры и логины не работали внутри тега [code]
         $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;', '@' => '&#64;', '<br>' => '']);
 
         return '<pre class="prettyprint">' . $match[1] . '</pre>';

@@ -23,7 +23,7 @@ translate_ru = {
         image: 'Изображение',
         image_text: 'URL изображения',
         video: 'Видео',
-        video_link: 'Ссылка на видео с youtube',
+        video_link: 'Ссылка на видео',
         color: 'Цвет',
         color_code: 'Код цвета',
         font_size: 'Размер текста',

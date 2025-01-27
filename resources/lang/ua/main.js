@@ -23,7 +23,7 @@ translate_ua = {
         image: 'Зображення',
         image_text: 'URL зображення',
         video: 'Відео',
-        video_link: 'Посилання на відео з youtube',
+        video_link: 'Посилання на відео',
         color: 'Колір',
         color_code: 'Код кольору',
         font_size: 'Розмір тексту',

@@ -23,7 +23,7 @@ translate_en = {
         image: 'Image',
         image_text: 'Image URL',
         video: 'Video',
-        video_link: 'Youtube video link',
+        video_link: 'Video link',
         color: 'Color',
         color_code: 'Color code',
         font_size: 'Text size',

@@ -19,7 +19,7 @@ mySettings = {
 
         {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-image', openWith: '[img][![' + translate.editor.image_text + ':!:https://]!]', closeWith: '[/img]'},
 
-        {title: translate.editor.video, name: '<i class="fab fa-youtube"></i>', className: 'bb-youtube', openWith: '[youtube][![' + translate.editor.video_link + ']!]', closeWith: '[/youtube]'},
+        {title: translate.editor.video, name: '<i class="fab fa-youtube"></i>', className: 'bb-video', openWith: '[video][![' + translate.editor.video_link + ']!]', closeWith: '[/video]'},
         {title: translate.editor.color, name: '<i class="fa fa-th"></i>', className: 'bb-color', openWith: '[color=[![' + translate.editor.color_code + ']!]]', closeWith: '[/color]',
         dropMenu: [
             {name: 'Yellow', openWith: '[color=#ffd700]', closeWith: '[/color]', className: 'col1-1'},
