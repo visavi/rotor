@@ -124,7 +124,7 @@ class BBCode
         }
 
         // Проверяем, является ли ссылка VK
-        if (preg_match('/vk\.com\/video(-?\d+)_(\d+)/i', $match[1], $vkMatches)) {
+        if (preg_match('/(?:vk\.com\/video|vkvideo\.ru\/video)(-?\d+)_(\d+)/i', $match[1], $vkMatches)) {
             return '<div class="media-file ratio ratio-16x9"><iframe src="//vk.com/video_ext.php?oid=' . $vkMatches[1] . '&id=' . $vkMatches[2] . '&hash=515a06e22f3b6a8c" allowfullscreen></iframe></div>';
         }
 
