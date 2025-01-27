@@ -38,7 +38,7 @@ class BBCode
             'callback' => 'urlReplace',
         ],
         'image' => [
-            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|jpeg|png|gif|webp))\[/img\]%s',
+            'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|jpeg|png|gif|webp))\[/img\]%',
             'replace' => '<div class="media-file"><a href="$1" data-fancybox="gallery"><img src="$1" class="img-fluid" alt="image"></a></div>',
         ],
         'bold' => [
@@ -110,6 +110,10 @@ class BBCode
             'pattern'  => '/\[video\](.+?)\[\/video\]/',
             'callback' => 'videoReplace',
         ],
+        'audio' => [
+            'pattern' => '%\[audio\]((\w+://|//|/)[^\s()<>\[\]]+\.(mp3|ogg|wav|m4a|flac))\[/audio\]%',
+            'replace' => '<div><audio src="$1" style="max-width:100%;" preload="metadata" controls></audio></div>',
+        ],
         'username' => [
             'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
             'callback' => 'userReplace',
@@ -119,7 +123,7 @@ class BBCode
     /*
      * Video
      */
-    public function videoReplace(array $match)
+    public function videoReplace(array $match): string
     {
         // Проверяем, является ли ссылка YouTube
         if (preg_match('/youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=|embed\/|watch\?v=))([\w-]{11})/i', $match[1], $youtubeMatches)) {

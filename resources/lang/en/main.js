@@ -24,6 +24,8 @@ translate_en = {
         image_text: 'Image URL',
         video: 'Video',
         video_link: 'Video link',
+        audio: 'Audio',
+        audio_link: 'Audio link',
         color: 'Color',
         color_code: 'Color code',
         font_size: 'Text size',

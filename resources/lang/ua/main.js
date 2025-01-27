@@ -24,6 +24,8 @@ translate_ua = {
         image_text: 'URL зображення',
         video: 'Відео',
         video_link: 'Посилання на відео',
+        audio: 'Аудіо',
+        audio_link: 'Посилання на аудіо',
         color: 'Колір',
         color_code: 'Код кольору',
         font_size: 'Розмір тексту',
