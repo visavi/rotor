@@ -64,7 +64,6 @@ trait ConvertVideoTrait
 
                     rename(public_path($file['path'] . '.convert.mp4'), public_path($file['path']));
                 } catch (RuntimeException) {
-
                 }
             }
         }
