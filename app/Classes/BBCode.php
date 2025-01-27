@@ -116,6 +116,9 @@ class BBCode
         ],
     ];
 
+    /*
+     * Video
+     */
     public function videoReplace(array $match)
     {
         // Проверяем, является ли ссылка YouTube
@@ -133,9 +136,19 @@ class BBCode
             return '<div class="media-file ratio ratio-16x9"><iframe src="//rutube.ru/play/embed/' . $rutubeMatches[1] . '" allowfullscreen></iframe></div>';
         }
 
-        // Проверяем, является ли ссылка Яндекс.Видео
-        if (preg_match('/yandex\.ru\/video\/(?:preview|embed|touch\/preview)\/(\d+)/i', $match[1], $yandexMatches)) {
-            return '<div class="media-file ratio ratio-16x9"><iframe src="//yandex.ru/video/embed/' . $yandexMatches[1] . '" allowfullscreen></iframe></div>';
+        // Проверяем, является ли ссылка Vimeo
+        if (preg_match('/vimeo\.com\/(?:embed\/)?(\d+)/i', $match[1], $vimeoMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//player.vimeo.com/video/' . $vimeoMatches[1] . '" allowfullscreen></iframe></div>';
+        }
+
+        // Проверяем, является ли ссылка Coub
+        if (preg_match('/coub\.com\/(?:view|embed)\/([a-zA-Z0-9]+)/i', $match[1], $coubMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//coub.com/embed/' . $coubMatches[1] . '" allowfullscreen></iframe></div>';
+        }
+
+        // Проверяем, является ли ссылка Ok.ru
+        if (preg_match('/ok\.ru\/(?:video|video\/embed)\/(\d+)/i', $match[1], $okMatches)) {
+            return '<div class="media-file ratio ratio-16x9"><iframe src="//ok.ru/videoembed/' . $okMatches[1] . '" allowfullscreen></iframe></div>';
         }
 
         return $match[0];
