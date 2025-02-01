@@ -32,7 +32,9 @@
                 </div>
 
                 <div class="section-content">
-                    {{ bbCode($data->text) }}<br>
+                    <div class="section-message">
+                        {{ bbCode($data->text) }}
+                    </div>
 
                     {{ __('main.posted') }}: {{ $data->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>

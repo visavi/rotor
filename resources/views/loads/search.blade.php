@@ -35,7 +35,9 @@
                 </div>
 
                 <div class="section-content">
-                    {{ $data->shortText() }}<br>
+                    <div class="section-message">
+                        {{ $data->shortText() }}
+                    </div>
 
                     {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
                     {{ __('main.rating') }}: {{ formatNum($data->rating) }}<br>

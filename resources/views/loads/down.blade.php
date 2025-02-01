@@ -51,7 +51,7 @@
             @endforeach
         @endif
 
-        <div class="section-message mb-3">
+        <div class="section-message">
             {{ bbCode($down->text) }}
         </div>
 

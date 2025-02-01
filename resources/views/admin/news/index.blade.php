@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="section-content">
-                    <div class="section-message row mb-3">
+                    <div class="section-message row">
                         @if ($data->image)
                             <div class="col-sm-3 mb-3">
                                 <a href="{{ $data->image }}" data-fancybox="gallery-{{ $data->id }}">{{ resizeImage($data->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $data->title]) }}</a>

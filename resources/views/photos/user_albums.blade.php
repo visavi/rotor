@@ -38,7 +38,9 @@
                     @include('app/_carousel', ['model' => $photo])
 
                     @if ($photo->text)
-                       {{ bbCode($photo->text) }}<br>
+                        <div class="section-message">
+                            {{ bbCode($photo->text) }}
+                        </div>
                     @endif
 
                     {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>

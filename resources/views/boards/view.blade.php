@@ -58,7 +58,7 @@
 
             <div class="row">
                 <div class="col-md-10">
-                    <div class="section-message mb-3">
+                    <div class="section-message">
                         {{ bbCode($item->text) }}
                     </div>
                     <div>

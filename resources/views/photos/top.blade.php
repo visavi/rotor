@@ -33,7 +33,9 @@
                 <div class="section-content">
                     @include('app/_carousel', ['model' => $photo])
 
-                    <br>{{ bbCode($photo->text) }}<br>
+                    <div class="section-message">
+                        {{ bbCode($photo->text) }}
+                    </div>
 
                         {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
                     <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})

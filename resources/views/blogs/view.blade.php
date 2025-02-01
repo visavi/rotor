@@ -50,7 +50,7 @@
     <hr>
 
     <div class="mb-3">
-        <div class="section-message mb-3">
+        <div class="section-message">
             {{ bbCode($article->text) }}
         </div>
 

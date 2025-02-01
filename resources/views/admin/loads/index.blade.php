@@ -48,18 +48,19 @@
                 <div>
                     @if ($category->children->isNotEmpty())
                         @foreach ($category->children as $child)
-                            <i class="fa fa-angle-right"></i> <b><a href="/admin/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
-                            @if ($child->new)
-                                ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
-                            @else
-                                ({{ $child->count_downs }})
-                            @endif
+                            <div>
+                                <i class="fa fa-angle-right"></i> <b><a href="/admin/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
+                                @if ($child->new)
+                                    ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                                @else
+                                    ({{ $child->count_downs }})
+                                @endif
 
-                            @if (isAdmin('boss'))
-                                <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="/admin/loads/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
-                            @endif
-                            <br>
+                                @if (isAdmin('boss'))
+                                    <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                                    <a href="/admin/loads/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                                @endif
+                            </div>
                         @endforeach
                     @endif
                 </div>

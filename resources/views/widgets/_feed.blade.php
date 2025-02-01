@@ -156,7 +156,9 @@
                 @include('app/_carousel', ['model' => $post])
 
                 @if ($post->text)
-                    {{ bbCode($post->text) }}<br>
+                    <div class="section-message">
+                        {{ bbCode($post->text) }}
+                    </div>
                 @endif
             </div>
 
@@ -209,16 +211,18 @@
             </div>
 
             <div class="section-content">
-                {{ $post->shortText() }}
-            </div>
+                <div class="section-message">
+                    {{ $post->shortText() }}
+                </div>
 
-            <div class="section-body">
-                <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
-                <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
-            </div>
+                <div class="section-body">
+                    <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
+                </div>
 
-            <i class="fa-regular fa-comment"></i> <a href="/articles/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
-            <a href="/articles/end/{{ $post->id }}">&raquo;</a>
+                <i class="fa-regular fa-comment"></i> <a href="/articles/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
+                <a href="/articles/end/{{ $post->id }}">&raquo;</a>
+            </div>
         </div>
     @endif
 
@@ -263,7 +267,7 @@
                 @include('app/_carousel', ['model' => $post, 'files' => $post->getImages()])
             @endif
 
-            <div class="section-message mb-3">
+            <div class="section-message">
                 {{ bbCode($post->text) }}
             </div>
 
@@ -353,7 +357,7 @@
 
                 <div class="row">
                     <div class="col-md-10">
-                        <div class="section-message mb-3">
+                        <div class="section-message">
                             {{ bbCode($post->text) }}
                         </div>
                         <div>

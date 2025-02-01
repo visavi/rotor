@@ -30,13 +30,14 @@
             <div class="section-content">
                 @if ($board->children->isNotEmpty())
                     @foreach ($board->children as $child)
-                        <i class="fa fa-angle-right"></i> <b><a href="/admin/boards/{{ $child->id }}">{{ $child->name }}</a></b>
+                        <div>
+                            <i class="fa fa-angle-right"></i> <b><a href="/admin/boards/{{ $child->id }}">{{ $child->name }}</a></b>
 
-                        ({{ $child->count_items }})
+                            ({{ $child->count_items }})
 
-                        <a href="/admin/boards/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/boards/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
-                        <br>
+                            <a href="/admin/boards/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="/admin/boards/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                        </div>
                     @endforeach
                 @endif
             </div>

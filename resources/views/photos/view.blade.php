@@ -50,7 +50,9 @@
 
         <div class="section-content">
             @if ($photo->text)
-                {{ bbCode($photo->text) }}<br>
+                <div class="section-message">
+                    {{ bbCode($photo->text) }}
+                </div>
             @endif
 
             <div class="my-2 js-rating">{{ __('main.rating') }}:

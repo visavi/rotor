@@ -49,12 +49,14 @@
             <div>
                 @if ($category->children->isNotEmpty())
                     @foreach ($category->children as $child)
-                        <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b>
-                        @if ($child->new)
-                            ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)<br>
-                        @else
-                            ({{ $child->count_downs }})<br>
-                        @endif
+                        <div>
+                            <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b>
+                            @if ($child->new)
+                                ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                            @else
+                                ({{ $child->count_downs }})
+                            @endif
+                        </div>
                     @endforeach
                 @endif
             </div>
