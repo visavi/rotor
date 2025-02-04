@@ -80,6 +80,7 @@
                         </div>
                     </li>
                 @endif
+
                 <li class="dropdown js-messages-block">
                     <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">
                         <i class="far fa-envelope fa-lg"></i>

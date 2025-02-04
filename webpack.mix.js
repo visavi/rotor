@@ -42,6 +42,7 @@ mix.webpackConfig({
         alias: {
             'js': path.resolve(__dirname, 'public/assets/js'),
             'css': path.resolve(__dirname, 'public/assets/css'),
+            'themes': path.resolve(__dirname, 'public/themes'),
         }
     }
 });

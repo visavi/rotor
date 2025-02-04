@@ -1,13 +1,13 @@
 // This files are essential for the theme
-@import 'css/../../themes/default/src/sass/variables';
-@import '~bootstrap/scss/bootstrap';
+@import 'themes/default/src/sass/variables';
+@import 'bootstrap/scss/bootstrap';
 
 @import '@fortawesome/fontawesome-free/scss/brands';
 @import '@fortawesome/fontawesome-free/scss/regular';
 @import '@fortawesome/fontawesome-free/scss/solid';
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
-@import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
+@import "@fancyapps/ui/dist/fancybox/fancybox.css";
 @import 'css/markitup';
 @import 'css/toastr';
 @import 'css/prettify';
