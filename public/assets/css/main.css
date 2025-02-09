@@ -35,11 +35,8 @@
 }
 
 .section-media {
-  padding: .6rem;
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-  border: 1px solid #eee;
-  border-left: .25rem solid #d9534f;
 }
 
 .avatar-default {
