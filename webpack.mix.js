@@ -26,9 +26,6 @@ mix
     .js('public/themes/motor/src/js/app.js', 'public/themes/motor/dist')
     .sass('public/themes/motor/src/sass/app.scss', 'public/themes/motor/dist')
 
-    /* default-dark */
-    .css('public/themes/default-dark/src/dark.css', 'public/themes/default-dark/dist')
-
     /* lang */
     .js('resources/lang/*/main.js', 'public/assets/js/dist/lang.js')
 
