@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-if ($argc < 3 ) {
-    exit('Usage: upgrade <tag1> <tag2>' . PHP_EOL);
+if ($argc < 3) {
+    exit('Usage: ./upgrade-cli <tag1> <tag2>' . PHP_EOL);
 }
 
 [, $commit1, $commit2] = $argv;
@@ -16,11 +16,10 @@ if (! file_exists($directory)) {
 
 exec('git pull');
 $command = shell_exec('git diff ' . $commit1 . ' ' . $commit2 . ' --name-only');
-$files   = explode(PHP_EOL, $command);
+$files = explode(PHP_EOL, $command);
 
 foreach ($files as $file) {
     if ($file && file_exists($baseDir . '/' . $file)) {
-
         if (! file_exists($directory . '/' . dirname($file))) {
             mkdir($directory . '/' . dirname($file), 0777, true);
         }
