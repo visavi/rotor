@@ -42,8 +42,19 @@
         <a href="/users?type={{ $type }}&amp;sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
         <hr>
 
+        <div class="section-form mb-3 shadow">
+            <form action="/users?type={{ $type }}&amp;sort={{ $sort }}" method="post">
+                <div class="input-group{{ hasError('user') }}">
+                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
+                    <button class="btn btn-primary">{{ __('main.search') }}</button>
+                </div>
+                <div class="invalid-feedback">{{ textError('user') }}</div>
+            </form>
+        </div>
+        <hr>
+
         @foreach ($users as $key => $data)
-            <div class="section mb-3 shadow{{ $user === $data->login ? ' bg-warning' : ''}}">
+            <div class="section mb-3 shadow{{ $position === $users->firstItem() + $key ? ' bg-info-subtle' : ''}}">
                 <div class="user-avatar">
                     {{ $data->getAvatar() }}
                     {{ $data->getOnline() }}
@@ -67,15 +78,6 @@
         @endforeach
 
         {{ $users->links() }}
-        <div class="section-form mb-3 shadow">
-            <form action="/users?type={{ $type }}&amp;sort={{ $sort }}" method="post">
-                <div class="input-group{{ hasError('user') }}">
-                    <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
-                    <button class="btn btn-primary">{{ __('main.search') }}</button>
-                </div>
-                <div class="invalid-feedback">{{ textError('user') }}</div>
-            </form>
-        </div>
 
         <div class="mb-3">
             {{ __('main.total_users') }}: <b>{{ $users->total() }}</b>

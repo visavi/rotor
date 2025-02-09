@@ -23,7 +23,9 @@ class ListController extends Controller
     {
         $type = check($request->input('type', 'users'));
         $sort = check($request->input('sort', 'point'));
+        $position = (int) $request->input('position');
         $user = $request->input('user', getUser('login'));
+
         $order = match ($sort) {
             'time'   => 'created_at',
             'rating' => 'rating',
@@ -31,7 +33,7 @@ class ListController extends Controller
             default  => 'point',
         };
 
-        $users = User::query()
+        $baseSearch = User::query()
             ->when($type === 'admins', static function (Builder $query) {
                 return $query->whereIn('level', User::ADMIN_GROUPS);
             })
@@ -39,35 +41,35 @@ class ListController extends Controller
                 return $query->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME));
             })
             ->orderByDesc($order)
+            ->orderBy('id');
+
+        $users = $baseSearch
             ->paginate(setting('userlist'))
             ->appends(compact('type', 'sort'));
 
         if ($request->isMethod('post')) {
-            $position = User::query()
-                ->when($type === 'admins', static function (Builder $query) {
-                    return $query->whereIn('level', User::ADMIN_GROUPS);
-                })
-                ->when($type === 'birthdays', static function (Builder $query) {
-                    return $query->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME));
-                })
-                ->orderByDesc($order)
-                ->get()
-                ->where('login', $user)
-                ->keys()
-                ->first();
+            $search = $baseSearch
+                ->select('login', 'name')
+                ->toBase()
+                ->lazy();
 
-            if ($position !== null) {
+            $position = $search->search(function ($userModel) use ($user) {
+                return utfLower($userModel->login) === utfLower($user)
+                    || mb_stripos($userModel->login, $user) !== false
+                    || mb_stripos((string) $userModel->name, $user) !== false;
+            });
+
+            if ($position !== false) {
                 $position++;
                 $end = ceil($position / setting('userlist'));
 
-                setFlash('success', __('users.rating_position', ['position' => $position]));
-
-                return redirect('users?page=' . $end . '&user=' . $user . '&type=' . $type . '&sort=' . $sort);
+                return redirect('users?page=' . $end . '&user=' . $user . '&type=' . $type . '&sort=' . $sort . '&position=' . $position)
+                    ->with('success', __('users.rating_position', ['position' => $position]));
             }
 
-            setFlash('danger', __('validator.user'));
+            session()->flash('danger', __('validator.user'));
         }
 
-        return view('users/users', compact('users', 'user', 'type', 'sort'));
+        return view('users/users', compact('users', 'user', 'type', 'sort', 'position'));
     }
 }
