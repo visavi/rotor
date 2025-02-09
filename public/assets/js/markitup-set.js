@@ -23,6 +23,7 @@ mySettings = {
 
         {title: translate.editor.audio, name: '<i class="fa-solid fa-music"></i>', className: 'bb-audio', openWith: '[audio][![' + translate.editor.audio_link + ':!:https://]!]', closeWith: '[/audio]'},
 
+        {separator: '---------------'},
         {title: translate.editor.color, name: '<i class="fa fa-th"></i>', className: 'bb-color', openWith: '[color=[![' + translate.editor.color_code + ']!]]', closeWith: '[/color]',
         dropMenu: [
             {name: 'Yellow', openWith: '[color=#ffd700]', closeWith: '[/color]', className: 'col1-1'},
@@ -38,7 +39,6 @@ mySettings = {
             {name: 'Cyan', openWith: '[color=#00ffff]', closeWith: '[/color]', className: 'col3-3'}
         ]},
 
-        {separator: '---------------'},
         {title: translate.editor.font_size, name: '<i class="fa fa-font"></i>', className: 'bb-size', openWith: '[size=[![' + translate.editor.font_text + ']!]]', closeWith: '[/size]',
         dropMenu :[
             {name: 'x-small', openWith: '[size=1]', closeWith: '[/size]'},
@@ -48,8 +48,6 @@ mySettings = {
             {name: 'x-large', openWith: '[size=5]', closeWith: '[/size]'}
         ]},
 
-        {title: translate.editor.center, name: '<i class="fa fa-align-center"></i>', className: 'bb-center', openWith: '[center]', closeWith: '[/center]'},
-        {title: translate.editor.spoiler, name: '<i class="fa fa-plus-square"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + translate.editor.spoiler_title + ']!]]', closeWith: '[/spoiler]', placeHolder: translate.editor.spoiler_text},
         {
             title: translate.editor.sticker,
             name: '<i class="fa fa-smile"></i>',
@@ -77,11 +75,13 @@ mySettings = {
         },
 
         {separator: '---------------'},
+        {title: translate.editor.spoiler, name: '<i class="fa fa-plus-square"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + translate.editor.spoiler_title + ']!]]', closeWith: '[/spoiler]', placeHolder: translate.editor.spoiler_text},
         {title: translate.editor.hide, name: '<i class="fa fa-eye-slash"></i>', className: 'bb-hide', openWith: '[hide]', closeWith: '[/hide]'},
         {title: translate.editor.quote, name: '<i class="fa fa-quote-right"></i>', className: 'bb-quote', openWith: '[quote]', closeWith: '[/quote]'},
         {title: translate.editor.code, name: '<i class="fa fa-code"></i>', className: 'bb-code', openWith: '[code]', closeWith: '[/code]'},
 
         {separator: '---------------'},
+        {title: translate.editor.center, name: '<i class="fa fa-align-center"></i>', className: 'bb-center', openWith: '[center]', closeWith: '[/center]'},
         {title: translate.editor.unorderedlist, name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
         {title: translate.editor.orderedlist, name: '<i class="fa fa-list-ol"></i>', className: 'bb-orderedlist', multiline:true, openBlockWith: '[list=1]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
 
