@@ -4,6 +4,17 @@ $(function () {
     translate = window['translate_' + currentLang];
 
     prettyPrint();
+    tags.init(".input-tag", {
+        allowNew: true,
+        server: "/blogs/tags/search",
+        liveServer: true,
+        clearEnd: true,
+        allowClear: true,
+        suggestionsThreshold: 2,
+        max: 5,
+        separator: [','],
+        addOnBlur: true,
+    });
 
     bootbox.addLocale('my', {
         OK : translate.buttons.ok,
