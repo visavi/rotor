@@ -22,4 +22,5 @@ return [
     'photo_success_edited'   => 'Photo successfully edited!',
     'photo_has_comments'     => 'It is forbidden to delete photos to which there are comments!',
     'photo_success_deleted'  => 'Photo successfully deleted!',
+    'photos_closed'          => 'Adding photos is prohibited by the site administration',
 ];

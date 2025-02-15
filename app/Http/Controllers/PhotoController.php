@@ -65,6 +65,10 @@ class PhotoController extends Controller
      */
     public function create(Request $request, Validator $validator, Flood $flood)
     {
+        if (! isAdmin() && ! setting('photos_create')) {
+            abort(200, __('photos.photos_closed'));
+        }
+
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }

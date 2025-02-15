@@ -197,7 +197,7 @@ class ArticleController extends Controller
         $cid = int($request->input('cid'));
 
         if (! isAdmin() && ! setting('blog_create')) {
-            abort(200, __('main.articles_closed'));
+            abort(200, __('blogs.articles_closed'));
         }
 
         if (! $user = getUser()) {

@@ -118,6 +118,7 @@ class SettingSeeder extends Seeder
             ['name' => 'openreg', 'value' => 1],
             ['name' => 'performance', 'value' => 1],
             ['name' => 'photogroup', 'value' => 10],
+            ['name' => 'photos_create', 'value' => 1],
             ['name' => 'postnews', 'value' => 10],
             ['name' => 'postoffers', 'value' => 10],
             ['name' => 'previewsize', 'value' => 500],

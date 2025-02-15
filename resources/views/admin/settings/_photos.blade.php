@@ -16,5 +16,11 @@
         <div class="invalid-feedback">{{ textError('sets[photogroup]') }}</div>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="sets[photos_create]">
+        <input type="checkbox" class="form-check-input" value="1" name="sets[photos_create]" id="photos_create"{{ getInput('sets.photos_create', $settings['photos_create']) ? ' checked' : '' }}>
+        <label class="form-check-label" for="photos_create">{{ __('settings.photos_create') }}</label>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

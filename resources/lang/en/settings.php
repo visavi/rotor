@@ -136,6 +136,7 @@ return [
 
     'photos_per_page' => 'Number of photos on page',
     'photos_groups'   => 'Groups per page in the gallery',
+    'photos_create'   => 'Allow users to upload photos',
 
     'points_transfer'     => 'Asset for money transfer',
     'points_rating_edit'  => 'Asset for changing reputation',
