@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -20,7 +21,6 @@ use Illuminate\Support\HtmlString;
  * @property int user_id
  * @property string title
  * @property string text
- * @property string tags
  * @property int rating
  * @property int visits
  * @property int count_comments
@@ -102,6 +102,16 @@ class Article extends BaseModel
     }
 
     /**
+     * Tags
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'article_tags', 'article_id', 'tag_id')
+            ->withPivot('sort')
+            ->orderBy('article_tags.sort');
+    }
+
+    /**
      * Возвращает путь к первому файлу
      *
      * @return HtmlString|null код изображения
@@ -137,30 +147,6 @@ class Article extends BaseModel
         }
 
         return new HtmlString(bbCode($this->text));
-    }
-
-    /**
-     * Возвращает размер шрифта для облака тегов
-     *
-     * @param int   $count
-     * @param float $minCount
-     * @param float $maxCount
-     * @param int   $minSize
-     * @param int   $maxSize
-     */
-    public static function logTagSize($count, $minCount, $maxCount, $minSize = 10, $maxSize = 30): int
-    {
-        $minCount = log($minCount + 1);
-        $maxCount = log($maxCount + 1);
-
-        $diffSize = $maxSize - $minSize;
-        $diffCount = $maxCount - $minCount;
-
-        if (empty($diffCount)) {
-            $diffCount = 1;
-        }
-
-        return (int) round($minSize + (log(1 + $count) - $minCount) * ($diffSize / $diffCount));
     }
 
     /**

@@ -26,7 +26,14 @@
             <div class="section-content">
                 {{ __('blogs.blog') }}: <a href="/blogs/{{ $article->category_id }}">{{ $article->name }}</a><br>
                 {{ __('main.views') }}: {{ $article->visits }}<br>
-                {{ __('blogs.tags') }}: {{ $article->tags }}<br>
+
+                <div class="mb-3">
+                    {{ __('blogs.tags') }}:
+                    @foreach ($article->tags as $tag)
+                        {{ $tag->name }}{{ ! $loop->last ? ', ' : '' }}
+                    @endforeach
+                </div>
+
                 {{ __('main.author') }}: {{ $article->user->getProfile() }}  ({{ dateFixed($article->created_at) }})
             </div>
         </div>

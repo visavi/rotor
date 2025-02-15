@@ -162,7 +162,8 @@ Route::controller(ArticleController::class)
         Route::get('/', 'index');
         Route::get('/{id}', 'blog');
         Route::get('/tags', 'tags');
-        Route::get('/tags/{tag}', 'searchTag')->where('tag', '.+');
+        Route::get('/tags-search', 'searchTags');
+        Route::get('/tags/{tag}', 'getTag')->where('tag', '.+');
         Route::get('/authors', 'authors');
         Route::get('/active/articles', 'userArticles');
         Route::get('/active/comments', 'userComments');
@@ -715,7 +716,7 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
                 Route::post('/delete', 'delete');
             });
 
-        /* Денежный переводы*/
+        /* Денежный переводы */
         Route::controller(AdminTransferController::class)
             ->prefix('transfers')
             ->group(function () {
@@ -898,7 +899,7 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
                 Route::get('/delete', 'delete');
             });
 
-        /* Пользовательская реклама  */
+        /* Пользовательская реклама */
         Route::controller(AdminUserAdvertController::class)
             ->prefix('adverts')
             ->group(function () {

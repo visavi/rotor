@@ -45,9 +45,15 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
+            <?php $inputTags = getInput('tags', []); ?>
             <div class="mb-3{{ hasError('tags') }}">
-                <label for="inputTags" class="form-label">{{ __('blogs.tags') }}:</label>
-                <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags') }}" required>
+                <label for="tags" class="form-label">{{ __('blogs.tags') }}:</label>
+                <select class="form-select input-tag" id="tags" name="tags[]" multiple required>
+                    <option disabled value="">{{ __('blogs.tags') }}...</option>
+                    @foreach ($inputTags as $tag)
+                        <option value="{{ $tag }}" selected>{{ $tag }}</option>
+                    @endforeach
+                </select>
                 <div class="invalid-feedback">{{ textError('tags') }}</div>
             </div>
 

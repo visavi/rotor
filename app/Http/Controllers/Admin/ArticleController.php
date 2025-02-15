@@ -7,9 +7,11 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\Article;
 use App\Models\Blog;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ArticleController extends AdminController
@@ -206,20 +208,32 @@ class ArticleController extends AdminController
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $tags = $request->input('tags');
+            $tags = (array) $request->input('tags');
+            $tags = array_unique(array_diff($tags, ['']));
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
-                ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')]);
+                ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
+
+            foreach ($tags as $tag) {
+                $validator->length($tag, 2, 30, ['tags' => __('blogs.article_error_tags')]);
+            }
 
             if ($validator->isValid()) {
                 $article->update([
                     'title' => $title,
                     'text'  => $text,
-                    'tags'  => $tags,
                 ]);
+
+                $tagIds = [];
+                foreach ($tags as $key => $tagName) {
+                    $tag = Tag::query()->firstOrCreate(['name' => Str::lower($tagName)]);
+                    $tagIds[$tag->id] = ['sort' => $key];
+                }
+
+                $article->tags()->sync($tagIds);
 
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));

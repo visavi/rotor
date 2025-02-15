@@ -15,10 +15,11 @@
 @section('content')
     @if ($tags)
         <div style="text-align:center">
-            @foreach ($tags as $key => $val)
-                <?php $fontsize = App\Models\Article::logTagSize($val, $min, $max); ?>
-
-                <a href="/blogs/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}pt">{{ $key }}</span></a>
+            @foreach ($tags as $tag => $count)
+                @php
+                    $size = $min === $max ? 14 : round(12 + (24 * log($count - $min + 1) / log($max - $min + 1)));
+                @endphp
+                <a href="/blogs/tags/{{ urlencode($tag) }}"><span style="font-size:{{ $size }}px">{{ $tag }}</span></a>
             @endforeach
         </div>
     @else

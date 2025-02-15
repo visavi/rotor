@@ -11,10 +11,13 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Reader;
+use App\Models\Tag;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ArticleController extends Controller
@@ -77,7 +80,7 @@ class ArticleController extends Controller
                     ->where('pollings.relate_type', Article::$morphName)
                     ->where('pollings.user_id', getUser('id'));
             })
-            ->with('category.parent')
+            ->with('category.parent', 'tags')
             ->first();
 
         if (! $article) {
@@ -86,15 +89,7 @@ class ArticleController extends Controller
 
         Reader::countingStat($article);
 
-        $tagsList = preg_split('/[\s]*[,][\s]*/', $article->tags);
-
-        $tags = [];
-        foreach ($tagsList as $value) {
-            $tags[] = '<a href="/blogs/tags/' . check(urlencode($value)) . '">' . check($value) . '</a>';
-        }
-        $tags = implode(', ', $tags);
-
-        return view('blogs/view', compact('article', 'tags'));
+        return view('blogs/view', compact('article'));
     }
 
     /**
@@ -121,7 +116,8 @@ class ArticleController extends Controller
             $cid = int($request->input('cid'));
             $title = $request->input('title');
             $text = $request->input('text');
-            $tags = $request->input('tags');
+            $tags = (array) $request->input('tags');
+            $tags = array_unique(array_diff($tags, ['']));
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
@@ -130,8 +126,12 @@ class ArticleController extends Controller
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
-                ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
-                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
+                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
+                ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
+
+            foreach ($tags as $tag) {
+                $validator->length($tag, 2, 30, ['tags' => __('blogs.article_error_tags')]);
+            }
 
             if ($category) {
                 $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
@@ -148,8 +148,15 @@ class ArticleController extends Controller
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
-                    'tags'        => $tags,
                 ]);
+
+                $tagIds = [];
+                foreach ($tags as $key => $tagName) {
+                    $tag = Tag::query()->firstOrCreate(['name' => Str::lower($tagName)]);
+                    $tagIds[$tag->id] = ['sort' => $key];
+                }
+
+                $article->tags()->sync($tagIds);
 
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
@@ -206,7 +213,8 @@ class ArticleController extends Controller
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $tags = $request->input('tags');
+            $tags = (array) $request->input('tags');
+            $tags = array_unique(array_diff($tags, ['']));
 
             /** @var Blog $category */
             $category = Blog::query()->find($cid);
@@ -215,9 +223,13 @@ class ArticleController extends Controller
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
-                ->length($tags, 2, 50, ['tags' => __('blogs.article_error_tags')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')]);
+                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
+                ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
+
+            foreach ($tags as $tag) {
+                $validator->length($tag, 2, 30, ['tags' => __('blogs.article_error_tags')]);
+            }
 
             if ($category) {
                 $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
@@ -232,9 +244,13 @@ class ArticleController extends Controller
                     'user_id'     => $user->id,
                     'title'       => $title,
                     'text'        => $text,
-                    'tags'        => $tags,
                     'created_at'  => SITETIME,
                 ]);
+
+                foreach ($tags as $key => $tagName) {
+                    $tag = Tag::query()->firstOrCreate(['name' => Str::lower($tagName)]);
+                    $article->tags()->attach($tag->id, ['sort' => $key]);
+                }
 
                 $category->increment('count_articles');
 
@@ -456,18 +472,17 @@ class ArticleController extends Controller
     public function tags(): View
     {
         $tags = Cache::remember('tagCloud', 3600, static function () {
-            $allTags = Article::query()
-                ->select('tags')
-                ->pluck('tags')
-                ->all();
+            $allTags = Tag::query()
+                ->withCount('articles')
+                ->orderBy('articles_count', 'desc')
+                ->limit(100)
+                ->get()
+                ->pluck('articles_count', 'name')
+                ->toArray();
 
-            $stingTag = implode(',', $allTags);
-            $dumptags = preg_split('/[\s]*[,][\s]*/', $stingTag, -1, PREG_SPLIT_NO_EMPTY);
-            $allTags = array_count_values(array_map('utfLower', $dumptags));
-
-            arsort($allTags);
-            array_splice($allTags, 100);
-            shuffleAssoc($allTags);
+            uksort($allTags, static function () {
+                return mt_rand(-1, 1);
+            });
 
             return $allTags;
         });
@@ -481,43 +496,60 @@ class ArticleController extends Controller
     /**
      * Поиск по тегам
      */
-    public function searchTag(string $tag, Request $request): View|RedirectResponse
+    public function getTag(string $tag): View|RedirectResponse
     {
         $tag = urldecode($tag);
 
-        if (! isUtf($tag)) {
-            $tag = winToUtf($tag);
-        }
-
-        if (utfStrlen($tag) < 2) {
+        if (Str::length($tag) < 2) {
             setFlash('danger', __('blogs.tag_search_rule'));
 
             return redirect('blogs/tags');
         }
 
-        if ($request->session()->missing(['findresult', 'blogfind']) ||
-            $tag !== $request->session()->get('blogfind')
-        ) {
-            $result = Article::query()
-                ->select('id')
-                ->where('tags', 'like', '%' . $tag . '%')
-                ->limit(500)
-                ->pluck('id')
-                ->all();
+        $tagModel = Tag::query()->where('name', $tag)->first();
+        if (! $tagModel) {
+            setFlash('danger', __('main.empty_found'));
 
-            $request->session()->put('blogfind', $tag);
-            $request->session()->put('findresult', $result);
+            return redirect('blogs/tags');
         }
 
-        $articles = Article::query()
+        $articles = $tagModel->articles()
             ->select('articles.*', 'blogs.name')
-            ->whereIn('articles.id', $request->session()->get('findresult'))
             ->join('blogs', 'articles.category_id', 'blogs.id')
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'));
 
         return view('blogs/tags_search', compact('articles', 'tag'));
+    }
+
+    /**
+     * Search tags
+     */
+    public function searchTags(Request $request): JsonResponse
+    {
+        $query = $request->input('query');
+
+        if (Str::length($query) < 2) {
+            return response()->json();
+        }
+
+        $tags = Tag::query()
+            ->where('name', 'like', $query . '%')
+            ->withCount('articles')
+            ->orderByDesc('articles_count')
+            ->orderBy('name')
+            ->limit(10)
+            ->get();
+
+        $formattedTags = $tags->map(function ($tag) {
+            return [
+                'value' => $tag->name,
+                'label' => $tag->name,
+            ];
+        });
+
+        return response()->json($formattedTags);
     }
 
     /**
@@ -652,7 +684,7 @@ class ArticleController extends Controller
         $articles = collect();
 
         if ($find) {
-            $find = rawurldecode(trim(preg_replace('/[^\w\x7F-\xFF\s]/', ' ', $find)));
+            $find = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($find)));
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {

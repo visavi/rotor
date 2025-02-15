@@ -58,7 +58,10 @@
         <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small><br>
 
         <div class="my-3 fst-italic">
-            <i class="fa fa-tag"></i> {!! $tags !!}
+            <i class="fa fa-tag"></i>
+            @foreach ($article->tags as $tag)
+                <a href="/blogs/tags/{{ urlencode($tag->name) }}">{{ $tag->name }}</a> {{ ! $loop->last ? ', ' : '' }}
+            @endforeach
         </div>
 
         <div class="js-rating">{{ __('main.rating') }}:

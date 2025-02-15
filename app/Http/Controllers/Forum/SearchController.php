@@ -27,7 +27,7 @@ class SearchController extends Controller
         $data = collect();
 
         if ($find) {
-            $find = rawurldecode(trim(preg_replace('/[^\w\x7F-\xFF\s]/', ' ', $find)));
+            $find = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($find)));
 
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
