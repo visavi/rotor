@@ -34,7 +34,8 @@
     <i class="fa fa-link"></i> {{ __('pages.link_short') }}: [url]http://site.com[/url]<br><br>
 
     <i class="fa fa-image"></i> [img]{{ __('pages.image') }}[/img]<br>{{ bbCode('[img]/assets/img/images/logo.png[/img]') }}<br>
-    <i class="fab fa-youtube"></i> [youtube]{{ __('pages.video') }}[/youtube]<br>{{ bbCode('[youtube]https://www.youtube.com/watch?v=yf_YWiqqv34[/youtube]') }}<br>
+    <i class="fab fa-youtube"></i> [video]{{ __('pages.video') }}[/video]<br>{{ bbCode('[video]https://www.youtube.com/watch?v=yf_YWiqqv34[/video]') }}<br>
+    <i class="fab fa-youtube"></i> [audio]{{ __('pages.audio') }}[/audio]<br>{{ bbCode('[audio]https://download.samplelib.com/mp3/sample-3s.mp3[/audio]') }}<br>
 
     <i class="fa fa-align-center"></i> [center]{{ __('pages.center') }}[/center]{{ bbCode('[center]' . __('pages.center') . '[/center]') }}<br>
     <i class="fa fa-list-ul"></i> [list]{{ __('pages.unorderedlist') }}[/list]{{ bbCode('[list]' . __('pages.unorderedlist') . '[/list]') }}<br>

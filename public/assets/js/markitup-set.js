@@ -19,7 +19,7 @@ mySettings = {
 
         {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-image', openWith: '[img][![' + translate.editor.image_text + ':!:https://]!]', closeWith: '[/img]'},
 
-        {title: translate.editor.video, name: '<i class="fab fa-youtube"></i>', className: 'bb-video', openWith: '[video][![' + translate.editor.video_link + ']!]', closeWith: '[/video]'},
+        {title: translate.editor.video, name: '<i class="fab fa-youtube"></i>', className: 'bb-video', openWith: '[video][![' + translate.editor.video_link + ':!:https://]!]', closeWith: '[/video]'},
 
         {title: translate.editor.audio, name: '<i class="fa-solid fa-music"></i>', className: 'bb-audio', openWith: '[audio][![' + translate.editor.audio_link + ':!:https://]!]', closeWith: '[/audio]'},
 
