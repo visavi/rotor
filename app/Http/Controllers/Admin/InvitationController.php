@@ -77,7 +77,7 @@ class InvitationController extends AdminController
      */
     public function send(Request $request, Validator $validator): RedirectResponse
     {
-        $userkeys = int($request->input('userkeys'));
+        $userkeys = int($request->input('userkeys', 1));
 
         /* @var User $user */
         $user = getUserByLogin($request->input('user'));

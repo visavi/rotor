@@ -711,7 +711,7 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
             ->group(function () {
                 Route::get('/', 'index');
                 Route::match(['get', 'post'], '/create', 'create');
-                Route::post('/send', 'send');
+                Route::match(['get', 'post'], '/send', 'send');
                 Route::post('/mail', 'mail');
                 Route::post('/delete', 'delete');
             });

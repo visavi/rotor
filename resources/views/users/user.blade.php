@@ -172,10 +172,11 @@
 
                 @if (isAdmin('moder'))
                     @if (setting('invite'))
-                        <i class="fa fa-ban"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;_token={{ csrf_token() }}">{{ __('users.send_invite') }}</a><br>
+                        <i class="fa-solid fa-handshake"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;_token={{ csrf_token() }}">{{ __('users.send_invite') }}</a><br>
                     @endif
-                <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
-                <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
+                    <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
+                    <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
+                        <i class="fa-solid fa-money-bill-transfer"></i> <a href="/admin/transfers/view?user={{ $user->login }}">{{ __('index.cash_transactions') }}</a><br>
                 @endif
 
                 @if (isAdmin('boss'))

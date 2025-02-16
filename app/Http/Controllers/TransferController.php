@@ -66,7 +66,7 @@ class TransferController extends Controller
                 getUser()->decrement('money', $money);
                 $this->user->increment('money', $money);
 
-                $comment = $msg ?? __('ignores.not_specified');
+                $comment = $msg ?? __('main.not_specified');
                 $text = textNotice('transfer', ['login' => getUser('login'), 'money' => plural($money, setting('moneyname')), 'comment' => $comment]);
                 $this->user->sendMessage(null, $text);
 
