@@ -15,5 +15,5 @@
 @endif
 
 @if (setting('incount') === 5)
-    <a href="/counters"><img src="/uploads/counters/counter.png?{{ dateFixed(SITETIME, 'YmdHi', true) }}" alt="counter"></a><br>
+    <a href="/counters"><img src="/uploads/counters/counter.png?{{ date('YmdHi') }}" alt="counter"></a><br>
 @endif
