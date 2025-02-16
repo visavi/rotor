@@ -27,10 +27,11 @@ class ListController extends Controller
         $user = $request->input('user', getUser('login'));
 
         $order = match ($sort) {
-            'time'   => 'created_at',
-            'rating' => 'rating',
-            'money'  => 'money',
-            default  => 'point',
+            'created' => 'created_at',
+            'updated' => 'updated_at',
+            'rating'  => 'rating',
+            'money'   => 'money',
+            default   => 'point',
         };
 
         $baseSearch = User::query()

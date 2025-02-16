@@ -74,16 +74,13 @@ use Illuminate\Support\HtmlString;
  * @property int created_at
  * @property Collection<UserData> data
  */
-class User extends BaseModel implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract
+class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
-    use MustVerifyEmail;
     use HasFactory;
+    use MustVerifyEmail;
     use Notifiable;
     use UploadTrait;
 
@@ -337,33 +334,16 @@ class User extends BaseModel implements
      */
     public static function getLevelByKey(string $level): string
     {
-        switch ($level) {
-            case self::BOSS:
-                $status = __('main.boss');
-                break;
-            case self::ADMIN:
-                $status = __('main.admin');
-                break;
-            case self::MODER:
-                $status = __('main.moder');
-                break;
-            case self::EDITOR:
-                $status = __('main.editor');
-                break;
-            case self::USER:
-                $status = __('main.user');
-                break;
-            case self::PENDED:
-                $status = __('main.pended');
-                break;
-            case self::BANNED:
-                $status = __('main.banned');
-                break;
-            default:
-                $status = setting('statusdef');
-        }
-
-        return $status;
+        return match ($level) {
+            self::BOSS   => __('main.boss'),
+            self::ADMIN  => __('main.admin'),
+            self::MODER  => __('main.moder'),
+            self::EDITOR => __('main.editor'),
+            self::USER   => __('main.user'),
+            self::PENDED => __('main.pended'),
+            self::BANNED => __('main.banned'),
+            default      => setting('statusdef'),
+        };
     }
 
     /**

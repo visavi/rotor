@@ -38,8 +38,11 @@
         <?php $active = ($sort === 'money') ? 'success' : 'light text-dark'; ?>
         <a href="/users?type={{ $type }}&amp;sort=money" class="badge bg-{{ $active }}">{{ __('users.moneys') }}</a>
 
-        <?php $active = ($sort === 'time') ? 'success' : 'light text-dark'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
+        <?php $active = ($sort === 'created') ? 'success' : 'light text-dark'; ?>
+        <a href="/users?type={{ $type }}&amp;sort=created" class="badge bg-{{ $active }}">{{ __('main.registration_date') }}</a>
+
+        <?php $active = ($sort === 'updated') ? 'success' : 'light text-dark'; ?>
+        <a href="/users?type={{ $type }}&amp;sort=updated" class="badge bg-{{ $active }}">{{ __('users.last_visit') }}</a>
         <hr>
 
         <div class="section-form mb-3 shadow">
@@ -72,7 +75,8 @@
                     {{ __('users.assets') }}: {{ plural($data->point, setting('scorename')) }}<br>
                     {{ __('users.reputation') }}: {{ formatNum($data->rating) }}<br>
                     {{ __('users.moneys') }}: {{ plural($data->money, setting('moneyname')) }}<br>
-                    {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}
+                    {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}<br>
+                    {{ __('users.last_visit') }}: {{ $data->getVisit() }}
                 </div>
             </div>
         @endforeach
