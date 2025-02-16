@@ -83,7 +83,7 @@ function dateFixed(
         $date = Date::parse($timestamp);
     }
 
-    $shift = getUser('timezone');
+    $shift = (int) getUser('timezone');
     $dateStamp = $date->addHours($shift)->format($format);
 
     if ($original) {
