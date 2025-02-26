@@ -698,7 +698,7 @@ class ArticleController extends Controller
                     setInput($request->all());
                     setFlash('danger', __('main.empty_found'));
 
-                    return redirect('loads/search');
+                    return redirect('blogs/search');
                 }
             } else {
                 setInput($request->all());
