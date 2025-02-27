@@ -93,6 +93,7 @@ class Feed
 
         $posts = $collect
             ->sortByDesc('created_at')
+            ->sortByDesc('top')
             ->take(setting('feed_total'));
 
         $user = $this->user;

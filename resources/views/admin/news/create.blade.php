@@ -48,7 +48,7 @@
             <div class="form-check">
                 <input type="hidden" value="0" name="top">
                 <input type="checkbox" class="form-check-input" value="1" name="top" id="top"{{ getInput('top') ? ' checked' : '' }}>
-                <label for="top" class="form-check-label">{{ __('news.show_on_the_homepage') }}</label>
+                <label for="top" class="form-check-label">{{ __('news.pin_top') }}</label>
             </div>
 
             <button class="btn btn-primary">{{ __('main.create') }}</button>
