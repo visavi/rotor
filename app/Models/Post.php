@@ -76,6 +76,26 @@ class Post extends BaseModel
     }
 
     /**
+     * Возвращает файлы
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files->filter(static function (File $value, $key) {
+            return ! $value->isImage();
+        });
+    }
+
+    /**
+     * Возвращает картинки
+     */
+    public function getImages(): Collection
+    {
+        return $this->files->filter(static function (File $value, $key) {
+            return $value->isImage();
+        });
+    }
+
+    /**
      * Возвращает связь с голосованием
      */
     public function polling(): morphOne

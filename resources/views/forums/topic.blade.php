@@ -173,15 +173,15 @@
                         {{ bbCode($post->text) }}
                     </div>
 
-                    @if ($post->files->isNotEmpty())
+                    @if ($post->getImages()->isNotEmpty())
+                        @include('app/_carousel', ['model' => $post, 'files' => $post->getImages()])
+                    @endif
+
+                    @if ($post->getFiles()->isNotEmpty())
                         <div class="section-media">
                             <i class="fa fa-paperclip"></i> <b>{{ __('main.attached_files') }}:</b><br>
-                            @foreach ($post->files as $file)
+                            @foreach ($post->getFiles() as $file)
                                 <div class="media-file">
-                                    @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $post->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
-                                    @endif
-
                                     @if ($file->isVideo())
                                         <div>
                                             <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>

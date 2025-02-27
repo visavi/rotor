@@ -99,7 +99,7 @@ class Feed
         $posts = simplePaginate($posts, setting('feed_per_page'));
         $allowDownload = $user || setting('down_guest_download');
 
-        return new HtmlString(view('widgets/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
+        return new HtmlString(view('feeds/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
     }
 
     /**
