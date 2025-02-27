@@ -29,6 +29,8 @@ return [
     'item_success_published'   => 'Оголошення успішно опубліковано!',
     'item_success_unpublished' => 'Оголошення успішно знято з публікації!',
     'item_success_deleted'     => 'Оголошення успішно видалено!',
+    'boards_closed'            => 'Розміщення оголошень закрито адміністрацією сайту!',
+    'boards_period_days'       => 'Строк розміщення оголошень :days дн!',
 
     'category_success_created' => 'Нову категорію успішно створено!',
     'category_parent_invalid'  => 'Неприпустимий вибір батьківської категорії!',

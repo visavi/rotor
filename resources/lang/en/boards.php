@@ -29,6 +29,8 @@ return [
     'item_success_published'   => 'Ad successfully posted!',
     'item_success_unpublished' => 'Ad successfully removed from publication!',
     'item_success_deleted'     => 'Ad successfully deleted!',
+    'boards_closed'            => 'Posting of ads is closed by the site administration!',
+    'boards_period_days'       => 'Advertisement placement :days days!',
 
     'category_success_created' => 'New category successfully created!',
     'category_parent_invalid'  => 'Invalid parent category selection!',

@@ -67,7 +67,7 @@
 
             <div class="mb-3{{ hasError('phone') }}">
                 <label for="inputPhone" class="form-label">{{ __('boards.phone') }}:</label>
-                <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $item->phone) }}">
+                <input class="phone form-control" id="inputPhone" name="phone" placeholder="+7 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $item->phone) }}">
                 <div class="invalid-feedback">{{ textError('phone') }}</div>
             </div>
 

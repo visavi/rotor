@@ -8,7 +8,7 @@ return [
     'text'         => 'Post text is too long or short!',
     'text_long'    => 'Post text is too long!',
     'comment_long' => 'Comment too long!',
-    'phone'        => 'Invalid phone format. Example: 8 900 123-45-67',
+    'phone'        => 'Invalid phone format. Example: +7 900 123-45-67',
     'captcha'      => 'Could not pass the captcha test!',
     'site'         => 'Invalid site address! Example: https://site.domain',
     'url'          => 'Invalid URL! The characters [a-z0-9_-.?=#/] are allowed. Example: https://site.domain',

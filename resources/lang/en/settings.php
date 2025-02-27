@@ -23,6 +23,7 @@ return [
     'offers'      => 'Suggestions and problems',
     'feeds'       => 'Post feed',
     'invitations' => 'Invitations',
+    'boards'      => 'Ads',
 
     'adverts_count_links' => 'Qty. sponsored links',
     'adverts_price'       => 'Advertising price',
@@ -200,4 +201,8 @@ return [
     'invite_days'   => 'Number of days to receive new keys',
     'invite_rating' => 'Rating required to receive keys',
     'invite_count'  => 'Number of keys received by the user',
+
+    'boards_create'   => 'Allow users to post ads',
+    'boards_period'   => 'Advertisement placement period',
+    'boards_per_page' => 'Number of ads per page',
 ];

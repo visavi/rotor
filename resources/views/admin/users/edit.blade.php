@@ -89,7 +89,7 @@
 
             <div class="mb-3{{ hasError('phone') }}">
                 <label for="phone" class="form-label">{{ __('users.phone') }}:</label>
-                <input class="phone form-control" id="phone" name="phone" placeholder="8 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $user->phone) }}">
+                <input class="phone form-control" id="phone" name="phone" placeholder="+7 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $user->phone) }}">
                 <div class="invalid-feedback">{{ textError('phone') }}</div>
             </div>
 

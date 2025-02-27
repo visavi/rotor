@@ -39,7 +39,7 @@ class BoardController extends Controller
             ->where('expires_at', '>', SITETIME)
             ->orderByDesc('updated_at')
             ->with('category', 'user', 'files')
-            ->paginate(Item::BOARD_PAGINATE);
+            ->paginate(setting('boards_per_page'));
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
@@ -79,6 +79,10 @@ class BoardController extends Controller
     {
         $bid = int($request->input('bid'));
 
+        if (! isAdmin() && ! setting('board_create')) {
+            abort(200, __('boards.boards_closed'));
+        }
+
         if (! $user = getUser()) {
             abort(403);
         }
@@ -93,8 +97,7 @@ class BoardController extends Controller
             $title = $request->input('title');
             $text = $request->input('text');
             $price = int($request->input('price'));
-            $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
-
+            $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
             /** @var Board $board */
             $board = Board::query()->find($bid);
 
@@ -121,7 +124,7 @@ class BoardController extends Controller
                     'phone'      => $phone,
                     'created_at' => SITETIME,
                     'updated_at' => SITETIME,
-                    'expires_at' => strtotime('+1 month', SITETIME),
+                    'expires_at' => strtotime('+' . setting('boards_period') . ' days', SITETIME),
                 ]);
 
                 $item->category->increment('count_items');
@@ -177,7 +180,7 @@ class BoardController extends Controller
             $title = $request->input('title');
             $text = $request->input('text');
             $price = int($request->input('price'));
-            $phone = preg_replace('/\D/', '', $request->input('phone') ?? '');
+            $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
 
             /** @var Board $board */
             $board = Board::query()->find($bid);
@@ -253,10 +256,10 @@ class BoardController extends Controller
                 $item->category->decrement('count_items');
             } else {
                 $status = __('boards.item_success_published');
-                $expired = strtotime('+1 month', $item->updated_at) <= SITETIME;
+                $expired = strtotime('+' . setting('boards_period') . ' days', $item->updated_at) <= SITETIME;
 
                 $item->update([
-                    'expires_at' => strtotime('+1 month', SITETIME),
+                    'expires_at' => strtotime('+' . setting('boards_period') . ' days', SITETIME),
                     'updated_at' => $expired ? SITETIME : $item->updated_at,
                 ]);
 
@@ -317,7 +320,7 @@ class BoardController extends Controller
             ->where('user_id', $user->id)
             ->orderByDesc('updated_at')
             ->with('category', 'user', 'files')
-            ->paginate(Item::BOARD_PAGINATE);
+            ->paginate(setting('boards_per_page'));
 
         return view('boards/active', compact('items'));
     }

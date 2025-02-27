@@ -75,7 +75,7 @@
                 @endif
 
                 @if (! empty($user->phone))
-                    {{ __('users.phone') }}: {{ $user->phone }}<br>
+                    {{ __('users.phone') }}: <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a><br>
                 @endif
 
                 {{ __('users.visits') }}: {{ $user->visits }}<br>

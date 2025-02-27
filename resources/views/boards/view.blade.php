@@ -63,7 +63,7 @@
                     </div>
                     <div>
                         @if ($item->phone)
-                            <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: {{ $item->phone }}</span><br>
+                            <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: <a href="tel:{{ $item->phone }}">{{ $item->phone }}</a></span><br>
                         @endif
 
                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }} / {{ dateFixed($item->updated_at) }}<br>

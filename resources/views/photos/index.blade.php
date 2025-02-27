@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        @if (getUser())
+        @if (isAdmin() || (getUser() && setting('photos_create')))
             <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a>
 
             @if (isAdmin())

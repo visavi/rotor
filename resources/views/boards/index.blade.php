@@ -4,12 +4,12 @@
 
 @section('header')
     <div class="float-end">
-        @if (getUser())
+        @if (isAdmin() || (getUser() && setting('board_create')))
             <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a>
-        @endif
 
-        @if (isAdmin())
-            <a class="btn btn-light" href="/admin/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
+            @if (isAdmin())
+                <a class="btn btn-light" href="/admin/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
+            @endif
         @endif
     </div>
 
@@ -73,7 +73,8 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
-                                    <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
+                                    <small><i class="fas fa-angle-right"></i> <a
+                                            href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
                                     <div class="section-message">
                                         {{ $item->shortText() }}
                                     </div>
@@ -87,7 +88,8 @@
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        <button type="button"
+                                                class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
                                     @endif
                                 </div>
                             </div>

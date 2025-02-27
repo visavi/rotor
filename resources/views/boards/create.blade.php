@@ -48,11 +48,15 @@
 
         <div class="mb-3{{ hasError('phone') }}">
             <label for="inputPhone" class="form-label">{{ __('boards.phone') }}:</label>
-            <input class="phone form-control" id="inputPhone" name="phone" placeholder="8 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', getUser('phone')) }}">
+            <input class="phone form-control" id="inputPhone" name="phone" placeholder="+7 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', getUser('phone')) }}">
             <div class="invalid-feedback">{{ textError('phone') }}</div>
         </div>
 
         @include('app/_upload_image', ['files' => $files, 'type' => App\Models\Item::$morphName])
+
+        <p class="text-muted fst-italic">
+            {{ __('boards.boards_period_days', ['days' => setting('boards_period')]) }}
+        </p>
 
         <button class="btn btn-primary">{{ __('main.add') }}</button>
     </form>

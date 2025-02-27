@@ -362,7 +362,7 @@
                         </div>
                         <div>
                             @if ($post->phone)
-                                <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: {{ $post->phone }}</span><br>
+                                <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: <a href="tel:{{ $post->phone }}">{{ $post->phone }}</a></span><br>
                             @endif
 
                             <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}

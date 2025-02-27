@@ -53,6 +53,7 @@ class Setting extends BaseModel
             'offers',
             'feeds',
             'invitations',
+            'boards',
         ];
     }
 

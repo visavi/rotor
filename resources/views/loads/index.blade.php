@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        @if (getUser())
+        @if (isAdmin() || (getUser() && setting('downupload')))
             <a class="btn btn-success" href="/downs/create">{{ __('main.add') }}</a>
 
             @if (isAdmin('admin'))
