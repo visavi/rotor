@@ -28,6 +28,11 @@
     @if ($post instanceof \App\Models\Item)
         @include('feeds/_boards')
     @endif
+
+    {{-- Предложения / проблемы --}}
+    @if ($post instanceof \App\Models\Offer)
+        @include('feeds/_offers')
+    @endif
 @empty
     {{ showError(__('forums.empty_posts')) }}
 @endforelse

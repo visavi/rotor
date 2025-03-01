@@ -189,6 +189,7 @@ return [
     'feed_articles_show'    => 'Show articles',
     'feed_downs_show'       => 'Show downloads',
     'feed_items_show'       => 'Show boards',
+    'feed_offers_show'      => 'Show offers / issues',
     'feed_per_page'         => 'Number of posts per page',
     'feed_last_record'      => 'The number of recent records received',
     'feed_total'            => 'Total posts',
@@ -197,6 +198,7 @@ return [
     'feed_photos_rating'    => 'Hide rated photos',
     'feed_articles_rating'  => 'Hide rated articles',
     'feed_downs_rating'     => 'Hide rated downloads',
+    'feed_offers_rating'    => 'Hide offers / issues with rating',
 
     'invite_days'   => 'Number of days to receive new keys',
     'invite_rating' => 'Rating required to receive keys',

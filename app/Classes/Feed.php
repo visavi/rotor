@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Down;
 use App\Models\Item;
 use App\Models\News;
+use App\Models\Offer;
 use App\Models\Photo;
 use App\Models\Polling;
 use App\Models\Post;
@@ -89,6 +90,16 @@ class Feed
 
         if (setting('feed_items_show')) {
             $collect = $collect->merge($this->getItems());
+        }
+
+        if (setting('feed_offers_show')) {
+            $offers = $this->getOffers();
+            $collect = $collect->merge($offers);
+
+            if ($this->user) {
+                $ids = $offers->pluck('id')->all();
+                $polls[Offer::$morphName] = $this->getPolling($ids, Offer::$morphName);
+            }
         }
 
         $posts = $collect
@@ -219,6 +230,23 @@ class Feed
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
                 ->with('user', 'files', 'category.parent')
+                ->get();
+        });
+    }
+
+    /**
+     * Get offers
+     *
+     * @return Collection<Offer>
+     */
+    public function getOffers(): Collection
+    {
+        return Cache::remember('OfferFeed', 600, static function () {
+            return Offer::query()
+                ->where('rating', '>', setting('feed_offers_rating'))
+                ->orderByDesc('created_at')
+                ->limit(setting('feed_last_record'))
+                ->with('user')
                 ->get();
         });
     }
