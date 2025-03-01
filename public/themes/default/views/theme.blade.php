@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use App\Classes\HookManager;use App\Models\Module; @endphp
+    <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
 <head>
     <meta charset="utf-8">
@@ -12,6 +13,7 @@
     <link href="/assets/img/images/icon.png" rel="image_src">
     <link href="/news/rss" title="RSS News" type="application/rss+xml" rel="alternate">
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
+    @hook('header')
     @stack('styles')
 </head>
 <body class="app">

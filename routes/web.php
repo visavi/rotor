@@ -958,7 +958,13 @@ if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
 
 $modules = Module::getEnabledModules();
 foreach ($modules as $module) {
-    if (file_exists(base_path('modules/' . $module . '/routes.php'))) {
-        include_once base_path('modules/' . $module . '/routes.php');
+    $routesFile = base_path('modules/' . $module . '/routes.php');
+    if (file_exists($routesFile)) {
+        include_once $routesFile;
+    }
+
+    $hooksFile = base_path('modules/' . $module . '/hooks.php');
+    if (file_exists($hooksFile)) {
+        include_once $hooksFile;
     }
 }

@@ -1414,7 +1414,7 @@ function deleteFile(string $path): bool
  */
 function sendNotify(string $text, string $url, string $title)
 {
-    /*$parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text);*/
+    /* $parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text); */
     preg_match_all('/(?<=^|\s|=)@([\w\-]+)/', $text, $matches);
 
     if (! empty($matches[1])) {

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -37,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Immutable date
         Date::use(CarbonImmutable::class);
+
+        Blade::directive('hook', function ($expression) {
+            return "<?= HookManager::callHook($expression); ?>";
+        });
 
         // If the public directory is renamed to public_html
         /*$this->app->bind('path.public', function () {
