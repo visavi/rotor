@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
         Date::use(CarbonImmutable::class);
 
         Blade::directive('hook', function ($expression) {
-            return "<?= HookManager::callHook($expression); ?>";
+            return "<?= Hook::call($expression); ?>";
         });
 
         // If the public directory is renamed to public_html

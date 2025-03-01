@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\ImageServiceProvider::class,
+        App\Providers\ModuleServiceProvider::class,
     ])->toArray(),
 
     /*

@@ -43,14 +43,6 @@ class CheckAccessSite
             return redirect('closed');
         }
 
-        $route = Route::getRoutes()->match($request);
-        $action = explode('\\', $route->getActionName());
-
-        if ($action[0] === 'Modules') {
-            View::addNamespace($action[1], base_path('modules/' . $action[1] . '/resources/views'));
-            Lang::addNamespace($action[1], base_path('modules/' . $action[1] . '/resources/lang'));
-        }
-
         return $next($request);
     }
 

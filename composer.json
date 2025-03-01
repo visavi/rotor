@@ -56,7 +56,8 @@
             "Modules\\": "modules/"
         },
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/hooks.php"
         ]
     },
     "autoload-dev": {

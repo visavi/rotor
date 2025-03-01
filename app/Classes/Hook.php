@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-class HookManager
+class Hook
 {
     private static array $hooks = [];
 
@@ -15,9 +15,9 @@ class HookManager
     }
 
     /**
-     * Регистрирует функцию для хука
+     * Добавляет функцию для хука
      */
-    public static function addHook(string $hookName, callable $callback, int $priority = 0): void
+    public static function add(string $hookName, callable $callback, int $priority = 0): void
     {
         if (! isset(self::$hooks[$hookName])) {
             self::$hooks[$hookName] = [];
@@ -36,7 +36,7 @@ class HookManager
     /**
      * Вызывает хук
      */
-    public static function callHook(string $hookName, mixed $value = null)
+    public static function call(string $hookName, mixed $value = null)
     {
         if (isset(self::$hooks[$hookName])) {
             foreach (self::$hooks[$hookName] as $hook) {

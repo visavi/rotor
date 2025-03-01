@@ -1,5 +1,4 @@
-@php use App\Classes\HookManager;use App\Models\Module; @endphp
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
 <head>
     <meta charset="utf-8">

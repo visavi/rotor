@@ -87,7 +87,6 @@ use App\Http\Controllers\User\SearchController as UserSearchController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WallController;
-use App\Models\Module;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -954,17 +953,4 @@ if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
             Route::match(['get', 'post'], '/account', 'account');
             Route::get('/finish', 'finish');
         });
-}
-
-$modules = Module::getEnabledModules();
-foreach ($modules as $module) {
-    $routesFile = base_path('modules/' . $module . '/routes.php');
-    if (file_exists($routesFile)) {
-        include_once $routesFile;
-    }
-
-    $hooksFile = base_path('modules/' . $module . '/hooks.php');
-    if (file_exists($hooksFile)) {
-        include_once $hooksFile;
-    }
 }
