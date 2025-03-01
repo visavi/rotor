@@ -1,7 +1,8 @@
 window.$ = window.jQuery = require('jquery');
-bootbox = require('bootbox');
-toastr = require('toastr');
-fancybox = require("@fancyapps/ui").Fancybox;
+window.bootbox = require('bootbox');
+window.toastr = require('toastr');
+window.fancybox = require("@fancyapps/ui").Fancybox;
+window.tags = require('bootstrap5-tags').default;
 
 require('bootstrap');
 require('jquery-mask-plugin');
