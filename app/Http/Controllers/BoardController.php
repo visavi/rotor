@@ -34,8 +34,8 @@ class BoardController extends Controller
 
         $sort = check($request->input('sort', 'date'));
         $order = match ($sort) {
-            'price'   => 'price',
-            default   => 'updated_at',
+            'price' => 'price',
+            default => 'updated_at',
         };
 
         $items = Item::query()
