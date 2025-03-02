@@ -48,13 +48,14 @@
 
             <div>
                 @if ($category->children->isNotEmpty())
+                    @php $category->children->load('children'); @endphp
                     @foreach ($category->children as $child)
                         <div>
                             <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b>
                             @if ($child->new)
-                                ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                                ({{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
                             @else
-                                ({{ $child->count_downs }})
+                                ({{ $child->count_downs + $child->children->sum('count_downs') }})
                             @endif
                         </div>
                     @endforeach

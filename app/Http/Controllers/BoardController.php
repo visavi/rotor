@@ -43,6 +43,7 @@ class BoardController extends Controller
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
+            ->with('children')
             ->get();
 
         return view('boards/index', compact('items', 'board', 'boards'));

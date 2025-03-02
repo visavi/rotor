@@ -37,6 +37,7 @@
 
 @section('content')
     @if ($topics->onFirstPage() && $forum->children->isNotEmpty())
+        @php $forum->children->load('children'); @endphp
         @foreach ($forum->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-header d-flex align-items-center">
@@ -48,7 +49,7 @@
                     </div>
 
                     <div class="text-end">
-                        <b>{{ $child->count_topics }}/{{ $child->count_posts }}</b>
+                        <b>{{ $child->count_topics + $child->children->sum('count_topics') }}/{{ $child->count_posts + $child->children->sum('count_posts') }}</b>
                     </div>
                 </div>
 

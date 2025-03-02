@@ -53,11 +53,12 @@
     <hr>
 
     @if ($downs->onFirstPage() && $category->children->isNotEmpty())
+        @php $category->children->load('children'); @endphp
         @foreach ($category->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
-                    <a href="/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs }})
+                    <a href="/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs + $child->children->sum('count_downs') }})
                 </div>
             </div>
         @endforeach

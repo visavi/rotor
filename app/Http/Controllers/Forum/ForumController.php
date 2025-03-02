@@ -28,8 +28,7 @@ class ForumController extends Controller
     {
         $forums = Forum::query()
             ->where('parent_id', 0)
-            ->with('lastTopic.lastPost.user')
-            ->with('children')
+            ->with('children', 'lastTopic.lastPost.user')
             ->orderBy('sort')
             ->get();
 

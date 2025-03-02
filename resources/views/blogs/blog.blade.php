@@ -37,6 +37,7 @@
 
 @section('content')
     @if ($articles->onFirstPage() && $category->children->isNotEmpty())
+        @php $category->children->load('children'); @endphp
         @foreach ($category->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-header d-flex align-items-center">
@@ -44,7 +45,7 @@
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
                             <a href="/blogs/{{ $child->id }}">{{ $child->name }}</a>
-                            ({{ $child->count_articles }})
+                            ({{ $child->count_articles + $child->children->sum('count_articles') }})
                         </div>
                     </div>
                 </div>

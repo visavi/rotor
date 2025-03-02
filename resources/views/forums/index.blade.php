@@ -60,12 +60,13 @@
                 </div>
                 <div>
                     @if ($forum->children->isNotEmpty())
+                        @php $forum->children->load('children'); @endphp
                         <div class="collapse" id="section_{{ $forum->id }}">
                             <div class="section-content border-top p-2">
                                 @foreach ($forum->children as $child)
                                     <div>
                                         <i class="fas fa-angle-right"></i> <a href="/forums/{{ $child->id }}">{{ $child->title }}</a>
-                                        <span class="badge rounded-pill bg-light text-dark">{{ $child->count_topics }}/{{ $child->count_posts }}</span>
+                                        <span class="badge rounded-pill bg-light text-dark">{{ $child->count_topics + $child->children->sum('count_topics') }}/{{ $child->count_posts + $child->children->sum('count_posts') }}</span>
                                     </div>
                                 @endforeach
                             </div>
