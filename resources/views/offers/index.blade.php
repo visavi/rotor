@@ -36,11 +36,11 @@
 
     @if ($offers->isNotEmpty())
         {{ __('main.sort') }}:
-        <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
-        <a href="/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
-
         <?php $active = ($order === 'created_at') ? 'success' : 'light text-dark'; ?>
         <a href="/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
+
+        <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
+        <a href="/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
 
         <?php $active = ($order === 'status') ? 'success' : 'light text-dark'; ?>
         <a href="/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>

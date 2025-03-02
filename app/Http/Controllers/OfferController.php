@@ -23,12 +23,12 @@ class OfferController extends Controller
         $offerCount = Offer::query()->where('type', Offer::OFFER)->count();
         $issueCount = Offer::query()->where('type', Offer::ISSUE)->count();
 
-        $sort = check($request->input('sort', 'rating'));
+        $sort = check($request->input('sort', 'time'));
         $order = match ($sort) {
-            'time'     => 'created_at',
+            'rating'   => 'rating',
             'status'   => 'status',
             'comments' => 'count_comments',
-            default    => 'rating',
+            default    => 'created_at',
         };
 
         $offers = Offer::query()
