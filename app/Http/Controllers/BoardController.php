@@ -19,7 +19,7 @@ class BoardController extends Controller
     /**
      * Главная страница
      */
-    public function index(?int $id = null): View
+    public function index(Request $request, ?int $id = null): View
     {
         $board = null;
 
@@ -32,21 +32,28 @@ class BoardController extends Controller
             }
         }
 
+        $sort = check($request->input('sort', 'date'));
+        $order = match ($sort) {
+            'price'   => 'price',
+            default   => 'updated_at',
+        };
+
         $items = Item::query()
             ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
-            ->orderByDesc('updated_at')
+            ->orderByDesc($order)
             ->with('category', 'user', 'files')
-            ->paginate(setting('boards_per_page'));
+            ->paginate(setting('boards_per_page'))
+            ->appends(['sort' => $sort]);
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
             ->with('children')
             ->get();
 
-        return view('boards/index', compact('items', 'board', 'boards'));
+        return view('boards/index', compact('items', 'board', 'boards', 'sort'));
     }
 
     /**

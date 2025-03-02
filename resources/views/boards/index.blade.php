@@ -52,14 +52,22 @@
     @if ($boards->isNotEmpty())
         <div class="row mb-3">
             @foreach ($boards->chunk(3) as $chunk)
-                @foreach ($chunk as $board)
+                @foreach ($chunk as $child)
                     <div class="col-md-3 col-6">
-                        <a href="/boards/{{ $board->id }}">{{ $board->name }}</a> {{ $board->count_items + $board->children->sum('count_items') }}
+                        <a href="/boards/{{ $child->id }}">{{ $child->name }}</a> {{ $child->count_items + $child->children->sum('count_items') }}
                     </div>
                 @endforeach
             @endforeach
         </div>
     @endif
+
+    {{ __('main.sort') }}:
+    <?php $active = ($sort === 'date') ? 'success' : 'light text-dark'; ?>
+    <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=date" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
+
+    <?php $active = ($sort === 'price') ? 'success' : 'light text-dark'; ?>
+    <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=price" class="badge bg-{{ $active }}">{{ __('main.cost') }}</a>
+    <hr>
 
     @if ($items->isNotEmpty())
         @foreach ($items as $item)

@@ -130,7 +130,7 @@ Route::controller(SitemapController::class)
 Route::controller(BoardController::class)
     ->prefix('boards')
     ->group(function () {
-        Route::get('/{id?}', 'index');
+        Route::get('/{id?}', 'index')->name('boards.index');
         Route::get('/active', 'active');
     });
 
