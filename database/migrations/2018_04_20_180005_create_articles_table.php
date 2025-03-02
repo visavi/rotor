@@ -20,7 +20,6 @@ final class CreateArticlesTable extends Migration
                 $table->integer('user_id');
                 $table->string('title', 50);
                 $table->text('text');
-                $table->string('tags', 100);
                 $table->integer('rating')->default(0);
                 $table->integer('visits')->default(0);
                 $table->integer('count_comments')->default(0);
