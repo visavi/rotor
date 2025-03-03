@@ -17,18 +17,18 @@
 @stop
 
 @section('content')
-    {{ __('main.sort') }}:
-    <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
-    <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
-
-    <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
-    <a href="/loads/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
-
-    <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
-    <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
-    <hr>
-
     @if ($downs->isNotEmpty())
+        {{ __('main.sort') }}:
+            <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
+        <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
+
+            <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
+        <a href="/loads/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
+
+            <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
+        <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
+        <hr>
+
         @foreach ($downs as $data)
             <div class="section mb-3 shadow">
                 <div class="section-header d-flex align-items-center">
