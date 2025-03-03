@@ -92,8 +92,8 @@
                                     </div>
 
                                     <p class="card-text">
-                                        <a href="tel:+79167407574" class="text-decoration-none">
-                                            <i class="fa-solid fa-phone fs-5 me-2"></i> +7 916 740-75-74
+                                        <a href="tel:{{ $item->phone }}" class="text-decoration-none">
+                                            <i class="fa-solid fa-phone fs-5 me-2"></i> {{ $item->phone }}
                                         </a>
                                     </p>
 

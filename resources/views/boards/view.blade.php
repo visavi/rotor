@@ -64,8 +64,7 @@
                     <div>
                         @if ($item->phone)
                             <div class="d-flex align-items-center mb-3">
-                                <i class="fa-solid fa-phone fs-5 me-2"></i>
-                                <a href="tel:{{ $item->phone }}" class="text-decoration-none fs-5">{{ $item->phone }}</a>
+                                <a href="tel:{{ $item->phone }}" class="text-decoration-none fs-5"><i class="fa-solid fa-phone fs-5 me-2"></i> {{ $item->phone }}</a>
                             </div>
                         @endif
 

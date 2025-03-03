@@ -33,7 +33,11 @@
                 </div>
                 <div>
                     @if ($post->phone)
-                        <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: <a href="tel:{{ $post->phone }}">{{ $post->phone }}</a></span><br>
+                        <p class="card-text">
+                            <a href="tel:{{ $post->phone }}" class="text-decoration-none">
+                                <i class="fa-solid fa-phone fs-5 me-2"></i> {{ $post->phone }}
+                            </a>
+                        </p>
                     @endif
 
                     <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
@@ -43,7 +47,9 @@
 
             <div class="col-md-2">
                 @if ($post->price)
-                    <button type="button" class="btn btn-sm btn-light">{{ $post->price }} {{ setting('currency') }}</button>
+                    <div class="float-end">
+                        <button type="button" class="btn btn-outline-info">{{ $post->price }} {{ setting('currency') }}</button>
+                    </div>
                 @endif
             </div>
         </div>
