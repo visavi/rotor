@@ -81,11 +81,22 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
-                                    <small><i class="fas fa-angle-right"></i> <a
-                                            href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
+
+                                    <div class="small my-2">
+                                        <i class="fas fa-angle-right"></i>
+                                        <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a>
+                                    </div>
+
                                     <div class="section-message">
                                         {{ $item->shortText() }}
                                     </div>
+
+                                    <p class="card-text">
+                                        <a href="tel:+79167407574" class="text-decoration-none">
+                                            <i class="fa-solid fa-phone fs-5 me-2"></i> +7 916 740-75-74
+                                        </a>
+                                    </p>
+
                                     <div>
                                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }}
                                         <small class="section-date text-muted fst-italic">
@@ -96,8 +107,9 @@
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button"
-                                                class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        <div class="float-end">
+                                            <button type="button" class="btn btn-outline-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        </div>
                                     @endif
                                 </div>
                             </div>

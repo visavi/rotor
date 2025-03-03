@@ -63,7 +63,10 @@
                     </div>
                     <div>
                         @if ($item->phone)
-                            <span class="badge rounded-pill bg-primary mb-3">{{ __('boards.phone') }}: <a href="tel:{{ $item->phone }}">{{ $item->phone }}</a></span><br>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fa-solid fa-phone fs-5 me-2"></i>
+                                <a href="tel:{{ $item->phone }}" class="text-decoration-none fs-5">{{ $item->phone }}</a>
+                            </div>
                         @endif
 
                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }} / {{ dateFixed($item->updated_at) }}<br>
@@ -76,7 +79,9 @@
 
                 <div class="col-md-2">
                     @if ($item->price)
-                        <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
+                        <div class="float-end">
+                            <button type="button" class="btn btn-outline-info">{{ $item->price }} {{ setting('currency') }}</button>
+                        </div>
                     @endif
                 </div>
             </div>
