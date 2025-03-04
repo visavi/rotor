@@ -81,7 +81,7 @@ class AdminAdvertController extends AdminController
 
             $flash = ['success', __('main.record_deleted_success')];
         } else {
-            $flash = ['danger', $validator->getErrors()];
+            $flash = ['danger', current($validator->getErrors())];
         }
 
         return redirect('admin/admin-adverts')->with(...$flash);
