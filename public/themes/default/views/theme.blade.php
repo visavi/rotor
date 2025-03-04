@@ -12,7 +12,7 @@
     <link href="/assets/img/images/icon.png" rel="image_src">
     <link href="/news/rss" title="RSS News" type="application/rss+xml" rel="alternate">
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
-    @hook('header')
+    @hook('head')
     @stack('styles')
 </head>
 <body class="app">
@@ -24,6 +24,7 @@
     <div class="app-title">
         @yield('header')
         @yield('breadcrumb')
+        @hook('header')
     </div>
 
     @yield('flash')
@@ -34,7 +35,9 @@
         @yield('advertUser')
     </div>
 
+    @hook('contentStart')
     @yield('content')
+    @hook('contentEnd')
     @yield('advertBottom')
 </main>
 
@@ -46,6 +49,7 @@
 {{--@if (getUser())
 <script src="{{ mix('/themes/default/dist/messages.js') }}"></script>
 @endif--}}
+@hook('footer')
 @stack('scripts')
 <div class="scrollup"></div>
 </body>

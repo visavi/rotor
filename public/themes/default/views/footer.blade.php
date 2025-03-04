@@ -1,6 +1,7 @@
 <!-- Footer -->
 <div class="app-footer">
     <footer class="row py-3 border-top">
+        @hook('footerStart')
         <div class="col-sm">
             <h5>{{ __('index.pages') }}</h5>
             <ul class="nav flex-column">
@@ -36,6 +37,7 @@
 
             <div class="text-muted">{{ setting('copy') }}</div>
         </div>
+        @hook('footerEnd')
     </footer>
 
     @yield('performance')

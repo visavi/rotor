@@ -104,13 +104,12 @@
 
 .app-search {
   position: relative;
-  display: flex;
   align-self: center;
   padding: 10px 0;
 }
 
 .search-navbar {
-  margin-right: 15px;
+  margin-right: 10px;
 
   @media(max-width: 768px) {
     display: none;
@@ -124,13 +123,9 @@
 }
 
 .app-search__input {
-  border: 0;
   padding: 5px 30px 5px 10px;
-  border-radius: 2px;
-  background-color: rgba(255,255,255,0.8);
-  transition: background-color 0.3s ease;
-  &::placeholder { color: rgba(0,0,0,0.4); }
 }
+
 .app-search__button {
   position: absolute;
   right: 0;
@@ -138,14 +133,8 @@
   bottom: 10px;
   padding: 0 10px;
   border: 0;
-  color: rgba(0,0,0,0.8);
   background: none;
   cursor: pointer;
-}
-
-.app-search__input:invalid + button {
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 .app-notification {

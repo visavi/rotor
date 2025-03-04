@@ -16,6 +16,7 @@
             </div>
 
             <ul class="treeview-menu">
+                @hook('sidebarTreeviewStart')
                 @if (isAdmin())
                     <li>
                         <a class="treeview-item" href="/admin" rel="nofollow">
@@ -30,6 +31,7 @@
                         {{ __('index.menu') }}
                     </a>
                 </li>
+                @hook('sidebarTreeviewEnd')
             </ul>
         @else
             <div class="app-menu__item" data-bs-toggle="treeview">
@@ -43,6 +45,7 @@
             </div>
 
             <ul class="treeview-menu">
+                @hook('sidebarTreeviewGuestStart')
                 <li>
                     <a class="treeview-item" href="/login{{ returnUrl() }}" rel="nofollow">
                         <i class="icon fas fa-sign-in-alt"></i>
@@ -55,11 +58,13 @@
                         {{ __('index.register') }}
                     </a>
                 </li>
+                @hook('sidebarTreeviewGuestEnd')
             </ul>
         @endif
         </li>
     </ul>
     <ul class="app-menu">
+        @hook('sidebarMenuStart')
         <li>
             <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
                 <i class="app-menu__icon far fa-comment-alt"></i>
@@ -136,12 +141,14 @@
                 <span class="badge bg-dark bg-gradient">{{ statVotes() }}</span>
             </a>
         </li>
+        @hook('sidebarMenuEnd')
     </ul>
 
     <ul class="app-menu app-sidebar__footer">
+        @hook('sidebarFooterStart')
         <li class="app-search search-sidebar">
             <form action="/search" method="get">
-                <input name="q" class="app-search__input" type="search" placeholder="{{ __('main.search') }}" required>
+                <input name="q" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" required>
                 <button class="app-search__button"><i class="fa fa-search"></i></button>
             </form>
         </li>
@@ -155,5 +162,6 @@
             <a href="/language/ru{{ returnUrl() }}">RU</a> /
             <a href="/language/en{{ returnUrl() }}">EN</a>
         </li>
+        @hook('sidebarFooterEnd')
     </ul>
 </aside>

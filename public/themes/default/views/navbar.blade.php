@@ -12,11 +12,11 @@
     <ul class="app-nav">
         <li class="app-search search-navbar">
             <form action="/search" method="get">
-                <input name="q" class="app-search__input" type="search" placeholder="{{ __('main.search') }}" required>
+                <input name="q" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" required>
                 <button class="app-search__button"><i class="fa fa-search"></i></button>
             </form>
         </li>
-
+        @hook('navbarStart')
         <li class="dropdown">
             <a href="#" class="app-nav__item" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                 <i class="fa-solid fa-sun fa-lg" id="theme-icon-active"></i>
@@ -102,14 +102,17 @@
                     <i class="far fa-user fa-lg"></i>
                 </a>
                 <ul class="app-notification dropdown-menu dropdown-menu-end">
+                    @hook('navbarMenuStart')
                     <li><a class="dropdown-item" href="/users/{{ getUser('login') }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
                     <li><a class="dropdown-item" href="/profile"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>
                     <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>
                     <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
+                    @hook('navbarMenuEnd')
                     <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)"><i class="fas fa-sign-out-alt fa-lg"></i> {{ __('index.logout') }}</a>
                     </li>
                 </ul>
             </li>
         @endif
+        @hook('navbarEnd')
     </ul>
 </header>
