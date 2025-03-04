@@ -650,7 +650,6 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
             Route::get('/delete', 'delete');
         });
 
-
     /* Пользовательская реклама */
     Route::get('/adverts', [AdminUserAdvertController::class, 'index']);
 
