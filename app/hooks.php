@@ -4,6 +4,7 @@ use App\Classes\Hook;
 
 /*
 Список хуков
+
 sidebarTreeviewStart
 sidebarTreeviewEnd
 sidebarTreeviewGuestStart
@@ -16,6 +17,7 @@ sidebarFooterEnd
 head
 header
 footer
+
 contentStart
 contentEnd
 

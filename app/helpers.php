@@ -1568,7 +1568,7 @@ function getCaptcha(): HtmlString
  *
  * @return void
  *
- * @deprecated since 10.1 - Use redirect->with('success', 'Message') or session()->flash()
+ * @deprecated since 10.1 - Use redirect->with('success', 'Message') or $request->session()->flash()
  */
 function setFlash(string $status, $message)
 {
@@ -1580,11 +1580,11 @@ function setFlash(string $status, $message)
  *
  * @param array $data Массив полей
  *
- * @deprecated since 10.1
+ * @deprecated since 10.1 - Use $request->session()->flash();
  */
 function setInput(array $data)
 {
-    session()->flash('input', json_encode($data));
+    app('session')->flash('_old_input', $data);
 }
 
 /**
@@ -1598,11 +1598,11 @@ function setInput(array $data)
  */
 function getInput(string $key, $default = null): mixed
 {
-    if (session()->missing('input')) {
+    if (app('session')->missing('_old_input')) {
         return $default;
     }
 
-    $input = json_decode(session('input', []), true);
+    $input = session('_old_input', []);
 
     return Arr::get($input, $key, $default);
 }

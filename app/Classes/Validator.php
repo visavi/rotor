@@ -412,4 +412,12 @@ class Validator
     {
         return empty($this->errors);
     }
+
+    /**
+     * Возвращает наличие ошибок валидации
+     */
+    public function fails(): bool
+    {
+        return ! empty($this->errors);
+    }
 }

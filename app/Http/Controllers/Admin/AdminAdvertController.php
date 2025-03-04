@@ -36,28 +36,54 @@ class AdminAdvertController extends AdminController
                 ->length($name, 5, 35, ['name' => __('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
-            if ($validator->isValid()) {
-                AdminAdvert::query()
-                    ->updateOrCreate([], [
-                        'site'       => $site,
-                        'name'       => $name,
-                        'color'      => $color,
-                        'bold'       => $bold,
-                        'user_id'    => getUser('id'),
-                        'created_at' => SITETIME,
-                        'deleted_at' => SITETIME + 7 * 86400,
-                    ]);
-
-                clearCache('adminAdverts');
-                setFlash('success', __('main.record_saved_success'));
-
-                return redirect('admin/admin-adverts');
+            if ($validator->fails()) {
+                return redirect('admin/admin-adverts')
+                    ->withErrors($validator->getErrors())
+                    ->withInput();
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            AdminAdvert::query()
+                ->updateOrCreate([], [
+                    'site'       => $site,
+                    'name'       => $name,
+                    'color'      => $color,
+                    'bold'       => $bold,
+                    'user_id'    => getUser('id'),
+                    'created_at' => SITETIME,
+                    'deleted_at' => SITETIME + 7 * 86400,
+                ]);
+
+            clearCache('adminAdverts');
+
+            return redirect('admin/admin-adverts')->with('success', __('main.record_saved_success'));
         }
 
         return view('admin/admin-adverts/index', compact('advert'));
+    }
+
+    /**
+     * Удаление записи
+     */
+    public function delete(Request $request, Validator $validator): RedirectResponse
+    {
+        $advert = AdminAdvert::query()
+            ->where('user_id', getUser('id'))
+            ->first();
+
+        if (! $advert) {
+            abort(404, __('main.record_not_found'));
+        }
+
+        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+
+        if ($validator->isValid()) {
+            $advert->delete();
+
+            $flash = ['success', __('main.record_deleted_success')];
+        } else {
+            $flash = ['danger', $validator->getErrors()];
+        }
+
+        return redirect('admin/admin-adverts')->with(...$flash);
     }
 }

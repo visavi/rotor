@@ -643,7 +643,13 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
         });
 
     /* Админская реклама */
-    Route::match(['get', 'post'], '/admin-adverts', [AdminAdvertController::class, 'index']);
+    Route::controller(AdminAdvertController::class)
+        ->prefix('admin-adverts')
+        ->group(function () {
+            Route::match(['get', 'post'], '/', 'index');
+            Route::get('/delete', 'delete');
+        });
+
 
     /* Пользовательская реклама */
     Route::get('/adverts', [AdminUserAdvertController::class, 'index']);

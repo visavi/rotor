@@ -25,7 +25,7 @@
         <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
     @endif
 
-    <i class="fas fa-times"></i> <a class="me-3" href="/admin/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete') }}')">{{ __('main.delete') }}</a>
+    <i class="fas fa-times"></i> <a class="me-3" href="/admin/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
     <hr>
 
     <div class="section-form mb-3 shadow">
