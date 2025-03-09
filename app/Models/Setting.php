@@ -65,25 +65,22 @@ class Setting extends BaseModel
     public static function getSettings(): array
     {
         try {
-            $settings = Cache::rememberForever('settings', static function () {
-                $settings = Setting::query()->pluck('value', 'name')->all();
+            return Cache::remember('settings', 3600, static function () {
+                $settings = Setting::query()
+                    ->select(['name', 'value'])
+                    ->get()
+                    ->pluck('value', 'name')
+                    ->all();
 
                 return array_map(static function ($value) {
                     if (is_numeric($value)) {
                         return ! str_contains($value, '.') ? (int) $value : (float) $value;
                     }
-
-                    if ($value === '') {
-                        return null;
-                    }
-
-                    return $value;
+                    return $value === '' ? null : $value;
                 }, $settings);
             });
         } catch (Exception) {
-            $settings = [];
+            return [];
         }
-
-        return $settings;
     }
 }
