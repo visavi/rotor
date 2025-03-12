@@ -34,7 +34,7 @@ class BaseModel extends Model
     {
         parent::boot();
 
-        Relation::morphMap([
+        Relation::enforceMorphMap([
             Down::$morphName      => Down::class,
             Article::$morphName   => Article::class,
             Photo::$morphName     => Photo::class,

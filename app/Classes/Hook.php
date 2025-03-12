@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Classes;
 
 class Hook
@@ -36,14 +38,14 @@ class Hook
     /**
      * Вызывает хук
      */
-    public static function call(string $hookName, mixed $value = null)
+    public static function call(string $hookName, mixed $args = null, mixed $result = null): mixed
     {
         if (isset(self::$hooks[$hookName])) {
             foreach (self::$hooks[$hookName] as $hook) {
-                $value = call_user_func($hook['callback'], $value);
+                $result = $hook['callback']($result, $args);
             }
         }
 
-        return $value;
+        return $result;
     }
 }

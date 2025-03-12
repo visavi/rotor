@@ -50,6 +50,7 @@
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col-md-6">
+                @hook('userStart')
                 {{ __('users.status') }}: <b><a href="/statusfaq">{{ $user->getStatus() }}</a></b><br>
 
                 {{ $user->getGender() }}
@@ -115,6 +116,7 @@
                 @else
                     {{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})<br>
                 @endif
+                @hook('userEnd')
             </div>
 
             <div class="col-md-6">
@@ -156,6 +158,7 @@
     @endif
 
     <div class="alert alert-info mb-3">
+        @hook('userActionStart')
         <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">{{ __('index.wall_posts') }}</a> ({{ $user->getCountWall() }})<br>
 
         @if (!empty($user->site))
@@ -163,7 +166,14 @@
         @endif
 
         @if (getUser())
-            @if ($user->login !== getUser('login'))
+            @if ($user->login === getUser('login'))
+                @hook('userPersonalStart')
+                <i class="fa fa-user-circle"></i> <a href="/profile">{{ __('index.my_profile') }}</a><br>
+                <i class="fa fa-cog"></i> <a href="/accounts">{{ __('index.my_details') }}</a><br>
+                <i class="fa fa-wrench"></i> <a href="/settings">{{ __('index.my_settings') }}</a><br>
+                @hook('userPersonalEnd')
+            @else
+                @hook('userNotPersonalStart', $user)
                 <i class="fa fa-address-book"></i> {{ __('users.add_to') }}
                 <a href="/contacts?user={{ $user->login }}">{{ __('index.contacts') }}</a> /
                 <a href="/ignores?user={{ $user->login }}">{{ __('index.ignores') }}</a><br>
@@ -176,17 +186,15 @@
                     @endif
                     <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
                     <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
-                        <i class="fa-solid fa-money-bill-transfer"></i> <a href="/admin/transfers/view?user={{ $user->login }}">{{ __('index.cash_transactions') }}</a><br>
+                    <i class="fa-solid fa-money-bill-transfer"></i> <a href="/admin/transfers/view?user={{ $user->login }}">{{ __('index.cash_transactions') }}</a><br>
                 @endif
 
                 @if (isAdmin('boss'))
                     <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ __('main.edit') }}</a><br>
                 @endif
-            @else
-                <i class="fa fa-user-circle"></i> <a href="/profile">{{ __('index.my_profile') }}</a><br>
-                <i class="fa fa-cog"></i> <a href="/accounts">{{ __('index.my_details') }}</a><br>
-                <i class="fa fa-wrench"></i> <a href="/settings">{{ __('index.my_settings') }}</a><br>
+                @hook('userNotPersonalEnd', $user)
             @endif
         @endif
+        @hook('userActionEnd')
     </div>
 @stop

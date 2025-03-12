@@ -76,6 +76,7 @@ class Setting extends BaseModel
                     if (is_numeric($value)) {
                         return ! str_contains($value, '.') ? (int) $value : (float) $value;
                     }
+
                     return $value === '' ? null : $value;
                 }, $settings);
             });
