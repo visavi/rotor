@@ -222,6 +222,20 @@ class TopicController extends Controller
             $flood->saveState();
             sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
 
+            $subscribers = \App\Models\My::query()
+                ->where('relate_type', Topic::$morphName)
+                ->where('relate_id', $topic->id)
+                //->where('user_id', '<>', $user->id)
+                ->pluck('user_id');
+
+            $users = User::whereIn('id', $subscribers)->get();
+
+            foreach ($users as $user) {
+                // $message = 'Какой-то текст';
+                // $notify = textNotice('explain', compact('message'));
+                //$user->sendMessage(null, $notify);
+            }
+
             setFlash('success', __('main.message_added_success'));
         } else {
             setInput($request->all());
