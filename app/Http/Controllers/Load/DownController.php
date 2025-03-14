@@ -117,9 +117,9 @@ class DownController extends Controller
                     $validator->length($link, 5, 100, ['links' => __('validator.text')])
                         ->url($link, ['links' => __('validator.url')]);
 
-                    if (! in_array(getExtension($link), $allowExtension, true)) {
+                    /*if (! in_array(getExtension($link), $allowExtension, true)) {
                         $validator->addError(['links' => __('validator.extension')]);
-                    }
+                    }*/
                 }
             }
 
