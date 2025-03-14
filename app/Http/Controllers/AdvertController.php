@@ -59,14 +59,15 @@ class AdvertController extends Controller
             abort(200, __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));
         }
 
-        $total = Advert::query()->where('deleted_at', '>', SITETIME)->count();
+        Advert::query()->where('deleted_at', '<', SITETIME)->delete();
+
+        $total = Advert::query()->count();
         if ($total >= setting('rekusertotal')) {
             abort(200, __('adverts.advert_not_seats'));
         }
 
         $advert = Advert::query()
             ->where('user_id', $this->user->id)
-            ->where('deleted_at', '>', SITETIME)
             ->first();
 
         if ($advert) {
@@ -99,8 +100,6 @@ class AdvertController extends Controller
                 ->gte($this->user->money, $price, __('adverts.advert_not_money'));
 
             if ($validator->isValid()) {
-                Advert::query()->where('deleted_at', '<', SITETIME)->delete();
-
                 Advert::query()->create([
                     'site'       => $site,
                     'name'       => $name,
