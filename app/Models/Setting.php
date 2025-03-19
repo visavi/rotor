@@ -65,10 +65,8 @@ class Setting extends BaseModel
     public static function getSettings(): array
     {
         try {
-            return Cache::remember('settings', 3600, static function () {
+            return Cache::rememberForever('settings', static function () {
                 $settings = Setting::query()
-                    ->select(['name', 'value'])
-                    ->get()
                     ->pluck('value', 'name')
                     ->all();
 
