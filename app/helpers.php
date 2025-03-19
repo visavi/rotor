@@ -74,15 +74,7 @@ function dateFixed(
     string $format = 'd.m.Y / H:i',
     bool $original = false,
 ): string {
-    if ($timestamp === null) {
-        $timestamp = SITETIME;
-    }
-    if (is_numeric($timestamp)) {
-        $date = Date::createFromTimestamp($timestamp);
-    } else {
-        $date = Date::parse($timestamp);
-    }
-
+    $date = Date::parse($timestamp, config('app.timezone'));
     $shift = (int) getUser('timezone');
     $dateStamp = $date->addHours($shift)->format($format);
 
