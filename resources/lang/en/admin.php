@@ -199,6 +199,8 @@ return [
         'module'                   => 'Module',
         'migrations'               => 'Migrations',
         'symlink'                  => 'Symlink',
+        'routes'                   => 'Routes',
+        'hooks'                    => 'Hooks',
         'empty_modules'            => 'Modules not loaded yet!',
         'confirm_delete'           => 'Do you really want to remove the module?',
         'hint'                     => 'Attention! When you remove the module, all migrations and changes to the database will be deleted',

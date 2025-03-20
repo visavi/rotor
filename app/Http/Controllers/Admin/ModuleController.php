@@ -60,6 +60,14 @@ class ModuleController extends AdminController
             $moduleConfig['symlink'] = (new Module())->getLinkName($modulePath);
         }
 
+        if (file_exists($modulePath . '/routes.php')) {
+            $moduleConfig['routes'] = file_get_contents($modulePath . '/routes.php');
+        }
+
+        if (file_exists($modulePath . '/hooks.php')) {
+            $moduleConfig['hooks'] = file_get_contents($modulePath . '/hooks.php');
+        }
+
         $module = Module::query()->where('name', $moduleName)->first();
 
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));

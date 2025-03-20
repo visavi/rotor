@@ -81,6 +81,16 @@
         <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
     @endif
 
+    @if (isset($moduleConfig['routes']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.routes') }}</div>
+            <?= bbCode('[spoiler][code]' . $moduleConfig['routes'] . '[/code][/spoiler]') ?>
+    @endif
+
+    @if (isset($moduleConfig['hooks']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.hooks') }}</div>
+        <?= bbCode('[spoiler][code]' . $moduleConfig['hooks'] . '[/code][/spoiler]') ?>
+    @endif
+
     <br>
     @if ($module)
         @if (version_compare($moduleConfig['version'], $module->version, '>'))
