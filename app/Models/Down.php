@@ -155,6 +155,14 @@ class Down extends BaseModel
     }
 
     /**
+     * Is new file
+     */
+    public function isNew(): bool
+    {
+        return $this->created_at > strtotime('-3 day');
+    }
+
+    /**
      * Возвращает массив доступных расширений для просмотра в архиве
      */
     public function getViewExt(): array
