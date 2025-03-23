@@ -73,6 +73,9 @@
                         <div class="section-title">
                             <i class="fa fa-file"></i>
                             <a href="/downs/{{ $data->id }}">{{ $data->title }}</a>
+                            @if ($data->isNew())
+                                <span class="badge text-bg-success">NEW</span>
+                            @endif
                         </div>
                     </div>
 
