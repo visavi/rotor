@@ -135,6 +135,12 @@ return [
 
     'admin' => env('APP_ADMIN'),
 
+    'previous_keys' => [
+        ...array_filter(
+            explode(',', env('APP_PREVIOUS_KEYS', ''))
+        ),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
@@ -147,9 +153,10 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
+
     'maintenance' => [
-        'driver' => 'file',
-        // 'store' => 'redis',
+        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
+        'store'  => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
     /*
@@ -163,7 +170,7 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
+    //'providers' => ServiceProvider::defaultProviders()->merge([
         /*
          * Package Service Providers...
          */
@@ -171,7 +178,7 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
+/*        App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
@@ -179,7 +186,7 @@ return [
 
         App\Providers\ImageServiceProvider::class,
         App\Providers\ModuleServiceProvider::class,
-    ])->toArray(),
+    ])->toArray(),*/
 
     /*
     |--------------------------------------------------------------------------
@@ -192,7 +199,7 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
+/*    'aliases' => Facade::defaultAliases()->merge([
         // ...
-    ])->toArray(),
+    ])->toArray(),*/
 ];

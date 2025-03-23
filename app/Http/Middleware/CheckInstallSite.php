@@ -12,6 +12,9 @@ class CheckInstallSite
      */
     public function handle(Request $request, Closure $next)
     {
+
+       // dd($request);
+
         if (! setting('app_installed') && ! $request->is('install*')) {
             return redirect('install');
         }
