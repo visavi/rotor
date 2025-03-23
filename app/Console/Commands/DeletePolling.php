@@ -24,8 +24,6 @@ class DeletePolling extends Command
 
     /**
      * Удаляет старые записи голосов
-     *
-     * @return int
      */
     public function handle(): int
     {

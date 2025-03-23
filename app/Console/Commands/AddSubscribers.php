@@ -25,8 +25,6 @@ class AddSubscribers extends Command
 
     /**
      * Добавляет подписчиков в рассылку
-     *
-     * @return int
      */
     public function handle(): int
     {

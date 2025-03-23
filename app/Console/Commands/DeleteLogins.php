@@ -24,8 +24,6 @@ class DeleteLogins extends Command
 
     /**
      * Удаляет старые записи истории авторизаций
-     *
-     * @return int
      */
     public function handle(): int
     {

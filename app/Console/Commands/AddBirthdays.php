@@ -25,8 +25,6 @@ class AddBirthdays extends Command
 
     /**
      * Добавляет именинников в рассылку
-     *
-     * @return int
      */
     public function handle(): int
     {

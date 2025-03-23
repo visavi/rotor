@@ -25,8 +25,6 @@ class DeleteLogs extends Command
 
     /**
      * Удаляет старые записи логов
-     *
-     * @return int
      */
     public function handle(): int
     {

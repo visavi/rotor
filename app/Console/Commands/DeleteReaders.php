@@ -24,8 +24,6 @@ class DeleteReaders extends Command
 
     /**
      * Удаляет старые записи статистики просмотров и скачиваний
-     *
-     * @return int
      */
     public function handle(): int
     {

@@ -23,8 +23,6 @@ class BoardRestatement extends Command
 
     /**
      * Пересчитывает счетчик объявлений
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -32,6 +30,7 @@ class BoardRestatement extends Command
 
         $this->info('Board restatement successfully.');
 
-        return SymfonyCommand::SUCCESS;;
+        return SymfonyCommand::SUCCESS;
+        ;
     }
 }

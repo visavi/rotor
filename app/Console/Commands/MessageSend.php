@@ -24,8 +24,6 @@ class MessageSend extends Command
 
     /**
      * Рассылает письма
-     *
-     * @return int
      */
     public function handle(): int
     {

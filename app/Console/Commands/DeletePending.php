@@ -24,8 +24,6 @@ class DeletePending extends Command
 
     /**
      * Удаляет не активированные аккаунты
-     *
-     * @return int
      */
     public function handle(): int
     {

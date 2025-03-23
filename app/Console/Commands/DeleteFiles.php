@@ -24,8 +24,6 @@ class DeleteFiles extends Command
 
     /**
      * Удаляет не прикрепленные файлы
-     *
-     * @return int
      */
     public function handle(): int
     {
