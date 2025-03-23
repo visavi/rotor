@@ -50,7 +50,7 @@
     <div class="container-fluid mb-3">
         <div class="row">
             <div class="col-md-6">
-                @hook('userStart')
+                @hook('userStart', $user)
                 {{ __('users.status') }}: <b><a href="/statusfaq">{{ $user->getStatus() }}</a></b><br>
 
                 {{ $user->getGender() }}
@@ -116,7 +116,7 @@
                 @else
                     {{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{  $user->posrating }}/-{{  $user->negrating }})<br>
                 @endif
-                @hook('userEnd')
+                @hook('userEnd', $user)
             </div>
 
             <div class="col-md-6">
@@ -158,12 +158,13 @@
     @endif
 
     <div class="alert alert-info mb-3">
-        @hook('userActionStart')
+        @hook('userActionStart', $user)
         <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">{{ __('index.wall_posts') }}</a> ({{ $user->getCountWall() }})<br>
 
         @if (!empty($user->site))
             <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->getName() }}</a><br>
         @endif
+        @hook('userActionMiddle', $user)
 
         @if (getUser())
             @if ($user->login === getUser('login'))
@@ -195,6 +196,6 @@
                 @hook('userNotPersonalEnd', $user)
             @endif
         @endif
-        @hook('userActionEnd')
+        @hook('userActionEnd', $user)
     </div>
 @stop

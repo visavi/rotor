@@ -29,10 +29,11 @@ navbarMenuEnd
 footerStart
 footerEnd
 
-userStart - анкетка сверху
-userEnd - анкета снизу
+userStart($user) - анкетка сверху
+userEnd($user) - анкета снизу
 
-userActionStart - анкета нижний блок сверху
+userActionStart($user) - анкета нижний блок сверху
+userActionMiddle($user) - анкета нижний блок середина
 
 userPersonalStart - своя анкета сверху
 userPersonalEnd - своя анкета снизу
@@ -40,7 +41,7 @@ userPersonalEnd - своя анкета снизу
 userNotPersonalStart($user) - чужая анкета сверху
 userNotPersonalEnd($user) - чужая анкета снизу
 
-userActionEnd - блок снизу
+userActionEnd($user) - блок снизу
  */
 
 // Пример хука
