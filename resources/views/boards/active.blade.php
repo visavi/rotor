@@ -3,6 +3,12 @@
 @section('title', __('boards.my_items'))
 
 @section('header')
+    <div class="float-end">
+        @if (isAdmin() || (getUser() && setting('board_create')))
+            <a class="btn btn-success" href="/items/create">{{ __('main.add') }}</a>
+        @endif
+    </div>
+
     <h1>{{ __('boards.my_items') }}</h1>
 @stop
 
@@ -66,7 +72,9 @@
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        <div class="float-end">
+                                            <button type="button" class="btn btn-outline-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        </div>
                                     @endif
                                 </div>
                             </div>

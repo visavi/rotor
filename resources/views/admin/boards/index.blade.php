@@ -91,7 +91,9 @@
 
                                 <div class="col-md-2">
                                     @if ($item->price)
-                                        <button type="button" class="btn btn-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        <div class="float-end">
+                                            <button type="button" class="btn btn-outline-info">{{ $item->price }} {{ setting('currency') }}</button>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
