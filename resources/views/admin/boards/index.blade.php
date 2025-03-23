@@ -35,14 +35,6 @@
 
 @section('content')
     @if ($boards->isNotEmpty())
-        {{ __('main.sort') }}:
-            <?php $active = ($sort === 'date') ? 'success' : 'light text-dark'; ?>
-        <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=date" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
-
-            <?php $active = ($sort === 'price') ? 'success' : 'light text-dark'; ?>
-        <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=price" class="badge bg-{{ $active }}">{{ __('main.cost') }}</a>
-        <hr>
-
         <div class="row mb-3">
             @foreach ($boards->chunk(3) as $chunk)
                 @foreach ($chunk as $board)
@@ -60,6 +52,14 @@
     @endif
 
     @if ($items->isNotEmpty())
+        {{ __('main.sort') }}:
+            <?php $active = ($sort === 'date') ? 'success' : 'light text-dark'; ?>
+        <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=date" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
+
+            <?php $active = ($sort === 'price') ? 'success' : 'light text-dark'; ?>
+        <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=price" class="badge bg-{{ $active }}">{{ __('main.cost') }}</a>
+        <hr>
+
         @foreach ($items as $item)
             <div class="row mb-3">
                 <div class="col-md-12">
