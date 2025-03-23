@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Mailing;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class AddSubscribers extends Command
 {
@@ -23,21 +24,11 @@ class AddSubscribers extends Command
     protected $description = 'Add subscribers';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Добавляет подписчиков в рассылку
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $deliveryUsers = User::query()
             ->where('sendprivatmail', 0)
@@ -68,6 +59,6 @@ class AddSubscribers extends Command
 
         $this->info('Subscribers successfully added.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

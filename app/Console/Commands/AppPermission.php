@@ -3,7 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Filesystem\Filesystem;
+use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class AppPermission extends Command
 {
@@ -22,21 +23,9 @@ class AppPermission extends Command
     protected $description = 'Set file permissions';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(Filesystem $filesystem)
+    public function handle(Filesystem $filesystem): int
     {
         $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR);
         $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
@@ -44,10 +33,12 @@ class AppPermission extends Command
 
         $dirs = array_merge($storage, $uploads, $dirs);
 
-        $filesystem->chmod($dirs, 0777);
+        foreach ($dirs as $dir) {
+            $filesystem->chmod($dir, 0777);
+        }
 
         $this->info('Permissions set successfully.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

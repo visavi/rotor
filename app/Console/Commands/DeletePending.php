@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class DeletePending extends Command
 {
@@ -22,21 +23,11 @@ class DeletePending extends Command
     protected $description = 'Delete pending user';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Удаляет не активированные аккаунты
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (setting('regkeys')) {
             $users = User::query()
@@ -58,6 +49,6 @@ class DeletePending extends Command
 
         $this->info('Pending user successfully deleted.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Mailing;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class AddBirthdays extends Command
 {
@@ -23,21 +24,11 @@ class AddBirthdays extends Command
     protected $description = 'Add birthdays';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Добавляет именинников в рассылку
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $deliveryUsers = User::query()
             ->where('point', '>', 0)
@@ -64,6 +55,6 @@ class AddBirthdays extends Command
 
         $this->info('Birthdays successfully added.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

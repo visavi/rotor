@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class LangCompare extends Command
 {
@@ -25,7 +26,7 @@ class LangCompare extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $lang1 = $this->argument('lang1');
         $lang2 = $this->argument('lang2');
@@ -71,7 +72,7 @@ class LangCompare extends Command
             }
         }
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 
     /**

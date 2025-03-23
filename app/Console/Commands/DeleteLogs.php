@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Error;
 use App\Models\Log;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class DeleteLogs extends Command
 {
@@ -23,21 +24,11 @@ class DeleteLogs extends Command
     protected $description = 'Delete logs';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Удаляет старые записи логов
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $time = strtotime('-1 month', SITETIME);
 
@@ -51,6 +42,6 @@ class DeleteLogs extends Command
 
         $this->info('Logs successfully deleted.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

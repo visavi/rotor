@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Mailing;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class MessageSend extends Command
 {
@@ -22,21 +23,11 @@ class MessageSend extends Command
     protected $description = 'Message send';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Рассылает письма
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $queues = Mailing::query()
             ->where('sent', 0)
@@ -67,6 +58,6 @@ class MessageSend extends Command
 
         $this->info('Message sent successfully.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

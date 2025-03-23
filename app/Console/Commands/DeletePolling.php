@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Polling;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class DeletePolling extends Command
 {
@@ -22,21 +23,11 @@ class DeletePolling extends Command
     protected $description = 'Delete polling';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Удаляет старые записи голосов
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         Polling::query()
             ->where('created_at', '<', strtotime('-1 year', SITETIME))
@@ -44,6 +35,6 @@ class DeletePolling extends Command
 
         $this->info('Polling successfully deleted.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

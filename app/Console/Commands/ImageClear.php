@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class ImageClear extends Command
 {
@@ -21,21 +22,11 @@ class ImageClear extends Command
     protected $description = 'Flush the application image thumbnails';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $images = glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg,webp}'), GLOB_BRACE);
 
@@ -47,6 +38,6 @@ class ImageClear extends Command
 
         $this->info('Image cleared successfully.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }

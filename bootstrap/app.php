@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -37,6 +38,18 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.token' => \App\Http\Middleware\CheckToken::class,
             'check.ajax'  => \App\Http\Middleware\CheckAjax::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command('board:restatement')->hourly();
+        $schedule->command('delete:files')->daily();
+        $schedule->command('delete:logins')->daily();
+        $schedule->command('delete:logs')->daily();
+        $schedule->command('delete:pending')->daily();
+        $schedule->command('delete:polling')->weekly();
+        $schedule->command('delete:readers')->weekly();
+        $schedule->command('add:subscribers')->hourly();
+        $schedule->command('add:birthdays')->dailyAt('07:00');
+        $schedule->command('message:send')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->reportable(function (Throwable $exception) {

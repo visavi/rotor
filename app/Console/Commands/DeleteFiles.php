@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\File;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class DeleteFiles extends Command
 {
@@ -22,21 +23,11 @@ class DeleteFiles extends Command
     protected $description = 'Delete unattached files';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Удаляет не прикрепленные файлы
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $files = File::query()
             ->where('relate_id', 0)
@@ -49,6 +40,6 @@ class DeleteFiles extends Command
 
         $this->info('Files successfully deleted.');
 
-        return 0;
+        return SymfonyCommand::SUCCESS;
     }
 }
