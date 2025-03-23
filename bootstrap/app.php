@@ -16,22 +16,19 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append([
-            // \App\Http\Middleware\TrustHosts::class,
-            \Illuminate\Http\Middleware\TrustProxies::class,
-            \Illuminate\Http\Middleware\HandleCors::class,
-            \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
-            \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
-            \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-            \App\Http\Middleware\CheckInstallSite::class,
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\CheckInstallSite::class,
             \App\Http\Middleware\AuthenticateCookie::class,
-            \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         ]);
 
         $middleware->group('web', [
             \App\Http\Middleware\CheckAccessSite::class,
+            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            // \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
 
         $middleware->alias([

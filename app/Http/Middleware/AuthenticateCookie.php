@@ -73,10 +73,8 @@ class AuthenticateCookie
 
     /**
      * Устанавливает настройки
-     *
-     * @param User|false $user
      */
-    private function setSetting($user, Request $request): void
+    private function setSetting(?User $user, Request $request): void
     {
         $language = $user->language ?? setting('language');
         $theme = $user->themes ?? setting('themes');
