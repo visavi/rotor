@@ -31,6 +31,8 @@ return [
     'item_success_deleted'     => 'Ad successfully deleted!',
     'boards_closed'            => 'Posting of ads is closed by the site administration!',
     'boards_period_days'       => 'Advertisement placement :days days!',
+    'active'                   => 'Active',
+    'archive'                  => 'Archive',
 
     'category_success_created' => 'New category successfully created!',
     'category_parent_invalid'  => 'Invalid parent category selection!',

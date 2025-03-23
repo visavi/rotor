@@ -318,18 +318,38 @@ class BoardController extends Controller
     /**
      * Мои объявления
      */
-    public function active(): View
+    public function active(Request $request): View
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
+        $sort = check($request->input('sort', 'date'));
+        $order = match ($sort) {
+            'price' => 'price',
+            default => 'updated_at',
+        };
+
+        $type = check($request->input('type', 'active'));
+        $whereType = match ($type) {
+            'active' => '>',
+            default  => '<=',
+        };
+
+        $otherType = $type === 'active' ? '<=' : '>';
+        $otherCount = Item::query()
+            ->where('user_id', $user->id)
+            ->where('expires_at', $otherType, SITETIME)
+            ->count();
+
         $items = Item::query()
             ->where('user_id', $user->id)
-            ->orderByDesc('updated_at')
+            ->where('expires_at', $whereType, SITETIME)
+            ->orderByDesc($order)
             ->with('category', 'user', 'files')
-            ->paginate(setting('boards_per_page'));
+            ->paginate(setting('boards_per_page'))
+            ->appends(compact('type', 'sort'));
 
-        return view('boards/active', compact('items'));
+        return view('boards/active', compact('items', 'sort', 'type', 'otherCount'));
     }
 }

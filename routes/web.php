@@ -131,7 +131,7 @@ Route::controller(BoardController::class)
     ->prefix('boards')
     ->group(function () {
         Route::get('/{id?}', 'index')->name('boards.index');
-        Route::get('/active', 'active');
+        Route::get('/active', 'active')->name('boards.active');
     });
 
 /* Объявления */
