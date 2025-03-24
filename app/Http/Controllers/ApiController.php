@@ -12,6 +12,7 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,10 +61,10 @@ class ApiController extends Controller
                 'timezone'    => $user->timezone,
                 'point'       => $user->point,
                 'money'       => $user->money,
-                'status'      => $user->getStatus()->toHtml(),
+                'status'      => $user->status ? $user->getStatus()->toHtml() : null,
                 'color'       => $user->color,
-                'avatar'      => $user->avatar ? config('app.url') . $user->avatar : null,
-                'picture'     => $user->picture ? config('app.url') . $user->picture : null,
+                'avatar'      => $user->avatar ? asset($user->avatar) : null,
+                'picture'     => $user->picture ? asset($user->picture) : null,
                 'rating'      => $user->rating,
                 'lastlogin'   => $user->updated_at,
             ],
@@ -100,10 +101,10 @@ class ApiController extends Controller
                 'themes'      => $user->themes,
                 'point'       => $user->point,
                 'money'       => $user->money,
-                'status'      => $user->getStatus()->toHtml(),
+                'status'      => $user->status ? $user->getStatus()->toHtml() : null,
                 'color'       => $user->color,
-                'avatar'      => $user->avatar ? config('app.url') . $user->avatar : null,
-                'picture'     => $user->picture ? config('app.url') . $user->picture : null,
+                'avatar'      => $user->avatar ? asset($user->avatar) : null,
+                'picture'     => $user->picture ? asset($user->picture) : null,
                 'rating'      => $user->rating,
                 'lastlogin'   => $user->updated_at,
             ],
@@ -149,21 +150,7 @@ class ApiController extends Controller
             ];
         }
 
-        return response()->json([
-            'success' => true,
-            'data'    => $messages,
-            'links'   => [
-                'next' => $dialogues->nextPageUrl(),
-                'prev' => $dialogues->previousPageUrl(),
-            ],
-            'meta' => [
-                'current_page' => $dialogues->currentPage(),
-                'last_page'    => $dialogues->lastPage(),
-                'path'         => $dialogues->path(),
-                'per_page'     => $dialogues->perPage(),
-                'total'        => $dialogues->total(),
-            ],
-        ]);
+        return $this->getResponse($dialogues, $messages);
     }
 
     /**
@@ -220,21 +207,7 @@ class ApiController extends Controller
             ];
         }
 
-        return response()->json([
-            'success' => true,
-            'data'    => $msg,
-            'links'   => [
-                'next' => $messages->nextPageUrl(),
-                'prev' => $messages->previousPageUrl(),
-            ],
-            'meta' => [
-                'current_page' => $messages->currentPage(),
-                'last_page'    => $messages->lastPage(),
-                'path'         => $messages->path(),
-                'per_page'     => $messages->perPage(),
-                'total'        => $messages->total(),
-            ],
-        ]);
+        return $this->getResponse($messages, $msg);
     }
 
     /**
@@ -274,21 +247,7 @@ class ApiController extends Controller
             ];
         }
 
-        return response()->json([
-            'success' => true,
-            'data'    => $data,
-            'links'   => [
-                'next' => $topics->nextPageUrl(),
-                'prev' => $topics->previousPageUrl(),
-            ],
-            'meta' => [
-                'current_page' => $topics->currentPage(),
-                'last_page'    => $topics->lastPage(),
-                'path'         => $topics->path(),
-                'per_page'     => $topics->perPage(),
-                'total'        => $topics->total(),
-            ],
-        ]);
+        return $this->getResponse($topics, $data);
     }
 
     /**
@@ -322,19 +281,27 @@ class ApiController extends Controller
             ];
         }
 
+        return $this->getResponse($posts, $data);
+    }
+
+    /**
+     * Get paginate
+     */
+    private function getResponse(LengthAwarePaginator $collect, array $data): Response
+    {
         return response()->json([
             'success' => true,
             'data'    => $data,
             'links'   => [
-                'next' => $posts->nextPageUrl(),
-                'prev' => $posts->previousPageUrl(),
+                'next' => $collect->nextPageUrl(),
+                'prev' => $collect->previousPageUrl(),
             ],
             'meta' => [
-                'current_page' => $posts->currentPage(),
-                'last_page'    => $posts->lastPage(),
-                'path'         => $posts->path(),
-                'per_page'     => $posts->perPage(),
-                'total'        => $posts->total(),
+                'current_page' => $collect->currentPage(),
+                'last_page'    => $collect->lastPage(),
+                'path'         => $collect->path(),
+                'per_page'     => $collect->perPage(),
+                'total'        => $collect->total(),
             ],
         ]);
     }
