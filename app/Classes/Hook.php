@@ -40,6 +40,8 @@ class Hook
      */
     public static function call(string $hookName, mixed $args = null, mixed $result = null): mixed
     {
+        $result .= '<!--@' . $hookName . '-->';
+
         if (isset(self::$hooks[$hookName])) {
             foreach (self::$hooks[$hookName] as $hook) {
                 $result = $hook['callback']($result, $args);
