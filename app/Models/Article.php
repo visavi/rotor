@@ -150,6 +150,14 @@ class Article extends BaseModel
     }
 
     /**
+     * Is new article
+     */
+    public function isNew(): bool
+    {
+        return $this->created_at > strtotime('-3 day');
+    }
+
+    /**
      * Удаление статьи и загруженных файлов
      */
     public function delete(): ?bool

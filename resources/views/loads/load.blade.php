@@ -64,6 +64,10 @@
                 <div class="section-body border-top">
                     @if ($child->lastDown)
                         {{ __('loads.down') }}: <a href="/downs/{{ $child->lastDown->id }}">{{ $child->lastDown->title }}</a>
+
+                        @if ($child->lastDown->isNew())
+                            <span class="badge text-bg-success">NEW</span>
+                        @endif
                         <br>
                         {{ __('main.author') }}: {{ $child->lastDown->user->getProfile() }}
                         <small class="section-date text-muted fst-italic">

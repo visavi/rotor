@@ -61,4 +61,14 @@ class Blog extends BaseModel
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->groupBy('category_id');
     }
+
+    /**
+     * Возвращает последнюю статью
+     */
+    public function lastArticle(): hasOne
+    {
+        return $this->hasOne(Article::class, 'category_id')
+            ->latest('created_at')
+            ->limit(1);
+    }
 }

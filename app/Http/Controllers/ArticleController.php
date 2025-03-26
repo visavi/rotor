@@ -30,7 +30,7 @@ class ArticleController extends Controller
         $categories = Blog::query()
             ->where('parent_id', 0)
             ->orderBy('sort')
-            ->with('children', 'new', 'children.new')
+            ->with('children', 'new', 'children.new', 'lastArticle.user')
             ->get();
 
         if ($categories->isEmpty()) {

@@ -37,7 +37,7 @@
 
 @section('content')
     @if ($articles->onFirstPage() && $category->children->isNotEmpty())
-        @php $category->children->load('children'); @endphp
+        @php $category->children->load(['children', 'lastArticle.user']); @endphp
         @foreach ($category->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-header d-flex align-items-center">
@@ -48,6 +48,23 @@
                             ({{ $child->count_articles + $child->children->sum('count_articles') }})
                         </div>
                     </div>
+                </div>
+
+                <div class="section-body border-top">
+                    @if ($child->lastArticle)
+                        {{ __('blogs.article') }}: <a href="/articles/{{ $child->lastArticle->id }}">{{ $child->lastArticle->title }}</a>
+
+                        @if ($child->lastArticle->isNew())
+                            <span class="badge text-bg-success">NEW</span>
+                        @endif
+                        <br>
+                        {{ __('main.author') }}: {{ $child->lastArticle->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">
+                            {{ dateFixed($child->lastArticle->created_at) }}
+                        </small>
+                    @else
+                        {{ __('blogs.empty_articles') }}
+                    @endif
                 </div>
             </div>
         @endforeach
@@ -62,6 +79,9 @@
                         <div class="section-title">
                             <i class="fa fa-pencil-alt"></i>
                             <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                            @if ($article->isNew())
+                                <span class="badge text-bg-success">NEW</span>
+                            @endif
                         </div>
                     </div>
 

@@ -65,6 +65,10 @@
             <div class="section-body border-top">
                 @if ($category->lastDown)
                     {{ __('loads.down') }}: <a href="/downs/{{ $category->lastDown->id }}">{{ $category->lastDown->title }}</a>
+
+                    @if ($category->lastDown->isNew())
+                        <span class="badge text-bg-success">NEW</span>
+                    @endif
                     <br>
                     {{ __('main.author') }}: {{ $category->lastDown->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">
