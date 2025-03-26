@@ -66,7 +66,7 @@ class Article extends BaseModel
     }
 
     /**
-     * Возвращает последнии комментарии к статье
+     * Возвращает последние комментарии к статье
      */
     public function lastComments(int $limit = 15): HasMany
     {

@@ -53,12 +53,25 @@
     <hr>
 
     @if ($downs->onFirstPage() && $category->children->isNotEmpty())
-        @php $category->children->load('children'); @endphp
+        @php $category->children->load(['children', 'lastDown.user']); @endphp
         @foreach ($category->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
                     <a href="/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs + $child->children->sum('count_downs') }})
+                </div>
+
+                <div class="section-body border-top">
+                    @if ($child->lastDown)
+                        {{ __('loads.down') }}: <a href="/downs/{{ $child->lastDown->id }}">{{ $child->lastDown->title }}</a>
+                        <br>
+                        {{ __('main.author') }}: {{ $child->lastDown->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">
+                            {{ dateFixed($child->lastDown->created_at) }}
+                        </small>
+                    @else
+                        {{ __('loads.empty_downs') }}
+                    @endif
                 </div>
             </div>
         @endforeach
@@ -85,7 +98,14 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('main.downloads') }}: {{ $data->loads }}<br>
+                    <div class="mb-2">
+                        {{ __('main.downloads') }}: {{ $data->loads }}<br>
+                        {{ __('main.author') }}: {{ $data->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">
+                            {{ dateFixed($data->created_at) }}
+                        </small>
+                    </div>
+
                     <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                     <a href="/downs/end/{{ $data->id }}">&raquo;</a>
                 </div>

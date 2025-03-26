@@ -5,6 +5,7 @@ return [
     'down_text'              => 'Description',
     'load'                   => 'Section',
     'loads_list'             => 'List of sections',
+    'down'                   => 'File',
     'downs'                  => 'Files',
     'top_downs'              => 'Top Files',
     'empty_loads'            => 'Download sections not yet created!',

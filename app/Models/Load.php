@@ -53,6 +53,16 @@ class Load extends BaseModel
     }
 
     /**
+     * Возвращает последнюю загрузку
+     */
+    public function lastDown(): hasOne
+    {
+        return $this->hasOne(Down::class, 'category_id')
+            ->latest('created_at')
+            ->limit(1);
+    }
+
+    /**
      * Возвращает количество загрузок за последние 3 дней
      */
     public function new(): hasOne

@@ -61,6 +61,19 @@
                     @endforeach
                 @endif
             </div>
+
+            <div class="section-body border-top">
+                @if ($category->lastDown)
+                    {{ __('loads.down') }}: <a href="/downs/{{ $category->lastDown->id }}">{{ $category->lastDown->title }}</a>
+                    <br>
+                    {{ __('main.author') }}: {{ $category->lastDown->user->getProfile() }}
+                    <small class="section-date text-muted fst-italic">
+                        {{ dateFixed($category->lastDown->created_at) }}
+                    </small>
+                @else
+                    {{ __('loads.empty_downs') }}
+                @endif
+            </div>
         </div>
     @endforeach
 

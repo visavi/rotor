@@ -19,7 +19,7 @@ class LoadController extends Controller
     {
         $categories = Load::query()
             ->where('parent_id', 0)
-            ->with('children', 'new', 'children.new')
+            ->with('children', 'new', 'children.new', 'lastDown.user')
             ->orderBy('sort')
             ->get();
 
