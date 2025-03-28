@@ -54,6 +54,7 @@ class LoadController extends Controller
             ->where('category_id', $category->id)
             ->where('active', 1)
             ->orderByDesc($order)
+            ->with('user')
             ->paginate(setting('downlist'))
             ->appends(['sort' => $sort]);
 

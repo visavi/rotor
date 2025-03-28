@@ -22,7 +22,7 @@ class LoadController extends AdminController
     {
         $categories = Load::query()
             ->where('parent_id', 0)
-            ->with('children', 'new', 'children.new')
+            ->with('children', 'new', 'children.new', 'lastDown.user')
             ->orderBy('sort')
             ->get();
 
@@ -193,6 +193,7 @@ class LoadController extends AdminController
             ->where('category_id', $category->id)
             ->where('active', 1)
             ->orderByDesc($order)
+            ->with('user')
             ->paginate(setting('downlist'))
             ->appends(['sort' => $sort]);
 

@@ -28,9 +28,9 @@
                     <i class="fa fa-folder-open"></i>
                     <a href="/admin/loads/{{ $category->id }}">{{ $category->name }}</a>
                     @if ($category->new)
-                        ({{ $category->count_downs }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)
+                        ({{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)<br>
                     @else
-                        ({{ $category->count_downs }})
+                        ({{ $category->count_downs + $category->children->sum('count_downs') }})<br>
                     @endif
 
                     @if ($category->closed)
@@ -47,13 +47,14 @@
 
                 <div>
                     @if ($category->children->isNotEmpty())
+                        @php $category->children->load('children'); @endphp
                         @foreach ($category->children as $child)
                             <div>
                                 <i class="fa fa-angle-right"></i> <b><a href="/admin/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
                                 @if ($child->new)
-                                    ({{ $child->count_downs }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                                    ({{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
                                 @else
-                                    ({{ $child->count_downs }})
+                                    ({{ $child->count_downs + $child->children->sum('count_downs') }})
                                 @endif
 
                                 @if (isAdmin('boss'))
@@ -62,6 +63,23 @@
                                 @endif
                             </div>
                         @endforeach
+                    @endif
+                </div>
+
+                <div class="section-body border-top">
+                    @if ($category->lastDown)
+                        {{ __('loads.down') }}: <a href="/downs/{{ $category->lastDown->id }}">{{ $category->lastDown->title }}</a>
+
+                        @if ($category->lastDown->isNew())
+                            <span class="badge text-bg-success">NEW</span>
+                        @endif
+                        <br>
+                        {{ __('main.author') }}: {{ $category->lastDown->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">
+                            {{ dateFixed($category->lastDown->created_at) }}
+                        </small>
+                    @else
+                        {{ __('loads.empty_downs') }}
                     @endif
                 </div>
             </div>
