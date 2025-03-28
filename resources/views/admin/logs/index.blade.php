@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    @if ($logs)
+    @if ($logs->isNotEmpty())
         @foreach ($logs as $log)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">

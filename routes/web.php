@@ -531,7 +531,7 @@ Route::controller(OnlineController::class)
     });
 
 /* Админ-панель */
-Route::prefix('admin')->middleware('check.admin')->group(function () {
+Route::prefix('admin')->middleware(['check.admin', 'admin.logger'])->group(function () {
     Route::controller(AdminController::class)
         ->group(function () {
             Route::get('/', 'main');
@@ -879,7 +879,7 @@ Route::prefix('admin')->middleware('check.admin')->group(function () {
         Route::controller(LogController::class)
             ->prefix('logs')
             ->group(function () {
-                Route::get('/', 'index');
+                Route::get('/', 'index')->withoutMiddleware('admin.logger');
                 Route::get('/clear', 'clear');
             });
 

@@ -33,10 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'check.admin' => \App\Http\Middleware\CheckAdmin::class,
-            'check.user'  => \App\Http\Middleware\CheckUser::class,
-            'check.token' => \App\Http\Middleware\CheckToken::class,
-            'check.ajax'  => \App\Http\Middleware\CheckAjax::class,
+            'check.admin'  => \App\Http\Middleware\CheckAdmin::class,
+            'check.user'   => \App\Http\Middleware\CheckUser::class,
+            'check.token'  => \App\Http\Middleware\CheckToken::class,
+            'check.ajax'   => \App\Http\Middleware\CheckAjax::class,
+            'admin.logger' => \App\Http\Middleware\AdminLogger::class,
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
