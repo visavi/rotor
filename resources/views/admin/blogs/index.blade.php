@@ -62,6 +62,23 @@
                     @endforeach
                 @endif
             </div>
+
+            <div class="section-body border-top">
+                @if ($category->lastArticle)
+                    {{ __('blogs.article') }}: <a href="/articles/{{ $category->lastArticle->id }}">{{ $category->lastArticle->title }}</a>
+
+                    @if ($category->lastArticle->isNew())
+                        <span class="badge text-bg-success">NEW</span>
+                    @endif
+                    <br>
+                    {{ __('main.author') }}: {{ $category->lastArticle->user->getProfile() }}
+                    <small class="section-date text-muted fst-italic">
+                        {{ dateFixed($category->lastArticle->created_at) }}
+                    </small>
+                @else
+                    {{ __('blogs.empty_articles') }}
+                @endif
+            </div>
         </div>
     @endforeach
 

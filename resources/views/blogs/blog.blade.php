@@ -101,8 +101,14 @@
                         {{ $article->shortText() }}
                     </div>
 
-                    {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})<br>
-                    {{ __('main.views') }}: {{ $article->visits }}<br>
+                    <div class="mb-2">
+                        {{ __('main.views') }}: {{ $article->visits }}<br>
+                        {{ __('main.author') }}: {{ $article->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">
+                            {{ dateFixed($article->created_at) }}
+                        </small>
+                    </div>
+
                     <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
                     <a href="/articles/end/{{ $article->id }}">&raquo;</a>
                 </div>
