@@ -116,11 +116,16 @@ $(function () {
         return false;
     });
 
-    /*if ($('.markItUpEditor').val().length > 0) {
-        window.onbeforeunload = function () {
-            return "You're about to end your session, are you sure?";
+    $(window).on('beforeunload', function(e) {
+        if ($('.markItUpEditor').val().trim().length > 0) {
+            e.preventDefault();
+            return e.returnValue = '';
         }
-    }*/
+    });
+
+    $('form').on('submit', function() {
+        $(window).off('beforeunload');
+    });
 
     $('.js-messages-block').on('show.bs.dropdown', function () {
         getNewMessages();
@@ -151,6 +156,16 @@ $(function () {
 
     currentTheme.addClass('active');
     $('#theme-icon-active').attr('class', activeThemeClass);
+
+    /* Offset при переходе по якорю */
+    if (window.location.hash) {
+        setTimeout(function() {
+            const hash = $(window.location.hash);
+            if (hash.length) {
+                window.scrollTo(0, hash.offset().top - 50);
+            }
+        }, 10);
+    }
 });
 
 /* Показ формы загрузки файла */
