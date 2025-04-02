@@ -42,4 +42,18 @@ class Comment extends BaseModel
     {
         return $this->morphTo('relate');
     }
+
+    /**
+     * Возвращает тип связанного объекта
+     */
+    public function getRelateType(): string
+    {
+        return match ($this->relate_type) {
+            Article::$morphName => __('index.blogs'),
+            Down::$morphName    => __('index.loads'),
+            News::$morphName    => __('index.news'),
+            Offer::$morphName   => __('index.offers'),
+            Photo::$morphName   => __('index.photos'),
+        };
+    }
 }

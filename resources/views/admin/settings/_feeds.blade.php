@@ -84,6 +84,12 @@
         <label class="form-check-label" for="feed_offers_show">{{ __('settings.feed_offers_show') }}</label>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="sets[feed_comments_show]">
+        <input type="checkbox" class="form-check-input" value="1" name="sets[feed_comments_show]" id="feed_comments_show"{{ getInput('sets.feed_comments_show', $settings['feed_comments_show']) ? ' checked' : '' }}>
+        <label class="form-check-label" for="feed_comments_show">{{ __('settings.feed_comments_show') }}</label>
+    </div>
+
     <div class="mb-3{{ hasError('sets[feed_topics_rating]') }}">
         <label for="feed_topics_rating" class="form-label">{{ __('settings.feed_topics_rating') }}:</label>
         <input type="number" class="form-control" id="feed_topics_rating" name="sets[feed_topics_rating]" maxlength="2" value="{{ getInput('sets.feed_topics_rating', $settings['feed_topics_rating']) }}" required>
@@ -118,6 +124,12 @@
         <label for="feed_offers_rating" class="form-label">{{ __('settings.feed_offers_rating') }}:</label>
         <input type="number" class="form-control" id="feed_offers_rating" name="sets[feed_offers_rating]" maxlength="2" value="{{ getInput('sets.feed_offers_rating', $settings['feed_offers_rating']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[feed_offers_rating]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[feed_comments_rating]') }}">
+        <label for="feed_comments_rating" class="form-label">{{ __('settings.feed_comments_rating') }}:</label>
+        <input type="number" class="form-control" id="feed_comments_rating" name="sets[feed_comments_rating]" maxlength="2" value="{{ getInput('sets.feed_comments_rating', $settings['feed_comments_rating']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[feed_comments_rating]') }}</div>
     </div>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>

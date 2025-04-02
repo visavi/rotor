@@ -33,6 +33,11 @@
     @if ($post instanceof \App\Models\Offer)
         @include('feeds/_offers')
     @endif
+
+    {{-- Комментарии --}}
+    @if ($post instanceof \App\Models\Comment)
+        @include('feeds/_comments')
+    @endif
 @empty
     {{ showError(__('forums.empty_posts')) }}
 @endforelse

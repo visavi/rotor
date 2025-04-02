@@ -8,7 +8,7 @@
             @if ($post->type === 'offer')
                 <a href="/offers/offer" class="text-muted">{{ __('offers.offers') }}</a>
             @else
-                <a href="/offers/issue" class="text-muted">{{ __('offers.issues') }}</a>
+                <a href="/offers/issue" class="text-muted">{{ __('offers.problems') }}</a>
             @endif
         </li>
     </ol>

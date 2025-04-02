@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Classes;
 
 use App\Models\Article;
+use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Item;
 use App\Models\News;
@@ -102,6 +103,11 @@ class Feed
             }
         }
 
+        if (setting('feed_comments_show')) {
+            $comments = $this->getComments();
+            $collect = $collect->merge($comments);
+        }
+
         $posts = $collect
             ->sortByDesc('created_at')
             ->sortByDesc('top')
@@ -141,8 +147,8 @@ class Feed
                     $join->on('last_post_id', 'posts.id')
                         ->where('posts.rating', '>', setting('feed_topics_rating'));
                 })
-                ->orderByDesc('topics.updated_at')
                 ->with('lastPost.user', 'lastPost.files', 'forum.parent')
+                ->orderByDesc('topics.updated_at')
                 ->limit(setting('feed_last_record'))
                 ->get();
         });
@@ -158,9 +164,9 @@ class Feed
         return Cache::remember('NewsFeed', 600, static function () {
             return News::query()
                 ->where('rating', '>', setting('feed_news_rating'))
+                ->with('user')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
-                ->with('user')
                 ->get();
         });
     }
@@ -175,9 +181,9 @@ class Feed
         return Cache::remember('PhotoFeed', 600, static function () {
             return Photo::query()
                 ->where('rating', '>', setting('feed_photos_rating'))
+                ->with('user', 'files')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
-                ->with('user', 'files')
                 ->get();
         });
     }
@@ -192,9 +198,9 @@ class Feed
         return Cache::remember('ArticleFeed', 600, static function () {
             return Article::query()
                 ->where('rating', '>', setting('feed_downs_rating'))
+                ->with('user', 'files', 'category.parent')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
-                ->with('user', 'files', 'category.parent')
                 ->get();
         });
     }
@@ -210,9 +216,9 @@ class Feed
             return Down::query()
                 ->where('active', 1)
                 ->where('rating', '>', setting('feed_downs_rating'))
+                ->with('user', 'files', 'category.parent')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
-                ->with('user', 'files', 'category.parent')
                 ->get();
         });
     }
@@ -227,9 +233,9 @@ class Feed
         return Cache::remember('ItemFeed', 600, static function () {
             return Item::query()
                 ->where('expires_at', '>', SITETIME)
+                ->with('user', 'files', 'category.parent')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
-                ->with('user', 'files', 'category.parent')
                 ->get();
         });
     }
@@ -244,9 +250,31 @@ class Feed
         return Cache::remember('OfferFeed', 600, static function () {
             return Offer::query()
                 ->where('rating', '>', setting('feed_offers_rating'))
+                ->with('user')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
-                ->with('user')
+                ->get();
+        });
+    }
+
+    /**
+     * Get comments
+     *
+     * @return Collection<Comment>
+     */
+    public function getComments(): Collection
+    {
+        return Cache::remember('CommentFeed', 600, static function () {
+            return Comment::query()
+                // ->where('rating', '>', 0) // TODO добавить рейтинг для комментариев
+                ->whereIn('id', function ($query) {
+                    $query->selectRaw('MAX(id)')
+                        ->from('comments')
+                        ->groupBy('relate_id');
+                })
+                ->with('relate', 'user')
+                ->orderByDesc('created_at')
+                ->limit(setting('feed_last_record'))
                 ->get();
         });
     }

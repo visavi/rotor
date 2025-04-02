@@ -27,10 +27,8 @@ class BaseModel extends Model
 
     /**
      * Bootstrap services.
-     *
-     * @return void
      */
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
