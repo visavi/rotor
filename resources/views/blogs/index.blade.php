@@ -39,11 +39,13 @@
                 <i class="fa fa-folder-open"></i>
                 <a href="/blogs/{{ $category->id }}">{{ $category->name }}</a>
 
-                @if ($category->new)
-                    ({{ $category->count_articles + $category->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
-                @else
-                    ({{ $category->count_articles + $category->children->sum('count_articles') }})
-                @endif
+                <span class="badge bg-light text-dark">
+                    @if ($category->new)
+                        {{ $category->count_articles + $category->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>
+                    @else
+                        {{ $category->count_articles + $category->children->sum('count_articles') }}
+                    @endif
+                </span>
             </div>
 
             <div class="section-content">
@@ -53,11 +55,13 @@
                             <i class="fa fa-angle-right"></i>
                             <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
 
-                            @if ($child->new)
-                                ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
-                            @else
-                                ({{ $child->count_articles }})
-                            @endif
+                            <span class="badge bg-light text-dark">
+                                @if ($child->new)
+                                    {{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>
+                                @else
+                                    {{ $child->count_articles }}
+                                @endif
+                            </span>
                         </div>
                     @endforeach
                 @endif

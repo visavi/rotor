@@ -146,12 +146,11 @@
 .app-notification__title {
   padding: 8px 20px;
   text-align: center;
-  background-color: transparentize($navbar-color, 0.6);
+  color: var(--bs-dropdown-link-active-color);
+  background-color: var(--bs-dropdown-link-active-bg);
 }
 .app-notification__footer {
-  padding: 8px 20px;
   text-align: center;
-  background-color: var(--bs-body-bg);
 }
 .app-notification__content {
   max-height: 220px;

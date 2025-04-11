@@ -96,7 +96,7 @@
     <form action="/admin/posts/delete?tid={{ $topic->id }}&amp;page={{ $posts->currentPage() }}" method="post">
         @csrf
 
-        <div class="bg-light text-dark p-1 my-1 text-end">
+        <div class="section-form py-1 my-2 text-end">
             <label for="all" class="form-label">{{ __('main.select_all') }}</label>
             <input type="checkbox" class="form-check-input" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
         </div>

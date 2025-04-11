@@ -4,6 +4,7 @@
 .dropdown-menu {
   border-radius: 0;
   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
   &.dropdown-menu-end {
     left: auto;
     right: 0;
@@ -18,10 +19,13 @@
     vertical-align: middle;
     width: 1.25em;
   }
-    &.active {
-        border-radius: 0 !important;
-    }
-    &:hover {
-        border-radius: 0 !important;
-    }
+
+  &.active,
+  &:hover {
+    border-radius: 0 !important;
+  }
+  &:hover:not(.active) {
+    background-color: var(--base-bg);
+    filter: brightness(95%);
+  }
 }
