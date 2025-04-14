@@ -209,8 +209,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает ссылку на профиль пользователя
-     *
-     * @return HtmlString Путь к профилю
      */
     public function getProfile(): HtmlString
     {
@@ -238,8 +236,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает пол пользователя
-     *
-     * @return HtmlString пол пользователя
      */
     public function getGender(): HtmlString
     {
@@ -252,14 +248,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Авторизует пользователя
-     *
-     * @param string $login    Логин
-     * @param string $password Пароль пользователя
-     * @param bool   $remember Запомнить пароль
-     *
-     * @return User|bool
      */
-    public static function auth(string $login, string $password, bool $remember = true)
+    public static function auth(string $login, string $password, bool $remember = true): User|bool
     {
         if (! empty($login) && ! empty($password)) {
             $user = getUserByLoginOrEmail($login);
@@ -268,11 +258,11 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
                 (new self())->rememberUser($user, $remember);
 
                 // Сохранение привязки к соц. сетям
-                if (session()->has('social')) {
+                if (app('session')->has('social')) {
                     Social::query()->create([
                         'user_id'    => $user->id,
-                        'network'    => session()->get('social')->network,
-                        'uid'        => session()->get('social')->uid,
+                        'network'    => app('session')->get('social')->network,
+                        'uid'        => app('session')->get('social')->uid,
                         'created_at' => SITETIME,
                     ]);
                 }
@@ -288,8 +278,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Авторизует через социальные сети
-     *
-     * @param string $token идентификатор Ulogin
      *
      * @throws GuzzleException
      *
@@ -348,8 +336,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает уровень пользователя
-     *
-     * @return string Уровень пользователя
      */
     public function getLevel(): string
     {
@@ -377,8 +363,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * User online status
-     *
-     * @return HtmlString онлайн-статус
      */
     public function getOnline(): HtmlString
     {
@@ -431,8 +415,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает аватар пользователя
-     *
-     * @return HtmlString аватар пользователя
      */
     public function getAvatar(): HtmlString
     {
@@ -443,6 +425,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         if ($this->avatar && file_exists(public_path($this->avatar))) {
             $avatar = $this->getAvatarImage();
         } else {
+            // $avatar = $this->getGravatar();
             $avatar = $this->getAvatarDefault();
         }
 
@@ -475,8 +458,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает аватар для пользователя по умолчанию
-     *
-     * @return HtmlString код аватара
      */
     private function getAvatarDefault(): HtmlString
     {
@@ -488,9 +469,17 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
+     * Get gravatar
+     */
+    private function getGravatar(): HtmlString
+    {
+        $hash = hash('sha256', $this->email);
+
+        return new HtmlString('<img class="avatar-default rounded-circle" src="//gravatar.com/avatar/' . $hash . '?d=initials&amp;name=' . $this->getName() . '" alt="">');
+    }
+
+    /**
      * Кеширует статусы пользователей
-     *
-     * @param int $seconds время кеширования
      */
     public function getStatuses(int $seconds): array
     {
@@ -524,11 +513,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
-     * Возвращает находится ли пользователь в контакатх
-     *
-     * @param User $user объект пользователя
-     *
-     * @return bool находится ли в контактах
+     * Находится ли пользователь в контактах
      */
     public function isContact(User $user): bool
     {
@@ -545,11 +530,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
-     * Возвращает находится ли пользователь в игноре
-     *
-     * @param User $user объект пользователя
-     *
-     * @return bool находится ли в игноре
+     * Находится ли пользователь в игноре
      */
     public function isIgnore(User $user): bool
     {
@@ -568,10 +549,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     /**
      * Отправляет приватное сообщение
      *
-     * @param User|null $author     Отправитель
-     * @param string    $text       Текст сообщения
-     * @param bool      $withAuthor Создавать диалог для автора
-     *
      * @return Builder|Model
      */
     public function sendMessage(?User $author, string $text, bool $withAuthor = true)
@@ -581,8 +558,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает количество писем пользователя
-     *
-     * @return int количество писем
      */
     public function getCountMessages(): int
     {
@@ -591,8 +566,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает размер контакт-листа
-     *
-     * @return int количество контактов
      */
     public function getCountContact(): int
     {
@@ -636,8 +609,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Удаляет записи пользователя из всех таблиц
-     *
-     * @return bool|null Результат удаления
      */
     public function delete(): ?bool
     {
@@ -750,8 +721,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
             cookie()->queue(cookie()->forever('password', $user->password));
         }
 
-        session()->put('id', $user->id);
-        session()->put('password', $user->password);
-        session()->put('online');
+        app('session')->put('id', $user->id);
+        app('session')->put('password', $user->password);
+        app('session')->put('online');
     }
 }
