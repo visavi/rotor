@@ -15,6 +15,7 @@
     <div class="mb-3">
         <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">{{ __('main.version') }} {{ ROTOR_VERSION }}</a></b>
     </div>
+    @hook('adminHeader')
 
     <div class="section mb-3 shadow">
         <div class="section-title">
@@ -29,6 +30,7 @@
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/boards">{{ __('index.boards') }}</a> ({{ statsBoard() }})<br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/admin-adverts">{{ __('index.admin_advertising') }}</a><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adverts">{{ __('index.advertising') }}</a><br>
+            @hook('adminBlockEditor')
         </div>
     </div>
 
@@ -47,6 +49,7 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">{{ __('index.ban_history') }}</a> ({{ statsBanHist() }})<br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">{{ __('index.invitations') }}</a> ({{ statsInvite() }})<br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">{{ __('index.cash_transactions') }}</a><br>
+                @hook('adminBlockModer')
             </div>
         </div>
     @endif
@@ -69,6 +72,7 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})<br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/stickers">{{ __('index.stickers') }}</a> ({{ statsStickers() }})<br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">{{ __('index.user_statuses') }}</a><br>
+                @hook('adminBlockAdmin')
             </div>
         </div>
     @endif
@@ -92,6 +96,7 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/paid-adverts">{{ __('index.paid_adverts') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/user-fields">{{ __('index.user_fields') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/modules">{{ __('index.modules') }}</a><br>
+                @hook('adminBlockBoss')
             </div>
         </div>
     @endif
@@ -107,4 +112,5 @@
             <i class="fas fa-exclamation-triangle"></i> {!! __('admin.exists_install') !!}
         </div>
     @endif
+    @hook('adminFooter')
 @stop

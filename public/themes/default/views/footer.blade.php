@@ -7,6 +7,7 @@
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="/pages">{{ __('index.pages') }}</a></li>
                 <li class="nav-item mb-2"><a href="/files/docs">{{ __('index.docs') }}</a></li>
+                @hook('footerColumnStart')
             </ul>
         </div>
 
@@ -15,6 +16,7 @@
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="/users">{{ __('index.users') }}</a> ({{  statsUsers() }})</li>
                 <li class="nav-item mb-2"><a href="/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})</li>
+                @hook('footerColumnMiddle')
             </ul>
         </div>
 
@@ -23,6 +25,7 @@
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="/mails">{{ __('index.mails') }}</a></li>
                 <li class="nav-item mb-2"><a href="/search">{{ __('index.search') }}</a></li>
+                @hook('footerColumnEnd')
             </ul>
         </div>
 
