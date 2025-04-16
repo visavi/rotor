@@ -217,12 +217,15 @@ class LoadController extends AdminController
             abort(404, __('loads.down_not_exist'));
         }
 
+        $files = File::query()
+            ->where('relate_type', Down::$morphName)
+            ->where('relate_id', $down->id)
+            ->get();
+
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $files = (array) $request->file('files');
             $links = (array) $request->input('links');
-
             $links = array_unique(array_diff($links, ['']));
 
             /** @var Load $category */
@@ -233,33 +236,20 @@ class LoadController extends AdminController
                 ->length($text, 50, 5000, ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
 
-            $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
+            $duplicate = Down::query()
+                ->where('title', $title)
+                ->where('id', '<>', $down->id)
+                ->count();
+
             $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
 
-            $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + count($links) + $existFiles, ['files' => __('validator.file_upload_one')]);
-            $validator->lte(count($files) + count($links) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
+            $validator->notEmpty($files->count() + count($links), ['files' => __('validator.file_upload_one')]);
+            $validator->lte($files->count() + count($links), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
-                $allowExtension = explode(',', setting('allowextload'));
-
-                $rules = [
-                    'maxsize'    => setting('fileupload'),
-                    'extensions' => $allowExtension,
-                    'minweight'  => 100,
-                ];
-
-                foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
-                }
-
                 foreach ($links as $link) {
                     $validator->length($link, 5, 100, ['links' => __('validator.text')])
                         ->url($link, ['links' => __('validator.url')]);
-
-                    if (! in_array(getExtension($link), $allowExtension, true)) {
-                        $validator->addError(['links' => __('validator.extension')]);
-                    }
                 }
             }
 
@@ -279,10 +269,6 @@ class LoadController extends AdminController
                     $oldDown->category->decrement('count_downs');
                 }
 
-                foreach ($files as $file) {
-                    $down->uploadAndConvertFile($file);
-                }
-
                 if (! $down->active) {
                     $text = textNotice('down_change', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
                     $down->user->sendMessage(null, $text);
@@ -300,7 +286,7 @@ class LoadController extends AdminController
 
         $categories = $down->category->getChildren();
 
-        return view('admin/loads/edit_down', compact('categories', 'down', 'cid'));
+        return view('admin/loads/edit_down', compact('categories', 'down', 'cid', 'files'));
     }
 
     /**
@@ -334,31 +320,6 @@ class LoadController extends AdminController
         }
 
         return redirect('admin/loads/' . $down->category_id);
-    }
-
-    /**
-     * Удаление файла
-     */
-    public function deleteFile(int $id, int $fid): RedirectResponse
-    {
-        /** @var Down $down */
-        $down = Down::query()->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        /** @var File $file */
-        $file = $down->files()->find($fid);
-
-        if (! $file) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        setFlash('success', __('loads.file_deleted_success'));
-        $file->delete();
-
-        return redirect('admin/downs/edit/' . $down->id);
     }
 
     /**

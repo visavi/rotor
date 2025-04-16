@@ -248,6 +248,7 @@ class AjaxController extends Controller
         $fileTypes = [
             Message::$morphName,
             Post::$morphName,
+            Down::$morphName,
         ];
 
         $id = int($request->input('id'));
@@ -317,6 +318,8 @@ class AjaxController extends Controller
                 ];
             } else {
                 $model->convertVideo($fileData);
+                $model->addFileToArchive($fileData);
+
                 $data = [
                     'success' => true,
                     'id'      => $fileData['id'],
@@ -347,6 +350,7 @@ class AjaxController extends Controller
             Photo::$morphName,
             Message::$morphName,
             Post::$morphName,
+            Down::$morphName,
         ];
 
         $id = int($request->input('id'));

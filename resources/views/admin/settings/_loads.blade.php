@@ -16,21 +16,6 @@
         <div class="invalid-feedback">{{ textError('sets[ziplist]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[fileupload]') }}">
-        <label for="fileupload" class="form-label">{{ __('main.max_file_weight') }} (Mb):</label>
-        <input type="number" class="form-control" id="fileupload" name="sets[fileupload]" maxlength="3" value="{{ getInput('sets.fileupload', round($settings['fileupload'] / 1048576)) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[fileupload]') }}</div>
-
-        <input type="hidden" value="1048576" name="mods[fileupload]">
-        <span class="text-muted fst-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
-    </div>
-
-    <div class="mb-3{{ hasError('sets[allowextload]') }}">
-        <label for="allowextload" class="form-label">{{ __('main.valid_file_extensions') }}:</label>
-        <textarea class="form-control" id="allowextload" name="sets[allowextload]" required>{{ getInput('sets.allowextload', $settings['allowextload']) }}</textarea>
-        <div class="invalid-feedback">{{ textError('sets[allowextload]') }}</div>
-    </div>
-
     <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[downupload]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[downupload]" id="downupload"{{ getInput('sets.downupload', $settings['downupload']) ? ' checked' : '' }}>

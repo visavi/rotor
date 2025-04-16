@@ -280,7 +280,6 @@ Route::prefix('loads')->group(function () {
 Route::prefix('downs')->group(function () {
     Route::get('/', [LoadNewController::class, 'files']);
     Route::get('/{id}', [DownController::class, 'index']);
-    Route::get('/delete/{id}/{fid}', [DownController::class, 'deleteFile'])->whereNumber('fid');
     Route::post('/votes/{id}', [DownController::class, 'vote']);
     Route::get('/comment/{id}/{cid}', [DownController::class, 'viewComment'])->whereNumber('cid');
     Route::get('/end/{id}', [DownController::class, 'end']);
@@ -774,7 +773,6 @@ Route::prefix('admin')->middleware(['check.admin', 'admin.logger'])->group(funct
 
                 Route::match(['get', 'post'], '/downs/edit/{id}', 'editDown');
                 Route::match(['get', 'post'], '/downs/delete/{id}', 'deleteDown');
-                Route::get('/downs/delete/{id}/{fid}', 'deleteFile')->whereNumber('fid');
                 Route::get('/downs/new', 'new');
                 Route::get('/downs/publish/{id}', 'publish');
             });

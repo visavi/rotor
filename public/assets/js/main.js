@@ -64,7 +64,7 @@ $(function () {
     $('[data-bs-toggle="tooltip"]').tooltip();
     $('[data-bs-toggle="popover"]').popover();
 
-    // Hide popover poppers anywhere
+    /* Hide popover poppers anywhere */
     $('body').on('click', function (e) {
         //did not click a popover toggle or popover
         if ($(e.target).data('bs-toggle') !== 'popover'
@@ -73,7 +73,7 @@ $(function () {
         }
     });
 
-    // Spoiler
+    /* Spoiler */
     $('.spoiler-title').on('click', function () {
         let spoiler = $(this).parent();
         spoiler.toggleClass('spoiler-open');
@@ -100,7 +100,7 @@ $(function () {
     $('.phone').mask('+0 000 000-00-00-00');
     $('.birthday').mask('00.00.0000');
 
-    // Scroll up
+    /* Scroll up */
     $(window).scroll(function () {
         if ($(this).scrollTop() > 200) {
             $('.scrollup').fadeIn();
@@ -116,8 +116,14 @@ $(function () {
         return false;
     });
 
+    /* Уход со страницы */
+    let isChanged = false;
+    $('.markItUpEditor').on('input change', function() {
+        isChanged = true;
+    });
+
     $(window).on('beforeunload', function(e) {
-        if ($('.markItUpEditor').val().trim().length > 0) {
+        if (isChanged && $('.markItUpEditor').val().trim().length > 0) {
             e.preventDefault();
             return e.returnValue = '';
         }
@@ -131,6 +137,7 @@ $(function () {
         getNewMessages();
     })
 
+    /* Set theme */
     $('[data-bs-theme-value]').click(function() {
         let currentTheme = $(this).data('bs-theme-value');
         let activeThemeClass = $(this).find('i').attr('class');

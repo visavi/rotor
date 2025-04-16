@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,6 +28,7 @@ use Illuminate\Support\Collection;
  */
 class Message extends BaseModel
 {
+    use AddFileToArchiveTrait;
     use ConvertVideoTrait;
     use UploadTrait;
 

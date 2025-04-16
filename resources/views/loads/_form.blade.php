@@ -26,43 +26,11 @@
         <span class="js-textarea-counter"></span>
     </div>
 
-    @if ($down->getFiles()->isNotEmpty())
-        @foreach ($down->getFiles() as $file)
-            <div class="media-file mb-3">
-                <i class="fa fa-download"></i>
-                <b><a href="{{ $file->hash }}">{{ $file->name }}</a></b> ({{ formatSize($file->size) }}) (<a href="{{ isAdmin() ? '/admin' : '' }}/downs/delete/{{ $down->id }}/{{ $file->id }}" onclick="return confirm('{{ __('loads.confirm_delete_file') }}')">{{ __('main.delete') }}</a>)
-            </div>
-        @endforeach
-    @endif
-
-    @if ($down->getImages()->isNotEmpty())
-        @foreach ($down->getImages() as $image)
-            <div class="media-file mb-3">
-                {{ resizeImage($image->hash) }}<br>
-                <i class="fa fa-image"></i> <b><a href="{{ $image->hash }}">{{ $image->name }}</a></b> ({{ formatSize($image->size ) }}) (<a href="{{ isAdmin() ? '/admin' : '' }}/downs/delete/{{ $down->id }}/{{ $image->id }}" onclick="return confirm('{{ __('loads.confirm_delete_screen') }}')">{{ __('main.delete') }}</a>)
-            </div>
-        @endforeach
-    @endif
-
     @if (setting('down_allow_links'))
-        <span class="float-end">
-            <a class="js-links-add" href="#">{{ __('loads.add_link') }}</a>
-        </span>
+        <a class="mb-3 ms-3 float-end js-links-add" href="#">{{ __('loads.add_link') }}</a>
     @endif
 
-    <?php $links = array_values(array_diff((array) getInput('links', $down->links), [''])) ?>
-
-    @if ($down->files->count() + count($links) < setting('maxfiles'))
-        <div class="mb-3{{ hasError('files') }}">
-            <label class="btn btn-sm btn-secondary" for="files">
-                <input type="file" id="files" name="files[]" onchange="$('#upload-file-info').html((this.files.length > 1) ? '{{ __('main.files') }}: ' + this.files.length : this.files[0].name);" hidden multiple>
-                {{ __('main.attach_files') }}&hellip;
-            </label>
-            <span class="badge bg-info" id="upload-file-info"></span>
-            <div class="invalid-feedback">{{ textError('files') }}</div>
-        </div>
-    @endif
-
+    @php $links = array_values(array_diff((array) getInput('links', $down->links), [''])); @endphp
     @if (setting('down_allow_links'))
         <div class="mb-3{{ hasError('links') }}">
             <div class="js-links-list">
@@ -79,12 +47,12 @@
         </div>
     @endif
 
-    <p class="text-muted fst-italic">
-        {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
-        {{ __('main.max_file_weight') }}: {{ formatSize(setting('fileupload')) }}<br>
-        {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
-        {{ __('main.min_image_size') }}: 100px
-    </p>
+    @include('app/_upload_file', [
+        'id'       => $down->id,
+        'files'    => $files,
+        'type'     => App\Models\Down::$morphName,
+        'showForm' => true,
+    ])
 
     <button class="btn btn-primary">{{ $down->id ? __('main.edit') : __('main.upload') }}</button>
 </form>
@@ -92,7 +60,7 @@
 @push('scripts')
     <script>
         $('.js-links-add').click(function () {
-            const listBlock =  $('.js-links-list');
+            const listBlock = $('.js-links-list');
 
             listBlock.append('<div class="input-group mt-1 js-links-append">' +
                 '<input class="form-control" name="links[]" type="text" value="" maxlength="100" placeholder="https://">' +
@@ -101,7 +69,7 @@
                 '</span>' +
                 '</div>');
 
-            const inputs = listBlock.find($('input') );
+            const inputs = listBlock.find('input');
             if (inputs.length >= <?= (setting('maxfiles') - $down->files->count()) ?>) {
                 $('.js-links-add').hide();
             }
@@ -111,7 +79,11 @@
 
         $(document).on('click', '.js-links-remove', function () {
             $(this).closest('.js-links-append').remove();
-            $('.js-links-add').show();
+
+            const remainingInputs = $('.js-links-list').find('input').length;
+            if (remainingInputs < <?= (setting('maxfiles') - $down->files->count()) ?>) {
+                $('.js-links-add').show();
+            }
 
             return false;
         });

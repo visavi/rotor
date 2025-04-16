@@ -72,12 +72,15 @@ class DownController extends Controller
             abort(200, __('loads.empty_loads'));
         }
 
+        $files = File::query()
+            ->where('relate_type', Down::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', $user->id);
+
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $files = (array) $request->file('files');
             $links = (array) $request->input('links');
-
             $links = array_unique(array_diff($links, ['']));
 
             /** @var Load $category */
@@ -97,29 +100,13 @@ class DownController extends Controller
                 $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
             }
 
-            $validator->notEmpty($files || $links, ['files' => __('validator.file_upload_one')]);
-            $validator->lte(count($files) + count($links), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
+            $validator->notEmpty($files->count() + count($links), ['files' => __('validator.file_upload_one')]);
+            $validator->lte($files->count() + count($links), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
-                $allowExtension = explode(',', setting('allowextload'));
-
-                $rules = [
-                    'maxsize'    => setting('fileupload'),
-                    'extensions' => $allowExtension,
-                    'minweight'  => 100,
-                ];
-
-                foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
-                }
-
                 foreach ($links as $link) {
                     $validator->length($link, 5, 100, ['links' => __('validator.text')])
                         ->url($link, ['links' => __('validator.url')]);
-
-                    /*if (! in_array(getExtension($link), $allowExtension, true)) {
-                        $validator->addError(['links' => __('validator.extension')]);
-                    }*/
                 }
             }
 
@@ -135,9 +122,11 @@ class DownController extends Controller
                     'links'       => $links ? array_values($links) : null,
                 ]);
 
-                foreach ($files as $file) {
+                $files->update(['relate_id' => $down->id]);
+
+                /*foreach ($files as $file) {
                     $down->uploadAndConvertFile($file);
-                }
+                }*/
 
                 if (isAdmin(User::ADMIN)) {
                     $down->category->increment('count_downs');
@@ -166,8 +155,9 @@ class DownController extends Controller
         }
 
         $down = new Down();
+        $files = $files->get();
 
-        return view('loads/create', compact('categories', 'down', 'cid'));
+        return view('loads/create', compact('categories', 'down', 'cid', 'files'));
     }
 
     /**
@@ -177,8 +167,12 @@ class DownController extends Controller
     {
         $cid = int($request->input('category'));
 
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
         /** @var Down $down */
-        $down = Down::query()->where('user_id', getUser('id'))->find($id);
+        $down = Down::query()->where('user_id', $user->id)->find($id);
 
         if (! $down) {
             abort(404, __('loads.down_not_exist'));
@@ -188,12 +182,16 @@ class DownController extends Controller
             abort(200, __('loads.down_verified'));
         }
 
+        $files = File::query()
+            ->where('relate_type', Down::$morphName)
+            ->where('relate_id', $down->id)
+            ->where('user_id', $user->id)
+            ->get();
+
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $files = (array) $request->file('files');
             $links = (array) $request->input('links');
-
             $links = array_unique(array_diff($links, ['']));
 
             /** @var Load $category */
@@ -205,33 +203,19 @@ class DownController extends Controller
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')])
                 ->empty($category->closed, ['category' => __('loads.load_closed')]);
 
-            $duplicate = Down::query()->where('title', $title)->where('id', '<>', $down->id)->count();
-            $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
+            $duplicate = Down::query()
+                ->where('title', $title)
+                ->where('id', '<>', $down->id)
+                ->count();
 
-            $existFiles = $down->files ? $down->files->count() : 0;
-            $validator->notEmpty(count($files) + count($links) + $existFiles, ['files' => __('validator.file_upload_one')]);
-            $validator->lte(count($files) + count($links) + $existFiles, setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
+            $validator->empty($duplicate, ['title' => __('loads.down_name_exists')]);
+            $validator->notEmpty($files->count() + count($links), ['files' => __('validator.file_upload_one')]);
+            $validator->lte($files->count() + count($links), setting('maxfiles'), ['files' => __('validator.files_max', ['max' => setting('maxfiles')])]);
 
             if ($validator->isValid()) {
-                $allowExtension = explode(',', setting('allowextload'));
-
-                $rules = [
-                    'maxsize'    => setting('fileupload'),
-                    'extensions' => $allowExtension,
-                    'minweight'  => 100,
-                ];
-
-                foreach ($files as $file) {
-                    $validator->file($file, $rules, ['files' => __('validator.file_upload_failed')]);
-                }
-
                 foreach ($links as $link) {
                     $validator->length($link, 5, 100, ['links' => __('validator.text')])
                         ->url($link, ['links' => __('validator.url')]);
-
-                    if (! in_array(getExtension($link), $allowExtension, true)) {
-                        $validator->addError(['links' => __('validator.extension')]);
-                    }
                 }
             }
 
@@ -245,9 +229,9 @@ class DownController extends Controller
                     'links'       => $links,
                 ]);
 
-                foreach ($files as $file) {
+                /* foreach ($files as $file) {
                     $down->uploadAndConvertFile($file);
-                }
+                }*/
 
                 clearCache(['statLoads', 'recentDowns', 'DownFeed']);
                 setFlash('success', __('loads.down_edited_success'));
@@ -261,36 +245,7 @@ class DownController extends Controller
 
         $categories = $down->category->getChildren();
 
-        return view('loads/edit', compact('categories', 'down', 'cid'));
-    }
-
-    /**
-     * Удаление файла
-     */
-    public function deleteFile(int $id, int $fid): RedirectResponse
-    {
-        /** @var Down $down */
-        $down = Down::query()->where('user_id', getUser('id'))->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        if ($down->active) {
-            abort(200, __('loads.down_verified'));
-        }
-
-        /** @var File $file */
-        $file = $down->files()->find($fid);
-
-        if (! $file) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        setFlash('success', __('loads.file_deleted_success'));
-        $file->delete();
-
-        return redirect('downs/edit/' . $down->id);
+        return view('loads/edit', compact('categories', 'down', 'cid', 'files'));
     }
 
     /**

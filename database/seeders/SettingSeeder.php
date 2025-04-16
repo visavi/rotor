@@ -9,10 +9,8 @@ class SettingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $data = [
             ['name' => 'app_installed', 'value' => 0],
@@ -20,7 +18,6 @@ class SettingSeeder extends Seeder
             ['name' => 'addofferspoint', 'value' => 50],
             ['name' => 'advertpoint', 'value' => 1000],
             ['name' => 'archive_file_path', 'value' => ''],
-            ['name' => 'allowextload', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,mp3,mp4,pdf'],
             ['name' => 'allvotes', 'value' => 10],
             ['name' => 'avtorlist', 'value' => 10],
             ['name' => 'banlist', 'value' => 10],
@@ -83,7 +80,6 @@ class SettingSeeder extends Seeder
             ['name' => 'feed_articles_rating', 'value' => -10],
             ['name' => 'feed_downs_rating', 'value' => -10],
             ['name' => 'filesize', 'value' => 5242880],
-            ['name' => 'fileupload', 'value' => 10485760],
             ['name' => 'floodstime', 'value' => 30],
             ['name' => 'file_extensions', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,webp,mp3,mp4,pdf'],
             ['name' => 'image_extensions', 'value' => 'jpg,jpeg,gif,png,webp'],

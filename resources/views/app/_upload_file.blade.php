@@ -1,8 +1,8 @@
 <?php
-$display = $files->isEmpty() ? 'none' : 'block';
+$display = $files->isNotEmpty() || ($showForm ?? false);
 ?>
 
-@if ($files->isEmpty())
+@if (! $display)
     <span class="float-end js-attach-button">
         <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
     </span>
@@ -15,11 +15,11 @@ $display = $files->isEmpty() ? 'none' : 'block';
                 @if ($file->isImage())
                     {{ resizeImage($file->hash, ['width' => 100]) }}
                 @else
-                    <a href="{{ $file->hash }}">{{ $file->name }}</a>
+                    <a class="me-1" href="{{ $file->hash }}">{{ $file->name }}</a>
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
                 @endif
 
-                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
+                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a><br>
             </span>
         @endforeach
     @endif
@@ -27,8 +27,8 @@ $display = $files->isEmpty() ? 'none' : 'block';
 
 <div class="js-file-template d-none">
     <span class="js-file">
-        <a href="#" class="js-file-link"></a> <span class="js-file-size"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
+        <a href="#" class="js-file-link me-1"></a> <span class="js-file-size"></span>
+        <a href="#" onclick="return deleteFile(this);" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a><br>
     </span>
 </div>
 
@@ -39,7 +39,7 @@ $display = $files->isEmpty() ? 'none' : 'block';
     </span>
 </div>
 
-<div class="mb-3 js-attach-form" style="display: {{ $display }};">
+<div class="mb-3 js-attach-form" style="display: {{ $display ? 'block' : 'none' }};">
     <label class="btn btn-sm btn-secondary mb-1" for="file">
         <input id="file" type="file" name="file" onchange="return submitFile(this);" data-id="{{ $id ?? 0 }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}" hidden>
         {{ __('main.attach_file') }}&hellip;

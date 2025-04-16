@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\HtmlString;
-use ZipArchive;
 
 /**
  * Class Down
@@ -36,6 +36,7 @@ use ZipArchive;
  */
 class Down extends BaseModel
 {
+    use AddFileToArchiveTrait;
     use ConvertVideoTrait;
     use UploadTrait;
 
@@ -192,26 +193,5 @@ class Down extends BaseModel
         });
 
         return parent::delete();
-    }
-
-    /**
-     * Add file to archive
-     */
-    private function addFileToArchive(array $file): void
-    {
-        if (
-            $file['extension'] === 'zip'
-            && setting('archive_file_path')
-            && ! str_contains(setting('archive_file_path'), '..')
-            && file_exists(public_path(setting('archive_file_path')))
-        ) {
-            $archive = new ZipArchive();
-            $opened = $archive->open(public_path($file['path']));
-
-            if ($opened === true) {
-                $archive->addFile(public_path(setting('archive_file_path')), basename(setting('archive_file_path')));
-                $archive->close();
-            }
-        }
     }
 }

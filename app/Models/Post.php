@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  */
 class Post extends BaseModel
 {
+    use AddFileToArchiveTrait;
     use ConvertVideoTrait;
     use UploadTrait;
 

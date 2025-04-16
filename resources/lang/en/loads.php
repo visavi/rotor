@@ -20,8 +20,6 @@ return [
     'edit_comment'           => 'Editing a comment',
     'edit_down'              => 'Editing loading',
     'edit_load'              => 'Editing a section',
-    'confirm_delete_file'    => 'Are you sure you want to delete this file?',
-    'confirm_delete_screen'  => 'Are you sure you want to delete this screenshot?',
     'publish_down'           => 'Publish file',
     'view_archive'           => 'View archive',
     'view_file'              => 'View file',

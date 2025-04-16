@@ -1,6 +1,6 @@
 <?php
 $click = empty($paste) ? null : 'return pasteImage(this);';
-$pointer = empty($paste)  ? null : 'cursor-pointer';
+$pointer = empty($paste) ? null : 'cursor-pointer';
 ?>
 
 <div class="js-files mb-3">
