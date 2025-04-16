@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\HtmlString;
 
 /**
@@ -169,18 +168,6 @@ class Down extends BaseModel
     public function getViewExt(): array
     {
         return $this->viewExt;
-    }
-
-    /**
-     * Загружает файл
-     */
-    public function uploadAndConvertFile(UploadedFile $file): array
-    {
-        $uploadFile = $this->uploadFile($file);
-        $this->convertVideo($uploadFile);
-        $this->addFileToArchive($uploadFile);
-
-        return $uploadFile;
     }
 
     /**

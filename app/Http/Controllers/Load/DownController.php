@@ -124,10 +124,6 @@ class DownController extends Controller
 
                 $files->update(['relate_id' => $down->id]);
 
-                /*foreach ($files as $file) {
-                    $down->uploadAndConvertFile($file);
-                }*/
-
                 if (isAdmin(User::ADMIN)) {
                     $down->category->increment('count_downs');
                     clearCache(['statLoads', 'recentDowns', 'DownFeed']);
@@ -228,10 +224,6 @@ class DownController extends Controller
                     'text'        => $text,
                     'links'       => $links,
                 ]);
-
-                /* foreach ($files as $file) {
-                    $down->uploadAndConvertFile($file);
-                }*/
 
                 clearCache(['statLoads', 'recentDowns', 'DownFeed']);
                 setFlash('success', __('loads.down_edited_success'));
