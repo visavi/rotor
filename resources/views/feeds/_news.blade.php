@@ -7,8 +7,12 @@
 
     <div class="section-header d-flex align-items-center">
         <div class="flex-grow-1">
-            <div class="section-title">
+            <div class="section-title d-flex align-items-baseline">
                 <h3><a class="post-title" href="/news/{{ $post->id }}">{{ $post->title }}</a></h3>
+
+                @if ($post->top)
+                    <span class="ms-2" data-bs-toggle="tooltip" title="{{ __('main.pinned') }}"><i class="fa-solid fa-thumbtack fa-xs"></i></span>
+                @endif
             </div>
         </div>
 

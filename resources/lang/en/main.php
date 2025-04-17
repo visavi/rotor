@@ -17,6 +17,7 @@ return [
     'create'            => 'Create',
     'created'           => 'Created',
     'used'              => 'Used',
+    'pinned'            => 'Pinned',
     'upload'            => 'Upload',
     'edit'              => 'Edit',
     'change'            => 'Change',
