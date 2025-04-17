@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -41,6 +42,14 @@ class Comment extends BaseModel
     public function relate(): MorphTo
     {
         return $this->morphTo('relate');
+    }
+
+    /**
+     * Возвращает связь с голосованием
+     */
+    public function polling(): morphOne
+    {
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
     }
 
     /**

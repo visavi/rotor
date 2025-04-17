@@ -10,7 +10,7 @@
         <div class="invalid-feedback">{{ textError('sets[filesize]') }}</div>
 
         <input type="hidden" value="1048576" name="mods[filesize]">
-        <span class="text-muted fst-italic">{{ __('main.server_limit') }}: {{ ini_get('upload_max_filesize') }}</span>
+        <span class="text-muted fst-italic">{{ __('main.server_limit') }}: {{ min(ini_get('upload_max_filesize'), ini_get('post_max_size')) }}</span>
     </div>
 
     <div class="mb-3{{ hasError('sets[maxfiles]') }}">

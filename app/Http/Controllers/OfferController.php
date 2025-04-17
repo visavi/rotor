@@ -232,6 +232,12 @@ class OfferController extends Controller
         }
 
         $comments = $offer->comments()
+            ->select('comments.*', 'pollings.vote')
+            ->leftJoin('pollings', static function (JoinClause $join) {
+                $join->on('comments.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Comment::$morphName)
+                    ->where('pollings.user_id', getUser('id'));
+            })
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));
 

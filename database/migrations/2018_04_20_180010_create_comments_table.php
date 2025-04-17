@@ -20,11 +20,13 @@ final class CreateCommentsTable extends Migration
                 $table->string('relate_type', 10);
                 $table->integer('relate_id');
                 $table->text('text');
+                $table->integer('rating')->default(0);
                 $table->ipAddress('ip');
                 $table->string('brow', 25);
                 $table->integer('created_at');
 
                 $table->index('created_at');
+                $table->index(['rating', 'created_at']);
                 $table->index(['relate_type', 'relate_id']);
             });
         }

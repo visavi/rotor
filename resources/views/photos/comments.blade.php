@@ -51,6 +51,16 @@
                             @if (isAdmin())
                                 <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                             @endif
+
+                            <div class="js-rating">
+                                @if (getUser() && getUser('id') !== $comment->user_id)
+                                    <a class="post-rating-down{{ $comment->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $comment->id }}" data-type="{{ $comment->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
+                                @endif
+                                <b>{{ formatNum($comment->rating) }}</b>
+                                @if (getUser() && getUser('id') !== $comment->user_id)
+                                    <a class="post-rating-up{{ $comment->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $comment->id }}" data-type="{{ $comment->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
+                                @endif
+                                </div>
                         </div>
                     @endif
                 </div>

@@ -154,66 +154,53 @@ class AjaxController extends Controller
      */
     public function rating(Request $request): JsonResponse
     {
-        $types = [
+        $validTypes = [
             Post::$morphName,
             Article::$morphName,
             Photo::$morphName,
             Offer::$morphName,
             News::$morphName,
             Down::$morphName,
+            Comment::$morphName,
         ];
 
-        $id = int($request->input('id'));
+        if ($request->input('_token') !== csrf_token()) {
+            return response()->json(['success' => false, 'message' => 'Invalid token']);
+        }
+
         $type = $request->input('type');
         $vote = $request->input('vote');
 
-        if ($request->input('_token') !== csrf_token()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid token',
-            ]);
+        if (! in_array($type, $validTypes, true)) {
+            return response()->json(['success' => false, 'message' => 'Type invalid']);
         }
 
         if (! in_array($vote, ['+', '-'], true)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid rating',
-            ]);
+            return response()->json(['success' => false, 'message' => 'Invalid rating']);
         }
 
-        if (! in_array($type, $types, true)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Type invalid',
-            ]);
-        }
-
-        /** @var BaseModel $model */
         $model = Relation::getMorphedModel($type);
-
         $post = $model::query()
-            ->where('id', $id)
+            ->where('id', int($request->input('id')))
             ->where('user_id', '<>', getUser('id'))
             ->first();
 
         if (! $post) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Record not found',
-            ]);
+            return response()->json(['success' => false, 'message' => 'Record not found']);
         }
 
-        $polling = $post->polling()->first();
-        $cancel = false;
+        $polling = $post->polling()->firstOrNew();
+        $isCancel = false;
 
-        if ($polling) {
+        if ($polling->exists) {
             if ($polling->vote === $vote) {
                 return response()->json(['success' => false]);
             }
-
+            $isCancel = true;
             $polling->delete();
-            $cancel = true;
-        } else {
+        }
+
+        if (! $isCancel) {
             $post->polling()->create([
                 'user_id'    => getUser('id'),
                 'vote'       => $vote,
@@ -221,16 +208,13 @@ class AjaxController extends Controller
             ]);
         }
 
-        if ($vote === '+') {
-            $post->increment('rating');
-        } else {
-            $post->decrement('rating');
-        }
+        $vote === '+' ? $post->increment('rating') : $post->decrement('rating');
+        $post->refresh();
 
         return response()->json([
             'success' => true,
-            'cancel'  => $cancel,
-            'rating'  => formatNum($post['rating'])->toHtml(),
+            'cancel'  => $isCancel,
+            'rating'  => formatNum($post->rating)->toHtml(),
         ]);
     }
 

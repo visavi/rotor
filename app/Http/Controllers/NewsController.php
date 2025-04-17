@@ -36,8 +36,6 @@ class NewsController extends Controller
 
     /**
      * Вывод новости
-     *
-     * @param int
      */
     public function view(int $id): View
     {
@@ -67,11 +65,8 @@ class NewsController extends Controller
 
     /**
      * Комментарии
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -125,6 +120,12 @@ class NewsController extends Controller
         }
 
         $comments = $news->comments()
+            ->select('comments.*', 'pollings.vote')
+            ->leftJoin('pollings', static function (JoinClause $join) {
+                $join->on('comments.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Comment::$morphName)
+                    ->where('pollings.user_id', getUser('id'));
+            })
             ->orderBy('created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'));
@@ -134,11 +135,8 @@ class NewsController extends Controller
 
     /**
      * Редактирование комментария
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator)
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 

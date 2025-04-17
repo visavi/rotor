@@ -235,6 +235,12 @@ class PhotoController extends Controller
         }
 
         $comments = $photo->comments()
+            ->select('comments.*', 'pollings.vote')
+            ->leftJoin('pollings', static function (JoinClause $join) {
+                $join->on('comments.id', 'pollings.relate_id')
+                    ->where('pollings.relate_type', Comment::$morphName)
+                    ->where('pollings.user_id', getUser('id'));
+            })
             ->orderBy('created_at')
             ->with('user')
             ->paginate(setting('comments_per_page'));

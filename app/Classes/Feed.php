@@ -106,6 +106,11 @@ class Feed
         if (setting('feed_comments_show')) {
             $comments = $this->getComments();
             $collect = $collect->merge($comments);
+
+            if ($this->user) {
+                $ids = $comments->pluck('id')->all();
+                $polls[Comment::$morphName] = $this->getPolling($ids, Comment::$morphName);
+            }
         }
 
         $posts = $collect
@@ -266,7 +271,7 @@ class Feed
     {
         return Cache::remember('CommentFeed', 600, static function () {
             return Comment::query()
-                // ->where('rating', '>', 0) // TODO добавить рейтинг для комментариев
+                ->where('rating', '>', setting('feed_comments_rating'))
                 ->whereIn('id', function ($query) {
                     $query->selectRaw('MAX(id)')
                         ->from('comments')

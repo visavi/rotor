@@ -14,6 +14,16 @@
                 <h3><a class="post-title" href="/{{ $post->relate_type }}/comment/{{ $post->relate_id }}/{{ $post->id }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
             </div>
         </div>
+
+        <div class="js-rating text-end">
+            @if ($user && $user->id !== $post->user_id)
+                <a class="post-rating-down{{ ($polls[$post::$morphName][$post->id] ?? '') === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
+            @endif
+            <b>{{ formatNum($post->rating) }}</b>
+            @if ($user && $user->id !== $post->user_id)
+                <a class="post-rating-up{{ ($polls[$post::$morphName][$post->id] ?? '') === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-up"></i></a>
+            @endif
+        </div>
     </div>
 
     <div class="section-content">
