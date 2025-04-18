@@ -43,13 +43,20 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            <?php $checkVote = getInput('vote') ? true : false; ?>
-            <?php $checked = $checkVote ? ' checked' : ''; ?>
-            <?php $display = $checkVote ? '' : ' style="display: none"'; ?>
+            @php
+                $checkVote = (bool) getInput('vote');
+                $checked = $checkVote ? ' checked' : '';
+                $display = $checkVote ? '' : ' style="display: none"';
+            @endphp
 
-            <label>
-                <input type="checkbox" class="form-check-input" name="vote" onchange="return showVoteForm();"{!! $checked !!}> {{ __('forums.create_vote') }}
-            </label><br>
+            @include('app/_upload_file', [
+                'files' => $files,
+                'type'  => App\Models\Post::$morphName,
+            ])
+
+            <label class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" name="vote" onchange="showVoteForm();"{!! $checked !!}> {{ __('forums.create_vote') }}
+            </label>
 
             <div class="js-vote-form"{!! $display !!}>
                 <div class="mb-3{{ hasError('question') }}">
@@ -61,6 +68,7 @@
 
                 @include('votes/_answers')
             </div>
+
             <button class="btn btn-primary">{{ __('forums.create_topic') }}</button>
         </form>
     </div>
@@ -71,3 +79,11 @@
     <a href="/forums/search">{{ __('main.search') }}</a><br>
     {{ __('forums.create_rule3') }}<br><br>
 @stop
+
+@push('scripts')
+    <script>
+        function showVoteForm() {
+            $('.js-vote-form').toggle();
+        }
+    </script>
+@endpush

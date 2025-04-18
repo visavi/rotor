@@ -85,7 +85,7 @@
                     @foreach ($vote->answers as $answer)
                         <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
                     @endforeach
-                    <button class="btn btn-sm btn-primary">{{ __('forums.vote') }}</button>
+                    <button class="btn btn-sm btn-primary mt-3">{{ __('forums.vote') }}</button>
                 </form>
             @endif
 

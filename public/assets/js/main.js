@@ -457,13 +457,6 @@ deleteWall = function (el) {
     return false;
 };
 
-/* Показ формы создания голосования */
-showVoteForm = function () {
-    $('.js-vote-form').toggle();
-
-    return false;
-};
-
 /* Копирует текст в input */
 copyToClipboard = function (el) {
     let form = $(el).closest('.input-group');

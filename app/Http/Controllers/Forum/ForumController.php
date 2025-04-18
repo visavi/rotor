@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Forum;
 
 use App\Classes\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Forum;
 use App\Models\Post;
@@ -87,6 +88,11 @@ class ForumController extends Controller
             abort(403);
         }
 
+        $files = File::query()
+            ->where('relate_type', Post::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', $user->id);
+
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $msg = $request->input('msg');
@@ -141,7 +147,6 @@ class ForumController extends Controller
                     'updated_at'  => SITETIME,
                 ]);
 
-                /** @var Post $post */
                 $post = Post::query()->create([
                     'topic_id'   => $topic->id,
                     'user_id'    => getUser('id'),
@@ -150,6 +155,8 @@ class ForumController extends Controller
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
+
+                $files->update(['relate_id' => $post->id]);
 
                 Topic::query()->where('id', $topic->id)->update(['last_post_id' => $post->id]);
 
@@ -168,7 +175,6 @@ class ForumController extends Controller
 
                 // Создание голосования
                 if ($vote) {
-                    /** @var Vote $vote */
                     $vote = Vote::query()->create([
                         'title'      => $question,
                         'topic_id'   => $topic->id,
@@ -198,7 +204,9 @@ class ForumController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('forums/topic_create', compact('forums', 'fid'));
+        $files = $files->get();
+
+        return view('forums/topic_create', compact('forums', 'fid', 'files'));
     }
 
     /**
