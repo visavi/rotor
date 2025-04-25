@@ -1,6 +1,6 @@
 @if (setting('captcha_type') === 'recaptcha_v2')
     <script src="//www.google.com/recaptcha/api.js?hl={{ app()->getLocale() }}" async defer></script>
-    <div class="g-recaptcha" data-sitekey="{{ setting('recaptcha_public') }}"></div>
+    <div class="g-recaptcha mb-3" data-sitekey="{{ setting('recaptcha_public') }}"></div>
     <div class="invalid-feedback">{{ textError('protect') }}</div>
 @endif
 
@@ -26,3 +26,26 @@
         <div class="invalid-feedback">{{ textError('protect') }}</div>
     </div>
 @endif
+
+@push('styles')
+    <style>
+        .g-recaptcha {
+            overflow:hidden;
+            width:298px;
+            height:74px;
+        }
+
+        iframe {
+            margin:-1px 0 0 -2px;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            const currentTheme = $('html').data('bs-theme');
+            $('.g-recaptcha').attr("data-theme", currentTheme);
+        });
+    </script>
+@endpush
