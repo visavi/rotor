@@ -722,7 +722,7 @@ function statsLoad(): string
  */
 function statsNewLoad(): int
 {
-    return Down::query()->where('active', 0)->count();
+    return Down::query()->active(false)->count();
 }
 
 /**

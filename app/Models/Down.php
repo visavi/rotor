@@ -93,12 +93,12 @@ class Down extends BaseModel
     }
 
     /**
-     * Scope a query to only include active downs.
+     * Scope a query to only include active records.
      */
     #[Scope]
-    protected function active(Builder $query): void
+    protected function active(Builder $query, bool $type = true): void
     {
-        $query->where('active', true);
+        $query->where('active', $type);
     }
 
     /**

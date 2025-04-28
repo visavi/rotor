@@ -5,9 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Migrate Up.
-     */
     public function up(): void
     {
         if (! Schema::hasTable('stickers_categories')) {
@@ -20,9 +17,6 @@ return new class extends Migration {
         }
     }
 
-    /**
-     * Migrate Down.
-     */
     public function down(): void
     {
         Schema::dropIfExists('stickers_categories');

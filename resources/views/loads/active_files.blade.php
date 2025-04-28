@@ -18,10 +18,10 @@
 
 @section('content')
     @if (getUser() && getUser('id') === $user->id)
-        <?php $type = ($active === 1) ? 'success' : 'light text-dark'; ?>
+        <?php $type = $active ? 'success' : 'light text-dark'; ?>
         <a href="/downs/active/files?active=1" class="badge bg-{{ $type }}">{{ __('loads.verified') }}</a>
 
-        <?php $type = ($active === 0) ? 'success' : 'light text-dark'; ?>
+        <?php $type = ! $active ? 'success' : 'light text-dark'; ?>
         <a href="/downs/active/files?active=0" class="badge bg-{{ $type }}">{{ __('loads.pending') }}</a>
         <hr>
     @endif

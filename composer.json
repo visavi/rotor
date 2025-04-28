@@ -39,7 +39,7 @@
     "require-dev": {
         "deployer/deployer": "^7.5",
         "fakerphp/faker": "^1.24",
-        "laravel/pint": "^1.21",
+        "laravel/pint": "^1.22",
         "laravel/sail": "^1.41",
         "laravel/tinker": "^2.10",
         "mockery/mockery": "^1.6",

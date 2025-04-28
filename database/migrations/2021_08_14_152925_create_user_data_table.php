@@ -5,9 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Migrate Up.
-     */
     public function up(): void
     {
         if (! Schema::hasTable('user_data')) {
@@ -22,9 +19,6 @@ return new class extends Migration {
         }
     }
 
-    /**
-     * Migrate Down.
-     */
     public function down(): void
     {
         Schema::dropIfExists('user_data');

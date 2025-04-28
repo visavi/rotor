@@ -23,7 +23,7 @@ class GuestbookController extends AdminController
             ->with('user', 'editUser')
             ->paginate(setting('bookpost'));
 
-        $unpublished = Guestbook::query()->where('active', false)->count();
+        $unpublished = Guestbook::query()->active(false)->count();
 
         return view('admin/guestbook/index', compact('posts', 'unpublished'));
     }

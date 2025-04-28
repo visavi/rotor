@@ -328,7 +328,7 @@ class LoadController extends AdminController
     public function new(): View
     {
         $downs = Down::query()
-            ->where('active', 0)
+            ->active(false)
             ->orderByDesc('created_at')
             ->with('user', 'category', 'files')
             ->paginate(setting('downlist'));

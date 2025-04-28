@@ -219,7 +219,7 @@ class Feed
     {
         return Cache::remember('DownFeed', 600, static function () {
             return Down::query()
-                ->where('active', 1)
+                ->active()
                 ->where('rating', '>', setting('feed_downs_rating'))
                 ->with('user', 'files', 'category.parent')
                 ->orderByDesc('created_at')

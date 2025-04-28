@@ -37,15 +37,15 @@ class ActiveController extends Controller
      */
     public function files(Request $request): View
     {
-        $active = int($request->input('active', 1));
+        $active = (bool) $request->input('active', true);
         $user = $this->user;
 
         if (getUser() && getUser('id') !== $user->id) {
-            $active = 1;
+            $active = true;
         }
 
         $downs = Down::query()
-            ->where('active', $active)
+            ->active($active)
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->with('category', 'user')

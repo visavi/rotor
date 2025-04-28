@@ -24,7 +24,7 @@ class GuestbookController extends Controller
             ->with('user', 'editUser')
             ->paginate(10);
 
-        $unpublished = Guestbook::query()->where('active', false)->count();
+        $unpublished = Guestbook::query()->active(false)->count();
 
         return view('guestbook/index', compact('posts', 'unpublished'));
     }

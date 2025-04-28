@@ -1,16 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-final class CreateBoardsTable extends Migration
-{
-    /**
-     * Migrate Up.
-     */
+return new class extends Migration {
     public function up(): void
     {
         if (! Schema::hasTable('boards')) {
@@ -25,11 +19,8 @@ final class CreateBoardsTable extends Migration
         }
     }
 
-    /**
-     * Migrate Down.
-     */
     public function down(): void
     {
         Schema::dropIfExists('boards');
     }
-}
+};
