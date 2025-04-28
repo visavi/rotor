@@ -122,6 +122,22 @@ textarea.form-control {
   margin-bottom: 1rem;
 }
 
+.carousel {
+    position: relative;
+    display: inline-block;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+    height: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    margin: 10px;
+}
+
 .blockquote:before {
   content: "\f10d";
   line-height: 1.0em;
