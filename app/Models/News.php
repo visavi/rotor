@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -24,6 +25,7 @@ use Illuminate\Support\HtmlString;
  */
 class News extends BaseModel
 {
+    use SearchableTrait;
     use UploadTrait;
 
     /**
@@ -45,6 +47,14 @@ class News extends BaseModel
      * Morph name
      */
     public static string $morphName = 'news';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['title', 'text'];
+    }
 
     /**
      * Возвращает комментарии новостей

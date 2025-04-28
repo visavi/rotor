@@ -19,7 +19,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
                 @endif
 
-                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a><br>
+                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
             </span>
         @endforeach
     @endif

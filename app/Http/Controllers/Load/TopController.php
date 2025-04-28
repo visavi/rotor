@@ -24,7 +24,7 @@ class TopController extends Controller
         };
 
         $downs = Down::query()
-            ->where('active', 1)
+            ->active()
             ->orderByDesc($order)
             ->with('category', 'user')
             ->paginate(setting('downlist'))

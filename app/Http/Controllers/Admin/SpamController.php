@@ -22,11 +22,11 @@ class SpamController extends AdminController
     public function __construct(Request $request)
     {
         $this->types = [
-            'posts'     => __('index.forums'),
+            'post'      => __('index.forums'),
             'guestbook' => __('index.guestbook'),
-            'messages'  => __('index.messages'),
-            'walls'     => __('index.wall_posts'),
-            'comments'  => __('main.comments'),
+            'message'   => __('index.messages'),
+            'wall'      => __('index.wall_posts'),
+            'comment'   => __('main.comments'),
         ];
 
         $type = $request->input('type');
@@ -38,11 +38,11 @@ class SpamController extends AdminController
             ->all();
 
         if ($type) {
-            $this->type = isset($this->types[$type]) ? $type : 'posts';
+            $this->type = isset($this->types[$type]) ? $type : 'post';
         } elseif ($spam) {
             $this->type = array_search(max($spam), $spam, true);
         } else {
-            $this->type = 'posts';
+            $this->type = 'post';
         }
 
         foreach ($this->types as $key => $value) {

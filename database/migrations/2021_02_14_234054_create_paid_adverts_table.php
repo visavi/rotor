@@ -1,13 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-final class CreatePaidAdvertsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Migrate Up.
      */
@@ -36,4 +33,4 @@ final class CreatePaidAdvertsTable extends Migration
     {
         Schema::dropIfExists('paid_adverts');
     }
-}
+};

@@ -51,8 +51,8 @@ class LoadController extends Controller
         };
 
         $downs = Down::query()
+            ->active()
             ->where('category_id', $category->id)
-            ->where('active', 1)
             ->orderByDesc($order)
             ->with('user')
             ->paginate(setting('downlist'))

@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 use App\Models\UserField;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-final class CreateUserFieldsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Migrate Up.
      */
@@ -34,4 +31,4 @@ final class CreateUserFieldsTable extends Migration
     {
         Schema::dropIfExists('user_fields');
     }
-}
+};

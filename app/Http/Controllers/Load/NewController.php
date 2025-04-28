@@ -17,7 +17,7 @@ class NewController extends Controller
     public function files(): View
     {
         $downs = Down::query()
-            ->where('active', 1)
+            ->active()
             ->orderByDesc('created_at')
             ->with('category', 'user')
             ->paginate(setting('downlist'));

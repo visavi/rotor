@@ -19,11 +19,14 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 class BaseModel extends Model
 {
     /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      */
-    protected $casts = [
-        'user_id' => 'int',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
 
     /**
      * Bootstrap services.
@@ -46,6 +49,7 @@ class BaseModel extends Model
             Comment::$morphName   => Comment::class,
             Vote::$morphName      => Vote::class,
             Item::$morphName      => Item::class,
+            User::$morphName      => User::class,
         ]);
     }
 

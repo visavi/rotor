@@ -660,7 +660,7 @@ function statsGuestbook(): string
         $total = Guestbook::query()->count();
 
         $totalNew = Guestbook::query()
-            ->where('active', true)
+            ->active()
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
@@ -706,7 +706,8 @@ function statsLoad(): string
     return Cache::remember('statLoads', 900, static function () {
         $totalLoads = Load::query()->sum('count_downs');
 
-        $totalNew = Down::query()->where('active', 1)
+        $totalNew = Down::query()
+            ->active()
             ->where('created_at', '>', strtotime('-1 day', SITETIME))
             ->count();
 
@@ -1102,7 +1103,7 @@ function recentDowns(int $show = 5): HtmlString
 {
     $downs = Cache::remember('recentDowns', 600, static function () use ($show) {
         return Down::query()
-            ->where('active', 1)
+            ->active()
             ->orderByDesc('created_at')
             ->limit($show)
             ->with('category')

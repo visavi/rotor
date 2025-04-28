@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -82,6 +83,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     use HasFactory;
     use MustVerifyEmail;
     use Notifiable;
+    use SearchableTrait;
     use UploadTrait;
 
     public const BOSS = 'boss';   // Владелец
@@ -159,6 +161,19 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * Директория загрузки аватаров
      */
     public string $uploadAvatarPath = '/uploads/avatars';
+
+    /**
+     * Morph name
+     */
+    public static string $morphName = 'user';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['login', 'name', 'info', 'site', 'status'];
+    }
 
     /**
      * Связь с таблицей online

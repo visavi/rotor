@@ -12,9 +12,39 @@
 @stop
 
 @section('content')
-    {!! __('search.help_text') !!}<br>
+    <div class="mb-3">
+        <form action="{{ route('search') }}" method="get">
+            <div class="input-group">
+                <input type="search" class="form-control" id="query" name="query" maxlength="64" placeholder="Поиск..." value="{{ $query }}" required>
+                <button class="btn btn-primary">{{ __('main.search') }}</button>
+            </div>
+        </form>
+    </div>
 
-    {{ __('search.help_link') }}:<br>
-    <a href="https://site.yandex.ru">Yandex search</a><br>
-    <a href="https://cse.google.ru">Google search</a><br>
+    @if ($query)
+        <h2>Результаты поиска "{{ $query }}"</h2>
+
+        <p>Найдено результатов: {{ $posts->total() }}</p>
+    @endif
+
+    @if ($posts->isNotEmpty())
+        @foreach($posts as $post)
+            @php
+                $post = $post->relate;
+            @endphp
+            @if ($post->getMorphClass() === 'post')
+                @include('search/_posts')
+            @endif
+
+            @if ($post->getMorphClass() === 'article')
+                @include('search/_articles')
+            @endif
+
+            @if ($post->getMorphClass() === 'comment')
+                @include('search/_comments')
+            @endif
+        @endforeach
+
+        {{ $posts->links() }}
+    @endif
 @stop

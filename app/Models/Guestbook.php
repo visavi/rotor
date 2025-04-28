@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Guestbook extends BaseModel
 {
+    use SearchableTrait;
+
     /**
      * The table associated with the model.
      */
@@ -39,6 +44,23 @@ class Guestbook extends BaseModel
      * Morph name
      */
     public static string $morphName = 'guestbook';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['text', 'reply'];
+    }
+
+    /**
+     * Scope a query to only include active downs.
+     */
+    #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->where('active', true);
+    }
 
     /**
      * Возвращает связь пользователей

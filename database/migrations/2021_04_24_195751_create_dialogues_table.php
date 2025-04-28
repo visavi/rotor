@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 use App\Models\Message;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-final class CreateDialoguesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Migrate Up.
      */
@@ -37,4 +34,4 @@ final class CreateDialoguesTable extends Migration
     {
         Schema::dropIfExists('dialogues');
     }
-}
+};

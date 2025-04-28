@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\Validator;
 use App\Models\Ban;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\Search;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -41,9 +45,34 @@ class HomeController extends Controller
     /**
      * Поиск по сайту
      */
-    public function search(): View
+    public function search(Request $request, Validator $validator): View|RedirectResponse
     {
-        return view('search/index');
+        $user = getUser();
+        $posts = collect();
+        $query = $request->input('query');
+
+        if ($query) {
+            $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($query)));
+
+            $validator->length($query, 3, 64, ['find' => __('main.request_length')]);
+
+            if ($validator->isValid()) {
+                $posts = Search::query()
+                    ->whereFullText('text', $query . '*', ['mode' => 'boolean'])
+                    ->with('relate')
+                    ->paginate()
+                    ->appends(compact('query'))
+                    ->loadMorph('relate', [
+                        Post::class    => ['topic'],
+                        Comment::class => ['relate'],
+                    ]);
+            } else {
+                setInput($request->all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('search/index', compact('posts', 'user', 'query'));
     }
 
     /**

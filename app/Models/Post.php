@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
+use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +32,7 @@ class Post extends BaseModel
 {
     use AddFileToArchiveTrait;
     use ConvertVideoTrait;
+    use SearchableTrait;
     use UploadTrait;
 
     /**
@@ -51,7 +53,15 @@ class Post extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'posts';
+    public static string $morphName = 'post';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['text'];
+    }
 
     /**
      * Возвращает связь пользователей

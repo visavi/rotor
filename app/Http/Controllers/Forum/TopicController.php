@@ -627,7 +627,7 @@ class TopicController extends Controller
     /**
      * Forward to message
      */
-    public function viewpost(int $id, int $pid): RedirectResponse
+    public function viewPost(int $id, int $pid): RedirectResponse
     {
         $countTopics = Post::query()
             ->where('id', '<=', $pid)

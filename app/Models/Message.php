@@ -48,7 +48,7 @@ class Message extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'messages';
+    public static string $morphName = 'message';
 
     /**
      * Директория загрузки файлов

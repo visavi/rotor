@@ -171,7 +171,7 @@ $(function () {
             if (hash.length) {
                 window.scrollTo(0, hash.offset().top - 50);
             }
-        }, 10);
+        }, 50);
     }
 });
 

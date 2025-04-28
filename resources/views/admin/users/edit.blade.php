@@ -177,7 +177,7 @@
 
              </div>
             <div class="tab-pane fade py-3" id="nav-custom-fields">
-                @forelse($fields as $field)
+                @forelse ($fields as $field)
                     <div class="mb-3{{ $field->required ? ' form-required' : null }}{{ hasError('field' . $field->id) }}">
                         <label for="{{ 'field' . $field->id }}" class="form-label">{{ $field->name }}:</label>
                         @if ($field->type === 'textarea')

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,7 @@ use Illuminate\Support\HtmlString;
  */
 class Article extends BaseModel
 {
+    use SearchableTrait;
     use UploadTrait;
 
     /**
@@ -55,7 +57,15 @@ class Article extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'articles';
+    public static string $morphName = 'article';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['title', 'text'];
+    }
 
     /**
      * Возвращает комментарии блогов

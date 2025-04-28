@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -21,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Comment extends BaseModel
 {
+    use SearchableTrait;
+
     /**
      * Indicates if the model should be timestamped.
      */
@@ -34,7 +37,15 @@ class Comment extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'comments';
+    public static string $morphName = 'comment';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['text'];
+    }
 
     /**
      * Возвращает связанные объекты

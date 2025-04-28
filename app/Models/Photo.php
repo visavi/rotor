@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\ConvertVideoTrait;
+use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 class Photo extends BaseModel
 {
     use ConvertVideoTrait;
+    use SearchableTrait;
     use UploadTrait;
 
     /**
@@ -46,7 +48,15 @@ class Photo extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'photos';
+    public static string $morphName = 'photo';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['title', 'text'];
+    }
 
     /**
      * Возвращает комментарии фотографий

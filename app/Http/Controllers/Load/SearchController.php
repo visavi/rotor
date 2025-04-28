@@ -30,7 +30,7 @@ class SearchController extends Controller
             $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
             if ($validator->isValid()) {
                 $downs = Down::query()
-                    ->where('active', 1)
+                    ->active()
                     ->whereFullText(['title', 'text'], $find . '*', ['mode' => 'boolean'])
                     ->with('user', 'category')
                     ->paginate(setting('downlist'))

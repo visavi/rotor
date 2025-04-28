@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  */
 class Vote extends BaseModel
 {
+    use SearchableTrait;
+
     /**
      * Indicates if the model should be timestamped.
      */
@@ -37,7 +40,15 @@ class Vote extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'votes';
+    public static string $morphName = 'vote';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['title', 'description'];
+    }
 
     /**
      * Возвращает топик

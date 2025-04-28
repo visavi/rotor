@@ -50,7 +50,7 @@
     @include('app/_upload_file', [
         'id'       => $down->id,
         'files'    => $files,
-        'type'     => App\Models\Down::$morphName,
+        'type'     => $down->getMorphClass(),
         'showForm' => true,
     ])
 

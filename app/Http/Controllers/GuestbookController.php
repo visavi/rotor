@@ -19,7 +19,7 @@ class GuestbookController extends Controller
     public function index(): View
     {
         $posts = Guestbook::query()
-            ->where('active', true)
+            ->active()
             ->orderByDesc('created_at')
             ->with('user', 'editUser')
             ->paginate(10);

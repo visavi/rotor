@@ -24,11 +24,11 @@
 
         <div class="text-end js-rating">
             @if (getUser() && getUser('id') !== $post->user_id)
-                <a class="post-rating-down<?= ($polls[$post::$morphName][$post->id] ?? '') === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
+                <a class="post-rating-down<?= ($polls[$post->getMorphClass()][$post->id] ?? '') === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
             @endif
             <b>{{ formatNum($post->rating) }}</b>
             @if (getUser() && getUser('id') !== $post->user_id)
-                <a class="post-rating-up<?=($polls[$post::$morphName][$post->id] ?? '') === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
+                <a class="post-rating-up<?=($polls[$post->getMorphClass()][$post->id] ?? '') === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
             @endif
         </div>
     </div>

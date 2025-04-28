@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -29,6 +30,8 @@ use Illuminate\Support\HtmlString;
  */
 class Offer extends BaseModel
 {
+    use SearchableTrait;
+
     public const DONE = 'done';
     public const WAIT = 'wait';
     public const CANCEL = 'cancel';
@@ -68,7 +71,15 @@ class Offer extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'offers';
+    public static string $morphName = 'offer';
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['title', 'text', 'reply'];
+    }
 
     /**
      * Возвращает связь с голосованием

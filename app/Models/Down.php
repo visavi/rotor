@@ -6,7 +6,10 @@ namespace App\Models;
 
 use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
+use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,14 +40,8 @@ class Down extends BaseModel
 {
     use AddFileToArchiveTrait;
     use ConvertVideoTrait;
+    use SearchableTrait;
     use UploadTrait;
-
-    /**
-     * The attributes that should be cast to native types.
-     */
-    protected $casts = [
-        'links' => 'array',
-    ];
 
     /**
      * Indicates if the model should be timestamped.
@@ -74,7 +71,35 @@ class Down extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'downs';
+    public static string $morphName = 'down';
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'active' => 'bool',
+            'links'  => 'array',
+        ];
+    }
+
+    /**
+     * Возвращает поля участвующие в поиске
+     */
+    public function searchableFields(): array
+    {
+        return ['title', 'text'];
+    }
+
+    /**
+     * Scope a query to only include active downs.
+     */
+    #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->where('active', true);
+    }
 
     /**
      * Возвращает категорию загрузок
@@ -101,7 +126,7 @@ class Down extends BaseModel
     }
 
     /**
-     * Возвращает последнии комментарии к файлу
+     * Возвращает последние комментарии к файлу
      */
     public function lastComments(int $limit = 15): HasMany
     {

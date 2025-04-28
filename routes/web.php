@@ -110,7 +110,7 @@ Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/', 'index');
         Route::get('/closed', 'closed');
-        Route::get('/search', 'search');
+        Route::get('/search', 'search')->name('search');
         Route::get('/captcha', 'captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+');
         Route::match(['get', 'post'], '/ipban', 'ipban');
@@ -248,7 +248,7 @@ Route::prefix('topics')->group(function () {
     Route::get('/', [NewController::class, 'topics']);
 
     Route::get('/{id}', [TopicController::class, 'index']);
-    Route::get('/{id}/{pid}', [TopicController::class, 'viewpost'])->whereNumber('pid');
+    Route::get('/{id}/{pid}', [TopicController::class, 'viewPost'])->whereNumber('pid');
     Route::post('/votes/{id}', [TopicController::class, 'vote']);
     Route::get('/end/{id}', [TopicController::class, 'end']);
     Route::get('/open/{id}', [TopicController::class, 'open']);
