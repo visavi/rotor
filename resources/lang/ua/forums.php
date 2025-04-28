@@ -67,7 +67,6 @@ return [
     'topic_success_closed'     => 'Тема успішно закрита!',
     'topic_success_changed'    => 'Тема успішно змінена!',
     'post_repeat'              => 'Ваше повідомлення повторює попередній пост!',
-    'post_added_after'         => 'Додано через :sec сек.',
     'posts_deleted_curators'   => 'Видаляти повідомлення можуть тільки куратори теми!',
     'posts_edited_curators'    => 'Редагувати повідомлення може тільки автор або куратори теми!',
     'topic_edited_points'      => 'Для зміни та закриття теми необхідно :point!',

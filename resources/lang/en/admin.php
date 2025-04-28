@@ -84,11 +84,10 @@ return [
     ],
 
     'chat' => [
-        'clear'            => 'Clear chat',
-        'confirm_clear'    => 'Do you really want to clear the admin chat?',
-        'edit_message'     => 'Editing a message',
-        'post_added_after' => 'Added after :sec sec.',
-        'success_cleared'  => 'Admin chat successfully cleared!',
+        'clear'           => 'Clear chat',
+        'confirm_clear'   => 'Do you really want to clear the admin chat?',
+        'edit_message'    => 'Editing a message',
+        'success_cleared' => 'Admin chat successfully cleared!',
     ],
 
     'checkers' => [

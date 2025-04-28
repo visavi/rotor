@@ -58,9 +58,11 @@ class HomeController extends Controller
 
             if ($validator->isValid()) {
                 $posts = Search::query()
+                    ->selectRaw('*, MATCH(text) AGAINST("' . $query . '*" IN BOOLEAN MODE) AS relevance')
                     ->whereFullText('text', $query . '*', ['mode' => 'boolean'])
                     ->with('relate')
-                    ->paginate()
+                    ->orderByDesc('relevance')
+                    ->paginate(10)
                     ->appends(compact('query'))
                     ->loadMorph('relate', [
                         Post::class    => ['topic'],

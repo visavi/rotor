@@ -67,7 +67,6 @@ return [
     'topic_success_closed'     => 'Topic successfully closed!',
     'topic_success_changed'    => 'Theme successfully changed!',
     'post_repeat'              => 'Your message repeats the previous post!',
-    'post_added_after'         => 'Added after :sec sec.',
     'posts_deleted_curators'   => 'Only topic curators can delete posts!',
     'posts_edited_curators'    => 'Only the author or the curators of the topic can edit posts!',
     'topic_edited_points'      => 'To change and close the topic you need :point!',

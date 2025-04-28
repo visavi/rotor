@@ -169,16 +169,7 @@ class TopicController extends Controller
                 && $countFiles + $post->files->count() <= setting('maxfiles')
                 && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
             ) {
-                $newpost = $post->text
-                    . PHP_EOL
-                    . PHP_EOL
-                    . '[i][size=1]'
-                    . __('forums.post_added_after', ['sec' => makeTime(SITETIME - $post->created_at)])
-                    . '[/size][/i]'
-                    . PHP_EOL
-                    . $msg;
-
-                $post->update(['text' => $newpost]);
+                $post->update(['text' => $post->text . PHP_EOL . $msg]);
             } else {
                 $post = Post::query()->create([
                     'topic_id'   => $topic->id,
