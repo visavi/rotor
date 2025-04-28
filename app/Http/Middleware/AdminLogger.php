@@ -22,13 +22,17 @@ class AdminLogger
      */
     public function terminate(Request $request, Response $response): void
     {
-        Log::query()->create([
-            'user_id'    => getUser('id'),
-            'request'    => utfSubstr($request->getRequestUri(), 0, 250),
-            'referer'    => utfSubstr($request->header('referer'), 0, 250),
-            'ip'         => getIp(),
-            'brow'       => getBrowser(),
-            'created_at' => SITETIME,
-        ]);
+        $user = getUser();
+
+        if ($user) {
+            Log::query()->create([
+                'user_id'    => $user->id,
+                'request'    => utfSubstr($request->getRequestUri(), 0, 250),
+                'referer'    => utfSubstr($request->header('referer'), 0, 250),
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
+                'created_at' => SITETIME,
+            ]);
+        }
     }
 }
