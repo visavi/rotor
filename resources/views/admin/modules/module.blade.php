@@ -30,7 +30,7 @@
 
     @if (isset($moduleConfig['info']))
         <div class="mb-3">
-            {{ bbCode($moduleConfig['info']) }}<br>
+            {{ bbCode($moduleConfig['info']) }}
         </div>
     @endif
 

@@ -530,419 +530,421 @@ Route::controller(OnlineController::class)
     });
 
 /* Админ-панель */
-Route::prefix('admin')->middleware(['check.admin', 'admin.logger'])->group(function () {
-    Route::controller(AdminController::class)
-        ->group(function () {
-            Route::get('/', 'main');
-            Route::get('/upgrade', 'upgrade');
-        });
-
-    /* Админ-чат */
-    Route::controller(ChatController::class)
-        ->prefix('chats')
-        ->group(function () {
-            Route::match(['get', 'post'], '/', 'index');
-            Route::match(['get', 'post'], '/edit/{id}', 'edit');
-            Route::get('/clear', 'clear');
-        });
-
-    /* Гостевая */
-    Route::controller(AdminGuestbookController::class)
-        ->prefix('guestbook')
-        ->group(function () {
-            Route::get('/', 'index');
-            Route::match(['get', 'post'], '/edit/{id}', 'edit');
-            Route::match(['get', 'post'], '/reply/{id}', 'reply');
-            Route::post('/delete', 'delete');
-            Route::post('/publish', 'publish');
-            Route::get('/clear', 'clear');
-        });
-
-    /* Форум */
-    Route::controller(AdminForumController::class)
-        ->prefix('forums')
-        ->group(function () {
-            Route::get('/', 'index');
-            Route::post('/create', 'create');
-            Route::match(['get', 'post'], '/edit/{id}', 'edit');
-            Route::get('/delete/{id}', 'delete');
-            Route::get('/restatement', 'restatement');
-            Route::get('/{id}', 'forum');
-        });
-
-    /* Темы */
-    Route::controller(AdminForumController::class)
-        ->prefix('topics')
-        ->group(function () {
-            Route::match(['get', 'post'], '/edit/{id}', 'editTopic');
-            Route::match(['get', 'post'], '/move/{id}', 'moveTopic');
-            Route::get('/action/{id}', 'actionTopic');
-            Route::get('/delete/{id}', 'deleteTopic');
-            Route::get('/{id}', 'topic');
-            Route::get('/end/{id}', 'end');
-        });
-
-    /* Посты */
-    Route::controller(AdminForumController::class)
-        ->prefix('posts')
-        ->group(function () {
-            Route::match(['get', 'post'], '/edit/{id}', 'editPost');
-            Route::post('/delete', 'deletePosts');
-        });
-
-    /* Галерея */
-    Route::controller(AdminPhotoController::class)
-        ->prefix('photos')
-        ->group(function () {
-            Route::get('/', 'index');
-            Route::match(['get', 'post'], '/edit/{id}', 'edit');
-            Route::get('/restatement', 'restatement');
-            Route::get('/delete/{id}', 'delete');
-        });
-
-    /* Блоги */
-    Route::controller(AdminArticleController::class)
-        ->prefix('blogs')
-        ->group(function () {
-            Route::get('/', 'index');
-            Route::post('/create', 'create');
-            Route::get('/restatement', 'restatement');
-            Route::match(['get', 'post'], '/edit/{id}', 'edit');
-            Route::get('/delete/{id}', 'delete');
-            Route::get('/{id}', 'blog');
-        });
-
-    /* Статьи */
-    Route::controller(AdminArticleController::class)
-        ->prefix('articles')
-        ->group(function () {
-            Route::match(['get', 'post'], '/edit/{id}', 'editArticle');
-            Route::match(['get', 'post'], '/move/{id}', 'moveArticle');
-            Route::get('/delete/{id}', 'deleteArticle');
-        });
-
-    /* Доска объявлений */
-    Route::controller(AdminBoardController::class)
-        ->prefix('boards')
-        ->group(function () {
-            Route::get('/{id?}', 'index');
-            Route::get('/restatement', 'restatement');
-            Route::get('/categories', 'categories');
-            Route::post('/create', 'create');
-            Route::match(['get', 'post'], '/edit/{id}', 'edit');
-            Route::get('/delete/{id}', 'delete');
-        });
-
-    /* Объявления */
-    Route::controller(AdminBoardController::class)
-        ->prefix('items')
-        ->group(function () {
-            Route::match(['get', 'post'], '/edit/{id}', 'editItem');
-            Route::get('/delete/{id}', 'deleteItem');
-        });
-
-    /* Админская реклама */
-    Route::controller(AdminAdvertController::class)
-        ->prefix('admin-adverts')
-        ->group(function () {
-            Route::match(['get', 'post'], '/', 'index');
-            Route::get('/delete', 'delete');
-        });
-
-    /* Пользовательская реклама */
-    Route::get('/adverts', [AdminUserAdvertController::class, 'index']);
-
-    /* Модер */
-    Route::middleware('check.admin:moder')->group(function () {
-        /* Жалобы */
-        Route::controller(SpamController::class)
-            ->prefix('spam')
+Route::middleware(['check.admin', 'admin.logger'])
+    ->prefix('admin')
+    ->group(function () {
+        Route::controller(AdminController::class)
             ->group(function () {
-                Route::get('/', 'index');
-                Route::post('/delete', 'delete');
+                Route::get('/', 'main');
+                Route::get('/upgrade', 'upgrade');
             });
 
-        /* Бан / разбан */
-        Route::controller(AdminBanController::class)
-            ->prefix('bans')
+        /* Админ-чат */
+        Route::controller(ChatController::class)
+            ->prefix('chats')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/edit', 'edit');
-                Route::match(['get', 'post'], '/change', 'change');
-                Route::get('/unban', 'unban');
-            });
-
-        /* Забаненные */
-        Route::get('/banlists', [BanlistController::class, 'index']);
-
-        /* Ожидающие */
-        Route::match(['get', 'post'], '/reglists', [ReglistController::class, 'index']);
-
-        /* Голосования */
-        Route::controller(AdminVoteController::class)
-            ->prefix('votes')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::get('/history', 'history');
+                Route::match(['get', 'post'], '/', 'index');
                 Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/close/{id}', 'close');
-                Route::get('/delete/{id}', 'delete');
-                Route::get('/restatement', 'restatement');
-            });
-
-        /* Антимат */
-        Route::controller(AntimatController::class)
-            ->prefix('antimat')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::get('/delete', 'delete');
                 Route::get('/clear', 'clear');
             });
 
-        /* История банов */
-        Route::controller(BanhistController::class)
-            ->prefix('banhists')
+        /* Гостевая */
+        Route::controller(AdminGuestbookController::class)
+            ->prefix('guestbook')
             ->group(function () {
                 Route::get('/', 'index');
-                Route::get('/view', 'view');
-                Route::post('/delete', 'delete');
-            });
-
-        /* Приглашения */
-        Route::controller(AdminInvitationController::class)
-            ->prefix('invitations')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/create', 'create');
-                Route::match(['get', 'post'], '/send', 'send');
-                Route::post('/mail', 'mail');
-                Route::post('/delete', 'delete');
-            });
-
-        /* Денежный переводы */
-        Route::controller(AdminTransferController::class)
-            ->prefix('transfers')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::get('/view', 'view');
-            });
-    });
-
-    /* Админ */
-    Route::middleware('check.admin:admin')->group(function () {
-        /* Правила */
-        Route::controller(RuleController::class)
-            ->prefix('rules')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/edit', 'edit');
-            });
-
-        /* Новости */
-        Route::controller(AdminNewsController::class)
-            ->prefix('news')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::match(['get', 'post'], '/create', 'create');
-                Route::get('/restatement', 'restatement');
-                Route::get('/delete/{id}', 'delete');
-            });
-
-        /* IP-бан */
-        Route::controller(IpBanController::class)
-            ->prefix('ipbans')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::post('/delete', 'delete');
-                Route::get('/clear', 'clear');
-            });
-
-        /* PHP-info */
-        Route::get('/phpinfo', [AdminController::class, 'phpinfo']);
-
-        /* Загрузки */
-        Route::controller(AdminLoadController::class)
-            ->group(function () {
-                Route::get('/loads', 'index');
-                Route::post('/loads/create', 'create');
-                Route::match(['get', 'post'], '/loads/edit/{id}', 'edit');
-                Route::get('/loads/delete/{id}', 'delete');
-                Route::get('/loads/restatement', 'restatement');
-                Route::get('/loads/{id}', 'load');
-
-                Route::match(['get', 'post'], '/downs/edit/{id}', 'editDown');
-                Route::match(['get', 'post'], '/downs/delete/{id}', 'deleteDown');
-                Route::get('/downs/new', 'new');
-                Route::get('/downs/publish/{id}', 'publish');
-            });
-
-        /* Ошибки */
-        Route::controller(ErrorController::class)
-            ->prefix('errors')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::get('/clear', 'clear');
-            });
-
-        /* Черный список */
-        Route::controller(BlacklistController::class)
-            ->prefix('blacklists')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::post('/delete', 'delete');
-            });
-
-        /* Предложения / проблемы */
-        Route::controller(AdminOfferController::class)
-            ->prefix('offers')
-            ->group(function () {
-                Route::get('/{type?}', 'index')->where('type', 'offer|issue');
-                Route::get('/{id}', 'view');
                 Route::match(['get', 'post'], '/edit/{id}', 'edit');
                 Route::match(['get', 'post'], '/reply/{id}', 'reply');
-                Route::get('/restatement', 'restatement');
-                Route::match(['get', 'post'], '/delete', 'delete');
+                Route::post('/delete', 'delete');
+                Route::post('/publish', 'publish');
+                Route::get('/clear', 'clear');
             });
 
-        /* Стикеры */
-        Route::controller(StickerController::class)
-            ->prefix('stickers')
+        /* Форум */
+        Route::controller(AdminForumController::class)
+            ->prefix('forums')
             ->group(function () {
                 Route::get('/', 'index');
-                Route::get('/{id}', 'category');
                 Route::post('/create', 'create');
                 Route::match(['get', 'post'], '/edit/{id}', 'edit');
                 Route::get('/delete/{id}', 'delete');
-                Route::match(['get', 'post'], '/sticker/create', 'createSticker');
-                Route::match(['get', 'post'], '/sticker/edit/{id}', 'editSticker');
-                Route::get('/sticker/delete/{id}', 'deleteSticker');
+                Route::get('/restatement', 'restatement');
+                Route::get('/{id}', 'forum');
             });
 
-        /* Статусы */
-        Route::controller(StatusController::class)
-            ->prefix('status')
+        /* Темы */
+        Route::controller(AdminForumController::class)
+            ->prefix('topics')
+            ->group(function () {
+                Route::match(['get', 'post'], '/edit/{id}', 'editTopic');
+                Route::match(['get', 'post'], '/move/{id}', 'moveTopic');
+                Route::get('/action/{id}', 'actionTopic');
+                Route::get('/delete/{id}', 'deleteTopic');
+                Route::get('/{id}', 'topic');
+                Route::get('/end/{id}', 'end');
+            });
+
+        /* Посты */
+        Route::controller(AdminForumController::class)
+            ->prefix('posts')
+            ->group(function () {
+                Route::match(['get', 'post'], '/edit/{id}', 'editPost');
+                Route::post('/delete', 'deletePosts');
+            });
+
+        /* Галерея */
+        Route::controller(AdminPhotoController::class)
+            ->prefix('photos')
             ->group(function () {
                 Route::get('/', 'index');
-                Route::match(['get', 'post'], '/create', 'create');
-                Route::match(['get', 'post'], '/edit', 'edit');
-                Route::get('/delete', 'delete');
+                Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                Route::get('/restatement', 'restatement');
+                Route::get('/delete/{id}', 'delete');
             });
-    });
 
-    /* Босс */
-    Route::middleware('check.admin:boss')->group(function () {
-        /* Настройки */
-        Route::match(['get', 'post'], '/settings', [SettingController::class, 'index']);
-
-        /* Пользователи */
-        Route::controller(AdminUserController::class)
-            ->prefix('users')
+        /* Блоги */
+        Route::controller(AdminArticleController::class)
+            ->prefix('blogs')
             ->group(function () {
                 Route::get('/', 'index');
-                Route::get('/search', 'search');
-                Route::match(['get', 'post'], '/edit', 'edit');
-                Route::match(['get', 'post'], '/delete', 'delete');
+                Route::post('/create', 'create');
+                Route::get('/restatement', 'restatement');
+                Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                Route::get('/delete/{id}', 'delete');
+                Route::get('/{id}', 'blog');
             });
 
-        /* Очистка кеша */
-        Route::controller(CacheController::class)
-            ->prefix('caches')
+        /* Статьи */
+        Route::controller(AdminArticleController::class)
+            ->prefix('articles')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::post('/clear', 'clear');
+                Route::match(['get', 'post'], '/edit/{id}', 'editArticle');
+                Route::match(['get', 'post'], '/move/{id}', 'moveArticle');
+                Route::get('/delete/{id}', 'deleteArticle');
             });
 
-        /* Бэкап */
-        Route::controller(BackupController::class)
-            ->prefix('backups')
+        /* Доска объявлений */
+        Route::controller(AdminBoardController::class)
+            ->prefix('boards')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/create', 'create');
-                Route::get('/delete', 'delete');
-            });
-
-        /* Сканирование */
-        Route::controller(CheckerController::class)
-            ->prefix('checkers')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::match(['get', 'post'], '/scan', 'scan');
-            });
-
-        /* Приват рассылка */
-        Route::match(['get', 'post'], '/delivery', [DeliveryController::class, 'index']);
-
-        /* Логи */
-        Route::controller(LogController::class)
-            ->prefix('logs')
-            ->group(function () {
-                Route::get('/', 'index')->withoutMiddleware('admin.logger');
-                Route::get('/clear', 'clear');
-            });
-
-        /* Шаблоны писем */
-        Route::controller(NoticeController::class)
-            ->prefix('notices')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/create', 'create');
+                Route::get('/{id?}', 'index');
+                Route::get('/restatement', 'restatement');
+                Route::get('/categories', 'categories');
+                Route::post('/create', 'create');
                 Route::match(['get', 'post'], '/edit/{id}', 'edit');
                 Route::get('/delete/{id}', 'delete');
             });
 
-        /* Редактор */
-        Route::controller(AdminFileController::class)
-            ->prefix('files')
+        /* Объявления */
+        Route::controller(AdminBoardController::class)
+            ->prefix('items')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/edit', 'edit');
-                Route::match(['get', 'post'], '/create', 'create');
+                Route::match(['get', 'post'], '/edit/{id}', 'editItem');
+                Route::get('/delete/{id}', 'deleteItem');
+            });
+
+        /* Админская реклама */
+        Route::controller(AdminAdvertController::class)
+            ->prefix('admin-adverts')
+            ->group(function () {
+                Route::match(['get', 'post'], '/', 'index');
                 Route::get('/delete', 'delete');
             });
 
         /* Пользовательская реклама */
-        Route::controller(AdminUserAdvertController::class)
-            ->prefix('adverts')
-            ->group(function () {
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::post('/delete', 'delete');
-            });
+        Route::get('/adverts', [AdminUserAdvertController::class, 'index']);
 
-        /* Платная реклама */
-        Route::controller(PaidAdvertController::class)
-            ->prefix('paid-adverts')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/create', 'create');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/delete/{id}', 'delete');
-            });
+        /* Модер */
+        Route::middleware('check.admin:moder')->group(function () {
+            /* Жалобы */
+            Route::controller(SpamController::class)
+                ->prefix('spam')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::post('/delete', 'delete');
+                });
 
-        /* Пользовательские поля */
-        Route::resource('user-fields', UserFieldController::class)
-            ->parameters(['user-fields' => 'id'])
-            ->except('show');
+            /* Бан / разбан */
+            Route::controller(AdminBanController::class)
+                ->prefix('bans')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/edit', 'edit');
+                    Route::match(['get', 'post'], '/change', 'change');
+                    Route::get('/unban', 'unban');
+                });
 
-        /* Чистка пользователей */
-        Route::controller(DelUserController::class)
-            ->prefix('delusers')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::post('/clear', 'clear');
-            });
+            /* Забаненные */
+            Route::get('/banlists', [BanlistController::class, 'index']);
 
-        /* Модули */
-        Route::controller(ModuleController::class)
-            ->prefix('modules')
-            ->group(function () {
-                Route::get('/', 'index');
-                Route::get('/module', 'module');
-                Route::get('/install', 'install');
-                Route::get('/uninstall', 'uninstall');
-            });
+            /* Ожидающие */
+            Route::match(['get', 'post'], '/reglists', [ReglistController::class, 'index']);
+
+            /* Голосования */
+            Route::controller(AdminVoteController::class)
+                ->prefix('votes')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/history', 'history');
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::get('/close/{id}', 'close');
+                    Route::get('/delete/{id}', 'delete');
+                    Route::get('/restatement', 'restatement');
+                });
+
+            /* Антимат */
+            Route::controller(AntimatController::class)
+                ->prefix('antimat')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/', 'index');
+                    Route::get('/delete', 'delete');
+                    Route::get('/clear', 'clear');
+                });
+
+            /* История банов */
+            Route::controller(BanhistController::class)
+                ->prefix('banhists')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/view', 'view');
+                    Route::post('/delete', 'delete');
+                });
+
+            /* Приглашения */
+            Route::controller(AdminInvitationController::class)
+                ->prefix('invitations')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::match(['get', 'post'], '/send', 'send');
+                    Route::post('/mail', 'mail');
+                    Route::post('/delete', 'delete');
+                });
+
+            /* Денежный переводы */
+            Route::controller(AdminTransferController::class)
+                ->prefix('transfers')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/view', 'view');
+                });
+        });
+
+        /* Админ */
+        Route::middleware('check.admin:admin')->group(function () {
+            /* Правила */
+            Route::controller(RuleController::class)
+                ->prefix('rules')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/edit', 'edit');
+                });
+
+            /* Новости */
+            Route::controller(AdminNewsController::class)
+                ->prefix('news')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::get('/restatement', 'restatement');
+                    Route::get('/delete/{id}', 'delete');
+                });
+
+            /* IP-бан */
+            Route::controller(IpBanController::class)
+                ->prefix('ipbans')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/', 'index');
+                    Route::post('/delete', 'delete');
+                    Route::get('/clear', 'clear');
+                });
+
+            /* PHP-info */
+            Route::get('/phpinfo', [AdminController::class, 'phpinfo']);
+
+            /* Загрузки */
+            Route::controller(AdminLoadController::class)
+                ->group(function () {
+                    Route::get('/loads', 'index');
+                    Route::post('/loads/create', 'create');
+                    Route::match(['get', 'post'], '/loads/edit/{id}', 'edit');
+                    Route::get('/loads/delete/{id}', 'delete');
+                    Route::get('/loads/restatement', 'restatement');
+                    Route::get('/loads/{id}', 'load');
+
+                    Route::match(['get', 'post'], '/downs/edit/{id}', 'editDown');
+                    Route::match(['get', 'post'], '/downs/delete/{id}', 'deleteDown');
+                    Route::get('/downs/new', 'new');
+                    Route::get('/downs/publish/{id}', 'publish');
+                });
+
+            /* Ошибки */
+            Route::controller(ErrorController::class)
+                ->prefix('errors')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/clear', 'clear');
+                });
+
+            /* Черный список */
+            Route::controller(BlacklistController::class)
+                ->prefix('blacklists')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/', 'index');
+                    Route::post('/delete', 'delete');
+                });
+
+            /* Предложения / проблемы */
+            Route::controller(AdminOfferController::class)
+                ->prefix('offers')
+                ->group(function () {
+                    Route::get('/{type?}', 'index')->where('type', 'offer|issue');
+                    Route::get('/{id}', 'view');
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::match(['get', 'post'], '/reply/{id}', 'reply');
+                    Route::get('/restatement', 'restatement');
+                    Route::match(['get', 'post'], '/delete', 'delete');
+                });
+
+            /* Стикеры */
+            Route::controller(StickerController::class)
+                ->prefix('stickers')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/{id}', 'category');
+                    Route::post('/create', 'create');
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::get('/delete/{id}', 'delete');
+                    Route::match(['get', 'post'], '/sticker/create', 'createSticker');
+                    Route::match(['get', 'post'], '/sticker/edit/{id}', 'editSticker');
+                    Route::get('/sticker/delete/{id}', 'deleteSticker');
+                });
+
+            /* Статусы */
+            Route::controller(StatusController::class)
+                ->prefix('status')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::match(['get', 'post'], '/edit', 'edit');
+                    Route::get('/delete', 'delete');
+                });
+        });
+
+        /* Босс */
+        Route::middleware('check.admin:boss')->group(function () {
+            /* Настройки */
+            Route::match(['get', 'post'], '/settings', [SettingController::class, 'index']);
+
+            /* Пользователи */
+            Route::controller(AdminUserController::class)
+                ->prefix('users')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/search', 'search');
+                    Route::match(['get', 'post'], '/edit', 'edit');
+                    Route::match(['get', 'post'], '/delete', 'delete');
+                });
+
+            /* Очистка кеша */
+            Route::controller(CacheController::class)
+                ->prefix('caches')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::post('/clear', 'clear');
+                });
+
+            /* Бэкап */
+            Route::controller(BackupController::class)
+                ->prefix('backups')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::get('/delete', 'delete');
+                });
+
+            /* Сканирование */
+            Route::controller(CheckerController::class)
+                ->prefix('checkers')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/', 'index');
+                    Route::match(['get', 'post'], '/scan', 'scan');
+                });
+
+            /* Приват рассылка */
+            Route::match(['get', 'post'], '/delivery', [DeliveryController::class, 'index']);
+
+            /* Логи */
+            Route::controller(LogController::class)
+                ->prefix('logs')
+                ->group(function () {
+                    Route::get('/', 'index')->withoutMiddleware('admin.logger');
+                    Route::get('/clear', 'clear');
+                });
+
+            /* Шаблоны писем */
+            Route::controller(NoticeController::class)
+                ->prefix('notices')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::get('/delete/{id}', 'delete');
+                });
+
+            /* Редактор */
+            Route::controller(AdminFileController::class)
+                ->prefix('files')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/edit', 'edit');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::get('/delete', 'delete');
+                });
+
+            /* Пользовательская реклама */
+            Route::controller(AdminUserAdvertController::class)
+                ->prefix('adverts')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::post('/delete', 'delete');
+                });
+
+            /* Платная реклама */
+            Route::controller(PaidAdvertController::class)
+                ->prefix('paid-adverts')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::match(['get', 'post'], '/create', 'create');
+                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::get('/delete/{id}', 'delete');
+                });
+
+            /* Пользовательские поля */
+            Route::resource('user-fields', UserFieldController::class)
+                ->parameters(['user-fields' => 'id'])
+                ->except('show');
+
+            /* Чистка пользователей */
+            Route::controller(DelUserController::class)
+                ->prefix('delusers')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/', 'index');
+                    Route::post('/clear', 'clear');
+                });
+
+            /* Модули */
+            Route::controller(ModuleController::class)
+                ->prefix('modules')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::get('/module', 'module');
+                    Route::get('/install', 'install');
+                    Route::get('/uninstall', 'uninstall');
+                });
+        });
     });
-});
 
 if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
     Route::controller(InstallController::class)
