@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -47,6 +48,10 @@ class AppServiceProvider extends ServiceProvider
 
             return "<?= \\App\\Classes\\Hook::call($hookName, $args); ?>";
         });
+
+        if (config('app.env')) {
+            URL::forceScheme('https');
+        }
 
         // If the public directory is renamed to public_html
         /*$this->app->bind('path.public', function () {

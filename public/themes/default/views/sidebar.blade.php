@@ -147,8 +147,8 @@
     <ul class="app-menu app-sidebar__footer">
         @hook('sidebarFooterStart')
         <li class="app-search search-sidebar">
-            <form action="/search" method="get">
-                <input name="q" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" required>
+            <form action="{{ route('search') }}" method="get">
+                <input name="query" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" maxlength="64" required>
                 <button class="app-search__button"><i class="fa fa-search"></i></button>
             </form>
         </li>
