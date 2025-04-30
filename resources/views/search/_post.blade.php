@@ -18,7 +18,7 @@
 
     <div class="section-content">
         <div class="section-message">
-            {{ $post->text ? bbCodeTruncate($post->text, 100) : 'Удалено' }}
+            {{ bbCodeTruncate($post->text, 100) }}
         </div>
     </div>
 </div>

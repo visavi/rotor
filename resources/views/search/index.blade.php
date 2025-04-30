@@ -32,19 +32,36 @@
             @php
                 $post = $post->relate;
             @endphp
-            @if ($post->getMorphClass() === 'post')
-                @include('search/_posts')
-            @endif
 
-            @if ($post->getMorphClass() === 'article')
-                @include('search/_articles')
-            @endif
-
-            @if ($post->getMorphClass() === 'comment')
-                @include('search/_comments')
-            @endif
+            @includeIf('search/_' . $post->getMorphClass())
         @endforeach
 
         {{ $posts->links() }}
     @endif
 @stop
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Получаем поисковый запрос из URL
+            const query = new URLSearchParams(window.location.search).get('query');
+
+            if (query) {
+                const searchWords = query.split(' ')
+                    .filter(word => word.length >= 3)
+                    .filter((word, index, self) => self.indexOf(word) === index);
+
+                if (searchWords.length > 0) {
+                    const regexPattern = '(' + searchWords.join('|') + ')';
+                    const regex = new RegExp(regexPattern, 'gi');
+
+                    $('.section').each(function() {
+                        const originalHtml = $(this).html();
+                        const highlightedHtml = originalHtml.replace(regex, '<mark>$1</mark>');
+                        $(this).html(highlightedHtml);
+                    });
+                }
+            }
+        });
+    </script>
+@endpush

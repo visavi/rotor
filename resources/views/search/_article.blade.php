@@ -3,6 +3,10 @@
         <li class="breadcrumb-item">
             <i class="fa-regular fa-note-sticky"></i> <a href="/blogs" class="text-muted">{{ __('index.blogs') }}</a>
         </li>
+
+        <li class="breadcrumb-item">
+            <a href="/blogs/{{ $post->category->id }}" class="text-muted">{{ $post->category->name }}</a>
+        </li>
     </ol>
 
     <div class="section-header d-flex align-items-center">

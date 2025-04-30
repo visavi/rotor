@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Validator;
+use App\Models\Article;
 use App\Models\Ban;
 use App\Models\Comment;
+use App\Models\Down;
 use App\Models\Post;
 use App\Models\Search;
+use App\Models\Topic;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\RedirectResponse;
@@ -65,8 +68,11 @@ class HomeController extends Controller
                     ->paginate(10)
                     ->appends(compact('query'))
                     ->loadMorph('relate', [
-                        Post::class    => ['topic'],
+                        Article::class => ['category'],
                         Comment::class => ['relate'],
+                        Down::class    => ['category'],
+                        Post::class    => ['topic'],
+                        Topic::class   => ['forum', 'lastPost'],
                     ]);
             } else {
                 setInput($request->all());

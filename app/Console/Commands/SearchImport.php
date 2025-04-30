@@ -28,9 +28,9 @@ class SearchImport extends Command
         $models = [
             Article::class,
             Comment::class,
-            Guestbook::class,
             Down::class,
-            //Item::class,
+            Guestbook::class,
+            // Item::class,
             News::class,
             Offer::class,
             Photo::class,
