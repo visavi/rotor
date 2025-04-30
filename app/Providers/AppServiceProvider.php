@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
             return "<?= \\App\\Classes\\Hook::call($hookName, $args); ?>";
         });
 
-        if (config('app.env')) {
+        if (app()->environment('production')) {
             URL::forceScheme('https');
         }
 
