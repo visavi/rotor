@@ -101,6 +101,5 @@
 
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
-    <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /
-    <a href="/forums/search?fid={{ $forum->id }}">{{ __('main.search') }}</a><br>
+    <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a><br>
 @stop

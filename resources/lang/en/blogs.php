@@ -29,7 +29,6 @@ return [
     'new_articles'           => 'New Articles',
     'new_comments'           => 'New comments',
     'title_rss'              => 'RSS articles',
-    'title_search'           => 'Blog Search',
     'title_tags'             => 'Tag Search',
     'confirm_delete_article' => 'Are you sure you want to delete this article?',
     'confirm_delete_blog'    => 'Are you sure you want to delete this section?',

@@ -29,7 +29,6 @@ return [
     'new_articles'           => 'Нові статті',
     'new_comments'           => 'Нові коментарі',
     'title_rss'              => 'RSS статей',
-    'title_search'           => 'Пошук у блогах',
     'title_tags'             => 'Пошук за тегами',
     'confirm_delete_article' => 'Ви дійсно хочете видалити цю статтю?',
     'confirm_delete_blog'    => 'Ви впевнені, що хочете видалити цей розділ?',

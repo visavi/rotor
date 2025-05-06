@@ -32,8 +32,6 @@ return [
     'title_new_posts'      => 'Нові повідомлення',
     'title_new_topics'     => 'Нові теми',
     'title_rss'            => 'Теми форуму',
-    'title_search'         => 'Пошук за форумом',
-    'search_in_topics'     => 'Шукати в назвах тем',
     'title_top_topics'     => 'Топ популярних тем',
     'title_top_posts'      => 'Топ популярних постів',
     'rating'               => 'Рейтинг',

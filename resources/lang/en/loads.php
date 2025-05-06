@@ -36,7 +36,6 @@ return [
     'create_load'            => 'Create Partition',
     'new_publications'       => 'New publications',
     'files_images'           => 'Files / Images',
-    'search'                 => 'Search by file',
     'add_link'               => 'Add link',
 
     'pending_down1' => 'Attention! This download is pending moderator! ',

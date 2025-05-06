@@ -679,43 +679,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Поиск
-     *
-     *
-     * @return View|RedirectResponse
-     */
-    public function search(Request $request, Validator $validator)
-    {
-        $find = check($request->input('find'));
-        $articles = collect();
-
-        if ($find) {
-            $find = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($find)));
-
-            $validator->length($find, 3, 64, ['find' => __('main.request_length')]);
-            if ($validator->isValid()) {
-                $articles = Article::query()
-                    ->whereFullText(['title', 'text'], $find . '*', ['mode' => 'boolean'])
-                    ->with('user', 'category')
-                    ->paginate(setting('blogpost'))
-                    ->appends(compact('find'));
-
-                if ($articles->isEmpty()) {
-                    setInput($request->all());
-                    setFlash('danger', __('main.empty_found'));
-
-                    return redirect('blogs/search');
-                }
-            } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
-            }
-        }
-
-        return view('blogs/search', compact('articles', 'find'));
-    }
-
-    /**
      * Список всех блогов (Для вывода на главную страницу)
      */
     public function main(): View

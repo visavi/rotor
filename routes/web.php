@@ -54,7 +54,6 @@ use App\Http\Controllers\Forum\ActiveController;
 use App\Http\Controllers\Forum\BookmarkController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\NewController;
-use App\Http\Controllers\Forum\SearchController;
 use App\Http\Controllers\Forum\TopicController;
 use App\Http\Controllers\GuestbookController;
 use App\Http\Controllers\HomeController;
@@ -65,7 +64,6 @@ use App\Http\Controllers\Load\ActiveController as LoadActiveController;
 use App\Http\Controllers\Load\DownController;
 use App\Http\Controllers\Load\LoadController;
 use App\Http\Controllers\Load\NewController as LoadNewController;
-use App\Http\Controllers\Load\SearchController as LoadSearchController;
 use App\Http\Controllers\Load\TopController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
@@ -169,7 +167,6 @@ Route::controller(ArticleController::class)
         Route::get('/top', 'top');
         Route::get('/rss', 'rss');
         Route::match(['get', 'post'], '/create', 'create');
-        Route::match(['get', 'post'], '/search', 'search');
         Route::get('/main', 'main');
     });
 
@@ -232,8 +229,6 @@ Route::prefix('forums')->group(function () {
     Route::get('/rss', [ForumController::class, 'rss']);
     Route::match(['get', 'post'], '/create', [ForumController::class, 'create']);
 
-    Route::get('/search', [SearchController::class, 'index']);
-
     Route::get('/active/posts', [ActiveController::class, 'posts']);
     Route::get('/active/topics', [ActiveController::class, 'topics']);
     Route::delete('/active/delete/{id}', [ActiveController::class, 'destroy']);
@@ -273,7 +268,6 @@ Route::prefix('loads')->group(function () {
     Route::get('/rss', [LoadController::class, 'rss']);
     Route::get('/{id}', [LoadController::class, 'load']);
     Route::get('/top', [TopController::class, 'index']);
-    Route::get('/search', [LoadSearchController::class, 'index']);
 });
 
 /* Загрузки */

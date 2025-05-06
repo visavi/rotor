@@ -76,7 +76,7 @@
     {{ __('forums.create_rule1') }}<br>
     <a href="/rules">{{ __('main.rules') }}</a><br>
     {{ __('forums.create_rule2') }}<br>
-    <a href="/forums/search">{{ __('main.search') }}</a><br>
+    <a href="/search">{{ __('main.search') }}</a><br>
     {{ __('forums.create_rule3') }}<br><br>
 @stop
 

@@ -122,6 +122,5 @@
 
     <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
     <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/search">{{ __('main.search') }}</a> /
     <a href="/blogs/authors">{{ __('blogs.authors') }}</a>
 @stop

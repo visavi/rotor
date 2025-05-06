@@ -29,7 +29,6 @@ return [
     'new_articles'           => 'Новые статьи',
     'new_comments'           => 'Новые комментарии',
     'title_rss'              => 'RSS статей',
-    'title_search'           => 'Поиск в блогах',
     'title_tags'             => 'Поиск по тегам',
     'confirm_delete_article' => 'Вы действительно хотите удалить данную статью?',
     'confirm_delete_blog'    => 'Вы уверены что хотите удалить данный раздел?',

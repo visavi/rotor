@@ -92,6 +92,5 @@
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
     <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a> /
-    <a href="/forums/search">{{ __('main.search') }}</a> /
     <a href="/forums/rss">{{ __('main.rss') }}</a><br>
 @stop
