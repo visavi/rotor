@@ -20,5 +20,7 @@
         <div class="section-message">
             {{ bbCodeTruncate($post->text, 100) }}
         </div>
+
+        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>
 </div>

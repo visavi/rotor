@@ -50,9 +50,32 @@ class HomeController extends Controller
      */
     public function search(Request $request, Validator $validator): View|RedirectResponse
     {
-        $user = getUser();
-        $posts = collect();
+        $posts = paginate([], 10);
         $query = $request->input('query');
+
+        $types = [
+            'article'   => __('index.blogs'),
+            'comment'   => __('index.comments'),
+            'down'      => __('index.loads'),
+            'guestbook' => __('index.guestbook'),
+            'news'      => __('index.news'),
+            'offer'     => __('index.offers'),
+            'photo'     => __('index.photos'),
+            'post'      => __('index.posts'),
+            'topic'     => __('index.topics'),
+            'user'      => __('index.users'),
+            'vote'      => __('index.votes'),
+        ];
+
+        $sort = check($request->input('sort', 'relevance'));
+        $order = match ($sort) {
+            'date'     => ['created_at desc'],
+            'date_asc' => ['created_at asc'],
+            default    => ['match(text) against(? in boolean mode) desc', [$query . '*']],
+        };
+
+        $type = check($request->input('type'));
+        $type = isset($types[$type]) ? $type : null;
 
         if ($query) {
             $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($query)));
@@ -61,12 +84,14 @@ class HomeController extends Controller
 
             if ($validator->isValid()) {
                 $posts = Search::query()
-                    ->selectRaw('*, MATCH(text) AGAINST("' . $query . '*" IN BOOLEAN MODE) AS relevance')
+                    ->when($type, function ($query) use ($type) {
+                        $query->where('relate_type', $type);
+                    })
                     ->whereFullText('text', $query . '*', ['mode' => 'boolean'])
                     ->with('relate')
-                    ->orderByDesc('relevance')
+                    ->orderByRaw(...$order)
                     ->paginate(10)
-                    ->appends(compact('query'))
+                    ->appends(compact('query', 'sort', 'type'))
                     ->loadMorph('relate', [
                         Article::class => ['category'],
                         Comment::class => ['relate'],
@@ -80,7 +105,7 @@ class HomeController extends Controller
             }
         }
 
-        return view('search/index', compact('posts', 'user', 'query'));
+        return view('search/index', compact('posts', 'types', 'type', 'sort', 'query'));
     }
 
     /**

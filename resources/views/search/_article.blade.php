@@ -21,5 +21,7 @@
         <div class="section-message">
             {{ $post->shortText() }}
         </div>
+
+        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>
 </div>

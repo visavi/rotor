@@ -30,7 +30,7 @@
                     @endif
 
                     @if ($post->site)
-                        <div><i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ $user->site }}</a></div>
+                        <div><i class="fa fa-home"></i> <a href="{{ $post->site }}">{{ $post->site }}</a></div>
                     @endif
                 </div>
             </div>

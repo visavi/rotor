@@ -12,7 +12,7 @@
     <ul class="app-nav">
         <li class="app-search search-navbar">
             <form action="{{ route('search') }}" method="get">
-                <input name="query" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" maxlength="64" required>
+                <input name="query" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" minlength="3" maxlength="64" required>
                 <button class="app-search__button"><i class="fa fa-search"></i></button>
             </form>
         </li>

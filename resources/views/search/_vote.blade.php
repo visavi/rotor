@@ -19,5 +19,7 @@
                 {{ bbCodeTruncate($post->description, 100) }}
             @endif
         </div>
+
+        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>
 </div>

@@ -22,6 +22,9 @@ return [
     'chat'          => 'Chat',
     'user_search'   => 'User search',
     'statistics'    => 'Attendance Statistics',
+    'comments'      => 'Comments',
+    'topics'        => 'Forum topics',
+    'posts'         => 'Forum posts',
 
     'menu'      => 'Menu',
     'login'     => 'Login',

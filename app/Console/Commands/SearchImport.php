@@ -89,7 +89,7 @@ class SearchImport extends Command
                     $searchData[] = [
                         'text'        => $this->buildSearchTextForRecord($record),
                         'created_at'  => $record->created_at,
-                        'relate_type' => $record::$morphName,
+                        'relate_type' => $record->getMorphClass(),
                         'relate_id'   => $record->getKey(),
                     ];
 
