@@ -25,7 +25,7 @@
                     @if (isset($moduleInstall[$name]))
                         <span class="badge bg-success">{{ __('main.installed') }}</span>
 
-                        @if ($moduleInstall[$name]->disabled)
+                        @if (! $moduleInstall[$name]->active)
                             <span class="badge bg-warning">{{ __('main.disabled') }}</span>
                         @endif
 

@@ -14,7 +14,7 @@
 @stop
 
 @section('header')
-    @if ($module && ! $module['disabled'] && isset($moduleConfig['panel']))
+    @if ($module && $module->active && isset($moduleConfig['panel']))
         <div class="float-end">
             <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">{{ __('main.management') }}</a>
         </div>
@@ -97,10 +97,10 @@
             <a class="btn btn-info" href="/admin/modules/install?module={{ $moduleName }}&amp;update=1">{{ __('main.refresh') }}</a>
         @endif
 
-        @if ($module['disabled'])
-            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}&amp;enable=1">{{ __('main.enable') }}</a>
-        @else
+        @if ($module['active'])
             <a class="btn btn-warning" href="/admin/modules/uninstall?module={{ $moduleName }}&amp;disable=1">{{ __('main.disable') }}</a>
+        @else
+            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}&amp;enable=1">{{ __('main.enable') }}</a>
         @endif
 
         <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('{{ __('admin.modules.confirm_delete') }}')">{{ __('main.delete') }}</a>

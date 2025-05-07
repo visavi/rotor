@@ -13,11 +13,10 @@ set('repository', 'git@github.com:visavi/rotor.git');
 add('shared_files', []);
 add('shared_dirs', [
     'public/uploads',
-    'public/assets/modules',
 ]);
+
 add('writable_dirs', [
     'public/uploads/*',
-    'public/assets/modules',
 ]);
 
 set('bin/npm', function () {
@@ -37,5 +36,6 @@ task('build', function () {
     run('{{bin/npm}} run prod');
 });
 
+before('deploy:success', artisan('module:link'));
 after('deploy:update_code', 'build');
 after('deploy:failed', 'deploy:unlock');

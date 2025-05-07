@@ -57,7 +57,7 @@ class ModuleController extends AdminController
         }
 
         if (file_exists($modulePath . '/resources/assets')) {
-            $moduleConfig['symlink'] = (new Module())->getLinkName($modulePath);
+            $moduleConfig['symlink'] = Module::getLinkNameByPath($modulePath);
         }
 
         if (file_exists($modulePath . '/routes.php')) {
@@ -91,8 +91,8 @@ class ModuleController extends AdminController
         $module = Module::query()->firstOrNew(['name' => $moduleName]);
 
         $moduleConfig = include $modulePath . '/module.php';
-        $module->createSymlink($modulePath);
-        $module->migrate($modulePath);
+        $module->createSymlink();
+        $module->migrate();
 
         Artisan::call('route:clear');
         $result = __('admin.modules.module_success_installed');
@@ -108,7 +108,7 @@ class ModuleController extends AdminController
 
             if ($enable) {
                 $module->update([
-                    'disabled'   => 0,
+                    'active'     => true,
                     'updated_at' => SITETIME,
                 ]);
                 $result = __('admin.modules.module_success_enabled');
@@ -121,6 +121,7 @@ class ModuleController extends AdminController
             ])->save();
         }
 
+        clearCache('modules');
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);
@@ -145,21 +146,22 @@ class ModuleController extends AdminController
             abort(200, __('admin.modules.module_not_found'));
         }
 
-        $module->deleteSymlink($modulePath);
+        $module->deleteSymlink();
         Artisan::call('route:clear');
 
         if ($disable) {
             $module->update([
-                'disabled'   => 1,
+                'active'     => false,
                 'updated_at' => SITETIME,
             ]);
             $result = __('admin.modules.module_success_disabled');
         } else {
-            $module->rollback($modulePath);
+            $module->rollback();
             $module->delete();
             $result = __('admin.modules.module_success_deleted');
         }
 
+        clearCache('modules');
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);

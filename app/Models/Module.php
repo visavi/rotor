@@ -7,6 +7,7 @@ namespace App\Models;
 use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -14,9 +15,9 @@ use Illuminate\Support\Str;
  * Class Module
  *
  * @property int id
- * @property string version
  * @property string name
- * @property int disabled
+ * @property string version
+ * @property bool active
  * @property int updated_at
  * @property int created_at
  */
@@ -38,11 +39,21 @@ class Module extends BaseModel
     public string $assetsPath = '/assets/modules/';
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'active' => 'bool',
+        ];
+    }
+
+    /**
      * Выполняет применение миграции
      */
-    public function migrate(string $modulePath): void
+    public function migrate(): void
     {
-        $migrationPath = $modulePath . '/migrations';
+        $migrationPath = base_path('modules/' . $this->name . '/migrations');
 
         if (file_exists($migrationPath)) {
             Artisan::call('migrate', [
@@ -56,9 +67,9 @@ class Module extends BaseModel
     /**
      * Выполняет откат миграций
      */
-    public function rollback(string $modulePath): void
+    public function rollback(): void
     {
-        $migrationPath = $modulePath . '/migrations';
+        $migrationPath = base_path('modules/' . $this->name . '/migrations');
 
         if (file_exists($migrationPath)) {
             $migrator = app('migrator');
@@ -80,28 +91,28 @@ class Module extends BaseModel
     /**
      * Создает симлинки модулей
      */
-    public function createSymlink(string $modulePath): void
+    public function createSymlink(): void
     {
-        $originPath = public_path($this->getLinkName($modulePath));
+        $originPath = public_path($this->getLinkName());
         if (file_exists($originPath)) {
             return;
         }
 
-        $modulesPath = $modulePath . '/resources/assets';
-        if (! file_exists($modulesPath)) {
+        $assetsPath = base_path('modules/' . $this->name . '/resources/assets');
+        if (! file_exists($assetsPath)) {
             return;
         }
 
         $filesystem = new Filesystem();
-        $filesystem->link($modulesPath, $originPath);
+        $filesystem->link($assetsPath, $originPath);
     }
 
     /**
      * Удаляет симлинки модулей
      */
-    public function deleteSymlink(string $modulePath): void
+    public function deleteSymlink(): void
     {
-        $originPath = public_path($this->getLinkName($modulePath));
+        $originPath = public_path($this->getLinkName());
         if (! file_exists($originPath)) {
             return;
         }
@@ -113,9 +124,17 @@ class Module extends BaseModel
     /**
      * Получает название директории для симлинка
      */
-    public function getLinkName(string $modulePath): string
+    public function getLinkName(): string
     {
-        return $this->assetsPath . Str::plural(strtolower(basename($modulePath)));
+        return $this->assetsPath . Str::plural(strtolower($this->name));
+    }
+
+    /**
+     * Получает название директории для симлинка из пути
+     */
+    public static function getLinkNameByPath(string $modulePath): string
+    {
+        return (new self())->assetsPath . Str::plural(strtolower(basename($modulePath)));
     }
 
     /**
@@ -123,12 +142,12 @@ class Module extends BaseModel
      */
     public static function getEnabledModules(): array
     {
-        try {
-            $modules = self::query()->where('disabled', 0)->pluck('name')->all();
-        } catch (Exception) {
-            $modules = [];
-        }
-
-        return $modules;
+        return Cache::rememberForever('modules', static function () {
+            try {
+                return self::query()->where('active', true)->pluck('name')->all();
+            } catch (Exception) {
+                return [];
+            }
+        });
     }
 }
