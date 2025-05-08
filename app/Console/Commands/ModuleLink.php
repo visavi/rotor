@@ -27,7 +27,7 @@ class ModuleLink extends Command
      */
     public function handle(): int
     {
-        $modules = Module::query()->where('disabled', 0)->get();
+        $modules = Module::query()->where('active', true)->get();
 
         foreach ($modules as $module) {
             $module->createSymlink();
