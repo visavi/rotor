@@ -53,7 +53,7 @@ class Post extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'post';
+    public static string $morphName = 'posts';
 
     /**
      * Возвращает поля участвующие в поиске

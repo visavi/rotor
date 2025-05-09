@@ -50,7 +50,7 @@ class Item extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'item';
+    public static string $morphName = 'items';
 
     /**
      * Возвращает поля участвующие в поиске

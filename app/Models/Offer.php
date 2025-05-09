@@ -71,7 +71,7 @@ class Offer extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'offer';
+    public static string $morphName = 'offers';
 
     /**
      * Возвращает поля участвующие в поиске

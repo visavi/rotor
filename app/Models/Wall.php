@@ -30,7 +30,7 @@ class Wall extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'wall';
+    public static string $morphName = 'walls';
 
     /**
      * Возвращает связь пользователей

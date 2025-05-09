@@ -48,7 +48,7 @@ class Photo extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'photo';
+    public static string $morphName = 'photos';
 
     /**
      * Возвращает поля участвующие в поиске

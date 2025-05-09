@@ -57,7 +57,7 @@ class Article extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'article';
+    public static string $morphName = 'articles';
 
     /**
      * Возвращает поля участвующие в поиске

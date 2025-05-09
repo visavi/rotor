@@ -71,7 +71,7 @@ class Down extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'down';
+    public static string $morphName = 'downs';
 
     /**
      * Get the attributes that should be cast.

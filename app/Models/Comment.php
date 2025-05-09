@@ -37,7 +37,7 @@ class Comment extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'comment';
+    public static string $morphName = 'comments';
 
     /**
      * Возвращает поля участвующие в поиске

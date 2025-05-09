@@ -165,7 +165,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     /**
      * Morph name
      */
-    public static string $morphName = 'user';
+    public static string $morphName = 'users';
 
     /**
      * Возвращает поля участвующие в поиске

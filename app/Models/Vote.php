@@ -40,7 +40,7 @@ class Vote extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'vote';
+    public static string $morphName = 'votes';
 
     /**
      * Возвращает поля участвующие в поиске

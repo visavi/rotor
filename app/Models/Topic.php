@@ -54,7 +54,7 @@ class Topic extends BaseModel
     /**
      * Morph name
      */
-    public static string $morphName = 'topic';
+    public static string $morphName = 'topics';
 
     /**
      * Возвращает поля участвующие в поиске

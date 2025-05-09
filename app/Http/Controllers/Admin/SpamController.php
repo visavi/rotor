@@ -22,11 +22,11 @@ class SpamController extends AdminController
     public function __construct(Request $request)
     {
         $this->types = [
-            'post'      => __('index.forums'),
+            'posts'     => __('index.forums'),
             'guestbook' => __('index.guestbook'),
-            'message'   => __('index.messages'),
-            'wall'      => __('index.wall_posts'),
-            'comment'   => __('main.comments'),
+            'messages'  => __('index.messages'),
+            'walls'     => __('index.wall_posts'),
+            'comments'  => __('main.comments'),
         ];
 
         $type = $request->input('type');
