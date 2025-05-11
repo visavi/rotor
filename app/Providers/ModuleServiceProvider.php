@@ -23,18 +23,25 @@ class ModuleServiceProvider extends ServiceProvider
         $modules = Module::getEnabledModules();
 
         foreach ($modules as $module) {
-            $routesFile = base_path('modules/' . $module . '/routes.php');
-            if (file_exists($routesFile)) {
-                include_once $routesFile;
-            }
-
             $hooksFile = base_path('modules/' . $module . '/hooks.php');
             if (file_exists($hooksFile)) {
                 include_once $hooksFile;
             }
 
-            $this->loadViewsFrom(base_path('modules/' . $module . '/resources/views'), $module);
-            $this->loadTranslationsFrom(base_path('modules/' . $module . '/resources/lang'), $module);
+            $routesFile = base_path('modules/' . $module . '/routes.php');
+            if (file_exists($routesFile)) {
+                $this->loadRoutesFrom($routesFile);
+            }
+
+            $viewsPath = base_path('modules/' . $module . '/resources/views');
+            if (file_exists($viewsPath)) {
+                $this->loadViewsFrom($viewsPath, $module);
+            }
+
+            $langPath = base_path('modules/' . $module . '/resources/lang');
+            if (file_exists($langPath)) {
+                $this->loadTranslationsFrom($langPath, $module);
+            }
         }
     }
 }
