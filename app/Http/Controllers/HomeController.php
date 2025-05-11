@@ -54,17 +54,17 @@ class HomeController extends Controller
         $query = $request->input('query');
 
         $types = [
-            'article'   => __('index.blogs'),
-            'comment'   => __('index.comments'),
-            'down'      => __('index.loads'),
+            'articles'  => __('index.blogs'),
+            'comments'  => __('index.comments'),
+            'downs'     => __('index.loads'),
             'guestbook' => __('index.guestbook'),
             'news'      => __('index.news'),
-            'offer'     => __('index.offers'),
-            'photo'     => __('index.photos'),
-            'post'      => __('index.posts'),
-            'topic'     => __('index.topics'),
-            'user'      => __('index.users'),
-            'vote'      => __('index.votes'),
+            'offers'    => __('index.offers'),
+            'photos'    => __('index.photos'),
+            'posts'     => __('index.posts'),
+            'topics'    => __('index.topics'),
+            'users'     => __('index.users'),
+            'votes'     => __('index.votes'),
         ];
 
         $sort = check($request->input('sort', 'relevance'));
