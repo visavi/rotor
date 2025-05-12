@@ -24,7 +24,6 @@ return new class extends Migration {
                 $table->index(['user_id', 'created_at']);
                 $table->index(['rating', 'created_at']);
                 $table->index('created_at');
-                $table->fullText('text');
             });
         }
     }

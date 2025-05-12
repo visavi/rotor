@@ -22,7 +22,6 @@ return new class extends Migration {
                 $table->index('category_id');
                 $table->index('user_id');
                 $table->index('created_at');
-                $table->fullText(['title', 'text']);
             });
         }
     }

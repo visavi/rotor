@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->string('name', 50);
                 $table->string('version', 10);
-                $table->boolean('disabled')->default(false);
+                $table->boolean('active')->default(true);
                 $table->integer('updated_at')->nullable();
                 $table->integer('created_at');
             });
