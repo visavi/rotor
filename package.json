@@ -13,25 +13,25 @@
         "production": "mix --production"
     },
     "dependencies": {
-        "@fancyapps/ui": "^5.0.35",
-        "@fortawesome/fontawesome-free": "^6.5",
+        "@fancyapps/ui": "^5.0.36",
+        "@fortawesome/fontawesome-free": "^6.7",
         "@popperjs/core": "^2.11.8",
-        "bootbox": "^6.0.0",
-        "bootstrap": "^5.3.3",
-        "bootstrap5-tags": "^1.7.6",
+        "bootbox": "^6.0.3",
+        "bootstrap": "^5.3.6",
+        "bootstrap5-tags": "^1.7.13",
         "jquery": "^3.7.1",
         "jquery-mask-plugin": "^1.14.16",
         "toastr": "^2.1.4"
     },
     "devDependencies": {
-        "axios": "^1.8",
+        "axios": "^1.9",
         "laravel-mix": "^6.0.49",
         "lodash": "^4.17.21",
         "postcss": "^8.4.38",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.85.0",
+        "sass": "^1.88.0",
         "sass-loader": "^16.0.5",
-        "webpack": "^5.94.0"
+        "webpack": "^5.99.8"
     },
     "repository": {
         "type": "git",
