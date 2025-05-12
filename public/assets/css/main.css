@@ -122,6 +122,10 @@ textarea.form-control {
   margin-bottom: 1rem;
 }
 
+.media-file img {
+    max-height: 600px;
+}
+
 .carousel {
     position: relative;
     display: inline-block;
