@@ -806,23 +806,18 @@ function statsNewsDate()
 }
 
 /**
- * Возвращает последние новости
+ * Возвращает закрепленные новости
  *
  * @return HtmlString Новость
  */
-function lastNews(): HtmlString
+function pinnedNews(): HtmlString
 {
-    $news = collect();
-
-    if (setting('lastnews') > 0) {
-        $news = Cache::remember('lastNews', 1800, static function () {
-            return News::query()
-                ->where('top', 1)
-                ->orderByDesc('created_at')
-                ->limit(setting('lastnews'))
-                ->get();
-        });
-    }
+    $news = Cache::remember('pinnedNews', 1800, static function () {
+        return News::query()
+            ->where('top', 1)
+            ->orderByDesc('created_at')
+            ->get();
+    });
 
     return new HtmlString(view('widgets/_news', compact('news')));
 }

@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\File;
 use App\Models\News;
-use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -62,7 +61,7 @@ class NewsController extends AdminController
                     'top'    => $top,
                 ]);
 
-                clearCache(['statNews', 'lastNews', 'NewsFeed']);
+                clearCache(['statNews', 'pinnedNews', 'NewsFeed']);
                 setFlash('success', __('news.news_success_edited'));
 
                 return redirect('/news/' . $news->id);
@@ -110,14 +109,7 @@ class NewsController extends AdminController
 
                 $files->update(['relate_id' => $news->id]);
 
-                // TODO Удалить setting('lastnews')
-                // Выводим на главную если там нет новостей
-                if ($top && empty(setting('lastnews'))) {
-                    Setting::query()->where('name', 'lastnews')->update(['value' => 1]);
-                    clearCache('settings');
-                }
-
-                clearCache(['statNews', 'lastNews', 'statNewsDate', 'NewsFeed']);
+                clearCache(['statNews', 'pinnedNews', 'statNewsDate', 'NewsFeed']);
                 setFlash('success', __('news.news_success_added'));
 
                 return redirect('/news/' . $news->id);

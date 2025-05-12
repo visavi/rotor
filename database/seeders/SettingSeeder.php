@@ -100,7 +100,6 @@ class SettingSeeder extends Seeder
             ['name' => 'invite_rating', 'value' => 10],
             ['name' => 'invite_count', 'value' => 3],
             ['name' => 'ipbanlist', 'value' => 10],
-            ['name' => 'lastnews', 'value' => 5],
             ['name' => 'language', 'value' => __('seeds.settings.language')],
             ['name' => 'language_fallback', 'value' => 'ru'],
             ['name' => 'limitcontact', 'value' => 1000],

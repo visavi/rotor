@@ -4,7 +4,7 @@
         <a href="/news" class="">{{ __('index.news') }}</a>
         <span class="badge bg-light text-dark">{{ statsNewsDate() }}</span>
     </div>
-    {{ lastNews() }}
+    {{ pinnedNews() }}
 </div>
 
 <div class="section mb-3 shadow">
@@ -103,4 +103,3 @@
         {{ onlineWidget() }}
     </div>
 </div>
-
