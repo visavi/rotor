@@ -60,22 +60,22 @@
                             @foreach ($data->files as $file)
                                 <div class="media-file">
                                     @if ($file->isImage())
-                                        <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $data->id }}">{{ resizeImage($file->hash, ['alt' => $file->name]) }}</a><br>
+                                        <a href="{{ $file->path }}" data-fancybox="gallery-{{ $data->id }}">{{ resizeImage($file->path, ['alt' => $file->name]) }}</a><br>
                                     @endif
 
                                     @if ($file->isVideo())
                                         <div>
-                                            <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                                            <video src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
                                         </div>
                                     @endif
 
                                     @if ($file->isAudio())
                                         <div>
-                                            <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                                            <audio src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls></audio>
                                         </div>
                                     @endif
                                     {{ icons($file->extension) }}
-                                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
+                                    <a href="{{ $file->path }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                                 </div>
                             @endforeach
                         </div>

@@ -134,7 +134,7 @@ class Article extends BaseModel
             return null;
         }
 
-        return new HtmlString('<img src="' . $image->hash . '" atl="' . $this->title . '" class="card-img-top">');
+        return new HtmlString('<img src="' . $image->path . '" atl="' . $this->title . '" class="card-img-top">');
     }
 
     /**

@@ -16,9 +16,9 @@ $countFiles = $files->count();
             @foreach ($files as $file)
                 <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
                     @php
-                        $image = resizeImage($file->hash, ['alt' => $model->title]);
+                        $image = resizeImage($file->path, ['alt' => $model->title]);
                     @endphp
-                    <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $model->id }}">{{ $image }}</a>
+                    <a href="{{ $file->path }}" data-fancybox="gallery-{{ $model->id }}">{{ $image }}</a>
                 </div>
             @endforeach
         </div>

@@ -56,7 +56,7 @@ trait UploadTrait
             $upload = File::query()->create([
                 'relate_id'   => $this->id ?? 0,
                 'relate_type' => $this->getMorphClass(),
-                'hash'        => $path,
+                'path'        => $path,
                 'name'        => $basename,
                 'size'        => $filesize,
                 'user_id'     => getUser('id'),

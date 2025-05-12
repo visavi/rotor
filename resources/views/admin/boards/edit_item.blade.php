@@ -75,7 +75,7 @@
                 @if ($item->files->isNotEmpty())
                     @foreach ($item->files as $file)
                         <span class="js-image">
-                            {{ resizeImage($file->hash, ['width' => 100]) }}
+                            {{ resizeImage($file->path, ['width' => 100]) }}
                             <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $item->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
                         </span>
                     @endforeach

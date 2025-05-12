@@ -7,7 +7,7 @@ $pointer = empty($paste) ? null : 'cursor-pointer';
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-file">
-                <span onclick="{{ $click }}" class="{{ $pointer }}">{{ resizeImage($file->hash, ['width' => 100]) }}</span>
+                <span onclick="{{ $click }}" class="{{ $pointer }}">{{ resizeImage($file->path, ['width' => 100]) }}</span>
                 <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $type }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
             </span>
         @endforeach

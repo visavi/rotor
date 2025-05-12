@@ -260,12 +260,12 @@ class DownController extends Controller
             abort(200, __('loads.down_not_verified'));
         }
 
-        $validator->true(file_exists(public_path($file->hash)), __('loads.down_not_exist'));
+        $validator->true(file_exists(public_path($file->path)), __('loads.down_not_exist'));
 
         if ($validator->isValid()) {
             Reader::countingStat($file->relate);
 
-            return response()->download(public_path($file->hash), $file->name);
+            return response()->download(public_path($file->path), $file->name);
         }
 
         setFlash('danger', $validator->getErrors());
@@ -472,7 +472,7 @@ class DownController extends Controller
         }
 
         $archive = new ZipArchive();
-        $opened = $archive->open(public_path($file->hash), ZipArchive::RDONLY);
+        $opened = $archive->open(public_path($file->path), ZipArchive::RDONLY);
 
         if ($opened !== true) {
             abort(200, __('loads.archive_not_open'));
@@ -553,7 +553,7 @@ class DownController extends Controller
         }
 
         $archive = new ZipArchive();
-        $opened = $archive->open(public_path($file->hash), ZipArchive::RDONLY);
+        $opened = $archive->open(public_path($file->path), ZipArchive::RDONLY);
 
         if ($opened !== true) {
             abort(200, __('loads.archive_not_open'));

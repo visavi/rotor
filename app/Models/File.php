@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int id
  * @property string relate_type
  * @property int relate_id
- * @property string hash
+ * @property string path
  * @property string name
  * @property int size
  * @property int user_id
@@ -49,7 +49,7 @@ class File extends BaseModel
      */
     public function getExtensionAttribute(): string
     {
-        return getExtension($this->hash);
+        return getExtension($this->path);
     }
 
     /**
@@ -81,7 +81,7 @@ class File extends BaseModel
      */
     public function delete(): ?bool
     {
-        deleteFile(public_path($this->hash));
+        deleteFile(public_path($this->path));
 
         return parent::delete();
     }

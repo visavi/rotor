@@ -85,7 +85,7 @@ class Item extends BaseModel
     {
         $image = $this->files->first();
 
-        $path = $image->hash ?? null;
+        $path = $image->path ?? null;
 
         return resizeImage($path, ['alt' => $this->title, 'class' => 'img-fluid']);
     }

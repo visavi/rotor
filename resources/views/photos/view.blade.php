@@ -44,7 +44,7 @@
     <div class="section mb-3 shadow">
         @foreach ($photo->files as $file)
             <div class="media-file mb-3">
-                <a href="{{ $file->hash }}" data-fancybox="gallery-{{ $photo->id }}"><img class="img-fluid" src="{{ $file->hash }}" alt="image"></a>
+                <a href="{{ $file->path }}" data-fancybox="gallery-{{ $photo->id }}"><img class="img-fluid" src="{{ $file->path }}" alt="image"></a>
             </div>
         @endforeach
 

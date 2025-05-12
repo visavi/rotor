@@ -60,18 +60,18 @@
                             <div class="media-file">
                                 @if ($file->isVideo())
                                     <div>
-                                        <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                                        <video src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
                                     </div>
                                 @endif
 
                                 @if ($file->isAudio())
                                     <div>
-                                        <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                                        <audio src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls></audio>
                                     </div>
                                 @endif
 
                                 {{ icons($file->extension) }}
-                                <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
+                                <a href="{{ $file->path }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                             </div>
                         @endforeach
                     @endif

@@ -13,9 +13,9 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
         @foreach ($files as $file)
             <span class="js-file">
                 @if ($file->isImage())
-                    {{ resizeImage($file->hash, ['width' => 100]) }}
+                    {{ resizeImage($file->path, ['width' => 100]) }}
                 @else
-                    <a class="me-1" href="{{ $file->hash }}">{{ $file->name }}</a>
+                    <a class="me-1" href="{{ $file->path }}">{{ $file->name }}</a>
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
                 @endif
 

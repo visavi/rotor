@@ -35,7 +35,7 @@ trait ConvertVideoTrait
             $frame->save(public_path($file['path'] . '.jpg'));
 
             $this->files()->create([
-                'hash'       => $file['path'] . '.jpg',
+                'path'       => $file['path'] . '.jpg',
                 'name'       => 'screenshot.jpg',
                 'size'       => filesize(public_path($file['path'] . '.jpg')),
                 'user_id'    => getUser('id'),

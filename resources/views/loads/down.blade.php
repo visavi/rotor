@@ -46,7 +46,7 @@
         @if ($down->getImages()->isNotEmpty())
             @foreach ($down->getImages() as $image)
                 <div class="media-file mb-3">
-                    <a href="{{ $image->hash }}" data-fancybox="gallery-{{ $down->id }}">{{ resizeImage($image->hash, ['alt' => $down->title]) }}</a>
+                    <a href="{{ $image->path }}" data-fancybox="gallery-{{ $down->id }}">{{ resizeImage($image->path, ['alt' => $down->title]) }}</a>
                 </div>
             @endforeach
         @endif
@@ -58,16 +58,16 @@
         @if ($down->links || $down->files->isNotEmpty())
             @foreach ($down->getFiles() as $file)
                 <div class="media-file mb-3">
-                    @if ($file->hash && file_exists(public_path($file->hash)))
+                    @if ($file->path && file_exists(public_path($file->path)))
                         @if ($file->extension === 'mp3')
                             <div>
-                                <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
+                                <audio src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
                             </div>
                         @endif
 
                         @if ($file->extension === 'mp4')
                             <div>
-                                <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
+                                <video src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
                             </div>
                         @endif
 

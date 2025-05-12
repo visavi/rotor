@@ -369,7 +369,7 @@ class AjaxController extends Controller
 
             return response()->json([
                 'success' => true,
-                'path'    => $file->hash,
+                'path'    => $file->path,
             ]);
         }
 
