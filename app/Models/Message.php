@@ -71,6 +71,9 @@ class Message extends BaseModel
         return $this->morphMany(File::class, 'relate');
     }
 
+    /**
+     * Возвращает связь с диалогами
+     */
     public function dialogues(): HasMany
     {
         return $this->hasMany(Dialogue::class);

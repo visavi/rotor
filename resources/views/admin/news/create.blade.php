@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow cut">
-        <form action="/admin/news/create" method="post" enctype="multipart/form-data">
+        <form action="/admin/news/create" method="post">
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="title" class="form-label">{{ __('main.title') }}:</label>
@@ -30,14 +30,10 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            <div class="mb-3{{ hasError('image') }}">
-                <label for="image" class="btn btn-sm btn-secondary form-label">
-                    <input id="image" type="file" name="image" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
-                    {{ __('main.attach_image') }}&hellip;
-                </label>
-                <span class="badge bg-info" id="upload-file-info"></span>
-                <div class="invalid-feedback">{{ textError('image') }}</div>
-            </div>
+            @include('app/_upload_file', [
+                'files' => $files,
+                'type' => App\Models\News::$morphName,
+            ])
 
             <div class="form-check">
                 <input type="hidden" value="0" name="closed">
@@ -51,7 +47,7 @@
                 <label for="top" class="form-check-label">{{ __('news.pin_top') }}</label>
             </div>
 
-            <button class="btn btn-primary">{{ __('main.create') }}</button>
+            <button class="btn btn-primary mt-3">{{ __('main.create') }}</button>
         </form>
     </div>
 @stop

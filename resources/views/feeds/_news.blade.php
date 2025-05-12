@@ -29,14 +29,33 @@
 
     <div class="section-content">
         <div class="section-message">
-            @if ($post->image)
-                <div class="media-file mb-3">
-                    <a href="{{ $post->image }}" data-fancybox="gallery-{{ $post->id }}">{{ resizeImage($post->image, ['class' => 'img-fluid', 'alt' => $post->title]) }}</a>
-                </div>
-            @endif
-
             {{ bbCode($post->text) }}
         </div>
+
+        @if ($post->getImages()->isNotEmpty())
+            @include('app/_carousel', ['model' => $post, 'files' => $post->getImages()])
+        @endif
+
+        @if ($post->getFiles()->isNotEmpty())
+            @foreach ($post->getFiles() as $file)
+                <div class="media-file">
+                    @if ($file->isVideo())
+                        <div>
+                            <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                        </div>
+                    @endif
+
+                    @if ($file->isAudio())
+                        <div>
+                            <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                        </div>
+                    @endif
+
+                    {{ icons($file->extension) }}
+                    <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
+                </div>
+            @endforeach
+        @endif
     </div>
 
     <div class="section-body">

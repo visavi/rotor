@@ -29,7 +29,7 @@
                     <div class="flex-grow-1">
                         <i class="fa {{ $data->getIcon() }} text-muted"></i>
                         <a class="section-title" href="/news/{{ $data->id }}">{{ $data->title }}</a>
-                        <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }})</small>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                     </div>
 
                     <div class="text-end">
@@ -42,24 +42,42 @@
                 </div>
 
                 <div class="section-content">
-                    <div class="section-message row">
-                        @if ($data->image)
-                            <div class="col-sm-3 mb-3">
-                                <a href="{{ $data->image }}" data-fancybox="gallery-{{ $data->id }}">{{ resizeImage($data->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $data->title]) }}</a>
+                    <div class="section-message">
+                        {{ $data->shortText() }}
+                    </div>
+
+                    @if ($data->getImages()->isNotEmpty())
+                        @include('app/_carousel', ['model' => $data, 'files' => $data->getImages()])
+                    @endif
+
+                    @if ($data->getFiles()->isNotEmpty())
+                        @foreach ($data->getFiles() as $file)
+                            <div class="media-file">
+                                @if ($file->isVideo())
+                                    <div>
+                                        <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                                    </div>
+                                @endif
+
+                                @if ($file->isAudio())
+                                    <div>
+                                        <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                                    </div>
+                                @endif
+
+                                {{ icons($file->extension) }}
+                                <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
                             </div>
-                        @endif
-
-                        <div class="col">
-                            {{ $data->shortText() }}
-                        </div>
-                    </div>
-
-                    <div>
-                        {{ __('main.added') }}: {{ $data->user->getProfile() }}<br>
-                        <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                        <a href="/news/end/{{ $data->id }}">&raquo;</a>
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
+
+                <div class="section-body">
+                    <span class="avatar-micro">{{ $data->user->getAvatarImage() }}</span> {{ $data->user->getProfile() }}
+                </div>
+
+                <i class="fa-regular fa-comment"></i> <a href="/news/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
+                <a href="/news/end/{{ $data->id }}">&raquo;</a>
             </div>
         @endforeach
 

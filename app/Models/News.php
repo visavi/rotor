@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\AddFileToArchiveTrait;
+use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\HtmlString;
@@ -17,7 +20,6 @@ use Illuminate\Support\HtmlString;
  * @property string title
  * @property string text
  * @property int user_id
- * @property string image
  * @property int created_at
  * @property int count_comments
  * @property int closed
@@ -25,6 +27,8 @@ use Illuminate\Support\HtmlString;
  */
 class News extends BaseModel
 {
+    use AddFileToArchiveTrait;
+    use ConvertVideoTrait;
     use SearchableTrait;
     use UploadTrait;
 
@@ -65,6 +69,34 @@ class News extends BaseModel
     }
 
     /**
+     * Возвращает загруженные файлы
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'relate');
+    }
+
+    /**
+     * Возвращает файлы
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files->filter(static function (File $value, $key) {
+            return ! $value->isImage();
+        });
+    }
+
+    /**
+     * Возвращает картинки
+     */
+    public function getImages(): Collection
+    {
+        return $this->files->filter(static function (File $value, $key) {
+            return $value->isImage();
+        });
+    }
+
+    /**
      * Возвращает связь с голосованием
      */
     public function polling(): morphOne
@@ -101,5 +133,17 @@ class News extends BaseModel
         }
 
         return new HtmlString(bbCode($this->text) . $more);
+    }
+
+    /**
+     * Удаление новость и загруженных файлов
+     */
+    public function delete(): ?bool
+    {
+        $this->files->each(static function (File $file) {
+            $file->delete();
+        });
+
+        return parent::delete();
     }
 }

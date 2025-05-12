@@ -28,7 +28,7 @@ class NewsController extends Controller
                     ->where('pollings.user_id', getUser('id'));
             })
             ->orderByDesc('created_at')
-            ->with('user')
+            ->with('user', 'files')
             ->paginate(setting('postnews'));
 
         return view('news/index', compact('news'));

@@ -230,9 +230,10 @@ class AjaxController extends Controller
         ];
 
         $fileTypes = [
-            Message::$morphName,
-            Post::$morphName,
             Down::$morphName,
+            Message::$morphName,
+            News::$morphName,
+            Post::$morphName,
         ];
 
         $id = int($request->input('id'));
@@ -330,11 +331,12 @@ class AjaxController extends Controller
     {
         $types = [
             Article::$morphName,
-            Item::$morphName,
-            Photo::$morphName,
-            Message::$morphName,
-            Post::$morphName,
             Down::$morphName,
+            Item::$morphName,
+            News::$morphName,
+            Message::$morphName,
+            Photo::$morphName,
+            Post::$morphName,
         ];
 
         $id = int($request->input('id'));

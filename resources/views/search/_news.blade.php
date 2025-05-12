@@ -15,12 +15,6 @@
 
     <div class="section-content">
         <div class="section-message">
-            @if ($post->image)
-                <div class="media-file mb-3">
-                    <a href="{{ $post->image }}" data-fancybox="gallery-{{ $post->id }}">{{ resizeImage($post->image, ['class' => 'img-fluid', 'alt' => $post->title]) }}</a>
-                </div>
-            @endif
-
             {{ bbCodeTruncate($post->text, 100) }}
         </div>
 

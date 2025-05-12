@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
+use App\Models\File;
 use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
@@ -46,7 +47,6 @@ class NewsController extends AdminController
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $image = $request->file('image');
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top = empty($request->input('top')) ? 0 : 1;
 
@@ -54,33 +54,18 @@ class NewsController extends AdminController
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
-            $rules = [
-                'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', setting('image_extensions')),
-                'minweight'  => 100,
-            ];
-
-            $validator->file($image, $rules, ['image' => __('validator.image_upload_failed')], false);
-
             if ($validator->isValid()) {
-                // Удаление старой картинки
-                if ($image) {
-                    deleteFile(public_path($news->image));
-                    $file = $news->uploadFile($image, false);
-                }
-
                 $news->update([
                     'title'  => $title,
                     'text'   => $text,
                     'closed' => $closed,
                     'top'    => $top,
-                    'image'  => $file['path'] ?? $news->image,
                 ]);
 
                 clearCache(['statNews', 'lastNews', 'NewsFeed']);
                 setFlash('success', __('news.news_success_edited'));
 
-                return redirect('admin/news/edit/' . $news->id . '?page=' . $page);
+                return redirect('/news/' . $news->id);
             }
 
             setInput($request->all());
@@ -98,10 +83,14 @@ class NewsController extends AdminController
      */
     public function create(Request $request, Validator $validator)
     {
+        $files = File::query()
+            ->where('relate_type', News::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', getUser('id'));
+
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
-            $image = $request->file('image');
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top = empty($request->input('top')) ? 0 : 1;
 
@@ -109,16 +98,7 @@ class NewsController extends AdminController
                 ->length($title, 3, 50, ['title' => __('validator.text')])
                 ->length($text, 5, 10000, ['text' => __('validator.text')]);
 
-            $rules = [
-                'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', setting('image_extensions')),
-                'minweight'  => 100,
-            ];
-
-            $validator->file($image, $rules, ['image' => __('validator.image_upload_failed')], false);
-
             if ($validator->isValid()) {
-                /** @var News $news */
                 $news = News::query()->create([
                     'user_id'    => getUser('id'),
                     'title'      => $title,
@@ -128,13 +108,9 @@ class NewsController extends AdminController
                     'created_at' => SITETIME,
                 ]);
 
-                if ($image) {
-                    $file = $news->uploadFile($image, false);
-                    $news->update([
-                        'image' => $file['path'],
-                    ]);
-                }
+                $files->update(['relate_id' => $news->id]);
 
+                // TODO Удалить setting('lastnews')
                 // Выводим на главную если там нет новостей
                 if ($top && empty(setting('lastnews'))) {
                     Setting::query()->where('name', 'lastnews')->update(['value' => 1]);
@@ -144,14 +120,16 @@ class NewsController extends AdminController
                 clearCache(['statNews', 'lastNews', 'statNewsDate', 'NewsFeed']);
                 setFlash('success', __('news.news_success_added'));
 
-                return redirect('admin/news/edit/' . $news->id);
+                return redirect('/news/' . $news->id);
             }
 
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('admin/news/create');
+        $files = $files->orderBy('created_at')->get();
+
+        return view('admin/news/create', compact('files'));
     }
 
     /**
@@ -191,8 +169,6 @@ class NewsController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            deleteFile(public_path($news->image));
-
             $news->comments()->delete();
             $news->delete();
 

@@ -35,21 +35,41 @@
 @section('content')
     <div class="mb-3">
         <div class="section-content">
-            <div class="section-message row">
-                @if ($news->image)
-                    <div class="col-sm-3 mb-3">
-                        <a href="{{ $news->image }}" data-fancybox="gallery-{{ $news->id }}">{{ resizeImage($news->image, ['class' => 'img-thumbnail img-fluid', 'alt' => $news->title]) }}</a>
-                    </div>
-                @endif
-
-                <div class="col">
-                    {{ bbCode($news->text) }}
-                </div>
+            <div class="section-message">
+                {{ bbCode($news->text) }}
             </div>
+
+            @if ($news->getImages()->isNotEmpty())
+                @include('app/_carousel', ['model' => $news, 'files' => $news->getImages()])
+            @endif
+
+            @if ($news->getFiles()->isNotEmpty())
+                @foreach ($news->getFiles() as $file)
+                    <div class="media-file">
+                        @if ($file->isVideo())
+                            <div>
+                                <video src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                            </div>
+                        @endif
+
+                        @if ($file->isAudio())
+                            <div>
+                                <audio src="{{ $file->hash }}" style="max-width:100%;" preload="metadata" controls></audio>
+                            </div>
+                        @endif
+
+                        {{ icons($file->extension) }}
+                        <a href="{{ $file->hash }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
+                    </div>
+                @endforeach
+            @endif
         </div>
 
+
         <div class="section-body">
-            {{ __('main.added') }}: {{ $news->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($news->created_at) }}</small>
+            <div class="section-body">
+                <span class="avatar-micro">{{ $news->user->getAvatarImage() }}</span> {{ $news->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($news->created_at) }}</small>
+            </div>
 
             <div class="js-rating">
                 {{ __('main.rating') }}:
