@@ -64,7 +64,6 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            // Получаем поисковый запрос из URL
             const query = new URLSearchParams(window.location.search).get('query');
 
             if (query) {
@@ -73,12 +72,14 @@
                     .filter((word, index, self) => self.indexOf(word) === index);
 
                 if (searchWords.length > 0) {
-                    const regexPattern = '(' + searchWords.join('|') + ')';
-                    const regex = new RegExp(regexPattern, 'gi');
+                    const regex = new RegExp('(' + searchWords.join('|') + ')', 'gi');
 
                     $('.section').each(function() {
                         const originalHtml = $(this).html();
-                        const highlightedHtml = originalHtml.replace(regex, '<mark>$1</mark>');
+                        const highlightedHtml = originalHtml.replace(
+                            /(<[^>]+>)|([^<]+)/g,
+                            (m, tag, text) => tag || text.replace(regex, '<mark>$1</mark>')
+                        );
                         $(this).html(highlightedHtml);
                     });
                 }
