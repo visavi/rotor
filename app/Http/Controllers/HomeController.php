@@ -53,19 +53,7 @@ class HomeController extends Controller
         $posts = paginate([], 10);
         $query = $request->input('query');
 
-        $types = [
-            'articles'  => __('index.blogs'),
-            'comments'  => __('index.comments'),
-            'downs'     => __('index.loads'),
-            'guestbook' => __('index.guestbook'),
-            'news'      => __('index.news'),
-            'offers'    => __('index.offers'),
-            'photos'    => __('index.photos'),
-            'posts'     => __('index.posts'),
-            'topics'    => __('index.topics'),
-            'users'     => __('index.users'),
-            'votes'     => __('index.votes'),
-        ];
+        $types = Search::getRelateTypes();
 
         $sort = check($request->input('sort', 'relevance'));
         $order = match ($sort) {

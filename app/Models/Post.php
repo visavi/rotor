@@ -16,17 +16,20 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 /**
  * Class Post
  *
- * @property int id
- * @property int topic_id
- * @property int user_id
- * @property string text
- * @property int rating
- * @property int created_at
- * @property string ip
- * @property string brow
- * @property int edit_user_id
- * @property int updated_at
- * @property Collection files
+ * @property int    $id
+ * @property int    $topic_id
+ * @property int    $user_id
+ * @property string $text
+ * @property int    $rating
+ * @property int    $created_at
+ * @property string $ip
+ * @property string $brow
+ * @property int    $edit_user_id
+ * @property int    $updated_at
+ * @property-read Collection<File>    $files
+ * @property-read Collection<Polling> $polling
+ * @property-read Topic               $topic
+ * @property-read User                $editUser
  */
 class Post extends BaseModel
 {
@@ -112,7 +115,8 @@ class Post extends BaseModel
      */
     public function polling(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+        return $this->morphOne(Polling::class, 'relate')
+            ->where('user_id', getUser('id'));
     }
 
     /**

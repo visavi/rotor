@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\PaidAdvertController;
 use App\Http\Controllers\Admin\PhotoController as AdminPhotoController;
 use App\Http\Controllers\Admin\ReglistController;
 use App\Http\Controllers\Admin\RuleController;
+use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SpamController;
 use App\Http\Controllers\Admin\StatusController;
@@ -926,6 +927,13 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::match(['get', 'post'], '/', 'index');
                     Route::post('/clear', 'clear');
+                });
+
+            Route::controller(SearchController::class)
+                ->prefix('search')
+                ->group(function () {
+                    Route::get('/', 'index');
+                    Route::post('/import', 'import');
                 });
 
             /* Модули */

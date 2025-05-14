@@ -94,6 +94,8 @@ return [
     'amount'            => 'Сумма',
     'not_specified'     => 'Не указан',
     'read_more'         => 'Читать дальше',
+    'import'            => 'Импорт',
+    'export'            => 'Экспорт',
 
     'period'         => 'Период',
     'all_time'       => 'За все время',
@@ -244,6 +246,7 @@ return [
     'record_deleted_success'     => 'Запись успешно удалена!',
     'records_deleted_success'    => 'Записи успешно удалены!',
     'records_cleared_success'    => 'Записи успешно очищены!',
+    'records_added_success'      => 'Записи успешно добавлены!',
     'record_not_found'           => 'Выбранная запись не найдена!',
     'record_exists'              => 'Запись уже существует!',
     'editing_impossible'         => 'Редактирование невозможно, прошло более 10 минут!',

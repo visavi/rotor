@@ -94,6 +94,8 @@ return [
     'amount'            => 'Amount',
     'not_specified'     => 'Not specified',
     'read_more'         => 'Read more',
+    'import'            => 'Import',
+    'export'            => 'Export',
 
     'period'         => 'Period',
     'all_time'       => 'All time',
@@ -244,6 +246,7 @@ return [
     'record_deleted_success'     => 'Record deleted successfully!',
     'records_deleted_success'    => 'Entries successfully deleted!',
     'records_cleared_success'    => 'Records successfully cleared!',
+    'records_added_success'      => 'Records added successfully!',
     'record_not_found'           => 'Selected entry not found!',
     'record_exists'              => 'Record already exists!',
     'editing_impossible'         => 'Editing is not possible, more than 10 minutes have passed!',

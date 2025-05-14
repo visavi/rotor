@@ -14,24 +14,24 @@ use Illuminate\Support\HtmlString;
 /**
  * Class Topic
  *
- * @property int                  $id
- * @property int                  $forum_id
- * @property string               $title
- * @property int                  $user_id
- * @property int                  $closed
- * @property int                  $locked
- * @property int                  $count_posts
- * @property int                  $visits
- * @property int                  $updated_at
- * @property int                  $created_at
- * @property string|null          $moderators
- * @property string               $note
- * @property int                  $last_post_id
- * @property int                  $close_user_id
- * @property Forum                $forum
- * @property Collection<Post>     $posts
- * @property Collection<Bookmark> $bookmarks
- * @property Vote                 $vote
+ * @property int         $id
+ * @property int         $forum_id
+ * @property string      $title
+ * @property int         $user_id
+ * @property int         $closed
+ * @property int         $locked
+ * @property int         $count_posts
+ * @property int         $visits
+ * @property int         $updated_at
+ * @property int         $created_at
+ * @property string|null $moderators
+ * @property string      $note
+ * @property int         $last_post_id
+ * @property int         $close_user_id
+ * @property-read Forum                $forum
+ * @property-read Collection<Post>     $posts
+ * @property-read Collection<Bookmark> $bookmarks
+ * @property-read Vote                 $vote
  */
 class Topic extends BaseModel
 {
