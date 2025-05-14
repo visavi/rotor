@@ -120,7 +120,11 @@ class GuestbookController extends AdminController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-            Guestbook::query()->whereIn('id', $del)->delete();
+            $posts = Guestbook::query()->whereIn('id', $del)->get();
+
+            $posts->each(static function (Guestbook $post) {
+                $post->delete();
+            });
 
             clearCache('statGuestbook');
             setFlash('success', __('main.messages_deleted_success'));
@@ -143,9 +147,13 @@ class GuestbookController extends AdminController
             ->true($active, __('validator.published'));
 
         if ($validator->isValid()) {
-            Guestbook::query()->whereIn('id', $active)->update([
-                'active' => true,
-            ]);
+            $posts = Guestbook::query()->whereIn('id', $active)->get();
+
+            $posts->each(static function (Guestbook $post) {
+                $post->update([
+                    'active' => true,
+                ]);
+            });
 
             clearCache('statGuestbook');
             setFlash('success', __('main.messages_published_success'));

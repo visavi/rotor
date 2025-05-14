@@ -14,23 +14,24 @@ use Illuminate\Support\HtmlString;
 /**
  * Class Topic
  *
- * @property int id
- * @property int forum_id
- * @property string title
- * @property int user_id
- * @property int closed
- * @property int locked
- * @property int count_posts
- * @property int visits
- * @property int updated_at
- * @property string|null moderators
- * @property string note
- * @property int last_post_id
- * @property int close_user_id
- * @property int created_at
- * @property Forum forum
- * @property Collection posts
- * @property Vote vote
+ * @property int                  $id
+ * @property int                  $forum_id
+ * @property string               $title
+ * @property int                  $user_id
+ * @property int                  $closed
+ * @property int                  $locked
+ * @property int                  $count_posts
+ * @property int                  $visits
+ * @property int                  $updated_at
+ * @property int                  $created_at
+ * @property string|null          $moderators
+ * @property string               $note
+ * @property int                  $last_post_id
+ * @property int                  $close_user_id
+ * @property Forum                $forum
+ * @property Collection<Post>     $posts
+ * @property Collection<Bookmark> $bookmarks
+ * @property Vote                 $vote
  */
 class Topic extends BaseModel
 {
@@ -110,6 +111,30 @@ class Topic extends BaseModel
     public function closeUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'close_user_id')->withDefault();
+    }
+
+    /**
+     * Удаление темы и связанных данных
+     */
+    public function delete(): ?bool
+    {
+        // Удаление голосований
+        $this->vote->delete();
+
+        // Удаление закладок
+        $this->bookmarks->each(static function (Bookmark $bookmark) {
+            $bookmark->delete();
+        });
+
+        // Удаление сообщений
+        $this->posts->each(static function (Post $post) {
+            $post->delete();
+        });
+
+        // Обновление счетчиков
+        $this->forum->restatement();
+
+        return parent::delete();
     }
 
     /**

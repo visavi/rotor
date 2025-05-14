@@ -13,15 +13,16 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 /**
  * Class Vote
  *
- * @property int id
- * @property string title
- * @property string description
- * @property int count
- * @property int closed
- * @property int created_at
- * @property int topic_id
- * @property Topic topic
- * @property Collection answers
+ * @property int                    $id
+ * @property string                 $title
+ * @property string                 $description
+ * @property int                    $count
+ * @property int                    $closed
+ * @property int                    $created_at
+ * @property int                    $topic_id
+ * @property Topic                  $topic
+ * @property Collection<VoteAnswer> $answers
+ * @property Collection<Polling>    $pollings
  */
 class Vote extends BaseModel
 {
@@ -72,5 +73,21 @@ class Vote extends BaseModel
     public function pollings(): MorphMany
     {
         return $this->morphMany(Polling::class, 'relate');
+    }
+
+    /**
+     * Удаление голосования
+     */
+    public function delete(): ?bool
+    {
+        $this->answers->each(static function (VoteAnswer $answer) {
+            $answer->delete();
+        });
+
+        $this->pollings->each(static function (Polling $polling) {
+            $polling->delete();
+        });
+
+        return parent::delete();
     }
 }

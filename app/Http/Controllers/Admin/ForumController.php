@@ -401,28 +401,7 @@ class ForumController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            // Удаление загруженных файлов
-            $filtered = $topic->posts->load('files')->filter(static function ($post) {
-                return $post->files->isNotEmpty();
-            });
-
-            $filtered->each(static function (Post $post) {
-                $post->delete();
-            });
-
-            // Удаление голосований
-            $topic->vote->answers()->delete();
-            $topic->vote->pollings()->delete();
-            $topic->vote->delete();
-
-            // Удаление закладок
-            $topic->bookmarks()->delete();
-
-            $topic->posts()->delete();
             $topic->delete();
-
-            // Обновление счетчиков
-            $topic->forum->restatement();
 
             clearCache(['statForums', 'recentTopics', 'TopicFeed']);
             setFlash('success', __('forums.topic_success_deleted'));
@@ -537,7 +516,7 @@ class ForumController extends AdminController
     }
 
     /**
-     * Удаление тем
+     * Удаление сообщений
      */
     public function deletePosts(Request $request, Validator $validator): RedirectResponse
     {

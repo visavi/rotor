@@ -249,22 +249,14 @@ class TopicController extends Controller
             ->equal($isModer, true, __('forums.posts_deleted_curators'));
 
         if ($validator->isValid()) {
-            // ------ Удаление загруженных файлов -------//
-            $files = File::query()
-                ->where('relate_type', Post::$morphName)
-                ->whereIn('relate_id', $del)
-                ->get();
+            $posts = Post::query()->whereIn('id', $del)->get();
 
-            if ($files->isNotEmpty()) {
-                foreach ($files as $file) {
-                    $file->delete();
-                }
-            }
+            $posts->each(static function (Post $post) {
+                $post->delete();
+            });
 
-            $delPosts = Post::query()->whereIn('id', $del)->delete();
-
-            $topic->decrement('count_posts', $delPosts);
-            $topic->forum->decrement('count_posts', $delPosts);
+            $topic->decrement('count_posts', $posts->count());
+            $topic->forum->decrement('count_posts', $posts->count());
 
             setFlash('success', __('main.messages_deleted_success'));
         } else {
