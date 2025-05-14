@@ -84,7 +84,7 @@ trait SearchableTrait
     /**
      * Подготавливает текст для поиска из указанных полей
      */
-    protected function buildSearchText(): string
+    public function buildSearchText(): string
     {
         $values = [];
         $fields = $this->searchableFields();
@@ -95,6 +95,6 @@ trait SearchableTrait
             }
         }
 
-        return implode(' ', $values);
+        return preg_replace('/\[(.*?)]/', '', implode(' ', $values));
     }
 }

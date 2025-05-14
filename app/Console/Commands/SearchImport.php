@@ -23,6 +23,9 @@ class SearchImport extends Command
     protected $signature = 'search:import';
     protected $description = 'Sync existing records to search index';
 
+    /**
+     * Handle
+     */
     public function handle(): int
     {
         $models = [
@@ -53,6 +56,9 @@ class SearchImport extends Command
         return SymfonyCommand::SUCCESS;
     }
 
+    /**
+     * SyncModelRecords
+     */
     protected function syncModelRecords(string $modelClass): void
     {
         $this->line(PHP_EOL . "Processing model: {$modelClass}");
@@ -87,7 +93,7 @@ class SearchImport extends Command
                     }
 
                     $searchData[] = [
-                        'text'        => $this->buildSearchTextForRecord($record),
+                        'text'        => $record->buildSearchText(),
                         'created_at'  => $record->created_at,
                         'relate_type' => $record->getMorphClass(),
                         'relate_id'   => $record->getKey(),
@@ -108,19 +114,5 @@ class SearchImport extends Command
         } catch (\Exception $e) {
             $this->error("Error processing {$modelClass}: " . $e->getMessage());
         }
-    }
-
-    protected function buildSearchTextForRecord($record): string
-    {
-        $fields = $record->searchableFields();
-        $values = [];
-
-        foreach ($fields as $field) {
-            if (isset($record->$field)) {
-                $values[] = $record->$field;
-            }
-        }
-
-        return bbCode(implode(' ', $values), false);
     }
 }

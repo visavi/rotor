@@ -54,7 +54,9 @@
                 $post = $post->relate;
             @endphp
 
-            @includeIf('search/_' . $post->getMorphClass())
+            @if ($post)
+                @includeIf('search/_' . $post->getMorphClass())
+            @endif
         @endforeach
 
         {{ $posts->links() }}
