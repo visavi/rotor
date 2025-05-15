@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Bookmark;
 use App\Models\File;
 use App\Models\Flood;
-use App\Models\Polling;
+use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Reader;
 use App\Models\Topic;
@@ -52,11 +52,11 @@ class TopicController extends Controller
         $posts = Post::query()
             ->where('topic_id', $topic->id)
             ->when($user, static function (Builder $query) use ($user) {
-                $query->select('posts.*', 'pollings.vote')
-                    ->leftJoin('pollings', static function (JoinClause $join) use ($user) {
-                        $join->on('posts.id', 'pollings.relate_id')
-                            ->where('pollings.relate_type', Post::$morphName)
-                            ->where('pollings.user_id', $user->id);
+                $query->select('posts.*', 'polls.vote')
+                    ->leftJoin('polls', static function (JoinClause $join) use ($user) {
+                        $join->on('posts.id', 'polls.relate_id')
+                            ->where('polls.relate_type', Post::$morphName)
+                            ->where('polls.user_id', $user->id);
                     });
             })
             ->with('files', 'user', 'editUser')
@@ -89,7 +89,7 @@ class TopicController extends Controller
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
-            $vote->poll = $vote->pollings()
+            $vote->poll = $vote->polls()
                 ->where('user_id', $user->id ?? null)
                 ->first();
 
@@ -292,7 +292,7 @@ class TopicController extends Controller
 
             if ($topic->vote) {
                 $topic->vote->update(['closed' => 1]);
-                $topic->vote->pollings()->delete();
+                $topic->vote->polls()->delete();
             }
 
             setFlash('success', __('forums.topic_success_closed'));
@@ -549,10 +549,10 @@ class TopicController extends Controller
             ->empty($vote->closed, __('votes.voting_closed'));
 
         if ($validator->isValid()) {
-            $polling = $vote->pollings()
+            $poll = $vote->polls()
                 ->where('user_id', $user->id)
                 ->first();
-            $validator->empty($polling, __('votes.voting_passed'));
+            $validator->empty($poll, __('votes.voting_passed'));
         }
 
         if ($validator->isValid()) {
@@ -568,7 +568,7 @@ class TopicController extends Controller
             $vote->increment('count');
             $answer->increment('result');
 
-            Polling::query()->create([
+            Poll::query()->create([
                 'relate_type' => Vote::$morphName,
                 'relate_id'   => $vote->id,
                 'user_id'     => $user->id,

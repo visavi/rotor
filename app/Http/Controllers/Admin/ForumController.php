@@ -345,7 +345,7 @@ class ForumController extends AdminController
 
                     if ($topic->vote) {
                         $topic->vote->update(['closed' => 1]);
-                        $topic->vote->pollings()->delete();
+                        $topic->vote->polls()->delete();
                     }
 
                     setFlash('success', __('forums.topic_success_closed'));
@@ -425,12 +425,12 @@ class ForumController extends AdminController
         }
 
         $posts = Post::query()
-            ->select('posts.*', 'pollings.vote')
+            ->select('posts.*', 'polls.vote')
             ->where('topic_id', $topic->id)
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('posts.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Post::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('posts.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Post::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->with('files', 'user', 'editUser')
             ->orderBy('created_at')
@@ -445,7 +445,7 @@ class ForumController extends AdminController
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
-            $vote->poll = $vote->pollings()
+            $vote->poll = $vote->polls()
                 ->where('user_id', getUser('id'))
                 ->first();
 

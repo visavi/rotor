@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\DB;
  * @property int    $topic_id
  * @property-read Topic                  $topic
  * @property-read Collection<VoteAnswer> $answers
- * @property-read Collection<Polling>    $pollings
+ * @property-read Collection<Poll>       $polls
  */
 class Vote extends BaseModel
 {
@@ -71,9 +71,9 @@ class Vote extends BaseModel
     /**
      * Возвращает связь с голосованиями
      */
-    public function pollings(): MorphMany
+    public function polls(): MorphMany
     {
-        return $this->morphMany(Polling::class, 'relate');
+        return $this->morphMany(Poll::class, 'relate');
     }
 
     /**
@@ -82,11 +82,11 @@ class Vote extends BaseModel
     public function delete(): ?bool
     {
         return DB::transaction(function () {
+            $this->polls()->delete();
+
             $this->answers->each(function (VoteAnswer $answer) {
                 $answer->delete();
             });
-
-            $this->pollings()->delete();
 
             return parent::delete();
         });

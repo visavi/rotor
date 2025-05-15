@@ -27,11 +27,11 @@ use Illuminate\Support\Facades\DB;
  * @property string $brow
  * @property int    $edit_user_id
  * @property int    $updated_at
- * @property-read Collection<File>    $files
- * @property-read Collection<Polling> $pollings
- * @property-read Polling             $polling
- * @property-read Topic               $topic
- * @property-read User                $editUser
+ * @property-read Collection<File> $files
+ * @property-read Collection<Poll> $polls
+ * @property-read Poll             $poll
+ * @property-read Topic            $topic
+ * @property-read User             $editUser
  */
 class Post extends BaseModel
 {
@@ -115,17 +115,17 @@ class Post extends BaseModel
     /**
      * Возвращает связь с голосованиями
      */
-    public function pollings(): MorphMany
+    public function polls(): MorphMany
     {
-        return $this->morphMany(Polling::class, 'relate');
+        return $this->morphMany(Poll::class, 'relate');
     }
 
     /**
      * Возвращает связь с голосованием
      */
-    public function polling(): morphOne
+    public function poll(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')
+        return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
     }
 
@@ -135,7 +135,7 @@ class Post extends BaseModel
     public function delete(): ?bool
     {
         return DB::transaction(function () {
-            $this->pollings()->delete();
+            $this->polls()->delete();
 
             $this->files->each(static function (File $file) {
                 $file->delete();

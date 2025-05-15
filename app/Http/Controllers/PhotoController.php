@@ -22,11 +22,11 @@ class PhotoController extends Controller
     public function index(): View
     {
         $photos = Photo::query()
-            ->select('photos.*', 'pollings.vote')
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('photos.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Photo::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->select('photos.*', 'polls.vote')
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('photos.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Photo::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->orderByDesc('created_at')
             ->with('user', 'files')
@@ -41,12 +41,12 @@ class PhotoController extends Controller
     public function view(int $id): View
     {
         $photo = Photo::query()
-            ->select('photos.*', 'pollings.vote')
+            ->select('photos.*', 'polls.vote')
             ->where('photos.id', $id)
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('photos.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Photo::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('photos.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Photo::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->with('user')
             ->first();
@@ -235,11 +235,11 @@ class PhotoController extends Controller
         }
 
         $comments = $photo->comments()
-            ->select('comments.*', 'pollings.vote')
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('comments.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Comment::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->select('comments.*', 'polls.vote')
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('comments.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Comment::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->orderBy('created_at')
             ->with('user')

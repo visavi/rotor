@@ -189,19 +189,19 @@ class AjaxController extends Controller
             return response()->json(['success' => false, 'message' => 'Record not found']);
         }
 
-        $polling = $post->polling()->firstOrNew();
+        $poll = $post->poll()->firstOrNew();
         $isCancel = false;
 
-        if ($polling->exists) {
-            if ($polling->vote === $vote) {
+        if ($poll->exists) {
+            if ($poll->vote === $vote) {
                 return response()->json(['success' => false]);
             }
             $isCancel = true;
-            $polling->delete();
+            $poll->delete();
         }
 
         if (! $isCancel) {
-            $post->polling()->create([
+            $post->poll()->create([
                 'user_id'    => getUser('id'),
                 'vote'       => $vote,
                 'created_at' => SITETIME,

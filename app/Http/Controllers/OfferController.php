@@ -47,12 +47,12 @@ class OfferController extends Controller
     public function view(int $id): View
     {
         $offer = Offer::query()
-            ->select('offers.*', 'pollings.vote')
+            ->select('offers.*', 'polls.vote')
             ->where('offers.id', $id)
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('offers.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Offer::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('offers.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Offer::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->first();
 
@@ -232,11 +232,11 @@ class OfferController extends Controller
         }
 
         $comments = $offer->comments()
-            ->select('comments.*', 'pollings.vote')
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('comments.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Comment::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->select('comments.*', 'polls.vote')
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('comments.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Comment::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));

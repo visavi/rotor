@@ -35,8 +35,8 @@ use Illuminate\Support\HtmlString;
  * @property int    $updated_at
  * @property-read Collection<File>    $files
  * @property-read Collection<Comment> $comments
- * @property-read Collection<Polling> $pollings
- * @property-read Polling             $polling
+ * @property-read Collection<Poll>    $polls
+ * @property-read Poll                $poll
  * @property-read Load                $category
  */
 class Down extends BaseModel
@@ -123,17 +123,17 @@ class Down extends BaseModel
     /**
      * Возвращает связь с голосованиями
      */
-    public function pollings(): MorphMany
+    public function polls(): MorphMany
     {
-        return $this->MorphMany(Polling::class, 'relate');
+        return $this->MorphMany(Poll::class, 'relate');
     }
 
     /**
      * Возвращает связь с голосованием
      */
-    public function polling(): morphOne
+    public function poll(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')
+        return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
     }
 
@@ -213,7 +213,7 @@ class Down extends BaseModel
     public function delete(): ?bool
     {
         return DB::transaction(function () {
-            $this->pollings()->delete();
+            $this->polls()->delete();
 
             $this->comments->each(static function (Comment $comment) {
                 $comment->delete();

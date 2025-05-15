@@ -28,12 +28,12 @@ class DownController extends Controller
     public function index(int $id): View
     {
         $down = Down::query()
-            ->select('downs.*', 'pollings.vote')
+            ->select('downs.*', 'polls.vote')
             ->where('downs.id', $id)
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('downs.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Down::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('downs.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Down::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->with('category.parent')
             ->first();
@@ -361,11 +361,11 @@ class DownController extends Controller
         }
 
         $comments = $down->comments()
-            ->select('comments.*', 'pollings.vote')
-            ->leftJoin('pollings', static function (JoinClause $join) {
-                $join->on('comments.id', 'pollings.relate_id')
-                    ->where('pollings.relate_type', Comment::$morphName)
-                    ->where('pollings.user_id', getUser('id'));
+            ->select('comments.*', 'polls.vote')
+            ->leftJoin('polls', static function (JoinClause $join) {
+                $join->on('comments.id', 'polls.relate_id')
+                    ->where('polls.relate_type', Comment::$morphName)
+                    ->where('polls.user_id', getUser('id'));
             })
             ->orderBy('created_at')
             ->with('user')

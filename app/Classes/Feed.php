@@ -11,7 +11,7 @@ use App\Models\Item;
 use App\Models\News;
 use App\Models\Offer;
 use App\Models\Photo;
-use App\Models\Polling;
+use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -45,7 +45,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $topics->pluck('last_post_id')->all();
-                $polls[Post::$morphName] = $this->getPolling($ids, Post::$morphName);
+                $polls[Post::$morphName] = $this->getPolls($ids, Post::$morphName);
             }
         }
 
@@ -55,7 +55,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $news->pluck('id')->all();
-                $polls[News::$morphName] = $this->getPolling($ids, News::$morphName);
+                $polls[News::$morphName] = $this->getPolls($ids, News::$morphName);
             }
         }
 
@@ -65,7 +65,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $photos->pluck('id')->all();
-                $polls[Photo::$morphName] = $this->getPolling($ids, Photo::$morphName);
+                $polls[Photo::$morphName] = $this->getPolls($ids, Photo::$morphName);
             }
         }
 
@@ -75,7 +75,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $articles->pluck('id')->all();
-                $polls[Article::$morphName] = $this->getPolling($ids, Article::$morphName);
+                $polls[Article::$morphName] = $this->getPolls($ids, Article::$morphName);
             }
         }
 
@@ -85,7 +85,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $downs->pluck('id')->all();
-                $polls[Down::$morphName] = $this->getPolling($ids, Down::$morphName);
+                $polls[Down::$morphName] = $this->getPolls($ids, Down::$morphName);
             }
         }
 
@@ -99,7 +99,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $offers->pluck('id')->all();
-                $polls[Offer::$morphName] = $this->getPolling($ids, Offer::$morphName);
+                $polls[Offer::$morphName] = $this->getPolls($ids, Offer::$morphName);
             }
         }
 
@@ -109,7 +109,7 @@ class Feed
 
             if ($this->user) {
                 $ids = $comments->pluck('id')->all();
-                $polls[Comment::$morphName] = $this->getPolling($ids, Comment::$morphName);
+                $polls[Comment::$morphName] = $this->getPolls($ids, Comment::$morphName);
             }
         }
 
@@ -126,14 +126,14 @@ class Feed
     }
 
     /**
-     * Get polling
+     * Get polls
      */
-    private function getPolling(array $ids, string $morphName): array
+    private function getPolls(array $ids, string $morphName): array
     {
-        return Polling::query()
-            ->whereIn('pollings.relate_id', $ids)
-            ->where('pollings.relate_type', $morphName)
-            ->where('pollings.user_id', $this->user->id)
+        return Poll::query()
+            ->whereIn('polls.relate_id', $ids)
+            ->where('polls.relate_type', $morphName)
+            ->where('polls.user_id', $this->user->id)
             ->pluck('vote', 'relate_id')
             ->all();
     }

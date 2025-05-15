@@ -13,7 +13,6 @@ return new class extends Migration {
                 $table->string('title', 100);
                 $table->text('text');
                 $table->integer('user_id');
-                $table->string('image', 100)->nullable();
                 $table->integer('count_comments')->default(0);
                 $table->boolean('closed')->default(false);
                 $table->boolean('top')->default(false);

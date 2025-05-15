@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        if (! Schema::hasTable('pollings')) {
-            Schema::create('pollings', function (Blueprint $table) {
+        if (! Schema::hasTable('polls')) {
+            Schema::create('polls', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('relate_type', 10);
                 $table->integer('relate_id');
@@ -23,6 +23,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('pollings');
+        Schema::dropIfExists('polls');
     }
 };

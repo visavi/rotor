@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->string('relate_type', 10);
                 $table->integer('relate_id');
-                $table->string('hash', 100);
+                $table->string('path', 100);
                 $table->string('name', 60);
                 $table->integer('size');
                 $table->integer('user_id');

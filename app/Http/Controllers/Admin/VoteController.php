@@ -155,7 +155,7 @@ class VoteController extends AdminController
             ]);
 
             if ($closed) {
-                $vote->pollings()->delete();
+                $vote->polls()->delete();
                 $status = __('votes.voting_success_closed');
             }
 

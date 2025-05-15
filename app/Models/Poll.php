@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 /**
- * Class Polling
+ * Class Poll
  *
  * @property int    $id
  * @property string $relate_type
@@ -14,7 +14,7 @@ namespace App\Models;
  * @property string $vote
  * @property int    $created_at
  */
-class Polling extends BaseModel
+class Poll extends BaseModel
 {
     /**
      * Indicates if the model should be timestamped.

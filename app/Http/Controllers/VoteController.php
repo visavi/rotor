@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Validator;
-use App\Models\Polling;
+use App\Models\Poll;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Http\RedirectResponse;
@@ -59,7 +59,7 @@ class VoteController extends Controller
             abort(200, __('votes.voting_not_answers'));
         }
 
-        $vote->poll = $vote->pollings()
+        $vote->poll = $vote->polls()
             ->where('user_id', getUser('id'))
             ->first();
 
@@ -82,7 +82,7 @@ class VoteController extends Controller
                 $vote->increment('count');
                 $answer->increment('result');
 
-                Polling::query()->create([
+                Poll::query()->create([
                     'relate_type' => Vote::$morphName,
                     'relate_id'   => $vote->id,
                     'user_id'     => getUser('id'),
@@ -123,7 +123,7 @@ class VoteController extends Controller
             abort(404, __('votes.voting_not_exist'));
         }
 
-        $voters = $vote->pollings()
+        $voters = $vote->polls()
             ->limit(50)
             ->with('user')
             ->get();

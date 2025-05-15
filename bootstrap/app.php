@@ -46,7 +46,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('delete:logins')->daily();
         $schedule->command('delete:logs')->daily();
         $schedule->command('delete:pending')->daily();
-        $schedule->command('delete:polling')->weekly();
+        $schedule->command('delete:polls')->weekly();
         $schedule->command('delete:readers')->weekly();
         $schedule->command('delete:dialogues')->daily();
         $schedule->command('add:subscribers')->hourly();
