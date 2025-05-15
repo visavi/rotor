@@ -54,13 +54,12 @@ class VoteController extends Controller
             abort(200, __('votes.voting_not_answers'));
         }
 
-        $vote->poll = $vote->poll()->first();
-
         if ($request->isMethod('post')) {
             $poll = int($request->input('poll'));
+            $votePoll = $vote->poll()->first();
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->empty($vote->poll, __('votes.voting_passed'))
+                ->empty($votePoll, __('votes.voting_passed'))
                 ->notEmpty($poll, __('votes.answer_not_chosen'));
 
             if ($validator->isValid()) {
