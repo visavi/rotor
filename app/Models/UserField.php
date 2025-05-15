@@ -10,14 +10,14 @@ use Illuminate\Support\Collection;
 /**
  * Class User
  *
- * @property int id
- * @property int sort
- * @property string type
- * @property string name
- * @property int min
- * @property int max
- * @property bool required
- * @property Collection<UserData> data
+ * @property int    $id
+ * @property int    $sort
+ * @property string $type
+ * @property string $name
+ * @property int    $min
+ * @property int    $max
+ * @property bool   $required
+ * @property-read Collection<UserData> $data
  */
 class UserField extends BaseModel
 {

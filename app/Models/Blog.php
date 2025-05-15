@@ -13,13 +13,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * Class Category
  *
- * @property int id
- * @property int sort
- * @property int parent_id
- * @property string name
- * @property int count_articles
- * @property int closed
- * @property Collection children
+ * @property int    $id
+ * @property int    $sort
+ * @property int    $parent_id
+ * @property string $name
+ * @property int    $count_articles
+ * @property int    $closed
+ * @property-read Blog             $parent
+ * @property-read Collection<Blog> $children
  */
 class Blog extends BaseModel
 {

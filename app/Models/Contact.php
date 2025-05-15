@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Contact
  *
- * @property int id
- * @property int user_id
- * @property int contact_id
- * @property string text
- * @property int created_at
+ * @property int    $id
+ * @property int    $user_id
+ * @property int    $contact_id
+ * @property string $text
+ * @property int    $created_at
  */
 class Contact extends BaseModel
 {

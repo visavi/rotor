@@ -14,12 +14,12 @@ use Illuminate\Support\Str;
 /**
  * Class Module
  *
- * @property int id
- * @property string name
- * @property string version
- * @property bool active
- * @property int updated_at
- * @property int created_at
+ * @property int    $id
+ * @property string $name
+ * @property string $version
+ * @property bool   $active
+ * @property int    $updated_at
+ * @property int    $created_at
  */
 class Module extends BaseModel
 {

@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Class Advert
  *
- * @property int id
- * @property string site
- * @property string name
- * @property string color
- * @property int bold
- * @property int user_id
- * @property int created_at
- * @property int deleted_at
+ * @property int    $id
+ * @property string $site
+ * @property string $name
+ * @property string $color
+ * @property int    $bold
+ * @property int    $user_id
+ * @property int    $created_at
+ * @property int    $deleted_at
  */
 class Advert extends BaseModel
 {

@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 /**
@@ -34,6 +35,8 @@ use Illuminate\Support\HtmlString;
  * @property int    $updated_at
  * @property-read Collection<File>    $files
  * @property-read Collection<Comment> $comments
+ * @property-read Collection<Polling> $pollings
+ * @property-read Polling             $polling
  * @property-read Load                $category
  */
 class Down extends BaseModel
@@ -115,6 +118,14 @@ class Down extends BaseModel
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'relate')->with('relate');
+    }
+
+    /**
+     * Возвращает связь с голосованиями
+     */
+    public function pollings(): MorphMany
+    {
+        return $this->MorphMany(Polling::class, 'relate');
     }
 
     /**
@@ -201,14 +212,18 @@ class Down extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->comments->each(static function (Comment $comment) {
-            $comment->delete();
-        });
+        return DB::transaction(function () {
+            $this->pollings()->delete();
 
-        $this->files->each(static function (File $file) {
-            $file->delete();
-        });
+            $this->comments->each(static function (Comment $comment) {
+                $comment->delete();
+            });
 
-        return parent::delete();
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
+
+            return parent::delete();
+        });
     }
 }

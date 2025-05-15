@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class Antimat
  *
- * @property int id
- * @property string string
+ * @property int    $id
+ * @property string $string
  */
 class Antimat extends BaseModel
 {

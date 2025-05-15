@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * Class Tag
  *
- * @property int id
- * @property string name
+ * @property int    $id
+ * @property string $name
  */
 class Tag extends BaseModel
 {

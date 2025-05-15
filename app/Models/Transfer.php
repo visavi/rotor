@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Transfer
  *
- * @property int id
- * @property int user_id
- * @property int recipient_id
- * @property string text
- * @property int total
- * @property int created_at
+ * @property int    $id
+ * @property int    $user_id
+ * @property int    $recipient_id
+ * @property string $text
+ * @property int    $total
+ * @property int    $created_at
  */
 class Transfer extends BaseModel
 {

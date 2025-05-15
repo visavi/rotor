@@ -13,14 +13,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * Class Board
  *
- * @property int id
- * @property int sort
- * @property int parent_id
- * @property string name
- * @property int count_items
- * @property int closed
- * @property Collection children
- * @property Board parent
+ * @property int    $id
+ * @property int    $sort
+ * @property int    $parent_id
+ * @property string $name
+ * @property int    $count_items
+ * @property int    $closed
+ * @property-read Board             $parent
+ * @property-read Collection<Board> $children
  */
 class Board extends BaseModel
 {

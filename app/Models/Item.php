@@ -9,23 +9,24 @@ use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 /**
  * Class Item
  *
- * @property int id
- * @property int board_id
- * @property string title
- * @property string text
- * @property int user_id
- * @property int price
- * @property string phone
- * @property int created_at
- * @property int updated_at
- * @property int expires_at
- * @property Board category
- * @property Collection files
+ * @property int    $id
+ * @property int    $board_id
+ * @property string $title
+ * @property string $text
+ * @property int    $user_id
+ * @property int    $price
+ * @property string $phone
+ * @property int    $created_at
+ * @property int    $updated_at
+ * @property int    $expires_at
+ * @property-read Board            $category
+ * @property-read Collection<File> $files
  */
 class Item extends BaseModel
 {
@@ -109,10 +110,12 @@ class Item extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(static function (File $file) {
-            $file->delete();
-        });
+        return DB::transaction(function () {
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
 
-        return parent::delete();
+            return parent::delete();
+        });
     }
 }

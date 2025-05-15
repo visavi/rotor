@@ -25,55 +25,56 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 /**
  * Class User
  *
- * @property int id
- * @property string login
- * @property string password
- * @property string email
- * @property string level
- * @property string name
- * @property string country
- * @property string city
- * @property string language
- * @property string info
- * @property string site
- * @property string phone
- * @property string gender
- * @property string birthday
- * @property int visits
- * @property int newprivat
- * @property int newwall
- * @property int allforum
- * @property int allguest
- * @property int allcomments
- * @property string themes
- * @property string timezone
- * @property int point
- * @property int money
- * @property string status
- * @property string color
- * @property string avatar
- * @property string picture
- * @property int rating
- * @property int posrating
- * @property int negrating
+ * @property int    $id
+ * @property string $login
+ * @property string $password
+ * @property string $email
+ * @property string $level
+ * @property string $name
+ * @property string $country
+ * @property string $city
+ * @property string $language
+ * @property string $info
+ * @property string $site
+ * @property string $phone
+ * @property string $gender
+ * @property string $birthday
+ * @property int    $visits
+ * @property int    $newprivat
+ * @property int    $newwall
+ * @property int    $allforum
+ * @property int    $allguest
+ * @property int    $allcomments
+ * @property string $themes
+ * @property string $timezone
+ * @property int    $point
+ * @property int    $money
+ * @property string $status
+ * @property string $color
+ * @property string $avatar
+ * @property string $picture
+ * @property int    $rating
+ * @property int    $posrating
+ * @property int    $negrating
  * @property string keypasswd
- * @property int timepasswd
- * @property int sendprivatmail
- * @property int timebonus
- * @property string confirmregkey
- * @property int newchat
- * @property int notify
- * @property string apikey
- * @property string subscribe
- * @property int timeban
- * @property int updated_at
- * @property int created_at
- * @property Collection<UserData> data
+ * @property int    $timepasswd
+ * @property int    $sendprivatmail
+ * @property int    $timebonus
+ * @property string $confirmregkey
+ * @property int    $newchat
+ * @property int    $notify
+ * @property string $apikey
+ * @property string $subscribe
+ * @property int    $timeban
+ * @property int    $updated_at
+ * @property int    $created_at
+ * @property-read Collection<UserData> $data
  */
 class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -626,23 +627,25 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      */
     public function delete(): ?bool
     {
-        deleteFile(public_path($this->picture));
-        deleteFile(public_path($this->avatar));
+        return DB::transaction(function () {
+            deleteFile(public_path($this->picture));
+            deleteFile(public_path($this->avatar));
 
-        Message::query()->where('user_id', $this->id)->delete();
-        Dialogue::query()->where('user_id', $this->id)->delete();
-        Contact::query()->where('user_id', $this->id)->delete();
-        Ignore::query()->where('user_id', $this->id)->delete();
-        Rating::query()->where('user_id', $this->id)->delete();
-        Wall::query()->where('user_id', $this->id)->delete();
-        Note::query()->where('user_id', $this->id)->delete();
-        Notebook::query()->where('user_id', $this->id)->delete();
-        Banhist::query()->where('user_id', $this->id)->delete();
-        Bookmark::query()->where('user_id', $this->id)->delete();
-        Login::query()->where('user_id', $this->id)->delete();
-        Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
+            Message::query()->where('user_id', $this->id)->delete();
+            Dialogue::query()->where('user_id', $this->id)->delete();
+            Contact::query()->where('user_id', $this->id)->delete();
+            Ignore::query()->where('user_id', $this->id)->delete();
+            Rating::query()->where('user_id', $this->id)->delete();
+            Wall::query()->where('user_id', $this->id)->delete();
+            Note::query()->where('user_id', $this->id)->delete();
+            Notebook::query()->where('user_id', $this->id)->delete();
+            Banhist::query()->where('user_id', $this->id)->delete();
+            Bookmark::query()->where('user_id', $this->id)->delete();
+            Login::query()->where('user_id', $this->id)->delete();
+            Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
 
-        return parent::delete();
+            return parent::delete();
+        });
     }
 
     /**

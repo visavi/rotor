@@ -7,15 +7,15 @@ namespace App\Models;
 /**
  * Class Error
  *
- * @property int id
- * @property int code
- * @property string request
- * @property string referer
- * @property int user_id
- * @property string message
- * @property string ip
- * @property string brow
- * @property int created_at
+ * @property int    $id
+ * @property int    $code
+ * @property string $request
+ * @property string $referer
+ * @property int    $user_id
+ * @property string $message
+ * @property string $ip
+ * @property string $brow
+ * @property int    $created_at
  */
 class Error extends BaseModel
 {

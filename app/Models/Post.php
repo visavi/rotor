@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Post
@@ -27,7 +28,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property int    $edit_user_id
  * @property int    $updated_at
  * @property-read Collection<File>    $files
- * @property-read Collection<Polling> $polling
+ * @property-read Collection<Polling> $pollings
+ * @property-read Polling             $polling
  * @property-read Topic               $topic
  * @property-read User                $editUser
  */
@@ -111,6 +113,14 @@ class Post extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованиями
+     */
+    public function pollings(): MorphMany
+    {
+        return $this->morphMany(Polling::class, 'relate');
+    }
+
+    /**
      * Возвращает связь с голосованием
      */
     public function polling(): morphOne
@@ -124,10 +134,14 @@ class Post extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(static function (File $file) {
-            $file->delete();
-        });
+        return DB::transaction(function () {
+            $this->pollings()->delete();
 
-        return parent::delete();
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
+
+            return parent::delete();
+        });
     }
 }

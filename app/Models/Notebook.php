@@ -7,10 +7,10 @@ namespace App\Models;
 /**
  * Class Notebook
  *
- * @property int id
- * @property int user_id
- * @property string text
- * @property int created_at
+ * @property int    $id
+ * @property int    $user_id
+ * @property string $text
+ * @property int    $created_at
  */
 class Notebook extends BaseModel
 {

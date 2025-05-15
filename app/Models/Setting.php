@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Class Setting
  *
- * @property string name
- * @property string value
+ * @property string $name
+ * @property string $value
  */
 class Setting extends BaseModel
 {

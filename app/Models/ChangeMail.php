@@ -7,11 +7,11 @@ namespace App\Models;
 /**
  * Class ChangeMail
  *
- * @property int id
- * @property int user_id
- * @property string mail
- * @property string hash
- * @property int created_at
+ * @property int    $id
+ * @property int    $user_id
+ * @property string $mail
+ * @property string $hash
+ * @property int    $created_at
  */
 class ChangeMail extends BaseModel
 {

@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class File
  *
- * @property int id
- * @property string relate_type
- * @property int relate_id
- * @property string path
- * @property string name
- * @property int size
- * @property int user_id
- * @property int created_at
- * @property string extension
- * @property BaseModel relate
+ * @property int    $id
+ * @property string $relate_type
+ * @property int    $relate_id
+ * @property string $path
+ * @property string $name
+ * @property int    $size
+ * @property int    $user_id
+ * @property int    $created_at
+ * @property-read string    $extension
+ * @property-read BaseModel $relate
  */
 class File extends BaseModel
 {
@@ -81,8 +82,10 @@ class File extends BaseModel
      */
     public function delete(): ?bool
     {
-        deleteFile(public_path($this->path));
+        return DB::transaction(function () {
+            deleteFile(public_path($this->path));
 
-        return parent::delete();
+            return parent::delete();
+        });
     }
 }

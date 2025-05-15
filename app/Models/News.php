@@ -11,6 +11,7 @@ use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 /**
@@ -25,8 +26,9 @@ use Illuminate\Support\HtmlString;
  * @property int    $closed
  * @property int    $top
  * @property-read Collection<Comment> $comments
- * @property-read Collection<File> $files
- * @property-read Polling $polling
+ * @property-read Collection<File>    $files
+ * @property-read Collection<Polling> $pollings
+ * @property-read Polling             $polling
  */
 class News extends BaseModel
 {
@@ -100,6 +102,14 @@ class News extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованиями
+     */
+    public function pollings(): MorphMany
+    {
+        return $this->MorphMany(Polling::class, 'relate');
+    }
+
+    /**
      * Возвращает связь с голосованием
      */
     public function polling(): morphOne
@@ -144,14 +154,18 @@ class News extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->comments->each(static function (Comment $comment) {
-            $comment->delete();
-        });
+        return DB::transaction(function () {
+            $this->pollings()->delete();
 
-        $this->files->each(static function (File $file) {
-            $file->delete();
-        });
+            $this->comments->each(static function (Comment $comment) {
+                $comment->delete();
+            });
 
-        return parent::delete();
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
+
+            return parent::delete();
+        });
     }
 }

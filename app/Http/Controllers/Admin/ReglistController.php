@@ -43,9 +43,9 @@ class ReglistController extends AdminController
                         ->whereIn('id', $choice)
                         ->get();
 
-                    foreach ($users as $user) {
+                    $users->each(static function (User $user) {
                         $user->delete();
-                    }
+                    });
 
                     setFlash('success', __('admin.reglists.users_success_deleted'));
                 }

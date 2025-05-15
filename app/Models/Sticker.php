@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Sticker
  *
- * @property int id
- * @property int category_id
- * @property string name
- * @property string code
+ * @property int    $id
+ * @property int    $category_id
+ * @property string $name
+ * @property string $code
  */
 class Sticker extends BaseModel
 {

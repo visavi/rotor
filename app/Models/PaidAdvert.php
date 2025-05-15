@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Class PaidAdvert
  *
- * @property int id
- * @property string place
- * @property string site
- * @property array names
- * @property string color
- * @property int bold
- * @property int user_id
- * @property int created_at
- * @property int deleted_at
+ * @property int    $id
+ * @property string $place
+ * @property string $site
+ * @property array  $names
+ * @property string $color
+ * @property int    $bold
+ * @property int    $user_id
+ * @property int    $created_at
+ * @property int    $deleted_at
  */
 class PaidAdvert extends BaseModel
 {

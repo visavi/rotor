@@ -7,10 +7,10 @@ namespace App\Models;
 /**
  * Class Online
  *
- * @property string ip
- * @property string brow
- * @property int updated_at
- * @property int user_id
+ * @property string $ip
+ * @property string $brow
+ * @property int    $updated_at
+ * @property int    $user_id
  */
 class Online extends BaseModel
 {

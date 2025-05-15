@@ -122,7 +122,7 @@ class Offer extends BaseModel
     }
 
     /**
-     * Возвращает последнии комментарии
+     * Возвращает последние комментарии
      */
     public function lastComments(int $limit = 15): HasMany
     {
@@ -154,12 +154,10 @@ class Offer extends BaseModel
     public function delete(): ?bool
     {
         return DB::transaction(function () {
+            $this->pollings()->delete();
+
             $this->comments->each(static function (Comment $comment) {
                 $comment->delete();
-            });
-
-            $this->pollings->each(function (Polling $polling) {
-                $polling->delete();
             });
 
             return parent::delete();

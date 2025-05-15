@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Message
@@ -125,10 +126,12 @@ class Message extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->files->each(static function (File $file) {
-            $file->delete();
-        });
+        return DB::transaction(function () {
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
 
-        return parent::delete();
+            return parent::delete();
+        });
     }
 }

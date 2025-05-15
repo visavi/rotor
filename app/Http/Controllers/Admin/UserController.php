@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
-use App\Models\File;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -234,57 +233,41 @@ class UserController extends AdminController
 
                 // Удаление тем форума
                 if ($deltopics) {
-                    $topics = Topic::query()->where('user_id', $user->id)->pluck('id')->all();
-                    $posts = Post::query()->whereIn('topic_id', $topics)->pluck('id')->all();
+                    $topics = Topic::query()->where('user_id', $user->id)->get();
 
-                    // Удаление загруженных файлов
-                    if ($posts) {
-                        $files = File::query()
-                            ->where('relate_type', Post::$morphName)
-                            ->whereIn('relate_id', $posts)
-                            ->get();
+                    $topics->each(static function (Topic $topic) {
+                        $topic->delete();
+                    });
 
-                        if ($files->isNotEmpty()) {
-                            foreach ($files as $file) {
-                                $file->delete();
-                            }
-                        }
+                    if ($topics->isNotEmpty()) {
+                        restatement('forums');
                     }
-
-                    Post::query()->whereIn('topic_id', $topics)->delete();
-                    Topic::query()->where('user_id', $user->id)->delete();
-                    restatement('forums');
                 }
 
                 // Удаление постов форума
                 if ($delposts) {
-                    $posts = Post::query()->where('user_id', $user->id)->pluck('id')->all();
+                    $posts = Post::query()->where('user_id', $user->id)->get();
 
-                    // Удаление загруженных файлов
-                    if ($posts) {
-                        $files = File::query()
-                            ->where('relate_type', Post::$morphName)
-                            ->whereIn('relate_id', $posts)
-                            ->get();
+                    $posts->each(static function (Post $post) {
+                        $post->delete();
+                    });
 
-                        if ($files->isNotEmpty()) {
-                            foreach ($files as $file) {
-                                $file->delete();
-                            }
-                        }
+                    if ($posts->isNotEmpty()) {
+                        restatement('forums');
                     }
-
-                    Post::query()->where('user_id', $user->id)->delete();
-                    restatement('forums');
                 }
 
                 // Удаление комментариев
                 if ($delcomments) {
-                    $deletes = Comment::query()
+                    $comments = Comment::query()
                         ->where('user_id', $user->id)
-                        ->delete();
+                        ->get();
 
-                    if ($deletes) {
+                    $comments->each(static function (Comment $comment) {
+                        $comment->delete();
+                    });
+
+                    if ($comments->isNotEmpty()) {
                         restatement('blogs');
                         restatement('loads');
                         restatement('news');

@@ -10,11 +10,11 @@ use Illuminate\Support\Collection;
 /**
  * Class User
  *
- * @property int id
- * @property int user_id
- * @property int field_id
- * @property string value
- * @property Collection<UserField> field
+ * @property int    $id
+ * @property int    $user_id
+ * @property int    $field_id
+ * @property string $value
+ * @property-read Collection<UserField> $field
  */
 class UserData extends BaseModel
 {

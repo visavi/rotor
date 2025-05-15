@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 /**
@@ -118,23 +119,22 @@ class Topic extends BaseModel
      */
     public function delete(): ?bool
     {
-        // Удаление голосований
-        $this->vote->delete();
+        return DB::transaction(function () {
+            // Удаление голосования
+            $this->vote->delete();
 
-        // Удаление закладок
-        $this->bookmarks->each(static function (Bookmark $bookmark) {
-            $bookmark->delete();
+            // Удаление закладок
+            $this->bookmarks->each(static function (Bookmark $bookmark) {
+                $bookmark->delete();
+            });
+
+            // Удаление сообщений
+            $this->posts->each(static function (Post $post) {
+                $post->delete();
+            });
+
+            return parent::delete();
         });
-
-        // Удаление сообщений
-        $this->posts->each(static function (Post $post) {
-            $post->delete();
-        });
-
-        // Обновление счетчиков
-        $this->forum->restatement();
-
-        return parent::delete();
     }
 
     /**

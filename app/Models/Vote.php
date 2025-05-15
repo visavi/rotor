@@ -86,9 +86,7 @@ class Vote extends BaseModel
                 $answer->delete();
             });
 
-            $this->pollings->each(function (Polling $polling) {
-                $polling->delete();
-            });
+            $this->pollings()->delete();
 
             return parent::delete();
         });

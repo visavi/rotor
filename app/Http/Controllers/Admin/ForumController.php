@@ -402,6 +402,7 @@ class ForumController extends AdminController
 
         if ($validator->isValid()) {
             $topic->delete();
+            $topic->forum->restatement();
 
             clearCache(['statForums', 'recentTopics', 'TopicFeed']);
             setFlash('success', __('forums.topic_success_deleted'));

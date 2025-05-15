@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class Invite
  *
- * @property int id
- * @property string hash
- * @property int user_id
- * @property int invite_user_id
- * @property int used
- * @property int used_at
- * @property int created_at
+ * @property int    $id
+ * @property string $hash
+ * @property int    $user_id
+ * @property int    $invite_user_id
+ * @property int    $used
+ * @property int    $used_at
+ * @property int    $created_at
  */
 class Invite extends BaseModel
 {

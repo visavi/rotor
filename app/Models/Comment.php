@@ -5,20 +5,25 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Comment
  *
- * @property int id
- * @property int user_id
- * @property string relate_type
- * @property int relate_id
- * @property string text
- * @property string ip
- * @property string brow
- * @property int created_at
+ * @property int    $id
+ * @property int    $user_id
+ * @property string $relate_type
+ * @property int    $relate_id
+ * @property string $text
+ * @property string $ip
+ * @property string $brow
+ * @property int    $created_at
+ * @property-read Collection<Polling> $pollings
+ * @property-read Polling             $polling
  */
 class Comment extends BaseModel
 {
@@ -56,11 +61,32 @@ class Comment extends BaseModel
     }
 
     /**
-     * Возвращает связь с голосованием
+     * Возвращает связь с голосованиями
+     */
+    public function pollings(): MorphMany
+    {
+        return $this->MorphMany(Polling::class, 'relate');
+    }
+
+    /**
+     * Возвращает связь с голосованием пользователя
      */
     public function polling(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+        return $this->morphOne(Polling::class, 'relate')
+            ->where('user_id', getUser('id'));
+    }
+
+    /**
+     * Удаление записи
+     */
+    public function delete(): ?bool
+    {
+        return DB::transaction(function () {
+            $this->pollings()->delete();
+
+            return parent::delete();
+        });
     }
 
     /**

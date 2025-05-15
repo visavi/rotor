@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Dialogue
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $type
  * @property int    $reading
  * @property int    $created_at
- * @property-read User $author
+ * @property-read User    $author
  * @property-read Message $message
  */
 class Dialogue extends BaseModel
@@ -55,11 +56,13 @@ class Dialogue extends BaseModel
      */
     public function delete(): ?bool
     {
-        // Если сообщение осталось только у одного пользователя
-        if ($this->message->dialogues->count() === 1) {
-            $this->message->delete();
-        }
+        return DB::transaction(function () {
+            // Если сообщение осталось только у одного пользователя
+            if ($this->message->dialogues->count() === 1) {
+                $this->message->delete();
+            }
 
-        return parent::delete();
+            return parent::delete();
+        });
     }
 }

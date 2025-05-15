@@ -7,9 +7,9 @@ namespace App\Models;
 /**
  * Class ArticleTag
  *
- * @property int id
- * @property int article_id
- * @property int tag_id
+ * @property int $id
+ * @property int $article_id
+ * @property int $tag_id
  */
 class ArticleTag extends BaseModel
 {
