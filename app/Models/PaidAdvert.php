@@ -38,6 +38,19 @@ class PaidAdvert extends BaseModel
         self::BOTTOM,
     ];
 
+    public const DAYS = [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        14,
+        21,
+        28,
+    ];
+
     /**
      * The attributes that should be cast to native types.
      */
