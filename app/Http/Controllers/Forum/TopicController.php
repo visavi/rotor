@@ -89,9 +89,7 @@ class TopicController extends Controller
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
-            $vote->poll = $vote->polls()
-                ->where('user_id', $user->id ?? null)
-                ->first();
+            $vote->poll = $vote->poll()->first();
 
             if ($vote->answers->isNotEmpty()) {
                 $results = Arr::pluck($vote->answers, 'result', 'answer');
@@ -549,18 +547,16 @@ class TopicController extends Controller
             ->empty($vote->closed, __('votes.voting_closed'));
 
         if ($validator->isValid()) {
-            $poll = $vote->polls()
-                ->where('user_id', $user->id)
-                ->first();
-            $validator->empty($poll, __('votes.voting_passed'));
+            $votePoll = $vote->poll()->first();
+            $validator->empty($votePoll, __('votes.voting_passed'));
         }
 
         if ($validator->isValid()) {
-            /** @var VoteAnswer $answer */
             $answer = $vote->answers()
                 ->where('id', $poll)
                 ->where('vote_id', $vote->id)
                 ->first();
+
             $validator->notEmpty($answer, __('votes.answer_not_found'));
         }
 

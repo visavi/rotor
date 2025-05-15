@@ -445,9 +445,7 @@ class ForumController extends AdminController
         $vote = Vote::query()->where('topic_id', $topic->id)->first();
 
         if ($vote) {
-            $vote->poll = $vote->polls()
-                ->where('user_id', getUser('id'))
-                ->first();
+            $vote->poll = $vote->poll()->first();
 
             if ($vote->answers->isNotEmpty()) {
                 $results = Arr::pluck($vote->answers, 'result', 'answer');

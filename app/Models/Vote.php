@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -65,7 +66,8 @@ class Vote extends BaseModel
      */
     public function answers(): HasMany
     {
-        return $this->hasMany(VoteAnswer::class, 'vote_id')->orderBy('id');
+        return $this->hasMany(VoteAnswer::class, 'vote_id')
+            ->orderBy('id');
     }
 
     /**
@@ -74,6 +76,15 @@ class Vote extends BaseModel
     public function polls(): MorphMany
     {
         return $this->morphMany(Poll::class, 'relate');
+    }
+
+    /**
+     * Возвращает связь с голосованием
+     */
+    public function poll(): morphOne
+    {
+        return $this->morphOne(Poll::class, 'relate')
+            ->where('user_id', getUser('id'));
     }
 
     /**

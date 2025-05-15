@@ -50,18 +50,11 @@ class VoteController extends Controller
             abort(200, __('votes.voting_closed'));
         }
 
-        $vote->answers = VoteAnswer::query()
-            ->where('vote_id', $vote->id)
-            ->orderBy('id')
-            ->get();
-
         if ($vote->answers->isEmpty()) {
             abort(200, __('votes.voting_not_answers'));
         }
 
-        $vote->poll = $vote->polls()
-            ->where('user_id', getUser('id'))
-            ->first();
+        $vote->poll = $vote->poll()->first();
 
         if ($request->isMethod('post')) {
             $poll = int($request->input('poll'));
@@ -75,6 +68,7 @@ class VoteController extends Controller
                     ->where('id', $poll)
                     ->where('vote_id', $vote->id)
                     ->first();
+
                 $validator->notEmpty($answer, __('votes.answer_not_found'));
             }
 
@@ -160,11 +154,6 @@ class VoteController extends Controller
         if (! $vote->closed) {
             abort(200, __('votes.voting_not_archive'));
         }
-
-        $vote->answers = VoteAnswer::query()
-            ->where('vote_id', $vote->id)
-            ->orderBy('id')
-            ->get();
 
         if ($vote->answers->isEmpty()) {
             abort(200, __('votes.voting_not_answers'));
