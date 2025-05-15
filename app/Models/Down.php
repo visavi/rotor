@@ -20,21 +20,21 @@ use Illuminate\Support\HtmlString;
 /**
  * Class Down
  *
- * @property int id
- * @property int category_id
- * @property string title
- * @property string text
- * @property int user_id
- * @property int created_at
- * @property int count_comments
- * @property int rating
- * @property int loads
- * @property int active
- * @property array links
- * @property int updated_at
- * @property Collection files
- * @property Collection comments
- * @property Load category
+ * @property int    $id
+ * @property int    $category_id
+ * @property string $title
+ * @property string $text
+ * @property int    $user_id
+ * @property int    $created_at
+ * @property int    $count_comments
+ * @property int    $rating
+ * @property int    $loads
+ * @property bool   $active
+ * @property array  $links
+ * @property int    $updated_at
+ * @property-read Collection<File>    $files
+ * @property-read Collection<Comment> $comments
+ * @property-read Load                $category
  */
 class Down extends BaseModel
 {
@@ -122,7 +122,8 @@ class Down extends BaseModel
      */
     public function polling(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+        return $this->morphOne(Polling::class, 'relate')
+            ->where('user_id', getUser('id'));
     }
 
     /**
@@ -200,6 +201,10 @@ class Down extends BaseModel
      */
     public function delete(): ?bool
     {
+        $this->comments->each(static function (Comment $comment) {
+            $comment->delete();
+        });
+
         $this->files->each(static function (File $file) {
             $file->delete();
         });

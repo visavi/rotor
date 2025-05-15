@@ -318,7 +318,6 @@ class ArticleController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            $article->comments()->delete();
             $article->delete();
 
             $article->category->decrement('count_articles');

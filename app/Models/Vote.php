@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Vote
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property int    $closed
  * @property int    $created_at
  * @property int    $topic_id
- * @property Topic  $topic
+ * @property-read Topic                  $topic
  * @property-read Collection<VoteAnswer> $answers
  * @property-read Collection<Polling>    $pollings
  */
@@ -80,14 +81,16 @@ class Vote extends BaseModel
      */
     public function delete(): ?bool
     {
-        $this->answers->each(static function (VoteAnswer $answer) {
-            $answer->delete();
-        });
+        return DB::transaction(function () {
+            $this->answers->each(function (VoteAnswer $answer) {
+                $answer->delete();
+            });
 
-        $this->pollings->each(static function (Polling $polling) {
-            $polling->delete();
-        });
+            $this->pollings->each(function (Polling $polling) {
+                $polling->delete();
+            });
 
-        return parent::delete();
+            return parent::delete();
+        });
     }
 }

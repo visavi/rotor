@@ -310,7 +310,6 @@ class LoadController extends AdminController
                 $down->category->decrement('count_downs');
             }
 
-            $down->comments()->delete();
             $down->delete();
 
             clearCache(['statLoads', 'recentDowns', 'DownFeed']);

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
-use App\Models\Comment;
 use App\Models\Offer;
-use App\Models\Polling;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -187,17 +185,11 @@ class OfferController extends AdminController
             ->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
-            Offer::query()->whereIn('id', $del)->delete();
+            $offers = Offer::query()->whereIn('id', $del)->get();
 
-            Polling::query()
-                ->where('relate_type', Offer::$morphName)
-                ->whereIn('relate_id', $del)
-                ->delete();
-
-            Comment::query()
-                ->where('relate_type', Offer::$morphName)
-                ->whereIn('relate_id', $del)
-                ->delete();
+            $offers->each(static function (Offer $offer) {
+                $offer->delete();
+            });
 
             setFlash('success', __('main.records_deleted_success'));
         } else {

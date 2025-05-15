@@ -161,7 +161,6 @@ class NewsController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            $news->comments()->delete();
             $news->delete();
 
             setFlash('success', __('news.news_success_deleted'));

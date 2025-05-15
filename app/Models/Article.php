@@ -17,17 +17,18 @@ use Illuminate\Support\HtmlString;
 /**
  * Class Article
  *
- * @property int id
- * @property int category_id
- * @property int user_id
- * @property string title
- * @property string text
- * @property int rating
- * @property int visits
- * @property int count_comments
- * @property int created_at
- * @property Collection files
- * @property Blog category
+ * @property int    $id
+ * @property int    $category_id
+ * @property int    $user_id
+ * @property string $title
+ * @property string $text
+ * @property int    $rating
+ * @property int    $visits
+ * @property int    $count_comments
+ * @property int    $created_at
+ * @property-read Collection<File>    $files
+ * @property-read Collection<Comment> $comments
+ * @property-read Blog                $category
  */
 class Article extends BaseModel
 {
@@ -108,7 +109,8 @@ class Article extends BaseModel
      */
     public function polling(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+        return $this->morphOne(Polling::class, 'relate')
+            ->where('user_id', getUser('id'));
     }
 
     /**
@@ -172,6 +174,10 @@ class Article extends BaseModel
      */
     public function delete(): ?bool
     {
+        $this->comments->each(static function (Comment $comment) {
+            $comment->delete();
+        });
+
         $this->files->each(static function (File $file) {
             $file->delete();
         });

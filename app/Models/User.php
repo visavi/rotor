@@ -616,7 +616,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
         if ($photos->isNotEmpty()) {
             foreach ($photos as $photo) {
-                $photo->comments()->delete();
                 $photo->delete();
             }
         }

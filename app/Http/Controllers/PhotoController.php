@@ -331,7 +331,6 @@ class PhotoController extends Controller
             ->empty($photo->count_comments, __('photos.photo_has_comments'));
 
         if ($validator->isValid()) {
-            $photo->comments()->delete();
             $photo->delete();
 
             setFlash('success', __('photos.photo_success_deleted'));

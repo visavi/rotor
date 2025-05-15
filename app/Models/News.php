@@ -16,14 +16,17 @@ use Illuminate\Support\HtmlString;
 /**
  * Class News
  *
- * @property int id
- * @property string title
- * @property string text
- * @property int user_id
- * @property int created_at
- * @property int count_comments
- * @property int closed
- * @property int top
+ * @property int    $id
+ * @property string $title
+ * @property string $text
+ * @property int    $user_id
+ * @property int    $created_at
+ * @property int    $count_comments
+ * @property int    $closed
+ * @property int    $top
+ * @property-read Collection<Comment> $comments
+ * @property-read Collection<File> $files
+ * @property-read Polling $polling
  */
 class News extends BaseModel
 {
@@ -101,7 +104,8 @@ class News extends BaseModel
      */
     public function polling(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+        return $this->morphOne(Polling::class, 'relate')
+            ->where('user_id', getUser('id'));
     }
 
     /**
@@ -140,6 +144,10 @@ class News extends BaseModel
      */
     public function delete(): ?bool
     {
+        $this->comments->each(static function (Comment $comment) {
+            $comment->delete();
+        });
+
         $this->files->each(static function (File $file) {
             $file->delete();
         });

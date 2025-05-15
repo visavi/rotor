@@ -93,7 +93,6 @@ class PhotoController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
-            $photo->comments()->delete();
             $photo->delete();
 
             clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);

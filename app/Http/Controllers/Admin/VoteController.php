@@ -10,7 +10,6 @@ use App\Models\Vote;
 use App\Models\VoteAnswer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class VoteController extends AdminController
@@ -126,11 +125,7 @@ class VoteController extends AdminController
         }
 
         if ($request->input('_token') === csrf_token()) {
-            DB::transaction(static function () use ($vote) {
-                $vote->delete();
-                $vote->answers()->delete();
-                $vote->pollings()->delete();
-            });
+            $vote->delete();
 
             setFlash('success', __('votes.voting_success_deleted'));
         } else {

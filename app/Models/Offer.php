@@ -5,28 +5,34 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 /**
  * Class Offer
  *
- * @property int id
- * @property string type
- * @property string title
- * @property string text
- * @property int user_id
- * @property int rating
- * @property int created_at
- * @property string status
- * @property int count_comments
- * @property int closed
- * @property string reply
- * @property int reply_user_id
- * @property int updated_at
+ * @property int    $id
+ * @property string $type
+ * @property string $title
+ * @property string $text
+ * @property int    $user_id
+ * @property int    $rating
+ * @property int    $created_at
+ * @property string $status
+ * @property int    $count_comments
+ * @property int    $closed
+ * @property string $reply
+ * @property int    $reply_user_id
+ * @property int    $updated_at
+ * @property-read Collection<Comment> $comments
+ * @property-read Collection<Polling> $pollings
+ * @property-read Polling             $polling
+ * @property-read User                $replyUser
  */
 class Offer extends BaseModel
 {
@@ -82,11 +88,20 @@ class Offer extends BaseModel
     }
 
     /**
+     * Возвращает связь с голосованиями
+     */
+    public function pollings(): MorphMany
+    {
+        return $this->MorphMany(Polling::class, 'relate');
+    }
+
+    /**
      * Возвращает связь с голосованием
      */
     public function polling(): morphOne
     {
-        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
+        return $this->morphOne(Polling::class, 'relate')
+            ->where('user_id', getUser('id'));
     }
 
     /**
@@ -94,7 +109,8 @@ class Offer extends BaseModel
      */
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'relate')->with('relate', 'user');
+        return $this->morphMany(Comment::class, 'relate')
+            ->with('relate', 'user');
     }
 
     /**
@@ -130,5 +146,23 @@ class Offer extends BaseModel
         };
 
         return new HtmlString($status);
+    }
+
+    /**
+     * Удаление записи
+     */
+    public function delete(): ?bool
+    {
+        return DB::transaction(function () {
+            $this->comments->each(static function (Comment $comment) {
+                $comment->delete();
+            });
+
+            $this->pollings->each(function (Polling $polling) {
+                $polling->delete();
+            });
+
+            return parent::delete();
+        });
     }
 }
