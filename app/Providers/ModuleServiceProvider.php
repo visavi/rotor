@@ -42,6 +42,11 @@ class ModuleServiceProvider extends ServiceProvider
             if (file_exists($langPath)) {
                 $this->loadTranslationsFrom($langPath, $module);
             }
+
+            $configFile = base_path('modules/' . $module . '/config.php');
+            if (file_exists($configFile)) {
+                $this->mergeConfigFrom($configFile, $module);
+            }
         }
     }
 }
