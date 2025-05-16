@@ -196,6 +196,7 @@ return [
         'module'                   => 'Модуль',
         'migrations'               => 'Міграції',
         'symlink'                  => 'Сімлінк',
+        'config'                   => 'Налаштування',
         'routes'                   => 'Роути',
         'hooks'                    => 'Хукі',
         'empty_modules'            => 'Модулі ще не завантажені!',

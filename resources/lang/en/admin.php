@@ -198,6 +198,7 @@ return [
         'module'                   => 'Module',
         'migrations'               => 'Migrations',
         'symlink'                  => 'Symlink',
+        'config'                   => 'Config',
         'routes'                   => 'Routes',
         'hooks'                    => 'Hooks',
         'empty_modules'            => 'Modules not loaded yet!',

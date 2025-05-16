@@ -198,6 +198,7 @@ return [
         'module'                   => 'Модуль',
         'migrations'               => 'Миграции',
         'symlink'                  => 'Симлинк',
+        'config'                   => 'Настройки',
         'routes'                   => 'Роуты',
         'hooks'                    => 'Хуки',
         'empty_modules'            => 'Модули еще не загружены!',

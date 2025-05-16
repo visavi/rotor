@@ -81,6 +81,11 @@
         <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
     @endif
 
+    @if (isset($moduleConfig['config']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.config') }}</div>
+            <?= bbCode('[spoiler][code]' . $moduleConfig['config'] . '[/code][/spoiler]') ?>
+    @endif
+
     @if (isset($moduleConfig['routes']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.routes') }}</div>
             <?= bbCode('[spoiler][code]' . $moduleConfig['routes'] . '[/code][/spoiler]') ?>
