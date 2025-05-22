@@ -54,10 +54,6 @@ define('SITETIME', time());
 
 /**
  * Форматирует вывод времени из секунд
- *
- * @param int $time секунды
- *
- * @return string Форматированный вывод
  */
 function makeTime(int $time): string
 {
@@ -107,10 +103,6 @@ function dateFixed(
 
 /**
  * Конвертирует строку в кодировку utf-8
- *
- * @param string $str строка
- *
- * @return string Конвертированная строка
  */
 function winToUtf(string $str): string
 {
@@ -119,10 +111,6 @@ function winToUtf(string $str): string
 
 /**
  * Преобразует строку в нижний регистр
- *
- * @param string $str строка
- *
- * @return string Преобразованная строка
  */
 function utfLower(string $str): string
 {
@@ -131,12 +119,6 @@ function utfLower(string $str): string
 
 /**
  * Обрезает строку
- *
- * @param mixed    $str    Строка
- * @param int      $start  Начало позиции
- * @param int|null $length Конец позиции
- *
- * @return string Обрезанная строка
  */
 function utfSubstr(mixed $str, int $start, ?int $length = null): string
 {
@@ -149,20 +131,14 @@ function utfSubstr(mixed $str, int $start, ?int $length = null): string
 
 /**
  * Возвращает длину строки
- *
- * @param mixed $str строка
- *
- * @return int Длина строка
  */
-function utfStrlen($str): int
+function utfStrlen(string $str): int
 {
     return mb_strlen($str, 'utf-8');
 }
 
 /**
  * Является ли кодировка utf-8
- *
- * @param string $str строка
  */
 function isUtf(string $str): bool
 {
@@ -171,13 +147,8 @@ function isUtf(string $str): bool
 
 /**
  * Преобразует специальные символы в HTML-сущности
- *
- * @param mixed $string       Строка или массив строк
- * @param bool  $doubleEncode Преобразовывать существующие html-сущности
- *
- * @return array|string Обработанные данные
  */
-function check($string, bool $doubleEncode = true)
+function check(array|string $string, bool $doubleEncode = true): array|string
 {
     if (is_array($string)) {
         foreach ($string as $key => $val) {
@@ -194,24 +165,16 @@ function check($string, bool $doubleEncode = true)
 
 /**
  * Преобразует в положительное число
- *
- * @param int|string $num число
- *
- * @return int Обработанные данные
  */
-function int($num): int
+function int(int|string|null $num): int
 {
     return abs((int) $num);
 }
 
 /**
  * Преобразует все элементы массива в int
- *
- * @param array|int|string $numbers массив или число
- *
- * @return array|null Обработанные данные
  */
-function intar($numbers): ?array
+function intar(array|int|string|null $numbers): ?array
 {
     if (! $numbers) {
         return null;
@@ -228,11 +191,6 @@ function intar($numbers): ?array
 
 /**
  * Возвращает размер в человеко читаемом формате
- *
- * @param int $bytes     размер в байтах
- * @param int $precision кол. символов после запятой
- *
- * @return string Форматированный вывод размера
  */
 function formatSize(int $bytes, int $precision = 2): string
 {
@@ -247,10 +205,6 @@ function formatSize(int $bytes, int $precision = 2): string
 
 /**
  * Возвращает размер файла человеко-читаемом формате
- *
- * @param string $file Путь к файлу
- *
- * @return string Размер в читаемом формате
  */
 function formatFileSize(string $file): string
 {
@@ -263,11 +217,6 @@ function formatFileSize(string $file): string
 
 /**
  * Возвращает время в человеко-читаемом формате
- *
- * @param int $time   Кол. секунд timestamp
- * @param int $crumbs Кол. элементов
- *
- * @return string Время в читаемом формате
  */
 function formatTime(int $time, int $crumbs = 2): string
 {
@@ -300,10 +249,6 @@ function formatTime(int $time, int $crumbs = 2): string
 
 /**
  * Очищает строку от мата по базе слов
- *
- * @param string|null $str строка
- *
- * @return string Обработанная строка
  */
 function antimat(?string $str): string
 {
@@ -312,9 +257,6 @@ function antimat(?string $str): string
 
 /**
  * Возвращает календарь
- *
- *
- * @return HtmlString календарь
  */
 function getCalendar(int $time = SITETIME): HtmlString
 {
@@ -325,8 +267,6 @@ function getCalendar(int $time = SITETIME): HtmlString
 
 /**
  * Возвращает количество пользователей онлайн по типам
- *
- * @return array Массив данных
  */
 function statsOnline(): array
 {
@@ -364,8 +304,6 @@ function showOnline(): ?HtmlString
 
 /**
  * Get online widget
- *
- * @return mixed
  */
 function onlineWidget(): HtmlString
 {
@@ -376,8 +314,6 @@ function onlineWidget(): HtmlString
 
 /**
  * Возвращает статистику посещений
- *
- * @return array Статистика посещений
  */
 function statsCounter(): array
 {
@@ -407,8 +343,6 @@ function showCounter(): ?HtmlString
 
 /**
  * Возвращает количество пользователей
- *
- * @return string Количество пользователей
  */
 function statsUsers(): string
 {
@@ -426,8 +360,6 @@ function statsUsers(): string
 
 /**
  * Возвращает количество администраторов
- *
- * @return int Количество администраторов
  */
 function statsAdmins(): int
 {
@@ -438,8 +370,6 @@ function statsAdmins(): int
 
 /**
  * Возвращает количество жалоб
- *
- * @return int Количество жалоб
  */
 function statsSpam(): int
 {
@@ -448,8 +378,6 @@ function statsSpam(): int
 
 /**
  * Возвращает количество забанненых пользователей
- *
- * @return int Количество забаненных
  */
 function statsBanned(): int
 {
@@ -461,8 +389,6 @@ function statsBanned(): int
 
 /**
  * Возвращает количество записей в истории банов
- *
- * @return int Количество записей
  */
 function statsBanHist(): int
 {
@@ -471,8 +397,6 @@ function statsBanHist(): int
 
 /**
  * Возвращает количество ожидающих подтверждения регистрации
- *
- * @return int Количество ожидающих
  */
 function statsRegList(): int
 {
@@ -481,8 +405,6 @@ function statsRegList(): int
 
 /**
  * Возвращает количество забаненных по IP
- *
- * @return int Количество забаненных
  */
 function statsIpBanned(): int
 {
@@ -491,8 +413,6 @@ function statsIpBanned(): int
 
 /**
  * Возвращает количество фотографий в галерее
- *
- * @return string Количество фотографий
  */
 function statsPhotos(): string
 {
@@ -506,8 +426,6 @@ function statsPhotos(): string
 
 /**
  * Возвращает количество новостей
- *
- * @return string Количество новостей
  */
 function statsNews(): string
 {
@@ -524,8 +442,6 @@ function statsNews(): string
 
 /**
  * Возвращает количество записей в черном списке
- *
- * @return string Количество записей
  */
 function statsBlacklist(): string
 {
@@ -542,8 +458,6 @@ function statsBlacklist(): string
 
 /**
  * Возвращает количество записей в антимате
- *
- * @return int Количество записей
  */
 function statsAntimat(): int
 {
@@ -552,8 +466,6 @@ function statsAntimat(): int
 
 /**
  * Возвращает количество стикеров
- *
- * @return int Количество стикеров
  */
 function statsStickers(): int
 {
@@ -562,22 +474,18 @@ function statsStickers(): int
 
 /**
  * Возвращает дату последнего сканирования сайта
- *
- * @return int|string Дата последнего сканирования
  */
-function statsChecker()
+function statsChecker(): string
 {
     if (file_exists(storage_path('framework/cache/checker.php'))) {
         return dateFixed(filemtime(storage_path('framework/cache/checker.php')), 'd.m.Y');
     }
 
-    return 0;
+    return '0';
 }
 
 /**
  * Возвращает количество приглашений на регистрацию
- *
- * @return string Количество приглашений
  */
 function statsInvite(): string
 {
@@ -589,10 +497,6 @@ function statsInvite(): string
 
 /**
  * Возвращает следующею и предыдущую фотографию в галерее
- *
- * @param int $id Id фотографий
- *
- * @return array|null Массив данных
  */
 function photoNavigation(int $id): ?array
 {
@@ -617,8 +521,6 @@ function photoNavigation(int $id): ?array
 
 /**
  * Возвращает количество статей в блогах
- *
- * @return string Количество статей
  */
 function statsBlog(): string
 {
@@ -632,8 +534,6 @@ function statsBlog(): string
 
 /**
  * Возвращает количество тем и сообщений в форуме
- *
- * @return string Количество тем и сообщений
  */
 function statsForum(): string
 {
@@ -651,8 +551,6 @@ function statsForum(): string
 
 /**
  * Возвращает количество сообщений в гостевой книге
- *
- * @return string Количество сообщений
  */
 function statsGuestbook(): string
 {
@@ -670,8 +568,6 @@ function statsGuestbook(): string
 
 /**
  * Возвращает количество сообщений в админ-чате
- *
- * @return string Количество сообщений
  */
 function statsChat(): string
 {
@@ -688,8 +584,6 @@ function statsChat(): string
 
 /**
  * Возвращает время последнего сообщения в админ-чате
- *
- * @return int Время сообщения
  */
 function statsNewChat(): int
 {
@@ -698,8 +592,6 @@ function statsNewChat(): int
 
 /**
  * Возвращает количество файлов в загруз-центре
- *
- * @return string Количество файлов
  */
 function statsLoad(): string
 {
@@ -717,8 +609,6 @@ function statsLoad(): string
 
 /**
  * Возвращает количество новых файлов
- *
- * @return int Количество файлов
  */
 function statsNewLoad(): int
 {
@@ -727,8 +617,6 @@ function statsNewLoad(): int
 
 /**
  * Возвращает количество объявлений
- *
- * @return string Количество статей
  */
 function statsBoard(): string
 {
@@ -741,25 +629,6 @@ function statsBoard(): string
 }
 
 /**
- * Обфусцирует email
- *
- * @param string $email email
- *
- * @return string Обфусцированный email
- */
-function cryptMail(string $email): string
-{
-    $output = '';
-    $symbols = mb_str_split($email);
-
-    foreach ($symbols as $symbol) {
-        $output .= '&#' . ord($symbol) . ';';
-    }
-
-    return $output;
-}
-
-/**
  * Частично скрывает email
  */
 function hideMail(string $email): string
@@ -769,8 +638,6 @@ function hideMail(string $email): string
 
 /**
  * Возвращает статистику текущих голосований из кэш-файла
- *
- * @return string Статистика текущий голосований
  */
 function statVotes(): string
 {
@@ -790,10 +657,8 @@ function statVotes(): string
 
 /**
  * Возвращает дату последней новости из кэш-файла
- *
- * @return string Дата последней новости
  */
-function statsNewsDate()
+function statsNewsDate(): string
 {
     $newsDate = Cache::remember('statNewsDate', 900, static function () {
         /** @var News $news */
@@ -802,13 +667,11 @@ function statsNewsDate()
         return $news->created_at ?? 0;
     });
 
-    return $newsDate ? dateFixed($newsDate, 'd.m.Y') : 0;
+    return $newsDate ? dateFixed($newsDate, 'd.m.Y') : '0';
 }
 
 /**
  * Возвращает закрепленные новости
- *
- * @return HtmlString Новость
  */
 function pinnedNews(): HtmlString
 {
@@ -824,10 +687,6 @@ function pinnedNews(): HtmlString
 
 /**
  * Возвращает иконку расширения
- *
- * @param string $ext Расширение файла
- *
- * @return HtmlString Иконка
  */
 function icons(string $ext): HtmlString
 {
@@ -896,10 +755,6 @@ function icons(string $ext): HtmlString
 
 /**
  * Перемешивает элементы ассоциативного массива, сохраняя ключи
- *
- * @param array &$array Исходный массив, переданный по ссылке
- *
- * @return bool Флаг успешного выполнения операции
  */
 function shuffleAssoc(array &$array): bool
 {
@@ -932,13 +787,8 @@ function bbCodeTruncate(?string $text, int $words = 20, string $end = '...'): Ht
 
 /**
  * Возвращает обрезанную до заданного количества букв строке
- *
- * @param HtmlString|string $value Исходная строка
- * @param int               $limit Максимальное количество символов в результате
- *
- * @return string Обрезанная строка
  */
-function truncateString($value, int $limit = 100, string $end = '...'): string
+function truncateString(HtmlString|string $value, int $limit = 100, string $end = '...'): string
 {
     $value = strip_tags($value);
 
@@ -958,13 +808,8 @@ function truncateString($value, int $limit = 100, string $end = '...'): string
 
 /**
  * Возвращает обрезанную до заданного количества слов строке
- *
- * @param HtmlString|string $value Исходная строка
- * @param int               $words Максимальное количество слов в результате
- *
- * @return string Обрезанная строка
  */
-function truncateWord($value, int $words = 20, string $end = '...'): string
+function truncateWord(HtmlString|string $value, int $words = 20, string $end = '...'): string
 {
     $value = strip_tags($value);
 
@@ -973,10 +818,8 @@ function truncateWord($value, int $words = 20, string $end = '...'): string
 
 /**
  * Возвращает обрезанную строку с удалением перевода строки
- *
- * @param HtmlString|string $value
  */
-function truncateDescription($value, int $words = 20, string $end = ''): string
+function truncateDescription(HtmlString|string $value, int $words = 20, string $end = ''): string
 {
     $value = strip_tags(preg_replace('/\s+/', ' ', $value));
 
@@ -985,10 +828,8 @@ function truncateDescription($value, int $words = 20, string $end = ''): string
 
 /**
  * Get the number of words a string contains.
- *
- * @param string $string
  */
-function wordCount($string): int
+function wordCount(string $string): int
 {
     return count(preg_split('/[^\s*+]+/u', $string));
 }
@@ -1050,10 +891,6 @@ function getAdvertUser(): ?HtmlString
 
 /**
  * Выводит последние фотографии
- *
- * @param int $show Количество последних фотографий
- *
- * @return HtmlString Список фотографий
  */
 function recentPhotos(int $show = 5): HtmlString
 {
@@ -1070,10 +907,6 @@ function recentPhotos(int $show = 5): HtmlString
 
 /**
  * Выводит последние темы форума
- *
- * @param int $show Количество последних тем форума
- *
- * @return HtmlString Список тем
  */
 function recentTopics(int $show = 5): HtmlString
 {
@@ -1089,10 +922,6 @@ function recentTopics(int $show = 5): HtmlString
 
 /**
  * Выводит последние файлы в загрузках
- *
- * @param int $show Количество последних файлов в загрузках
- *
- * @return HtmlString Список файлов
  */
 function recentDowns(int $show = 5): HtmlString
 {
@@ -1110,10 +939,6 @@ function recentDowns(int $show = 5): HtmlString
 
 /**
  * Выводит последние статьи в блогах
- *
- * @param int $show Количество последних статей в блогах
- *
- * @return HtmlString Список статей
  */
 function recentArticles(int $show = 5): HtmlString
 {
@@ -1129,10 +954,6 @@ function recentArticles(int $show = 5): HtmlString
 
 /**
  * Выводит последние объявления
- *
- * @param int $show Количество последних объявлений
- *
- * @return HtmlString Список объявлений
  */
 function recentBoards(int $show = 5): HtmlString
 {
@@ -1149,8 +970,6 @@ function recentBoards(int $show = 5): HtmlString
 
 /**
  * Возвращает количество предложений и проблем
- *
- * @return string Количество предложений и проблем
  */
 function statsOffers(): string
 {
@@ -1164,12 +983,8 @@ function statsOffers(): string
 
 /**
  * Пересчитывает счетчики
- *
- * @param string $mode сервис счетчиков
- *
- * @return void
  */
-function restatement(string $mode)
+function restatement(string $mode): void
 {
     switch ($mode) {
         case 'forums':
@@ -1212,10 +1027,6 @@ function restatement(string $mode)
 
 /**
  * Возвращает количество строк в файле
- *
- * @param string $file Путь к файлу
- *
- * @return int Количество строк
  */
 function counterString(string $file): int
 {
@@ -1229,12 +1040,8 @@ function counterString(string $file): int
 
 /**
  * Форматирует вывод числа
- *
- * @param int|float $num число
- *
- * @return HtmlString Форматированное число
  */
-function formatNum($num): HtmlString
+function formatNum(int|float $num): HtmlString
 {
     if ($num > 0) {
         $data = '<span style="color:#00aa00">+' . $num . '</span>';
@@ -1277,11 +1084,6 @@ function formatShortNum(int $num): float|int|string
 
 /**
  * Обрабатывает и уменьшает изображение
- *
- * @param string|null $path   Путь к изображению
- * @param array       $params Параметры изображения
- *
- * @return array Обработанные параметры
  */
 function resizeProcess(?string $path, array $params = []): array
 {
@@ -1329,11 +1131,6 @@ function resizeProcess(?string $path, array $params = []): array
 
 /**
  * Возвращает уменьшенное изображение
- *
- * @param string|null $path   Путь к изображению
- * @param array       $params Параметры изображения
- *
- * @return HtmlString Уменьшенное изображение
  */
 function resizeImage(?string $path, array $params = []): HtmlString
 {
@@ -1351,12 +1148,8 @@ function resizeImage(?string $path, array $params = []): HtmlString
 
 /**
  * Удаляет директорию рекурсивно
- *
- * @param string $dir путь к директории
- *
- * @return void
  */
-function deleteDir(string $dir)
+function deleteDir(string $dir): void
 {
     if (file_exists($dir)) {
         if ($files = glob($dir . '/*')) {
@@ -1370,8 +1163,6 @@ function deleteDir(string $dir)
 
 /**
  * Удаляет файл
- *
- * @param string $path Путь к файлу
  */
 function deleteFile(string $path): bool
 {
@@ -1393,14 +1184,8 @@ function deleteFile(string $path): bool
 
 /**
  * Отправляет уведомление об упоминании в приват
- *
- * @param string $text  Текст сообщения
- * @param string $url   Путь к странице
- * @param string $title Название страницу
- *
- * @return void
  */
-function sendNotify(string $text, string $url, string $title)
+function sendNotify(string $text, string $url, string $title): void
 {
     /* $parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text); */
     preg_match_all('/(?<=^|\s|=)@([\w\-]+)/', $text, $matches);
@@ -1422,11 +1207,6 @@ function sendNotify(string $text, string $url, string $title)
 
 /**
  * Возвращает приватное сообщение
- *
- * @param string $type    Тип сообщения
- * @param array  $replace Массив заменяемых параметров
- *
- * @return string Сформированный текст
  */
 function textNotice(string $type, array $replace = []): string
 {
@@ -1446,8 +1226,6 @@ function textNotice(string $type, array $replace = []): string
 
 /**
  * Возвращает блок статистики производительности
- *
- * @return HtmlString|null Статистика производительности
  */
 function performance(): ?HtmlString
 {
@@ -1463,9 +1241,6 @@ function performance(): ?HtmlString
 
 /**
  * Очистка кеш-файлов
- *
- *
- * @return bool Результат выполнения
  */
 function clearCache(array|string|null $keys = null): bool
 {
@@ -1488,9 +1263,6 @@ function clearCache(array|string|null $keys = null): bool
 
 /**
  * Возвращает текущую страницу
- *
- *
- * @return string|null Текущая страница
  */
 function returnUrl(?string $url = null): ?string
 {
@@ -1507,11 +1279,8 @@ function returnUrl(?string $url = null): ?string
 
 /**
  * Saves error logs
- *
- *
- * @return void
  */
-function saveErrorLog(int $code, ?string $message = null)
+function saveErrorLog(int $code, ?string $message = null): void
 {
     $errorCodes = [401, 403, 404, 405, 419, 429, 500, 503, 666];
 
@@ -1531,10 +1300,6 @@ function saveErrorLog(int $code, ?string $message = null)
 
 /**
  * Возвращает ошибку
- *
- * @param string|array $errors ошибки
- *
- * @return HtmlString Сформированный блок с ошибкой
  */
 function showError(string|array $errors): HtmlString
 {
@@ -1551,14 +1316,9 @@ function getCaptcha(): HtmlString
 /**
  * Сохраняет flash уведомления
  *
- * @param string $status  Статус уведомления
- * @param mixed  $message Массив или текст с уведомлениями
- *
- * @return void
- *
  * @deprecated since 10.1 - Use redirect->with('success', 'Message') or $request->session()->flash()
  */
-function setFlash(string $status, $message)
+function setFlash(string $status, mixed $message): void
 {
     session(['flash.' . $status => $message]);
 }
@@ -1566,11 +1326,9 @@ function setFlash(string $status, $message)
 /**
  * Сохраняет POST данные введенных пользователем
  *
- * @param array $data Массив полей
- *
  * @deprecated since 10.1 - Use $request->session()->flash();
  */
-function setInput(array $data)
+function setInput(array $data): void
 {
     app('session')->flash('_old_input', $data);
 }
@@ -1578,13 +1336,9 @@ function setInput(array $data)
 /**
  * Возвращает значение из POST данных
  *
- * @param string $key Имя поля
- *
- * @return mixed Сохраненное значение
- *
  * @deprecated since 10.1 - Use old('field', 'default');
  */
-function getInput(string $key, $default = null): mixed
+function getInput(string $key, mixed $default = null): mixed
 {
     if (app('session')->missing('_old_input')) {
         return $default;
@@ -1597,10 +1351,6 @@ function getInput(string $key, $default = null): mixed
 
 /**
  * Подсвечивает блок с полем для ввода сообщения
- *
- * @param string $field Имя поля
- *
- * @return string CSS класс ошибки
  */
 function hasError(string $field): string
 {
@@ -1619,10 +1369,6 @@ function hasError(string $field): string
 
 /**
  * Возвращает блок с текстом ошибки
- *
- * @param string $field Имя поля
- *
- * @return string|null Блоки ошибки
  */
 function textError(string $field): ?string
 {
@@ -1639,9 +1385,6 @@ function textError(string $field): ?string
 
 /**
  * Отправляет уведомления на email
- *
- *
- * @return bool Результат отправки
  */
 function sendMail(string $view, array $data): bool
 {
@@ -1673,10 +1416,6 @@ function sendMail(string $view, array $data): bool
 
 /**
  * Возвращает расширение файла
- *
- * @param string $filename Имя файла
- *
- * @return string расширение
  */
 function getExtension(string $filename): string
 {
@@ -1685,10 +1424,6 @@ function getExtension(string $filename): string
 
 /**
  * Возвращает имя файла без расширения
- *
- * @param string $filename Имя файла
- *
- * @return string Имя без расширения
  */
 function getBodyName(string $filename): string
 {
@@ -1697,11 +1432,6 @@ function getBodyName(string $filename): string
 
 /**
  * Склоняет числа
- *
- * @param int   $num   Число
- * @param mixed $forms Склоняемые слова (один, два, много)
- *
- * @return string Форматированная строка
  */
 function plural(int $num, mixed $forms): string
 {
@@ -1730,11 +1460,6 @@ function plural(int $num, mixed $forms): string
 
 /**
  * Обрабатывает BB-код
- *
- * @param string|null $text  Необработанный текст
- * @param bool        $parse Обрабатывать или вырезать код
- *
- * @return HtmlString Обработанный текст
  */
 function bbCode(?string $text, bool $parse = true): HtmlString
 {
@@ -1753,8 +1478,6 @@ function bbCode(?string $text, bool $parse = true): HtmlString
 
 /**
  * Определяет IP пользователя
- *
- * @return string IP пользователя
  */
 function getIp(): string
 {
@@ -1763,9 +1486,6 @@ function getIp(): string
 
 /**
  * Определяет браузер
- *
- *
- * @return string Браузер и версия браузера
  */
 function getBrowser(?string $userAgent = null): string
 {
@@ -1784,10 +1504,6 @@ function getBrowser(?string $userAgent = null): string
 
 /**
  * Является ли пользователь администратором
- *
- * @param string|null $level Уровень доступа
- *
- * @return bool Является ли пользователь администратором
  */
 function isAdmin(?string $level = null): bool
 {
@@ -1796,10 +1512,6 @@ function isAdmin(?string $level = null): bool
 
 /**
  * Имеет ли пользователь доступ по уровню
- *
- * @param string $level Уровень доступа
- *
- * @return bool Разрешен ли доступ
  */
 function access(string $level): bool
 {
@@ -1828,8 +1540,6 @@ function getUserFromSession(): ?User
 
 /**
  * Возвращает объект пользователя по логину
- *
- * @param string|null $login Логин пользователя
  */
 function getUserByLogin(?string $login): Builder|User|null
 {
@@ -1838,8 +1548,6 @@ function getUserByLogin(?string $login): Builder|User|null
 
 /**
  * Возвращает объект пользователя по id
- *
- * @param int|null $id ID пользователя
  */
 function getUserById(?int $id): Builder|User|null
 {
@@ -1848,8 +1556,6 @@ function getUserById(?int $id): Builder|User|null
 
 /**
  * Возвращает объект пользователя по токену
- *
- * @param string $token Логин пользователя
  */
 function getUserByToken(string $token): Builder|User|null
 {
@@ -1858,8 +1564,6 @@ function getUserByToken(string $token): Builder|User|null
 
 /**
  * Возвращает объект пользователя по логину или email
- *
- * @param string|null $login Логин или email пользователя
  */
 function getUserByLoginOrEmail(?string $login): Builder|User|null
 {
@@ -1870,10 +1574,6 @@ function getUserByLoginOrEmail(?string $login): Builder|User|null
 
 /**
  * Возвращает данные пользователя по ключу
- *
- * @param string|null $key Ключ массива
- *
- * @return User|null|mixed
  */
 function getUser(?string $key = null): mixed
 {
@@ -1930,11 +1630,6 @@ function simplePaginate(array|Collection $items, int $perPage, array $appends = 
 
 /**
  * Возвращает сформированный код base64 картинки
- *
- * @param string $path   Путь к картинке
- * @param array  $params Параметры
- *
- * @return HtmlString Сформированный код
  */
 function imageBase64(string $path, array $params = []): HtmlString
 {
@@ -2000,10 +1695,6 @@ function getQueryLog(): array
 
 /**
  * Выводит список забаненных ip
- *
- * @param bool $clear Нужно ли сбросить кеш
- *
- * @return array Массив IP
  */
 function ipBan(bool $clear = false): array
 {
@@ -2018,11 +1709,6 @@ function ipBan(bool $clear = false): array
 
 /**
  * Возвращает настройки сайта по ключу
- *
- * @param string|null $key     Ключ массива
- * @param mixed|null  $default Значение по умолчанию
- *
- * @return mixed Данные
  */
 function setting(?string $key = null, mixed $default = null): mixed
 {
@@ -2037,10 +1723,6 @@ function setting(?string $key = null, mixed $default = null): mixed
 
 /**
  * Возвращает имя сайта из ссылки
- *
- * @param string $url Ссылка на сайт
- *
- * @return string Имя сайта
  */
 function siteDomain(string $url): string
 {
@@ -2054,7 +1736,7 @@ function parseVersion(string $version): string
 {
     $ver = explode('.', strtok($version, '-'));
 
-    return $ver[0] . '.' . $ver[1] . '.' . ($ver[2] ?? 0);
+    return $ver[0] . '.' . $ver[1] . '.' . ($ver[2] ?? '0');
 }
 
 /**
