@@ -167,7 +167,8 @@ textarea.form-control {
 }
 
 .is-invalid .form-control,
-.is-invalid .form-select {
+.is-invalid .form-select,
+.is-invalid .input-group-text {
   border-color: var(--bs-form-invalid-border-color);
 }
 
@@ -182,7 +183,8 @@ textarea.form-control {
 }
 
 .is-valid .form-control,
-.is-valid .form-select {
+.is-valid .form-select,
+.is-valid .input-group-text {
   border-color: var(--bs-form-valid-border-color);
 }
 

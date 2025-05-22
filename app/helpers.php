@@ -32,7 +32,6 @@ use App\Models\Sticker;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -42,6 +41,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -2109,15 +2109,13 @@ function getCourses(): ?HtmlString
 {
     $courses = Cache::remember('courses', 3600, static function () {
         try {
-            $client = new Client(['timeout' => 3.0]);
-            $response = $client->get('//www.cbr-xml-daily.ru/daily_json.js');
+            $response = Http::timeout(3)
+                ->get('https://www.cbr-xml-daily.ru/daily_json.js');
 
-            $content = json_decode($response->getBody()->getContents(), true);
+            return $response->json();
         } catch (Exception) {
-            $content = null;
+            return null;
         }
-
-        return $content;
     });
 
     return new HtmlString(view('app/_courses', compact('courses')));

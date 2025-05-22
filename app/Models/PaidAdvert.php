@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
  * @property string $site
  * @property array  $names
  * @property string $color
- * @property int    $bold
+ * @property bool   $bold
  * @property int    $user_id
  * @property int    $created_at
  * @property int    $deleted_at
@@ -39,11 +39,15 @@ class PaidAdvert extends BaseModel
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Get the attributes that should be cast.
      */
-    protected $casts = [
-        'names' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'bold'  => 'bool',
+            'names' => 'array',
+        ];
+    }
 
     /**
      * Indicates if the model should be timestamped.
@@ -54,6 +58,27 @@ class PaidAdvert extends BaseModel
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Get places
+     */
+    public function getPlaces(): array
+    {
+        $places = [];
+        foreach (self::PLACES as $place) {
+            $places[$place] = __('admin.paid_adverts.' . $place);
+        }
+
+        return $places;
+    }
+
+    /**
+     * Возвращает название места размещения
+     */
+    public function getPlaceName(): string
+    {
+        return $this->getPlaces()[$this->place] ?? 'Unknown';
+    }
 
     /**
      * Кэширует ссылки платной рекламы
