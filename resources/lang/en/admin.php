@@ -267,7 +267,7 @@ return [
         'link'                  => 'Site url',
         'names'                 => 'Names',
         'name'                  => 'Name',
-        'term'                  => 'Term',
+        'term'                  => 'Placement period',
         'empty_links'           => 'There are no sponsored links yet!',
         'confirm_delete_advert' => 'Do you confirm deletion of the sponsored link?',
         'not_found'             => 'Sponsored link not found!',
