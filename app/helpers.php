@@ -148,7 +148,7 @@ function isUtf(string $str): bool
 /**
  * Преобразует специальные символы в HTML-сущности
  */
-function check(array|string $string, bool $doubleEncode = true): array|string
+function check(array|string|null $string, bool $doubleEncode = true): array|string
 {
     if (is_array($string)) {
         foreach ($string as $key => $val) {
