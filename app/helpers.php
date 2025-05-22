@@ -166,7 +166,7 @@ function check(array|string $string, bool $doubleEncode = true): array|string
 /**
  * Преобразует в положительное число
  */
-function int(int|string|null $num): int
+function int(array|int|string|null $num): int
 {
     return abs((int) $num);
 }
