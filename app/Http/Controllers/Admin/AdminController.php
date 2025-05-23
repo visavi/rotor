@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -21,17 +20,6 @@ class AdminController extends Controller
             ->count();
 
         return view('admin/index', compact('existBoss'));
-    }
-
-    /**
-     * Проверка обновлений
-     */
-    public function upgrade(): View
-    {
-        Artisan::call('migrate', ['--force' => true]);
-        $output = Artisan::output();
-
-        return view('admin/upgrade', compact('output'));
     }
 
     /**

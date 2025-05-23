@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\SpamController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\StickerController;
 use App\Http\Controllers\Admin\TransferController as AdminTransferController;
+use App\Http\Controllers\Admin\UpgradeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserFieldController;
 use App\Http\Controllers\Admin\VoteController as AdminVoteController;
@@ -531,7 +532,14 @@ Route::middleware(['check.admin', 'admin.logger'])
         Route::controller(AdminController::class)
             ->group(function () {
                 Route::get('/', 'main');
-                Route::get('/upgrade', 'upgrade');
+            });
+
+        /* Проверка обновлений */
+        Route::controller(UpgradeController::class)
+            ->prefix('upgrade')
+            ->group(function () {
+                Route::get('/', 'index');
+                Route::get('/check', 'check');
             });
 
         /* Админ-чат */
