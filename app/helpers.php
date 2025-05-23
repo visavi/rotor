@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
@@ -477,8 +478,8 @@ function statsStickers(): int
  */
 function statsChecker(): string
 {
-    if (file_exists(storage_path('framework/cache/checker.php'))) {
-        return dateFixed(filemtime(storage_path('framework/cache/checker.php')), 'd.m.Y');
+    if (Storage::disk('private')->exists('checker.php')) {
+        return dateFixed(Storage::disk('private')->lastModified('checker.php'));
     }
 
     return '0';

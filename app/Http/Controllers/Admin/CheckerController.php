@@ -6,22 +6,25 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 class CheckerController extends AdminController
 {
+    private string $filename = 'checker.php';
+
     /**
      * Главная страница
      */
     public function index(): View
     {
         $diff = [];
-
-        if (file_exists(storage_path('framework/cache/checker.php'))) {
+        if (Storage::disk('private')->exists($this->filename)) {
             $files = $this->scanFiles(base_path());
-            $filesScan = json_decode(file_get_contents(storage_path('framework/cache/checker.php')), true);
+
+            $filesScan = json_decode(Storage::disk('private')->get($this->filename));
 
             $diff['left'] = array_diff($files, $filesScan);
             $diff['right'] = array_diff($filesScan, $files);
@@ -38,7 +41,7 @@ class CheckerController extends AdminController
         if ($request->input('_token') === csrf_token()) {
             $files = $this->scanFiles(base_path());
 
-            file_put_contents(storage_path('framework/cache/checker.php'), json_encode($files));
+            Storage::disk('private')->put($this->filename, json_encode($files));
 
             setFlash('success', __('admin.checkers.success_crawled'));
         } else {
@@ -68,7 +71,7 @@ class CheckerController extends AdminController
 
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
-            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i', true) . ' / ' . formatSize($file->getSize());
+            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i:s', true) . ' / ' . formatSize($file->getSize());
         }
 
         return $state;

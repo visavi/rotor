@@ -22,12 +22,12 @@
             <i class="fa fa-cog fa-lg text-muted"></i> {{ __('main.editor') }}
         </div>
         <div class="section-body">
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> ({{ statsChat() }})<br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">{{ __('index.forums') }}</a> ({{ statsForum() }})<br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blogs">{{ __('index.blogs') }}</a> ({{ statsBlog() }})<br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/boards">{{ __('index.boards') }}</a> ({{ statsBoard() }})<br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> <span class="badge bg-light text-dark">{{ statsChat() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbook">{{ __('index.guestbook') }}</a> <span class="badge bg-light text-dark">{{ statsGuestbook() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">{{ __('index.forums') }}</a> <span class="badge bg-light text-dark">{{ statsForum() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/photos">{{ __('index.photos') }}</a> <span class="badge bg-light text-dark">{{ statsPhotos() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blogs">{{ __('index.blogs') }}</a> <span class="badge bg-light text-dark">{{ statsBlog() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/boards">{{ __('index.boards') }}</a> <span class="badge bg-light text-dark">{{ statsBoard() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/admin-adverts">{{ __('index.admin_advertising') }}</a><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adverts">{{ __('index.advertising') }}</a><br>
             @hook('adminBlockEditor')
@@ -40,14 +40,14 @@
                 <i class="fa fa-cog fa-lg text-muted"></i> {{ __('main.moder') }}
             </div>
             <div class="section-body">
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">{{ __('index.complains') }}</a> ({{ statsSpam() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/spam">{{ __('index.complains') }}</a> <span class="badge bg-light text-dark">{{ statsSpam() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/bans">{{ __('index.ban_unban') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">{{ __('index.banned_list') }}</a> ({{ statsBanned() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">{{ __('index.pending_list') }}</a> ({{ statsRegList() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/votes">{{ __('index.votes') }}</a> ({{ statVotes() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">{{ __('index.antimat') }}</a> ({{ statsAntimat() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">{{ __('index.ban_history') }}</a> ({{ statsBanHist() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">{{ __('index.invitations') }}</a> ({{ statsInvite() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">{{ __('index.banned_list') }}</a> <span class="badge bg-light text-dark">{{ statsBanned() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">{{ __('index.pending_list') }}</a> <span class="badge bg-light text-dark">{{ statsRegList() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/votes">{{ __('index.votes') }}</a> <span class="badge bg-light text-dark">{{ statVotes() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">{{ __('index.antimat') }}</a> <span class="badge bg-light text-dark">{{ statsAntimat() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">{{ __('index.ban_history') }}</a> <span class="badge bg-light text-dark">{{ statsBanHist() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">{{ __('index.invitations') }}</a> <span class="badge bg-light text-dark">{{ statsInvite() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/transfers">{{ __('index.cash_transactions') }}</a><br>
                 @hook('adminBlockModer')
             </div>
@@ -61,16 +61,16 @@
             </div>
             <div class="section-body">
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/rules">{{ __('index.site_rules') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/news">{{ __('index.news') }}</a> ({{ statsNews() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/news">{{ __('index.news') }}</a> <span class="badge bg-light text-dark">{{ statsNews() }}</span><br>
 
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> ({{ statsIpBanned() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> ({{ parseVersion(PHP_VERSION) }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/loads">{{ __('index.loads') }}</a> ({{ statsLoad() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/downs/new">{{ __('index.new_loads') }}</a> ({{ statsNewLoad() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> <span class="badge bg-light text-dark">{{ statsIpBanned() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> <span class="badge bg-light text-dark">{{ parseVersion(PHP_VERSION) }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/loads">{{ __('index.loads') }}</a> <span class="badge bg-light text-dark">{{ statsLoad() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/downs/new">{{ __('index.new_loads') }}</a> <span class="badge bg-light text-dark">{{ statsNewLoad() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/errors">{{ __('index.errors') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklists">{{ __('index.blacklist') }}</a> ({{ statsBlacklist() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})<br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/stickers">{{ __('index.stickers') }}</a> ({{ statsStickers() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklists">{{ __('index.blacklist') }}</a> <span class="badge bg-light text-dark">{{ statsBlacklist() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">{{ __('index.offers') }}</a> <span class="badge bg-light text-dark">{{ statsOffers() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/stickers">{{ __('index.stickers') }}</a> <span class="badge bg-light text-dark">{{ statsStickers() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">{{ __('index.user_statuses') }}</a><br>
                 @hook('adminBlockAdmin')
             </div>
@@ -84,10 +84,10 @@
             </div>
             <div class="section-body">
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/settings">{{ __('index.site_settings') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/users">{{ __('index.users') }}</a> ({{ statsUsers() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/users">{{ __('index.users') }}</a> <span class="badge bg-light text-dark">{{ statsUsers() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/caches">{{ __('index.cache_clear') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backups">{{ __('index.backup') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checkers">{{ __('index.site_scan') }}</a> ({{ statsChecker() }})<br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checkers">{{ __('index.site_scan') }}</a> <span class="badge bg-light text-dark">{{ statsChecker() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">{{ __('index.private_mailing') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/logs">{{ __('index.logs_visits') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/notices">{{ __('index.email_templates') }}</a><br>
