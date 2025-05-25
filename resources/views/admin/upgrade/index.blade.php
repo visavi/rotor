@@ -17,7 +17,7 @@
 
     @if ($hasNewVersion)
         <div class="alert alert-warning my-3">
-            <i class="fa fa-check"></i> <b>Доступно обновление!</b>
+            <i class="fa fa-check"></i> Доступно обновление системы!
         </div>
 
         <div class="post mb-3">
@@ -48,17 +48,15 @@
         </div>
     @else
         <div class="alert alert-success my-3">
-            <i class="fa fa-check"></i> <b>У вас актуальная версия сайта</b>
+            <i class="fa fa-check"></i> У вас актуальная версия сайта
         </div>
     @endif
 
     <div class="alert alert-success my-3">
-        <i class="fa fa-check"></i> <b>База данных в актуальном состоянии</b>
+        <i class="fa fa-check"></i> База данных в актуальном состоянии
     </div>
 
     <div class="section mb-3 shadow">
-        <div class="fw-bold">Rotor by Vantuz - https://visavi.net v{{ ROTOR_VERSION }}</div>
-
         {!! nl2br($migrateOutput) !!}
     </div>
 @stop
