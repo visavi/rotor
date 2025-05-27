@@ -1528,10 +1528,12 @@ function access(string $level): bool
  */
 function getUserFromSession(): ?User
 {
-    if (session()->has(['id', 'password'])) {
-        $user = getUserById(session('id'));
+    $session = app('session');
 
-        if ($user && session('password') === $user->password) {
+    if ($session->has(['id', 'password'])) {
+        $user = getUserById($session->get('id'));
+
+        if ($user && $session->get('password') === $user->password) {
             return $user;
         }
     }
@@ -1680,9 +1682,9 @@ function getQueryLog(): array
         foreach ($query['bindings'] as $key => $binding) {
             if (is_string($binding)) {
                 $query['bindings'][$key] = ctype_print($binding) ? "'$binding'" : '[binary]';
+            } else {
+                $query['bindings'][$key] = $binding ?? 'null';
             }
-
-            $query['bindings'][$key] = $binding ?? 'null';
         }
 
         $sql = str_replace(['%', '?'], ['%%', '%s'], $query['query']);
