@@ -385,6 +385,14 @@ textarea.form-control {
     max-width: 3rem;
 }
 
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
 .slide-main img {
     width: auto;
     margin: 0 auto 5px;
@@ -403,6 +411,7 @@ textarea.form-control {
     cursor: pointer;
     transition: all 0.2s;
 }
+
 .slide-thumbnails img:hover {
     transform: scale(1.1);
 }

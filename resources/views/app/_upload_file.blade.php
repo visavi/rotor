@@ -13,7 +13,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
         @foreach ($files as $file)
             <span class="js-file">
                 @if ($file->isImage())
-                    {{ resizeImage($file->path, ['width' => 100]) }}
+                    {{ resizeImage($file->path, ['class' => 'thumbnail']) }}
                 @else
                     <a class="me-1" href="{{ $file->path }}">{{ $file->name }}</a>
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
@@ -34,7 +34,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
 
 <div class="js-image-template d-none">
     <span class="js-file">
-        <img src="#" width="100" alt="" class="img-fluid">
+        <img src="#" alt="" class="thumbnail">
         <a href="#" onclick="return deleteFile(this);" data-type="{{ $type }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>

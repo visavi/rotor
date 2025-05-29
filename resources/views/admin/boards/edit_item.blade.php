@@ -71,16 +71,11 @@
                 <div class="invalid-feedback">{{ textError('phone') }}</div>
             </div>
 
-            <div class="js-images mb-3">
-                @if ($item->files->isNotEmpty())
-                    @foreach ($item->files as $file)
-                        <span class="js-image">
-                            {{ resizeImage($file->path, ['width' => 100]) }}
-                            <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $item->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
-                        </span>
-                    @endforeach
-                @endif
-            </div>
+            @include('app/_upload_image', [
+                'id'    => $item->id,
+                'files' => $item->files,
+                'type'  => $item->getMorphClass(),
+            ])
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>

@@ -30,16 +30,11 @@
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            <div class="js-images mb-3">
-                @if ($photo->files->isNotEmpty())
-                    @foreach ($photo->files as $file)
-                        <span class="js-image">
-                            {{ resizeImage($file->path, ['width' => 100]) }}
-                            <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $photo->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
-                        </span>
-                    @endforeach
-                @endif
-            </div>
+            @include('app/_upload_image', [
+                'id'       => $photo->id,
+                'files'    => $photo->files,
+                'type'     => $photo->getMorphClass(),
+            ])
 
             <div class="form-check">
                 <input type="hidden" value="0" name="closed">

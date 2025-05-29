@@ -580,11 +580,14 @@ pasteImage = function (el) {
 /* Удаление изображения из формы */
 cutImage = function (path) {
     let field = $('.markItUpEditor');
-    let text  = field.val();
-    let cut   = '[img]' + path + '[/img]';
 
-    field.val(text.replace(cut, ''));
+    if (field.length && field.val()) {
+        let text = field.val();
+        let cut = '[img]' + path + '[/img]';
+        field.val(text.replace(cut, ''));
+    }
 };
+
 
 /* Удаление файла */
 deleteFile = function (el) {
@@ -603,7 +606,10 @@ deleteFile = function (el) {
                 return;
             }
 
-            cutImage(data.path);
+            if (data.path) {
+                cutImage(data.path);
+            }
+
             $(el).closest('.js-file').hide('fast');
         },
         error: function (jqXHR, textStatus, errorThrown) {

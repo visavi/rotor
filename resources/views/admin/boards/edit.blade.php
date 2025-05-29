@@ -59,7 +59,6 @@
                 <label class="form-check-label" for="closed">{{ __('main.close') }}</label>
             </div>
 
-
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>
     </div>
