@@ -683,19 +683,19 @@ initSlideThumbImage = function (e, el) {
     const newImg = $(el).find('img');
     const imgSource = newImg.data('source');
     const slider = $(el).closest('.media-file');
+    const mainLink = slider.find('.slide-main-link');
 
     // Обновляет главное изображение
-    slider.find('.slide-main-link')
-        .attr('href', imgSource)
-        .find('img').attr('src', newImg.attr('src')).data('source', imgSource);
+    mainLink.fadeOut(50, function() {
+        $(this).attr('href', imgSource);
+        $(this).find('img').attr('src', newImg.attr('src')).data('source', imgSource);
+        $(this).fadeIn(50);
+    });
 
     // Подсветка активной миниатюры
-    slider.find('.slide-thumb-link').removeClass('active');
-    $(el).addClass('active');
-
-    return false;
+    slider.find('.slide-thumb-image').removeClass('active');
+    newImg.addClass('active');
 }
-
 
 let checkTimeout;
 /* Проверка логина */

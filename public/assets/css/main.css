@@ -404,11 +404,11 @@ textarea.form-control {
     transition: all 0.2s;
 }
 .slide-thumbnails img:hover {
-    border-color: #0d6efd;
     transform: scale(1.1);
 }
 
-.slide-thumb-link.active {
+.slide-thumb-image.active {
     border: 2px solid #0d6efd !important;
+    border-radius: 3px;
     box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
 }
