@@ -14,7 +14,7 @@
     </div>
 
     <div class="section-content">
-        {{--@include('app/_carousel', ['model' => $post])--}}
+        {{--@include('app/_viewer', ['model' => $post])--}}
 
         @if ($post->text)
             <div class="section-message">

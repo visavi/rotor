@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="section-content">
-                    @include('app/_carousel', ['model' => $photo])
+                    @include('app/_viewer', ['model' => $photo])
 
                     <div class="section-message">
                         {{ bbCode($photo->text) }}

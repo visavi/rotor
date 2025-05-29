@@ -13,7 +13,7 @@
     @if (setting('homepage_view') === 'feed')
         {{ (new \App\Classes\Feed())->getFeed() }}
     @else
-        @include('widgets._classic')
+        @include('widgets/_classic')
     @endif
 
     @include('ads/_bottom')

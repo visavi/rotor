@@ -111,7 +111,7 @@ class UserController extends Controller
 
         if ($request->isMethod('post')) {
             if ($request->has(['login', 'password'])) {
-                $login = (string) $request->input('login', '');
+                $login = (string) $request->input('login');
                 $password = $request->input('password');
                 $password2 = $request->input('password2');
                 $invite = setting('invite') ? $request->input('invite') : '';

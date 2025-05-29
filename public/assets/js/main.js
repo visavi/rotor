@@ -35,7 +35,7 @@ $(function () {
         'positionClass': 'toast-top-full-width'
     };
 
-    fancybox.bind("[data-fancybox]", {
+    fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {
         // Your custom options
     });
 
@@ -92,10 +92,6 @@ $(function () {
     $('.colorpicker-addon').on('input', function () {
         $('.colorpicker').val(this.value);
     });
-
-    /*$('.carousel').carousel({
-        interval: false
-    });*/
 
     $('.phone').mask('+0 000 000-00-00-00');
     $('.birthday').mask('00.00.0000');
@@ -669,6 +665,37 @@ getNewMessages = function () {
 
     return false;
 };
+
+/* Инициализирует главное изображение слайдера */
+initSlideMainImage = function (el) {
+    const mainHref = $(el).attr('href');
+    const slider = $(el).closest('.media-file');
+
+    // Исключает дублирующуюся миниатюру
+    slider.find('.slide-thumb-link').removeClass('fancybox-exclude');
+    slider.find('.slide-thumb-link[href="' + mainHref + '"]').addClass('fancybox-exclude');
+};
+
+/* Инициализирует миниатюру слайдера */
+initSlideThumbImage = function (e, el) {
+    e.preventDefault();
+
+    const newImg = $(el).find('img');
+    const imgSource = newImg.data('source');
+    const slider = $(el).closest('.media-file');
+
+    // Обновляет главное изображение
+    slider.find('.slide-main-link')
+        .attr('href', imgSource)
+        .find('img').attr('src', newImg.attr('src')).data('source', imgSource);
+
+    // Подсветка активной миниатюры
+    slider.find('.slide-thumb-link').removeClass('active');
+    $(el).addClass('active');
+
+    return false;
+}
+
 
 let checkTimeout;
 /* Проверка логина */

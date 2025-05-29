@@ -38,7 +38,7 @@
         </div>
 
         @if ($post->lastPost->getImages()->isNotEmpty())
-            @include('app/_carousel', ['model' => $post, 'files' => $post->lastPost->getImages()])
+            @include('app/_viewer', ['model' => $post, 'files' => $post->lastPost->getImages()])
         @endif
 
         @if ($post->lastPost->getFiles()->isNotEmpty())

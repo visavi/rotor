@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="section-content">
-                    @include('app/_carousel', ['model' => $photo])
+                    @include('app/_viewer', ['model' => $photo])
 
                     @if ($photo->text)
                         <div class="section-message">

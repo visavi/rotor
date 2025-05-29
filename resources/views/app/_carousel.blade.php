@@ -1,7 +1,3 @@
-<?php
-$files = $files ?? $model->files;
-$countFiles = $files->count();
-?>
 <div class="media-file">
     <div id="myCarousel{{ $model->id }}" class="carousel slide" data-bs-ride="carousel">
         @if ($countFiles > 1)

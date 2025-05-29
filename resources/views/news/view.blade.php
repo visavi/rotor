@@ -40,7 +40,7 @@
             </div>
 
             @if ($news->getImages()->isNotEmpty())
-                @include('app/_carousel', ['model' => $news, 'files' => $news->getImages()])
+                @include('app/_viewer', ['model' => $news, 'files' => $news->getImages()])
             @endif
 
             @if ($news->getFiles()->isNotEmpty())

@@ -52,7 +52,7 @@
                     </div>
 
                     @if ($data->getImages()->isNotEmpty())
-                        @include('app/_carousel', ['model' => $data, 'files' => $data->getImages()])
+                        @include('app/_viewer', ['model' => $data, 'files' => $data->getImages()])
                     @endif
 
                     @if ($data->getFiles()->isNotEmpty())

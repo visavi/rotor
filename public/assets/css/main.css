@@ -123,7 +123,7 @@ textarea.form-control {
 }
 
 .media-file img {
-    max-height: 600px;
+    max-height: 450px;
 }
 
 .carousel {
@@ -383,4 +383,32 @@ textarea.form-control {
 /* Fix input width in form-group */
 .form-control-color {
     max-width: 3rem;
+}
+
+.slide-main img {
+    width: auto;
+    margin: 0 auto 5px;
+}
+.slide-thumbnails {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.slide-thumbnails img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.slide-thumbnails img:hover {
+    border-color: #0d6efd;
+    transform: scale(1.1);
+}
+
+.slide-thumb-link.active {
+    border: 2px solid #0d6efd !important;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
 }

@@ -174,7 +174,7 @@
                     </div>
 
                     @if ($post->getImages()->isNotEmpty())
-                        @include('app/_carousel', ['model' => $post, 'files' => $post->getImages()])
+                        @include('app/_viewer', ['model' => $post, 'files' => $post->getImages()])
                     @endif
 
                     @if ($post->getFiles()->isNotEmpty())
