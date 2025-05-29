@@ -391,6 +391,7 @@ textarea.form-control {
     object-fit: cover;
     border: 1px solid #ccc;
     border-radius: 3px;
+    margin: 3px 0;
 }
 
 .slide-main img {
