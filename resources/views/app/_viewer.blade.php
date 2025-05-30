@@ -1,7 +1,9 @@
-<?php
-$files = $files ?? $model->files;
-$countFiles = $files->count();
-?>
+@php
+    $files = $files ?? $model->files;
+    $countFiles = $files->count();
+@endphp
 
-@include('app/_slider')
-{{--@include('app/_carousel')--}}
+@if ($countFiles)
+    @include('app/_slider')
+    {{--@include('app/_carousel')--}}
+@endif
