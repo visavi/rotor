@@ -43,7 +43,7 @@
                     <div class="flex-grow-1">
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
                         <a href="/forums/{{ $forum->id }}" class="section-title position-relative">{{ $forum->title }}</a>
-                        <span class="badge bg-light text-dark">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
+                        <span class="badge bg-adaptive">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
 
                         @if ($forum->description)
                             <div class="section-description text-muted small">{{ $forum->description }}</div>
@@ -66,7 +66,7 @@
                                 @foreach ($forum->children as $child)
                                     <div>
                                         <i class="fas fa-angle-right"></i> <a href="/forums/{{ $child->id }}">{{ $child->title }}</a>
-                                        <span class="badge bg-light text-dark">{{ $child->count_topics + $child->children->sum('count_topics') }}/{{ $child->count_posts + $child->children->sum('count_posts') }}</span>
+                                        <span class="badge bg-adaptive">{{ $child->count_topics + $child->children->sum('count_topics') }}/{{ $child->count_posts + $child->children->sum('count_posts') }}</span>
                                     </div>
                                 @endforeach
                             </div>

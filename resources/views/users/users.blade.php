@@ -17,31 +17,31 @@
 
 @section('content')
     <div class="mb-3">
-        <?php $active = ($type === 'users') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=users&amp;sort={{ $sort }}">{{ __('main.users') }} <span class="badge bg-light text-dark">{{ statsUsers() }}</span></a>
+        <?php $active = ($type === 'users') ? 'primary' : 'adaptive'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=users&amp;sort={{ $sort }}">{{ __('main.users') }} <span class="badge bg-adaptive">{{ statsUsers() }}</span></a>
 
-        <?php $active = ($type === 'admins') ? 'primary' : 'light'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=admins&amp;sort={{ $sort }}">{{ __('main.admins') }} <span class="badge bg-light text-dark">{{ statsAdmins() }}</span></a>
+        <?php $active = ($type === 'admins') ? 'primary' : 'adaptive'; ?>
+        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=admins&amp;sort={{ $sort }}">{{ __('main.admins') }} <span class="badge bg-adaptive">{{ statsAdmins() }}</span></a>
 
-        <?php $active = ($type === 'birthdays') ? 'primary' : 'light'; ?>
+        <?php $active = ($type === 'birthdays') ? 'primary' : 'adaptive'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/users?type=birthdays&amp;sort={{ $sort }}">{{ __('main.birthdays') }}</a>
     </div>
 
     @if ($users->isNotEmpty())
         {{ __('main.sort') }}:
-        <?php $active = ($sort === 'point') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($sort === 'point') ? 'success' : 'adaptive'; ?>
         <a href="/users?type={{ $type }}&amp;sort=point" class="badge bg-{{ $active }}">{{ __('users.assets') }}</a>
 
-        <?php $active = ($sort === 'rating') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($sort === 'rating') ? 'success' : 'adaptive'; ?>
         <a href="/users?type={{ $type }}&amp;sort=rating" class="badge bg-{{ $active }}">{{ __('users.reputation') }}</a>
 
-        <?php $active = ($sort === 'money') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($sort === 'money') ? 'success' : 'adaptive'; ?>
         <a href="/users?type={{ $type }}&amp;sort=money" class="badge bg-{{ $active }}">{{ __('users.moneys') }}</a>
 
-        <?php $active = ($sort === 'created') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($sort === 'created') ? 'success' : 'adaptive'; ?>
         <a href="/users?type={{ $type }}&amp;sort=created" class="badge bg-{{ $active }}">{{ __('main.registration_date') }}</a>
 
-        <?php $active = ($sort === 'updated') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($sort === 'updated') ? 'success' : 'adaptive'; ?>
         <a href="/users?type={{ $type }}&amp;sort=updated" class="badge bg-{{ $active }}">{{ __('users.last_visit') }}</a>
         <hr>
 

@@ -24,26 +24,26 @@
 @section('content')
     <div class="mb-3">
         @if ($type === 'offer')
-            <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-light text-dark">{{ $offers->total() }}</span></a>
-            <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-light text-dark">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offers->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
         @else
-            <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-light text-dark">{{ $otherCount }}</span></a>
-            <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-light text-dark">{{ $offers->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $offers->total() }}</span></a>
         @endif
     </div>
 
     @if ($offers->isNotEmpty())
         {{ __('main.sort') }}:
-        <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
         <a href="/admin/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
 
-        <?php $active = ($order === 'created_at') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($order === 'created_at') ? 'success' : 'adaptive'; ?>
         <a href="/admin/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
-        <?php $active = ($order === 'status') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($order === 'status') ? 'success' : 'adaptive'; ?>
         <a href="/admin/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>
 
-        <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
+        <?php $active = ($order === 'count_comments') ? 'success' : 'adaptive'; ?>
         <a href="/admin/offers/{{ $type }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 

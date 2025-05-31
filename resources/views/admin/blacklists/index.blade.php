@@ -14,11 +14,11 @@
 
 @section('content')
     <div class="mb-3">
-        <?php $active = ($type === 'email') ? 'primary' : 'light'; ?>
+        <?php $active = ($type === 'email') ? 'primary' : 'adaptive'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=email">{{ __('admin.blacklists.email') }}</a>
-        <?php $active = ($type === 'login') ? 'primary' : 'light'; ?>
+        <?php $active = ($type === 'login') ? 'primary' : 'adaptive'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=login">{{ __('admin.blacklists.logins') }}</a>
-        <?php $active = ($type === 'domain') ? 'primary' : 'light'; ?>
+        <?php $active = ($type === 'domain') ? 'primary' : 'adaptive'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=domain">{{ __('admin.blacklists.domains') }}</a>
     </div>
 

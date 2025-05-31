@@ -31,10 +31,10 @@
                     <h5 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {{ formatNum($article->rating) }})</small></h5>
 
                     @if ($article->category->parent->id)
-                        <a href="/blogs/{{ $article->category->parent->id }}"><span class="badge bg-light text-dark">{{ $article->category->parent->name }}</span></a> /
+                        <a href="/blogs/{{ $article->category->parent->id }}"><span class="badge bg-adaptive">{{ $article->category->parent->name }}</span></a> /
                     @endif
 
-                    <a href="/blogs/{{ $article->category->id }}"><span class="badge bg-light text-dark">{{ $article->category->name }}</span></a>
+                    <a href="/blogs/{{ $article->category->id }}"><span class="badge bg-adaptive">{{ $article->category->name }}</span></a>
 
                     <p class="card-text">
                         {{ $article->shortText() }}

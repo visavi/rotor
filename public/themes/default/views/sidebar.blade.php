@@ -69,7 +69,7 @@
             <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
                 <i class="app-menu__icon far fa-comment-alt"></i>
                 <span class="app-menu__label">{{ __('index.forums') }}</span>
-                <span class="badge bg-dark bg-gradient">{{ statsForum() }}</span>
+                <span class="badge bg-sidebar">{{ statsForum() }}</span>
             </a>
         </li>
 
@@ -77,7 +77,7 @@
             <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="/guestbook">
                 <i class="app-menu__icon far fa-comment"></i>
                 <span class="app-menu__label">{{ __('index.guestbook') }}</span>
-                <span class="badge bg-dark bg-gradient">{{ statsGuestbook() }}</span>
+                <span class="badge bg-sidebar">{{ statsGuestbook() }}</span>
             </a>
         </li>
 
@@ -85,7 +85,7 @@
             <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="/news">
                 <i class="app-menu__icon far fa-newspaper"></i>
                 <span class="app-menu__label">{{ __('index.news') }}</span>
-                <span class="badge bg-dark bg-gradient">{{ statsNews() }}</span>
+                <span class="badge bg-sidebar">{{ statsNews() }}</span>
             </a>
         </li>
 
@@ -122,7 +122,7 @@
             <a class="app-menu__item{{ request()->is('photos*') ? ' active' : '' }}" href="/photos">
                 <i class="app-menu__icon far fa-image"></i>
                 <span class="app-menu__label">{{ __('index.photos') }}</span>
-                <span class="badge bg-dark bg-gradient">{{ statsPhotos() }}</span>
+                <span class="badge bg-sidebar">{{ statsPhotos() }}</span>
             </a>
         </li>
 
@@ -130,7 +130,7 @@
             <a class="app-menu__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="/boards">
                 <i class="app-menu__icon far fa-rectangle-list"></i>
                 <span class="app-menu__label">{{ __('index.boards') }}</span>
-                <span class="badge bg-dark bg-gradient">{{ statsBoard() }}</span>
+                <span class="badge bg-sidebar">{{ statsBoard() }}</span>
             </a>
         </li>
 
@@ -138,7 +138,7 @@
             <a class="app-menu__item{{ request()->is('votes*') ? ' active' : '' }}" href="/votes">
                 <i class="app-menu__icon fas fa-square-poll-horizontal"></i>
                 <span class="app-menu__label">{{ __('index.votes') }}</span>
-                <span class="badge bg-dark bg-gradient">{{ statVotes() }}</span>
+                <span class="badge bg-sidebar">{{ statVotes() }}</span>
             </a>
         </li>
         @hook('sidebarMenuEnd')

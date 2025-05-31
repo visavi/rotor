@@ -109,9 +109,9 @@
                             </div>
                         </div>
 
-                        @if (env('APP_URL') !== url('/'))
+                        @if (config('app.url') !== url('/'))
                             <div class="alert alert-danger">
-                                {{ __('install.requirements_url', ['env_url' => env('APP_URL'), 'current_url' => url('/')]) }}
+                                {{ __('install.requirements_url', ['env_url' => config('app.url'), 'current_url' => url('/')]) }}
                             </div>
                         @endif
                     </div>

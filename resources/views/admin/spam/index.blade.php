@@ -16,7 +16,7 @@
 
     <div class="mb-3">
         @foreach ($types as $key => $value)
-            <a class="badge bg-{{ $key === $type ? 'success' : 'light text-dark' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
+            <a class="badge bg-{{ $key === $type ? 'success' : 'adaptive' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
         @endforeach
     </div>
 

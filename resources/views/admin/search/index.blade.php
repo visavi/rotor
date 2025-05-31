@@ -28,7 +28,7 @@
         <div class="section mb-3 shadow">
             @foreach ($search as $data)
                 <div class="mb-1">
-                    <i class="fa fa-search"></i> <b>{{ $data->getRelateType() }}</b> ({{ $data->relate_type }}) <span class="badge bg-light text-dark">{{ __('main.total') }}: {{ $data->cnt }}</span>
+                    <i class="fa fa-search"></i> <b>{{ $data->getRelateType() }}</b> ({{ $data->relate_type }}) <span class="badge bg-adaptive">{{ __('main.total') }}: {{ $data->cnt }}</span>
                 </div>
             @endforeach
         </div>

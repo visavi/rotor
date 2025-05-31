@@ -19,7 +19,7 @@
 
 @section('content')
     <div class="mb-3">
-        <a href="/ratings/{{ $user->login }}/received" class="badge bg-light text-dark">{{ __('ratings.votes_received') }}</a>
+        <a href="/ratings/{{ $user->login }}/received" class="badge bg-adaptive">{{ __('ratings.votes_received') }}</a>
         <a href="/ratings/{{ $user->login }}/gave" class="badge bg-success">{{ __('ratings.votes_gave') }}</a>
     </div>
 

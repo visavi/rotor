@@ -19,13 +19,13 @@
 @section('content')
     @if ($downs->isNotEmpty())
         {{ __('main.sort') }}:
-            <?php $active = ($order === 'loads') ? 'success' : 'light text-dark'; ?>
+            <?php $active = ($order === 'loads') ? 'success' : 'adaptive'; ?>
         <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
 
-            <?php $active = ($order === 'rating') ? 'success' : 'light text-dark'; ?>
+            <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
         <a href="/loads/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
 
-            <?php $active = ($order === 'count_comments') ? 'success' : 'light text-dark'; ?>
+            <?php $active = ($order === 'count_comments') ? 'success' : 'adaptive'; ?>
         <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
         <hr>
 

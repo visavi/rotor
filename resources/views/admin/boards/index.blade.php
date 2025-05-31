@@ -53,10 +53,10 @@
 
     @if ($items->isNotEmpty())
         {{ __('main.sort') }}:
-            <?php $active = ($sort === 'date') ? 'success' : 'light text-dark'; ?>
+            <?php $active = ($sort === 'date') ? 'success' : 'adaptive'; ?>
         <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=date" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
 
-            <?php $active = ($sort === 'price') ? 'success' : 'light text-dark'; ?>
+            <?php $active = ($sort === 'price') ? 'success' : 'adaptive'; ?>
         <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=price" class="badge bg-{{ $active }}">{{ __('main.cost') }}</a>
         <hr>
 

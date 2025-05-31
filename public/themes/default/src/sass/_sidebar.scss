@@ -81,7 +81,7 @@
   &.active,
   &:hover,
   &:focus {
-    background: darken($sidebar-color, 10);
+    background: darken($sidebar-color, 7);
     border-left-color: $primary-color;
     text-decoration: none;
     @if $sidebar-accent == dark { color: $sidebar-dark-link-color }
@@ -106,7 +106,7 @@
   &.is-expanded {
     [data-bs-toggle='treeview'] {
       border-left-color: $primary-color;
-      background: darken($sidebar-color, 10);
+      background: darken($sidebar-color, 7);
     }
     .treeview-menu { max-height: 100vh; }
     .treeview-indicator { transform: rotate(180deg); }
@@ -136,7 +136,7 @@
   &.active,
   &:hover,
   &:focus {
-    background: darken($sidebar-color, 10);
+    background: darken($sidebar-color, 7);
     text-decoration: none;
     @if $sidebar-accent == dark { color: $sidebar-dark-link-color }
     @if $sidebar-accent == light { color: $primary-color }

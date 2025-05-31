@@ -39,7 +39,7 @@
                 <i class="fa fa-folder-open"></i>
                 <a href="/blogs/{{ $category->id }}">{{ $category->name }}</a>
 
-                <span class="badge bg-light text-dark">
+                <span class="badge bg-adaptive">
                     @if ($category->new)
                         {{ $category->count_articles + $category->children->sum('count_articles') }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>
                     @else
@@ -55,7 +55,7 @@
                             <i class="fa fa-angle-right"></i>
                             <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
 
-                            <span class="badge bg-light text-dark">
+                            <span class="badge bg-adaptive">
                                 @if ($child->new)
                                     {{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>
                                 @else

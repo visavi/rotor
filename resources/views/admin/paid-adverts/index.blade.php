@@ -23,8 +23,8 @@
 @section('content')
     <div class="mb-3">
         @foreach ($places as $placeName)
-            <?php $active = ($place === $placeName) ? 'primary' : 'light'; ?>
-            <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place={{ $placeName }}">{{ __('admin.paid_adverts.' . $placeName) }} <span class="badge bg-light text-dark">{{ $totals[$placeName] }}</span></a>
+            <?php $active = ($place === $placeName) ? 'primary' : 'adaptive'; ?>
+            <a class="btn btn-{{ $active }} btn-sm" href="/admin/paid-adverts?place={{ $placeName }}">{{ __('admin.paid_adverts.' . $placeName) }} <span class="badge bg-adaptive">{{ $totals[$placeName] }}</span></a>
         @endforeach
     </div>
 

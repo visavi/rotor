@@ -2,6 +2,19 @@
   box-shadow: 0 0 1px #999;
 }
 
+.badge.bg-adaptive {
+    color: var(--bs-body-color);
+    background-color: var(--bs-tertiary-bg);
+    box-shadow: 0 0 1px var(--bs-border-color);
+    border: 1px solid var(--bs-border-color);
+}
+
+.badge.bg-sidebar {
+    color: #fff;
+    background-color: #1d2124;
+    border: 1px solid #495057;
+}
+
 a.badge:hover, a.badge:focus {
   text-decoration: none;
 }
