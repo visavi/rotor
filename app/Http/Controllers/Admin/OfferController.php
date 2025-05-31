@@ -18,15 +18,15 @@ class OfferController extends AdminController
      */
     public function index(Request $request, string $type = Offer::OFFER): View
     {
-        $otherType = $type === Offer::OFFER ? Offer::ISSUE : Offer::OFFER;
-        $otherCount = Offer::query()->where('type', $otherType)->count();
+        $offerCount = Offer::query()->where('type', Offer::OFFER)->count();
+        $issueCount = Offer::query()->where('type', Offer::ISSUE)->count();
 
-        $sort = check($request->input('sort', 'rating'));
+        $sort = check($request->input('sort', 'time'));
         $order = match ($sort) {
-            'time'     => 'created_at',
+            'rating'   => 'rating',
             'status'   => 'status',
             'comments' => 'count_comments',
-            default    => 'rating',
+            default    => 'created_at',
         };
 
         $offers = Offer::query()
@@ -34,9 +34,9 @@ class OfferController extends AdminController
             ->orderByDesc($order)
             ->with('user')
             ->paginate(setting('postoffers'))
-            ->appends(['sort' => $sort]);
+            ->appends(compact('type', 'sort'));
 
-        return view('admin/offers/index', compact('offers', 'order', 'type', 'otherCount'));
+        return view('admin/offers/index', compact('offers', 'order', 'type', 'sort', 'offerCount', 'issueCount'));
     }
 
     /**

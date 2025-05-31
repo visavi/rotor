@@ -23,22 +23,22 @@
 
 @section('content')
     <div class="mb-3">
-        @if ($type === 'offer')
-            <a class="btn btn-primary btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offers->total() }}</span></a>
-            <a class="btn btn-light btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
-        @else
-            <a class="btn btn-light btn-sm" href="/admin/offers/offer">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
-            <a class="btn btn-primary btn-sm" href="/admin/offers/issue">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $offers->total() }}</span></a>
-        @endif
+        <div class="mb-3">
+            <?php $active = ($type === 'offer') ? 'primary' : 'adaptive'; ?>
+            <a class="btn btn-{{ $active }} btn-sm" href="/admin/offers/offer?sort={{ $sort }}">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offerCount }}</span></a>
+
+            <?php $active = ($type === 'issue') ? 'primary' : 'adaptive'; ?>
+            <a class="btn btn-{{ $active }} btn-sm" href="/admin/offers/issue?sort={{ $sort }}">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $issueCount }}</span></a>
+        </div>
     </div>
 
     @if ($offers->isNotEmpty())
         {{ __('main.sort') }}:
-        <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
-        <a href="/admin/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
-
         <?php $active = ($order === 'created_at') ? 'success' : 'adaptive'; ?>
         <a href="/admin/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
+
+        <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
+        <a href="/admin/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
 
         <?php $active = ($order === 'status') ? 'success' : 'adaptive'; ?>
         <a href="/admin/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>
@@ -64,7 +64,8 @@
                     <div class="section-body">
                         {{ $data->getStatus() }}<br>
                         {{ bbCode($data->text) }}<br>
-                        {{ __('main.added') }}: {{ $data->user->getProfile() }} ({{ dateFixed($data->created_at) }})<br>
+                        {{ __('main.added') }}: {{ $data->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>
                         <a href="/offers/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
                         <a href="/offers/end/{{ $data->id }}">&raquo;</a>
                     </div>
