@@ -8,6 +8,7 @@
     <link rel="image_src" href="/assets/img/images/icon.png">
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/motor/dist/app.css') }}">
     @stack('styles')
+    <link rel="canonical" href="{{ request()->url() }}">
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
