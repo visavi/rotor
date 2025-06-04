@@ -226,4 +226,29 @@ class Down extends BaseModel
             return parent::delete();
         });
     }
+
+    /**
+     * Get sort config
+     */
+    public static function getSortConfig(string $sort, string $order): array
+    {
+        $options = [
+            'date'     => ['field' => 'created_at', 'label' => __('main.date')],
+            'loads'    => ['field' => 'loads', 'label' => __('main.downloads')],
+            'name'     => ['field' => 'title', 'label' => __('main.title')],
+            'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
+            'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
+        ];
+
+        $sort = isset($options[$sort]) ? $sort : 'date';
+        $order = in_array($order, ['asc', 'desc']) ? $order : 'desc';
+        $orderBy = [$options[$sort]['field'], $order];
+
+        return [
+            'options' => $options,
+            'orderBy' => $orderBy,
+            'sort'    => $sort,
+            'order'   => $order,
+        ];
+    }
 }

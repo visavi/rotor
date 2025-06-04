@@ -181,23 +181,26 @@ class LoadController extends AdminController
             abort(404, __('loads.load_not_exist'));
         }
 
-        $sort = check($request->input('sort', 'time'));
-        $order = match ($sort) {
-            'rating'   => 'rating',
-            'comments' => 'count_comments',
-            'loads'    => 'loads',
-            default    => 'created_at',
-        };
+        $sort = check($request->input('sort', 'date'));
+        $order = check($request->input('order', 'desc'));
+
+        $sortConfig = Down::getSortConfig($sort, $order);
 
         $downs = Down::query()
             ->active()
             ->where('category_id', $category->id)
-            ->orderByDesc($order)
+            ->orderBy(...$sortConfig['orderBy'])
             ->with('user')
             ->paginate(setting('downlist'))
-            ->appends(['sort' => $sort]);
+            ->appends(['sort' => $sortConfig['sort'], 'order' => $sortConfig['order']]);
 
-        return view('admin/loads/load', compact('category', 'downs', 'order'));
+        return view('admin/loads/load', [
+            'category'    => $category,
+            'downs'       => $downs,
+            'sortOptions' => $sortConfig['options'],
+            'sort'        => $sortConfig['sort'],
+            'order'       => $sortConfig['order'],
+        ]);
     }
 
     /**

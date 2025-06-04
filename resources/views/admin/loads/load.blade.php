@@ -32,20 +32,23 @@
 @stop
 
 @section('content')
-    {{ __('main.sort') }}:
+    <div class="sort-links border-bottom pb-3 mb-3">
+        {{ __('main.sort') }}:
 
-    <?php $active = ($order === 'created_at') ? 'success' : 'adaptive'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
-
-    <?php $active = ($order === 'loads') ? 'success' : 'adaptive'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
-
-    <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
-
-    <?php $active = ($order === 'count_comments') ? 'success' : 'adaptive'; ?>
-    <a href="/admin/loads/{{ $category->id }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
-    <hr>
+        @foreach ($sortOptions as $key => $option)
+            @php
+                $isActive = ($sort === $key);
+                $badgeClass = $isActive ? 'success' : 'adaptive';
+                $oppositeOrder = ($order === 'asc') ? 'desc' : 'asc';
+            @endphp
+            <a href="{{ route('admin.loads.load', ['id' => $category->id, 'sort' => $key, 'order' => $isActive ? $oppositeOrder : 'desc']) }}" class="badge bg-{{ $badgeClass }}">
+                {{ $option['label'] }}
+                @if ($isActive)
+                    <span>{{ $order === 'asc' ? '↑' : '↓' }}</span>
+                @endif
+            </a>
+        @endforeach
+    </div>
 
     @if ($downs->onFirstPage() && $category->children->isNotEmpty())
         @php $category->children->load(['children', 'lastDown.user']); @endphp

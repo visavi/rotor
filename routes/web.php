@@ -268,7 +268,7 @@ Route::prefix('posts')->group(function () {
 Route::prefix('loads')->group(function () {
     Route::get('/', [LoadController::class, 'index']);
     Route::get('/rss', [LoadController::class, 'rss']);
-    Route::get('/{id}', [LoadController::class, 'load']);
+    Route::get('/{id}', [LoadController::class, 'load'])->name('loads.load');
     Route::get('/top', [TopController::class, 'index']);
 });
 
@@ -276,7 +276,6 @@ Route::prefix('loads')->group(function () {
 Route::prefix('downs')->group(function () {
     Route::get('/', [LoadNewController::class, 'files']);
     Route::get('/{id}', [DownController::class, 'index']);
-    Route::post('/votes/{id}', [DownController::class, 'vote']);
     Route::get('/comment/{id}/{cid}', [DownController::class, 'viewComment'])->whereNumber('cid');
     Route::get('/end/{id}', [DownController::class, 'end']);
     Route::get('/rss/{id}', [DownController::class, 'rss']);
@@ -774,7 +773,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/loads/edit/{id}', 'edit');
                     Route::get('/loads/delete/{id}', 'delete');
                     Route::get('/loads/restatement', 'restatement');
-                    Route::get('/loads/{id}', 'load');
+                    Route::get('/loads/{id}', 'load')->name('admin.loads.load');
+                    ;
 
                     Route::match(['get', 'post'], '/downs/edit/{id}', 'editDown');
                     Route::match(['get', 'post'], '/downs/delete/{id}', 'deleteDown');
