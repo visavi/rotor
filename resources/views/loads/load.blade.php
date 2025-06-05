@@ -39,18 +39,9 @@
 @section('content')
     <div class="sort-links border-bottom pb-3 mb-3">
         {{ __('main.sort') }}:
-
-        @foreach ($sortOptions as $key => $option)
-            @php
-                $isActive = ($sort === $key);
-                $badgeClass = $isActive ? 'success' : 'adaptive';
-                $oppositeOrder = ($order === 'asc') ? 'desc' : 'asc';
-            @endphp
-            <a href="{{ route('loads.load', ['id' => $category->id, 'sort' => $key, 'order' => $isActive ? $oppositeOrder : 'desc']) }}" class="badge bg-{{ $badgeClass }}">
-                {{ $option['label'] }}
-                @if ($isActive)
-                    <span>{{ $order === 'asc' ? '↑' : '↓' }}</span>
-                @endif
+        @foreach ($sorting as $key => $option)
+            <a href="{{ route('loads.load', ['id' => $category->id, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                {{ $option['label'] }}{{ $option['icon'] ?? '' }}
             </a>
         @endforeach
     </div>
@@ -100,7 +91,7 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        <b>{{ formatNum($data->rating) }}</b>
+                        <span class="badge bg-adaptive">{{ formatNum($data->rating) }}</span>
                     </div>
                 </div>
 

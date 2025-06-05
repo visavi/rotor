@@ -28,9 +28,9 @@
                     <i class="fa fa-folder-open"></i>
                     <a href="/admin/loads/{{ $category->id }}">{{ $category->name }}</a>
                     @if ($category->new)
-                        ({{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)<br>
+                        <span class="badge bg-adaptive">{{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span></span>
                     @else
-                        ({{ $category->count_downs + $category->children->sum('count_downs') }})<br>
+                        <span class="badge bg-adaptive">{{ $category->count_downs + $category->children->sum('count_downs') }}</span>
                     @endif
 
                     @if ($category->closed)
@@ -52,9 +52,9 @@
                             <div>
                                 <i class="fa fa-angle-right"></i> <b><a href="/admin/loads/{{ $child->id }}">{{ $child['name'] }}</a></b>
                                 @if ($child->new)
-                                    ({{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                                    <span class="badge bg-adaptive">{{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span></span>
                                 @else
-                                    ({{ $child->count_downs + $child->children->sum('count_downs') }})
+                                    <span class="badge bg-adaptive">{{ $child->count_downs + $child->children->sum('count_downs') }}</span>
                                 @endif
 
                                 @if (isAdmin('boss'))

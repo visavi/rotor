@@ -4,7 +4,6 @@ return [
     'photos'                 => 'Фото',
     'albums'                 => 'Альбомы',
     'album'                  => 'Альбом',
-    'top_photos'             => 'Топ фотографий',
     'total_photos'           => 'Всего фотографий',
     'total_albums'           => 'Всего альбомов',
     'empty_photos'           => 'Фотографий еще нет!',

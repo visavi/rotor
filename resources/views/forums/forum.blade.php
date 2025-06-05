@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="text-end">
-                        <b>{{ $child->count_topics + $child->children->sum('count_topics') }}/{{ $child->count_posts + $child->children->sum('count_posts') }}</b>
+                        <span class="badge bg-adaptive">{{ $child->count_topics + $child->children->sum('count_topics') }}/{{ $child->count_posts + $child->children->sum('count_posts') }}</span>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="text-end">
-                        <b>{{ $topic->getCountPosts() }}</b>
+                        <span class="badge bg-adaptive">{{ $topic->getCountPosts() }}</span>
                     </div>
                 </div>
 

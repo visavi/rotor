@@ -18,35 +18,27 @@
 @section('content')
     <div class="mb-3">
         <?php $active = ($type === 'users') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=users&amp;sort={{ $sort }}">{{ __('main.users') }} <span class="badge bg-adaptive">{{ statsUsers() }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('users.index', ['type' => 'users', 'sort' => $sort, 'order' => $order]) }}">{{ __('main.users') }} <span class="badge bg-adaptive">{{ statsUsers() }}</span></a>
 
         <?php $active = ($type === 'admins') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=admins&amp;sort={{ $sort }}">{{ __('main.admins') }} <span class="badge bg-adaptive">{{ statsAdmins() }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('users.index', ['type' => 'admins', 'sort' => $sort, 'order' => $order]) }}">{{ __('main.admins') }} <span class="badge bg-adaptive">{{ statsAdmins() }}</span></a>
 
         <?php $active = ($type === 'birthdays') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/users?type=birthdays&amp;sort={{ $sort }}">{{ __('main.birthdays') }}</a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('users.index', ['type' => 'birthdays', 'sort' => $sort, 'order' => $order]) }}">{{ __('main.birthdays') }}</a>
     </div>
 
     @if ($users->isNotEmpty())
-        {{ __('main.sort') }}:
-        <?php $active = ($sort === 'point') ? 'success' : 'adaptive'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=point" class="badge bg-{{ $active }}">{{ __('users.assets') }}</a>
-
-        <?php $active = ($sort === 'rating') ? 'success' : 'adaptive'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=rating" class="badge bg-{{ $active }}">{{ __('users.reputation') }}</a>
-
-        <?php $active = ($sort === 'money') ? 'success' : 'adaptive'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=money" class="badge bg-{{ $active }}">{{ __('users.moneys') }}</a>
-
-        <?php $active = ($sort === 'created') ? 'success' : 'adaptive'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=created" class="badge bg-{{ $active }}">{{ __('main.registration_date') }}</a>
-
-        <?php $active = ($sort === 'updated') ? 'success' : 'adaptive'; ?>
-        <a href="/users?type={{ $type }}&amp;sort=updated" class="badge bg-{{ $active }}">{{ __('users.last_visit') }}</a>
-        <hr>
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('users.index', ['type' => $type, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
 
         <div class="section-form mb-3 shadow">
-            <form action="/users?type={{ $type }}&amp;sort={{ $sort }}" method="post">
+            <form action="{{ route('users.index', ['type' => $type, 'sort' => $sort]) }}" method="post">
                 <div class="input-group{{ hasError('user') }}">
                     <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
                     <button class="btn btn-primary">{{ __('main.search') }}</button>

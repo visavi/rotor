@@ -27,10 +27,14 @@
 
 @section('content')
     @if (getUser())
-        {{ __('main.my') }}: <a href="/downs/active/files">{{ __('loads.downs') }}</a>, <a href="/downs/active/comments">{{ __('main.comments') }}</a> /
+        {{ __('main.my') }}:
+        <a href="/downs/active/files" class="badge bg-adaptive">{{ __('loads.downs') }}</a>
+        <a href="/downs/active/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     @endif
 
-    {{ __('main.new') }}: <a href="/downs">{{ __('loads.downs') }}</a>, <a href="/downs/comments">{{ __('main.comments') }}</a>
+    {{ __('main.new') }}:
+    <a href="/downs" class="badge bg-adaptive">{{ __('loads.downs') }}</a>
+    <a href="/downs/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     <hr>
 
     @foreach ($categories as $category)
@@ -40,9 +44,9 @@
                 <a href="/loads/{{ $category->id }}">{{ $category->name }}</a>
 
                 @if ($category->new)
-                    ({{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span>)<br>
+                    <span class="badge bg-adaptive">{{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span></span>
                 @else
-                    ({{ $category->count_downs + $category->children->sum('count_downs') }})<br>
+                    <span class="badge bg-adaptive">{{ $category->count_downs + $category->children->sum('count_downs') }}</span>
                 @endif
             </div>
 
@@ -53,9 +57,9 @@
                         <div>
                             <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b>
                             @if ($child->new)
-                                ({{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span>)
+                                <span class="badge bg-adaptive">{{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span></span>
                             @else
-                                ({{ $child->count_downs + $child->children->sum('count_downs') }})
+                                <span class="badge bg-adaptive">{{ $child->count_downs + $child->children->sum('count_downs') }}</span>
                             @endif
                         </div>
                     @endforeach

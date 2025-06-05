@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
+use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -32,6 +33,7 @@ class Photo extends BaseModel
 {
     use ConvertVideoTrait;
     use SearchableTrait;
+    use SortableTrait;
     use UploadTrait;
 
     /**
@@ -60,6 +62,19 @@ class Photo extends BaseModel
     public function searchableFields(): array
     {
         return ['title', 'text'];
+    }
+
+    /**
+     * Возвращает список сортируемых полей
+     */
+    protected static function sortableFields(): array
+    {
+        return [
+            'date'     => ['field' => 'created_at', 'label' => __('main.date')],
+            'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
+            'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
+            'name'     => ['field' => 'title', 'label' => __('main.title')],
+        ];
     }
 
     /**

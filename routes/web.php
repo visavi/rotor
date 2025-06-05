@@ -159,14 +159,14 @@ Route::controller(ArticleController::class)
     ->prefix('blogs')
     ->group(function () {
         Route::get('/', 'index');
-        Route::get('/{id}', 'blog');
+        Route::get('/{id}', 'blog')->name('blogs.blog');
         Route::get('/tags', 'tags');
         Route::get('/tags-search', 'searchTags');
         Route::get('/tags/{tag}', 'getTag')->where('tag', '.+');
         Route::get('/authors', 'authors');
         Route::get('/active/articles', 'userArticles');
         Route::get('/active/comments', 'userComments');
-        Route::get('/top', 'top');
+        Route::get('/top', 'top')->name('blogs.top');
         Route::get('/rss', 'rss');
         Route::match(['get', 'post'], '/create', 'create');
         Route::get('/main', 'main');
@@ -206,7 +206,7 @@ Route::controller(NewsController::class)
 Route::controller(PhotoController::class)
     ->prefix('photos')
     ->group(function () {
-        Route::get('/', 'index');
+        Route::get('/', 'index')->name('photos.index');
         Route::get('/{id}', 'view');
         Route::get('/delete/{id}', 'delete');
         Route::get('/end/{id}', 'end');
@@ -219,7 +219,6 @@ Route::controller(PhotoController::class)
         Route::match(['get', 'post'], '/create', 'create');
         Route::match(['get', 'post'], '/edit/{id}', 'edit');
         Route::match(['get', 'post'], '/edit/{id}/{cid}', 'editComment')->whereNumber('cid');
-        Route::match(['get', 'post'], '/top', 'top');
     });
 
 /* Категория форума */
@@ -269,7 +268,7 @@ Route::prefix('loads')->group(function () {
     Route::get('/', [LoadController::class, 'index']);
     Route::get('/rss', [LoadController::class, 'rss']);
     Route::get('/{id}', [LoadController::class, 'load'])->name('loads.load');
-    Route::get('/top', [TopController::class, 'index']);
+    Route::get('/top', [TopController::class, 'index'])->name('loads.top');
 });
 
 /* Загрузки */
@@ -296,7 +295,7 @@ Route::prefix('downs')->group(function () {
 Route::controller(OfferController::class)
     ->prefix('offers')
     ->group(function () {
-        Route::get('/{type?}', 'index')->where('type', 'offer|issue');
+        Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('offers.index');
         Route::get('/{id}', 'view');
         Route::get('/end/{id}', 'end');
         Route::get('/comment/{id}/{cid}', 'viewComment')->whereNumber('cid');
@@ -469,7 +468,7 @@ Route::get('/files/{page?}', [FileController::class, 'index'])->where('page', '.
 /* Рейтинг пользователей */
 Route::prefix('users')
     ->group(function () {
-        Route::match(['get', 'post'], '/', [ListController::class, 'userlist']);
+        Route::match(['get', 'post'], '/', [ListController::class, 'userlist'])->name('users.index');
         Route::match(['get', 'post'], '/{login}/rating', [RatingController::class, 'index']);
     });
 
@@ -629,7 +628,7 @@ Route::middleware(['check.admin', 'admin.logger'])
         Route::controller(AdminBoardController::class)
             ->prefix('boards')
             ->group(function () {
-                Route::get('/{id?}', 'index');
+                Route::get('/{id?}', 'index')->name('admin.boards.index');
                 Route::get('/restatement', 'restatement');
                 Route::get('/categories', 'categories');
                 Route::post('/create', 'create');
@@ -802,7 +801,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             Route::controller(AdminOfferController::class)
                 ->prefix('offers')
                 ->group(function () {
-                    Route::get('/{type?}', 'index')->where('type', 'offer|issue');
+                    Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('admin.offers.index');
                     Route::get('/{id}', 'view');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
                     Route::match(['get', 'post'], '/reply/{id}', 'reply');

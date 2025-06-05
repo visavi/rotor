@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
+use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,6 +45,7 @@ class Down extends BaseModel
     use AddFileToArchiveTrait;
     use ConvertVideoTrait;
     use SearchableTrait;
+    use SortableTrait;
     use UploadTrait;
 
     /**
@@ -93,6 +95,20 @@ class Down extends BaseModel
     public function searchableFields(): array
     {
         return ['title', 'text'];
+    }
+
+    /**
+     * Возвращает список сортируемых полей
+     */
+    protected static function sortableFields(): array
+    {
+        return [
+            'date'     => ['field' => 'created_at', 'label' => __('main.date')],
+            'loads'    => ['field' => 'loads', 'label' => __('main.downloads')],
+            'name'     => ['field' => 'title', 'label' => __('main.title')],
+            'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
+            'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
+        ];
     }
 
     /**
@@ -225,30 +241,5 @@ class Down extends BaseModel
 
             return parent::delete();
         });
-    }
-
-    /**
-     * Get sort config
-     */
-    public static function getSortConfig(string $sort, string $order): array
-    {
-        $options = [
-            'date'     => ['field' => 'created_at', 'label' => __('main.date')],
-            'loads'    => ['field' => 'loads', 'label' => __('main.downloads')],
-            'name'     => ['field' => 'title', 'label' => __('main.title')],
-            'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
-            'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
-        ];
-
-        $sort = isset($options[$sort]) ? $sort : 'date';
-        $order = in_array($order, ['asc', 'desc']) ? $order : 'desc';
-        $orderBy = [$options[$sort]['field'], $order];
-
-        return [
-            'options' => $options,
-            'orderBy' => $orderBy,
-            'sort'    => $sort,
-            'order'   => $order,
-        ];
     }
 }

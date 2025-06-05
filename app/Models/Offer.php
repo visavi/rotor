@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,6 +38,7 @@ use Illuminate\Support\HtmlString;
 class Offer extends BaseModel
 {
     use SearchableTrait;
+    use SortableTrait;
 
     public const DONE = 'done';
     public const WAIT = 'wait';
@@ -85,6 +87,20 @@ class Offer extends BaseModel
     public function searchableFields(): array
     {
         return ['title', 'text', 'reply'];
+    }
+
+    /**
+     * Возвращает список сортируемых полей
+     */
+    protected static function sortableFields(): array
+    {
+        return [
+            'date'     => ['field' => 'created_at', 'label' => __('main.date')],
+            'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
+            'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
+            'name'     => ['field' => 'title', 'label' => __('main.title')],
+            'status'   => ['field' => 'status', 'label' => __('main.status')],
+        ];
     }
 
     /**

@@ -43,13 +43,18 @@ class ArticleController extends Controller
     /**
      * Список статей
      */
-    public function blog(int $id): View
+    public function blog(int $id, Request $request): View
     {
         $category = Blog::query()->with('parent')->find($id);
 
         if (! $category) {
             abort(404, __('blogs.category_not_exist'));
         }
+
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Article::getSorting($sort, $order);
 
         $articles = Article::query()
             ->select('articles.*', 'polls.vote')
@@ -59,11 +64,12 @@ class ArticleController extends Controller
                     ->where('polls.user_id', getUser('id'));
             })
             ->where('category_id', $id)
-            ->orderByDesc('created_at')
+            ->orderBy(...$orderBy)
             ->with('user')
-            ->paginate(setting('blogpost'));
+            ->paginate(setting('blogpost'))
+            ->appends(compact('sort', 'order'));
 
-        return view('blogs/blog', compact('articles', 'category'));
+        return view('blogs/blog', compact('articles', 'category', 'sorting'));
     }
 
     /**
@@ -660,22 +666,20 @@ class ArticleController extends Controller
      */
     public function top(Request $request): View
     {
-        $sort = check($request->input('sort', 'visits'));
-        $order = match ($sort) {
-            'rating'   => 'rating',
-            'comments' => 'count_comments',
-            default    => 'visits',
-        };
+        $sort = $request->input('sort', 'rating');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Article::getSorting($sort, $order);
 
         $articles = Article::query()
             ->select('articles.*', 'blogs.name')
             ->leftJoin('blogs', 'articles.category_id', 'blogs.id')
-            ->orderByDesc($order)
+            ->orderBy(...$orderBy)
             ->with('user')
             ->paginate(setting('blogpost'))
-            ->appends(['sort' => $sort]);
+            ->appends(compact('sort', 'order'));
 
-        return view('blogs/top', compact('articles', 'order'));
+        return view('blogs/top', compact('articles', 'sorting'));
     }
 
     /**

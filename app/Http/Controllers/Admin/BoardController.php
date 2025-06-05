@@ -31,27 +31,26 @@ class BoardController extends AdminController
             }
         }
 
-        $sort = check($request->input('sort', 'date'));
-        $order = match ($sort) {
-            'price' => 'price',
-            default => 'updated_at',
-        };
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Item::getSorting($sort, $order);
 
         $items = Item::query()
             ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
-            ->orderByDesc($order)
+            ->orderBy(...$orderBy)
             ->with('category', 'user', 'files')
             ->paginate(setting('boards_per_page'))
-            ->appends(compact('sort'));
+            ->appends(compact('sort', 'order'));
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
             ->get();
 
-        return view('admin/boards/index', compact('items', 'board', 'boards', 'sort'));
+        return view('admin/boards/index', compact('items', 'board', 'boards', 'sorting'));
     }
 
     /**

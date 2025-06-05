@@ -32,28 +32,27 @@ class BoardController extends Controller
             }
         }
 
-        $sort = check($request->input('sort', 'date'));
-        $order = match ($sort) {
-            'price' => 'price',
-            default => 'updated_at',
-        };
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Item::getSorting($sort, $order);
 
         $items = Item::query()
             ->when($board, static function (Builder $query) use ($board) {
                 return $query->where('board_id', $board->id);
             })
             ->where('expires_at', '>', SITETIME)
-            ->orderByDesc($order)
+            ->orderBy(...$orderBy)
             ->with('category', 'user', 'files')
             ->paginate(setting('boards_per_page'))
-            ->appends(['sort' => $sort]);
+            ->appends(compact('sort', 'order'));
 
         $boards = Board::query()
             ->where('parent_id', $board->id ?? 0)
             ->with('children')
             ->get();
 
-        return view('boards/index', compact('items', 'board', 'boards', 'sort'));
+        return view('boards/index', compact('items', 'board', 'boards', 'sorting'));
     }
 
     /**
@@ -324,11 +323,10 @@ class BoardController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $sort = check($request->input('sort', 'date'));
-        $order = match ($sort) {
-            'price' => 'price',
-            default => 'updated_at',
-        };
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Item::getSorting($sort, $order);
 
         $type = check($request->input('type', 'active'));
         $whereType = match ($type) {
@@ -345,11 +343,11 @@ class BoardController extends Controller
         $items = Item::query()
             ->where('user_id', $user->id)
             ->where('expires_at', $whereType, SITETIME)
-            ->orderByDesc($order)
+            ->orderBy(...$orderBy)
             ->with('category', 'user', 'files')
             ->paginate(setting('boards_per_page'))
-            ->appends(compact('type', 'sort'));
+            ->appends(compact('type', 'sort', 'order'));
 
-        return view('boards/active', compact('items', 'sort', 'type', 'otherCount'));
+        return view('boards/active', compact('items', 'sort', 'order', 'sorting', 'type', 'otherCount'));
     }
 }

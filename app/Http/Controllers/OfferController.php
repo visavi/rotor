@@ -23,22 +23,19 @@ class OfferController extends Controller
         $offerCount = Offer::query()->where('type', Offer::OFFER)->count();
         $issueCount = Offer::query()->where('type', Offer::ISSUE)->count();
 
-        $sort = check($request->input('sort', 'time'));
-        $order = match ($sort) {
-            'rating'   => 'rating',
-            'status'   => 'status',
-            'comments' => 'count_comments',
-            default    => 'created_at',
-        };
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Offer::getSorting($sort, $order);
 
         $offers = Offer::query()
             ->where('type', $type)
-            ->orderByDesc($order)
+            ->orderBy(...$orderBy)
             ->with('user')
             ->paginate(setting('postoffers'))
-            ->appends(compact('type', 'sort'));
+            ->appends(compact('type', 'sort', 'order'));
 
-        return view('offers/index', compact('offers', 'order', 'type', 'sort', 'offerCount', 'issueCount'));
+        return view('offers/index', compact('offers', 'order', 'type', 'sort', 'sorting', 'offerCount', 'issueCount'));
     }
 
     /**

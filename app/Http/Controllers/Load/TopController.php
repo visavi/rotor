@@ -16,20 +16,18 @@ class TopController extends Controller
      */
     public function index(Request $request): View
     {
-        $sort = check($request->input('sort'));
-        $order = match ($sort) {
-            'rating'   => 'rating',
-            'comments' => 'count_comments',
-            default    => 'loads',
-        };
+        $sort = $request->input('sort', 'rating');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Down::getSorting($sort, $order);
 
         $downs = Down::query()
             ->active()
-            ->orderByDesc($order)
             ->with('category', 'user')
+            ->orderBy(...$orderBy)
             ->paginate(setting('downlist'))
-            ->appends(['sort' => $sort]);
+            ->appends(compact('sort', 'order'));
 
-        return view('loads/top', compact('downs', 'order'));
+        return view('loads/top', compact('downs', 'sorting'));
     }
 }

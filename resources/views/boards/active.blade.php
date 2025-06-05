@@ -25,21 +25,22 @@
 @section('content')
     <div class="mb-3">
         @if ($type === 'active')
-            <a class="btn btn-primary btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $items->total() }}</span></a>
-            <a class="btn btn-light btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $items->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
         @else
-            <a class="btn btn-light btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
-            <a class="btn btn-primary btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $items->total() }}</span></a>
+            <a class="btn btn-light btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
+            <a class="btn btn-primary btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $items->total() }}</span></a>
         @endif
     </div>
 
-    {{ __('main.sort') }}:
-    <?php $active = ($sort === 'date') ? 'success' : 'adaptive'; ?>
-    <a href="{{ route('boards.active', ['type' => $type, 'sort' => 'date']) }}" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
-
-    <?php $active = ($sort === 'price') ? 'success' : 'adaptive'; ?>
-    <a href="{{ route('boards.active', ['type' => $type, 'sort' => 'price']) }}" class="badge bg-{{ $active }}">{{ __('main.cost') }}</a>
-    <hr>
+    <div class="sort-links border-bottom pb-3 mb-3">
+        {{ __('main.sort') }}:
+        @foreach ($sorting as $key => $option)
+            <a href="{{ route('boards.active', ['type' => $type, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+            </a>
+        @endforeach
+    </div>
 
     @if ($items->isNotEmpty())
         @foreach ($items as $item)

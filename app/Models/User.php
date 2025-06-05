@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -85,6 +86,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     use MustVerifyEmail;
     use Notifiable;
     use SearchableTrait;
+    use SortableTrait;
     use UploadTrait;
 
     public const BOSS = 'boss';   // Владелец
@@ -174,6 +176,20 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     public function searchableFields(): array
     {
         return ['login', 'name', 'info', 'site', 'status'];
+    }
+
+    /**
+     * Возвращает список сортируемых полей
+     */
+    protected static function sortableFields(): array
+    {
+        return [
+            'point'   => ['field' => 'point', 'label' => __('users.assets')],
+            'rating'  => ['field' => 'rating', 'label' => __('users.reputation')],
+            'money'   => ['field' => 'money', 'label' => __('users.moneys')],
+            'created' => ['field' => 'created_at', 'label' => __('main.registration_date')],
+            'updated' => ['field' => 'updated_at', 'label' => __('users.last_visit')],
+        ];
     }
 
     /**

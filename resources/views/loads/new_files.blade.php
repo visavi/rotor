@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        <b>{{ formatNum($down->rating) }}</b>
+                        <span class="badge bg-adaptive">{{ formatNum($down->rating) }}</span>
                     </div>
                 </div>
 

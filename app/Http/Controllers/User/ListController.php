@@ -22,17 +22,13 @@ class ListController extends Controller
     public function userlist(Request $request)
     {
         $type = check($request->input('type', 'users'));
-        $sort = check($request->input('sort', 'point'));
-        $position = (int) $request->input('position');
         $user = $request->input('user', getUser('login'));
+        $position = (int) $request->input('position');
 
-        $order = match ($sort) {
-            'created' => 'created_at',
-            'updated' => 'updated_at',
-            'rating'  => 'rating',
-            'money'   => 'money',
-            default   => 'point',
-        };
+        $sort = $request->input('sort', 'point');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = User::getSorting($sort, $order);
 
         $baseSearch = User::query()
             ->when($type === 'admins', static function (Builder $query) {
@@ -41,12 +37,12 @@ class ListController extends Controller
             ->when($type === 'birthdays', static function (Builder $query) {
                 return $query->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME));
             })
-            ->orderByDesc($order)
+            ->orderBy(...$orderBy)
             ->orderBy('id');
 
         $users = $baseSearch
             ->paginate(setting('userlist'))
-            ->appends(compact('type', 'sort'));
+            ->appends(compact('type', 'sort', 'order'));
 
         if ($request->isMethod('post')) {
             $search = $baseSearch
@@ -71,6 +67,6 @@ class ListController extends Controller
             session()->flash('danger', __('validator.user'));
         }
 
-        return view('users/users', compact('users', 'user', 'type', 'sort', 'position'));
+        return view('users/users', compact('users', 'user', 'type', 'sort', 'order', 'sorting', 'position'));
     }
 }

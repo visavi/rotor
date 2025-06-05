@@ -26,12 +26,17 @@
 @stop
 
 @section('content')
-    @if (getUser())
-        {{ __('main.my') }}: <a href="/blogs/active/articles">{{ __('blogs.articles') }}</a>, <a href="/blogs/active/comments">{{ __('main.comments') }}</a> /
-    @endif
+    <div class="border-bottom pb-3 mb-3">
+        @if (getUser())
+            {{ __('main.my') }}:
+            <a href="/blogs/active/articles" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
+            <a href="/blogs/active/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+        @endif
 
-    {{ __('main.new') }}: <a href="/articles">{{ __('blogs.articles') }}</a>, <a href="/articles/comments">{{ __('main.comments') }}</a>
-    <hr>
+        {{ __('main.new') }}:
+        <a href="/articles" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
+        <a href="/articles/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+    </div>
 
     @foreach ($categories as $key => $category)
         <div class="section mb-3 shadow">

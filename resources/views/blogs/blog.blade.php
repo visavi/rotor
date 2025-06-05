@@ -36,6 +36,15 @@
 @stop
 
 @section('content')
+    <div class="sort-links border-bottom pb-3 mb-3">
+        {{ __('main.sort') }}:
+        @foreach ($sorting as $key => $option)
+            <a href="{{ route('blogs.blog', ['id' => $category->id, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+            </a>
+        @endforeach
+    </div>
+
     @if ($articles->onFirstPage() && $category->children->isNotEmpty())
         @php $category->children->load(['children', 'lastArticle.user']); @endphp
         @foreach ($category->children as $child)
@@ -45,7 +54,7 @@
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
                             <a href="/blogs/{{ $child->id }}">{{ $child->name }}</a>
-                            ({{ $child->count_articles + $child->children->sum('count_articles') }})
+                            <span class="badge bg-adaptive">{{ $child->count_articles + $child->children->sum('count_articles') }}</span>
                         </div>
                     </div>
                 </div>

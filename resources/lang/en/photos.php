@@ -4,7 +4,6 @@ return [
     'photos'                 => 'A photo',
     'albums'                 => 'Albums',
     'album'                  => 'Album',
-    'top_photos'             => 'Top Photos',
     'total_photos'           => 'Total Photos',
     'total_albums'           => 'Total Albums',
     'empty_photos'           => 'No photos yet!',

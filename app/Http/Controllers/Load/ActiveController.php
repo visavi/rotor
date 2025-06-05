@@ -55,7 +55,17 @@ class ActiveController extends Controller
                 'active' => $active,
             ]);
 
-        return view('loads/active_files', compact('downs', 'user', 'active'));
+        $activeCount = Down::query()
+            ->active(true)
+            ->where('user_id', $user->id)
+            ->count();
+
+        $pendingCount = Down::query()
+            ->active(false)
+            ->where('user_id', $user->id)
+            ->count();
+
+        return view('loads/active_files', compact('downs', 'user', 'active', 'activeCount', 'pendingCount'));
     }
 
     /**

@@ -62,13 +62,14 @@
     @endif
 
     @if ($items->isNotEmpty())
-        {{ __('main.sort') }}:
-            <?php $active = ($sort === 'date') ? 'success' : 'adaptive'; ?>
-        <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=date" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
-
-            <?php $active = ($sort === 'price') ? 'success' : 'adaptive'; ?>
-        <a href="{{ route('boards.index', ['id' => $board?->id]) }}?sort=price" class="badge bg-{{ $active }}">{{ __('main.cost') }}</a>
-        <hr>
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('boards.index', ['id' => $board?->id, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
 
         @foreach ($items as $item)
             <div class="row mb-3">

@@ -19,8 +19,13 @@ class PhotoController extends Controller
     /**
      * Главная страница
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Photo::getSorting($sort, $order);
+
         $photos = Photo::query()
             ->select('photos.*', 'polls.vote')
             ->leftJoin('polls', static function (JoinClause $join) {
@@ -28,11 +33,12 @@ class PhotoController extends Controller
                     ->where('polls.relate_type', Photo::$morphName)
                     ->where('polls.user_id', getUser('id'));
             })
-            ->orderByDesc('created_at')
+            ->orderBy(...$orderBy)
             ->with('user', 'files')
-            ->paginate(setting('fotolist'));
+            ->paginate(setting('fotolist'))
+            ->appends(compact('sort', 'order'));
 
-        return view('photos/index', compact('photos'));
+        return view('photos/index', compact('photos', 'sorting'));
     }
 
     /**
@@ -397,28 +403,6 @@ class PhotoController extends Controller
         $moder = getUser() && getUser('id') === $user->id ? 1 : 0;
 
         return view('photos/user_albums', compact('photos', 'moder', 'user'));
-    }
-
-    /**
-     * Альбом пользователя
-     */
-    public function top(Request $request): View
-    {
-        $sort = check($request->input('sort', 'rating'));
-
-        if ($sort === 'comments') {
-            $order = 'count_comments';
-        } else {
-            $order = 'rating';
-        }
-
-        $photos = Photo::query()
-            ->orderByDesc($order)
-            ->with('user', 'files')
-            ->paginate(setting('fotolist'))
-            ->appends(['sort' => $sort]);
-
-        return view('photos/top', compact('photos', 'order'));
     }
 
     /**

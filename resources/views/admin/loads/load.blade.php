@@ -34,18 +34,9 @@
 @section('content')
     <div class="sort-links border-bottom pb-3 mb-3">
         {{ __('main.sort') }}:
-
-        @foreach ($sortOptions as $key => $option)
-            @php
-                $isActive = ($sort === $key);
-                $badgeClass = $isActive ? 'success' : 'adaptive';
-                $oppositeOrder = ($order === 'asc') ? 'desc' : 'asc';
-            @endphp
-            <a href="{{ route('admin.loads.load', ['id' => $category->id, 'sort' => $key, 'order' => $isActive ? $oppositeOrder : 'desc']) }}" class="badge bg-{{ $badgeClass }}">
-                {{ $option['label'] }}
-                @if ($isActive)
-                    <span>{{ $order === 'asc' ? '↑' : '↓' }}</span>
-                @endif
+        @foreach ($sorting as $key => $option)
+            <a href="{{ route('admin.loads.load', ['id' => $category->id, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                {{ $option['label'] }}{{ $option['icon'] ?? '' }}
             </a>
         @endforeach
     </div>
@@ -56,7 +47,7 @@
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
-                    <a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs }})
+                    <a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a> <span class="badge bg-adaptive">{{ $child->count_downs }}</span>
 
                     @if ($child->closed)
                         <span class="badge bg-danger">{{ __('loads.closed_load') }}</span>

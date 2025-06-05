@@ -30,10 +30,15 @@
 
     <div class="my-3 py-2 border-bottom">
         @if (getUser())
-            {{ __('main.my') }}: <a href="/forums/active/topics">{{ __('forums.topics') }}</a>, <a href="/forums/active/posts">{{ __('forums.posts') }}</a>, <a href="/forums/bookmarks">{{ __('forums.bookmarks') }}</a> /
+            {{ __('main.my') }}:
+            <a href="/forums/active/topics" class="badge bg-adaptive">{{ __('forums.topics') }}</a>
+            <a href="/forums/active/posts" class="badge bg-adaptive">{{ __('forums.posts') }}</a>
+            <a href="/forums/bookmarks" class="badge bg-adaptive">{{ __('forums.bookmarks') }}</a>
         @endif
 
-        {{ __('main.new') }}: <a href="/topics">{{ __('forums.topics') }}</a>, <a href="/posts">{{ __('forums.posts') }}</a>
+        {{ __('main.new') }}:
+        <a href="/topics" class="badge bg-adaptive">{{ __('forums.topics') }}</a>
+        <a href="/posts" class="badge bg-adaptive">{{ __('forums.posts') }}</a>
     </div>
 
     @if ($forums->isNotEmpty())

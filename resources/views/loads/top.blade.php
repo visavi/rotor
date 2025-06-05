@@ -18,16 +18,14 @@
 
 @section('content')
     @if ($downs->isNotEmpty())
-        {{ __('main.sort') }}:
-            <?php $active = ($order === 'loads') ? 'success' : 'adaptive'; ?>
-        <a href="/loads/top?sort=loads" class="badge bg-{{ $active }}">{{ __('main.downloads') }}</a>
-
-            <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
-        <a href="/loads/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
-
-            <?php $active = ($order === 'count_comments') ? 'success' : 'adaptive'; ?>
-        <a href="/loads/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
-        <hr>
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('loads.top', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
 
         @foreach ($downs as $data)
             <div class="section mb-3 shadow">
@@ -40,7 +38,7 @@
                     </div>
 
                     <div class="text-end js-rating">
-                        <b>{{ formatNum($data->rating) }}</b>
+                        <span class="badge bg-adaptive">{{ formatNum($data->rating) }}</span>
                     </div>
                 </div>
 

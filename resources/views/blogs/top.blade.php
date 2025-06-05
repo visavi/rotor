@@ -18,23 +18,20 @@
 
 @section('content')
     @if ($articles->isNotEmpty())
-        {{ __('main.sort') }}:
-
-            <?php $active = ($order === 'visits') ? 'success' : 'adaptive'; ?>
-        <a href="/blogs/top?sort=visits" class="badge bg-{{ $active }}">{{ __('main.views') }}</a>
-
-            <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
-        <a href="/blogs/top?sort=rating" class="badge bg-{{ $active }}">{{ __('main.rating') }}</a>
-
-            <?php $active = ($order === 'count_comments') ? 'success' : 'adaptive'; ?>
-        <a href="/blogs/top?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
-        <hr>
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('blogs.top', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
 
         @foreach ($articles as $article)
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> ({{ formatNum($article->rating) }})
+                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
                 </div>
 
                 <div class="section-content">

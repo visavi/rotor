@@ -49,9 +49,9 @@ class AppServiceProvider extends ServiceProvider
             return "<?= \\App\\Classes\\Hook::call($hookName, $args); ?>";
         });
 
-        if (app()->environment('production')) {
+        /*if (app()->environment('production')) {
             URL::forceScheme('https');
-        }
+        }*/
 
         // If the public directory is renamed to public_html
         /*$this->app->bind('path.public', function () {

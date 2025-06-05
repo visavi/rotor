@@ -28,17 +28,25 @@
 @section('content')
     @if (getUser())
         {{ __('main.my') }}:
-        <a href="/photos/albums/{{ getUser('login') }}">{{ __('photos.photos') }}</a>,
-        <a href="/photos/comments/active/{{ getUser('login') }}">{{ __('main.comments') }}</a> /
+        <a href="/photos/albums/{{ getUser('login') }}" class="badge bg-adaptive">{{ __('photos.photos') }}</a>
+        <a href="/photos/comments/active/{{ getUser('login') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     @endif
 
     {{ __('main.all') }}:
-    <a href="/photos/albums">{{ __('photos.albums') }}</a>,
-    <a href="/photos/comments">{{ __('main.comments') }}</a> /
-    <a href="/photos/top">{{ __('photos.top_photos') }}</a>
+    <a href="/photos/albums" class="badge bg-adaptive">{{ __('photos.albums') }}</a>
+    <a href="/photos/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($photos->isNotEmpty())
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('photos.index', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
+
         @foreach ($photos as $photo)
             <div class="section mb-3 shadow">
                 <div class="section-header d-flex align-items-center">

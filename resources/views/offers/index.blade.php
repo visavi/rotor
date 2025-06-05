@@ -28,26 +28,21 @@
 @section('content')
     <div class="mb-3">
         <?php $active = ($type === 'offer') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/offers/offer?sort={{ $sort }}">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offerCount }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="/offers/offer?sort={{ $sort }}&amp;order={{ $order }}">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offerCount }}</span></a>
 
         <?php $active = ($type === 'issue') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/offers/issue?sort={{ $sort }}">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $issueCount }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="/offers/issue?sort={{ $sort }}&amp;order={{ $order }}">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $issueCount }}</span></a>
     </div>
 
     @if ($offers->isNotEmpty())
-        {{ __('main.sort') }}:
-        <?php $active = ($order === 'created_at') ? 'success' : 'adaptive'; ?>
-        <a href="/offers/{{ $type }}?sort=time" class="badge bg-{{ $active }}">{{ __('main.date') }}</a>
-
-        <?php $active = ($order === 'rating') ? 'success' : 'adaptive'; ?>
-        <a href="/offers/{{ $type }}?sort=rating" class="badge bg-{{ $active }}">{{ __('main.votes') }}</a>
-
-        <?php $active = ($order === 'status') ? 'success' : 'adaptive'; ?>
-        <a href="/offers/{{ $type }}?sort=status" class="badge bg-{{ $active }}">{{ __('main.status') }}</a>
-
-        <?php $active = ($order === 'count_comments') ? 'success' : 'adaptive'; ?>
-        <a href="/offers/{{ $type }}?sort=comments" class="badge bg-{{ $active }}">{{ __('main.comments') }}</a>
-        <hr>
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('offers.index', ['type' => $type, 'sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
 
         @foreach ($offers as $data)
             <div class="section mb-3 shadow">

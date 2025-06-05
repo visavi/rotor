@@ -45,23 +45,17 @@ class LoadController extends Controller
         $sort = $request->input('sort', 'date');
         $order = $request->input('order', 'desc');
 
-        $sortConfig = Down::getSortConfig($sort, $order);
+        [$sorting, $orderBy] = Down::getSorting($sort, $order);
 
         $downs = Down::query()
             ->active()
             ->where('category_id', $category->id)
-            ->orderBy(...$sortConfig['orderBy'])
+            ->orderBy(...$orderBy)
             ->with('user')
             ->paginate(setting('downlist'))
-            ->appends(['sort' => $sortConfig['sort'], 'order' => $sortConfig['order']]);
+            ->appends(compact('sort', 'order'));
 
-        return view('loads/load', [
-            'category'    => $category,
-            'downs'       => $downs,
-            'sortOptions' => $sortConfig['options'],
-            'sort'        => $sortConfig['sort'],
-            'order'       => $sortConfig['order'],
-        ]);
+        return view('loads/load', compact('category', 'downs', 'sorting'));
     }
 
     /**
