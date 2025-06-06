@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.comments') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
@@ -20,14 +20,16 @@
     @if ($comments->isNotEmpty())
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow">
-                <i class="fa fa-file-alt"></i> <b><a href="/photos/comment/{{ $comment->relate_id }}/{{ $comment->id }}">{{ $comment->title }}</a></b>
+                <i class="fa fa-file-alt"></i> <b><a href="{{ route('photos.comments', ['id' => $comment->relate_id, 'cid' => $comment->id]) }}">{{ $comment->title }}</a></b>
 
                 @if (isAdmin())
                     <a href="#" class="float-end" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                 @endif
 
-                <div class="section-message">
-                    {{ bbCode($comment->text) }}<br>
+                <div class="section-body">
+                    <div class="section-message">
+                        {{ bbCode($comment->text) }}
+                    </div>
 
                     {{ __('main.posted') }}: {{ $comment->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small>

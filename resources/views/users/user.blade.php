@@ -138,7 +138,7 @@
                 <b><a href="/forums/active/topics?user={{ $user->login }}">{{ __('index.forums') }}</a></b> (<a href="/forums/active/posts?user={{ $user->login }}">{{ __('main.messages') }}</a>) /
                 <b><a href="/downs/active/files?user={{ $user->login }}">{{ __('index.loads') }}</a></b> (<a href="/downs/active/comments?user={{ $user->login }}">{{ __('main.comments') }}</a>) /
                 <b><a href="/blogs/active/articles?user={{ $user->login }}">{{ __('index.blogs') }}</a></b> (<a href="/blogs/active/comments?user={{ $user->login }}">{{ __('main.comments') }}</a>) /
-                <b><a href="/photos/albums/{{ $user->login }}">{{ __('index.photos') }}</a></b> (<a href="/photos/comments/active/{{ $user->login }}">{{ __('main.comments') }}</a>)<br>
+                <b><a href="{{ route('photos.user-albums', ['login' => $user->login]) }}">{{ __('index.photos') }}</a></b> (<a href="{{ route('photos.user-comments', ['login' => $user->login]) }}">{{ __('main.comments') }}</a>)<br>
             </div>
         </div>
     </div>

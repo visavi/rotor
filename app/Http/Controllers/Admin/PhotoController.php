@@ -62,7 +62,7 @@ class PhotoController extends AdminController
                 clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);
                 setFlash('success', __('photos.photo_success_edited'));
 
-                return redirect('admin/photos?page=' . $page);
+                return redirect()->route('admin.photos.index', ['page' => $page]);
             }
 
             setInput($request->all());
@@ -101,7 +101,7 @@ class PhotoController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/photos?page=' . $page);
+        return redirect()->route('admin.photos.index', ['page' => $page]);
     }
 
     /**
@@ -121,6 +121,6 @@ class PhotoController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/photos');
+        return redirect()->route('admin.photos.index');
     }
 }

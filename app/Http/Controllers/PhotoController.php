@@ -117,7 +117,7 @@ class PhotoController extends Controller
 
                 setFlash('success', __('photos.photo_success_uploaded'));
 
-                return redirect('photos/' . $photo->id);
+                return redirect()->route('photos.view', ['id' => $photo->id]);
             }
 
             setInput($request->all());
@@ -173,7 +173,7 @@ class PhotoController extends Controller
 
                 setFlash('success', __('photos.photo_success_edited'));
 
-                return redirect('photos/albums/' . $user->login . '?page=' . $page);
+                return redirect()->route('photos.user-albums', ['login' => $user->login, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -197,6 +197,16 @@ class PhotoController extends Controller
 
         if (! $photo) {
             abort(404, __('photos.photo_not_exist'));
+        }
+
+        $cid = int($request->input('cid'));
+        if ($cid) {
+            $total = $photo->comments->where('id', '<=', $cid)->count();
+
+            $page = ceil($total / setting('comments_per_page'));
+
+            return redirect()->route('photos.comments', ['id' => $photo->id, 'page' => $page])
+                ->withFragment('comment_' . $cid);
         }
 
         if ($request->isMethod('post')) {
@@ -229,11 +239,14 @@ class PhotoController extends Controller
                 $photo->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/photos/comment/' . $photo->id . '/' . $comment->id, $photo->title);
+                sendNotify($msg, route('photos.comments', ['id' => $photo->id, 'cid' => $comment->id], false), $photo->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
-                return redirect('photos/end/' . $photo->id);
+                return redirect()->route('photos.comments', [
+                    'id'   => $photo->id,
+                    'page' => ceil($photo->comments->count() / setting('comments_per_page')),
+                ]);
             }
 
             setInput($request->all());
@@ -304,7 +317,7 @@ class PhotoController extends Controller
 
                 setFlash('success', __('main.comment_edited_success'));
 
-                return redirect('photos/comments/' . $photo->id . '?page=' . $page);
+                return redirect()->route('photos.comments', ['id' => $photo->id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -344,26 +357,7 @@ class PhotoController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('photos/albums/' . $user->login . '?page=' . $page);
-    }
-
-    /**
-     * Переадресация на последнюю страницу
-     */
-    public function end(int $id): RedirectResponse
-    {
-        /** @var Photo $photo */
-        $photo = Photo::query()->find($id);
-
-        if (! $photo) {
-            abort(404, __('photos.photo_not_exist'));
-        }
-
-        $total = $photo->comments()->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('photos/comments/' . $photo->id . '?page=' . $end);
+        return redirect()->route('photos.user-albums', ['login' => $user->login, 'page' => $page]);
     }
 
     /**
@@ -442,27 +436,5 @@ class PhotoController extends Controller
             ->paginate(setting('comments_per_page'));
 
         return view('photos/user_comments', compact('comments', 'user'));
-    }
-
-    /**
-     * Переход к сообщению
-     */
-    public function viewComment(int $id, int $cid): RedirectResponse
-    {
-        /** @var Photo $photo */
-        $photo = Photo::query()->find($id);
-
-        if (! $photo) {
-            abort(404, __('photos.photo_not_exist'));
-        }
-
-        $total = $photo->comments()
-            ->where('id', '<=', $cid)
-            ->orderBy('created_at')
-            ->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('photos/comments/' . $photo->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

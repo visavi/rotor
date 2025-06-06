@@ -157,66 +157,66 @@ Route::controller(GuestbookController::class)
 /* Категория блогов */
 Route::controller(ArticleController::class)
     ->prefix('blogs')
+    ->name('blogs.')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'blog')->name('blogs.blog');
-        Route::get('/tags', 'tags');
-        Route::get('/tags-search', 'searchTags');
-        Route::get('/tags/{tag}', 'getTag')->where('tag', '.+');
-        Route::get('/authors', 'authors');
-        Route::get('/active/articles', 'userArticles');
-        Route::get('/active/comments', 'userComments');
-        Route::get('/top', 'top')->name('blogs.top');
-        Route::get('/rss', 'rss');
-        Route::match(['get', 'post'], '/create', 'create');
-        Route::get('/main', 'main');
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'blog')->name('blog');
+        Route::get('/tags', 'tags')->name('tags');
+        Route::get('/tags-search', 'searchTags')->name('tags-search');
+        Route::get('/tags/{tag}', 'getTag')->where('tag', '.+')->name('tag');
+        Route::get('/authors', 'authors')->name('authors');
+        Route::get('/active/articles', 'userArticles')->name('user-articles');
+        Route::get('/active/comments', 'userComments')->name('user-comments');
+        Route::get('/top', 'top')->name('top')->name('top');
+        Route::get('/rss', 'rss')->name('rss');
+        Route::match(['get', 'post'], '/create', 'create')->name('create');
+        Route::get('/main', 'main')->name('main');
     });
 
 /* Статьи блогов */
 Route::controller(ArticleController::class)
     ->prefix('articles')
+    ->name('articles.')
     ->group(function () {
-        Route::get('/', 'newArticles')->name('articles.new-articles');
-        Route::get('/{id}', 'view')->name('articles.view');
-        Route::get('/{id}/print', 'print')->name('articles.print');
-        Route::get('/{id}/rss', 'rssComments')->name('articles.rss-comments');
-        Route::get('/comments', 'newComments')->name('articles.new-comments');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('articles.edit');
-        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('articles.comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('articles.edit-comment');
+        Route::get('/', 'newArticles')->name('new-articles');
+        Route::get('/{id}', 'view')->name('view');
+        Route::get('/{id}/print', 'print')->name('print');
+        Route::get('/{id}/rss', 'rssComments')->name('rss-comments');
+        Route::get('/comments', 'newComments')->name('new-comments');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('.edit');
+        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
     });
 
 /* Новости */
 Route::controller(NewsController::class)
     ->prefix('news')
+    ->name('news.')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'view');
-        Route::get('/end/{id}', 'end');
-        Route::get('/rss', 'rss');
-        Route::get('/allcomments', 'allComments');
-        Route::get('/comment/{id}/{cid}', 'viewComment')->whereNumber('cid');
-        Route::match(['get', 'post'], '/comments/{id}', 'comments');
-        Route::match(['get', 'post'], '/edit/{id}/{cid}', 'editComment')->whereNumber('cid');
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'view')->name('view');
+        Route::get('/rss', 'rss')->name('rss');
+        Route::get('/allcomments', 'allComments')->name('all-comments');
+        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
     });
 
 /* Галерея */
 Route::controller(PhotoController::class)
     ->prefix('photos')
+    ->name('photos.')
     ->group(function () {
-        Route::get('/', 'index')->name('photos.index');
-        Route::get('/{id}', 'view');
-        Route::get('/delete/{id}', 'delete');
-        Route::get('/end/{id}', 'end');
-        Route::get('/albums', 'albums');
-        Route::get('/albums/{login}', 'album');
-        Route::get('/comments', 'allComments');
-        Route::get('/comments/active/{login}', 'userComments');
-        Route::get('/comment/{id}/{cid}', 'viewComment')->whereNumber('cid');
-        Route::match(['get', 'post'], '/comments/{id}', 'comments');
-        Route::match(['get', 'post'], '/create', 'create');
-        Route::match(['get', 'post'], '/edit/{id}', 'edit');
-        Route::match(['get', 'post'], '/edit/{id}/{cid}', 'editComment')->whereNumber('cid');
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'view')->name('view');
+        Route::get('/{id}/delete', 'delete')->name('delete');
+        Route::get('/albums', 'albums')->name('albums');
+        Route::get('/albums/{login}', 'album')->name('user-albums');
+        Route::get('/comments', 'allComments')->name('all-comments');
+        Route::get('/comments/active/{login}', 'userComments')->name('user-comments');
+        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
+        Route::match(['get', 'post'], '/create', 'create')->name('create');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
     });
 
 /* Категория форума */
@@ -524,10 +524,11 @@ Route::controller(OnlineController::class)
 /* Админ-панель */
 Route::middleware(['check.admin', 'admin.logger'])
     ->prefix('admin')
+    ->name('admin.')
     ->group(function () {
         Route::controller(AdminController::class)
             ->group(function () {
-                Route::get('/', 'main');
+                Route::get('/', 'index')->name('index');
             });
 
         /* Проверка обновлений */
@@ -594,11 +595,12 @@ Route::middleware(['check.admin', 'admin.logger'])
         /* Галерея */
         Route::controller(AdminPhotoController::class)
             ->prefix('photos')
+            ->name('photos.')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/restatement', 'restatement');
-                Route::get('/delete/{id}', 'delete');
+                Route::get('/', 'index')->name('index');
+                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::get('/restatement', 'restatement')->name('restatement');
             });
 
         /* Блоги */
@@ -626,7 +628,7 @@ Route::middleware(['check.admin', 'admin.logger'])
         Route::controller(AdminBoardController::class)
             ->prefix('boards')
             ->group(function () {
-                Route::get('/{id?}', 'index')->name('admin.boards.index');
+                Route::get('/{id?}', 'index')->name('boards.index');
                 Route::get('/restatement', 'restatement');
                 Route::get('/categories', 'categories');
                 Route::post('/create', 'create');
@@ -743,11 +745,11 @@ Route::middleware(['check.admin', 'admin.logger'])
             Route::controller(AdminNewsController::class)
                 ->prefix('news')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::get('/restatement', 'restatement');
-                    Route::get('/delete/{id}', 'delete');
+                    Route::get('/', 'index')->name('news.index');
+                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('news.edit');
+                    Route::match(['get', 'post'], '/create', 'create')->name('news.create');
+                    Route::get('/restatement', 'restatement')->name('news.restatement');
+                    Route::get('/{id}/delete', 'delete')->name('news.delete');
                 });
 
             /* IP-бан */
@@ -770,8 +772,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/loads/edit/{id}', 'edit');
                     Route::get('/loads/delete/{id}', 'delete');
                     Route::get('/loads/restatement', 'restatement');
-                    Route::get('/loads/{id}', 'load')->name('admin.loads.load');
-                    ;
+                    Route::get('/loads/{id}', 'load')->name('loads.load');
 
                     Route::match(['get', 'post'], '/downs/edit/{id}', 'editDown');
                     Route::match(['get', 'post'], '/downs/delete/{id}', 'deleteDown');
@@ -799,7 +800,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             Route::controller(AdminOfferController::class)
                 ->prefix('offers')
                 ->group(function () {
-                    Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('admin.offers.index');
+                    Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('offers.index');
                     Route::get('/{id}', 'view');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
                     Route::match(['get', 'post'], '/reply/{id}', 'reply');

@@ -13,8 +13,8 @@
         <a href="/pages/recent">{{ __('index.communication') }}</a>
     </div>
     <div class="section-body">
-        <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/photos">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/guestbook">{{ __('index.guestbook') }}</a> ({{ statsGuestbook() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a> ({{ statsPhotos() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/votes">{{ __('index.votes') }}</a> ({{ statVotes()}})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})<br>
     </div>

@@ -6,8 +6,8 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
-            <li class="breadcrumb-item"><a href="/photos/albums/{{ $photo->user->login }}">{{ __('photos.album') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.user-albums', ['login' => $photo->user->login]) }}">{{ __('photos.album') }}</a></li>
             <li class="breadcrumb-item active">{{ $photo->title }}</li>
         </ol>
     </nav>
@@ -21,8 +21,8 @@
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="/admin/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="/admin/photos/delete/{{ $photo->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                    <a class="dropdown-item" href="{{ route('admin.photos.edit', ['id' => $photo->id]) }}">{{ __('main.edit') }}</a>
+                    <a class="dropdown-item" href="{{ route('admin.photos.delete', ['id' => $photo->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
                 </div>
             </div>
         @elseif (getUser('id') === $photo->user->id)
@@ -31,8 +31,8 @@
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="/photos/edit/{{ $photo->id }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="/photos/delete/{{ $photo->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                    <a class="dropdown-item" href="{{ route('photos.edit', ['id' => $photo->id]) }}">{{ __('main.edit') }}</a>
+                    <a class="dropdown-item" href="{{ route('photos.delete', ['id' => $photo->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
                 </div>
             </div>
         @endif
@@ -42,11 +42,7 @@
 
 @section('content')
     <div class="section mb-3 shadow">
-        @foreach ($photo->files as $file)
-            <div class="media-file mb-3">
-                <a href="{{ $file->path }}" data-fancybox="gallery-{{ $photo->id }}"><img class="img-fluid" src="{{ $file->path }}" alt="image"></a>
-            </div>
-        @endforeach
+        @include('app/_viewer', ['model' => $photo, 'files' => $photo->files])
 
         <div class="section-content">
             @if ($photo->text)
@@ -66,8 +62,7 @@
             </div>
 
             {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
-            <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
-            <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
+                <a href="{{ route('photos.comments', ['id' => $photo->id])  }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $photo->count_comments }}</span>
         </div>
     </div>
 
@@ -76,11 +71,11 @@
     @if (isset($nav['next']) || isset($nav['prev']))
         <div class="section mb-3 shadow text-center fw-bold">
             @if ($nav['next'])
-                <a href="/photos/{{ $nav['next'] }}">&laquo; {{ __('main.previous') }}</a> &nbsp;
+                <a href="{{ route('photos.view', ['id' => $nav['next']]) }}">&laquo; {{ __('main.previous') }}</a> &nbsp;
             @endif
 
             @if ($nav['prev'])
-                &nbsp; <a href="/photos/{{ $nav['prev'] }}">{{ __('main.next') }} &raquo;</a>
+                &nbsp; <a href="{{ route('photos.view', ['id' => $nav['prev']]) }}">{{ __('main.next') }} &raquo;</a>
             @endif
         </div>
     @endif

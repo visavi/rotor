@@ -165,7 +165,7 @@ class ArticleController extends Controller
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
 
-                return redirect('articles/' . $article->id);
+                return redirect()->route('articles.view', ['id' => $article->id]);
             }
 
             setInput($request->all());
@@ -271,7 +271,7 @@ class ArticleController extends Controller
 
                 setFlash('success', __('blogs.article_success_created'));
 
-                return redirect('articles/' . $article->id);
+                return redirect()->route('articles.view', ['id' => $article->id]);
             }
 
             setInput($request->all());
@@ -299,9 +299,8 @@ class ArticleController extends Controller
         }
 
         $cid = int($request->input('cid'));
-
         if ($cid) {
-            $total = $article->comments()->where('id', '<=', $cid)->count();
+            $total = $article->comments->where('id', '<=', $cid)->count();
 
             $page = ceil($total / setting('comments_per_page'));
 
@@ -504,14 +503,14 @@ class ArticleController extends Controller
         if (Str::length($tag) < 2) {
             setFlash('danger', __('blogs.tag_search_rule'));
 
-            return redirect('blogs/tags');
+            return redirect()->route('blogs.tags');
         }
 
         $tagModel = Tag::query()->where('name', $tag)->first();
         if (! $tagModel) {
             setFlash('danger', __('main.empty_found'));
 
-            return redirect('blogs/tags');
+            return redirect()->route('blogs.tags');
         }
 
         $articles = $tagModel->articles()

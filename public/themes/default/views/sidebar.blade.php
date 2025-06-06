@@ -119,7 +119,7 @@
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('photos*') ? ' active' : '' }}" href="/photos">
+            <a class="app-menu__item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">
                 <i class="app-menu__icon far fa-image"></i>
                 <span class="app-menu__label">{{ __('index.photos') }}</span>
                 <span class="badge bg-sidebar">{{ statsPhotos() }}</span>

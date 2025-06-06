@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
             <li class="breadcrumb-item active">{{ __('photos.create_photo') }}</li>
         </ol>
     </nav>
@@ -14,7 +14,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/photos/create" method="post" enctype="multipart/form-data">
+        <form action="{{ route('photos.create') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('photos.name') }}:</label>

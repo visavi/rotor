@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
             <li class="breadcrumb-item active">{{ __('photos.albums') }}</li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-image"></i>
-                    <a class="" href="/photos/albums/{{ $data->user->login }}">{{ $data->user->getName() }}</a>
+                    <a class="" href="{{ route('photos.user-albums', ['login' => $data->user->login]) }}">{{ $data->user->getName() }}</a>
                 </div>
 
                 {{ $data->cnt }} {{ __('photos.photos') }} / {{ $data->count_comments }} {{ __('main.comments') }}

@@ -75,6 +75,16 @@ class NewsController extends Controller
             abort(404, __('news.news_not_exist'));
         }
 
+        $cid = int($request->input('cid'));
+        if ($cid) {
+            $total = $news->comments->where('id', '<=', $cid)->count();
+
+            $page = ceil($total / setting('comments_per_page'));
+
+            return redirect()->route('news.comments', ['id' => $news->id, 'page' => $page])
+                ->withFragment('comment_' . $cid);
+        }
+
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
@@ -104,15 +114,18 @@ class NewsController extends Controller
                 $news->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/news/comment/' . $news->id . '/' . $comment->id, $news->title);
+                sendNotify($msg, '/news/' . $news->id . '/comments?cid=' . $comment->id, $news->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
                 if ($request->has('read')) {
-                    return redirect('news/' . $news->id);
+                    return redirect()->route('news.view', ['id' => $news->id]);
                 }
 
-                return redirect('news/end/' . $news->id . '');
+                return redirect()->route('news.comments', [
+                    'id'   => $news->id,
+                    'page' => ceil($news->comments->count() / setting('comments_per_page')),
+                ]);
             }
 
             setInput($request->all());
@@ -181,7 +194,7 @@ class NewsController extends Controller
 
                 setFlash('success', __('main.comment_edited_success'));
 
-                return redirect('news/comments/' . $news->id . '?page=' . $page);
+                return redirect()->route('news.comments', ['id' => $news->id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -189,23 +202,6 @@ class NewsController extends Controller
         }
 
         return view('news/editcomment', compact('news', 'comment', 'page'));
-    }
-
-    /**
-     * Переадресация на последнюю страницу
-     */
-    public function end(int $id): RedirectResponse
-    {
-        /** @var News $news */
-        $news = News::query()->find($id);
-
-        if (! $news) {
-            abort(404, __('news.news_not_exist'));
-        }
-
-        $end = ceil($news->count_comments / setting('comments_per_page'));
-
-        return redirect('news/comments/' . $id . '?page=' . $end);
     }
 
     /**
@@ -236,27 +232,5 @@ class NewsController extends Controller
             ->paginate(setting('comments_per_page'));
 
         return view('news/allcomments', compact('comments'));
-    }
-
-    /**
-     * Переход к сообщению
-     */
-    public function viewComment(int $id, int $cid): RedirectResponse
-    {
-        /** @var News $news */
-        $news = News::query()->find($id);
-
-        if (! $news) {
-            abort(404, __('news.news_not_exist'));
-        }
-
-        $total = $news->comments()
-            ->where('id', '<=', $cid)
-            ->orderBy('created_at')
-            ->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('news/comments/' . $news->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -6,7 +6,7 @@
         @endphp
 
         @if ($file)
-            <a href="/photos/{{ $photo->id }}">{{ resizeImage($file->path, ['alt' => check($photo->title), 'class' => 'rounded', 'style' => 'width: 100px;']) }}</a>
+            <a href="{{ route('photos.view', ['id' => $photo->id]) }}">{{ resizeImage($file->path, ['alt' => check($photo->title), 'class' => 'rounded', 'style' => 'width: 100px;']) }}</a>
         @endif
     @endforeach
     </div>

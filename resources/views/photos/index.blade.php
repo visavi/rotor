@@ -5,10 +5,10 @@
 @section('header')
     <div class="float-end">
         @if (isAdmin() || (getUser() && setting('photos_create')))
-            <a class="btn btn-success" href="/photos/create">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('photos.create') }}">{{ __('main.add') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/photos?page={{ $photos->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.photos.index', ['page' => $photos->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>
@@ -28,13 +28,13 @@
 @section('content')
     @if (getUser())
         {{ __('main.my') }}:
-        <a href="/photos/albums/{{ getUser('login') }}" class="badge bg-adaptive">{{ __('photos.photos') }}</a>
-        <a href="/photos/comments/active/{{ getUser('login') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+        <a href="{{ route('photos.user-albums', ['login' => getUser('login')]) }}" class="badge bg-adaptive">{{ __('photos.photos') }}</a>
+        <a href="{{ route('photos.user-comments', ['login' => getUser('login')]) }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     @endif
 
     {{ __('main.all') }}:
-    <a href="/photos/albums" class="badge bg-adaptive">{{ __('photos.albums') }}</a>
-    <a href="/photos/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+    <a href="{{ route('photos.albums') }}" class="badge bg-adaptive">{{ __('photos.albums') }}</a>
+    <a href="{{ route('photos.all-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     <hr>
 
     @if ($photos->isNotEmpty())
@@ -53,7 +53,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-image"></i>
-                            <a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a>
+                            <a href="{{ route('photos.view', ['id' => $photo->id]) }}">{{ $photo->title }}</a>
                         </div>
                     </div>
 
@@ -78,8 +78,7 @@
                     @endif
 
                     {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
-                    <a href="/photos/comments/{{ $photo->id }}">{{ __('main.comments') }}</a> ({{ $photo->count_comments }})
-                    <a href="/photos/end/{{ $photo->id }}">&raquo;</a>
+                    <a href="{{ route('photos.comments', ['id' => $photo->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $photo->count_comments }}</span>
                 </div>
             </div>
         @endforeach

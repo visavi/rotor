@@ -6,8 +6,8 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
-            <li class="breadcrumb-item"><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.view', ['id' => $photo->id]) }}">{{ $photo->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('photos.edit_photo') }}</li>
         </ol>
     </nav>
@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/photos/edit/{{ $photo->id }}?page={{ $page }}" method="post">
+        <form action="{{ route('photos.edit', ['id' => $photo->id, 'page' => $page]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('photos.name') }}:</label>

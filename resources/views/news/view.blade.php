@@ -116,8 +116,7 @@
         @endforeach
 
         <div class="p-3 mb-3 shadow">
-            <i class="fas fa-comments"></i> <b><a href="/news/comments/{{ $news->id }}">{{ __('news.all_comments') }}</a></b> ({{ $news->count_comments }})
-            <a href="/news/end/{{ $news->id }}">&raquo;</a>
+            <i class="fas fa-comments"></i> <b><a href="{{ route('news.comments', ['id' => $news->id]) }}">{{ __('news.all_comments') }}</a></b> <span class="badge bg-adaptive">{{ $news->count_comments }}</span>
         </div>
     @endif
 
@@ -128,7 +127,7 @@
 
         @if (getUser())
             <div class="section-form mb-3 shadow">
-                <form action="/news/comments/{{ $news->id }}?read=1" method="post">
+                <form action="{{ route('news.comments', ['id' => $news->id, 'read' => 1]) }}" method="post">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('main.message') }}:</label>

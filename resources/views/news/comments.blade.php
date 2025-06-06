@@ -45,7 +45,7 @@
                             @endif
 
                             @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                                <a href="/news/edit/{{ $news->id }}/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="{{ route('news.edit-comment', ['id' => $news->id, 'cid' => $comment->id, 'page' => $comments->currentPage()]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -87,7 +87,7 @@
 
         @if (getUser())
             <div class="section-form mb-3 shadow">
-                <form action="/news/comments/{{ $news->id }}" method="post">
+                <form action="{{ route('news.comments', ['id' => $news->id]) }}" method="post">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('main.message') }}:</label>

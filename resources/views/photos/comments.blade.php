@@ -10,8 +10,8 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/photos">{{ __('index.photos') }}</a></li>
-            <li class="breadcrumb-item"><a href="/photos/{{ $photo->id }}">{{ $photo->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.view', ['id' => $photo->id]) }}">{{ $photo->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.comments') }}</li>
         </ol>
     </nav>
@@ -45,7 +45,7 @@
                             @endif
 
                             @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                                <a href="/photos/edit/{{ $photo->id }}/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="{{ route('photos.edit-comment', ['id' => $photo->id, 'cid' => $comment->id, 'page' => $comments->currentPage()]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -87,7 +87,7 @@
 
         @if (getUser())
             <div class="section-form mb-3 shadow">
-                <form action="/photos/comments/{{ $photo->id }}" method="post">
+                <form action="{{ route('photos.comments', ['id' => $photo->id]) }}" method="post">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('main.message') }}:</label>
