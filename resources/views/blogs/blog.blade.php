@@ -105,7 +105,7 @@
                     </div>
                 </div>
 
-                <div class="section-content">
+                <span class="section-content">
                     <div class="section-message">
                         {{ $article->shortText() }}
                     </div>
@@ -118,8 +118,7 @@
                         </small>
                     </div>
 
-                    <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
-                    <a href="/articles/end/{{ $article->id }}">&raquo;</a>
+                    <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
                 </div>
             </div>
         @endforeach

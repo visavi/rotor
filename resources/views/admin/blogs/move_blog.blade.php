@@ -21,7 +21,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow cut">
-        <form action="/admin/articles/move/{{ $article->id }}" method="post">
+        <form action="/admin/articles/{{ $article->id }}/move" method="post">
             @csrf
             <div class="mb-3{{ hasError('cid') }}">
                 <label for="inputCategory" class="form-label">{{ __('blogs.blog') }}</label>

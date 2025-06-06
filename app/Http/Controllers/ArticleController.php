@@ -77,7 +77,6 @@ class ArticleController extends Controller
      */
     public function view(int $id): View
     {
-        /** @var Article $article */
         $article = Article::query()
             ->select('articles.*', 'polls.vote')
             ->where('articles.id', $id)
@@ -107,7 +106,6 @@ class ArticleController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {
@@ -244,7 +242,6 @@ class ArticleController extends Controller
             if ($validator->isValid()) {
                 $text = antimat($text);
 
-                /** @var Article $article */
                 $article = Article::query()->create([
                     'category_id' => $cid,
                     'user_id'     => $user->id,
@@ -295,11 +292,21 @@ class ArticleController extends Controller
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {
             abort(404, __('blogs.article_not_exist'));
+        }
+
+        $cid = int($request->input('cid'));
+
+        if ($cid) {
+            $total = $article->comments()->where('id', '<=', $cid)->count();
+
+            $page = ceil($total / setting('comments_per_page'));
+
+            return redirect()->route('articles.comments', ['id' => $article->id, 'page' => $page])
+                ->withFragment('comment_' . $cid);
         }
 
         if ($request->isMethod('post')) {
@@ -329,11 +336,14 @@ class ArticleController extends Controller
                 $article->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/articles/comment/' . $article->id . '/' . $comment->id, $article->title);
+                sendNotify($msg, '/articles/' . $article->id . '/comments/' . $comment->id, $article->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
-                return redirect('articles/end/' . $article->id);
+                return redirect()->route('articles.comments', [
+                    'id'   => $article->id,
+                    'page' => ceil($article->comments->count() / setting('comments_per_page')),
+                ]);
             }
 
             setInput($request->all());
@@ -361,7 +371,6 @@ class ArticleController extends Controller
     {
         $page = int($request->input('page', 1));
 
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {
@@ -402,7 +411,7 @@ class ArticleController extends Controller
 
                 setFlash('success', __('main.comment_edited_success'));
 
-                return redirect('articles/comments/' . $article->id . '?page=' . $page);
+                return redirect()->route('articles.comments', ['id' => $article->id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -413,30 +422,10 @@ class ArticleController extends Controller
     }
 
     /**
-     * Переадресация на последнюю страницу
-     */
-    public function end(int $id): RedirectResponse
-    {
-        /** @var Article $article */
-        $article = Article::query()->find($id);
-
-        if (! $article) {
-            abort(404, __('blogs.article_not_exist'));
-        }
-
-        $total = $article->comments()->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('articles/comments/' . $id . '?page=' . $end);
-    }
-
-    /**
      * Печать
      */
     public function print(int $id): View
     {
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {
@@ -637,28 +626,6 @@ class ArticleController extends Controller
             ->appends(['user' => $user->login]);
 
         return view('blogs/active_comments', compact('comments', 'user'));
-    }
-
-    /**
-     * Переход к сообщению
-     */
-    public function viewComment(int $id, int $cid): RedirectResponse
-    {
-        /** @var Article $article */
-        $article = Article::query()->find($id);
-
-        if (! $article) {
-            abort(404, __('blogs.article_not_exist'));
-        }
-
-        $total = $article->comments()
-            ->where('id', '<=', $cid)
-            ->orderBy('created_at')
-            ->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('articles/comments/' . $article->id . '?page=' . $end . '#comment_' . $cid);
     }
 
     /**

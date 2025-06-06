@@ -13,7 +13,7 @@
             @endforeach
 
             <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_edit_comment') }}</li>
         </ol>
     </nav>
@@ -24,7 +24,7 @@
     <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
 
     <div class="section-form mb-3 shadow">
-        <form action="/articles/edit/{{ $comment->relate_id }}/{{ $comment->id }}?page={{ $page }}" method="post">
+        <form action="/articles/{{ $comment->relate_id }}/comments/{{ $comment->id }}?page={{ $page }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>

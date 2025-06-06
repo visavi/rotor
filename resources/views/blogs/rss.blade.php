@@ -4,17 +4,20 @@
 
 @section('content')
     @foreach ($articles as $article)
-        <?php $article->text = bbCode($article->text); ?>
-        <?php $article->text = str_replace('/uploads/stickers', config('app.url') . '/uploads/stickers', $article->text); ?>
+        @php
+            $article->text = bbCode($article->text);
+            $article->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $article->text);
+            $article->text = str_replace('/uploads/articles', asset('/uploads/articles'), $article->text);
+        @endphp
 
         <item>
             <title>{{ $article->title }}</title>
-            <link>{{ config('app.url') }}/articles/{{ $article->id }}</link>
+            <link>{{ route('articles.view', ['id' => $article->id]) }}</link>
             <description>{{ $article->text }}</description>
             <author>{{ $article->user->getName() }}</author>
             <pubDate>{{ date('r', $article->created_at) }}</pubDate>
             <category>{{ __('index.blogs') }}</category>
-            <guid>{{ config('app.url') }}/articles/{{ $article->id }}</guid>
+            <guid>{{ route('articles.view', ['id' => $article->id]) }}</guid>
         </item>
     @endforeach
 @stop

@@ -176,16 +176,14 @@ Route::controller(ArticleController::class)
 Route::controller(ArticleController::class)
     ->prefix('articles')
     ->group(function () {
-        Route::get('/', 'newArticles');
-        Route::get('/{id}', 'view');
-        Route::get('/print/{id}', 'print');
-        Route::get('/rss/{id}', 'rssComments');
-        Route::get('/comments', 'newComments');
-        Route::get('/end/{id}', 'end');
-        Route::get('/comment/{id}/{cid}', 'viewComment')->whereNumber('cid');
-        Route::match(['get', 'post'], '/edit/{id}', 'edit');
-        Route::match(['get', 'post'], '/comments/{id}', 'comments');
-        Route::match(['get', 'post'], '/edit/{id}/{cid}', 'editComment')->whereNumber('cid');
+        Route::get('/', 'newArticles')->name('articles.new-articles');
+        Route::get('/{id}', 'view')->name('articles.view');
+        Route::get('/{id}/print', 'print')->name('articles.print');
+        Route::get('/{id}/rss', 'rssComments')->name('articles.rss-comments');
+        Route::get('/comments', 'newComments')->name('articles.new-comments');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('articles.edit');
+        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('articles.comments');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('articles.edit-comment');
     });
 
 /* Новости */
@@ -619,9 +617,9 @@ Route::middleware(['check.admin', 'admin.logger'])
         Route::controller(AdminArticleController::class)
             ->prefix('articles')
             ->group(function () {
-                Route::match(['get', 'post'], '/edit/{id}', 'editArticle');
-                Route::match(['get', 'post'], '/move/{id}', 'moveArticle');
-                Route::get('/delete/{id}', 'deleteArticle');
+                Route::match(['get', 'post'], '/{id}/edit', 'editArticle');
+                Route::match(['get', 'post'], '/{id}/move', 'moveArticle');
+                Route::get('/{id}/delete', 'deleteArticle');
             });
 
         /* Доска объявлений */

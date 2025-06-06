@@ -21,7 +21,7 @@
         @foreach ($comments as $comment)
             <div class="section mb-3 shadow">
                 <div class="section-title">
-                    <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $comment->relate_id }}">{{ $comment->title }}</a> ({{ $comment->count_comments }})
+                    <i class="fa fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $comment->relate_id]) }}">{{ $comment->title }}</a> <span class="badge bg-adaptive">{{ $comment->count_comments }}</span>
 
                     @if (isAdmin())
                         <div class="float-end">

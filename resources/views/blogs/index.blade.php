@@ -35,7 +35,7 @@
 
         {{ __('main.new') }}:
         <a href="/articles" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
-        <a href="/articles/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+        <a href="{{ route('articles.new-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     </div>
 
     @foreach ($categories as $key => $category)

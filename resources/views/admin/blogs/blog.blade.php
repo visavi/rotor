@@ -90,9 +90,9 @@
                     </div>
 
                     <div class="text-end">
-                        <a href="/admin/articles/edit/{{ $article->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/articles/move/{{ $article->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="/admin/articles/delete/{{ $article->id }}?page={{ $articles->currentPage() }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/articles/{{ $article->id }}/edit" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="/admin/articles/{{ $article->id }}/move" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
+                        <a href="/admin/articles/{{ $article->id }}/delete?page={{ $articles->currentPage() }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
 
@@ -109,8 +109,7 @@
                             {{ dateFixed($article->created_at) }}
                         </small>
                     </div>
-                    <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{ $article->count_comments }})
-                    <a href="/articles/end/{{ $article->id }}">&raquo;</a>
+                    <a href="/articles/{{ $article->id }}/comments">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
                 </div>
             </div>
         @endforeach

@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-comment"></i>
-                    <a href="/articles/comment/{{ $comment->relate_id}}/{{ $comment->id}}">{{ $comment->title }}</a> ({{ $comment->count_comments }})
+                    <a href="{{ route('articles.comments', ['id' => $comment->relate_id, 'cid' => $comment->id] }}">{{ $comment->title }}</a> <span class="badge bg-adaptive">{{ $comment->count_comments }}</span>
 
                     <div class="float-end">
                         @if (isAdmin())

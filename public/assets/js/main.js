@@ -182,7 +182,7 @@ showAttachForm = function () {
 /* Переход к форме ввода */
 postJump = function () {
     $('html, body').animate({
-        scrollTop: ($('.section-form').offset().top  - 50)
+        scrollTop: ($('.section-form').offset().top - 50)
     }, 100);
 };
 

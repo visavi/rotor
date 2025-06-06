@@ -198,7 +198,6 @@ class ArticleController extends AdminController
      */
     public function editArticle(int $id, Request $request, Validator $validator)
     {
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {
@@ -256,7 +255,6 @@ class ArticleController extends AdminController
      */
     public function moveArticle(int $id, Request $request, Validator $validator)
     {
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {
@@ -308,7 +306,6 @@ class ArticleController extends AdminController
     {
         $page = int($request->input('page', 1));
 
-        /** @var Article $article */
         $article = Article::query()->find($id);
 
         if (! $article) {

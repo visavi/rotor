@@ -11,7 +11,7 @@
     <div class="section-header d-flex align-items-center">
         <div class="flex-grow-1">
             <div class="section-title">
-                <h3><a class="post-title" href="/{{ $post->relate_type }}/comment/{{ $post->relate_id }}/{{ $post->id }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
+                <h3><a class="post-title" href="{{ $post->relate_type }}/{{ $post->relate_id }}/comments?cid={{ $post->id }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
             </div>
         </div>
 

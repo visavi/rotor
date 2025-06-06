@@ -23,7 +23,7 @@
 @stop
 
 @section('content')
-    <i class="fas fa-rss"></i> <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-rss"></i> <a href="/articles/{{ $article->id }}/rss">{{ __('main.rss') }}</a>
     <hr>
 
     @if ($comments->isNotEmpty())
@@ -53,7 +53,7 @@
                             @endif
 
                             @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                                <a href="/articles/edit/{{ $article->id }}/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="/articles/{{ $article->id }}/comments/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -92,7 +92,7 @@
 
     @if (getUser())
         <div class="section-form mb-3 shadow">
-            <form action="/articles/comments/{{ $article->id }}" method="post">
+            <form action="{{ route('articles.comments', ['id' => $article->id]) }}" method="post">
                 @csrf
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>

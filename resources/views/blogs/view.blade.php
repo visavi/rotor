@@ -8,7 +8,7 @@
     @if (getUser())
         <div class="float-end">
             @if (getUser('id') === $article->user->id)
-                <a class="btn btn-success" href="/articles/edit/{{ $article->id }}">{{ __('main.change') }}</a>
+                <a class="btn btn-success" href="/articles/{{ $article->id }}/edit">{{ __('main.change') }}</a>
             @endif
 
             @if (isAdmin())
@@ -17,9 +17,9 @@
                         <i class="fas fa-wrench"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="/admin/articles/edit/{{ $article->id }}">{{ __('main.edit') }}</a>
-                        <a class="dropdown-item" href="/admin/articles/move/{{ $article->id }}">{{ __('main.move') }}</a>
-                        <a class="dropdown-item" href="/admin/articles/delete/{{ $article->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
+                        <a class="dropdown-item" href="/admin/articles/{{ $article->id }}/edit">{{ __('main.edit') }}</a>
+                        <a class="dropdown-item" href="/admin/articles/{{ $article->id }}/move">{{ __('main.move') }}</a>
+                        <a class="dropdown-item" href="/admin/articles/{{ $article->id }}/delete?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
                     </div>
                 </div>
             @endif
@@ -45,8 +45,8 @@
 @stop
 
 @section('content')
-    <i class="fas fa-print"></i> <a class="me-3" href="/articles/print/{{ $article->id }}">{{ __('main.print') }}</a>
-    <i class="fas fa-rss"></i> <a href="/articles/rss/{{ $article->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-print"></i> <a class="me-3" href="/articles/{{ $article->id }}/print">{{ __('main.print') }}</a>
+    <i class="fas fa-rss"></i> <a href="/articles/{{ $article->id }}/rss">{{ __('main.rss') }}</a>
     <hr>
 
     <div class="mb-3">
@@ -75,7 +75,6 @@
         </div>
 
         <i class="fa fa-eye"></i> {{ __('main.views') }}: {{ $article->visits }}<br>
-        <i class="fa fa-comment"></i> <a href="/articles/comments/{{ $article->id }}">{{ __('main.comments') }}</a> ({{  $article->count_comments }})
-        <a href="/articles/end/{{ $article->id }}">&raquo;</a>
+        <i class="fa fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{  $article->count_comments }}</span>
     </div>
 @stop
