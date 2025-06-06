@@ -426,3 +426,16 @@ textarea.form-control {
     border-radius: 3px;
     box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
 }
+
+:target {
+    animation: highlight-fade 2s ease-out;
+}
+
+@keyframes highlight-fade {
+    0% {
+        background-color: rgba(150, 200, 255, 0.6);
+    }
+    100% {
+        background-color: transparent;
+    }
+}

@@ -165,9 +165,9 @@ $(function () {
         setTimeout(function() {
             const hash = $(window.location.hash);
             if (hash.length) {
-                window.scrollTo(0, hash.offset().top - 50);
+                window.scrollTo(0, hash.offset().top - 100);
             }
-        }, 50);
+        }, 100);
     }
 });
 
@@ -182,7 +182,7 @@ showAttachForm = function () {
 /* Переход к форме ввода */
 postJump = function () {
     $('html, body').animate({
-        scrollTop: ($('.section-form').offset().top)
+        scrollTop: ($('.section-form').offset().top  - 50)
     }, 100);
 };
 
