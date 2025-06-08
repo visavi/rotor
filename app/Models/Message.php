@@ -82,11 +82,8 @@ class Message extends BaseModel
 
     /**
      * Create dialogue
-     *
-     *
-     * @return Builder|Model
      */
-    public function createDialogue(User $user, ?User $author, string $text, bool $withAuthor)
+    public function createDialogue(User $user, ?User $author, string $text, bool $withAuthor): Builder|Model
     {
         $authorId = $author->id ?? 0;
 

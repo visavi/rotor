@@ -33,11 +33,8 @@ class InvitationController extends AdminController
 
     /**
      * Создание ключей
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $keys = int($request->input('keys'));
@@ -79,7 +76,6 @@ class InvitationController extends AdminController
     {
         $userkeys = int($request->input('userkeys', 1));
 
-        /* @var User $user */
         $user = getUserByLogin($request->input('user'));
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -135,7 +131,6 @@ class InvitationController extends AdminController
         $validator->false($users->isEmpty(), __('admin.invitations.keys_empty_recipients'));
 
         if ($validator->isValid()) {
-            /** @var User $user */
             foreach ($users as $user) {
                 $key = Str::random(mt_rand(12, 15));
 

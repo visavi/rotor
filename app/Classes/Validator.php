@@ -19,10 +19,7 @@ use Illuminate\Http\UploadedFile;
  */
 class Validator
 {
-    /**
-     * @var array validation errors
-     */
-    private $errors = [];
+    private array $errors = [];
 
     /**
      * Проверяет длину строки

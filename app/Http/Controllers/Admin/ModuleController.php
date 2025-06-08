@@ -91,7 +91,6 @@ class ModuleController extends AdminController
             abort(200, __('admin.modules.module_not_found'));
         }
 
-        /** @var Module $module */
         $module = Module::query()->firstOrNew(['name' => $moduleName]);
 
         $moduleConfig = include $modulePath . '/module.php';
@@ -144,7 +143,6 @@ class ModuleController extends AdminController
             abort(200, __('admin.modules.module_not_found'));
         }
 
-        /** @var Module $module */
         $module = Module::query()->where('name', $moduleName)->first();
         if (! $module) {
             abort(200, __('admin.modules.module_not_found'));

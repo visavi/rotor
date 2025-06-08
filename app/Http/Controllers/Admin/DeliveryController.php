@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Classes\Validator;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,11 +14,8 @@ class DeliveryController extends AdminController
 {
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
@@ -50,7 +46,6 @@ class DeliveryController extends AdminController
                 $users = User::query()->whereIn('level', User::USER_GROUPS)->get();
             }
 
-            /** @var Collection $users */
             $users = $users->filter(static function ($value, $key) {
                 return $value->id !== getUser('id');
             });

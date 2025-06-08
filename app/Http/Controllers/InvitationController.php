@@ -52,11 +52,8 @@ class InvitationController extends Controller
 
     /**
      * Создание ключей
-     *
-     *
-     * @return RedirectResponse
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
         $newKeys = [];
 

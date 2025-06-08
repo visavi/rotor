@@ -83,7 +83,6 @@ class DownController extends Controller
             $links = (array) $request->input('links');
             $links = array_unique(array_diff($links, ['']));
 
-            /** @var Load $category */
             $category = Load::query()->find($cid);
 
             $validator
@@ -111,7 +110,6 @@ class DownController extends Controller
             }
 
             if ($validator->isValid()) {
-                /** @var Down $down */
                 $down = Down::query()->create([
                     'category_id' => $category->id,
                     'title'       => $title,
@@ -133,7 +131,6 @@ class DownController extends Controller
                     if ($admins->isNotEmpty()) {
                         $text = textNotice('down_upload', ['url' => '/admin/downs/edit/' . $down->id, 'title' => $down->title]);
 
-                        /** @var User $admin */
                         foreach ($admins as $admin) {
                             $admin->sendMessage($user, $text, false);
                         }
@@ -167,7 +164,6 @@ class DownController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Down $down */
         $down = Down::query()->where('user_id', $user->id)->find($id);
 
         if (! $down) {
@@ -190,7 +186,6 @@ class DownController extends Controller
             $links = (array) $request->input('links');
             $links = array_unique(array_diff($links, ['']));
 
-            /** @var Load $category */
             $category = Load::query()->find($cid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -245,7 +240,6 @@ class DownController extends Controller
      */
     public function download(int $id, Validator $validator): Response
     {
-        /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
 
         if (! $file || ! $file->relate) {
@@ -278,7 +272,6 @@ class DownController extends Controller
      */
     public function downloadLink(int $id, int $linkId, Validator $validator): Response
     {
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -311,7 +304,6 @@ class DownController extends Controller
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -332,7 +324,6 @@ class DownController extends Controller
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-                /** @var Comment $comment */
                 $comment = $down->comments()->create([
                     'text'       => antimat($msg),
                     'user_id'    => getUser('id'),
@@ -436,7 +427,6 @@ class DownController extends Controller
      */
     public function end(int $id): RedirectResponse
     {
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -455,7 +445,6 @@ class DownController extends Controller
      */
     public function zip(int $id): View
     {
-        /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
         $down = $file?->relate;
 
@@ -536,7 +525,6 @@ class DownController extends Controller
      */
     public function zipView(int $id, int $fid): View
     {
-        /** @var File $file */
         $file = File::query()->where('relate_type', Down::$morphName)->find($id);
         $down = $file?->relate;
 
@@ -609,7 +597,6 @@ class DownController extends Controller
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {

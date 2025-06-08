@@ -32,11 +32,8 @@ class RuleController extends AdminController
 
     /**
      * Редактирование правил
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator)
+    public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
         $rules = Rule::query()->firstOrNew();
 

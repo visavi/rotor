@@ -55,8 +55,6 @@ class Banhist extends BaseModel
 
     /**
      * Возвращает тип бана
-     *
-     * @return HtmlString тип бана
      */
     public function getType(): HtmlString
     {

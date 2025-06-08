@@ -66,10 +66,8 @@ class PhotoController extends Controller
 
     /**
      * Форма загрузки фото
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood)
+    public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         if (! isAdmin() && ! setting('photos_create')) {
             abort(200, __('photos.photos_closed'));
@@ -97,7 +95,6 @@ class PhotoController extends Controller
             $validator->true($existFiles, ['files' => __('validator.image_upload_failed')]);
 
             if ($validator->isValid()) {
-                /** @var Photo $photo */
                 $photo = Photo::query()->create([
                     'user_id'    => $user->id,
                     'title'      => $title,
@@ -135,10 +132,8 @@ class PhotoController extends Controller
 
     /**
      * Редактирование фото
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -146,7 +141,6 @@ class PhotoController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Photo $photo */
         $photo = Photo::query()->where('user_id', $user->id)->find($id);
 
         if (! $photo) {
@@ -187,12 +181,9 @@ class PhotoController extends Controller
 
     /**
      * Список комментариев
-     *
-     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
@@ -223,7 +214,6 @@ class PhotoController extends Controller
             if ($validator->isValid()) {
                 $msg = antimat($msg);
 
-                /** @var Comment $comment */
                 $comment = $photo->comments()->create([
                     'text'       => $msg,
                     'user_id'    => $user->id,
@@ -269,10 +259,8 @@ class PhotoController extends Controller
 
     /**
      * Редактирование комментария
-     *
-     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator)
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -280,7 +268,6 @@ class PhotoController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {
@@ -338,7 +325,6 @@ class PhotoController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Photo $photo */
         $photo = Photo::query()->where('user_id', $user->id)->find($id);
 
         if (! $photo) {

@@ -32,11 +32,8 @@ class RatingController extends Controller
 
     /**
      * Изменение рейтинга
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(string $login, Request $request, Validator $validator)
+    public function index(string $login, Request $request, Validator $validator): View|RedirectResponse
     {
         $vote = $request->input('vote');
         $user = getUserByLogin($login);

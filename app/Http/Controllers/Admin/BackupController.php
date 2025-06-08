@@ -39,11 +39,8 @@ class BackupController extends AdminController
 
     /**
      * Создание нового бэкапа
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $sheets = check($request->input('sheets'));
@@ -147,7 +144,6 @@ class BackupController extends AdminController
 
     /**
      * Открывает поток
-     *
      *
      * @return bool|resource
      */

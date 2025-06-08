@@ -46,7 +46,6 @@ class LoadController extends AdminController
         if ($validator->isValid()) {
             $max = Load::query()->max('sort') + 1;
 
-            /** @var Load $load */
             $load = Load::query()->create([
                 'name' => $name,
                 'sort' => $max,
@@ -65,17 +64,13 @@ class LoadController extends AdminController
 
     /**
      * Редактирование раздела
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Load $load */
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
@@ -123,7 +118,6 @@ class LoadController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Load $load */
         $load = Load::query()->with('children')->find($id);
 
         if (! $load) {
@@ -174,7 +168,6 @@ class LoadController extends AdminController
      */
     public function load(int $id, Request $request): View
     {
-        /** @var Load $category */
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
@@ -199,15 +192,11 @@ class LoadController extends AdminController
 
     /**
      * Редактирование загрузки
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editDown(int $id, Request $request, Validator $validator)
+    public function editDown(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $cid = int($request->input('category'));
 
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -225,7 +214,6 @@ class LoadController extends AdminController
             $links = (array) $request->input('links');
             $links = array_unique(array_diff($links, ['']));
 
-            /** @var Load $category */
             $category = Load::query()->find($cid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -291,7 +279,6 @@ class LoadController extends AdminController
      */
     public function deleteDown(int $id, Request $request): RedirectResponse
     {
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {
@@ -337,7 +324,6 @@ class LoadController extends AdminController
      */
     public function publish(int $id, Request $request): RedirectResponse
     {
-        /** @var Down $down */
         $down = Down::query()->find($id);
 
         if (! $down) {

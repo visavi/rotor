@@ -31,15 +31,11 @@ class VoteController extends Controller
 
     /**
      * Просмотр голосования
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function view(int $id, Request $request, Validator $validator)
+    public function view(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $show = $request->input('show');
 
-        /** @var Vote $vote */
         $vote = Vote::query()->find($id);
 
         if (! $vote) {
@@ -109,7 +105,6 @@ class VoteController extends Controller
      */
     public function voters(int $id): View
     {
-        /** @var Vote $vote */
         $vote = Vote::query()->find($id);
 
         if (! $vote) {
@@ -143,7 +138,6 @@ class VoteController extends Controller
      */
     public function viewHistory(int $id): View
     {
-        /** @var Vote $vote */
         $vote = Vote::query()->find($id);
 
         if (! $vote) {
@@ -172,11 +166,8 @@ class VoteController extends Controller
 
     /**
      * Создание голосования
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $question = $request->input('question');
@@ -198,7 +189,6 @@ class VoteController extends Controller
             }
 
             if ($validator->isValid()) {
-                /** @var Vote $vote */
                 $vote = Vote::query()->create([
                     'title'       => $question,
                     'description' => $description,

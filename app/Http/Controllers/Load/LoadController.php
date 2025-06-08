@@ -35,7 +35,6 @@ class LoadController extends Controller
      */
     public function load(int $id, Request $request): View
     {
-        /** @var Load $category */
         $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 class CheckerController extends AdminController
 {
@@ -69,7 +68,6 @@ class CheckerController extends AdminController
             $files->ignoreVCSIgnored(true);
         }
 
-        /** @var SplFileInfo $file */
         foreach ($files as $file) {
             $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i:s', true) . ' / ' . formatSize($file->getSize());
         }

@@ -49,7 +49,6 @@ class UserFieldController extends AdminController
     {
         $types = UserField::TYPES;
 
-        /** @var UserField $field */
         $field = UserField::query()->find($id);
 
         if (! $field) {
@@ -77,7 +76,6 @@ class UserFieldController extends AdminController
      */
     public function destroy(int $id): JsonResponse
     {
-        /** @var UserField $field */
         $field = UserField::query()->find($id);
 
         if (! $field) {

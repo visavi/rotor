@@ -42,11 +42,8 @@ class NotebookController extends Controller
 
     /**
      * Редактирование
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator)
+    public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');

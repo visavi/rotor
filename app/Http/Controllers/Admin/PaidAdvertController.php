@@ -109,8 +109,6 @@ class PaidAdvertController extends AdminController
     public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $places = PaidAdvert::PLACES;
-
-        /** @var PaidAdvert $advert */
         $advert = PaidAdvert::query()->find($id);
 
         if (! $advert) {
@@ -172,7 +170,6 @@ class PaidAdvertController extends AdminController
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        /** @var PaidAdvert $advert */
         $advert = PaidAdvert::query()->find($id);
 
         if (! $advert) {

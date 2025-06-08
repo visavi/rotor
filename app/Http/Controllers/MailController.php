@@ -15,11 +15,8 @@ class MailController extends Controller
 {
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $message = $request->input('message');
@@ -73,11 +70,8 @@ class MailController extends Controller
 
     /**
      * Восстановление пароля
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function recovery(Request $request, Validator $validator)
+    public function recovery(Request $request, Validator $validator): View|RedirectResponse
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
@@ -131,11 +125,8 @@ class MailController extends Controller
 
     /**
      * Восстановление пароля
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function restore(Request $request, Validator $validator)
+    public function restore(Request $request, Validator $validator): View|RedirectResponse
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
@@ -145,7 +136,6 @@ class MailController extends Controller
 
         $key = $request->input('key');
 
-        /** @var User $user */
         $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
             abort(200, __('mails.secret_key_invalid'));

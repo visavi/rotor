@@ -9,10 +9,8 @@ class StatusSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $data = [
             ['topoint' => 0, 'point' => 249, 'name' => __('seeds.statuses.novice'), 'color' => null],

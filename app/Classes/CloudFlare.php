@@ -40,10 +40,7 @@ class CloudFlare
         '2a06:98c0::/29',
     ];
 
-    /**
-     * @var Request
-     */
-    private $request;
+    private Request $request;
 
     public function __construct(Request $request)
     {

@@ -52,7 +52,6 @@ class BookmarkController extends Controller
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($tid);
         $validator->true($topic, __('forums.topic_not_exist'));
 

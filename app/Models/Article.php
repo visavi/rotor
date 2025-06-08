@@ -151,8 +151,6 @@ class Article extends BaseModel
 
     /**
      * Возвращает путь к первому файлу
-     *
-     * @return HtmlString|null код изображения
      */
     public function getFirstImage(): ?HtmlString
     {

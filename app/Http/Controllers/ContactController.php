@@ -22,11 +22,8 @@ class ContactController extends Controller
 
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         $login = $request->input('user');
 
@@ -79,11 +76,8 @@ class ContactController extends Controller
 
     /**
      * Заметка для пользователя
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function note(int $id, Request $request, Validator $validator)
+    public function note(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $contact = Contact::query()
             ->where('user_id', getUser('id'))

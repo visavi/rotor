@@ -312,10 +312,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * Авторизует через социальные сети
      *
      * @throws GuzzleException
-     *
-     * @return User|bool
      */
-    public static function socialAuth(string $token)
+    public static function socialAuth(string $token): User|bool
     {
         $client = new Client(['timeout' => 30.0]);
 
@@ -331,7 +329,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
             session()->put('social', $network);
 
-            /** @var Social $social */
             $social = Social::query()
                 ->where('network', $network->network)
                 ->where('uid', $network->uid)
@@ -423,10 +420,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает статус пользователя
-     *
-     * @return HtmlString|string статус пользователя
      */
-    public function getStatus()
+    public function getStatus(): HtmlString|string
     {
         static $status;
 
@@ -580,10 +575,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Отправляет приватное сообщение
-     *
-     * @return Builder|Model
      */
-    public function sendMessage(?User $author, string $text, bool $withAuthor = true)
+    public function sendMessage(?User $author, string $text, bool $withAuthor = true): Builder|Model
     {
         return (new Message())->createDialogue($this, $author, $text, $withAuthor);
     }
@@ -606,8 +599,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает размер игнор-листа
-     *
-     * @return int количество игнорируемых
      */
     public function getCountIgnore(): int
     {
@@ -616,8 +607,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     /**
      * Возвращает количество записей на стене сообщений
-     *
-     * @return int количество записей
      */
     public function getCountWall(): int
     {

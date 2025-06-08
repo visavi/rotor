@@ -32,7 +32,6 @@ class NewsController extends AdminController
      */
     public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
-        /** @var News $news */
         $news = News::query()->find($id);
         $page = int($request->input('page', 1));
 
@@ -145,7 +144,6 @@ class NewsController extends AdminController
     {
         $page = int($request->input('page', 1));
 
-        /** @var News $news */
         $news = News::query()->find($id);
 
         if (! $news) {

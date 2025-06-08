@@ -24,7 +24,6 @@ class BoardController extends Controller
         $board = null;
 
         if ($id) {
-            /** @var Board $board */
             $board = Board::query()->find($id);
 
             if (! $board) {
@@ -60,7 +59,6 @@ class BoardController extends Controller
      */
     public function view(int $id): View
     {
-        /** @var Item $item */
         $item = Item::query()
             ->with('category')
             ->find($id);
@@ -78,11 +76,8 @@ class BoardController extends Controller
 
     /**
      * Создание объявления
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood)
+    public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         $bid = int($request->input('bid'));
 
@@ -105,7 +100,7 @@ class BoardController extends Controller
             $text = $request->input('text');
             $price = int($request->input('price'));
             $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
-            /** @var Board $board */
+
             $board = Board::query()->find($bid);
 
             $validator
@@ -121,7 +116,6 @@ class BoardController extends Controller
             }
 
             if ($validator->isValid()) {
-                /** @var Item $item */
                 $item = Item::query()->create([
                     'board_id'   => $board->id,
                     'title'      => $title,
@@ -165,17 +159,13 @@ class BoardController extends Controller
 
     /**
      * Редактирование объявления
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -189,7 +179,6 @@ class BoardController extends Controller
             $price = int($request->input('price'));
             $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
 
-            /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator
@@ -243,7 +232,6 @@ class BoardController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -290,7 +278,6 @@ class BoardController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {

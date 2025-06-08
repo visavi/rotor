@@ -49,11 +49,8 @@ class AdvertController extends Controller
 
     /**
      * Покупка рекламы
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($this->user->point < setting('rekuserpoint')) {
             abort(200, __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]));

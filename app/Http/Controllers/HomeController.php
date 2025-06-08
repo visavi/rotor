@@ -33,10 +33,8 @@ class HomeController extends Controller
 
     /**
      * Закрытие сайта
-     *
-     * @return Response
      */
-    public function closed()
+    public function closed(): Response
     {
         if (setting('closedsite') !== 2) {
             return redirect('/');

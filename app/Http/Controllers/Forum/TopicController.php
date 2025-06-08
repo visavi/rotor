@@ -15,7 +15,6 @@ use App\Models\Reader;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\VoteAnswer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
@@ -146,7 +145,6 @@ class TopicController extends Controller
             ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
 
         // Проверка сообщения на схожесть
-        /** @var Post $post */
         $post = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->first();
         $validator->notEqual($msg, $post->text, ['msg' => __('forums.post_repeat')]);
 
@@ -232,7 +230,6 @@ class TopicController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -273,7 +270,6 @@ class TopicController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -310,7 +306,6 @@ class TopicController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -339,11 +334,8 @@ class TopicController extends Controller
 
     /**
      * Topic editing
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -353,7 +345,6 @@ class TopicController extends Controller
             abort(200, __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]));
         }
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -372,7 +363,6 @@ class TopicController extends Controller
             ->orderBy('id')
             ->first();
 
-        /** @var Vote $vote */
         $vote = Vote::query()->where('topic_id', $id)->first();
 
         if ($request->isMethod('post')) {
@@ -430,7 +420,6 @@ class TopicController extends Controller
                         $countAnswers = $vote->answers()->count();
 
                         foreach ($answers as $answerId => $answer) {
-                            /** @var VoteAnswer $ans */
                             $ans = $vote->answers()->firstOrNew(['id' => $answerId]);
 
                             if ($ans->exists) {
@@ -461,11 +450,8 @@ class TopicController extends Controller
 
     /**
      * Post editing
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editPost(int $id, Request $request, Validator $validator)
+    public function editPost(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page'));
 
@@ -473,7 +459,6 @@ class TopicController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Post $post */
         $post = Post::query()
             ->select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', 'topics.id')
@@ -532,7 +517,6 @@ class TopicController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Vote $vote */
         $vote = Vote::query()->where('topic_id', $id)->first();
 
         if (! $vote) {
@@ -585,7 +569,6 @@ class TopicController extends Controller
      */
     public function print(int $id): View
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -627,7 +610,6 @@ class TopicController extends Controller
      */
     public function end(int $id): RedirectResponse
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {

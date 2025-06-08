@@ -28,11 +28,8 @@ class AdvertController extends AdminController
 
     /**
      * Редактирование ссылки
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
         $link = Advert::query()->find($id);

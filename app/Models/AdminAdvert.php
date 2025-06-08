@@ -34,8 +34,6 @@ class AdminAdvert extends BaseModel
 
     /**
      * Кэширует ссылки админской рекламы
-     *
-     * @return array Список ссылок
      */
     public static function statAdverts(): array
     {

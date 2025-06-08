@@ -32,8 +32,6 @@ class Advert extends BaseModel
 
     /**
      * Кэширует ссылки пользовательской рекламы
-     *
-     * @return array Список ссылок
      */
     public static function statAdverts(): array
     {

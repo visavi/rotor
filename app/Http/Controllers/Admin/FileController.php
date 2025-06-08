@@ -62,11 +62,8 @@ class FileController extends AdminController
 
     /**
      * Редактирование файла
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator)
+    public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
         $path = $this->path;
         $file = $path ? '/' . $this->file : $this->file;
@@ -108,11 +105,8 @@ class FileController extends AdminController
 
     /**
      * Создание файла
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if (! is_writable(resource_path('views/' . $this->path))) {
             abort(200, __('admin.files.directory_not_writable', ['dir' => $this->path]));

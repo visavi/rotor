@@ -16,11 +16,8 @@ class BanController extends Controller
 {
     /**
      * User Ban
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function ban(Request $request, Validator $validator)
+    public function ban(Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -61,7 +58,6 @@ class BanController extends Controller
             if ($validator->isValid()) {
                 $text = textNotice('explain', ['message' => antimat($msg)]);
 
-                /** @var User $admin */
                 foreach ($admins as $admin) {
                     $admin->sendMessage($user, $text, false);
                 }

@@ -18,7 +18,6 @@ class GuestbookControllerTest extends \Tests\TestCase
             'created_at' => SITETIME,
         ]);
 
-        /** @var Guestbook $getGuest */
         $getGuest = Guestbook::query()->find($guest->id);
         self::assertEquals('Test text message', $getGuest->text);
 

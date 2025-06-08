@@ -28,11 +28,8 @@ class PhotoController extends AdminController
 
     /**
      * Редактирование ссылки
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
         $photo = Photo::query()->find($id);
@@ -83,7 +80,6 @@ class PhotoController extends AdminController
 
         $page = int($request->input('page', 1));
 
-        /** @var Photo $photo */
         $photo = Photo::query()->find($id);
 
         if (! $photo) {

@@ -24,11 +24,8 @@ class StatusController extends AdminController
 
     /**
      * Добавление статуса
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $topoint = int($request->input('topoint'));
@@ -63,11 +60,8 @@ class StatusController extends AdminController
 
     /**
      * Редактирование статуса
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator)
+    public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
         $id = int($request->input('id'));
 

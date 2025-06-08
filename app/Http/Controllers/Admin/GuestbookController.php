@@ -30,11 +30,8 @@ class GuestbookController extends AdminController
 
     /**
      * Редактирование сообщения
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);
@@ -72,11 +69,8 @@ class GuestbookController extends AdminController
 
     /**
      * Ответ на сообщение
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function reply(int $id, Request $request, Validator $validator)
+    public function reply(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page'));
         $post = Guestbook::with('user')->find($id);

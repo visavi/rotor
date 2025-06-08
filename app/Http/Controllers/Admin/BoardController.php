@@ -23,7 +23,6 @@ class BoardController extends AdminController
         $board = null;
 
         if ($id) {
-            /** @var Board $board */
             $board = Board::query()->find($id);
 
             if (! $board) {
@@ -88,7 +87,6 @@ class BoardController extends AdminController
         if ($validator->isValid()) {
             $max = Board::query()->max('sort') + 1;
 
-            /** @var Board $board */
             $board = Board::query()->create([
                 'name' => $name,
                 'sort' => $max,
@@ -107,17 +105,13 @@ class BoardController extends AdminController
 
     /**
      * Редактирование раздела
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Board $board */
         $board = Board::query()->with('children')->find($id);
 
         if (! $board) {
@@ -169,7 +163,6 @@ class BoardController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Board $board */
         $board = Board::query()->with('children')->find($id);
 
         if (! $board) {
@@ -197,13 +190,9 @@ class BoardController extends AdminController
 
     /**
      * Редактирование объявления
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editItem(int $id, Request $request, Validator $validator)
+    public function editItem(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
-        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {
@@ -217,7 +206,6 @@ class BoardController extends AdminController
             $price = int($request->input('price'));
             $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
 
-            /** @var Board $board */
             $board = Board::query()->find($bid);
 
             $validator
@@ -266,7 +254,6 @@ class BoardController extends AdminController
      */
     public function deleteItem(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        /** @var Item $item */
         $item = Item::query()->find($id);
 
         if (! $item) {

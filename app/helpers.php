@@ -662,7 +662,6 @@ function statVotes(): string
 function statsNewsDate(): string
 {
     $newsDate = Cache::remember('statNewsDate', 900, static function () {
-        /** @var News $news */
         $news = News::query()->orderByDesc('created_at')->first();
 
         return $news->created_at ?? 0;
@@ -1211,7 +1210,6 @@ function sendNotify(string $text, string $url, string $title): void
  */
 function textNotice(string $type, array $replace = []): string
 {
-    /** @var Notice $message */
     $message = Notice::query()->where('type', $type)->first();
 
     if (! $message) {

@@ -52,11 +52,8 @@ class UserController extends Controller
 
     /**
      * Note
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function note(string $login, Request $request, Validator $validator)
+    public function note(string $login, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! isAdmin()) {
             abort(403, __('main.page_only_admins'));
@@ -94,12 +91,9 @@ class UserController extends Controller
     /**
      * Registration
      *
-     *
      * @throws GuzzleException
-     *
-     * @return View|RedirectResponse
      */
-    public function register(Request $request, Validator $validator)
+    public function register(Request $request, Validator $validator): View|RedirectResponse
     {
         if (getUser()) {
             abort(403, __('users.already_registered'));
@@ -185,7 +179,6 @@ class UserController extends Controller
                         $level = User::PENDED;
                     }
 
-                    /* @var User $user */
                     $user = User::query()->create([
                         'login'         => $login,
                         'password'      => password_hash($password, PASSWORD_BCRYPT),
@@ -255,12 +248,9 @@ class UserController extends Controller
     /**
      * Login
      *
-     *
      * @throws GuzzleException
-     *
-     * @return View|RedirectResponse
      */
-    public function login(Request $request, Validator $validator, Flood $flood)
+    public function login(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         if (getUser()) {
             setFlash('danger', __('main.already_authorized'));
@@ -282,7 +272,6 @@ class UserController extends Controller
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
-                    /** @var User $user */
                     if ($user = User::auth($login, $password, $remember)) {
                         setFlash('success', __('users.welcome', ['login' => $user->getName()]));
 
@@ -329,11 +318,8 @@ class UserController extends Controller
 
     /**
      * Profile editing
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function profile(Request $request, Validator $validator)
+    public function profile(Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -414,13 +400,9 @@ class UserController extends Controller
 
     /**
      * Confirmation of registration
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function key(Request $request, Validator $validator)
+    public function key(Request $request, Validator $validator): View|RedirectResponse
     {
-        /* @var User $user */
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
@@ -505,11 +487,8 @@ class UserController extends Controller
 
     /**
      * Settings
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function setting(Request $request, Validator $validator)
+    public function setting(Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -638,7 +617,6 @@ class UserController extends Controller
 
         ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
 
-        /** @var ChangeMail $changeMail */
         $changeMail = ChangeMail::query()->where('hash', $key)->where('user_id', $user->id)->first();
 
         $validator->notEmpty($key, __('users.changed_code_empty'))

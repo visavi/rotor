@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Article;
-use App\Models\BaseModel;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\File;
@@ -131,7 +130,6 @@ class AjaxController extends Controller
                 ->delete();
 
             if ($delComments) {
-                /** @var BaseModel $class */
                 $class = Relation::getMorphedModel($type);
                 $model = $class::query()->find($rid);
 
@@ -247,7 +245,6 @@ class AjaxController extends Controller
             ]);
         }
 
-        /** @var BaseModel $class */
         $class = Relation::getMorphedModel($type);
         $isImageType = in_array($type, $imageTypes, true);
 
@@ -349,7 +346,6 @@ class AjaxController extends Controller
             ]);
         }
 
-        /** @var File $file */
         $file = File::query()
             ->where('relate_type', $type)
             ->find($id);

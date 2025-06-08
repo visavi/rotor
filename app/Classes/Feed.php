@@ -14,17 +14,13 @@ use App\Models\Photo;
 use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Topic;
-use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
 class Feed
 {
-    /**
-     * @var User|mixed
-     */
-    private $user;
+    private mixed $user;
 
     public function __construct()
     {

@@ -32,7 +32,6 @@ class ApiController extends Controller
      */
     public function user(Request $request): Response
     {
-        /** @var User $user */
         $user = $request->attributes->get('user');
 
         return response()->json([
@@ -116,7 +115,6 @@ class ApiController extends Controller
      */
     public function dialogues(Request $request): Response
     {
-        /** @var User $user */
         $user = $request->attributes->get('user');
 
         $lastMessage = Dialogue::query()
@@ -158,7 +156,6 @@ class ApiController extends Controller
      */
     public function talk(string $login, Request $request): Response
     {
-        /** @var User $user */
         $user = $request->attributes->get('user');
 
         if (is_numeric($login)) {
@@ -215,7 +212,6 @@ class ApiController extends Controller
      */
     public function forums(int $id): Response
     {
-        /** @var Forum $forum */
         $forum = Forum::query()->find($id);
 
         if (! $forum) {
@@ -228,7 +224,6 @@ class ApiController extends Controller
             ->paginate(setting('forumtem'));
 
         $data = [];
-        /** @var Topic $topic */
         foreach ($topics as $topic) {
             $data[] = [
                 'id'            => $topic->id,
@@ -255,7 +250,6 @@ class ApiController extends Controller
      */
     public function topics(int $id): Response
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {

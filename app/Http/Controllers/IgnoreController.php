@@ -23,11 +23,8 @@ class IgnoreController extends Controller
 
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         $login = $request->input('user');
 
@@ -81,11 +78,8 @@ class IgnoreController extends Controller
 
     /**
      * Заметка для пользователя
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function note(int $id, Request $request, Validator $validator)
+    public function note(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $ignore = Ignore::query()
             ->where('user_id', getUser('id'))

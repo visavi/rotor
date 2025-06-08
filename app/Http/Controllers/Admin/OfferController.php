@@ -54,11 +54,8 @@ class OfferController extends AdminController
 
     /**
      * Редактирование записи
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $offer = Offer::query()->where('id', $id)->first();
 
@@ -103,11 +100,8 @@ class OfferController extends AdminController
 
     /**
      * Ответ на предложение
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function reply(int $id, Request $request, Validator $validator)
+    public function reply(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $offer = Offer::query()->where('id', $id)->first();
 

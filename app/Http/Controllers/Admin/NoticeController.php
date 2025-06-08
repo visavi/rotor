@@ -27,11 +27,8 @@ class NoticeController extends AdminController
 
     /**
      * Создание шаблона
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $type = $request->input('type');
@@ -49,7 +46,6 @@ class NoticeController extends AdminController
             $validator->empty($duplicate, ['type' => __('admin.notices.notice_exists')]);
 
             if ($validator->isValid()) {
-                /** @var Notice $notice */
                 $notice = Notice::query()->create([
                     'type'       => $type,
                     'name'       => $name,
@@ -74,13 +70,9 @@ class NoticeController extends AdminController
 
     /**
      * Редактирование шаблона
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
-        /** @var Notice $notice */
         $notice = Notice::query()->find($id);
 
         if (! $notice) {
@@ -122,7 +114,6 @@ class NoticeController extends AdminController
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        /** @var Notice $notice */
         $notice = Notice::query()->find($id);
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

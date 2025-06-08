@@ -45,7 +45,6 @@ class ForumController extends Controller
      */
     public function forum(int $id): View
     {
-        /** @var Forum $forum */
         $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
         if (! $forum) {
@@ -100,7 +99,6 @@ class ForumController extends Controller
             $question = $request->input('question');
             $answers = (array) $request->input('answers');
 
-            /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -137,7 +135,6 @@ class ForumController extends Controller
                 $user->increment('point');
                 $user->increment('money', 5);
 
-                /** @var Topic $topic */
                 $topic = Topic::query()->create([
                     'forum_id'    => $forum->id,
                     'title'       => $title,
@@ -233,7 +230,6 @@ class ForumController extends Controller
      */
     public function rssPosts(int $id): View
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {

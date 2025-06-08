@@ -15,11 +15,8 @@ class ChatController extends AdminController
 {
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         $user = getUser();
 
@@ -36,7 +33,6 @@ class ChatController extends AdminController
                 ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                /** @var Chat $post */
                 $post = Chat::query()->orderByDesc('created_at')->first();
 
                 if ($post
@@ -79,11 +75,8 @@ class ChatController extends AdminController
 
     /**
      * Редактирование сообщения
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -91,7 +84,6 @@ class ChatController extends AdminController
             abort(403);
         }
 
-        /** @var Chat $post */
         $post = Chat::query()->where('user_id', $user->id)->find($id);
 
         if (! $post) {

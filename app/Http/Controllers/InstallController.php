@@ -115,11 +115,8 @@ class InstallController extends Controller
 
     /**
      * Создание администратора
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function account(Request $request, Validator $validator)
+    public function account(Request $request, Validator $validator): View|RedirectResponse
     {
         $lang = $request->input('lang', 'ru');
         $login = $request->input('login');
@@ -149,7 +146,6 @@ class InstallController extends Controller
             }
 
             if ($validator->isValid()) {
-                /** @var User $user */
                 $user = User::query()->create([
                     'login'      => $login,
                     'password'   => password_hash($password, PASSWORD_BCRYPT),

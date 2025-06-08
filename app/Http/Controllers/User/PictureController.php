@@ -32,14 +32,12 @@ class PictureController extends Controller
 
     /**
      * Главная страница
-     *
-     * @return View|RedirectResponse
      */
     public function index(
         Request $request,
         Validator $validator,
         ImageManager $imageManager,
-    ) {
+    ): View|RedirectResponse {
         if ($request->isMethod('post')) {
             $photo = $request->file('photo');
 

@@ -47,7 +47,6 @@ class ArticleController extends AdminController
         if ($validator->isValid()) {
             $max = Blog::query()->max('sort') + 1;
 
-            /** @var Blog $category */
             $category = Blog::query()->create([
                 'name' => $name,
                 'sort' => $max,
@@ -66,17 +65,13 @@ class ArticleController extends AdminController
 
     /**
      * Редактирование раздела
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Blog $category */
         $category = Blog::query()->with('children')->find($id);
 
         if (! $category) {
@@ -124,7 +119,6 @@ class ArticleController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Blog $category */
         $category = Blog::query()->with('children')->find($id);
 
         if (! $category) {
@@ -192,11 +186,8 @@ class ArticleController extends AdminController
 
     /**
      * Редактирование статьи
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editArticle(int $id, Request $request, Validator $validator)
+    public function editArticle(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $article = Article::query()->find($id);
 
@@ -249,11 +240,8 @@ class ArticleController extends AdminController
 
     /**
      * Перенос статьи
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function moveArticle(int $id, Request $request, Validator $validator)
+    public function moveArticle(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $article = Article::query()->find($id);
 
@@ -264,7 +252,6 @@ class ArticleController extends AdminController
         if ($request->isMethod('post')) {
             $cid = int($request->input('cid'));
 
-            /** @var Blog $category */
             $category = Blog::query()->find($cid);
 
             $validator

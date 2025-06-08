@@ -58,7 +58,6 @@ class SpamController extends AdminController
         $type = $this->type;
         $types = $this->types;
 
-        /** @var Spam $records */
         $records = Spam::query()
             ->where('relate_type', $type)
             ->orderByDesc('created_at')

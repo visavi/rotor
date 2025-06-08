@@ -62,11 +62,8 @@ class OfferController extends Controller
 
     /**
      * Создание записи
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator, Flood $flood)
+    public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -89,7 +86,6 @@ class OfferController extends Controller
                 $title = antimat($title);
                 $text = antimat($text);
 
-                /** @var Offer $offer */
                 $offer = Offer::query()->create([
                     'type'       => $type,
                     'title'      => $title,
@@ -116,11 +112,8 @@ class OfferController extends Controller
 
     /**
      * Редактирование записи
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -174,13 +167,9 @@ class OfferController extends Controller
 
     /**
      * Комментарии
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood)
+    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        /** @var Offer $offer */
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
@@ -200,7 +189,6 @@ class OfferController extends Controller
             if ($validator->isValid()) {
                 $msg = antimat($msg);
 
-                /** @var Comment $comment */
                 $comment = $offer->comments()->create([
                     'text'       => $msg,
                     'user_id'    => getUser('id'),
@@ -243,15 +231,11 @@ class OfferController extends Controller
 
     /**
      * Подготовка к редактированию комментария
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator)
+    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 
-        /** @var Offer $offer */
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
@@ -307,7 +291,6 @@ class OfferController extends Controller
      */
     public function end(int $id): RedirectResponse
     {
-        /** @var Offer $offer */
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
@@ -326,7 +309,6 @@ class OfferController extends Controller
      */
     public function viewComment(int $id, int $cid): RedirectResponse
     {
-        /** @var Offer $offer */
         $offer = Offer::query()->find($id);
 
         if (! $offer) {

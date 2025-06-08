@@ -6,10 +6,7 @@ use App\Classes\BBCode;
 
 class BBCodeTest extends \Tests\TestCase
 {
-    /**
-     * @var BBCode
-     */
-    private $bbCode;
+    private BBCode $bbCode;
 
     public function setUp(): void
     {

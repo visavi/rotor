@@ -39,7 +39,6 @@ class NewsController extends Controller
      */
     public function view(int $id): View
     {
-        /** @var News $news */
         $news = News::query()
             ->select('news.*', 'polls.vote')
             ->leftJoin('polls', static function (JoinClause $join) {
@@ -68,7 +67,6 @@ class NewsController extends Controller
      */
     public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        /** @var News $news */
         $news = News::query()->find($id);
 
         if (! $news) {
@@ -97,7 +95,6 @@ class NewsController extends Controller
             if ($validator->isValid()) {
                 $msg = antimat($msg);
 
-                /** @var Comment $comment */
                 $comment = $news->comments()->create([
                     'text'       => $msg,
                     'user_id'    => getUser('id'),
@@ -153,7 +150,6 @@ class NewsController extends Controller
     {
         $page = int($request->input('page', 1));
 
-        /** @var News $news */
         $news = News::query()->find($id);
 
         if (! $news) {
@@ -164,7 +160,6 @@ class NewsController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        /** @var Comment $comment */
         $comment = $news->comments()
             ->where('id', $cid)
             ->where('user_id', getUser('id'))

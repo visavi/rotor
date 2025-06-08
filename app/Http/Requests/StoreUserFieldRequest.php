@@ -9,10 +9,8 @@ class StoreUserFieldRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             '_token'   => 'required|in:' . csrf_token(),

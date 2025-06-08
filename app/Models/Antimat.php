@@ -33,10 +33,6 @@ class Antimat extends BaseModel
 
     /**
      * Очищает строку от мата по базе слов
-     *
-     * @param string $str Строка
-     *
-     * @return string Обработанная строка
      */
     public static function replace(string $str): string
     {

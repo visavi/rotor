@@ -139,8 +139,6 @@ class Topic extends BaseModel
 
     /**
      * Возвращает иконку в зависимости от статуса
-     *
-     * @return string иконка топика
      */
     public function getIcon(): string
     {
@@ -157,9 +155,6 @@ class Topic extends BaseModel
 
     /**
      * Генерирует постраничную навигацию для форума
-     *
-     *
-     * @return HtmlString|null сформированный блок
      */
     public function pagination(string $url = '/topics'): ?HtmlString
     {

@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Validator;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\VoteAnswer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -44,11 +43,8 @@ class VoteController extends AdminController
 
     /**
      * Редактирование голосования
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -84,7 +80,6 @@ class VoteController extends AdminController
                 $countAnswers = $vote->answers()->count();
 
                 foreach ($answers as $answerId => $answer) {
-                    /** @var VoteAnswer $ans */
                     $ans = $vote->answers()->firstOrNew(['id' => $answerId]);
 
                     if ($ans->exists) {

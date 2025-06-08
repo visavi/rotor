@@ -22,11 +22,8 @@ class SearchController extends Controller
 
     /**
      * User search
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function search(Request $request)
+    public function search(Request $request): View|RedirectResponse
     {
         $find = $request->input('find');
         $strlen = utfStrlen($find);

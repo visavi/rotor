@@ -90,11 +90,8 @@ class GuestbookController extends Controller
 
     /**
      * Редактирование сообщения
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403);
@@ -102,7 +99,6 @@ class GuestbookController extends Controller
 
         $msg = $request->input('msg');
 
-        /** @var Guestbook $post */
         $post = Guestbook::query()->where('user_id', $user->id)->find($id);
 
         if (! $post) {

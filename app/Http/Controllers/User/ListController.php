@@ -15,11 +15,8 @@ class ListController extends Controller
 {
     /**
      * Users list
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function userlist(Request $request)
+    public function userlist(Request $request): View|RedirectResponse
     {
         $type = check($request->input('type', 'users'));
         $user = $request->input('user', getUser('login'));

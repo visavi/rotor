@@ -51,7 +51,6 @@ class ForumController extends AdminController
         if ($validator->isValid()) {
             $max = Forum::query()->max('sort') + 1;
 
-            /** @var Forum $forum */
             $forum = Forum::query()->create([
                 'title' => $title,
                 'sort'  => $max,
@@ -70,17 +69,13 @@ class ForumController extends AdminController
 
     /**
      * Редактирование форума
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Forum $forum */
         $forum = Forum::query()->with('children')->find($id);
 
         if (! $forum) {
@@ -135,7 +130,6 @@ class ForumController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        /** @var Forum $forum */
         $forum = Forum::query()->with('children')->find($id);
 
         if (! $forum) {
@@ -186,7 +180,6 @@ class ForumController extends AdminController
      */
     public function forum(int $id): View
     {
-        /** @var Forum $forum */
         $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($id);
 
         if (! $forum) {
@@ -210,13 +203,9 @@ class ForumController extends AdminController
 
     /**
      * Редактирование темы
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editTopic(int $id, Request $request, Validator $validator)
+    public function editTopic(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -269,13 +258,9 @@ class ForumController extends AdminController
 
     /**
      * Перенос темы
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function moveTopic(int $id, Request $request, Validator $validator)
+    public function moveTopic(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -285,7 +270,6 @@ class ForumController extends AdminController
         if ($request->isMethod('post')) {
             $fid = int($request->input('fid'));
 
-            /** @var Forum $forum */
             $forum = Forum::query()->find($fid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -328,7 +312,6 @@ class ForumController extends AdminController
     {
         $page = int($request->input('page', 1));
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -391,7 +374,6 @@ class ForumController extends AdminController
     {
         $page = int($request->input('page', 1));
 
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {
@@ -472,15 +454,11 @@ class ForumController extends AdminController
 
     /**
      * Редактирование сообщения
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editPost(int $id, Request $request, Validator $validator)
+    public function editPost(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $page = int($request->input('page', 1));
 
-        /** @var Post $post */
         $post = Post::query()->find($id);
 
         if (! $post) {
@@ -557,7 +535,6 @@ class ForumController extends AdminController
      */
     public function end(int $id): RedirectResponse
     {
-        /** @var Topic $topic */
         $topic = Topic::query()->find($id);
 
         if (! $topic) {

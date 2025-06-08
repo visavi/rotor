@@ -59,8 +59,6 @@ class Setting extends BaseModel
 
     /**
      * Возвращает настройки сайта по ключу
-     *
-     * @return array данные
      */
     public static function getSettings(): array
     {

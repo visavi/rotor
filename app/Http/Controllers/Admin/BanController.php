@@ -23,11 +23,8 @@ class BanController extends AdminController
 
     /**
      * Бан пользователя
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(Request $request, Validator $validator)
+    public function edit(Request $request, Validator $validator): View|RedirectResponse
     {
         $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
@@ -95,11 +92,8 @@ class BanController extends AdminController
 
     /**
      * Изменение бана
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function change(Request $request, Validator $validator)
+    public function change(Request $request, Validator $validator): View|RedirectResponse
     {
         $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 

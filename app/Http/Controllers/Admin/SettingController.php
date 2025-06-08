@@ -14,11 +14,8 @@ class SettingController extends AdminController
 {
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         $act = $request->input('act', 'mains');
 

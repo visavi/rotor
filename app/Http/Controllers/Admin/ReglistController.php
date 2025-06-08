@@ -14,11 +14,8 @@ class ReglistController extends AdminController
 {
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $page = int($request->input('page', 1));

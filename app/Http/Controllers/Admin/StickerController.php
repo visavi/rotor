@@ -62,7 +62,6 @@ class StickerController extends AdminController
             ->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
-            /** @var StickersCategory $category */
             $category = StickersCategory::query()->create([
                 'name'       => $name,
                 'created_at' => SITETIME,
@@ -81,11 +80,8 @@ class StickerController extends AdminController
 
     /**
      * Редактирование категории
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         $category = StickersCategory::query()->find($id);
 
@@ -122,7 +118,6 @@ class StickerController extends AdminController
      */
     public function delete(int $id, Request $request, Validator $validator): RedirectResponse
     {
-        /** @var StickersCategory $category */
         $category = StickersCategory::query()->find($id);
 
         if (! $category) {
@@ -149,11 +144,8 @@ class StickerController extends AdminController
 
     /**
      * Добавление стикера
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function createSticker(Request $request, Validator $validator)
+    public function createSticker(Request $request, Validator $validator): View|RedirectResponse
     {
         $cid = int($request->input('cid'));
 
@@ -216,13 +208,9 @@ class StickerController extends AdminController
 
     /**
      * Редактирование стикера
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function editSticker(int $id, Request $request, Validator $validator)
+    public function editSticker(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
-        /** @var Sticker $sticker */
         $sticker = Sticker::query()->find($id);
         $page = int($request->input('page', 1));
 
@@ -267,9 +255,6 @@ class StickerController extends AdminController
 
     /**
      * Удаление стикера
-     *
-     *
-     * @return RedirectResponse
      s*/
     public function deleteSticker(int $id, Request $request, Validator $validator): RedirectResponse
     {

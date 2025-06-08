@@ -93,8 +93,6 @@ class Item extends BaseModel
 
     /**
      * Возвращает путь к первому файлу
-     *
-     * @return HtmlString|null имя файла
      */
     public function getFirstImage(): ?HtmlString
     {

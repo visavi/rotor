@@ -39,11 +39,6 @@ class Calendar
 
     /**
      * Формирует календарь
-     *
-     * @param int $month месяц
-     * @param int $year  год
-     *
-     * @return array сформированный массив
      */
     protected function makeCalendar(int $month, int $year): array
     {

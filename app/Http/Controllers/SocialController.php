@@ -34,12 +34,9 @@ class SocialController extends Controller
     /**
      * Главная страница
      *
-     *
      * @throws GuzzleException
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $client = new Client(['timeout' => 30.0]);

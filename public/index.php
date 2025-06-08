@@ -7,7 +7,6 @@
 | @author    Vantuz <admin@visavi.net>
 | @link      https://visavi.net
 | @copyright 2005-2025
-|
 */
 
 use Illuminate\Foundation\Application;
@@ -25,6 +24,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Bootstrap Laravel and handle the request...
 /** @var Application $app */
-$app = require_once __DIR__ . '/../bootstrap/app.php';
+$app = require __DIR__ . '/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());

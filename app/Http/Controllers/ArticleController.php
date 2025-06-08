@@ -123,7 +123,6 @@ class ArticleController extends Controller
             $tags = (array) $request->input('tags');
             $tags = array_unique(array_diff($tags, ['']));
 
-            /** @var Blog $category */
             $category = Blog::query()->find($cid);
 
             $validator
@@ -220,7 +219,6 @@ class ArticleController extends Controller
             $tags = (array) $request->input('tags');
             $tags = array_unique(array_diff($tags, ['']));
 
-            /** @var Blog $category */
             $category = Blog::query()->find($cid);
 
             $validator
@@ -319,7 +317,6 @@ class ArticleController extends Controller
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
-                /** @var Comment $comment */
                 $comment = $article->comments()->create([
                     'text'       => antimat($msg),
                     'user_id'    => $user->id,
