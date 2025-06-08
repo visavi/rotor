@@ -5,10 +5,10 @@
 @section('header')
     @if (getUser())
         <div class="float-end">
-            <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
+            <a class="btn btn-success" href="{{ route('blogs.create') }}">{{ __('blogs.add') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/blogs"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.blogs.index') }}"><i class="fas fa-wrench"></i></a>
             @endif
         </div>
     @endif
@@ -29,12 +29,12 @@
     <div class="border-bottom pb-3 mb-3">
         @if (getUser())
             {{ __('main.my') }}:
-            <a href="/blogs/active/articles" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
-            <a href="/blogs/active/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+            <a href="{{ route('blogs.user-articles') }}" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
+            <a href="{{ route('blogs.user-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
         @endif
 
         {{ __('main.new') }}:
-        <a href="/articles" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
+        <a href="{{ route('articles.index') }}" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
         <a href="{{ route('articles.new-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     </div>
 
@@ -42,7 +42,7 @@
         <div class="section mb-3 shadow">
             <div class="section-title">
                 <i class="fa fa-folder-open"></i>
-                <a href="/blogs/{{ $category->id }}">{{ $category->name }}</a>
+                <a href="{{ route('blogs.blog', ['id' => $category->id]) }}">{{ $category->name }}</a>
 
                 <span class="badge bg-adaptive">
                     @if ($category->new)
@@ -58,7 +58,7 @@
                     @foreach ($category->children as $child)
                         <div>
                             <i class="fa fa-angle-right"></i>
-                            <b><a href="/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
+                            <b><a href="{{ route('blogs.blog', ['id' => $child->id]) }}">{{ $child->name }}</a></b>
 
                             <span class="badge bg-adaptive">
                                 @if ($child->new)
@@ -74,7 +74,7 @@
 
             <div class="section-body border-top">
                 @if ($category->lastArticle)
-                    {{ __('blogs.article') }}: <a href="/articles/{{ $category->lastArticle->id }}">{{ $category->lastArticle->title }}</a>
+                    {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['id' => $category->lastArticle->id]) }}">{{ $category->lastArticle->title }}</a>
 
                     @if ($category->lastArticle->isNew())
                         <span class="badge text-bg-success">NEW</span>
@@ -91,8 +91,8 @@
         </div>
     @endforeach
 
-    <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
-    <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/authors">{{ __('blogs.authors') }}</a> /
-    <a href="/blogs/rss">{{ __('main.rss') }}</a>
+    <a href="{{ route('blogs.top') }}">{{ __('blogs.top_articles') }}</a> /
+    <a href="{{ route('blogs.tags') }}">{{ __('blogs.tag_cloud') }}</a> /
+    <a href="{{ route('blogs.authors') }}">{{ __('blogs.authors') }}</a> /
+    <a href="{{ route('blogs.rss') }}">{{ __('main.rss') }}</a>
 @stop

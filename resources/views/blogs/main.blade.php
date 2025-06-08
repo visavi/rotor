@@ -6,7 +6,7 @@
 
     @if (getUser())
         <div class="float-end">
-            <a class="btn btn-success" href="/blogs/create">{{ __('blogs.add') }}</a>
+            <a class="btn btn-success" href="{{ route('blogs.create') }}">{{ __('blogs.add') }}</a>
         </div>
     @endif
 
@@ -17,7 +17,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.articles_all') }}</li>
         </ol>
     </nav>
@@ -28,13 +28,13 @@
         @foreach ($articles as $article)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <small>(Рейтинг: {{ formatNum($article->rating) }})</small></h5>
+                    <h5 class="card-title"><a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a> <small>(Рейтинг: {{ formatNum($article->rating) }})</small></h5>
 
                     @if ($article->category->parent->id)
-                        <a href="/blogs/{{ $article->category->parent->id }}"><span class="badge bg-adaptive">{{ $article->category->parent->name }}</span></a> /
+                        <a href="{{ route('blogs.blog', ['id' => $article->category->parent->id]) }}"><span class="badge bg-adaptive">{{ $article->category->parent->name }}</span></a> /
                     @endif
 
-                    <a href="/blogs/{{ $article->category->id }}"><span class="badge bg-adaptive">{{ $article->category->name }}</span></a>
+                    <a href="{{ route('blogs.blog', ['id' => $article->category->id]) }}"><span class="badge bg-adaptive">{{ $article->category->name }}</span></a>
 
                     <p class="card-text">
                         {{ $article->shortText() }}
@@ -55,7 +55,7 @@
         {{ showError(__('blogs.empty_articles')) }}
     @endif
 
-    <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
-    <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/authors">{{ __('blogs.authors') }}</a>
+    <a href="{{ route('blogs.top') }}">{{ __('blogs.top_articles') }}</a> /
+    <a href="{{ route('blogs.tags') }}">{{ __('blogs.tag_cloud') }}</a> /
+    <a href="{{ route('blogs.authors') }}">{{ __('blogs.authors') }}</a>
 @stop

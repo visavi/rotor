@@ -1,7 +1,7 @@
 <div class="section mb-3 shadow">
     <div class="section-title">
         <i class="far fa-circle fa-lg text-muted"></i>
-        <a href="/news" class="">{{ __('index.news') }}</a>
+        <a href="{{ route('news.index') }}" class="">{{ __('index.news') }}</a>
         <span class="badge bg-adaptive">{{ statsNewsDate() }}</span>
     </div>
     {{ pinnedNews() }}
@@ -41,7 +41,7 @@
 <div class="section mb-3 shadow">
     <div class="section-title">
         <i class="fa fa-globe fa-lg text-muted"></i>
-        <a href="/blogs">{{ __('index.blogs') }}</a>
+        <a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a>
         <span class="badge bg-adaptive">{{ statsBlog() }}</span>
     </div>
     {{ recentArticles() }}

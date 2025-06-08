@@ -6,9 +6,9 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/news">{{ __('index.news') }}</a></li>
-            <li class="breadcrumb-item"><a href="/news/{{ $news->id }}">{{ $news->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.news.index') }}">{{ __('index.news') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('news.view', ['id' => $news->id]) }}">{{ $news->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('news.edit_news_title') }}</li>
         </ol>
     </nav>
@@ -16,7 +16,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow cut">
-        <form action="/admin/news/edit/{{ $news->id }}" method="post">
+        <form action="{{ route('admin.news.edit', ['id' => $news->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="title" class="form-label">{{ __('main.title') }}:</label>

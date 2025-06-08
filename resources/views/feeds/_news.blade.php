@@ -1,14 +1,14 @@
 <div class="section mb-3 shadow">
     <ol class="breadcrumb mb-1">
         <li class="breadcrumb-item">
-            <i class="fa-solid fa-newspaper"></i> <a href="/news" class="text-muted"> {{ __('index.news') }}</a>
+            <i class="fa-solid fa-newspaper"></i> <a href="{{ route('news.index') }}" class="text-muted"> {{ __('index.news') }}</a>
         </li>
     </ol>
 
     <div class="section-header d-flex align-items-center">
         <div class="flex-grow-1">
             <div class="section-title d-flex align-items-baseline">
-                <h3><a class="post-title" href="/news/{{ $post->id }}">{{ $post->title }}</a></h3>
+                <h3><a class="post-title" href="{{ route('news.view', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
 
                 @if ($post->top)
                     <span class="ms-2" data-bs-toggle="tooltip" title="{{ __('main.pinned') }}"><i class="fa-solid fa-thumbtack fa-xs"></i></span>

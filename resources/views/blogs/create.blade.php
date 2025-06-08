@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_create') }}</li>
         </ol>
     </nav>
@@ -14,7 +14,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow cut">
-        <form action="/blogs/create" method="post">
+        <form action="{{ route('blogs.create') }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('cid') }}">
                 <label for="inputCategory" class="form-label">{{ __('blogs.blog') }}</label>

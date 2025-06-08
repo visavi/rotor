@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/adverts">{{ __('index.advertising') }}</a></li>
             <li class="breadcrumb-item active">{{ __('adverts.edit_advert') }}</li>
         </ol>

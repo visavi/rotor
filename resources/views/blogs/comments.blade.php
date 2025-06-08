@@ -10,20 +10,20 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
 
             @foreach ($article->category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('blogs.blog', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/articles/{{ $article->id }}">{{ $article->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.comments') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fas fa-rss"></i> <a href="/articles/{{ $article->id }}/rss">{{ __('main.rss') }}</a>
+    <i class="fas fa-rss"></i> <a href="{{ route('articles.rss-comments', ['id' => $article->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
     @if ($comments->isNotEmpty())
@@ -53,7 +53,7 @@
                             @endif
 
                             @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                                <a href="/articles/{{ $article->id }}/comments/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="{{ route('articles.edit-comment', ['id' => $article->id, 'cid' => $comment->id, 'page' => $comments->currentPage()]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())

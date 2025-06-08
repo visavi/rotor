@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="/blogs"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('admin.blogs.index') }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.blogs') }}</h1>
@@ -14,7 +14,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.blogs') }}</li>
         </ol>
     </nav>
@@ -25,7 +25,7 @@
         <div class="section mb-3 shadow">
             <div class="section-title">
                 <i class="fa fa-folder-open"></i>
-                <a href="/admin/blogs/{{ $category->id }}">{{ $category->name }}</a>
+                <a href="{{ route('admin.blogs.blog', ['id' => $category->id]) }}">{{ $category->name }}</a>
 
                 @if ($category->new)
                     ({{ $category->count_articles }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
@@ -35,8 +35,8 @@
 
                 @if (isAdmin('boss'))
                     <div class="float-end">
-                        <a href="/admin/blogs/edit/{{ $category->id }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/blogs/delete/{{ $category->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                        <a href="{{ route('admin.blogs.edit', ['id' => $category->id]) }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="{{ route('admin.blogs.delete', ['id' => $category->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                     </div>
                 @endif
             </div>
@@ -46,7 +46,7 @@
                     @foreach ($category->children as $child)
                         <div>
                             <i class="fa fa-angle-right"></i>
-                            <b><a href="/admin/blogs/{{ $child->id }}">{{ $child->name }}</a></b>
+                            <b><a href="{{ route('admin.blogs.blog', ['id' => $child->id]) }}">{{ $child->name }}</a></b>
 
                             @if ($child->new)
                                 ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
@@ -55,8 +55,8 @@
                             @endif
 
                             @if (isAdmin('boss'))
-                                <a href="/admin/blogs/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                                <a href="/admin/blogs/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
+                                <a href="{{ route('admin.blogs.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
+                                <a href="{{ route('admin.blogs.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_blog') }}')"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
                     @endforeach
@@ -65,7 +65,7 @@
 
             <div class="section-body border-top">
                 @if ($category->lastArticle)
-                    {{ __('blogs.article') }}: <a href="/articles/{{ $category->lastArticle->id }}">{{ $category->lastArticle->title }}</a>
+                    {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['id' => $category->lastArticle->id]) }}">{{ $category->lastArticle->title }}</a>
 
                     @if ($category->lastArticle->isNew())
                         <span class="badge text-bg-success">NEW</span>
@@ -84,7 +84,7 @@
 
     @if (isAdmin('boss'))
         <div class="section-form my-3 shadow">
-            <form action="/admin/blogs/create" method="post">
+            <form action="{{ route('admin.blogs.create') }}" method="post">
                 @csrf
                 <div class="input-group{{ hasError('name') }}">
                     <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ __('blogs.blog') }}" required>
@@ -94,6 +94,6 @@
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="/admin/blogs/restatement?_token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="{{ route('admin.blogs.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

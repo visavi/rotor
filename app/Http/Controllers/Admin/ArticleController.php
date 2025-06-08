@@ -55,13 +55,13 @@ class ArticleController extends AdminController
 
             setFlash('success', __('blogs.category_success_created'));
 
-            return redirect('admin/blogs/edit/' . $category->id);
+            return redirect()->route('admin.blogs.edit', ['id' => $category->id]);
         }
 
         setInput($request->all());
         setFlash('danger', $validator->getErrors());
 
-        return redirect('admin/blogs');
+        return redirect()->route('admin.blogs.index');
     }
 
     /**
@@ -105,7 +105,7 @@ class ArticleController extends AdminController
 
                 setFlash('success', __('blogs.category_success_edited'));
 
-                return redirect('admin/blogs');
+                return redirect()->route('admin.blogs.index');
             }
 
             setInput($request->all());
@@ -147,7 +147,7 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/blogs');
+        return redirect()->route('admin.blogs.index');
     }
 
     /**
@@ -167,7 +167,7 @@ class ArticleController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/blogs');
+        return redirect()->route('admin.blogs.index');
     }
 
     /**
@@ -325,6 +325,6 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/blogs/' . $article->category_id . '?page=' . $page);
+        return redirect()->route('admin.blogs.blog', ['id' => $article->category_id, 'page' => $page]);
     }
 }

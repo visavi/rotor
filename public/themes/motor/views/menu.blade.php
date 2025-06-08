@@ -2,7 +2,7 @@
     <i class="fa fa-user-circle fa-lg"></i> <a href="/users/{{ $user->login }}">{{ $user->getName() }}</a> &bull;
 
     @if (isAdmin())
-        <a href="/admin">{{ __('index.panel') }}</a> &bull;
+        <a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a> &bull;
         @if (statsSpam() > 0)
             <a href="/admin/spam"><span style="color:#ff0000">{{ __('index.complains') }}</span></a> &bull;
         @endif

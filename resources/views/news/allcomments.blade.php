@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/news">{{ __('index.news') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.last_comments') }}</li>
         </ol>
     </nav>

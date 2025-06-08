@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers">{{ __('index.stickers') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/stickers/{{ $sticker->category->id }}">{{ $sticker->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ __('stickers.edit_sticker') }}</li>

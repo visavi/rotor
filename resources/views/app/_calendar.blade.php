@@ -21,7 +21,7 @@
                     @endif
 
                     @if (isset($newsIds[$valDay]))
-                        <td class="text-center"><a href="/news/{{ $newsIds[$valDay] }}"><span class="text-white bg-success px-1 fw-bold">{{ $valDay }}</span></a></td>
+                        <td class="text-center"><a href="{{ route('news.view', ['id' => $newsIds[$valDay]]) }}"><span class="text-white bg-success px-1 fw-bold">{{ $valDay }}</span></a></td>
                         @continue
                     @endif
 

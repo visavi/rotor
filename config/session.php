@@ -154,7 +154,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN', siteDomain(env('APP_URL', ''))),
+    'domain' => env('SESSION_DOMAIN', parse_url(env('APP_URL'), PHP_URL_HOST)),
 
     /*
     |--------------------------------------------------------------------------

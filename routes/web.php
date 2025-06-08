@@ -167,7 +167,7 @@ Route::controller(ArticleController::class)
         Route::get('/authors', 'authors')->name('authors');
         Route::get('/active/articles', 'userArticles')->name('user-articles');
         Route::get('/active/comments', 'userComments')->name('user-comments');
-        Route::get('/top', 'top')->name('top')->name('top');
+        Route::get('/top', 'top')->name('top');
         Route::get('/rss', 'rss')->name('rss');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::get('/main', 'main')->name('main');
@@ -178,12 +178,12 @@ Route::controller(ArticleController::class)
     ->prefix('articles')
     ->name('articles.')
     ->group(function () {
-        Route::get('/', 'newArticles')->name('new-articles');
+        Route::get('/', 'newArticles')->name('index');
         Route::get('/{id}', 'view')->name('view');
         Route::get('/{id}/print', 'print')->name('print');
         Route::get('/{id}/rss', 'rssComments')->name('rss-comments');
         Route::get('/comments', 'newComments')->name('new-comments');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('.edit');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
         Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
     });
@@ -528,15 +528,16 @@ Route::middleware(['check.admin', 'admin.logger'])
     ->group(function () {
         Route::controller(AdminController::class)
             ->group(function () {
-                Route::get('/', 'index')->name('index');
+                Route::get('/', 'main')->name('index');
             });
 
         /* Проверка обновлений */
         Route::controller(UpgradeController::class)
             ->prefix('upgrade')
+            ->name('upgrade.')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::get('/check', 'check');
+                Route::get('/', 'index')->name('index');
+                Route::get('/check', 'check')->name('check');
             });
 
         /* Админ-чат */
@@ -606,22 +607,24 @@ Route::middleware(['check.admin', 'admin.logger'])
         /* Блоги */
         Route::controller(AdminArticleController::class)
             ->prefix('blogs')
+            ->name('blogs.')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::post('/create', 'create');
-                Route::get('/restatement', 'restatement');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/delete/{id}', 'delete');
-                Route::get('/{id}', 'blog');
+                Route::get('/', 'index')->name('index');
+                Route::get('/{id}', 'blog')->name('blog');
+                Route::post('/create', 'create')->name('create');
+                Route::get('/restatement', 'restatement')->name('restatement');
+                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                Route::get('/{id}/delete', 'delete')->name('delete');
             });
 
         /* Статьи */
         Route::controller(AdminArticleController::class)
             ->prefix('articles')
+            ->name('articles.')
             ->group(function () {
-                Route::match(['get', 'post'], '/{id}/edit', 'editArticle');
-                Route::match(['get', 'post'], '/{id}/move', 'moveArticle');
-                Route::get('/{id}/delete', 'deleteArticle');
+                Route::match(['get', 'post'], '/{id}/edit', 'editArticle')->name('edit');
+                Route::match(['get', 'post'], '/{id}/move', 'moveArticle')->name('move');
+                Route::get('/{id}/delete', 'deleteArticle')->name('delete');
             });
 
         /* Доска объявлений */

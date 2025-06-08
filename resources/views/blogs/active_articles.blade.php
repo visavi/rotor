@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_active_articles', ['user' => $user->getName()]) }}</li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="/articles/{{ $article->id }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
+                    <a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
                 </div>
 
                 <div class="section-content">

@@ -114,7 +114,7 @@ class NewsController extends Controller
                 $news->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/news/' . $news->id . '/comments?cid=' . $comment->id, $news->title);
+                sendNotify($msg, route('news.comments', ['id' => $news->id, 'cid' => $comment->id], false), $news->title);
 
                 setFlash('success', __('main.comment_added_success'));
 

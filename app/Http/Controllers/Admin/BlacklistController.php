@@ -54,7 +54,7 @@ class BlacklistController extends AdminController
             }
 
             if ($type === 'domain') {
-                $value = siteDomain($value);
+                $value = parse_url(strtolower($value), PHP_URL_HOST);
                 $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => __('validator.site')]);
             }
 

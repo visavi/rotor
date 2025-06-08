@@ -212,7 +212,7 @@ class BBCode
 
         $target = '';
         if ($match[2] !== '/') {
-            if (str_contains($match[1], siteDomain(config('app.url')))) {
+            if (str_contains($match[1], request()->getHost())) {
                 $match[1] = '//' . str_replace($match[2], '', $match[1]);
             } else {
                 $target = ' target="_blank" rel="nofollow"';

@@ -29,11 +29,8 @@ class NewsController extends AdminController
 
     /**
      * Редактирование новости
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function edit(int $id, Request $request, Validator $validator)
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
     {
         /** @var News $news */
         $news = News::query()->find($id);
@@ -64,7 +61,7 @@ class NewsController extends AdminController
                 clearCache(['statNews', 'pinnedNews', 'NewsFeed']);
                 setFlash('success', __('news.news_success_edited'));
 
-                return redirect('/news/' . $news->id);
+                return redirect()->route('news.view', ['id' => $news->id]);
             }
 
             setInput($request->all());
@@ -76,11 +73,8 @@ class NewsController extends AdminController
 
     /**
      * Создание новости
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function create(Request $request, Validator $validator)
+    public function create(Request $request, Validator $validator): View|RedirectResponse
     {
         $files = File::query()
             ->where('relate_type', News::$morphName)
@@ -112,7 +106,7 @@ class NewsController extends AdminController
                 clearCache(['statNews', 'pinnedNews', 'statNewsDate', 'NewsFeed']);
                 setFlash('success', __('news.news_success_added'));
 
-                return redirect('/news/' . $news->id);
+                return redirect()->route('news.view', ['id' => $news->id]);
             }
 
             setInput($request->all());
@@ -141,7 +135,7 @@ class NewsController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/news');
+        return redirect()->route('admin.news.index');
     }
 
     /**
@@ -168,6 +162,6 @@ class NewsController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/news?page=' . $page);
+        return redirect()->route('admin.news.index', ['page' => $page]);
     }
 }

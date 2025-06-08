@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.authors') }}</li>
         </ol>
     </nav>
@@ -18,7 +18,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="/blogs/active/articles?user={{ $article->login }}">{{ $article->login }}</a>
+                    <a href="{{ route('blogs.user-articles', ['user' => $article->login]) }}">{{ $article->login }}</a>
                 </div>
 
                 {{ $article->cnt }} {{ __('blogs.all_articles') }} / {{ $article->count_comments }} {{ __('main.comments') }}

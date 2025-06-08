@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/motor/dist/app.css') }}">
     @stack('styles')
     <link rel="canonical" href="{{ request()->url() }}">
-    <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
+    <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
 </head>
@@ -37,9 +37,9 @@
                 <div class="menu">
                     <a href="/forums">{{ __('index.forums') }}</a> &bull;
                     <a href="/guestbook">{{ __('index.guestbook') }}</a> &bull;
-                    <a href="/news">{{ __('index.news') }}</a> &bull;
+                    <a href="{{ route('news.index') }}">{{ __('index.news') }}</a> &bull;
                     <a href="/loads">{{ __('index.loads') }}</a> &bull;
-                    <a href="/blogs">{{ __('index.blogs') }}</a>
+                    <a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a>
 
                     <span class="mright">
                         @include('menu')

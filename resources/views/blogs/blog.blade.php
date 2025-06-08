@@ -6,11 +6,11 @@
     @if (getUser())
         <div class="float-end">
             @if (! $category->closed)
-                <a class="btn btn-success" href="/blogs/create?cid={{ $category->id }}">{{ __('blogs.add') }}</a>
+                <a class="btn btn-success" href="{{ route('blogs.create', ['cid' => $category->id]) }}">{{ __('blogs.add') }}</a>
             @endif
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/blogs/{{ $category->id }}?page={{ $articles->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.blogs.blog', ['id' => $category->id, 'page' => $articles->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         </div>
     @endif
@@ -22,13 +22,13 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
 
             @foreach ($category->getParents() as $parent)
                 @if ($loop->last)
                     <li class="breadcrumb-item active">{{ $parent->name }}</li>
                 @else
-                    <li class="breadcrumb-item"><a href="/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('blogs.blog', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
                 @endif
             @endforeach
         </ol>
@@ -53,7 +53,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
-                            <a href="/blogs/{{ $child->id }}">{{ $child->name }}</a>
+                            <a href="{{ route('blogs.blog', ['id' => $child->id]) }}">{{ $child->name }}</a>
                             <span class="badge bg-adaptive">{{ $child->count_articles + $child->children->sum('count_articles') }}</span>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
 
                 <div class="section-body border-top">
                     @if ($child->lastArticle)
-                        {{ __('blogs.article') }}: <a href="/articles/{{ $child->lastArticle->id }}">{{ $child->lastArticle->title }}</a>
+                        {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['id' => $child->lastArticle->id]) }}">{{ $child->lastArticle->title }}</a>
 
                         @if ($child->lastArticle->isNew())
                             <span class="badge text-bg-success">NEW</span>
@@ -87,7 +87,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-pencil-alt"></i>
-                            <a href="/articles/{{ $article->id }}">{{ $article->title }}</a>
+                            <a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a>
                             @if ($article->isNew())
                                 <span class="badge text-bg-success">NEW</span>
                             @endif
@@ -128,7 +128,7 @@
 
     {{ $articles->links() }}
 
-    <a href="/blogs/top">{{ __('blogs.top_articles') }}</a> /
-    <a href="/blogs/tags">{{ __('blogs.tag_cloud') }}</a> /
-    <a href="/blogs/authors">{{ __('blogs.authors') }}</a>
+    <a href="{{ route('blogs.top') }}">{{ __('blogs.top_articles') }}</a> /
+    <a href="{{ route('blogs.tags') }}">{{ __('blogs.tag_cloud') }}</a> /
+    <a href="{{ route('blogs.authors') }}">{{ __('blogs.authors') }}</a>
 @stop

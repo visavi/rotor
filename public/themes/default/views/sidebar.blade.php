@@ -19,7 +19,7 @@
                 @hook('sidebarTreeviewStart')
                 @if (isAdmin())
                     <li>
-                        <a class="treeview-item" href="/admin" rel="nofollow">
+                        <a class="treeview-item" href="{{ route('admin.index') }}" rel="nofollow">
                             <i class="icon fas fa-wrench"></i>
                             {{ __('index.panel') }}
                         </a>
@@ -82,7 +82,7 @@
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="/news">
+            <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
                 <i class="app-menu__icon far fa-newspaper"></i>
                 <span class="app-menu__label">{{ __('index.news') }}</span>
                 <span class="badge bg-sidebar">{{ statsNews() }}</span>
@@ -96,11 +96,11 @@
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->is('blogs') ? ' active' : '' }}" href="/blogs"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.blogs_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('blogs/main') ? ' active' : '' }}" href="/blogs/main"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.articles_all') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('articles') ? ' active' : '' }}" href="/articles"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_articles') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('blogs') ? ' active' : '' }}" href="{{ route('blogs.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.blogs_list') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('blogs/main') ? ' active' : '' }}" href="{{ route('blogs.main') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.articles_all') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('articles') ? ' active' : '' }}" href="{{ route('articles.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_articles') }}</a></li>
                 <li><a class="treeview-item{{ request()->is('articles/comments') ? ' active' : '' }}" href="{{ route('articles.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_comments') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('blogs/top') ? ' active' : '' }}" href="/blogs/top"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.top_articles') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('blogs/top') ? ' active' : '' }}" href="{{ route('blogs.top') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.top_articles') }}</a></li>
             </ul>
         </li>
 

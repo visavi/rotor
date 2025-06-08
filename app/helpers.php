@@ -1725,14 +1725,6 @@ function setting(?string $key = null, mixed $default = null): mixed
 }
 
 /**
- * Возвращает имя сайта из ссылки
- */
-function siteDomain(string $url): string
-{
-    return parse_url(strtolower($url), PHP_URL_HOST);
-}
-
-/**
  * Получает версию
  */
 function parseVersion(string $version): string

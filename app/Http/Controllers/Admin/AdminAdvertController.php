@@ -14,11 +14,8 @@ class AdminAdvertController extends AdminController
 {
     /**
      * Главная страница
-     *
-     *
-     * @return View|RedirectResponse
      */
-    public function index(Request $request, Validator $validator)
+    public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         $advert = AdminAdvert::query()
             ->where('user_id', getUser('id'))

@@ -73,7 +73,7 @@ class SitemapController extends Controller
             $new = strtotime('+1 month', $changeTime) > SITETIME;
 
             $locs[] = [
-                'loc'        => config('app.url') . '/articles/' . $article->id,
+                'loc'        => route('articles.view', ['id' => $article->id]),
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -107,7 +107,7 @@ class SitemapController extends Controller
             $new = strtotime('+1 month', $changeTime) > SITETIME;
 
             $locs[] = [
-                'loc'        => config('app.url') . '/news/' . $news->id,
+                'loc'        => route('news.view', ['id' => $news->id]),
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

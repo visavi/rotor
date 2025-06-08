@@ -6,11 +6,11 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/admin">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.blogs.index') }}">{{ __('index.blogs') }}</a></li>
 
             @foreach ($category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/admin/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.blogs.blog', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ __('blogs.title_edit_blog') }}</li>
@@ -20,7 +20,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/blogs/edit/{{ $category->id }}" method="post">
+        <form action="{{ route('admin.blogs.edit', ['id' => $category->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('parent') }}">
                 <label for="parent" class="form-label">{{ __('blogs.parent_blog') }}</label>

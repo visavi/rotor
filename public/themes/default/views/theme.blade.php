@@ -11,7 +11,7 @@
     <link rel="canonical" href="{{ request()->url() }}">
     <link href="/favicon.ico" rel="icon">
     <link href="/assets/img/images/icon.png" rel="image_src">
-    <link href="/news/rss" title="RSS News" type="application/rss+xml" rel="alternate">
+    <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
     <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
     @hook('head')
     @stack('styles')

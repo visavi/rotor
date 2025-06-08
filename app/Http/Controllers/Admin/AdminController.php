@@ -13,7 +13,7 @@ class AdminController extends Controller
     /**
      * Главная страница
      */
-    public function index(): View
+    public function main(): View
     {
         $existBoss = User::query()
             ->where('level', User::BOSS)

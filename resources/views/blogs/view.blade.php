@@ -8,7 +8,7 @@
     @if (getUser())
         <div class="float-end">
             @if (getUser('id') === $article->user->id)
-                <a class="btn btn-success" href="/articles/{{ $article->id }}/edit">{{ __('main.change') }}</a>
+                <a class="btn btn-success" href="{{ route('articles.edit', ['id' => $article->id]) }}">{{ __('main.change') }}</a>
             @endif
 
             @if (isAdmin())
@@ -17,9 +17,9 @@
                         <i class="fas fa-wrench"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="/admin/articles/{{ $article->id }}/edit">{{ __('main.edit') }}</a>
-                        <a class="dropdown-item" href="/admin/articles/{{ $article->id }}/move">{{ __('main.move') }}</a>
-                        <a class="dropdown-item" href="/admin/articles/{{ $article->id }}/delete?_token={{ csrf_token() }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
+                        <a class="dropdown-item" href="{{ route('admin.articles.edit', ['id' => $article->id]) }}">{{ __('main.edit') }}</a>
+                        <a class="dropdown-item" href="{{ route('admin.articles.move', ['id' => $article->id]) }}">{{ __('main.move') }}</a>
+                        <a class="dropdown-item" href="{{ route('admin.articles.edit', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
                     </div>
                 </div>
             @endif
@@ -33,10 +33,10 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/blogs">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
 
             @foreach ($article->category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/blogs/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('blogs.blog', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ $article->title }}</li>
@@ -45,8 +45,8 @@
 @stop
 
 @section('content')
-    <i class="fas fa-print"></i> <a class="me-3" href="/articles/{{ $article->id }}/print">{{ __('main.print') }}</a>
-    <i class="fas fa-rss"></i> <a href="/articles/{{ $article->id }}/rss">{{ __('main.rss') }}</a>
+    <i class="fas fa-print"></i> <a class="me-3" href="{{ route('articles.print', ['id' => $article->id]) }}">{{ __('main.print') }}</a>
+    <i class="fas fa-rss"></i> <a href="{{ route('articles.rss-comments', ['id' => $article->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
     <div class="mb-3">
@@ -60,7 +60,7 @@
         <div class="my-3 fst-italic">
             <i class="fa fa-tag"></i>
             @foreach ($article->tags as $tag)
-                <a href="/blogs/tags/{{ urlencode($tag->name) }}">{{ $tag->name }}</a> {{ ! $loop->last ? ', ' : '' }}
+                <a href="{{ route('blogs.tag', ['tag' => urlencode($tag->name)]) }}">{{ $tag->name }}</a> {{ ! $loop->last ? ', ' : '' }}
             @endforeach
         </div>
 

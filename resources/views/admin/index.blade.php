@@ -26,7 +26,7 @@
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbook">{{ __('index.guestbook') }}</a> <span class="badge bg-adaptive">{{ statsGuestbook() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">{{ __('index.forums') }}</a> <span class="badge bg-adaptive">{{ statsForum() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.photos.index') }}">{{ __('index.photos') }}</a> <span class="badge bg-adaptive">{{ statsPhotos() }}</span><br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blogs">{{ __('index.blogs') }}</a> <span class="badge bg-adaptive">{{ statsBlog() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.blogs.index') }}">{{ __('index.blogs') }}</a> <span class="badge bg-adaptive">{{ statsBlog() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/boards">{{ __('index.boards') }}</a> <span class="badge bg-adaptive">{{ statsBoard() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/admin-adverts">{{ __('index.admin_advertising') }}</a><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/adverts">{{ __('index.advertising') }}</a><br>
@@ -61,7 +61,7 @@
             </div>
             <div class="section-body">
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/rules">{{ __('index.site_rules') }}</a><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/news">{{ __('index.news') }}</a> <span class="badge bg-adaptive">{{ statsNews() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.news.index') }}">{{ __('index.news') }}</a> <span class="badge bg-adaptive">{{ statsNews() }}</span><br>
 
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> <span class="badge bg-adaptive">{{ statsIpBanned() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> <span class="badge bg-adaptive">{{ parseVersion(PHP_VERSION) }}</span><br>

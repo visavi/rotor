@@ -335,7 +335,7 @@ class ArticleController extends Controller
                 $article->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/articles/' . $article->id . '/comments/' . $comment->id, $article->title);
+                sendNotify($msg, route('articles.comments', ['id' => $article->id, 'cid' => $comment->id], false), $article->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
