@@ -36,7 +36,7 @@
 
                 <div class="menu">
                     <a href="/forums">{{ __('index.forums') }}</a> &bull;
-                    <a href="/guestbook">{{ __('index.guestbook') }}</a> &bull;
+                    <a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a> &bull;
                     <a href="{{ route('news.index') }}">{{ __('index.news') }}</a> &bull;
                     <a href="/loads">{{ __('index.loads') }}</a> &bull;
                     <a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a>

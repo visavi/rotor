@@ -16,7 +16,7 @@
     <i class="fa fa-pencil-alt text-muted"></i> <b>{{ $post->user->getName() }}</b> ({{ dateFixed($post->created_at) }})<br><br>
 
     <div class="section-form mb-3 shadow">
-        <form action="/guestbook/edit/{{ $post->id }}" method="post">
+        <form action="{{ route('guestbook.edit', ['id' => $post->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>

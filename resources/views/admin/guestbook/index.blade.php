@@ -14,7 +14,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('guestbook.index', ['page' => $posts->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.guestbook') }}</h1>
@@ -62,8 +62,8 @@
                         </div>
 
                         <div class="text-end">
-                            <a href="/admin/guestbook/reply/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="/admin/guestbook/edit/{{ $post->id }}?page={{ $posts->currentPage() }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                            <a href="{{ route('admin.guestbook.reply', ['id' => $post->id, 'page' => $posts->currentPage()]) }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="{{ route('admin.guestbook.edit', ['id' => $post->id, 'page' => $posts->currentPage()]) }}"><i class="fas fa-pencil-alt text-muted"></i></a>
                             <input type="checkbox" class="form-check-input" name="chosen[]" value="{{ $post->id }}">
                         </div>
                     </div>
@@ -89,10 +89,10 @@
             @endforeach
 
             <div class="clearfix mb-3">
-                <button class="btn btn-sm btn-danger float-end" formaction="/admin/guestbook/delete?page={{ $posts->currentPage() }}">{{ __('main.delete_selected') }}</button>
+                <button class="btn btn-sm btn-danger float-end" formaction="{{ route('admin.guestbook.delete', ['page' => $posts->currentPage()]) }}">{{ __('main.delete_selected') }}</button>
 
                 @if ($unpublished)
-                    <button class="btn btn-sm btn-success float-end me-1" formaction="/admin/guestbook/publish?page={{ $posts->currentPage() }}">{{ __('main.publish') }}</button>
+                    <button class="btn btn-sm btn-success float-end me-1" formaction="{{ route('admin.guestbook.publish', ['page' => $posts->currentPage()]) }}">{{ __('main.publish') }}</button>
                 @endif
             </div>
         </form>
@@ -104,7 +104,7 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-times"></i> <a href="/admin/guestbook/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
+            <i class="fa fa-times"></i> <a href="{{ route('admin.guestbook.clear', ['_token' => csrf_token()]) }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
         @endif
     @else
         {{ showError(__('main.empty_messages')) }}

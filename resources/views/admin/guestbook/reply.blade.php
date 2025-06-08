@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/guestbook">{{ __('index.guestbook') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.guestbook.index') }}">{{ __('index.guestbook') }}</a></li>
             <li class="breadcrumb-item active">{{ __('guestbook.title_reply') }}</li>
         </ol>
     </nav>
@@ -27,7 +27,7 @@
     </div>
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/guestbook/reply/{{ $post->id }}?page={{ $page }}" method="post">
+        <form action="{{ route('admin.guestbook.reply', ['id' => $post->id, 'page' => $page]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('reply') }}">
                 <label for="reply" class="form-label">{{ __('main.message') }}:</label>

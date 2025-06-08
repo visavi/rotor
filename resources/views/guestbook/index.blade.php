@@ -8,7 +8,7 @@
             <a class="btn btn-success" href="#" onclick="return postJump()">{{ __('main.write') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/guestbook?page={{ $posts->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.guestbook.index', ['page' => $posts->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         </div>
     @endif
@@ -72,7 +72,7 @@
 
                     @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
                         <div class="text-end">
-                            <a href="/guestbook/edit/{{ $post->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a href="{{ route('guestbook.edit', ['id' => $post->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
                 </div>
@@ -106,7 +106,7 @@
 
     @if (getUser())
         <div class="section-form mb-3 shadow">
-            <form action="/guestbook/add" method="post">
+            <form action="{{ route('guestbook.create') }}" method="post">
                 @csrf
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>
@@ -121,7 +121,7 @@
 
     @elseif (setting('bookadds'))
         <div class="section-form mb-3 shadow">
-            <form action="/guestbook/add" method="post">
+            <form action="{{ route('guestbook.create') }}" method="post">
                 @csrf
                 <div class="mb-3{{ hasError('guest_name') }}">
                     <label for="inputName" class="form-label">{{ __('users.name') }}:</label>

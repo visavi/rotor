@@ -51,7 +51,7 @@ class AjaxController extends Controller
         switch ($type) {
             case Guestbook::$morphName:
                 $model = Guestbook::query()->find($id);
-                $path = '/guestbook?page=' . $page;
+                $path = route('guestbook.index', ['page' => $page], false);
                 break;
 
             case Post::$morphName:
@@ -74,7 +74,7 @@ class AjaxController extends Controller
             case Offer::$morphName:
             case Down::$morphName:
                 $model = Comment::query()->find($id);
-                $path = '/' . $model->relate_type . '/comments/' . $model->relate_id . '?page=' . $page;
+                $path = route($model->relate_type . '.comments', ['id' => $model->relate_id, 'cid' => $model->id], false);
                 $type = 'comments';
                 break;
         }

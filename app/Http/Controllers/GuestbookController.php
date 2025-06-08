@@ -78,14 +78,14 @@ class GuestbookController extends Controller
             clearCache('statGuestbook');
             $flood->saveState();
 
-            sendNotify($msg, '/guestbook', __('index.guestbook'));
+            sendNotify($msg, route('guestbook.index', absolute: false), __('index.guestbook'));
             setFlash('success', $active ? __('main.message_added_success') : __('main.message_publish_moderation'));
         } else {
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('/guestbook');
+        return redirect()->route('guestbook.index');
     }
 
     /**
@@ -122,7 +122,7 @@ class GuestbookController extends Controller
 
                 setFlash('success', __('main.message_edited_success'));
 
-                return redirect('guestbook');
+                return redirect()->route('guestbook.index');
             }
 
             setInput($request->all());

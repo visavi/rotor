@@ -57,7 +57,7 @@ class GuestbookController extends AdminController
 
                 setFlash('success', __('main.message_edited_success'));
 
-                return redirect('admin/guestbook?page=' . $page);
+                return redirect()->route('admin.guestbook.index', ['page' => $page]);
             }
 
             setInput($request->all());
@@ -92,7 +92,7 @@ class GuestbookController extends AdminController
 
                 setFlash('success', __('guestbook.answer_success_added'));
 
-                return redirect('admin/guestbook?page=' . $page);
+                return redirect()->route('admin.guestbook.index', ['page' => $page]);
             }
 
             setInput($request->all());
@@ -126,7 +126,7 @@ class GuestbookController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/guestbook?page=' . $page);
+        return redirect()->route('admin.guestbook.index', ['page' => $page]);
     }
 
     /**
@@ -155,7 +155,7 @@ class GuestbookController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/guestbook?page=' . $page);
+        return redirect()->route('admin.guestbook.index', ['page' => $page]);
     }
 
     /**
@@ -176,6 +176,6 @@ class GuestbookController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/guestbook');
+        return redirect()->route('admin.guestbook.index');
     }
 }

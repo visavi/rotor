@@ -148,10 +148,11 @@ Route::controller(BoardController::class)
 /* Гостевая книга */
 Route::controller(GuestbookController::class)
     ->prefix('guestbook')
+    ->name('guestbook.')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::post('/add', 'add');
-        Route::match(['get', 'post'], '/edit/{id}', 'edit');
+        Route::get('/', 'index')->name('index');
+        Route::post('/create', 'add')->name('create');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 
 /* Категория блогов */
@@ -552,13 +553,14 @@ Route::middleware(['check.admin', 'admin.logger'])
         /* Гостевая */
         Route::controller(AdminGuestbookController::class)
             ->prefix('guestbook')
+            ->name('guestbook.')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::match(['get', 'post'], '/reply/{id}', 'reply');
-                Route::post('/delete', 'delete');
-                Route::post('/publish', 'publish');
-                Route::get('/clear', 'clear');
+                Route::get('/', 'index')->name('index');
+                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                Route::match(['get', 'post'], '/{id}/reply', 'reply')->name('reply');
+                Route::post('/delete', 'delete')->name('delete');
+                Route::post('/publish', 'publish')->name('publish');
+                Route::get('/clear', 'clear')->name('clear');
             });
 
         /* Форум */
@@ -747,12 +749,13 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Новости */
             Route::controller(AdminNewsController::class)
                 ->prefix('news')
+                ->name('news.')
                 ->group(function () {
-                    Route::get('/', 'index')->name('news.index');
-                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('news.edit');
-                    Route::match(['get', 'post'], '/create', 'create')->name('news.create');
-                    Route::get('/restatement', 'restatement')->name('news.restatement');
-                    Route::get('/{id}/delete', 'delete')->name('news.delete');
+                    Route::get('/', 'index')->name('index');
+                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                    Route::match(['get', 'post'], '/create', 'create')->name('create');
+                    Route::get('/restatement', 'restatement')->name('restatement');
+                    Route::get('/{id}/delete', 'delete')->name('delete');
                 });
 
             /* IP-бан */

@@ -74,7 +74,7 @@
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="/guestbook">
+            <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">
                 <i class="app-menu__icon far fa-comment"></i>
                 <span class="app-menu__label">{{ __('index.guestbook') }}</span>
                 <span class="badge bg-sidebar">{{ statsGuestbook() }}</span>

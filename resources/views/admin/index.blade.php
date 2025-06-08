@@ -23,7 +23,7 @@
         </div>
         <div class="section-body">
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> <span class="badge bg-adaptive">{{ statsChat() }}</span><br>
-            <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/guestbook">{{ __('index.guestbook') }}</a> <span class="badge bg-adaptive">{{ statsGuestbook() }}</span><br>
+            <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.guestbook.index') }}">{{ __('index.guestbook') }}</a> <span class="badge bg-adaptive">{{ statsGuestbook() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/forums">{{ __('index.forums') }}</a> <span class="badge bg-adaptive">{{ statsForum() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.photos.index') }}">{{ __('index.photos') }}</a> <span class="badge bg-adaptive">{{ statsPhotos() }}</span><br>
             <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.blogs.index') }}">{{ __('index.blogs') }}</a> <span class="badge bg-adaptive">{{ statsBlog() }}</span><br>

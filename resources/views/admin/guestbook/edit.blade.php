@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/guestbook">{{ __('index.guestbook') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.guestbook.index') }}">{{ __('index.guestbook') }}</a></li>
             <li class="breadcrumb-item active">{{ __('guestbook.title_edit') }}</li>
         </ol>
     </nav>
@@ -25,7 +25,7 @@
     </p>
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/guestbook/edit/{{ $post->id }}?page={{ $page }}" method="post">
+        <form action="{{ route('admin.guestbook.edit', ['id' => $post->id, 'page' => $page]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>
