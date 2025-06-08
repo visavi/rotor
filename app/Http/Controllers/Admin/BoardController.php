@@ -94,13 +94,13 @@ class BoardController extends AdminController
 
             setFlash('success', __('boards.category_success_created'));
 
-            return redirect('admin/boards/edit/' . $board->id);
+            return redirect()->route('admin.boards.edit', ['id' => $board->id]);
         }
 
         setInput($request->all());
         setFlash('danger', $validator->getErrors());
 
-        return redirect('admin/boards/categories');
+        return redirect()->route('admin.boards.categories');
     }
 
     /**
@@ -142,7 +142,7 @@ class BoardController extends AdminController
 
                 setFlash('success', __('boards.category_success_edited'));
 
-                return redirect('admin/boards/categories');
+                return redirect()->route('admin.boards.categories');
             }
 
             setInput($request->all());
@@ -185,7 +185,7 @@ class BoardController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/boards/categories');
+        return redirect()->route('admin.boards.categories');
     }
 
     /**
@@ -237,7 +237,7 @@ class BoardController extends AdminController
                 clearCache(['statBoards', 'recentBoards', 'ItemFeed']);
                 setFlash('success', __('boards.item_success_edited'));
 
-                return redirect('admin/items/edit/' . $item->id);
+                return redirect()->route('admin.items.edit', ['id' => $item->id]);
             }
 
             setInput($request->all());
@@ -272,7 +272,7 @@ class BoardController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/boards/' . $item->board_id);
+        return redirect()->route('admin.boards.index', ['id' => $item->board_id]);
     }
 
     /**
@@ -292,6 +292,6 @@ class BoardController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/boards');
+        return redirect()->route('admin.boards.index');
     }
 }

@@ -6,14 +6,14 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
             <li class="breadcrumb-item active">{{ __('boards.create_item') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <form action="/items/create" method="post" enctype="multipart/form-data">
+    <form action="{{ route('items.create') }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="mb-3{{ hasError('category') }}">
             <label for="inputCategory" class="form-label">{{ __('boards.category') }}</label>

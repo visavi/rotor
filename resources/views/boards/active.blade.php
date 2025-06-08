@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-end">
         @if (isAdmin() || (getUser() && setting('board_create')))
-            <a class="btn btn-success" href="/items/create">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('items.create') }}">{{ __('main.add') }}</a>
         @endif
     </div>
 
@@ -16,7 +16,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
             <li class="breadcrumb-item active">{{ __('boards.my_items') }}</li>
         </ol>
     </nav>
@@ -50,11 +50,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="/items/{{ $item->id }}">{{ $item->getFirstImage() }}</a>
+                                    <a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
-                                    <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
-                                    <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
+                                    <h5><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></h5>
+                                    <small><i class="fas fa-angle-right"></i> <a href="{{ route('boards.index', ['id' => $item->category->id]) }}">{{ $item->category->name }}</a></small>
                                     <div class="section-message">
                                         {{ $item->shortText() }}
                                     </div>

@@ -129,20 +129,22 @@ Route::controller(SitemapController::class)
 /* Категории объявления */
 Route::controller(BoardController::class)
     ->prefix('boards')
+    ->name('boards.')
     ->group(function () {
-        Route::get('/{id?}', 'index')->name('boards.index');
-        Route::get('/active', 'active')->name('boards.active');
+        Route::get('/{id?}', 'index')->name('index');
+        Route::get('/active', 'active')->name('active');
     });
 
 /* Объявления */
 Route::controller(BoardController::class)
     ->prefix('items')
+    ->name('items.')
     ->group(function () {
-        Route::get('/{id}', 'view');
-        Route::get('/close/{id}', 'close');
-        Route::get('/delete/{id}', 'delete');
-        Route::match(['get', 'post'], '/create', 'create');
-        Route::match(['get', 'post'], '/edit/{id}', 'edit');
+        Route::get('/{id}', 'view')->name('view');
+        Route::get('/{id}/close', 'close')->name('close');
+        Route::get('/{id}/delete', 'delete')->name('delete');
+        Route::match(['get', 'post'], '/create', 'create')->name('create');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 
 /* Гостевая книга */
@@ -632,21 +634,23 @@ Route::middleware(['check.admin', 'admin.logger'])
         /* Доска объявлений */
         Route::controller(AdminBoardController::class)
             ->prefix('boards')
+            ->name('boards.')
             ->group(function () {
-                Route::get('/{id?}', 'index')->name('boards.index');
-                Route::get('/restatement', 'restatement');
-                Route::get('/categories', 'categories');
-                Route::post('/create', 'create');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/delete/{id}', 'delete');
+                Route::get('/{id?}', 'index')->name('index');
+                Route::get('/restatement', 'restatement')->name('restatement');
+                Route::get('/categories', 'categories')->name('categories');
+                Route::post('/create', 'create')->name('create');
+                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                Route::get('/{id}/delete', 'delete')->name('delete');
             });
 
         /* Объявления */
         Route::controller(AdminBoardController::class)
             ->prefix('items')
+            ->name('items.')
             ->group(function () {
-                Route::match(['get', 'post'], '/edit/{id}', 'editItem');
-                Route::get('/delete/{id}', 'deleteItem');
+                Route::match(['get', 'post'], '/{id}/edit', 'editItem')->name('edit');
+                Route::get('/{id}/delete', 'deleteItem')->name('delete');
             });
 
         /* Админская реклама */

@@ -127,7 +127,7 @@
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="/boards">
+            <a class="app-menu__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">
                 <i class="app-menu__icon far fa-rectangle-list"></i>
                 <span class="app-menu__label">{{ __('index.boards') }}</span>
                 <span class="badge bg-sidebar">{{ statsBoard() }}</span>

@@ -50,7 +50,7 @@
 <div class="section mb-3 shadow">
     <div class="section-title">
         <i class="fa fa-list-alt fa-lg text-muted"></i>
-        <a href="/boards">{{ __('index.boards') }}</a>
+        <a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a>
         <span class="badge bg-adaptive">{{ statsBoard() }}</span>
     </div>
     {{ recentBoards() }}

@@ -6,7 +6,7 @@
     @if (getUser())
         <div class="float-end">
             @if (getUser('id') === $item->user->id)
-                <a class="btn btn-success" href="/items/edit/{{ $item->id }}">{{ __('main.change') }}</a>
+                <a class="btn btn-success" href="{{ route('items.edit', ['id' => $item->id]) }}">{{ __('main.change') }}</a>
             @endif
 
             @if (isAdmin())
@@ -15,8 +15,8 @@
                         <i class="fas fa-wrench"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="/admin/items/edit/{{ $item->id }}">{{ __('main.edit') }}</a>
-                        <a class="dropdown-item" href="/admin/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+                        <a class="dropdown-item" href="{{ route('admin.items.edit', ['id' => $item->id]) }}">{{ __('main.edit') }}</a>
+                        <a class="dropdown-item" href="{{ route('admin.items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
                     </div>
                 </div>
             @endif
@@ -30,10 +30,10 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
 
             @foreach ($item->category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('boards.index', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ $item->title }}</li>

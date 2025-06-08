@@ -1,21 +1,21 @@
 <div class="section mb-3 shadow">
     <ol class="breadcrumb mb-1">
         <li class="breadcrumb-item">
-            <i class="fa-solid fa-rectangle-list"></i> <a href="/boards" class="text-muted">{{ __('index.boards') }}</a>
+            <i class="fa-solid fa-rectangle-list"></i> <a href="{{ route('boards.index') }}" class="text-muted">{{ __('index.boards') }}</a>
         </li>
 
         @if ($post->category->parent->id)
             <li class="breadcrumb-item">
-                <a href="/boards/{{ $post->category->parent->id }}" class="text-muted">{{ $post->category->parent->name }}</a>
+                <a href="{{ route('boards.index', ['id' => $post->category->parent->id]) }}" class="text-muted">{{ $post->category->parent->name }}</a>
             </li>
         @endif
 
         <li class="breadcrumb-item">
-            <a href="/boards/{{ $post->category->id }}" class="text-muted">{{ $post->category->name }}</a>
+            <a href="{{ route('boards.index', ['id' => $post->category->id]) }}" class="text-muted">{{ $post->category->name }}</a>
         </li>
     </ol>
 
-    <h3><a class="post-title" href="/items/{{ $post->id }}">{{ $post->title }}</a></h3>
+    <h3><a class="post-title" href="{{ route('items.edit', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
 
     <div class="col-md-12">
         @if ($post->files->isNotEmpty())

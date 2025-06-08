@@ -5,10 +5,10 @@
 @section('header')
     <div class="float-end">
         @if (isAdmin() || (getUser() && setting('board_create')))
-            <a class="btn btn-success" href="/items/create?bid={{ $board->id ?? 0 }}">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('items.create', ['id' => $board ?? null]) }}">{{ __('main.add') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.boards.index', ['id' => $board ?? null, 'page' => $items->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>
@@ -26,13 +26,13 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 
             @if ($board)
-                <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
 
                 @foreach ($board->getParents() as $parent)
                     @if ($loop->last)
                         <li class="breadcrumb-item active">{{ $parent->name }}</li>
                     @else
-                        <li class="breadcrumb-item"><a href="/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('boards.index', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
                     @endif
                 @endforeach
             @else
@@ -45,7 +45,7 @@
 @section('content')
     @if (getUser())
         <div class="mb-3">
-            <i class="far fa-list-alt"></i> <a href="/boards/active">{{ __('boards.my_items') }}</a>
+            <i class="far fa-list-alt"></i> <a href="{{ route('items.create') }}">{{ __('boards.my_items') }}</a>
         </div>
     @endif
 
@@ -54,7 +54,7 @@
             @foreach ($boards->chunk(3) as $chunk)
                 @foreach ($chunk as $child)
                     <div class="col-md-3 col-6">
-                        <a href="/boards/{{ $child->id }}">{{ $child->name }}</a> {{ $child->count_items + $child->children->sum('count_items') }}
+                        <a href="{{ route('boards.index', ['id' => $child->id]) }}">{{ $child->name }}</a> {{ $child->count_items + $child->children->sum('count_items') }}
                     </div>
                 @endforeach
             @endforeach
@@ -78,14 +78,14 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="/items/{{ $item->id }}">{{ $item->getFirstImage() }}</a>
+                                    <a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
-                                    <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
+                                    <h5><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></h5>
 
                                     <div class="small my-2">
                                         <i class="fas fa-angle-right"></i>
-                                        <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a>
+                                        <a href="{{ route('boards.index', ['id' => $item->category->id]) }}">{{ $item->category->name }}</a>
                                     </div>
 
                                     <div class="section-message">

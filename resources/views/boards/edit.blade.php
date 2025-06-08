@@ -6,13 +6,13 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
 
             @foreach ($item->category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('boards.index', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/items/{{ $item->id }}">{{ $item->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('boards.edit_item') }}</li>
         </ol>
     </nav>
@@ -26,15 +26,15 @@
     @endif
 
     @if ($item->expires_at > SITETIME)
-        <a href="/items/close/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_unpublish_item') }}')">{{ __('main.unpublish') }}</a> /
+        <a href="{{ route('items.close', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_unpublish_item') }}')">{{ __('main.unpublish') }}</a> /
     @else
-        <a href="/items/close/{{ $item->id }}?_token={{ csrf_token() }}">{{ __('main.publish') }}</a> /
+        <a href="{{ route('items.close', ['id' => $item->id, '_token' => csrf_token()]) }}">{{ __('main.publish') }}</a> /
     @endif
 
-    <a href="/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+    <a href="{{ route('items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
 
     <div class="section-form mb-3 shadow">
-        <form action="/items/edit/{{ $item->id }}" method="post">
+        <form action="{{ route('items.edit', ['id' => $item->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('bid') }}">
                 <label for="inputCategory" class="form-label">{{ __('boards.category') }}</label>

@@ -6,13 +6,13 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/boards">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
 
             @foreach ($item->category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/admin/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.boards.index', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/items/{{ $item->id }}">{{ $item->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('boards.edit_item') }}</li>
         </ol>
     </nav>
@@ -25,11 +25,11 @@
         <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
     @endif
 
-    <i class="fas fa-times"></i> <a class="me-3" href="/admin/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+    <i class="fas fa-times"></i> <a class="me-3" href="{{ route('admin.items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
     <hr>
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/items/edit/{{ $item->id }}" method="post">
+        <form action="{{ route('admin.items.edit', ['id' => $item->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('bid') }}">
                 <label for="inputCategory" class="form-label">{{ __('boards.category') }}</label>

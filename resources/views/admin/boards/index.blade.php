@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="/boards?page={{ $items->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('boards.index', ['id' => $board ?? null, 'page' => $items->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     @if ($board)
@@ -21,10 +21,10 @@
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
 
             @if ($board)
-                <li class="breadcrumb-item"><a href="/admin/boards">{{ __('index.boards') }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.boards.index') }}">{{ __('index.boards') }}</a></li>
 
                 @foreach ($board->getParents() as $parent)
-                    <li class="breadcrumb-item"><a href="/admin/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.boards.index', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
                 @endforeach
             @else
                 <li class="breadcrumb-item active">{{ __('index.boards') }}</li>
@@ -39,11 +39,11 @@
             @foreach ($boards->chunk(3) as $chunk)
                 @foreach ($chunk as $child)
                     <div class="col-md-3 col-6">
-                        <a href="/admin/boards/{{ $child->id }}">{{ $child->name }}</a> {{ $child->count_items }}
+                        <a href="{{ route('admin.boards.index', ['id' => $child->id]) }}">{{ $child->name }}</a> {{ $child->count_items }}
 
                         @if (isAdmin('boss'))
-                            <a href="/admin/boards/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/boards/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                            <a href="{{ route('admin.boards.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="{{ route('admin.boards.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 @endforeach
@@ -68,17 +68,17 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="/items/{{ $item->id }}">{{ $item->getFirstImage() }}</a>
+                                    <a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
 
                                     <div class="float-end">
-                                        <a href="/admin/items/edit/{{ $item->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-                                        <a href="/admin/items/delete/{{ $item->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                                        <a href="{{ route('admin.items.edit', ['id' => $item->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                                        <a href="{{ route('admin.items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                                     </div>
 
-                                    <h5><a href="/items/{{ $item->id }}">{{ $item->title }}</a></h5>
-                                    <small><i class="fas fa-angle-right"></i> <a href="/boards/{{ $item->category->id }}">{{ $item->category->name }}</a></small>
+                                    <h5><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></h5>
+                                    <small><i class="fas fa-angle-right"></i> <a href="{{ route('boards.index', ['id' => $item->category->id]) }}">{{ $item->category->name }}</a></small>
                                     <div class="section-message">
                                         {{ $item->shortText() }}
                                     </div>
@@ -110,7 +110,7 @@
     {{ $items->links() }}
 
     @if (isAdmin('boss'))
-        <i class="far fa-list-alt"></i> <a href="/admin/boards/categories">{{ __('boards.categories') }}</a><br>
-        <i class="fa fa-sync"></i> <a href="/admin/boards/restatement?_token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
+        <i class="far fa-list-alt"></i> <a href="{{ route('admin.boards.categories') }}">{{ __('boards.categories') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="{{ route('admin.boards.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
     @endif
 @stop

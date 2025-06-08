@@ -7,11 +7,11 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/boards">{{ __('index.boards') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/boards/categories">{{ __('boards.categories') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.boards.index') }}">{{ __('index.boards') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.boards.categories') }}">{{ __('boards.categories') }}</a></li>
 
             @foreach ($board->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/admin/boards/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.boards.index', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ __('boards.edit_category') }}</li>
@@ -21,7 +21,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/boards/edit/{{ $board->id }}" method="post">
+        <form action="{{ route('admin.boards.edit', ['id' => $board->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('parent') }}">
                 <label for="parent" class="form-label">{{ __('boards.parent_category') }}</label>
