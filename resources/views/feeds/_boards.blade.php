@@ -15,7 +15,7 @@
         </li>
     </ol>
 
-    <h3><a class="post-title" href="{{ route('items.edit', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
+    <h3><a class="post-title" href="{{ route('items.view', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
 
     <div class="col-md-12">
         @if ($post->files->isNotEmpty())

@@ -168,8 +168,6 @@ Route::controller(ArticleController::class)
         Route::get('/tags-search', 'searchTags')->name('tags-search');
         Route::get('/tags/{tag}', 'getTag')->where('tag', '.+')->name('tag');
         Route::get('/authors', 'authors')->name('authors');
-        Route::get('/active/articles', 'userArticles')->name('user-articles');
-        Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::get('/top', 'top')->name('top');
         Route::get('/rss', 'rss')->name('rss');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
@@ -186,6 +184,8 @@ Route::controller(ArticleController::class)
         Route::get('/{id}/print', 'print')->name('print');
         Route::get('/{id}/rss', 'rssComments')->name('rss-comments');
         Route::get('/comments', 'newComments')->name('new-comments');
+        Route::get('/active/articles', 'userArticles')->name('user-articles');
+        Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
         Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
@@ -213,9 +213,9 @@ Route::controller(PhotoController::class)
         Route::get('/{id}', 'view')->name('view');
         Route::get('/{id}/delete', 'delete')->name('delete');
         Route::get('/albums', 'albums')->name('albums');
-        Route::get('/albums/{login}', 'album')->name('user-albums');
         Route::get('/comments', 'allComments')->name('all-comments');
-        Route::get('/comments/active/{login}', 'userComments')->name('user-comments');
+        Route::get('/active/albums', 'album')->name('user-albums');
+        Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');

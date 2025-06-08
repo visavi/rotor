@@ -29,8 +29,8 @@
     <div class="border-bottom pb-3 mb-3">
         @if (getUser())
             {{ __('main.my') }}:
-            <a href="{{ route('blogs.user-articles') }}" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
-            <a href="{{ route('blogs.user-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+            <a href="{{ route('articles.user-articles') }}" class="badge bg-adaptive">{{ __('blogs.articles') }}</a>
+            <a href="{{ route('articles.user-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
         @endif
 
         {{ __('main.new') }}:

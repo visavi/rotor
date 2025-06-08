@@ -28,8 +28,8 @@
 @section('content')
     @if (getUser())
         {{ __('main.my') }}:
-        <a href="{{ route('photos.user-albums', ['login' => getUser('login')]) }}" class="badge bg-adaptive">{{ __('photos.photos') }}</a>
-        <a href="{{ route('photos.user-comments', ['login' => getUser('login')]) }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+        <a href="{{ route('photos.user-albums') }}" class="badge bg-adaptive">{{ __('photos.photos') }}</a>
+        <a href="{{ route('photos.user-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     @endif
 
     {{ __('main.all') }}:

@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('photos.user-albums', ['login' => $photo->user->login]) }}">{{ __('photos.album') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('photos.user-albums', ['user' => $photo->user->login]) }}">{{ __('photos.album') }} {{ $photo->user->getName() }}</a></li>
             <li class="breadcrumb-item active">{{ $photo->title }}</li>
         </ol>
     </nav>

@@ -167,7 +167,7 @@ class PhotoController extends Controller
 
                 setFlash('success', __('photos.photo_success_edited'));
 
-                return redirect()->route('photos.user-albums', ['login' => $user->login, 'page' => $page]);
+                return redirect()->route('photos.user-albums', ['user' => $user->login, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -343,7 +343,7 @@ class PhotoController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect()->route('photos.user-albums', ['login' => $user->login, 'page' => $page]);
+        return redirect()->route('photos.user-albums', ['user' => $user->login, 'page' => $page]);
     }
 
     /**
@@ -366,8 +366,9 @@ class PhotoController extends Controller
     /**
      * Альбом пользователя
      */
-    public function album(string $login): View
+    public function album(Request $request): View
     {
+        $login = $request->input('user', getUser('login'));
         $user = getUserByLogin($login);
 
         if (! $user) {
@@ -404,8 +405,9 @@ class PhotoController extends Controller
     /**
      * Выводит комментарии пользователя
      */
-    public function userComments(string $login): View
+    public function userComments(Request $request): View
     {
+        $login = $request->input('user', getUser('login'));
         $user = getUserByLogin($login);
 
         if (! $user) {
