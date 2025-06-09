@@ -42,7 +42,7 @@
             @endforeach
         </div>
 
-        <form action="{{ route('admin.offers.delete') }}" method="post">
+        <form action="{{ route('admin.offers.delete', ['type' => $type, 'page' => $offers->currentPage()]) }}" method="post">
             @csrf
             @foreach ($offers as $data)
                 <div class="section mb-3 shadow">

@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-end">
         @if (! $category->closed)
-            <a class="btn btn-success" href="/downs/create?cid={{ $category->id }}">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('downs.create', ['cid' => $category->id]) }}">{{ __('main.add') }}</a>
         @endif
         <a class="btn btn-light" href="/loads/{{ $category->id }}?page={{ $downs->currentPage() }}"><i class="fas fa-wrench"></i></a>
     </div>
@@ -63,7 +63,7 @@
 
                 <div class="section-body border-top">
                     @if ($child->lastDown)
-                        {{ __('loads.down') }}: <a href="/downs/{{ $child->lastDown->id }}">{{ $child->lastDown->title }}</a>
+                        {{ __('loads.down') }}: <a href="{{ route('downs.view', ['id' => $child->lastDown->id]) }}">{{ $child->lastDown->title }}</a>
 
                         @if ($child->lastDown->isNew())
                             <span class="badge text-bg-success">NEW</span>
@@ -89,7 +89,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file"></i>
-                            <a href="/downs/{{ $data->id }}">{{ $data->title }}</a>
+                            <a href="{{ route('downs.view', ['id' => $data->id]) }}">{{ $data->title }}</a>
                             @if ($data->isNew())
                                 <span class="badge text-bg-success">NEW</span>
                             @endif
@@ -97,10 +97,10 @@
                     </div>
 
                     <div class="text-end">
-                        <a href="/admin/downs/edit/{{ $data->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="{{ route('admin.downs.edit', ['id' => $data->id]) }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
                         @if (isAdmin('boss'))
-                            <a href="/admin/downs/delete/{{ $data->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')"><i class="fa fa-times"></i></a>
+                            <a href="{{ route('admin.downs.delete', ['id' => $data->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>
@@ -115,8 +115,7 @@
                         </small>
                     </div>
 
-                    <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                    <a href="/downs/end/{{ $data->id }}">&raquo;</a>
+                    <a href="{{ route('downs.comments', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
                 </div>
             </div>
         @endforeach

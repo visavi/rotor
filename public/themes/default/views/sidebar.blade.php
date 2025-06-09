@@ -111,10 +111,10 @@
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->is('loads') ? ' active' : '' }}" href="/loads"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.loads_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('downs') ? ' active' : '' }}" href="/downs"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_downs') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('downs/comments') ? ' active' : '' }}" href="/downs/comments"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('loads/top') ? ' active' : '' }}" href="/loads/top"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.top_downs') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('loads') ? ' active' : '' }}" href="{{ route('loads.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.loads_list') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('downs') ? ' active' : '' }}" href="{{ route('downs.new-files') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_downs') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('downs/comments') ? ' active' : '' }}" href="{{ route('downs.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
+                <li><a class="treeview-item{{ request()->is('loads/top') ? ' active' : '' }}" href="{{ route('loads.top') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.top_downs') }}</a></li>
             </ul>
         </li>
 

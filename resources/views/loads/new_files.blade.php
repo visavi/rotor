@@ -24,7 +24,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file"></i>
-                            <a href="/downs/{{ $down->id }}">{{ $down->title }}</a>
+                            <a href="{{ route('downs.view', ['id' => $down->id]) }}">{{ $down->title }}</a>
                         </div>
                     </div>
 

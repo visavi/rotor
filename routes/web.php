@@ -269,32 +269,36 @@ Route::prefix('posts')
     });
 
 /* Категории загрузок */
-Route::prefix('loads')->group(function () {
-    Route::get('/', [LoadController::class, 'index']);
-    Route::get('/rss', [LoadController::class, 'rss']);
-    Route::get('/{id}', [LoadController::class, 'load'])->name('loads.load');
-    Route::get('/top', [TopController::class, 'index'])->name('loads.top');
-});
+Route::prefix('loads')
+    ->name('loads.')
+    ->group(function () {
+        Route::get('/', [LoadController::class, 'index'])->name('index');
+        Route::get('/{id}', [LoadController::class, 'load'])->name('load');
+        Route::get('/rss', [LoadController::class, 'rss'])->name('rss');
+        Route::get('/top', [TopController::class, 'index'])->name('top');
+    });
 
 /* Загрузки */
-Route::prefix('downs')->group(function () {
-    Route::get('/', [LoadNewController::class, 'files']);
-    Route::get('/{id}', [DownController::class, 'index']);
-    Route::get('/comment/{id}/{cid}', [DownController::class, 'viewComment'])->whereNumber('cid');
-    Route::get('/end/{id}', [DownController::class, 'end']);
-    Route::get('/rss/{id}', [DownController::class, 'rss']);
-    Route::get('/zip/{id}', [DownController::class, 'zip']);
-    Route::get('/zip/{id}/{fid}', [DownController::class, 'zipView'])->whereNumber('fid');
-    Route::get('/comments', [LoadNewController::class, 'comments']);
-    Route::get('/active/files', [LoadActiveController::class, 'files']);
-    Route::get('/active/comments', [LoadActiveController::class, 'comments']);
-    Route::get('/download/{id}', [DownController::class, 'download']);
-    Route::get('/download/{id}/{lid}', [DownController::class, 'downloadLink'])->whereNumber('lid');
-    Route::match(['get', 'post'], '/edit/{id}', [DownController::class, 'edit']);
-    Route::match(['get', 'post'], '/create', [DownController::class, 'create']);
-    Route::match(['get', 'post'], '/comments/{id}', [DownController::class, 'comments']);
-    Route::match(['get', 'post'], '/edit/{id}/{cid}', [DownController::class, 'editComment'])->whereNumber('cid');
-});
+Route::prefix('downs')
+    ->name('downs.')
+    ->group(function () {
+        Route::get('/', [LoadNewController::class, 'files'])->name('new-files');
+        Route::get('/comments', [LoadNewController::class, 'comments'])->name('new-comments');
+
+        Route::get('/active/files', [LoadActiveController::class, 'files'])->name('active-files');
+        Route::get('/active/comments', [LoadActiveController::class, 'comments'])->name('active-comments');
+
+        Route::get('/{id}', [DownController::class, 'view'])->name('view');
+        Route::get('/{id}/rss', [DownController::class, 'rss'])->name('rss');
+        Route::get('/{id}/zip', [DownController::class, 'zip'])->name('zip');
+        Route::get('/{id}/zip/{fid}', [DownController::class, 'zipView'])->whereNumber('fid')->name('zip-view');
+        Route::get('/{id}/download', [DownController::class, 'download'])->name('download');
+        Route::get('/{id}/download/{lid}', [DownController::class, 'downloadLink'])->whereNumber('lid')->name('download-link');
+        Route::match(['get', 'post'], '/{id}/edit', [DownController::class, 'edit'])->name('edit');
+        Route::match(['get', 'post'], '/create', [DownController::class, 'create'])->name('create');
+        Route::match(['get', 'post'], '/{id}/comments', [DownController::class, 'comments'])->name('comments');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', [DownController::class, 'editComment'])->whereNumber('cid')->name('edit-comment');
+    });
 
 /* Предложения и проблемы */
 Route::controller(OfferController::class)
@@ -781,18 +785,25 @@ Route::middleware(['check.admin', 'admin.logger'])
 
             /* Загрузки */
             Route::controller(AdminLoadController::class)
+                ->prefix('loads')
+                ->name('loads.')
                 ->group(function () {
-                    Route::get('/loads', 'index');
-                    Route::post('/loads/create', 'create');
-                    Route::match(['get', 'post'], '/loads/edit/{id}', 'edit');
-                    Route::get('/loads/delete/{id}', 'delete');
-                    Route::get('/loads/restatement', 'restatement');
-                    Route::get('/loads/{id}', 'load')->name('loads.load');
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/create', 'create')->name('create');
+                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                    Route::get('/{id}/delete', 'delete')->name('delete');
+                    Route::get('/restatement', 'restatement')->name('restatement');
+                    Route::get('/{id}', 'load')->name('load');
+                });
 
-                    Route::match(['get', 'post'], '/downs/edit/{id}', 'editDown');
-                    Route::match(['get', 'post'], '/downs/delete/{id}', 'deleteDown');
-                    Route::get('/downs/new', 'new');
-                    Route::get('/downs/publish/{id}', 'publish');
+            Route::controller(AdminLoadController::class)
+                ->prefix('downs')
+                ->name('downs.')
+                ->group(function () {
+                    Route::match(['get', 'post'], '/{id}/edit', 'editDown')->name('edit');
+                    Route::match(['get', 'post'], '/delete/{id}', 'deleteDown')->name('delete');
+                    Route::get('/new', 'new')->name('new');
+                    Route::get('/{id}/publish', 'publish')->name('publish');
                 });
 
             /* Ошибки */

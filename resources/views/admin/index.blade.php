@@ -66,7 +66,7 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> <span class="badge bg-adaptive">{{ statsIpBanned() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> <span class="badge bg-adaptive">{{ parseVersion(PHP_VERSION) }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/loads">{{ __('index.loads') }}</a> <span class="badge bg-adaptive">{{ statsLoad() }}</span><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/downs/new">{{ __('index.new_loads') }}</a> <span class="badge bg-adaptive">{{ statsNewLoad() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.downs.new') }}">{{ __('index.new_loads') }}</a> <span class="badge bg-adaptive">{{ statsNewLoad() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/errors">{{ __('index.errors') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklists">{{ __('index.blacklist') }}</a> <span class="badge bg-adaptive">{{ statsBlacklist() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span><br>

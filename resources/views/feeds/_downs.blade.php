@@ -18,7 +18,7 @@
     <div class="section-header d-flex align-items-center">
         <div class="flex-grow-1">
             <div class="section-title">
-                <h3><a class="post-title" href="/downs/{{ $post->id }}">{{ $post->title }}</a></h3>
+                <h3><a class="post-title" href="{{ route('downs.view', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
                     <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
 
                     @if ($allowDownload)
-                        <a class="btn btn-sm btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                        <a class="btn btn-sm btn-success" href="{{ route('downs.download', ['id' => $file->id]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                     @endif
                 @else
                     <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
@@ -73,7 +73,7 @@
             @foreach ($post->links as $linkId => $link)
                 <div class="media-file mb-3">
                     <b>{{ basename($link) }}</b><br>
-                    <a class="btn btn-sm btn-success" href="/downs/download/{{ $post->id }}/{{ $linkId }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                    <a class="btn btn-sm btn-success" href="{{ route('downs.download-link', ['id' => $post->id, 'lid' => $linkId]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                 </div>
             @endforeach
         @endif
@@ -90,6 +90,5 @@
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>
 
-    <i class="fa-regular fa-comment"></i> <a href="/downs/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
-    <a href="/downs/end/{{ $post->id }}">&raquo;</a>
+    <i class="fa-regular fa-comment"></i> <a href="{{ route('downs.comments', ['id' => $post->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $post->count_comments }}</span>
 </div>

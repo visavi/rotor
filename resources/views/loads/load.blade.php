@@ -6,7 +6,7 @@
     <div class="float-end">
         @if (getUser())
             @if (! $category->closed)
-                    <a class="btn btn-success" href="/downs/create?category={{ $category->id }}">{{ __('main.add') }}</a>
+                    <a class="btn btn-success" href="{{ route('downs.create', ['category' => $category->id]) }}">{{ __('main.add') }}</a>
 
             @endif
 
@@ -57,7 +57,7 @@
 
                 <div class="section-body border-top">
                     @if ($child->lastDown)
-                        {{ __('loads.down') }}: <a href="/downs/{{ $child->lastDown->id }}">{{ $child->lastDown->title }}</a>
+                        {{ __('loads.down') }}: <a href="{{ route('downs.view', ['id' => $child->lastDown->id]) }}">{{ $child->lastDown->title }}</a>
 
                         @if ($child->lastDown->isNew())
                             <span class="badge text-bg-success">NEW</span>
@@ -83,7 +83,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file"></i>
-                            <a href="/downs/{{ $data->id }}">{{ $data->title }}</a>
+                            <a href="{{ route('downs.view', ['id' => $data->id]) }}">{{ $data->title }}</a>
                             @if ($data->isNew())
                                 <span class="badge text-bg-success">NEW</span>
                             @endif
@@ -104,8 +104,7 @@
                         </small>
                     </div>
 
-                    <a href="/downs/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                    <a href="/downs/end/{{ $data->id }}">&raquo;</a>
+                    <a href="{{ route('downs.comments', ['id' =>  $data->id ]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
                 </div>
             </div>
         @endforeach

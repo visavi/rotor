@@ -164,7 +164,7 @@ class SitemapController extends Controller
             $new = strtotime('+1 month', $changeTime) > SITETIME;
 
             $locs[] = [
-                'loc'        => config('app.url') . '/downs/' . $down->id,
+                'loc'        => route('downs.view', ['id' => $down->id]),
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

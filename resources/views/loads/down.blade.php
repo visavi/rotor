@@ -7,7 +7,7 @@
 @section('header')
     @if (isAdmin('admin'))
         <div class="float-end">
-            <a class="btn btn-light" href="/admin/downs/edit/{{ $down->id }}"><i class="fas fa-wrench"></i></a>
+            <a class="btn btn-light" href="{{ route('admin.downs.edit', ['id' => $down->id]) }}"><i class="fas fa-wrench"></i></a>
         </div>
     @endif
 
@@ -34,12 +34,12 @@
         <div class="alert alert-warning">
             <i class="fas fa-exclamation-triangle"></i> {{ __('loads.pending_down1') }}<br>
             @if (getUser() && getUser('id') === $down->user_id)
-                <i class="fa fa-pencil-alt"></i> <a href="/downs/edit/{{ $down->id }}">{{ __('main.edit') }}</a>
+                <i class="fa fa-pencil-alt"></i> <a href="{{ route('downs.edit', ['id' => $down->id]) }}">{{ __('main.edit') }}</a>
             @endif
         </div>
     @endif
 
-    <i class="fas fa-rss"></i> <a class="me-3" href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-rss"></i> <a class="me-3" href="{{ route('downs.rss', ['id' => $down->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
     <div class="mb-3">
@@ -73,11 +73,11 @@
 
                         <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
                         @if ($file->extension === 'zip')
-                            <a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a><br>
+                            <a href="{{ route('downs.zip', ['id' => $file->id]) }}">{{ __('loads.view_archive') }}</a><br>
                         @endif
 
                         @if ($allowDownload)
-                            <a class="btn btn-success" href="/downs/download/{{ $file->id }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                            <a class="btn btn-success" href="{{ route('downs.download', ['id' => $file->id ]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                         @endif
                     @else
                         <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
@@ -89,7 +89,7 @@
                 @foreach ($down->links as $linkId => $link)
                     <div class="media-file mb-3">
                         <b>{{ basename($link) }}</b><br>
-                        <a class="btn btn-success" href="/downs/download/{{ $down->id }}/{{ $linkId }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
+                        <a class="btn btn-success" href="{{ route('downs.download-link', ['id' => $down->id, 'lid' => $linkId]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a>
                     </div>
                 @endforeach
             @endif
@@ -102,8 +102,7 @@
         @endif
 
         <div class="mb-3">
-            <i class="fa fa-comment"></i> <a href="/downs/comments/{{ $down->id }}">{{ __('main.comments') }}</a> ({{ $down->count_comments }})
-            <a href="/downs/end/{{ $down->id }}">&raquo;</a><br>
+            <i class="fa fa-comment"></i> <a href="{{ route('downs.comments', ['id' => $down->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $down->count_comments }}</span>
 
             <div class="my-2 js-rating">{{ __('main.rating') }}:
                 @if (getUser() && getUser('id') !== $down->user_id)

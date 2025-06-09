@@ -255,14 +255,14 @@ class LoadController extends AdminController
                 }
 
                 if (! $down->active) {
-                    $text = textNotice('down_change', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
+                    $text = textNotice('down_change', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
                     $down->user->sendMessage(null, $text);
                 }
 
                 clearCache(['statLoads', 'recentDowns', 'DownFeed']);
                 setFlash('success', __('loads.down_edited_success'));
 
-                return redirect('admin/downs/edit/' . $down->id);
+                return redirect()->route('admin.downs.edit', ['id' => $down->id]);
             }
 
             setInput($request->all());
@@ -342,11 +342,11 @@ class LoadController extends AdminController
             if ($active) {
                 $status = __('loads.down_success_published');
                 $down->category->increment('count_downs');
-                $text = textNotice('down_publish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
+                $text = textNotice('down_publish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
             } else {
                 $status = __('loads.down_success_unpublished');
                 $down->category->decrement('count_downs');
-                $text = textNotice('down_unpublish', ['url' => '/downs/' . $down->id, 'title' => $down->title]);
+                $text = textNotice('down_unpublish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
             }
 
             $down->user->sendMessage(null, $text);
@@ -357,6 +357,6 @@ class LoadController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/downs/edit/' . $down->id);
+        return redirect()->route('admin.downs.edit', ['id' => $down->id]);
     }
 }

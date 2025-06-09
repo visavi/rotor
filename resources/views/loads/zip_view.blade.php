@@ -12,8 +12,8 @@
                 <li class="breadcrumb-item"><a href="/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
-            <li class="breadcrumb-item"><a href="/downs/zip/{{ $file->id }}">{{ __('loads.view_archive') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('downs.view', ['id' => $down->id]) }}">{{ $down->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('downs.zip', ['id' => $file->id]) }}">{{ __('loads.view_archive') }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.view_file') }}</li>
         </ol>
     </nav>

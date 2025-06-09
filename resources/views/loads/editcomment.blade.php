@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item"><a href="/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('downs.view', ['id' => $down->id]) }}">{{ $down->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.edit_comment') }}</li>
         </ol>
     </nav>
@@ -23,7 +23,7 @@
     <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
 
     <div class="section-form mb-3 shadow">
-        <form action="/downs/edit/{{ $comment->relate_id }}/{{ $comment->id }}?page={{ $page }}" method="post">
+        <form action="{{ route('downs.edit-comment', ['id' => $comment->relate_id, 'cid' => $comment->id, 'page' => $page]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>

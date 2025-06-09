@@ -19,10 +19,10 @@
 @section('content')
     @if (getUser() && getUser('id') === $user->id)
         <?php $type = $active ? 'success' : 'adaptive'; ?>
-        <a href="/downs/active/files?active=1" class="btn btn-{{ $type }} btn-sm">{{ __('loads.verified') }} <span class="badge bg-adaptive">{{ $activeCount }}</span></a>
+        <a href="{{ route('downs.active-files', ['active' => 1]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('loads.verified') }} <span class="badge bg-adaptive">{{ $activeCount }}</span></a>
 
         <?php $type = ! $active ? 'success' : 'adaptive'; ?>
-        <a href="/downs/active/files?active=0" class="btn btn-{{ $type }} btn-sm">{{ __('loads.pending') }} <span class="badge bg-adaptive">{{ $pendingCount }}</span></a>
+        <a href="{{ route('downs.active-files', ['$active' => 0]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('loads.pending') }} <span class="badge bg-adaptive">{{ $pendingCount }}</span></a>
         <hr>
     @endif
 
@@ -33,7 +33,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file"></i>
-                            <a href="/downs/{{ $down->id }}">{{ $down->title }}</a>
+                            <a href="{{ route('downs.view', ['id' => $down->id]) }}">{{ $down->title }}</a>
                         </div>
                     </div>
 

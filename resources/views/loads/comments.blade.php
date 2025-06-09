@@ -16,14 +16,14 @@
                 <li class="breadcrumb-item"><a href="/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('downs.view', ['id' => $down->id]) }}">{{ $down->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('main.comments') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
-    <i class="fas fa-rss"></i> <a href="/downs/rss/{{ $down->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-rss"></i> <a href="{{ route('downs.rss', ['id' => $down->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
     @if ($comments->isNotEmpty())
@@ -52,7 +52,7 @@
                             @endif
 
                             @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                                <a href="/downs/edit/{{ $down->id }}/{{ $comment->id }}?page={{ $comments->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="{{ route('downs.edit-comment', ['id' => $down->id, 'cid' => $comment->id, 'page' => $comments->currentPage()]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @endif
 
                             @if (isAdmin())
@@ -91,7 +91,7 @@
 
     @if (getUser())
         <div class="section-form mb-3 shadow">
-            <form action="/downs/comments/{{ $down->id }}" method="post">
+            <form action="{{ route('downs.comments', ['id' => $down->id]) }}" method="post">
                 @csrf
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>

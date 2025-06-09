@@ -25,7 +25,7 @@ class DownController extends Controller
     /**
      * Просмотр загрузки
      */
-    public function index(int $id): View
+    public function view(int $id): View
     {
         $down = Down::query()
             ->select('downs.*', 'polls.vote')
@@ -129,7 +129,7 @@ class DownController extends Controller
                     $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
                     if ($admins->isNotEmpty()) {
-                        $text = textNotice('down_upload', ['url' => '/admin/downs/edit/' . $down->id, 'title' => $down->title]);
+                        $text = textNotice('down_upload', ['url' => route('admin.downs.edit', ['id' => $down->id], false), 'title' => $down->title]);
 
                         foreach ($admins as $admin) {
                             $admin->sendMessage($user, $text, false);
@@ -140,7 +140,7 @@ class DownController extends Controller
                 $flood->saveState();
                 setFlash('success', __('loads.down_added_success'));
 
-                return redirect('downs/' . $down->id);
+                return redirect()->route('downs.view', ['id' => $down->id]);
             }
 
             setInput($request->all());
@@ -223,7 +223,7 @@ class DownController extends Controller
                 clearCache(['statLoads', 'recentDowns', 'DownFeed']);
                 setFlash('success', __('loads.down_edited_success'));
 
-                return redirect('downs/' . $down->id);
+                return redirect()->route('downs.view', ['id' => $down->id]);
             }
 
             setInput($request->all());
@@ -264,7 +264,7 @@ class DownController extends Controller
 
         setFlash('danger', $validator->getErrors());
 
-        return redirect('downs/' . $file->relate->id);
+        return redirect()->route('downs.view', ['id' => $file->relate->id]);
     }
 
     /**
@@ -296,7 +296,7 @@ class DownController extends Controller
 
         setFlash('danger', $validator->getErrors());
 
-        return redirect('downs/' . $down->id);
+        return redirect()->route('downs.view', ['id' => $down->id]);
     }
 
     /**
@@ -312,6 +312,17 @@ class DownController extends Controller
 
         if (! $down->active) {
             abort(200, __('loads.down_not_verified'));
+        }
+
+        $cid = int($request->input('cid'));
+        if ($cid) {
+            $total = $down->comments->where('id', '<=', $cid)->count();
+
+            $page = ceil($total / setting('comments_per_page'));
+            $page = $page > 1 ? $page : null;
+
+            return redirect()->route('downs.comments', ['id' => $down->id, 'page' => $page])
+                ->withFragment('comment_' . $cid);
         }
 
         if ($request->isMethod('post')) {
@@ -340,11 +351,14 @@ class DownController extends Controller
                 $down->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/downs/comment/' . $down->id . '/' . $comment->id, $down->title);
+                sendNotify($msg, route('downs.comment', ['id' => $down->id, 'cid' => $comment->id], false), $down->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
-                return redirect('downs/end/' . $down->id);
+                $page = ceil($down->count_comments / setting('comments_per_page'));
+                $page = $page > 1 ? $page : null;
+
+                return redirect()->route('downs.comments', ['id' => $down->id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -412,7 +426,7 @@ class DownController extends Controller
 
                 setFlash('success', __('main.comment_edited_success'));
 
-                return redirect('downs/comments/' . $id . '?page=' . $page);
+                return redirect()->route('downs.comments', ['id' => $id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -420,24 +434,6 @@ class DownController extends Controller
         }
 
         return view('loads/editcomment', compact('down', 'comment', 'page'));
-    }
-
-    /**
-     * Переадресация на последнюю страницу
-     */
-    public function end(int $id): RedirectResponse
-    {
-        $down = Down::query()->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        $total = $down->comments()->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('downs/comments/' . $down->id . '?page=' . $end);
     }
 
     /**
@@ -590,26 +586,5 @@ class DownController extends Controller
         }
 
         return view('loads/rss_comments', compact('down'));
-    }
-
-    /**
-     * Переход к сообщению
-     */
-    public function viewComment(int $id, int $cid): RedirectResponse
-    {
-        $down = Down::query()->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        $total = $down->comments()
-            ->where('id', '<=', $cid)
-            ->orderBy('created_at')
-            ->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('downs/comments/' . $down->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

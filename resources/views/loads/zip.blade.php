@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item"><a href="/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/downs/{{ $down->id }}">{{ $down->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('downs.view', ['id' => $down->id]) }}">{{ $down->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.view_archive') }}</li>
         </ol>
     </nav>
@@ -32,7 +32,7 @@
                     └─ {{ icons($document['ext']) }}
 
                     @if (in_array($document['ext'], $down->getViewExt(), true))
-                        <a href="/downs/zip/{{ $file->id }}/{{ $document['index'] }}">{{ $document['name'] }}</a>
+                        <a href="{{ route('downs.zip-view', ['id' => $file->id, 'fid' => $document['index']]) }}">{{ $document['name'] }}</a>
                     @else
                         {{ $document['name'] }}
                     @endif

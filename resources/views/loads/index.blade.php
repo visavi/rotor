@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-end">
         @if (isAdmin() || (getUser() && setting('downupload')))
-            <a class="btn btn-success" href="/downs/create">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('downs.create') }}">{{ __('main.add') }}</a>
 
             @if (isAdmin('admin'))
                 <a class="btn btn-light" href="/admin/loads"><i class="fas fa-wrench"></i></a>
@@ -28,20 +28,20 @@
 @section('content')
     @if (getUser())
         {{ __('main.my') }}:
-        <a href="/downs/active/files" class="badge bg-adaptive">{{ __('loads.downs') }}</a>
-        <a href="/downs/active/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+        <a href="{{ route('downs.active-files') }}" class="badge bg-adaptive">{{ __('loads.downs') }}</a>
+        <a href="{{ route('downs.active-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     @endif
 
     {{ __('main.new') }}:
-    <a href="/downs" class="badge bg-adaptive">{{ __('loads.downs') }}</a>
-    <a href="/downs/comments" class="badge bg-adaptive">{{ __('main.comments') }}</a>
+    <a href="{{ route('downs.new-files') }}" class="badge bg-adaptive">{{ __('loads.downs') }}</a>
+    <a href="{{ route('downs.new-comments') }}" class="badge bg-adaptive">{{ __('main.comments') }}</a>
     <hr>
 
     @foreach ($categories as $category)
         <div class="section mb-3 shadow">
             <div class="section-title">
                 <i class="fa fa-folder-open"></i>
-                <a href="/loads/{{ $category->id }}">{{ $category->name }}</a>
+                <a href="{{ route('loads.load', ['id' => $category->id]) }}">{{ $category->name }}</a>
 
                 @if ($category->new)
                     <span class="badge bg-adaptive">{{ $category->count_downs + $category->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $category->new->count_downs }}</span></span>
@@ -68,7 +68,7 @@
 
             <div class="section-body border-top">
                 @if ($category->lastDown)
-                    {{ __('loads.down') }}: <a href="/downs/{{ $category->lastDown->id }}">{{ $category->lastDown->title }}</a>
+                    {{ __('loads.down') }}: <a href="{{ route('downs.view', ['id' => $category->lastDown->id]) }}">{{ $category->lastDown->title }}</a>
 
                     @if ($category->lastDown->isNew())
                         <span class="badge text-bg-success">NEW</span>

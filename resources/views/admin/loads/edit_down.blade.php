@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="/downs/{{ $down->id }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('downs.view', ['id' => $down->id]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('loads.edit_down') . ' ' . $down->title }}</h1>
@@ -36,13 +36,13 @@
     @if (isAdmin('boss'))
         @if ($down->active)
             <i class="fa fa-pencil-alt"></i>
-            <a class="me-3" href="/admin/downs/publish/{{ $down->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a>
+            <a class="me-3" href="{{ route('admin.downs.publish', ['id' => $down->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a>
         @else
             <i class="fa fa-pencil-alt"></i>
-            <a class="me-3" href="/admin/downs/publish/{{ $down->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a>
+            <a class="me-3" href="{{ route('admin.downs.publish', ['id' => $down->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a>
         @endif
 
-        <i class="fas fa-times"></i> <a class="me-3" href="/admin/downs/delete/{{ $down->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a>
+        <i class="fas fa-times"></i> <a class="me-3" href="{{ route('admin.downs.delete', ['id' => $down->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a>
         <hr>
     @endif
 

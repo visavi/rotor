@@ -68,7 +68,7 @@
 
                 <div class="section-body border-top">
                     @if ($category->lastDown)
-                        {{ __('loads.down') }}: <a href="/downs/{{ $category->lastDown->id }}">{{ $category->lastDown->title }}</a>
+                        {{ __('loads.down') }}: <a href="{{ route('downs.view', ['id' => $category->lastDown->id]) }}">{{ $category->lastDown->title }}</a>
 
                         @if ($category->lastDown->isNew())
                             <span class="badge text-bg-success">NEW</span>
