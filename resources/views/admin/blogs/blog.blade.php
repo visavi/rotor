@@ -42,7 +42,7 @@
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
                             <a href="{{ route('admin.blogs.blog', ['id' => $child->id]) }}">{{ $child->name }}</a>
-                            ({{ $child->count_articles }})
+                            <span class="badge bg-adaptive">{{ $child->count_articles }}</span>
                         </div>
                     </div>
 

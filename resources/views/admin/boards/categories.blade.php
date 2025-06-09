@@ -19,7 +19,7 @@
             <div class="section-title">
                 <i class="fa fa-folder-open"></i> <a href="{{ route('admin.boards.index', ['id' => $board->id]) }}">{{ $board->name }}</a>
 
-                ({{ $board->count_items }})
+                <span class="badge bg-adaptive">{{ $board->count_items }}</span>
 
                 <div class="float-end">
                     <a href="{{ route('admin.boards.edit', ['id' => $board->id]) }}"><i class="fa fa-pencil-alt"></i></a>
@@ -33,7 +33,7 @@
                         <div>
                             <i class="fa fa-angle-right"></i> <b><a href="{{ route('admin.boards.index', ['id' => $child->id ]) }}">{{ $child->name }}</a></b>
 
-                            ({{ $child->count_items }})
+                            <span class="badge bg-adaptive">{{ $child->count_items }}</span>
 
                             <a href="{{ route('admin.boards.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                             <a href="{{ route('admin.boards.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>

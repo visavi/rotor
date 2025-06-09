@@ -15,10 +15,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.loads.index') }}">{{ __('index.loads') }}</a></li>
 
             @foreach ($down->category->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/admin/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.loads.load', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ __('loads.edit_down') }}</li>

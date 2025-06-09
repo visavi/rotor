@@ -28,9 +28,9 @@
                 <a href="{{ route('admin.blogs.blog', ['id' => $category->id]) }}">{{ $category->name }}</a>
 
                 @if ($category->new)
-                    ({{ $category->count_articles }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span>)
+                    <span class="badge bg-adaptive">{{ $category->count_articles }}/<span style="color:#ff0000">+{{ $category->new->count_articles }}</span></span>
                 @else
-                    ({{ $category->count_articles }})
+                    <span class="badge bg-adaptive">{{ $category->count_articles }}</span>
                 @endif
 
                 @if (isAdmin('boss'))
@@ -49,9 +49,9 @@
                             <b><a href="{{ route('admin.blogs.blog', ['id' => $child->id]) }}">{{ $child->name }}</a></b>
 
                             @if ($child->new)
-                                ({{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span>)
+                                <span class="badge bg-adaptive">{{ $child->count_articles }}/<span style="color:#ff0000">+{{ $child->new->count_articles }}</span></span>
                             @else
-                                ({{ $child->count_articles }})
+                                <span class="badge bg-adaptive">{{ $child->count_articles }}</span>
                             @endif
 
                             @if (isAdmin('boss'))

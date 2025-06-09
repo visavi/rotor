@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.top_downs') }}</li>
         </ol>
     </nav>
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('loads.load') }}: <a href="/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                    {{ __('loads.load') }}: <a href="{{ route('loads.load', ['id' => $data->category->id]) }}">{{ $data->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $data->loads }}<br>
                     <a href="{{ route('downs.comments', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
                 </div>

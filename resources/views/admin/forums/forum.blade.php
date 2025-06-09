@@ -38,7 +38,7 @@
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
                             <a href="{{ route('admin.forums.forum', ['id' => $child->id ]) }}">{{ $child->title }}</a>
-                            ({{ $child->count_topics }}/{{ $child->count_posts }})
+                            <span class="badge bg-adaptive">{{ $child->count_topics }}/{{ $child->count_posts }}</span>
                         </div>
                     </div>
 
@@ -76,7 +76,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-                            <a href="{{ route('admin.topics.topic', ['id' => $topic->id]) }}">{{ $topic->title }}</a> ({{ $topic->getCountPosts() }})
+                            <a href="{{ route('admin.topics.topic', ['id' => $topic->id]) }}">{{ $topic->title }}</a> <span class="badge bg-adaptive">{{ $topic->getCountPosts() }}</span>
                         </div>
                     </div>
                     <div class="text-end">

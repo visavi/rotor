@@ -32,7 +32,7 @@
 <div class="section mb-3 shadow">
     <div class="section-title">
         <i class="fa fa-download fa-lg text-muted"></i>
-        <a href="/loads">{{ __('index.loads') }}</a>
+        <a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a>
         <span class="badge bg-adaptive">{{ statsLoad() }}</span>
     </div>
     {{ recentDowns() }}

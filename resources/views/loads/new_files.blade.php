@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.new_downs') }}</li>
         </ol>
     </nav>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
+                    {{ __('loads.load') }}: <a href="{{ route('loads.load', ['id' => $down->category->id]) }}">{{ $down->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $down->loads }}<br>
                     {{ __('main.author') }}: {{ $down->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>

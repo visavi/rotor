@@ -16,7 +16,7 @@
         @foreach ($categories as $category)
             <div class="section mb-3 shadow">
                 <div class="section-title">
-                    <i class="far fa-smile"></i> <a href="/stickers/{{ $category->id }}">{{ $category->name }}</a> ({{ $category->cnt }})
+                    <i class="far fa-smile"></i> <a href="/stickers/{{ $category->id }}">{{ $category->name }}</a> <span class="badge bg-adaptive">{{ $category->cnt }}</span>
                 </div>
             </div>
         @endforeach

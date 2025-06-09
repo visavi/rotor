@@ -5,9 +5,9 @@
 @section('header')
     <div class="float-end">
         @if (! $category->closed)
-            <a class="btn btn-success" href="{{ route('downs.create', ['cid' => $category->id]) }}">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('downs.create', ['category' => $category->id]) }}">{{ __('main.add') }}</a>
         @endif
-        <a class="btn btn-light" href="/loads/{{ $category->id }}?page={{ $downs->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('loads.load', ['id' => $category->id, 'page' => $downs->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ $category->name }}</h1>
@@ -18,13 +18,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.loads.index') }}">{{ __('index.loads') }}</a></li>
 
             @foreach ($category->getParents() as $parent)
                 @if ($loop->last)
                     <li class="breadcrumb-item active">{{ $parent->name }}</li>
                 @else
-                    <li class="breadcrumb-item"><a href="/admin/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.loads.load', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
                 @endif
             @endforeach
         </ol>
@@ -47,7 +47,7 @@
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
-                    <a href="/admin/loads/{{ $child->id }}">{{ $child->name }}</a> <span class="badge bg-adaptive">{{ $child->count_downs }}</span>
+                    <a href="{{ route('admin.loads.load', ['id' => $child->id]) }}">{{ $child->name }}</a> <span class="badge bg-adaptive">{{ $child->count_downs }}</span>
 
                     @if ($child->closed)
                         <span class="badge bg-danger">{{ __('loads.closed_load') }}</span>
@@ -55,8 +55,8 @@
 
                     @if (isAdmin('boss'))
                         <div class="float-end">
-                            <a href="/admin/loads/edit/{{ $child->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/loads/delete/{{ $child->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                            <a href="{{ route('admin.loads.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="{{ route('admin.loads.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
                         </div>
                     @endif
                 </div>

@@ -14,9 +14,9 @@
         <i class="fa fa-envelope fa-lg text-muted"></i> {{ __('index.mail_contact') }}
     </div>
     <div class="section-body">
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/messages">{{ __('index.messages') }}</a> ({{ getUser()->getCountMessages() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/contacts">{{ __('index.contacts') }}</a> ({{ getUser()->getCountContact() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/ignores">{{ __('index.ignores') }}</a> ({{ getUser()->getCountIgnore() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/messages">{{ __('index.messages') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountMessages() }}</span><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/contacts">{{ __('index.contacts') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountContact() }}</span><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/ignores">{{ __('index.ignores') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountIgnore() }}</span><br>
     </div>
 </div>
 
@@ -38,7 +38,7 @@
         <i class="fa fa-star fa-lg text-muted"></i> {{ __('index.activity') }}
     </div>
     <div class="section-body">
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/walls/{{ getUser('login') }}">{{ __('index.my_wall') }}</a> ({{ getUser()->getCountWall() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/walls/{{ getUser('login') }}">{{ __('index.my_wall') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountWall() }}</span><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/notebooks">{{ __('index.notebook') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/adverts">{{ __('index.advertising') }}</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/ratings/{{ getUser('login') }}">{{ __('index.reputation_history') }}</a><br>

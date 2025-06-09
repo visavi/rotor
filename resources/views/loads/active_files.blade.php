@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.active_downs', ['user' => $user->login]) }}</li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
         <a href="{{ route('downs.active-files', ['active' => 1]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('loads.verified') }} <span class="badge bg-adaptive">{{ $activeCount }}</span></a>
 
         <?php $type = ! $active ? 'success' : 'adaptive'; ?>
-        <a href="{{ route('downs.active-files', ['$active' => 0]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('loads.pending') }} <span class="badge bg-adaptive">{{ $pendingCount }}</span></a>
+        <a href="{{ route('downs.active-files', ['active' => 0]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('loads.pending') }} <span class="badge bg-adaptive">{{ $pendingCount }}</span></a>
         <hr>
     @endif
 
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('loads.load') }}: <a href="/loads/{{ $down->category->id }}">{{ $down->category->name }}</a><br>
+                    {{ __('loads.load') }}: <a href="{{ route('loads.load', ['id' => $down->category->id]) }}">{{ $down->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $down->loads }}<br>
                     {{ __('main.author') }}: {{ $down->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>

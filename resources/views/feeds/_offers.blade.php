@@ -46,6 +46,5 @@
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>
 
-    <i class="fa-regular fa-comment"></i> <a href="offers/comments/{{ $post->id }}">{{ __('main.comments') }}</a> ({{ $post->count_comments }})
-    <a href="offers/end/{{ $post->id }}">&raquo;</a>
+    <i class="fa-regular fa-comment"></i> <a href="offers/comments/{{ $post->id }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $post->count_comments }}</span>
 </div>

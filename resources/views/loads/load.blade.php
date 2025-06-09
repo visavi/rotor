@@ -7,11 +7,10 @@
         @if (getUser())
             @if (! $category->closed)
                     <a class="btn btn-success" href="{{ route('downs.create', ['category' => $category->id]) }}">{{ __('main.add') }}</a>
-
             @endif
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/loads/{{ $category->id }}?page={{ $downs->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.loads.load', ['id' => $category->id, 'page' => $downs->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>
@@ -23,13 +22,13 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
 
             @foreach ($category->getParents() as $parent)
                 @if ($loop->last)
                     <li class="breadcrumb-item active">{{ $parent->name }}</li>
                 @else
-                    <li class="breadcrumb-item"><a href="/loads/{{ $parent->id }}">{{ $parent->name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('loads.load', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
                 @endif
             @endforeach
         </ol>
@@ -52,7 +51,7 @@
             <div class="section mb-3 shadow border-start border-info border-5">
                 <div class="section-title">
                     <i class="fa fa-folder-open"></i>
-                    <a href="/loads/{{ $child->id }}">{{ $child->name }}</a> ({{ $child->count_downs + $child->children->sum('count_downs') }})
+                    <a href="{{ route('loads.load', ['id' => $child->id]) }}">{{ $child->name }}</a> <span class="badge bg-adaptive">{{ $child->count_downs + $child->children->sum('count_downs') }}</span>
                 </div>
 
                 <div class="section-body border-top">

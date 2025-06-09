@@ -22,7 +22,7 @@
         @foreach ($topics as $data)
             <div class="section mb-3 shadow">
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
-                <b><a href="{{ route('topics.topic', ['id' => $data->id]) }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
+                <b><a href="{{ route('topics.topic', ['id' => $data->id]) }}">{{ $data->title }}</a></b> <span class="badge bg-adaptive">{{ $data->count_posts }}</span>
 
                 {{ $data->pagination() }}
                 {{ __('forums.forum') }}: <a href="{{ route('forums.forum', ['id' => $data->forum->id]) }}">{{ $data->forum->title }}</a><br>

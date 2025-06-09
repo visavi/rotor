@@ -27,7 +27,7 @@
                 <div class="section-title">
                     <i class="fa fa-file-alt fa-lg text-muted"></i>
                     <a href="{{ route('admin.forums.forum', ['id' => $forum->id]) }}">{{ $forum->title }}</a>
-                    ({{ $forum->count_topics }}/{{ $forum->count_posts }})
+                    <span class="badge bg-adaptive">{{ $forum->count_topics }}/{{ $forum->count_posts }}</span>
 
                     @if (isAdmin('boss'))
                         <div class="float-end">
@@ -45,7 +45,7 @@
                     @if ($forum->children->isNotEmpty())
                         @foreach ($forum->children as $child)
                             <i class="fa fa-copy text-muted"></i> <b><a href="{{ route('admin.forums.forum', ['id' => $child->id ]) }}">{{ $child->title }}</a></b>
-                            ({{ $child->count_topics }}/{{ $child->count_posts }})
+                            <span class="badge bg-adaptive">{{ $child->count_topics }}/{{ $child->count_posts }}</span>
 
                             @if (isAdmin('boss'))
                                 <a href="{{ route('admin.forums.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>

@@ -21,7 +21,7 @@
         @foreach ($posts as $data)
             <div class="section mb-3 shadow">
                 <i class="fa fa-file-alt"></i> <b><a href="{{ route('topics.topic', ['id' => $data->topic_id, 'pid' => $data->id]) }}">{{ $data->topic->title }}</a></b>
-                ({{ $data->topic->count_posts }})
+                <span class="badge bg-adaptive">{{ $data->topic->count_posts }}</span>
 
                 <div class="section-message">
                     {{ bbCode($data->text) }}<br>

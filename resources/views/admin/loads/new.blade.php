@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.loads.index') }}">{{ __('index.loads') }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.new_publications') }}</li>
         </ol>
     </nav>
@@ -25,7 +25,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file"></i>
-                            <a href="{{ route('downs.view', ['id' => $data->id]) }}">{{ $data->title }}</a> ({{ $data->count_comments }})
+                            <a href="{{ route('downs.view', ['id' => $data->id]) }}">{{ $data->title }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('loads.load') }}: <a href="/admin/loads/{{ $data->category->id }}">{{ $data->category->name }}</a><br>
+                    {{ __('loads.load') }}: <a href="{{ route('admin.loads.load', ['id' => $data->category->id]) }}">{{ $data->category->name }}</a><br>
                     {{ __('loads.files_images') }}: {{ $data->getFiles()->count() }}/{{ $data->getImages()->count() }}<br>
                     {{ __('main.author') }}: {{ $data->user->getProfile() }} ({{ dateFixed($data->created_at) }})
                 </div>

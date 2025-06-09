@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/loads">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.active_comments', ['user' => $user->getName()]) }}</li>
         </ol>
     </nav>
@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-comment"></i>
-                    <a href="{{ route('downs.comments', ['id' => $data->relate_id, 'cid' => $data->id]) }}">{{ $data->title }}</a> ({{ $data->count_comments }})
+                    <a href="{{ route('downs.comments', ['id' => $data->relate_id, 'cid' => $data->id]) }}">{{ $data->title }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
 
                     @if (isAdmin())
                         <div class="float-end">

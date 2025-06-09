@@ -8,7 +8,7 @@
             <a class="btn btn-success" href="{{ route('downs.create') }}">{{ __('main.add') }}</a>
 
             @if (isAdmin('admin'))
-                <a class="btn btn-light" href="/admin/loads"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.loads.index') }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>
@@ -55,7 +55,7 @@
                     @php $category->children->load('children'); @endphp
                     @foreach ($category->children as $child)
                         <div>
-                            <i class="fa fa-angle-right"></i> <b><a href="/loads/{{ $child->id }}">{{ $child->name }}</a></b>
+                            <i class="fa fa-angle-right"></i> <b><a href="{{ route('loads.load', ['id' => $child->id]) }}">{{ $child->name }}</a></b>
                             @if ($child->new)
                                 <span class="badge bg-adaptive">{{ $child->count_downs + $child->children->sum('count_downs') }}/<span style="color:#ff0000">+{{ $child->new->count_downs }}</span></span>
                             @else
@@ -85,6 +85,6 @@
         </div>
     @endforeach
 
-    <a href="/loads/top">{{ __('loads.top_downs') }}</a> /
-    <a href="/loads/rss">{{ __('main.rss') }}</a>
+    <a href="{{ route('loads.top') }}">{{ __('loads.top_downs') }}</a> /
+    <a href="{{ route('loads.rss') }}">{{ __('main.rss') }}</a>
 @stop

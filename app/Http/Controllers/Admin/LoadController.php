@@ -53,13 +53,13 @@ class LoadController extends AdminController
 
             setFlash('success', __('loads.load_success_created'));
 
-            return redirect('admin/loads/edit/' . $load->id);
+            return redirect()->route('admin.loads.edit', ['id' => $load->id]);
         }
 
         setInput($request->all());
         setFlash('danger', $validator->getErrors());
 
-        return redirect('admin/loads');
+        return redirect()->route('admin.loads.index');
     }
 
     /**
@@ -97,7 +97,7 @@ class LoadController extends AdminController
 
                 setFlash('success', __('loads.load_success_edited'));
 
-                return redirect('admin/loads');
+                return redirect()->route('admin.loads.index');
             }
 
             setInput($request->all());
@@ -140,7 +140,7 @@ class LoadController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/loads');
+        return redirect()->route('admin.loads.index');
     }
 
     /**
@@ -160,7 +160,7 @@ class LoadController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/loads');
+        return redirect()->route('admin.loads.index');
     }
 
     /**
@@ -302,7 +302,7 @@ class LoadController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/loads/' . $down->category_id);
+        return redirect()->route('admin.loads.load', ['id' => $down->category_id]);
     }
 
     /**

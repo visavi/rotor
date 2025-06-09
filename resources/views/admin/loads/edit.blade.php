@@ -7,8 +7,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads">{{ __('index.loads') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/loads/{{ $load->id }}">{{ $load->name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.loads.index') }}">{{ __('index.loads') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.loads.load', ['id' => $load->id]) }}">{{ $load->name }}</a></li>
             <li class="breadcrumb-item active">{{ __('loads.edit_load') }}</li>
         </ol>
     </nav>
@@ -16,7 +16,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/loads/edit/{{ $load->id }}" method="post">
+        <form action="{{ route('admin.loads.edit', ['id' => $load->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('parent') }}">
                 <label for="parent" class="form-label">{{ __('loads.parent_load') }}</label>
