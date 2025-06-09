@@ -100,7 +100,7 @@ class OfferController extends Controller
 
                 setFlash('success', __('main.record_added_success'));
 
-                return redirect('offers/' . $offer->id);
+                return redirect()->route('offers.view', ['id' => $offer->id]);
             }
 
             setInput($request->all());
@@ -155,7 +155,7 @@ class OfferController extends Controller
 
                 setFlash('success', __('main.record_changed_success'));
 
-                return redirect('offers/' . $offer->id);
+                return redirect()->route('offers.view', ['id' => $offer->id]);
             }
 
             setInput($request->all());
@@ -174,6 +174,17 @@ class OfferController extends Controller
 
         if (! $offer) {
             abort(404, __('main.record_not_found'));
+        }
+
+        $cid = int($request->input('cid'));
+        if ($cid) {
+            $total = $offer->comments->where('id', '<=', $cid)->count();
+
+            $page = ceil($total / setting('comments_per_page'));
+            $page = $page > 1 ? $page : null;
+
+            return redirect()->route('offers.comments', ['id' => $offer->id, 'page' => $page])
+                ->withFragment('comment_' . $cid);
         }
 
         if ($request->isMethod('post')) {
@@ -205,11 +216,14 @@ class OfferController extends Controller
                 $offer->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, '/offers/comment/' . $offer->id . '/' . $comment->id, $offer->title);
+                sendNotify($msg, route('offers.comments', ['id' => $offer->id, 'cid' => $comment->id], false), $offer->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
-                return redirect('offers/end/' . $offer->id);
+                $page = ceil($offer->count_comments / setting('comments_per_page'));
+                $page = $page > 1 ? $page : null;
+
+                return redirect()->route('offers.comments', ['id' => $offer->id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -276,7 +290,7 @@ class OfferController extends Controller
 
                 setFlash('success', __('main.comment_edited_success'));
 
-                return redirect('offers/comments/' . $offer->id . '?page=' . $page);
+                return redirect()->route('offers.comments', ['id' => $offer->id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -284,44 +298,5 @@ class OfferController extends Controller
         }
 
         return view('offers/editcomment', compact('offer', 'comment', 'page'));
-    }
-
-    /**
-     * Переадресация на последнюю страницу
-     */
-    public function end(int $id): RedirectResponse
-    {
-        $offer = Offer::query()->find($id);
-
-        if (! $offer) {
-            abort(404, __('main.record_not_found'));
-        }
-
-        $total = $offer->comments()->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('offers/comments/' . $offer->id . '?page=' . $end);
-    }
-
-    /**
-     * Переход к сообщению
-     */
-    public function viewComment(int $id, int $cid): RedirectResponse
-    {
-        $offer = Offer::query()->find($id);
-
-        if (! $offer) {
-            abort(404, __('main.record_not_found'));
-        }
-
-        $total = $offer->comments()
-            ->where('id', '<=', $cid)
-            ->orderBy('created_at')
-            ->count();
-
-        $end = ceil($total / setting('comments_per_page'));
-
-        return redirect('offers/comments/' . $offer->id . '?page=' . $end . '#comment_' . $cid);
     }
 }

@@ -15,7 +15,7 @@
             <h5>{{ __('index.users') }}</h5>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="/users">{{ __('index.users') }}</a> ({{  statsUsers() }})</li>
-                <li class="nav-item mb-2"><a href="/offers">{{ __('index.offers') }}</a> ({{ statsOffers() }})</li>
+                <li class="nav-item mb-2"><a href="{{ route('offers.index') }}">{{ __('index.offers') }}</a> ({{ statsOffers() }})</li>
                 @hook('footerColumnMiddle')
             </ul>
         </div>

@@ -194,7 +194,7 @@ class ForumController extends Controller
 
                 setFlash('success', __('forums.topic_success_created'));
 
-                return redirect('topics/' . $topic->id);
+                return redirect()->route('topics.topic', ['id' => $topic->id]);
             }
 
             setInput($request->all());

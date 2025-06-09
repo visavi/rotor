@@ -111,6 +111,6 @@ class BookmarkController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('forums/bookmarks?page=' . int($request->input('page')));
+        return redirect()->route('forums.bookmarks', ['page' => int($request->input('page'))]);
     }
 }

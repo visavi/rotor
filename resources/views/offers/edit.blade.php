@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/{{ $offer->type }}">{{ __('index.offers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('offers.index', ['type' => $offer->type]) }}">{{ __('index.offers') }}</a></li>
             <li class="breadcrumb-item active">{{ __('offers.editing_record') }}</li>
         </ol>
     </nav>
@@ -14,7 +14,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/offers/edit/{{ $offer->id }}" method="post">
+        <form action="{{ route('offers.edit', ['id' => $offer->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('type') }}">
                 <label for="types" class="form-label">{{ __('offers.i_want_to') }}</label>

@@ -5,10 +5,10 @@
 @section('header')
     <div class="float-end">
         @if (getUser())
-            <a class="btn btn-success" href="/offers/create?type={{ $type }}">{{ __('main.add') }}</a>
+            <a class="btn btn-success" href="{{ route('offers.create', ['type' => $type]) }}">{{ __('main.add') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/offers/{{ $type }}?page={{ $offers->currentPage() }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.offers.index', ['type' => $type, 'page' => $offers->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>
@@ -28,10 +28,10 @@
 @section('content')
     <div class="mb-3">
         <?php $active = ($type === 'offer') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/offers/offer?sort={{ $sort }}&amp;order={{ $order }}">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offerCount }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('offers.index', ['type' => 'offer', 'sort' => $sort, 'order' => $order]) }}">{{ __('offers.offers') }} <span class="badge bg-adaptive">{{ $offerCount }}</span></a>
 
         <?php $active = ($type === 'issue') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/offers/issue?sort={{ $sort }}&amp;order={{ $order }}">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $issueCount }}</span></a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('offers.index', ['type' => 'issue', 'sort' => $sort, 'order' => $order]) }}">{{ __('offers.problems') }} <span class="badge bg-adaptive">{{ $issueCount }}</span></a>
     </div>
 
     @if ($offers->isNotEmpty())
@@ -48,7 +48,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-file"></i>
-                    <a href="/offers/{{ $data->id }}">{{ $data->title }}</a> ({{ __('main.votes') }}: {{ $data->rating }})<br>
+                    <a href="{{ route('offers.view', ['id' => $data->id]) }}">{{ $data->title }}</a> ({{ __('main.votes') }}: {{ $data->rating }})<br>
                 </div>
 
                 <div class="section-body">
@@ -56,8 +56,7 @@
                     {{ bbCode($data->text) }}<br>
                     {{ __('main.added') }}: {{ $data->user->getProfile() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>
-                    <a href="/offers/comments/{{ $data->id }}">{{ __('main.comments') }}</a> ({{ $data->count_comments }})
-                    <a href="/offers/end/{{ $data->id }}">&raquo;</a>
+                    <a href="{{ route('offers.comments', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
                 </div>
             </div>
         @endforeach

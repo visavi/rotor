@@ -6,11 +6,11 @@
     <div class="float-end">
         @if (getUser())
             @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
-                <a class="btn btn-success" title="{{ __('main.edit') }}" href="/offers/edit/{{ $offer->id }}">{{ __('main.change') }}</a>
+                <a class="btn btn-success" title="{{ __('main.edit') }}" href="{{ route('offers.edit', ['id' => $offer->id]) }}">{{ __('main.change') }}</a>
             @endif
 
             @if (isAdmin())
-                <a class="btn btn-light" href="/admin/offers/{{ $offer->id }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-light" href="{{ route('admin.offers.view', ['id' => $offer->id]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>
@@ -22,7 +22,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/{{ $offer->type }}">{{ __('index.offers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('offers.index', ['type' => $offer->type]) }}">{{ __('index.offers') }}</a></li>
             <li class="breadcrumb-item active">{{ $offer->title }}</li>
         </ol>
     </nav>
@@ -99,8 +99,7 @@
         @endforeach
 
         <div class="p-3 mb-3 shadow">
-            <i class="fas fa-comments"></i> <b><a href="/offers/comments/{{ $offer->id }}">{{ __('main.all_comments') }}</a></b> ({{ $offer->count_comments }})
-            <a href="/offers/end/{{ $offer->id }}">&raquo;</a>
+            <i class="fas fa-comments"></i> <b><a href="{{ route('offers.comments', ['id' => $offer->id]) }}">{{ __('main.all_comments') }}</a></b> <span class="badge bg-adaptive">{{ $offer->count_comments }}</span>
         </div>
     @endif
 
@@ -111,7 +110,7 @@
 
         @if (getUser())
             <div class="section-form mb-3 shadow">
-                <form action="/offers/comments/{{ $offer->id }}" method="post">
+                <form action="{{ route('offers.comments', ['id' => $offer->id]) }}" method="post">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('main.message') }}:</label>

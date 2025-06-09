@@ -228,6 +228,7 @@ class TopicController extends Controller
         }
 
         $page = ceil($topic->count_posts / setting('forumpost'));
+        $page = $page > 1 ? $page : null;
 
         return redirect()->route('topics.topic', ['id' => $topic->id, 'page' => $page]);
     }
@@ -272,7 +273,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('topics/' . $topic->id . '?page=' . $page);
+        return redirect()->route('topics.topic', ['id' => $topic->id, 'page' => $page]);
     }
 
     /**
@@ -308,7 +309,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('topics/' . $topic->id);
+        return redirect()->route('topics.topic', ['id' => $topic->id]);
     }
 
     /**
@@ -343,7 +344,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('topics/' . $topic->id);
+        return redirect()->route('topics.topic', ['id' => $topic->id]);
     }
 
     /**
@@ -448,7 +449,7 @@ class TopicController extends Controller
 
                 setFlash('success', __('forums.topic_success_changed'));
 
-                return redirect('topics/' . $topic->id);
+                return redirect()->route('topics.topic', ['id' => $topic->id]);
             }
 
             setInput($request->all());
@@ -512,7 +513,7 @@ class TopicController extends Controller
 
                 setFlash('success', __('main.message_edited_success'));
 
-                return redirect('topics/' . $post->topic_id . '?page=' . $page);
+                return redirect()->route('topics.topic', ['id' => $post->topic_id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -575,7 +576,7 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('topics/' . $vote->topic_id . '?page=' . $page);
+        return redirect()->route('topics.topic', ['id' => $vote->topic_id, 'page' => $page]);
     }
 
     /**

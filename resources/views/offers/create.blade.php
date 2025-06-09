@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/offers/offer">{{ __('index.offers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('offers.index') }}">{{ __('index.offers') }}</a></li>
             <li class="breadcrumb-item active">{{ __('offers.adding_record') }}</li>
         </ol>
     </nav>
@@ -15,7 +15,7 @@
 @section('content')
     @if (getUser('point') >= setting('addofferspoint'))
         <div class="section-form mb-3 shadow">
-            <form action="/offers/create" method="post">
+            <form action="{{ route('offers.create') }}" method="post">
                 @csrf
                 <?php $inputType = getInput('type', $type); ?>
                 <div class="mb-3{{ hasError('type') }}">

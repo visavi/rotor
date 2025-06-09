@@ -7,8 +7,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">{{ __('index.offers') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->id }}">{{ $offer->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.offers.index', ['type' => $offer->type]) }}">{{ __('index.offers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.offers.view', ['id' => $offer->id]) }}">{{ $offer->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('offers.reply_record') }}</li>
         </ol>
     </nav>
@@ -16,7 +16,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/offers/reply/{{ $offer->id }}" method="post">
+        <form action="{{ route('admin.offers.reply', ['id' => $offer->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('reply') }}">
                 <label for="reply" class="form-label">{{ __('offers.answer') }}:</label>

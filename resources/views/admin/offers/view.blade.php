@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="/offers/{{ $offer->id }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('offers.view', ['id' => $offer->id]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ $offer->title }}</h1>
@@ -15,7 +15,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/offers/{{ $offer->type }}">{{ __('index.offers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.offers.index', ['type' => $offer->type]) }}">{{ __('index.offers') }}</a></li>
             <li class="breadcrumb-item active">{{ $offer->title }}</li>
         </ol>
     </nav>
@@ -25,9 +25,9 @@
     <div class="mb-3">
         <div class="section-content">
             <div class="float-end">
-                <a href="/admin/offers/reply/{{ $offer->id }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
-                <a href="/admin/offers/edit/{{ $offer->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                <a href="/admin/offers/delete?del={{ $offer->id }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('offers.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+                <a href="{{ route('admin.offers.reply', ['id' => $offer->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
+                <a href="{{ route('admin.offers.edit', ['id' => $offer->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
+                <a href="{{ route('admin.offers.reply', ['id' => $offer->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('offers.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
             </div>
 
             <div class="section-message">
@@ -48,8 +48,7 @@
                 <b>{{ formatNum($offer->rating) }}</b><br>
             </div>
 
-            <a href="/offers/comments/{{ $offer->id }}">{{ __('main.comments') }}</a> ({{ $offer->count_comments }})
-            <a href="/offers/end/{{ $offer->id }}">&raquo;</a><br>
+            <a href="{{ route('offers.comments', ['id' => $offer->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $offer->count_comments }}</span>
 
             @if ($offer->closed)
                 <span class="text-danger">{{ __('main.closed_comments') }}</span>

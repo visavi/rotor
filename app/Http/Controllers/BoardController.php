@@ -141,7 +141,7 @@ class BoardController extends Controller
 
                 setFlash('success', __('boards.item_success_added'));
 
-                return redirect('items/' . $item->id);
+                return redirect()->route('items.view', ['id' => $item->id]);
             }
 
             setInput($request->all());
@@ -211,7 +211,7 @@ class BoardController extends Controller
                 clearCache(['statBoards', 'recentBoards', 'ItemFeed']);
                 setFlash('success', __('boards.item_success_edited'));
 
-                return redirect('items/' . $item->id);
+                return redirect()->route('items.view', ['id' => $item->id]);
             }
 
             setInput($request->all());
@@ -266,7 +266,7 @@ class BoardController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('items/edit/' . $item->id);
+        return redirect()->route('items.edit', ['id' => $item->id]);
     }
 
     /**
@@ -298,7 +298,7 @@ class BoardController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('boards/' . $item->board_id);
+        return redirect()->route('boards.index', ['id' => $item->board_id]);
     }
 
     /**

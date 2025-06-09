@@ -299,15 +299,14 @@ Route::prefix('downs')->group(function () {
 /* Предложения и проблемы */
 Route::controller(OfferController::class)
     ->prefix('offers')
+    ->name('offers.')
     ->group(function () {
-        Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('offers.index');
-        Route::get('/{id}', 'view');
-        Route::get('/end/{id}', 'end');
-        Route::get('/comment/{id}/{cid}', 'viewComment')->whereNumber('cid');
-        Route::match(['get', 'post'], '/create', 'create');
-        Route::match(['get', 'post'], '/edit/{id}', 'edit');
-        Route::match(['get', 'post'], '/comments/{id}', 'comments');
-        Route::match(['get', 'post'], '/edit/{id}/{cid}', 'editComment')->whereNumber('cid');
+        Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('index');
+        Route::get('/{id}', 'view')->name('view');
+        Route::match(['get', 'post'], '/create', 'create')->name('create');
+        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
     });
 
 /* Ajax */
@@ -815,13 +814,14 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Предложения / проблемы */
             Route::controller(AdminOfferController::class)
                 ->prefix('offers')
+                ->name('offers.')
                 ->group(function () {
-                    Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('offers.index');
-                    Route::get('/{id}', 'view');
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::match(['get', 'post'], '/reply/{id}', 'reply');
-                    Route::get('/restatement', 'restatement');
-                    Route::match(['get', 'post'], '/delete', 'delete');
+                    Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('index');
+                    Route::get('/{id}', 'view')->name('view');
+                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                    Route::match(['get', 'post'], '/{id}/reply', 'reply')->name('reply');
+                    Route::get('/restatement', 'restatement')->name('restatement');
+                    Route::match(['get', 'post'], '/delete', 'delete')->name('delete');
                 });
 
             /* Стикеры */

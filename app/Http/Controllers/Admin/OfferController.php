@@ -88,7 +88,7 @@ class OfferController extends AdminController
 
                 setFlash('success', __('main.record_changed_success'));
 
-                return redirect('admin/offers/' . $offer->id);
+                return redirect()->route('admin.offers.view', ['id' => $offer->id]);
             }
 
             setInput($request->all());
@@ -131,7 +131,7 @@ class OfferController extends AdminController
 
                 setFlash('success', __('offers.answer_success_added'));
 
-                return redirect('admin/offers/' . $offer->id);
+                return redirect()->route('admin.offers.view', ['id' => $offer->id]);
             }
 
             setInput($request->all());
@@ -160,7 +160,7 @@ class OfferController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/offers');
+        return redirect()->route('admin.offers.index');
     }
 
     /**
@@ -187,6 +187,6 @@ class OfferController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/offers/' . $type . '?page=' . $page);
+        return redirect()->route('admin.offers.index', ['type' => $type, 'page' => $page]);
     }
 }
