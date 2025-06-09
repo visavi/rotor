@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <form action="{{ route('items.create') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('items.create') }}" method="post">
         @csrf
         <div class="mb-3{{ hasError('category') }}">
             <label for="inputCategory" class="form-label">{{ __('boards.category') }}</label>

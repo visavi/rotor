@@ -58,13 +58,13 @@ class ForumController extends AdminController
 
             setFlash('success', __('forums.forum_success_created'));
 
-            return redirect('admin/forums/edit/' . $forum->id);
+            return redirect()->route('admin.forums.edit', ['id' => $forum->id]);
         }
 
         setInput($request->all());
         setFlash('danger', $validator->getErrors());
 
-        return redirect('admin/forums');
+        return redirect()->route('admin.forums.index');
     }
 
     /**
@@ -109,7 +109,7 @@ class ForumController extends AdminController
 
                 setFlash('success', __('forums.forum_success_edited'));
 
-                return redirect('admin/forums');
+                return redirect()->route('admin.forums.index');
             }
 
             setInput($request->all());
@@ -152,7 +152,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/forums');
+        return redirect()->route('admin.forums.index');
     }
 
     /**
@@ -172,7 +172,7 @@ class ForumController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/forums');
+        return redirect()->route('admin.forums.index');
     }
 
     /**
@@ -246,7 +246,7 @@ class ForumController extends AdminController
                 clearCache(['statForums', 'recentTopics', 'TopicFeed']);
                 setFlash('success', __('forums.topic_success_edited'));
 
-                return redirect('admin/forums/' . $topic->forum_id);
+                return redirect()->route('admin.forums.forum', ['id' => $topic->forum_id]);
             }
 
             setInput($request->all());
@@ -293,7 +293,7 @@ class ForumController extends AdminController
 
                 setFlash('success', __('forums.topic_success_moved'));
 
-                return redirect('admin/forums/' . $topic->forum_id);
+                return redirect()->route('admin.forums.forum', ['id' => $topic->forum_id]);
             }
 
             setInput($request->all());
@@ -364,7 +364,7 @@ class ForumController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/topics/' . $topic->id . '?page=' . $page);
+        return redirect()->route('admin.topics.topic', ['id' => $topic->id, 'page' => $page]);
     }
 
     /**
@@ -392,7 +392,7 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/forums/' . $topic->forum->id . '?page=' . $page);
+        return redirect()->route('admin.forums.forum', ['id' => $topic->forum->id, 'page' => $page]);
     }
 
     /**
@@ -482,7 +482,7 @@ class ForumController extends AdminController
 
                 setFlash('success', __('main.message_edited_success'));
 
-                return redirect('admin/topics/' . $post->topic_id . '?page=' . $page);
+                return redirect()->route('admin.topics.topic', ['id' => $post->topic_id, 'page' => $page]);
             }
 
             setInput($request->all());
@@ -527,22 +527,6 @@ class ForumController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/topics/' . $topic->id . '?page=' . $page);
-    }
-
-    /**
-     * Переадресация к последнему сообщению
-     */
-    public function end(int $id): RedirectResponse
-    {
-        $topic = Topic::query()->find($id);
-
-        if (! $topic) {
-            abort(404, __('forums.topic_not_exist'));
-        }
-
-        $end = ceil($topic->count_posts / setting('forumpost'));
-
-        return redirect('admin/topics/' . $topic->id . '?page=' . $end);
+        return redirect()->route('admin.topics.topic', ['id' => $topic->id, 'page' => $page]);
     }
 }

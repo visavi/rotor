@@ -15,7 +15,7 @@
 @section('content')
     @if ($vote->topic->id)
         <div class="mb-3">
-            <h5>{{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a></h5>
+            <h5>{{ __('forums.topic') }}: <a href="{{ route('topics.topic', ['id' => $vote->topic->id]) }}">{{ $vote->topic->title }}</a></h5>
             @php
                 $firstPost = $vote->topic->posts()->orderBy('created_at')->first();
             @endphp

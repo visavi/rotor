@@ -301,6 +301,7 @@ class ArticleController extends Controller
             $total = $article->comments->where('id', '<=', $cid)->count();
 
             $page = ceil($total / setting('comments_per_page'));
+            $page = $page > 1 ? $page : null;
 
             return redirect()->route('articles.comments', ['id' => $article->id, 'page' => $page])
                 ->withFragment('comment_' . $cid);

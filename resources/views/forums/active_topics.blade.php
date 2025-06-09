@@ -10,7 +10,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_active_topics', ['user' => $user->getName()]) }}</li>
         </ol>
     </nav>
@@ -22,10 +22,10 @@
         @foreach ($topics as $data)
             <div class="section mb-3 shadow">
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
-                <b><a href="/topics/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
+                <b><a href="{{ route('topics.topic', ['id' => $data->id]) }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
 
                 {{ $data->pagination() }}
-                {{ __('forums.forum') }}: <a href="/forums/{{ $data->forum->id }}">{{ $data->forum->title }}</a><br>
+                {{ __('forums.forum') }}: <a href="{{ route('forums.forum', ['id' => $data->forum->id]) }}">{{ $data->forum->title }}</a><br>
                 {{ __('main.author') }}: {{ $data->user->getName() }} / {{ __('forums.latest') }}.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach

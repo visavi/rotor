@@ -131,7 +131,7 @@ class SitemapController extends Controller
             $new = strtotime('+1 month', $topic->updated_at) > SITETIME;
 
             $locs[] = [
-                'loc'        => config('app.url') . '/topics/' . $topic->id,
+                'loc'        => route('topics.topic', ['id' => $topic->id]),
                 'lastmod'    => date('c', $topic->updated_at),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

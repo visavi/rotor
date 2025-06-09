@@ -7,10 +7,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.forums.index') }}">{{ __('index.forums') }}</a></li>
 
             @foreach ($topic->forum->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/admin/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.forums.forum', ['id' => $parent->id ]) }}">{{ $parent->title }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ __('forums.title_move_topic') }} {{ $topic->title }}</li>
@@ -24,7 +24,7 @@
     {{ __('main.created') }}: {{ dateFixed($topic->created_at) }}<br>
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/topics/move/{{ $topic->id }}" method="post">
+        <form action="{{ route('admin.topics.move', ['id' => $topic->id]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('fid') }}">
                 <label for="fid" class="form-label">{{ __('forums.forum') }}:</label>

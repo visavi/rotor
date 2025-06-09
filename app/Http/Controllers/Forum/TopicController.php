@@ -28,7 +28,7 @@ class TopicController extends Controller
     /**
      * Main page
      */
-    public function index(int $id): View
+    public function index(int $id, Request $request): View|RedirectResponse
     {
         $user = getUser();
 
@@ -46,6 +46,18 @@ class TopicController extends Controller
 
         if (! $topic) {
             abort(404, __('forums.topic_not_exist'));
+        }
+
+        // Переход к сообщению
+        $pid = int($request->input('pid'));
+        if ($pid) {
+            $countPosts = $topic->posts->where('id', '<=', $pid)->count();
+
+            $page = ceil($countPosts / setting('forumpost'));
+            $page = $page > 1 ? $page : null;
+
+            return redirect()->route('topics.topic', ['id' => $topic->id, 'page' => $page])
+                ->withFragment('post_' . $pid);
         }
 
         $posts = Post::query()
@@ -180,8 +192,8 @@ class TopicController extends Controller
                 $user->increment('point');
                 $user->increment('money', 5);
 
+                $topic->increment('count_posts');
                 $topic->update([
-                    'count_posts'  => DB::raw('count_posts + 1'),
                     'last_post_id' => $post->id,
                     'updated_at'   => SITETIME,
                 ]);
@@ -207,7 +219,7 @@ class TopicController extends Controller
 
             clearCache(['statForums', 'recentTopics', 'TopicFeed']);
             $flood->saveState();
-            sendNotify($msg, '/topics/' . $topic->id . '/' . $post->id, $topic->title);
+            sendNotify($msg, route('topics.topic', ['id' => $topic->id, 'pid' => $post->id], false), $topic->title);
 
             setFlash('success', __('main.message_added_success'));
         } else {
@@ -215,7 +227,9 @@ class TopicController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('topics/end/' . $topic->id);
+        $page = ceil($topic->count_posts / setting('forumpost'));
+
+        return redirect()->route('topics.topic', ['id' => $topic->id, 'page' => $page]);
     }
 
     /**
@@ -584,40 +598,5 @@ class TopicController extends Controller
         $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text, false)) : $topic->title;
 
         return view('forums/print', compact('topic', 'posts', 'description'));
-    }
-
-    /**
-     * Forward to message
-     */
-    public function viewPost(int $id, int $pid): RedirectResponse
-    {
-        $countTopics = Post::query()
-            ->where('id', '<=', $pid)
-            ->where('topic_id', $id)
-            ->count();
-
-        if (! $countTopics) {
-            abort(404, __('forums.topic_not_exist'));
-        }
-
-        $end = ceil($countTopics / setting('forumpost'));
-
-        return redirect('topics/' . $id . '?page=' . $end . '#post_' . $pid);
-    }
-
-    /**
-     * Forward to the last message
-     */
-    public function end(int $id): RedirectResponse
-    {
-        $topic = Topic::query()->find($id);
-
-        if (! $topic) {
-            abort(404, __('forums.topic_not_exist'));
-        }
-
-        $end = ceil($topic->count_posts / setting('forumpost'));
-
-        return redirect('topics/' . $topic->id . '?page=' . $end);
     }
 }

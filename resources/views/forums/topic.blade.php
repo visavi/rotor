@@ -12,21 +12,21 @@
             </button>
             <div class="dropdown-menu dropdown-menu-end">
                 @if ($topic->closed)
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=open&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.open') }}</a>
+                    <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'open', 'page' =>$posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.open') }}</a>
                 @else
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=closed&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.close') }}</a>
+                    <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'closed', 'page' =>$posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.close') }}</a>
                 @endif
 
                 @if ($topic->locked)
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=unlocked&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.unlock') }}</a>
+                    <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'unlocked', 'page' =>$posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.unlock') }}</a>
                 @else
-                    <a class="dropdown-item" href="/admin/topics/action/{{ $topic->id }}?type=locked&amp;page={{ $posts->currentPage() }}&amp;_token={{ csrf_token() }}">{{ __('main.lock') }}</a>
+                    <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'locked', 'page' =>$posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.lock') }}</a>
                 @endif
 
-                <a class="dropdown-item" href="/admin/topics/edit/{{ $topic->id }}">{{ __('main.change') }}</a>
-                <a class="dropdown-item" href="/admin/topics/move/{{ $topic->id }}">{{ __('main.move') }}</a>
-                <a class="dropdown-item" href="/admin/topics/delete/{{ $topic->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
-                <a class="dropdown-item" href="/admin/topics/{{ $topic->id }}?page={{ $posts->currentPage() }}">{{ __('main.management') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.topics.edit', ['id' => $topic->id]) }}">{{ __('main.change') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.topics.move', ['id' => $topic->id]) }}">{{ __('main.move') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.topics.delete', ['id' => $topic->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.topics.topic', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}">{{ __('main.management') }}</a>
             </div>
         </div>
     @endif
@@ -38,10 +38,10 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
 
             @foreach ($topic->forum->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('forums.forum', ['id' => $parent->id]) }}">{{ $parent->title }}</a></li>
             @endforeach
 
             <li class="breadcrumb-item active">{{ $topic->title }}</li>
@@ -50,17 +50,17 @@
 @stop
 
 @section('content')
-    <i class="fas fa-print"></i> <a class="me-3" href="/topics/print/{{ $topic->id }}">{{ __('main.print') }}</a>
-    <i class="fas fa-rss"></i> <a class="me-3" href="/topics/rss/{{ $topic->id }}">{{ __('main.rss') }}</a>
+    <i class="fas fa-print"></i> <a class="me-3" href="{{ route('topics.print', ['id' => $topic->id]) }}">{{ __('main.print') }}</a>
+    <i class="fas fa-rss"></i> <a class="me-3" href="{{ route('topics.rss', ['id' => $topic->id]) }}">{{ __('main.rss') }}</a>
 
     @if (getUser())
         @if (! $topic->closed && getUser('id') === $topic->user->id && getUser('point') >= setting('editforumpoint'))
-            <i class="fas fa-lock"></i> <a class="me-3" href="/topics/close/{{ $topic->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
-            <i class="fas fa-pencil-alt"></i> <a class="me-3" href="/topics/edit/{{ $topic->id }}">{{ __('main.edit') }}</a>
+            <i class="fas fa-lock"></i> <a class="me-3" href="{{ route('topics.close', ['id' => $topic->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
+            <i class="fas fa-pencil-alt"></i> <a class="me-3" href="{{ route('topics.edit', ['id' => $topic->id]) }}">{{ __('main.edit') }}</a>
         @endif
 
         @if ($topic->closed && getUser('id') === $topic->closeUser->id)
-            <i class="fas fa-unlock"></i> <a class="me-3" href="/topics/open/{{ $topic->id }}?_token={{ csrf_token() }}">{{ __('main.open') }}</a>
+            <i class="fas fa-unlock"></i> <a class="me-3" href="{{ route('topics.open', ['id' => $topic->id, '_token' => csrf_token()]) }}">{{ __('main.open') }}</a>
         @endif
 
         <?php $bookmark = $topic->bookmark_posts ? __('forums.from_bookmarks') : __('forums.to_bookmarks'); ?>
@@ -72,8 +72,8 @@
     </div>
 
     @if ($topic->curators)
-       <div>
-            <span class="badge bg-warning">
+       <div class="mt-3">
+            <span class="badge bg-adaptive">
                 <i class="fa fa-wrench"></i> {{ __('forums.topic_curators') }}:
                 @foreach ($topic->curators as $key => $curator)
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
@@ -101,7 +101,7 @@
                     {{ progressBar($maxproc, $proc . '%') }}
                 @endforeach
             @else
-                <form class="mb-3" action="/topics/votes/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
+                <form class="mb-3" action="{{ route('topics.vote', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}" method="post">
                     @csrf
                     @foreach ($vote->answers as $answer)
                         <label><input name="poll" type="radio" value="{{ $answer->id }}"> {{ $answer->answer }}</label><br>
@@ -115,7 +115,7 @@
     @endif
 
     @if ($topic->isModer)
-        <form action="/topics/delete/{{ $topic->id }}?page={{ $posts->currentPage() }}" method="post">
+        <form action="{{ route('topics.delete', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}" method="post">
             @csrf
     @endif
 
@@ -149,7 +149,7 @@
                             @endif
 
                             @if ($topic->isModer || (getUser('id') === $post->user_id && $post->created_at + 600 > SITETIME))
-                                <a href="/posts/edit/{{ $post->id }}?page={{ $posts->currentPage() }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                                <a href="{{ route('posts.edit', ['id' => $post->id, 'page' => $posts->currentPage()]) }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                                 @if ($topic->isModer)
                                     <input type="checkbox" class="form-check-input" name="del[]" value="{{ $post->id }}">
                                 @endif
@@ -229,7 +229,7 @@
     @if (getUser())
         @if (empty($topic->closed))
             <div class="section-form mb-3 shadow">
-                <form action="/topics/create/{{ $topic->id }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('topics.create', ['id' => $topic->id]) }}" method="post">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
@@ -253,6 +253,6 @@
     <a href="/stickers">{{ __('main.stickers') }}</a>  /
     <a href="/tags">{{ __('main.tags') }}</a>  /
     <a href="/rules">{{ __('main.rules') }}</a> /
-    <a href="/forums/top/topics">{{ __('forums.top_topics') }}</a> /
-    <a href="/forums/top/posts">{{ __('forums.top_posts') }}</a><br>
+    <a href="{{ route('forums.top-topics') }}">{{ __('forums.top_topics') }}</a> /
+    <a href="{{ route('forums.top-posts') }}">{{ __('forums.top_posts') }}</a><br>
 @stop

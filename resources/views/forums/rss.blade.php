@@ -6,16 +6,16 @@
     @foreach ($topics as $topic)
         @if ($topic->lastPost->text)
             <?php $postText = bbCode($topic->lastPost->text); ?>
-            <?php $postText = str_replace('/uploads/stickers', config('app.url').'/uploads/stickers', $postText); ?>
+            <?php $postText = str_replace('/uploads/stickers', asset('/uploads/stickers'), $postText); ?>
 
             <item>
                 <title>{{ $topic->title }}</title>
-                <link>{{ config('app.url') }}/topics/{{ $topic->id }}</link>
+                <link>{{ route('topics.topic', ['id' => $topic->id]) }}</link>
                 <description>{{ $postText }}</description>
                 <author>{{ $topic->lastPost->user->getName() }}</author>
                 <pubDate>{{ date('r', $topic->updated_at) }}</pubDate>
                 <category>{{ __('forums.topics') }}</category>
-                <guid>{{ config('app.url') }}/topics/{{ $topic->id }}</guid>
+                <guid>{{ route('topics.topic', ['id' => $topic->id]) }}</guid>
             </item>
         @endif
     @endforeach

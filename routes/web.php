@@ -223,46 +223,50 @@ Route::controller(PhotoController::class)
     });
 
 /* Категория форума */
-Route::prefix('forums')->group(function () {
-    Route::get('/', [ForumController::class, 'index']);
-    Route::get('/{id}', [ForumController::class, 'forum']);
-    Route::get('/top/posts', [ForumController::class, 'topPosts']);
-    Route::get('/top/topics', [ForumController::class, 'topTopics']);
-    Route::get('/rss', [ForumController::class, 'rss']);
-    Route::match(['get', 'post'], '/create', [ForumController::class, 'create']);
+Route::prefix('forums')
+    ->name('forums.')
+    ->group(function () {
+        Route::get('/', [ForumController::class, 'index'])->name('index');
+        Route::get('/{id}', [ForumController::class, 'forum'])->name('forum');
+        Route::get('/top/posts', [ForumController::class, 'topPosts'])->name('top-posts');
+        Route::get('/top/topics', [ForumController::class, 'topTopics'])->name('top-topics');
+        Route::get('/rss', [ForumController::class, 'rss'])->name('rss');
+        Route::match(['get', 'post'], '/create', [ForumController::class, 'create'])->name('create');
 
-    Route::get('/active/posts', [ActiveController::class, 'posts']);
-    Route::get('/active/topics', [ActiveController::class, 'topics']);
-    Route::delete('/active/delete/{id}', [ActiveController::class, 'destroy']);
+        Route::get('/active/posts', [ActiveController::class, 'posts'])->name('active-posts');
+        Route::get('/active/topics', [ActiveController::class, 'topics'])->name('active-topics');
+        Route::delete('/active/{id}/delete', [ActiveController::class, 'destroy'])->name('active-delete');
 
-    Route::get('/bookmarks', [BookmarkController::class, 'index']);
-    Route::post('/bookmarks/delete', [BookmarkController::class, 'delete']);
-    Route::post('/bookmarks/perform', [BookmarkController::class, 'perform']);
-});
+        Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks');
+        Route::post('/bookmarks/delete', [BookmarkController::class, 'delete'])->name('bookmarks.delete');
+        Route::post('/bookmarks/perform', [BookmarkController::class, 'perform'])->name('bookmarks.perform');
+    });
 
 /* Темы форума */
-Route::prefix('topics')->group(function () {
-    Route::get('/', [NewController::class, 'topics']);
+Route::prefix('topics')
+    ->name('topics.')
+    ->group(function () {
+        Route::get('/', [NewController::class, 'topics'])->name('index');
 
-    Route::get('/{id}', [TopicController::class, 'index']);
-    Route::get('/{id}/{pid}', [TopicController::class, 'viewPost'])->whereNumber('pid');
-    Route::post('/votes/{id}', [TopicController::class, 'vote']);
-    Route::get('/end/{id}', [TopicController::class, 'end']);
-    Route::get('/open/{id}', [TopicController::class, 'open']);
-    Route::get('/close/{id}', [TopicController::class, 'close']);
-    Route::post('/create/{id}', [TopicController::class, 'create']);
-    Route::post('/delete/{id}', [TopicController::class, 'delete']);
-    Route::get('/print/{id}', [TopicController::class, 'print']);
-    Route::match(['get', 'post'], '/edit/{id}', [TopicController::class, 'edit']);
+        Route::get('/{id}', [TopicController::class, 'index'])->name('topic');
+        Route::post('/{id}/vote', [TopicController::class, 'vote'])->name('vote');
+        Route::get('/{id}/open', [TopicController::class, 'open'])->name('open');
+        Route::get('/{id}/close', [TopicController::class, 'close'])->name('close');
+        Route::post('/{id}/create', [TopicController::class, 'create'])->name('create');
+        Route::post('/{id}/delete', [TopicController::class, 'delete'])->name('delete');
+        Route::get('/{id}/print', [TopicController::class, 'print'])->name('print');
+        Route::match(['get', 'post'], '/{id}/edit', [TopicController::class, 'edit'])->name('edit');
 
-    Route::get('/rss/{id}', [ForumController::class, 'rssPosts']);
-});
+        Route::get('/{id}/rss', [ForumController::class, 'rssPosts'])->name('rss');
+    });
 
 /* Посты форума */
-Route::prefix('posts')->group(function () {
-    Route::get('/', [NewController::class, 'posts']);
-    Route::match(['get', 'post'], '/edit/{id}', [TopicController::class, 'editPost']);
-});
+Route::prefix('posts')
+    ->name('posts.')
+    ->group(function () {
+        Route::get('/', [NewController::class, 'posts'])->name('index');
+        Route::match(['get', 'post'], '/{id}/edit', [TopicController::class, 'editPost'])->name('edit');
+    });
 
 /* Категории загрузок */
 Route::prefix('loads')->group(function () {
@@ -568,33 +572,35 @@ Route::middleware(['check.admin', 'admin.logger'])
         /* Форум */
         Route::controller(AdminForumController::class)
             ->prefix('forums')
+            ->name('forums.')
             ->group(function () {
-                Route::get('/', 'index');
-                Route::post('/create', 'create');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/delete/{id}', 'delete');
-                Route::get('/restatement', 'restatement');
-                Route::get('/{id}', 'forum');
+                Route::get('/', 'index')->name('index');
+                Route::get('/{id}', 'forum')->name('forum');
+                Route::post('/create', 'create')->name('create');
+                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::get('/restatement', 'restatement')->name('restatement');
             });
 
         /* Темы */
         Route::controller(AdminForumController::class)
             ->prefix('topics')
+            ->name('topics.')
             ->group(function () {
-                Route::match(['get', 'post'], '/edit/{id}', 'editTopic');
-                Route::match(['get', 'post'], '/move/{id}', 'moveTopic');
-                Route::get('/action/{id}', 'actionTopic');
-                Route::get('/delete/{id}', 'deleteTopic');
-                Route::get('/{id}', 'topic');
-                Route::get('/end/{id}', 'end');
+                Route::get('/{id}', 'topic')->name('topic');
+                Route::match(['get', 'post'], '/{id}/edit', 'editTopic')->name('edit');
+                Route::match(['get', 'post'], '/{id}/move', 'moveTopic')->name('move');
+                Route::get('/{id}/action', 'actionTopic')->name('action');
+                Route::get('/{id}/delete', 'deleteTopic')->name('delete');
             });
 
         /* Посты */
         Route::controller(AdminForumController::class)
             ->prefix('posts')
+            ->name('posts.')
             ->group(function () {
-                Route::match(['get', 'post'], '/edit/{id}', 'editPost');
-                Route::post('/delete', 'deletePosts');
+                Route::match(['get', 'post'], '/{id}/edit', 'editPost')->name('edit');
+                Route::post('/delete', 'deletePosts')->name('delete');
             });
 
         /* Галерея */

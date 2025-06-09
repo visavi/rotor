@@ -9,12 +9,12 @@
 
         <item>
             <title>{{ $data->text }}</title>
-            <link>{{ config('app.url') }}/topics/{{ $topic->id }}/{{ $data->id }}</link>
+            <link>{{ route('topics.topic', ['id' => $topic->id, 'pid' => $data->id]) }}</link>
             <description>{{ $topic->title }} </description>
             <author>{{ $data->user->getName() }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
             <category>{{ __('forums.posts') }}</category>
-            <guid>{{ config('app.url') }}/topics/{{ $topic->id }}/{{  $data->id }}</guid>
+            <guid>{{ route('topics.topic', ['id' => $topic->id, 'pid' => $data->id]) }}</guid>
         </item>
     @endforeach
 @stop

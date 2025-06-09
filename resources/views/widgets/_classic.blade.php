@@ -23,7 +23,7 @@
 <div class="section mb-3 shadow">
     <div class="section-title">
         <i class="fab fa-forumbee fa-lg text-muted"></i>
-        <a href="/forums">{{ __('index.forums') }}</a>
+        <a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a>
         <span class="badge bg-adaptive">{{ statsForum() }}</span>
     </div>
     {{ recentTopics() }}

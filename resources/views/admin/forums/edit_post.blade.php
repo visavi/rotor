@@ -7,13 +7,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.forums.index') }}">{{ __('index.forums') }}</a></li>
 
             @foreach ($post->topic->forum->getParents() as $parent)
-                <li class="breadcrumb-item"><a href="/admin/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.forums.forum', ['id' => $parent->id ]) }}">{{ $parent->title }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="/admin/topics/{{ $post->topic->id }}">{{ $post->topic->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.topics.topic', ['id' => $post->topic->id]) }}">{{ $post->topic->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_edit_post') }}</li>
         </ol>
     </nav>
@@ -26,7 +26,7 @@
     </p>
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/posts/edit/{{ $post->id }}?page={{ $page }}" method="post">
+        <form action="{{ route('admin.posts.edit', ['id' => $post->id, 'page' => $page]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('forums.post') }}:</label>

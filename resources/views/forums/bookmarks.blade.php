@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_bookmarks') }}</li>
         </ol>
     </nav>
@@ -14,14 +14,14 @@
 
 @section('content')
     @if ($topics->isNotEmpty())
-        <form action="/forums/bookmarks/delete?page={{ $topics->currentPage() }}" method="post">
+        <form action="{{ route('forums.bookmarks.delete', ['page' => $topics->currentPage()]) }}" method="post">
             @csrf
             @foreach ($topics as $topic)
                 <div class="section mb-3 shadow">
                     <input type="checkbox" class="form-check-input" name="del[]" value="{{ $topic->id }}">
 
                     <i class="fa {{ $topic->topic->getIcon() }} text-muted"></i>
-                    <b><a href="/topics/{{ $topic->id }}">{{ $topic->title }}</a></b>
+                    <b><a href="{{ route('topics.topic', ['id' => $topic->id]) }}">{{ $topic->title }}</a></b>
                     ({{ $topic->count_posts }}{!! ($topic->count_posts > $topic->bookmark_posts) ? '/<span style="color:#00cc00">+' . ($topic->count_posts - $topic->bookmark_posts) . '</span>' : '' !!})
 
                     {{ $topic->topic->pagination() }}

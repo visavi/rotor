@@ -14,7 +14,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="{{ route('photos.create') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('photos.create') }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('photos.name') }}:</label>

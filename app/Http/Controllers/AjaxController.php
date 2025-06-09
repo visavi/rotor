@@ -56,7 +56,7 @@ class AjaxController extends Controller
 
             case Post::$morphName:
                 $model = Post::query()->find($id);
-                $path = '/topics/' . $model->topic_id . '?page=' . $page;
+                $path = route('topics.topic', ['id' => $model->topic_id, 'pid' => $model->id], false);
                 break;
 
             case Message::$morphName:

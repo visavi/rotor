@@ -66,7 +66,7 @@
     <ul class="app-menu">
         @hook('sidebarMenuStart')
         <li>
-            <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="/forums">
+            <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">
                 <i class="app-menu__icon far fa-comment-alt"></i>
                 <span class="app-menu__label">{{ __('index.forums') }}</span>
                 <span class="badge bg-sidebar">{{ statsForum() }}</span>

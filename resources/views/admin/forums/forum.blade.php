@@ -4,8 +4,8 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-success" href="/forums/create?fid={{ $forum->id }}">{{ __('forums.create_topic') }}</a>
-        <a class="btn btn-light" href="/forums/{{ $forum->id  }}?page={{ $topics->currentPage() }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-success" href="{{ route('forums.create', ['fid' => $forum->id]) }}">{{ __('forums.create_topic') }}</a>
+        <a class="btn btn-light" href="{{ route('forums.forum', ['id' => $forum->id, 'page' => $topics->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ $forum->title }}</h1>
@@ -16,13 +16,13 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.forums.index') }}">{{ __('index.forums') }}</a></li>
 
             @foreach ($forum->getParents() as $parent)
                 @if ($loop->last)
                     <li class="breadcrumb-item active">{{ $parent->title }}</li>
                 @else
-                    <li class="breadcrumb-item"><a href="/admin/forums/{{ $parent->id }}">{{ $parent->title }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.forums.forum', ['id' => $parent->id ]) }}">{{ $parent->title }}</a></li>
                 @endif
             @endforeach
         </ol>
@@ -37,22 +37,26 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
-                            <a href="/admin/forums/{{ $child->id }}">{{ $child->title }}</a>
+                            <a href="{{ route('admin.forums.forum', ['id' => $child->id ]) }}">{{ $child->title }}</a>
                             ({{ $child->count_topics }}/{{ $child->count_posts }})
                         </div>
                     </div>
 
                     @if (isAdmin('boss'))
                         <div class="float-end">
-                            <a href="/admin/forums/edit/{{ $forum->id }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/forums/delete/{{ $forum->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                            <a href="{{ route('admin.forums.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="{{ route('admin.forums.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
                         </div>
                     @endif
                 </div>
 
+                @if ($child->description)
+                    <div class="section-description text-muted fst-italic small">{{ $child->description }}</div>
+                @endif
+
                 @if ($child->lastTopic->id)
                     <div class="section-content">
-                        {{ __('forums.topic') }}: <a href="/admin/topics/end/{{ $child->lastTopic->id }}">{{ $child->lastTopic->title }}</a><br>
+                        {{ __('forums.topic') }}: <a href="{{ route('topics.topic', ['id' => $child->lastTopic->id]) }}">{{ $child->lastTopic->title }}</a><br>
                         @if ($child->lastTopic->lastPost->id)
                             {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
                         @endif
@@ -72,13 +76,13 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-                            <a href="/admin/topics/{{ $topic->id }}">{{ $topic->title }}</a> ({{ $topic->getCountPosts() }})
+                            <a href="{{ route('admin.topics.topic', ['id' => $topic->id]) }}">{{ $topic->title }}</a> ({{ $topic->getCountPosts() }})
                         </div>
                     </div>
                     <div class="text-end">
-                        <a href="/admin/topics/edit/{{ $topic->id }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/topics/move/{{ $topic->id }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="/admin/topics/delete/{{ $topic->id }}?page={{ $topics->currentPage() }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <a href="{{ route('admin.topics.edit', ['id' => $topic->id]) }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="{{ route('admin.topics.move', ['id' => $topic->id]) }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
+                        <a href="{{ route('admin.topics.delete', ['id' => $topic->id, 'page' => $topics->currentPage(), '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
                 <div class="section-content">

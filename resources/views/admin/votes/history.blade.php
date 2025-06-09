@@ -33,7 +33,7 @@
 
                 <div class="section-body">
                     @if ($vote->topic->id)
-                        {{ __('forums.topic') }}: <a href="/topics/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
+                        {{ __('forums.topic') }}: <a href="{{ route('topics.topic', ['id' => $vote->topic->id]) }}">{{ $vote->topic->title }}</a><br>
                     @endif
 
                     {{ __('main.created') }}: {{ dateFixed($vote->created_at) }}<br>

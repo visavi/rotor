@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/forums">{{ __('index.forums') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
             <li class="breadcrumb-item active">{{ __('forums.title_top_topics') }}</li>
         </ol>
     </nav>
@@ -17,7 +17,7 @@
         @foreach ($topics as $data)
             <div class="section mb-3 shadow">
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
-                <b><a href="/topics/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
+                <b><a href="{{ route('topics.topic', ['id' => $data->id]) }}">{{ $data->title }}</a></b> ({{ $data->count_posts }})
 
                 {{ $data->pagination() }}
                 {{ __('main.author') }}: {{ $data->user->getName() }}<br>

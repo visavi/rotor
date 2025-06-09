@@ -78,6 +78,7 @@ class NewsController extends Controller
             $total = $news->comments->where('id', '<=', $cid)->count();
 
             $page = ceil($total / setting('comments_per_page'));
+            $page = $page > 1 ? $page : null;
 
             return redirect()->route('news.comments', ['id' => $news->id, 'page' => $page])
                 ->withFragment('comment_' . $cid);

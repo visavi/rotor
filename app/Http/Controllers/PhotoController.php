@@ -195,6 +195,7 @@ class PhotoController extends Controller
             $total = $photo->comments->where('id', '<=', $cid)->count();
 
             $page = ceil($total / setting('comments_per_page'));
+            $page = $page > 1 ? $page : null;
 
             return redirect()->route('photos.comments', ['id' => $photo->id, 'page' => $page])
                 ->withFragment('comment_' . $cid);

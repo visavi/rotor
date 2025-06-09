@@ -13,5 +13,5 @@
         <br><br>
     @endforeach
 
-    URL: <a href="{{ config('app.url') }}/topics/{{ $topic->id }}">{{ config('app.url') }}/topics/{{ $topic->id }}</a>
+    URL: <a href="{{ route('topics.topic', ['id' => $topic->id]) }}">{{ route('topics.topic', ['id' => $topic->id]) }}</a>
 @stop
