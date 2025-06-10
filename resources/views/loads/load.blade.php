@@ -89,7 +89,7 @@
                         </div>
                     </div>
 
-                    <div class="text-end js-rating">
+                    <div class="text-end section-action js-rating">
                         <span class="badge bg-adaptive">{{ formatNum($data->rating) }}</span>
                     </div>
                 </div>

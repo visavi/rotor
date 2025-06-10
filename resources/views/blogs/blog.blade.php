@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    <div class="text-end js-rating">
+                    <div class="text-end section-action js-rating">
                         @if (getUser() && getUser('id') !== $article->user_id)
                             <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
                         @endif

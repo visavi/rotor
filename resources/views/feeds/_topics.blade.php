@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="js-rating text-end">
+        <div class="text-end section-action js-rating">
             @if ($user && $user->id !== $post->lastPost->user_id)
                 <a class="post-rating-down{{ ($polls[$post->lastPost::$morphName][$post->lastPost->id] ?? '') === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->lastPost->id }}" data-type="{{ $post->lastPost->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
             @endif

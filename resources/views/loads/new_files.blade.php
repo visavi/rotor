@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div class="text-end js-rating">
+                    <div class="text-end section-action js-rating">
                         <span class="badge bg-adaptive">{{ formatNum($down->rating) }}</span>
                     </div>
                 </div>

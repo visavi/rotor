@@ -43,7 +43,7 @@
                 {{ $offer->getStatus() }}
             </div>
 
-            <div class="js-rating">
+            <div class="section-action js-rating">
                 {{ __('main.rating') }}:
                 <b>{{ formatNum($offer->rating) }}</b><br>
             </div>

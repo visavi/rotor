@@ -35,7 +35,7 @@
                         </small>
                     </div>
 
-                    <div class="js-rating">
+                    <div class="section-action js-rating">
                         @if (getUser() && getUser('id') !== $data->user_id)
                             <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
                         @endif

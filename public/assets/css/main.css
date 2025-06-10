@@ -237,6 +237,12 @@ textarea.form-control {
     background-color: var(--base-bg);
     font-size: 90%;
 }
+.section-action {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 5px;
+}
 
 .post-rating-up.active {
     color: #fff;

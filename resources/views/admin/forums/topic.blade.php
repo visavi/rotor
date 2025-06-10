@@ -118,6 +118,7 @@
 
                         <div class="text-end">
                             @if (getUser())
+                                <div class="section-action">
                                 @if (getUser('id') !== $data->user_id)
                                     <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
@@ -127,9 +128,10 @@
                                 <a href="{{ route('admin.posts.edit', ['id' => $data->id, 'page' => $posts->currentPage()]) }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
 
                                 <input type="checkbox" class="form-check-input" name="del[]" value="{{ $data->id }}">
+                                </div>
                             @endif
 
-                            <div class="js-rating">
+                            <div class="section-action js-rating">
                                 @if (getUser() && getUser('id') !== $data->user_id)
                                     <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-minus"></i></a>
                                 @endif

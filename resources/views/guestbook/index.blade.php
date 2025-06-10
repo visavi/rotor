@@ -62,7 +62,7 @@
                     </div>
 
                     @if (getUser() && getUser('id') !== $post->user_id)
-                        <div class="text-end">
+                        <div class="text-end section-action">
                             <a href="#" onclick="return postReply(this)" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" data-bs-toggle="tooltip" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
@@ -71,7 +71,7 @@
                     @endif
 
                     @if ($post->created_at + 600 > SITETIME && getUser() && getUser('id') === $post->user_id)
-                        <div class="text-end">
+                        <div class="text-end section-action">
                             <a href="{{ route('guestbook.edit', ['id' => $post->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif

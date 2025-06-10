@@ -140,6 +140,7 @@
 
                     <div class="text-end">
                         @if (getUser())
+                            <div class="section-action">
                             @if (getUser('id') !== $post->user_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
 
@@ -154,9 +155,10 @@
                                     <input type="checkbox" class="form-check-input" name="del[]" value="{{ $post->id }}">
                                 @endif
                             @endif
+                            </div>
                         @endif
 
-                        <div class="js-rating">
+                        <div class="section-action js-rating">
                             @if (getUser() && getUser('id') !== $post->user_id)
                                 <a class="post-rating-down{{ $post->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $post->id }}" data-type="{{ $post->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>
                             @endif

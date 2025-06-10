@@ -35,7 +35,7 @@
                     </div>
 
                     @if (getUser())
-                        <div class="text-end">
+                        <div class="text-end section-action">
                             @if (getUser('id') !== $data->author_id)
                                 <a href="#" onclick="return postReply(this)" title="{{ __('main.reply') }}"><i class="fa fa-reply text-muted"></i></a>
                                 <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
