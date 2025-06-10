@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/votes">{{ __('index.votes') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.votes.index') }}">{{ __('index.votes') }}</a></li>
             <li class="breadcrumb-item active">{{ __('votes.archive_votes') }}</li>
         </ol>
     </nav>
@@ -19,14 +19,14 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-chart-bar"></i>
-                    <a href="/votes/history/{{ $vote['id'] }}">{{ $vote->title }}</a>
+                    <a href="{{ route('votes.view-history', ['id' => $vote->id]) }}">{{ $vote->title }}</a>
 
                     <div class="float-end">
-                        <a href="/admin/votes/edit/{{ $vote->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/votes/close/{{ $vote->id }}?_token={{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.open') }}"><i class="fa fa-unlock text-muted"></i></a>
+                        <a href="{{ route('admin.votes.edit', ['id' => $vote->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="{{ route('admin.votes.close', ['id' => $vote->id, '_token' => csrf_token()]) }}" data-bs-toggle="tooltip" title="{{ __('main.open') }}"><i class="fa fa-unlock text-muted"></i></a>
 
                         @if (isAdmin('boss'))
-                            <a href="/admin/votes/delete/{{ $vote->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <a href="{{ route('admin.votes.delete', ['id' => $vote->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>

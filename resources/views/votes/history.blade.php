@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/votes">{{ __('index.votes') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('votes.index') }}">{{ __('index.votes') }}</a></li>
             <li class="breadcrumb-item active">{{ __('votes.archive_votes') }}</li>
         </ol>
     </nav>
@@ -18,7 +18,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-briefcase"></i>
-                    <a href="/votes/history/{{ $vote->id }}">{{ $vote->title }}</a>
+                    <a href="{{ route('votes.view-history', ['id' => $vote->id]) }}">{{ $vote->title }}</a>
                 </div>
                 <div class="section-body">
                     @if ($vote->topic->id)

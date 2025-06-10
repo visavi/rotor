@@ -92,7 +92,7 @@ class VoteController extends AdminController
 
                 setFlash('success', __('votes.voting_success_changed'));
 
-                return redirect('admin/votes/edit/' . $vote->id);
+                return redirect()->route('admin.votes.edit', ['id' => $vote->id]);
             }
 
             setInput($request->all());
@@ -127,7 +127,7 @@ class VoteController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/votes');
+        return redirect()->route('admin.votes.index');
     }
 
     /**
@@ -160,10 +160,10 @@ class VoteController extends AdminController
         }
 
         if (empty($closed)) {
-            return redirect('admin/votes');
+            return redirect()->route('admin.votes.index');
         }
 
-        return redirect('admin/votes/history');
+        return redirect()->route('admin.votes.history');
     }
 
     /**
@@ -183,6 +183,6 @@ class VoteController extends AdminController
             setFlash('danger', __('validator.token'));
         }
 
-        return redirect('admin/votes');
+        return redirect()->route('admin.votes.index');
     }
 }

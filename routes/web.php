@@ -332,13 +332,14 @@ Route::controller(AjaxController::class)
 /* Голосования */
 Route::controller(VoteController::class)
     ->prefix('votes')
+    ->name('votes.')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::get('/voters/{id}', 'voters');
-        Route::get('/history', 'history');
-        Route::get('/history/{id}', 'viewHistory');
-        Route::match(['get', 'post'], '/{id}', 'view');
-        Route::match(['get', 'post'], '/create', 'create');
+        Route::get('/', 'index')->name('index');
+        Route::match(['get', 'post'], '/{id}', 'view')->name('view');
+        Route::get('/{id}/voters', 'voters')->name('voters');
+        Route::get('/history', 'history')->name('history');
+        Route::get('/{id}/history', 'viewHistory')->name('view-history');
+        Route::match(['get', 'post'], '/create', 'create')->name('create');
     });
 
 /* Мои данные */
@@ -702,13 +703,14 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Голосования */
             Route::controller(AdminVoteController::class)
                 ->prefix('votes')
+                ->name('votes.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/history', 'history');
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::get('/close/{id}', 'close');
-                    Route::get('/delete/{id}', 'delete');
-                    Route::get('/restatement', 'restatement');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/history', 'history')->name('history');
+                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
+                    Route::get('/close/{id}', 'close')->name('close');
+                    Route::get('/delete/{id}', 'delete')->name('delete');
+                    Route::get('/restatement', 'restatement')->name('restatement');
                 });
 
             /* Антимат */

@@ -81,7 +81,7 @@ class VoteController extends Controller
 
                 setFlash('success', __('votes.voting_success'));
 
-                return redirect('votes/' . $vote->id);
+                return redirect()->route('votes.view', ['id' => $vote->id]);
             }
 
             setInput($request->all());
@@ -207,7 +207,7 @@ class VoteController extends Controller
 
                 setFlash('success', __('votes.voting_success_created'));
 
-                return redirect('votes/' . $vote->id);
+                return redirect()->route('votes.view', ['id' => $vote->id]);
             }
 
             setInput($request->all());

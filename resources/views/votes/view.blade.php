@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/votes">{{ __('index.votes') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('votes.index') }}">{{ __('index.votes') }}</a></li>
             <li class="breadcrumb-item active">{{ $vote->title }}</li>
         </ol>
     </nav>
@@ -63,12 +63,12 @@
         {{ __('votes.voted') }}: <b>{{ $vote->count }}</b><br><br>
 
         @if (! empty($show))
-            <i class="fa fa-chart-bar"></i> <a href="/votes/{{ $vote->id }}">{{ __('votes.vote') }}</a><br>
+            <i class="fa fa-chart-bar"></i> <a href="{{ route('votes.view', ['id' => $vote->id]) }}">{{ __('votes.vote') }}</a><br>
         @endif
-        <i class="fa fa-users"></i> <a href="/votes/voters/{{ $vote->id }}">{{ __('votes.voted') }}</a><br>
+        <i class="fa fa-users"></i> <a href="{{ route('votes.voters', ['id' => $vote->id]) }}">{{ __('votes.voted') }}</a><br>
     @else
         <div class="section-form mb-3 shadow">
-            <form action="/votes/{{ $vote->id }}" method="post">
+            <form action="{{ route('votes.view', ['id' => $vote->id]) }}" method="post">
                 @csrf
                 @foreach ($vote->answers as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer['id'] }}"> {{ $answer['answer'] }}</label><br>
@@ -79,6 +79,6 @@
         </div>
 
         {{ __('votes.voted') }}: <b>{{ $vote->count }}</b><br><br>
-        <i class="fa fa-history"></i> <a href="/votes/{{ $vote->id }}?show=true">{{ __('votes.results') }}</a><br>
+        <i class="fa fa-history"></i> <a href="{{ route('votes.view', ['id' => $vote->id, 'show' => 'true']) }}">{{ __('votes.results') }}</a><br>
     @endif
 @stop

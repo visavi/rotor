@@ -7,8 +7,8 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/votes">{{ __('index.votes') }}</a></li>
-            <li class="breadcrumb-item"><a href="/votes/{{ $vote->id }}">{{ $vote->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.votes.index') }}">{{ __('index.votes') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('votes.view', ['id' => $vote->id]) }}">{{ $vote->title }}</a></li>
             <li class="breadcrumb-item active">{{ __('votes.edit_vote') }}</li>
         </ol>
     </nav>

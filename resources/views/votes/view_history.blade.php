@@ -6,8 +6,8 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/votes">{{ __('index.votes') }}</a></li>
-            <li class="breadcrumb-item"><a href="/votes/history">{{ __('votes.archive_votes') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('votes.index') }}">{{ __('index.votes') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('votes.history') }}">{{ __('votes.archive_votes') }}</a></li>
             <li class="breadcrumb-item active">{{ $vote->title }}</li>
         </ol>
     </nav>

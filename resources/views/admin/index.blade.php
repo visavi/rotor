@@ -44,7 +44,7 @@
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/bans">{{ __('index.ban_unban') }}</a><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banlists">{{ __('index.banned_list') }}</a> <span class="badge bg-adaptive">{{ statsBanned() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/reglists">{{ __('index.pending_list') }}</a> <span class="badge bg-adaptive">{{ statsRegList() }}</span><br>
-                <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/votes">{{ __('index.votes') }}</a> <span class="badge bg-adaptive">{{ statVotes() }}</span><br>
+                <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('admin.votes.index') }}">{{ __('index.votes') }}</a> <span class="badge bg-adaptive">{{ statVotes() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/antimat">{{ __('index.antimat') }}</a> <span class="badge bg-adaptive">{{ statsAntimat() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/banhists">{{ __('index.ban_history') }}</a> <span class="badge bg-adaptive">{{ statsBanHist() }}</span><br>
                 <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/invitations">{{ __('index.invitations') }}</a> <span class="badge bg-adaptive">{{ statsInvite() }}</span><br>

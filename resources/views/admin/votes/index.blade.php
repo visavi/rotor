@@ -5,8 +5,8 @@
 @section('header')
     @if (getUser())
         <div class="float-end">
-            <a class="btn btn-success" href="/votes/create">{{ __('main.create') }}</a>
-            <a class="btn btn-light" href="/votes?page={{ $votes->currentPage() }}"><i class="fas fa-wrench"></i></a>
+            <a class="btn btn-success" href="{{ route('votes.create') }}">{{ __('main.create') }}</a>
+            <a class="btn btn-light" href="{{ route('votes.index', ['page' => $votes->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
         </div>
     @endif
 
@@ -29,14 +29,14 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-chart-bar"></i>
-                    <a href="/votes/{{ $vote['id'] }}">{{ $vote->title }}</a>
+                    <a href="{{ route('votes.view', ['id' => $vote->id]) }}">{{ $vote->title }}</a>
 
                     <div class="float-end">
-                        <a href="/admin/votes/edit/{{ $vote->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/votes/close/{{ $vote->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('votes.confirm_close') }}')" data-bs-toggle="tooltip" title="{{ __('main.close') }}"><i class="fa fa-lock text-muted"></i></a>
+                        <a href="{{ route('admin.votes.edit', ['id' => $vote->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="{{ route('admin.votes.close', ['id' => $vote->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('votes.confirm_close') }}')" data-bs-toggle="tooltip" title="{{ __('main.close') }}"><i class="fa fa-lock text-muted"></i></a>
 
                         @if (isAdmin('boss'))
-                            <a href="/admin/votes/delete/{{ $vote->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <a href="{{ route('admin.votes.delete', ['id' => $vote->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                         @endif
                     </div>
                 </div>
@@ -64,8 +64,8 @@
     {{ $votes->links() }}
 
     @if (isAdmin('boss'))
-        <i class="fa fa-sync"></i> <a href="/admin/votes/restatement?_token={{ csrf_token() }}">{{ __('main.recount') }}</a><br>
+        <i class="fa fa-sync"></i> <a href="{{ route('admin.votes.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
     @endif
 
-    <i class="fa fa-briefcase"></i> <a href="/admin/votes/history">{{ __('votes.archive_votes') }}</a><br>
+    <i class="fa fa-briefcase"></i> <a href="{{ route('admin.votes.history') }}">{{ __('votes.archive_votes') }}</a><br>
 @stop

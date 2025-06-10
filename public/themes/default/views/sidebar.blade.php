@@ -135,7 +135,7 @@
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('votes*') ? ' active' : '' }}" href="/votes">
+            <a class="app-menu__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                 <i class="app-menu__icon fas fa-square-poll-horizontal"></i>
                 <span class="app-menu__label">{{ __('index.votes') }}</span>
                 <span class="badge bg-sidebar">{{ statVotes() }}</span>
