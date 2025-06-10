@@ -5,13 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="image_src" href="/assets/img/images/icon.png">
-    <link rel="stylesheet" type="text/css" href="{{ mix('/themes/mobile/dist/app.css') }}">
-    @stack('styles')
     <link rel="canonical" href="{{ request()->url() }}">
     <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('/assets/dist/css/mobile.css') }}">
+    @stack('styles')
+    @hook('head')
 </head>
 <body>
 
@@ -37,11 +38,16 @@
         @yield('advertUser')
 
         @include('note')
+        @hook('header')
 
         @yield('flash')
         @yield('breadcrumb')
         @yield('header')
+
+        @hook('contentStart')
         @yield('content')
+        @hook('contentEnd')
+
         @yield('advertBottom')
     </div>
 </div>
@@ -54,11 +60,12 @@
 <div class="site" style="text-align:center">
     @yield('performance')
 </div>
-<div class="scrollup"></div>
-<script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>
-<script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>
-<script src="{{ mix('/assets/js/dist/lang.js') }}"></script>
-<script src="{{ mix('/themes/mobile/dist/app.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/manifest.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/vendor.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/lang.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/mobile.js') }}"></script>
 @stack('scripts')
+@hook('footer')
+<div class="scrollup"></div>
 </body>
 </html>

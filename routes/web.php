@@ -106,20 +106,48 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '\d+');
 Route::pattern('login', '[\w\-]+');
 
+/* Временные редиректы на новые роуты */
 Route::redirect('/downs/zip/{id}', '/downs/{id}/zip', 301);
 Route::redirect('/downs/zip/{id}/{fid}', '/downs/{id}/zip/{fid}', 301);
 Route::redirect('/downs/comments/{id}', '/downs/{id}/comments', 301);
+Route::redirect('/downs/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
+Route::redirect('/downs/end/{id}', '/downs/{id}/comments', 301);
 Route::redirect('/downs/rss/{id}', '/downs/{id}/rss', 301);
 Route::redirect('/downs/download/{id}', '/downs/{id}/download', 301);
+Route::redirect('/down/{id}', '/downs/{id}', 301);
+Route::redirect('/down', '/downs', 301);
 
+Route::redirect('/forum', '/forums', 301);
 Route::redirect('/topics/votes/{id}', '/topics/{id}/vote', 301);
 Route::redirect('/topics/print/{id}', '/topics/{id}/print', 301);
+Route::redirect('/topics/{id}/{pid}', '/topics/{id}?pid={pid}', 301);
+Route::redirect('/topics/end/{id}', '/topics/{id}', 301);
+Route::redirect('/topics/rss/{id}', '/topics/{id}/rss', 301);
+Route::redirect('/topic/{id}', '/topics/{id}', 301);
 
 Route::redirect('/news/comments/{id}', '/news/{id}/comments', 301);
+Route::redirect('/news/comment/{id}/{cid}', '/news/{id}/comments?cid={cid}', 301);
+Route::redirect('/news/end/{id}', '/news/{id}/comments', 301);
 
+Route::redirect('/blog', '/blogs', 301);
+Route::redirect('/blog/tags', '/blogs/tags', 301);
 Route::redirect('/articles/comments/{id}', '/articles/{id}/comments', 301);
+Route::redirect('/articles/comment/{id}/{cid}', '/articles/{id}/comments?cid={cid}', 301);
 Route::redirect('/articles/rss/{id}', '/articles/{id}/rss', 301);
 Route::redirect('/articles/print/{id}', '/articles/{id}/print', 301);
+Route::redirect('/articles/end/{id}', '/articles/{id}/comments', 301);
+
+Route::redirect('/photos/comments/{id}', '/photos/{id}/comments', 301);
+Route::redirect('/photos/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
+Route::redirect('/photos/albums/{login}', '/photos/active/albums?user={login}', 301);
+Route::redirect('/photos/comments/active/{login}', '/photos/active/comments?user={login}', 301);
+Route::redirect('/photos/end/{id}', '/photos/{id}/comments', 301);
+
+Route::redirect('/offers/comments/{id}', '/offers/{id}/comments', 301);
+Route::redirect('/offers/comment/{id}/{cid}', '/offers/{id}/comments?cid={cid}', 301);
+Route::redirect('/offers/end/{id}', '/offers/{id}/comments', 301);
+
+Route::redirect('/votes/voters/{id}', '/votes/{id}/voters', 301);
 
 Route::controller(HomeController::class)
     ->group(function () {

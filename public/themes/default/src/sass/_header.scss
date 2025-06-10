@@ -51,7 +51,6 @@
   color: #fff;
   line-height: 2.4;
   transition: background-color 0.3s ease;
-  @media(min-width: 768px) { display: none; }
   &:focus,
   &:hover {
     color: #fff;
@@ -65,16 +64,8 @@
     content: "\f0c9";
     font-size: 21px;
   }
-  @media(max-width: 767px) { order: -1; }
-}
-
-
-.icon-login {
-  &:before {
-    content: "\f2f6";
-    font-size: 21px;
-  }
-  @media(max-width: 767px) { order: 1; }
+  order: -1;
+  @media(min-width: 768px) { display: none; }
 }
 
 .app-nav {

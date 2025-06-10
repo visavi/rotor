@@ -44,10 +44,13 @@
 @stop
 
 @push('styles')
-    <link rel="stylesheet" href="/assets/css/chartist.min.css">
-    <link rel="stylesheet" href="/assets/css/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" href="{{ mix('/assets/dist/css/chartist-bundle.css') }}">
 
     <style>
+        .ct-label{
+            color: var(--bs-body-color);
+        }
+
         .ct-series-a .ct-line,
         .ct-series-a .ct-point {
             stroke: #007bff;
@@ -65,8 +68,7 @@
 @endpush
 
 @push('scripts')
-    <script src="/assets/js/chartist.min.js"></script>
-    <script src="/assets/js/chartist-plugin-tooltip.min.js"></script>
+    <script src="{{ mix('/assets/dist/js/chartist-bundle.js') }}"></script>
     <script>
         new Chartist.Line('.ct-chart31', {
             onlyInteger: true,

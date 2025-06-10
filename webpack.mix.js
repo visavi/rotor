@@ -14,25 +14,37 @@ mix.setPublicPath('./public');
 
 mix
     /* default */
-    .js('public/themes/default/src/js/app.js', 'public/themes/default/dist')
-    .js('public/themes/default/src/js/messages.js', 'public/themes/default/dist')
-    .sass('public/themes/default/src/sass/app.scss', 'public/themes/default/dist')
+    .js('public/themes/default/src/js/app.js', 'public/assets/dist/js/default.js')
+    .js('public/themes/default/src/js/messages.js', 'public/assets/dist/js/messages.js')
+    .sass('public/themes/default/src/sass/app.scss', 'public/assets/dist/css/default.css')
 
     /* mobile */
-    .js('public/themes/mobile/src/js/app.js', 'public/themes/mobile/dist')
-    .sass('public/themes/mobile/src/sass/app.scss', 'public/themes/mobile/dist')
+    .js('public/themes/mobile/src/js/app.js', 'public/assets/dist/js/mobile.js')
+    .sass('public/themes/mobile/src/sass/app.scss', 'public/assets/dist/css/mobile.css')
 
     /* motor */
-    .js('public/themes/motor/src/js/app.js', 'public/themes/motor/dist')
-    .sass('public/themes/motor/src/sass/app.scss', 'public/themes/motor/dist')
+    .js('public/themes/motor/src/js/app.js', 'public/assets/dist/js/motor.js')
+    .sass('public/themes/motor/src/sass/app.scss', 'public/assets/dist/css/motor.css')
 
     /* lang */
-    .js('resources/lang/*/main.js', 'public/assets/js/dist/lang.js')
+    .js('resources/lang/*/main.js', 'public/assets/dist/js/lang.js')
+
+    /* chartist */
+    .styles([
+        'public/assets/css/chartist.min.css',
+        'public/assets/css/chartist-plugin-tooltip.css'
+    ], 'public/assets/dist/css/chartist-bundle.css')
+
+    .combine([
+        'public/assets/js/chartist.min.js',
+        'public/assets/js/chartist-plugin-tooltip.min.js'
+    ], 'public/assets/dist/js/chartist-bundle.js')
+
+    /* fontawesome */
+    .copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'public/assets/dist/fonts')
 
     .extract()
     .version();
-
-mix.copy('node_modules/@fortawesome/fontawesome-free/webfonts/*', 'public/assets/fonts/');
 
 mix.webpackConfig({
     resolve: {

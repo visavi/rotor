@@ -12,9 +12,9 @@
     <link href="/favicon.ico" rel="icon">
     <link href="/assets/img/images/icon.png" rel="image_src">
     <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
-    <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
-    @hook('head')
+    <link rel="stylesheet" type="text/css" href="{{ mix('/assets/dist/css/default.css') }}">
     @stack('styles')
+    @hook('head')
 </head>
 <body class="app">
 
@@ -43,15 +43,15 @@
 </main>
 
 @include('footer')
-<script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>
-<script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>
-<script src="{{ mix('/assets/js/dist/lang.js') }}"></script>
-<script src="{{ mix('/themes/default/dist/app.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/manifest.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/vendor.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/lang.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/default.js') }}"></script>
 {{--@if (getUser())
-<script src="{{ mix('/themes/default/dist/messages.js') }}"></script>
+<script src="{{ mix('/assets/dist/js/messages.js') }}"></script>
 @endif--}}
-@hook('footer')
 @stack('scripts')
+@hook('footer')
 <div class="scrollup"></div>
 </body>
 </html>

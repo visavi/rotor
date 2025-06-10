@@ -4,9 +4,6 @@
 
     <!-- Sidebar toggle button-->
     <a class="app-icon icon-toggle" href="#" data-bs-toggle="sidebar" aria-label="Show Sidebar"></a>
-    @if (! getUser())
-        <a class="app-icon icon-login" href="/login" aria-label="{{ __('index.login') }}"></a>
-    @endif
 
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
@@ -111,6 +108,12 @@
                     <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)"><i class="fas fa-sign-out-alt fa-lg"></i> {{ __('index.logout') }}</a>
                     </li>
                 </ul>
+            </li>
+        @else
+            <li>
+                <a class="app-nav__item" href="/login" aria-label="{{ __('index.login') }}">
+                    <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                </a>
             </li>
         @endif
         @hook('navbarEnd')
