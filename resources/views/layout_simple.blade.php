@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title') - {{ setting('title') }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ mix('/themes/default/dist/app.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('/assets/dist/css/default.css') }}">
     @stack('styles')
 </head>
 <body>
@@ -15,10 +15,10 @@
         @yield('content')
     </div>
 
-    <script src="{{ mix('/assets/js/dist/manifest.js') }}"></script>
-    <script src="{{ mix('/assets/js/dist/vendor.js') }}"></script>
-    <script src="{{ mix('/assets/js/dist/lang.js') }}"></script>
-    <script src="{{ mix('/themes/default/dist/app.js') }}"></script>
+    <script src="{{ mix('/assets/dist/js/manifest.js') }}"></script>
+    <script src="{{ mix('/assets/dist/js/vendor.js') }}"></script>
+    <script src="{{ mix('/assets/dist/js/lang.js') }}"></script>
+    <script src="{{ mix('/assets/dist/js/default.js') }}"></script>
     @stack('scripts')
 </body>
 </html>
