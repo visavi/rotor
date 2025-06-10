@@ -49,7 +49,7 @@ class HomeController extends Controller
     public function search(Request $request, Validator $validator): View|RedirectResponse
     {
         $posts = paginate([], 10);
-        $query = $request->input('query');
+        $query = (string) $request->input('query');
         $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($query)));
 
         $types = Search::getRelateTypes();
