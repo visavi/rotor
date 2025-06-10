@@ -50,6 +50,7 @@ class HomeController extends Controller
     {
         $posts = paginate([], 10);
         $query = $request->input('query');
+        $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($query)));
 
         $types = Search::getRelateTypes();
 
@@ -64,8 +65,6 @@ class HomeController extends Controller
         $type = isset($types[$type]) ? $type : null;
 
         if ($query) {
-            $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($query)));
-
             $validator->length($query, 3, 64, ['find' => __('main.request_length')]);
 
             if ($validator->isValid()) {

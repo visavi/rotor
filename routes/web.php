@@ -106,6 +106,21 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '\d+');
 Route::pattern('login', '[\w\-]+');
 
+Route::redirect('/downs/zip/{id}', '/downs/{id}/zip', 301);
+Route::redirect('/downs/zip/{id}/{fid}', '/downs/{id}/zip/{fid}', 301);
+Route::redirect('/downs/comments/{id}', '/downs/{id}/comments', 301);
+Route::redirect('/downs/rss/{id}', '/downs/{id}/rss', 301);
+Route::redirect('/downs/download/{id}', '/downs/{id}/download', 301);
+
+Route::redirect('/topics/votes/{id}', '/topics/{id}/vote', 301);
+Route::redirect('/topics/print/{id}', '/topics/{id}/print', 301);
+
+Route::redirect('/news/comments/{id}', '/news/{id}/comments', 301);
+
+Route::redirect('/articles/comments/{id}', '/articles/{id}/comments', 301);
+Route::redirect('/articles/rss/{id}', '/articles/{id}/rss', 301);
+Route::redirect('/articles/print/{id}', '/articles/{id}/print', 301);
+
 Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/', 'index');
