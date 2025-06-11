@@ -109,6 +109,9 @@ Route::pattern('fid', '\d+');
 Route::pattern('login', '[\w\-]+');
 
 /* Временные редиректы на новые роуты */
+Route::redirect('/forums/search', '/search', 301);
+Route::redirect('/blogs/search', '/search', 301);
+Route::redirect('/loads/search', '/search', 301);
 
 Route::get('/downs/zip/{id}', [DownController::class, 'redirectZip']);
 Route::get('/downs/zip/{id}/{fid}', [DownController::class, 'redirectZip']);
@@ -146,6 +149,7 @@ Route::redirect('/photos/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 
 Route::redirect('/photos/albums/{login}', '/photos/active/albums?user={login}', 301);
 Route::redirect('/photos/comments/active/{login}', '/photos/active/comments?user={login}', 301);
 Route::redirect('/photos/end/{id}', '/photos/{id}/comments', 301);
+Route::redirect('/photos/top', '/photos?sort=rating', 301);
 
 Route::redirect('/offers/comments/{id}', '/offers/{id}/comments', 301);
 Route::redirect('/offers/comment/{id}/{cid}', '/offers/{id}/comments?cid={cid}', 301);
