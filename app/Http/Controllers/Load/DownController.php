@@ -238,9 +238,9 @@ class DownController extends Controller
     /**
      * Скачивание файла
      */
-    public function download(int $id, Validator $validator): Response
+    public function download(int $id, int $fid, Validator $validator): Response
     {
-        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($fid);
 
         if (! $file || ! $file->relate) {
             abort(404, __('loads.down_not_exist'));
@@ -439,9 +439,9 @@ class DownController extends Controller
     /**
      * Просмотр zip архива
      */
-    public function zip(int $id): View
+    public function zip(int $id, int $fid): View
     {
-        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($fid);
         $down = $file?->relate;
 
         if (! $file || ! $down) {
@@ -519,9 +519,9 @@ class DownController extends Controller
     /**
      * Просмотр файла в zip архиве
      */
-    public function zipView(int $id, int $fid): View
+    public function zipView(int $id, int $fid, int $zid): View
     {
-        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($fid);
         $down = $file?->relate;
 
         if (! $file || ! $down) {
@@ -542,8 +542,8 @@ class DownController extends Controller
         if ($opened !== true) {
             abort(200, __('loads.archive_not_open'));
         }
-        $content = $archive->getFromIndex($fid);
-        $document = $archive->statIndex($fid);
+        $content = $archive->getFromIndex($zid);
+        $document = $archive->statIndex($zid);
 
         if ($content === false) {
             abort(200, __('loads.file_not_read'));

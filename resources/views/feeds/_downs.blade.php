@@ -61,7 +61,7 @@
                     <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
 
                     @if ($allowDownload)
-                        <a class="btn btn-sm btn-success" href="{{ route('downs.download', ['id' => $file->id]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                        <a class="btn btn-sm btn-success" href="{{ route('downs.download', ['id' => $post->id, 'fid' => $file->id]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                     @endif
                 @else
                     <i class="fa fa-download"></i> {{ __('main.file_not_found') }}

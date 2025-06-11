@@ -104,13 +104,13 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 Route::pattern('id', '\d+');
+Route::pattern('cid', '\d+');
+Route::pattern('fid', '\d+');
 Route::pattern('login', '[\w\-]+');
 
 /* Временные редиректы на новые роуты */
-Route::redirect('/downs/zip/{id}', '/downs/{id}/zip', 301);
-Route::redirect('/downs/zip/{id}/{fid}', '/downs/{id}/zip/{fid}', 301);
 Route::redirect('/downs/comments/{id}', '/downs/{id}/comments', 301);
-Route::redirect('/downs/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301)->where('cid', '[0-9]+');
+Route::redirect('/downs/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
 Route::redirect('/downs/end/{id}', '/downs/{id}/comments', 301);
 Route::redirect('/downs/rss/{id}', '/downs/{id}/rss', 301);
 Route::redirect('/downs/download/{id}', '/downs/{id}/download', 301);
@@ -120,31 +120,31 @@ Route::redirect('/down', '/downs', 301);
 Route::redirect('/forum', '/forums', 301);
 Route::redirect('/topics/votes/{id}', '/topics/{id}/vote', 301);
 Route::redirect('/topics/print/{id}', '/topics/{id}/print', 301);
-Route::redirect('/topics/{id}/{pid}', '/topics/{id}?pid={pid}', 301)->where('pid', '[0-9]+');
+Route::redirect('/topics/{id}/{pid}', '/topics/{id}?pid={pid}', 301)->whereNumber('pid');
 Route::redirect('/topics/end/{id}', '/topics/{id}', 301);
 Route::redirect('/topics/rss/{id}', '/topics/{id}/rss', 301);
 Route::redirect('/topic/{id}', '/topics/{id}', 301);
 
 Route::redirect('/news/comments/{id}', '/news/{id}/comments', 301);
-Route::redirect('/news/comment/{id}/{cid}', '/news/{id}/comments?cid={cid}', 301)->where('cid', '[0-9]+');
+Route::redirect('/news/comment/{id}/{cid}', '/news/{id}/comments?cid={cid}', 301);
 Route::redirect('/news/end/{id}', '/news/{id}/comments', 301);
 
 Route::redirect('/blog', '/blogs', 301);
 Route::redirect('/blog/tags', '/blogs/tags', 301);
 Route::redirect('/articles/comments/{id}', '/articles/{id}/comments', 301);
-Route::redirect('/articles/comment/{id}/{cid}', '/articles/{id}/comments?cid={cid}', 301)->where('cid', '[0-9]+');
+Route::redirect('/articles/comment/{id}/{cid}', '/articles/{id}/comments?cid={cid}', 301);
 Route::redirect('/articles/rss/{id}', '/articles/{id}/rss', 301);
 Route::redirect('/articles/print/{id}', '/articles/{id}/print', 301);
 Route::redirect('/articles/end/{id}', '/articles/{id}/comments', 301);
 
 Route::redirect('/photos/comments/{id}', '/photos/{id}/comments', 301);
-Route::redirect('/photos/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301)->where('cid', '[0-9]+');
+Route::redirect('/photos/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
 Route::redirect('/photos/albums/{login}', '/photos/active/albums?user={login}', 301);
 Route::redirect('/photos/comments/active/{login}', '/photos/active/comments?user={login}', 301);
 Route::redirect('/photos/end/{id}', '/photos/{id}/comments', 301);
 
 Route::redirect('/offers/comments/{id}', '/offers/{id}/comments', 301);
-Route::redirect('/offers/comment/{id}/{cid}', '/offers/{id}/comments?cid={cid}', 301)->where('cid', '[0-9]+');
+Route::redirect('/offers/comment/{id}/{cid}', '/offers/{id}/comments?cid={cid}', 301);
 Route::redirect('/offers/end/{id}', '/offers/{id}/comments', 301);
 
 Route::redirect('/votes/voters/{id}', '/votes/{id}/voters', 301);
@@ -231,7 +231,7 @@ Route::controller(ArticleController::class)
         Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Новости */
@@ -244,7 +244,7 @@ Route::controller(NewsController::class)
         Route::get('/rss', 'rss')->name('rss');
         Route::get('/allcomments', 'allComments')->name('all-comments');
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Галерея */
@@ -262,7 +262,7 @@ Route::controller(PhotoController::class)
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Категория форума */
@@ -333,14 +333,17 @@ Route::prefix('downs')
 
         Route::get('/{id}', [DownController::class, 'view'])->name('view');
         Route::get('/{id}/rss', [DownController::class, 'rss'])->name('rss');
-        Route::get('/{id}/zip', [DownController::class, 'zip'])->name('zip');
-        Route::get('/{id}/zip/{fid}', [DownController::class, 'zipView'])->whereNumber('fid')->name('zip-view');
-        Route::get('/{id}/download', [DownController::class, 'download'])->name('download');
-        Route::get('/{id}/download/{lid}', [DownController::class, 'downloadLink'])->whereNumber('lid')->name('download-link');
-        Route::match(['get', 'post'], '/{id}/edit', [DownController::class, 'edit'])->name('edit');
+
+        Route::get('/{id}/download/{fid}', [DownController::class, 'download'])->name('download');
+        Route::get('/{id}/link/{lid}', [DownController::class, 'downloadLink'])->whereNumber('lid')->name('download-link');
+
+        Route::get('/{id}/zip/{fid}', [DownController::class, 'zip'])->name('zip');
+        Route::get('/{id}/zip/{fid}/{zid}', [DownController::class, 'zipView'])->whereNumber('zid')->name('zip-view');
+
         Route::match(['get', 'post'], '/create', [DownController::class, 'create'])->name('create');
+        Route::match(['get', 'post'], '/{id}/edit', [DownController::class, 'edit'])->name('edit');
         Route::match(['get', 'post'], '/{id}/comments', [DownController::class, 'comments'])->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', [DownController::class, 'editComment'])->whereNumber('cid')->name('edit-comment');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', [DownController::class, 'editComment'])->name('edit-comment');
     });
 
 /* Предложения и проблемы */
@@ -353,7 +356,7 @@ Route::controller(OfferController::class)
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
         Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->whereNumber('cid')->name('edit-comment');
+        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Ajax */

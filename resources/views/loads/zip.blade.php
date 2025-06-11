@@ -32,7 +32,7 @@
                     └─ {{ icons($document['ext']) }}
 
                     @if (in_array($document['ext'], $down->getViewExt(), true))
-                        <a href="{{ route('downs.zip-view', ['id' => $file->id, 'fid' => $document['index']]) }}">{{ $document['name'] }}</a>
+                        <a href="{{ route('downs.zip-view', ['id' => $down->id, 'fid' => $file->id, 'zid' => $document['index']]) }}">{{ $document['name'] }}</a>
                     @else
                         {{ $document['name'] }}
                     @endif

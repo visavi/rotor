@@ -73,11 +73,11 @@
 
                         <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
                         @if ($file->extension === 'zip')
-                            <a href="{{ route('downs.zip', ['id' => $file->id]) }}">{{ __('loads.view_archive') }}</a><br>
+                            <a href="{{ route('downs.zip', ['id' => $down->id, 'fid' => $file->id]) }}">{{ __('loads.view_archive') }}</a><br>
                         @endif
 
                         @if ($allowDownload)
-                            <a class="btn btn-success" href="{{ route('downs.download', ['id' => $file->id ]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                            <a class="btn btn-success" href="{{ route('downs.download', ['id' => $down->id, 'fid' => $file->id ]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                         @endif
                     @else
                         <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
