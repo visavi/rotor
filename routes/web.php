@@ -109,6 +109,10 @@ Route::pattern('fid', '\d+');
 Route::pattern('login', '[\w\-]+');
 
 /* Временные редиректы на новые роуты */
+
+Route::get('/downs/zip/{id}', [DownController::class, 'redirectZip']);
+Route::get('/downs/zip/{id}/{fid}', [DownController::class, 'redirectZip']);
+
 Route::redirect('/downs/comments/{id}', '/downs/{id}/comments', 301);
 Route::redirect('/downs/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
 Route::redirect('/downs/end/{id}', '/downs/{id}/comments', 301);

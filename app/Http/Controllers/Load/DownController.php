@@ -437,19 +437,41 @@ class DownController extends Controller
     }
 
     /**
-     * Просмотр zip архива
+     * Редирект на новый роут (Будет удален в будущем)
      */
-    public function zip(int $id, int $fid): View
+    public function redirectZip(int $id, ?int $fid = null): RedirectResponse
     {
-        $file = File::query()->where('relate_type', Down::$morphName)->find($fid);
+        $file = File::query()->where('relate_type', Down::$morphName)->find($id);
         $down = $file?->relate;
 
         if (! $file || ! $down) {
             abort(404, __('loads.down_not_exist'));
         }
 
+        if ($fid) {
+            return redirect()->to("/downs/{$down->id}/zip/{$id}/{$fid}", 301);
+        }
+
+        return redirect()->to("/downs/{$down->id}/zip/{$id}", 301);
+    }
+
+    /**
+     * Просмотр zip архива
+     */
+    public function zip(int $id, int $fid): View
+    {
+        $down = Down::query()->find($id);
+        if (! $down) {
+            abort(404, __('loads.down_not_exist'));
+        }
+
         if (! $down->active && ! isAdmin(User::ADMIN)) {
             abort(200, __('loads.down_not_verified'));
+        }
+
+        $file = $down->files->firstWhere('id', $fid);
+        if (! $file) {
+            abort(404, __('loads.down_not_exist'));
         }
 
         if ($file->extension !== 'zip') {
@@ -521,15 +543,18 @@ class DownController extends Controller
      */
     public function zipView(int $id, int $fid, int $zid): View
     {
-        $file = File::query()->where('relate_type', Down::$morphName)->find($fid);
-        $down = $file?->relate;
-
-        if (! $file || ! $down) {
+        $down = Down::query()->find($id);
+        if (! $down) {
             abort(404, __('loads.down_not_exist'));
         }
 
         if (! $down->active && ! isAdmin(User::ADMIN)) {
             abort(200, __('loads.down_not_verified'));
+        }
+
+        $file = $down->files->firstWhere('id', $fid);
+        if (! $file) {
+            abort(404, __('loads.down_not_exist'));
         }
 
         if ($file->extension !== 'zip') {
