@@ -88,7 +88,7 @@ class DownController extends Controller
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->length($text, 50, 10000, ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
 
@@ -190,7 +190,7 @@ class DownController extends Controller
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->length($text, 50, 10000, ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')])
                 ->empty($category->closed, ['category' => __('loads.load_closed')]);
 
@@ -351,7 +351,7 @@ class DownController extends Controller
                 $down->increment('count_comments');
 
                 $flood->saveState();
-                sendNotify($msg, route('downs.comment', ['id' => $down->id, 'cid' => $comment->id], false), $down->title);
+                sendNotify($msg, route('downs.comments', ['id' => $down->id, 'cid' => $comment->id], false), $down->title);
 
                 setFlash('success', __('main.comment_added_success'));
 
