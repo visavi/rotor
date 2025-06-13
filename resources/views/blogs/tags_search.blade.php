@@ -34,7 +34,7 @@
                     @endforeach
                 </div>
 
-                {{ __('main.author') }}: {{ $article->user->getProfile() }}  ({{ dateFixed($article->created_at) }})
+                {{ __('main.author') }}: {{ $article->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small>
             </div>
         </div>
     @endforeach

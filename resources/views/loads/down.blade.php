@@ -115,7 +115,7 @@
             </div>
 
             {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
-            {{ __('main.author') }}: {{ $down->user->getProfile() }} ({{ dateFixed($down->created_at) }})
+            {{ __('main.author') }}: {{ $down->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
         </div>
     </div>
 @stop

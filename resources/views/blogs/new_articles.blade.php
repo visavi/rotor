@@ -40,7 +40,7 @@
 
                     <div class="section-body">
                         <span class="avatar-micro">{{ $article->user->getAvatarImage() }}</span> {{ $article->user->getProfile() }}
-                        <small class="section-date text-muted fst-italic">{{  dateFixed($article->created_at) }}</small><br>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small><br>
                     </div>
                 </div>
 

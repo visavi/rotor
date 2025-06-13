@@ -41,7 +41,7 @@
                 <div class="section-content">
                     {{ __('loads.load') }}: <a href="{{ route('admin.loads.load', ['id' => $data->category->id]) }}">{{ $data->category->name }}</a><br>
                     {{ __('loads.files_images') }}: {{ $data->getFiles()->count() }}/{{ $data->getImages()->count() }}<br>
-                    {{ __('main.author') }}: {{ $data->user->getProfile() }} ({{ dateFixed($data->created_at) }})
+                    {{ __('main.author') }}: {{ $data->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>
                 </div>
             </div>
         @endforeach

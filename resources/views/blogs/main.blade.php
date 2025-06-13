@@ -41,7 +41,7 @@
                     </p>
                 </div>
                 <div class="card-footer text-muted">
-                    {{ __('main.author') }}: {{ $article->user->getProfile() }} ({{ dateFixed($article->created_at) }})
+                    {{ __('main.author') }}: {{ $article->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small>
                     {{ __('main.views') }}: {{ $article->visits }}
                     <div class="float-end">
                         <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>

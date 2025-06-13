@@ -26,7 +26,7 @@
 
                 {{ $data->pagination() }}
                 {{ __('forums.forum') }}: <a href="{{ route('forums.forum', ['id' => $data->forum->id]) }}">{{ $data->forum->title }}</a><br>
-                {{ __('main.author') }}: {{ $data->user->getName() }} / {{ __('forums.latest') }}.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
+                {{ __('main.author') }}: {{ $data->user->getName() }} / {{ __('forums.latest') }}.: {{ $data->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($data->lastPost->created_at) }}</small>
             </div>
         @endforeach
     @else

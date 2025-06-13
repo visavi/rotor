@@ -48,7 +48,7 @@
 
                     <div class="section-body">
                         <span class="avatar-micro">{{ $down->user->getAvatarImage() }}</span> {{ $down->user->getProfile() }}
-                        <small class="section-date text-muted fst-italic">{{  dateFixed($down->created_at) }}</small><br>
+                        <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small><br>
                     </div>
                 </div>
 

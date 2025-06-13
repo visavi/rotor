@@ -75,6 +75,6 @@
         </div>
 
         <i class="fa fa-eye"></i> {{ __('main.views') }}: {{ $article->visits }}<br>
-        <i class="fa fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{  $article->count_comments }}</span>
+        <i class="fa fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
     </div>
 @stop

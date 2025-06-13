@@ -112,7 +112,7 @@
                     <div class="section-user d-flex align-items-center">
                         <div class="flex-grow-1">
                             {{ $data->user->getProfile() }}
-                            <small class="section-date text-muted fst-italic">({{ dateFixed($data->created_at) }})</small><br>
+                            <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }})</small><br>
                             <small class="fst-italic">{{ $data->user->getStatus() }}</small>
                         </div>
 
@@ -177,7 +177,7 @@
 
                         @if ($data->edit_user_id)
                             <div class="small">
-                                <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} ({{ dateFixed($data->updated_at) }})
+                                <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $data->editUser->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($data->updated_at) }}</small>
                             </div>
                         @endif
 

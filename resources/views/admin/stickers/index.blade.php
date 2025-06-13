@@ -25,7 +25,7 @@
         @foreach ($categories as $category)
             <div class="section mb-3 shadow">
                 <div class="section-title">
-                    <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> ({{ $category->cnt }})
+                    <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> <span class="badge bg-adaptive">{{ $category->cnt }}</span>
 
                     <div class="float-end">
                         <a href="/admin/stickers/edit/{{ $category->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>

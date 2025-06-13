@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="section-date text-muted fst-italic small">
-                        {{  dateFixed($data->created_at) }}
+                        {{ dateFixed($data->created_at) }}
 
                         @if ($data->type === $data::OUT)
                             <i class="fas fa-xs {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>

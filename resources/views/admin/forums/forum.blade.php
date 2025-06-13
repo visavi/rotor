@@ -58,7 +58,7 @@
                     <div class="section-content">
                         {{ __('forums.topic') }}: <a href="{{ route('topics.topic', ['id' => $child->lastTopic->id]) }}">{{ $child->lastTopic->title }}</a><br>
                         @if ($child->lastTopic->lastPost->id)
-                            {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} ({{ dateFixed($child->lastTopic->lastPost->created_at) }})
+                            {{ __('forums.post') }}: {{ $child->lastTopic->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($child->lastTopic->lastPost->created_at) }}</small>
                         @endif
                     </div>
                 @else
@@ -88,7 +88,7 @@
                 <div class="section-content">
                     @if ($topic->lastPost)
                         {{ $topic->pagination('/admin/topics') }}
-                        {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} ({{ dateFixed($topic->lastPost->created_at) }})
+                        {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($topic->lastPost->created_at) }}</small>
                     @endif
                 </div>
             </div>

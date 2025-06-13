@@ -43,7 +43,7 @@
                         </div>
                     @endif
 
-                    {{ __('main.added') }}: {{ $photo->user->getProfile() }} ({{ dateFixed($photo->created_at) }})<br>
+                    {{ __('main.added') }}: {{ $photo->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($photo->created_at) }}</small><br>
                     <a href="{{ route('photos.comments', ['id' => $photo->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $photo->count_comments }}</span>
                 </div>
             </div>

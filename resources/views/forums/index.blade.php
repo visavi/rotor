@@ -83,7 +83,7 @@
                     @if ($forum->lastTopic->lastPost->id)
                         {{ __('forums.topic') }}: <a href="{{ route('topics.topic', ['id' => $forum->lastTopic->id]) }}">{{ $forum->lastTopic->title }}</a>
                         <br>
-                        {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} ({{ dateFixed($forum->lastTopic->lastPost->created_at) }})
+                        {{ __('forums.post') }}: {{ $forum->lastTopic->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($forum->lastTopic->lastPost->created_at) }}</small>
                     @else
                         {{ __('forums.empty_topics') }}
                     @endif

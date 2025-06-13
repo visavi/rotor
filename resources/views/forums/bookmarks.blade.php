@@ -27,7 +27,7 @@
                     {{ $topic->topic->pagination() }}
                     {{ __('main.author') }}: {{ $topic->topic->user->getName() }} /
                     {{ __('forums.latest') }}: {{ $topic->topic->lastPost->user->getName() }}
-                    ({{ dateFixed($topic->topic->lastPost->created_at) }})
+                    <small class="section-date text-muted fst-italic">{{ dateFixed($topic->topic->lastPost->created_at) }}</small>
                 </div>
             @endforeach
 

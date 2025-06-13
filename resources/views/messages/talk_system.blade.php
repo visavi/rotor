@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="section-date text-muted fst-italic small">
-                        {{  dateFixed($data->created_at) }}
+                        {{ dateFixed($data->created_at) }}
                     </div>
                 </div>
 

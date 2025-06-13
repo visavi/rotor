@@ -205,7 +205,7 @@
 
                     @if ($post->edit_user_id)
                         <div class="small">
-                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} ({{ dateFixed($post->updated_at) }})
+                            <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($post->updated_at) }}</small>
                         </div>
                     @endif
 

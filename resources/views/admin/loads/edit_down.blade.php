@@ -48,7 +48,7 @@
 
     <div class="section-form mb-3 shadow">
         <div class="mb-3">
-            {{ __('main.author') }}: {{ $down->user->getProfile() }} ({{ dateFixed($down->created_at) }})
+            {{ __('main.author') }}: {{ $down->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
         </div>
 
         @include('loads/_form')

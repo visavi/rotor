@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="section-content">
-                        {{ __('main.added') }}: {{ $list->user->getProfile() }} ({{ dateFixed($list->created_at) }})
+                        {{ __('main.added') }}: {{ $list->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($list->created_at) }}</small>
                     </div>
                 </div>
             @endforeach

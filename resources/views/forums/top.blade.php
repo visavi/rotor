@@ -21,7 +21,7 @@
 
                 {{ $data->pagination() }}
                 {{ __('main.author') }}: {{ $data->user->getName() }}<br>
-                {{ __('forums.post') }}: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
+                {{ __('forums.post') }}: {{ $data->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($data->lastPost->created_at) }}</small>
             </div>
         @endforeach
     @else

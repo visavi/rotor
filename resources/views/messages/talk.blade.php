@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="section-date text-muted fst-italic small">
-                        {{  dateFixed($data->created_at) }}
+                        {{ dateFixed($data->created_at) }}
 
                         @if ($data->type === $data::IN)
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" data-token="{{ csrf_token() }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>

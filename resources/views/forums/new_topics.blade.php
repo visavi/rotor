@@ -24,8 +24,8 @@
                 <b><a href="{{ route('topics.topic', ['id' => $data->id]) }}">{{ $data->title }}</a></b> <span class="badge bg-adaptive">{{ $data->count_posts }}</span>
 
                 {{ $data->pagination() }}
-                {{ __('forums.forum') }}: <a href="{{ route('forums.forum', ['id' => $data->forum->id ]) }}">{{  $data->forum->title }}</a><br>
-                {{ __('main.author') }}: {{ $data->user->getName() }} / Посл.: {{ $data->lastPost->user->getName() }} ({{ dateFixed($data->lastPost->created_at) }})
+                {{ __('forums.forum') }}: <a href="{{ route('forums.forum', ['id' => $data->forum->id ]) }}">{{ $data->forum->title }}</a><br>
+                {{ __('main.author') }}: {{ $data->user->getName() }} / Посл.: {{ $data->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($data->lastPost->created_at) }}</small>
             </div>
         @endforeach
     @else
