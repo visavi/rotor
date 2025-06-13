@@ -41,7 +41,7 @@ class LoadController extends AdminController
         $name = $request->input('name');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($name, 3, 50, ['title' => __('validator.text')]);
+            ->length($name, setting('down_category_min'), setting('down_category_max'), ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Load::query()->max('sort') + 1;
@@ -84,7 +84,7 @@ class LoadController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($name, 3, 50, ['title' => __('validator.text')])
+                ->length($name, setting('down_category_min'), setting('down_category_max'), ['title' => __('validator.text')])
                 ->notEqual($parent, $load->id, ['parent' => __('loads.load_parent_invalid')]);
 
             if ($validator->isValid()) {
@@ -217,8 +217,8 @@ class LoadController extends AdminController
             $category = Load::query()->find($cid);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->length($title, setting('down_title_min'), setting('down_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('down_text_min'), setting('down_text_max'), ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')]);
 
             $duplicate = Down::query()
@@ -233,7 +233,7 @@ class LoadController extends AdminController
 
             if ($validator->isValid()) {
                 foreach ($links as $link) {
-                    $validator->length($link, 5, 100, ['links' => __('validator.text')])
+                    $validator->length($link, setting('down_link_min'), setting('down_link_max'), ['links' => __('validator.text')])
                         ->url($link, ['links' => __('validator.url')]);
                 }
             }

@@ -34,5 +34,55 @@
         <label for="down_allow_links" class="form-check-label">{{ __('settings.down_allow_links') }}</label>
     </div>
 
+    <h3 class="my-3">Размеры текстов</h3>
+
+    <div class="mb-3">
+        <label for="down_title_min" class="form-label">Длина названия:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[down_title_min]') }}" id="down_title_min" name="sets[down_title_min]" value="{{ old('sets.down_title_min', $settings['down_title_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[down_title_max]') }}" name="sets[down_title_max]" value="{{ old('sets.down_title_max', $settings['down_title_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[down_title_min]') }}</div>
+            <div>{{ textError('sets[down_title_max]') }}</div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="down_text_min" class="form-label">Длина текста:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[down_text_min]') }}" id="down_text_min" name="sets[down_text_min]" value="{{ old('sets.down_text_min', $settings['down_text_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[down_text_max]') }}" name="sets[down_text_max]" value="{{ old('sets.down_text_max', $settings['down_text_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[down_text_min]') }}</div>
+            <div>{{ textError('sets[down_text_max]') }}</div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="down_link_min" class="form-label">Длина ссылки:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[down_link_min]') }}" id="down_link_min" name="sets[down_link_min]" value="{{ old('sets.down_link_min', $settings['down_link_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[down_link_max]') }}" name="sets[down_link_max]" value="{{ old('sets.down_link_max', $settings['down_link_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[down_link_min]') }}</div>
+            <div>{{ textError('sets[down_link_max]') }}</div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="down_category_min" class="form-label">Длина раздела:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[down_category_min]') }}" id="down_category_min" name="sets[down_category_min]" value="{{ old('sets.down_category_min', $settings['down_category_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[down_category_max]') }}" name="sets[down_category_max]" value="{{ old('sets.down_category_max', $settings['down_category_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[down_category_min]') }}</div>
+            <div>{{ textError('sets[down_category_max]') }}</div>
+        </div>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>
