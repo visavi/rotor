@@ -7,7 +7,6 @@ return [
     'loads_list'             => 'List of sections',
     'down'                   => 'File',
     'downs'                  => 'Files',
-    'top_downs'              => 'Top Files',
     'empty_loads'            => 'Download sections not yet created!',
     'empty_downs'            => 'Files not yet uploaded!',
     'empty_archive'          => 'There are no files in this archive!',

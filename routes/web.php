@@ -66,7 +66,6 @@ use App\Http\Controllers\Load\ActiveController as LoadActiveController;
 use App\Http\Controllers\Load\DownController;
 use App\Http\Controllers\Load\LoadController;
 use App\Http\Controllers\Load\NewController as LoadNewController;
-use App\Http\Controllers\Load\TopController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
@@ -123,6 +122,7 @@ Route::redirect('/downs/rss/{id}', '/downs/{id}/rss', 301);
 Route::redirect('/downs/download/{id}', '/downs/{id}/download', 301);
 Route::redirect('/down/{id}', '/downs/{id}', 301);
 Route::redirect('/down', '/downs', 301);
+Route::redirect('/loads/top', '/downs?sort=rating', 301);
 
 Route::redirect('/forum', '/forums', 301);
 Route::redirect('/topics/votes/{id}', '/topics/{id}/vote', 301);
@@ -326,7 +326,6 @@ Route::prefix('loads')
         Route::get('/', [LoadController::class, 'index'])->name('index');
         Route::get('/{id}', [LoadController::class, 'load'])->name('load');
         Route::get('/rss', [LoadController::class, 'rss'])->name('rss');
-        Route::get('/top', [TopController::class, 'index'])->name('top');
     });
 
 /* Загрузки */

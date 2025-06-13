@@ -18,6 +18,15 @@
 
 @section('content')
     @if ($downs->isNotEmpty())
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('downs.new-files', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
+
         @foreach ($downs as $down)
             <div class="section mb-3 shadow">
                 <div class="section-header d-flex align-items-center">
@@ -33,12 +42,17 @@
                     </div>
                 </div>
 
-                <div class="section-content">
+                <div class="section-content mb-2">
                     {{ __('loads.load') }}: <a href="{{ route('loads.load', ['id' => $down->category->id]) }}">{{ $down->category->name }}</a><br>
                     {{ __('main.downloads') }}: {{ $down->loads }}<br>
-                    {{ __('main.author') }}: {{ $down->user->getProfile() }}
-                    <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
+
+                    <div class="section-body">
+                        <span class="avatar-micro">{{ $down->user->getAvatarImage() }}</span> {{ $down->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">{{  dateFixed($down->created_at) }}</small><br>
+                    </div>
                 </div>
+
+                <i class="fa-regular fa-comment"></i> <a href="{{ route('downs.comments', ['id' => $down->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $down->count_comments }}</span>
             </div>
         @endforeach
     @else

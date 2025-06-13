@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Load;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Down;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class NewController extends Controller
@@ -14,15 +15,21 @@ class NewController extends Controller
     /**
      * Новые файлы
      */
-    public function files(): View
+    public function files(Request $request): View
     {
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Down::getSorting($sort, $order);
+
         $downs = Down::query()
             ->active()
-            ->orderByDesc('created_at')
-            ->with('category', 'user')
-            ->paginate(setting('downlist'));
+            ->with('user', 'category')
+            ->orderBy(...$orderBy)
+            ->paginate(setting('downlist'))
+            ->appends(compact('sort', 'order'));
 
-        return view('loads/new_files', compact('downs'));
+        return view('loads/new_files', compact('downs', 'sorting'));
     }
 
     /**

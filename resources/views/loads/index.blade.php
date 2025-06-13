@@ -85,6 +85,5 @@
         </div>
     @endforeach
 
-    <a href="{{ route('loads.top') }}">{{ __('loads.top_downs') }}</a> /
     <a href="{{ route('loads.rss') }}">{{ __('main.rss') }}</a>
 @stop
