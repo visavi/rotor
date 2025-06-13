@@ -17,7 +17,6 @@ return [
     'total_articles'         => 'Total Articles',
     'total_authors'          => 'Total Authors',
     'comments_list'          => 'Comment list :user',
-    'top_articles'           => 'Top Articles',
     'tag_cloud'              => 'Tag Cloud',
     'empty_tag_cloud'        => 'No tags yet!',
     'title_create'           => 'Publication of a new article',

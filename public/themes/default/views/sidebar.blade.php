@@ -100,7 +100,6 @@
                 <li><a class="treeview-item{{ request()->is('blogs/main') ? ' active' : '' }}" href="{{ route('blogs.main') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.articles_all') }}</a></li>
                 <li><a class="treeview-item{{ request()->is('articles') ? ' active' : '' }}" href="{{ route('articles.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_articles') }}</a></li>
                 <li><a class="treeview-item{{ request()->is('articles/comments') ? ' active' : '' }}" href="{{ route('articles.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_comments') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('blogs/top') ? ' active' : '' }}" href="{{ route('blogs.top') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.top_articles') }}</a></li>
             </ul>
         </li>
 

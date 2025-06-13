@@ -18,6 +18,15 @@
 
 @section('content')
     @if ($articles->isNotEmpty())
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('articles.index', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
+
         @foreach ($articles as $article)
             <div class="section mb-3 shadow">
                 <div class="section-title">
@@ -25,12 +34,17 @@
                     <a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
                 </div>
 
-                <div class="section-content">
+                <div class="section-content mb-2">
                     {{ __('blogs.blog') }}: <a href="{{ route('blogs.blog', ['id' => $article->category_id]) }}">{{ $article->category->name }}</a><br>
                     {{ __('main.views') }}: {{ $article->visits }}<br>
-                    {{ __('main.author') }}: {{ $article->user->getProfile() }}
-                    <small class="section-date text-muted fst-italic">{{  dateFixed($article->created_at) }}</small>
+
+                    <div class="section-body">
+                        <span class="avatar-micro">{{ $article->user->getAvatarImage() }}</span> {{ $article->user->getProfile() }}
+                        <small class="section-date text-muted fst-italic">{{  dateFixed($article->created_at) }}</small><br>
+                    </div>
                 </div>
+
+                <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
             </div>
         @endforeach
     @else

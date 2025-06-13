@@ -17,7 +17,6 @@ return [
     'total_articles'         => 'Усього статей',
     'total_authors'          => 'Всього авторів',
     'comments_list'          => 'Список коментарів :user',
-    'top_articles'           => 'Топ статей',
     'tag_cloud'              => 'Хмара тегів',
     'empty_tag_cloud'        => 'Теґів ще немає!',
     'title_create'           => 'Публікація нової статті',

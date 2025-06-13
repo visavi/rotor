@@ -55,7 +55,6 @@
         {{ showError(__('blogs.empty_articles')) }}
     @endif
 
-    <a href="{{ route('blogs.top') }}">{{ __('blogs.top_articles') }}</a> /
     <a href="{{ route('blogs.tags') }}">{{ __('blogs.tag_cloud') }}</a> /
     <a href="{{ route('blogs.authors') }}">{{ __('blogs.authors') }}</a>
 @stop

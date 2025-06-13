@@ -553,14 +553,20 @@ class ArticleController extends Controller
     /**
      * Новые статьи
      */
-    public function newArticles(): View
+    public function newArticles(Request $request): View
     {
-        $articles = Article::query()
-            ->orderByDesc('created_at')
-            ->with('user', 'category')
-            ->paginate(setting('blogpost'));
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
 
-        return view('blogs/new_articles', compact('articles'));
+        [$sorting, $orderBy] = Article::getSorting($sort, $order);
+
+        $articles = Article::query()
+            ->orderBy(...$orderBy)
+            ->with('user', 'category')
+            ->paginate(setting('blogpost'))
+            ->appends(compact('sort', 'order'));
+
+        return view('blogs/new_articles', compact('articles', 'sorting'));
     }
 
     /**
@@ -623,27 +629,6 @@ class ArticleController extends Controller
             ->appends(['user' => $user->login]);
 
         return view('blogs/active_comments', compact('comments', 'user'));
-    }
-
-    /**
-     * Топ статей
-     */
-    public function top(Request $request): View
-    {
-        $sort = $request->input('sort', 'rating');
-        $order = $request->input('order', 'desc');
-
-        [$sorting, $orderBy] = Article::getSorting($sort, $order);
-
-        $articles = Article::query()
-            ->select('articles.*', 'blogs.name')
-            ->leftJoin('blogs', 'articles.category_id', 'blogs.id')
-            ->orderBy(...$orderBy)
-            ->with('user')
-            ->paginate(setting('blogpost'))
-            ->appends(compact('sort', 'order'));
-
-        return view('blogs/top', compact('articles', 'sorting'));
     }
 
     /**

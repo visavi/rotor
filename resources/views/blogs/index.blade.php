@@ -91,7 +91,6 @@
         </div>
     @endforeach
 
-    <a href="{{ route('blogs.top') }}">{{ __('blogs.top_articles') }}</a> /
     <a href="{{ route('blogs.tags') }}">{{ __('blogs.tag_cloud') }}</a> /
     <a href="{{ route('blogs.authors') }}">{{ __('blogs.authors') }}</a> /
     <a href="{{ route('blogs.rss') }}">{{ __('main.rss') }}</a>

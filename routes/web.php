@@ -143,6 +143,7 @@ Route::redirect('/articles/comment/{id}/{cid}', '/articles/{id}/comments?cid={ci
 Route::redirect('/articles/rss/{id}', '/articles/{id}/rss', 301);
 Route::redirect('/articles/print/{id}', '/articles/{id}/print', 301);
 Route::redirect('/articles/end/{id}', '/articles/{id}/comments', 301);
+Route::redirect('/blogs/top', '/articles?sort=rating', 301);
 
 Route::redirect('/photos/comments/{id}', '/photos/{id}/comments', 301);
 Route::redirect('/photos/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
@@ -219,7 +220,6 @@ Route::controller(ArticleController::class)
         Route::get('/tags-search', 'searchTags')->name('tags-search');
         Route::get('/tags/{tag}', 'getTag')->where('tag', '.+')->name('tag');
         Route::get('/authors', 'authors')->name('authors');
-        Route::get('/top', 'top')->name('top');
         Route::get('/rss', 'rss')->name('rss');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::get('/main', 'main')->name('main');
