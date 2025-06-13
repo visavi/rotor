@@ -17,7 +17,7 @@ trait SortableTrait
     /**
      * Get sorting
      */
-    public static function getSorting(string $sort, string $order): array
+    public static function getSorting(?string $sort, ?string $order): array
     {
         $options = static::sortableFields();
 
