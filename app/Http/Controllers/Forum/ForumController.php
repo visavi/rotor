@@ -245,45 +245,4 @@ class ForumController extends Controller
 
         return view('forums/rss_posts', compact('topic', 'posts'));
     }
-
-    /**
-     * Последние темы
-     */
-    public function topTopics(): View
-    {
-        $topics = Topic::query()
-            ->orderByDesc('count_posts')
-            ->orderByDesc('updated_at')
-            ->with('forum', 'user', 'lastPost.user')
-            ->limit(100)
-            ->get()
-            ->all();
-
-        $topics = paginate($topics, setting('forumtem'));
-
-        return view('forums/top', compact('topics'));
-    }
-
-    /**
-     * Последние сообщения
-     */
-    public function topPosts(Request $request): View
-    {
-        $period = int($request->input('period'));
-
-        $posts = Post::query()
-            ->when($period, static function (Builder $query) use ($period) {
-                return $query->where('created_at', '>', strtotime('-' . $period . ' day', SITETIME));
-            })
-            ->orderByDesc('rating')
-            ->orderByDesc('created_at')
-            ->with('topic', 'user')
-            ->limit(100)
-            ->get()
-            ->all();
-
-        $posts = paginate($posts, setting('forumpost'), ['period' => $period]);
-
-        return view('forums/top_posts', compact('posts', 'period'));
-    }
 }

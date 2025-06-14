@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ActiveController extends Controller
@@ -35,35 +36,45 @@ class ActiveController extends Controller
     /**
      * Вывод тем
      */
-    public function topics(): View
+    public function topics(Request $request): View
     {
         $user = $this->user;
 
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Topic::getSorting($sort, $order);
+
         $topics = Topic::query()
             ->where('user_id', $user->id)
-            ->orderByDesc('updated_at')
+            ->orderBy(...$orderBy)
             ->with('forum', 'user', 'lastPost.user')
             ->paginate(setting('forumtem'))
-            ->appends(['user' => $user->login]);
+            ->appends(['user' => $user->login, 'sort' => $sort, 'order' => $order]);
 
-        return view('forums/active_topics', compact('topics', 'user'));
+        return view('forums/active_topics', compact('topics', 'user', 'sorting'));
     }
 
     /**
      * Вывод сообщений
      */
-    public function posts(): View
+    public function posts(Request $request): View
     {
         $user = $this->user;
 
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Post::getSorting($sort, $order);
+
         $posts = Post::query()
             ->where('user_id', $user->id)
-            ->orderByDesc('created_at')
+            ->orderBy(...$orderBy)
             ->with('topic', 'user')
             ->paginate(setting('forumpost'))
-            ->appends(['user' => $user->login]);
+            ->appends(['user' => $user->login, 'sort' => $sort, 'order' => $order]);
 
-        return view('forums/active_posts', compact('posts', 'user'));
+        return view('forums/active_posts', compact('posts', 'user', 'sorting'));
     }
 
     /**

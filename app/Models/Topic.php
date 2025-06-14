@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -37,6 +38,7 @@ use Illuminate\Support\HtmlString;
 class Topic extends BaseModel
 {
     use SearchableTrait;
+    use SortableTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -64,6 +66,18 @@ class Topic extends BaseModel
     public function searchableFields(): array
     {
         return ['title'];
+    }
+
+    /**
+     * Возвращает список сортируемых полей
+     */
+    protected static function sortableFields(): array
+    {
+        return [
+            'date'   => ['field' => 'updated_at', 'label' => __('main.date')],
+            'visits' => ['field' => 'visits', 'label' => __('main.views')],
+            'posts'  => ['field' => 'count_posts', 'label' => __('main.messages')],
+        ];
     }
 
     /**

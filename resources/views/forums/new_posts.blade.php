@@ -17,11 +17,37 @@
 @stop
 
 @section('content')
+    <div class="sort-links border-bottom pb-3 mb-3">
+        {{ __('main.sort') }}:
+        @foreach ($sorting as $key => $option)
+            <a href="{{ route('posts.index', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc', 'period' => $period]) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+            </a>
+        @endforeach
+    </div>
+
+    {{ __('main.period') }}:
+    <?php $active = (empty($period)) ? 'success' : 'adaptive'; ?>
+    <a href="{{ route('posts.index', ['sort' => $sort, 'order' => $order]) }}" class="badge bg-{{ $active }}">{{ __('main.all_time') }}</a>
+
+    <?php $active = ($period === 365) ? 'success' : 'adaptive'; ?>
+    <a href="{{ route('posts.index', ['period' => 365, 'sort' => $sort, 'order' => $order]) }}" class="badge bg-{{ $active }}">{{ __('main.last_year') }}</a>
+
+    <?php $active = ($period === 30) ? 'success' : 'adaptive'; ?>
+    <a href="{{ route('posts.index', ['period' => 30, 'sort' => $sort, 'order' => $order]) }}" class="badge bg-{{ $active }}">{{ __('main.last_month') }}</a>
+
+    <?php $active = ($period === 7) ? 'success' : 'adaptive'; ?>
+    <a href="{{ route('posts.index', ['period' => 7, 'sort' => $sort, 'order' => $order]) }}" class="badge bg-{{ $active }}">{{ __('main.last_week') }}</a>
+
+    <?php $active = ($period === 1) ? 'success' : 'adaptive'; ?>
+    <a href="{{ route('posts.index', ['period' => 1, 'sort' => $sort, 'order' => $order]) }}" class="badge bg-{{ $active }}">{{ __('main.last_day') }}</a>
+    <hr>
+
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <div class="section mb-3 shadow">
                 <i class="fa fa-file-alt"></i> <b><a href="{{ route('topics.topic', ['id' => $data->topic_id, 'pid' => $data->id]) }}">{{ $data->topic->title }}</a></b>
-                <span class="badge bg-adaptive">{{ $data->topic->count_posts }}</span>
+                <span class="badge bg-adaptive">{{ $data->rating }}</span>
 
                 <div class="section-message">
                     {{ bbCode($data->text) }}<br>

@@ -84,7 +84,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="bg-info text-white p-1 my-1">{{ bbCode($topic->note) }}</div>
+        <div class="section-form my-1">{{ bbCode($topic->note) }}</div>
     @endif
     <hr>
 
@@ -254,7 +254,5 @@
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /
     <a href="/tags">{{ __('main.tags') }}</a>  /
-    <a href="/rules">{{ __('main.rules') }}</a> /
-    <a href="{{ route('forums.top-topics') }}">{{ __('forums.top_topics') }}</a> /
-    <a href="{{ route('forums.top-posts') }}">{{ __('forums.top_posts') }}</a><br>
+    <a href="/rules">{{ __('main.rules') }}</a><br>
 @stop

@@ -131,6 +131,8 @@ Route::redirect('/topics/{id}/{pid}', '/topics/{id}?pid={pid}', 301)->whereNumbe
 Route::redirect('/topics/end/{id}', '/topics/{id}', 301);
 Route::redirect('/topics/rss/{id}', '/topics/{id}/rss', 301);
 Route::redirect('/topic/{id}', '/topics/{id}', 301);
+Route::redirect('/forums/top/topics', '/topics?sort=posts', 301);
+Route::redirect('/forums/top/posts', '/posts?sort=rating', 301);
 
 Route::redirect('/news/comments/{id}', '/news/{id}/comments', 301);
 Route::redirect('/news/comment/{id}/{cid}', '/news/{id}/comments?cid={cid}', 301);
@@ -279,8 +281,7 @@ Route::prefix('forums')
     ->group(function () {
         Route::get('/', [ForumController::class, 'index'])->name('index');
         Route::get('/{id}', [ForumController::class, 'forum'])->name('forum');
-        Route::get('/top/posts', [ForumController::class, 'topPosts'])->name('top-posts');
-        Route::get('/top/topics', [ForumController::class, 'topTopics'])->name('top-topics');
+
         Route::get('/rss', [ForumController::class, 'rss'])->name('rss');
         Route::match(['get', 'post'], '/create', [ForumController::class, 'create'])->name('create');
 

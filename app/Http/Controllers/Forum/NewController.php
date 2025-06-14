@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Forum;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class NewController extends Controller
@@ -14,34 +16,48 @@ class NewController extends Controller
     /**
      * Вывод тем
      */
-    public function topics(): View
+    public function topics(Request $request): View
     {
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Topic::getSorting($sort, $order);
+
         $topics = Topic::query()
-            ->orderByDesc('updated_at')
+            ->orderBy(...$orderBy)
             ->with('forum', 'user', 'lastPost.user')
-            ->limit(100)
-            ->get()
-            ->all();
+            ->limit(1000)
+            ->get();
 
-        $topics = paginate($topics, setting('forumtem'));
+        $topics = paginate($topics, setting('forumtem'))
+            ->appends(compact('sort', 'order'));
 
-        return view('forums/new_topics', compact('topics'));
+        return view('forums/new_topics', compact('topics', 'sorting'));
     }
 
     /**
-     * Вывод сообшений
+     * Вывод сообщений
      */
-    public function posts(): View
+    public function posts(Request $request): View
     {
+        $period = int($request->input('period'));
+
+        $sort = $request->input('sort', 'date');
+        $order = $request->input('order', 'desc');
+
+        [$sorting, $orderBy] = Post::getSorting($sort, $order);
+
         $posts = Post::query()
-            ->orderByDesc('created_at')
+            ->when($period, static function (Builder $query) use ($period) {
+                return $query->where('created_at', '>', strtotime('-' . $period . ' day', SITETIME));
+            })
+            ->orderBy(...$orderBy)
             ->with('topic', 'user')
-            ->limit(100)
-            ->get()
-            ->all();
+            ->limit(1000)
+            ->get();
 
-        $posts = paginate($posts, setting('forumpost'));
+        $posts = paginate($posts, setting('forumpost'), compact('period', 'sort', 'order'));
 
-        return view('forums/new_posts', compact('posts'));
+        return view('forums/new_posts', compact('posts', 'period', 'sort', 'order', 'sorting'));
     }
 }

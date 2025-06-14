@@ -17,8 +17,16 @@
 @stop
 
 @section('content')
-
     @if ($topics->isNotEmpty())
+        <div class="sort-links border-bottom pb-3 mb-3">
+            {{ __('main.sort') }}:
+            @foreach ($sorting as $key => $option)
+                <a href="{{ route('forums.active-topics', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                    {{ $option['label'] }}{{ $option['icon'] ?? '' }}
+                </a>
+            @endforeach
+        </div>
+
         @foreach ($topics as $data)
             <div class="section mb-3 shadow">
                 <i class="fa {{ $data->getIcon() }} text-muted"></i>
@@ -26,6 +34,7 @@
 
                 {{ $data->pagination() }}
                 {{ __('forums.forum') }}: <a href="{{ route('forums.forum', ['id' => $data->forum->id]) }}">{{ $data->forum->title }}</a><br>
+                {{ __('main.views') }}: <span class="badge bg-adaptive">{{ $data->visits }}</span><br>
                 {{ __('main.author') }}: {{ $data->user->getName() }} / {{ __('forums.latest') }}.: {{ $data->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($data->lastPost->created_at) }}</small>
             </div>
         @endforeach

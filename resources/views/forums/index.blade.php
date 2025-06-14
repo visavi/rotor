@@ -95,7 +95,5 @@
     @endif
 
     <a href="/rules">{{ __('main.rules') }}</a> /
-    <a href="{{ route('forums.top-topics') }}">{{ __('forums.top_topics') }}</a> /
-    <a href="{{ route('forums.top-posts') }}">{{ __('forums.top_posts') }}</a> /
     <a href="{{ route('forums.rss') }}">{{ __('main.rss') }}</a><br>
 @stop

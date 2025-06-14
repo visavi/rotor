@@ -23,7 +23,7 @@
             <a class="dropdown-item" href="{{ route('admin.topics.edit', ['id' => $topic->id]) }}">{{ __('main.change') }}</a>
             <a class="dropdown-item" href="{{ route('admin.topics.move', ['id' => $topic->id]) }}">{{ __('main.move') }}</a>
             <a class="dropdown-item" href="{{ route('admin.topics.delete', ['id' => $topic->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
-            <a class="dropdown-item" href="{{ route('topics.edit', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}">{{ __('main.review') }}</a>
+            <a class="dropdown-item" href="{{ route('topics.topic', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}">{{ __('main.review') }}</a>
         </div>
     </div>
 
@@ -62,7 +62,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="bg-info text-white p-1 my-1">{{ bbCode($topic->note) }}</div>
+        <div class="section-form my-1">{{ bbCode($topic->note) }}</div>
     @endif
 
     @if ($vote)
@@ -221,7 +221,5 @@
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /
     <a href="/tags">{{ __('main.tags') }}</a>  /
-    <a href="/rules">{{ __('main.rules') }}</a> /
-    <a href="{{ route('forums.top-topics') }}">{{ __('forums.top_topics') }}</a> /
-    <a href="{{ route('forums.top-posts') }}">{{ __('forums.top_posts') }}</a><br>
+    <a href="/rules">{{ __('main.rules') }}</a><br>
 @stop

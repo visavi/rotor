@@ -103,7 +103,5 @@
 
     {{ $topics->links() }}
 
-    <a href="/rules">{{ __('main.rules') }}</a> /
-    <a href="{{ route('forums.top-topics') }}">{{ __('forums.top_topics') }}</a> /
-    <a href="{{ route('forums.top-posts') }}">{{ __('forums.top_posts') }}</a><br>
+    <a href="/rules">{{ __('main.rules') }}</a><br>
 @stop
