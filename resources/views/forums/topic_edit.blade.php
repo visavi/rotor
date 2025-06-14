@@ -27,14 +27,14 @@
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('forums.topic') }}:</label>
-                <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="50" placeholder="{{ __('forums.topic') }}" value="{{ getInput('title', $topic->title) }}" required>
+                <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="{{ setting('forum_title_max') }}" placeholder="{{ __('forums.topic') }}" value="{{ getInput('title', $topic->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             @if ($post)
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('forum_text_max') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg', $post->text) }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
                 </div>

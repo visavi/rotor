@@ -32,13 +32,13 @@
 
             <div class="mb-3{{ hasError('title') }}">
                 <label for="inputTitle" class="form-label">{{ __('forums.topic') }}:</label>
-                <input name="title" class="form-control" id="inputTitle" maxlength="50" placeholder="{{ __('forums.topic') }}" value="{{ getInput('title') }}" required>
+                <input name="title" class="form-control" id="inputTitle" maxlength="{{ setting('forum_title_max') }}" placeholder="{{ __('forums.topic') }}" value="{{ getInput('title') }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('forumtextlength') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('forum_text_max') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>

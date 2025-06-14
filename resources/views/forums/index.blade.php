@@ -51,7 +51,7 @@
                         <span class="badge bg-adaptive">{{ formatShortNum($forum->count_topics + $forum->children->sum('count_topics')) }}/{{ formatShortNum($forum->count_posts + $forum->children->sum('count_posts')) }}</span>
 
                         @if ($forum->description)
-                            <div class="section-description text-muted fst-italic small">{{ $forum->description }}</div>
+                            <div class="section-description text-muted fst-italic small">{{ bbCode($forum->description) }}</div>
                         @endif
                     </div>
 

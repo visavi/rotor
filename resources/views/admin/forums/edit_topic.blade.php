@@ -25,13 +25,13 @@
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="title" class="form-label">{{ __('forums.topic') }}:</label>
-                <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $topic->title) }}" required>
+                <input class="form-control" name="title" id="title" maxlength="{{ setting('forum_title_max') }}" value="{{ getInput('title', $topic->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('note') }}">
                 <label for="note" class="form-label">{{ __('forums.note') }}:</label>
-                <textarea class="form-control markItUp" id="note" name="note" rows="3">{{ getInput('note', $topic->note) }}</textarea>
+                <textarea class="form-control markItUp" id="note" maxlength="{{ setting('forum_note_max') }}" name="note" rows="3">{{ getInput('note', $topic->note) }}</textarea>
                 <div class="invalid-feedback">{{ textError('note') }}</div>
             </div>
 

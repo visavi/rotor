@@ -104,8 +104,8 @@ class ForumController extends Controller
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
+                ->length($title, setting('forum_title_min'), setting('forum_title_max'), ['title' => __('validator.text')])
+                ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
 
             if ($forum) {
                 $validator->empty($forum->closed, ['fid' => __('forums.forum_closed')]);

@@ -37,7 +37,7 @@
                     @endif
 
                     @if ($forum->description)
-                        <div class="section-description text-muted fst-italic small">{{ $forum->description }}</div>
+                        <div class="section-description text-muted fst-italic small">{{ bbCode($forum->description) }}</div>
                     @endif
                 </div>
 
@@ -74,7 +74,7 @@
             <form action="{{ route('admin.forums.create') }}" method="post">
                 @csrf
                 <div class="input-group{{ hasError('title') }}">
-                    <input type="text" class="form-control" id="title" name="title" maxlength="50" value="{{ getInput('title') }}" placeholder="{{ __('forums.forum') }}" required>
+                    <input type="text" class="form-control" id="title" name="title" maxlength="{{ setting('forum_category_max') }}" value="{{ getInput('title') }}" placeholder="{{ __('forums.forum') }}" required>
                     <button class="btn btn-primary">{{ __('forums.create_forum') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('title') }}</div>

@@ -154,7 +154,7 @@ class TopicController extends Controller
         $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
             ->empty($topic->closed, ['msg' => __('forums.topic_closed')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-            ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
+            ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
 
         // Проверка сообщения на схожесть
         $post = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->first();
@@ -175,7 +175,7 @@ class TopicController extends Controller
                 && $post->created_at + 600 > SITETIME
                 && $user->id === $post->user_id
                 && $countFiles + $post->files->count() <= setting('maxfiles')
-                && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))
+                && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forum_text_max'))
             ) {
                 $post->update(['text' => $post->text . PHP_EOL . $msg]);
             } else {
@@ -387,10 +387,10 @@ class TopicController extends Controller
             $answers = (array) $request->input('answers');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')]);
+                ->length($title, setting('forum_title_min'), setting('forum_title_max'), ['title' => __('validator.text')]);
 
             if ($post) {
-                $validator->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
+                $validator->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
             }
 
             if ($vote) {
@@ -502,7 +502,7 @@ class TopicController extends Controller
             $msg = $request->input('msg');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
+                ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $post->update([

@@ -46,7 +46,7 @@ class ForumController extends AdminController
         $title = $request->input('title');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($title, 3, 50, ['title' => __('validator.text')]);
+            ->length($title, setting('forum_category_min'), setting('forum_category_max'), ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Forum::query()->max('sort') + 1;
@@ -90,8 +90,8 @@ class ForumController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($description, 0, 100, ['description' => __('validator.text')])
+                ->length($title, setting('forum_category_min'), setting('forum_category_max'), ['title' => __('validator.text')])
+                ->length($description, setting('forum_description_min'), setting('forum_description_max'), ['description' => __('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => __('forums.forum_invalid')]);
 
             if (! empty($parent) && $forum->children->isNotEmpty()) {
@@ -221,10 +221,10 @@ class ForumController extends AdminController
             $closeUserId = $closed ? getUser('id') : null;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($note, 0, 250, ['note' => __('validator.text_long')]);
+                ->length($title, setting('forum_title_min'), setting('forum_title_max'), ['title' => __('validator.text')])
+                ->length($note, setting('forum_note_min'), setting('forum_note_max'), ['note' => __('validator.text_long')]);
 
-            $moderators = preg_split('/[\s]*[,][\s]*/', trim($moderators, ','), -1, PREG_SPLIT_NO_EMPTY);
+            $moderators = preg_split('/\s*,\s*/', trim($moderators, ','), -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($moderators as $moderator) {
                 if (! getUserByLogin($moderator)) {
@@ -469,7 +469,7 @@ class ForumController extends AdminController
             $msg = $request->input('msg');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, 5, setting('forumtextlength'), ['msg' => __('validator.text')]);
+                ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

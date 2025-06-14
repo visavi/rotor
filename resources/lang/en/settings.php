@@ -48,10 +48,13 @@ return [
     'contacts_max_users' => 'Max. in the contact list ',
     'ignores_max_users'  => 'Max. on the ignore list ',
 
-    'topics_per_page'      => 'Forum topics on page',
-    'posts_per_page'       => 'Forum posts on page',
-    'posts_symbols'        => 'Characters in a forum post',
-    'forums_upload_points' => 'Asset to upload files',
+    'topics_per_page'          => 'Forum topics on page',
+    'posts_per_page'           => 'Forum posts on page',
+    'forum_title_length'       => 'Topic length',
+    'forum_text_length'        => 'Message text length',
+    'forum_note_length'        => 'Topic note length',
+    'forum_category_length'    => 'Forum name length',
+    'forum_description_length' => 'Forum description length',
 
     'guestbook_guests_allow' => 'Allow guests to write in guestbook',
     'guestbook_points_add'   => 'To earn points in the guest room',
@@ -78,6 +81,10 @@ return [
     'loads_files_allow'           => 'Allow users to upload files',
     'loads_guests_download_allow' => 'Allow guests to download files',
     'down_allow_links'            => 'Allow adding links to files',
+    'loads_title_length'          => 'Download name length',
+    'loads_text_length'           => 'Download text length',
+    'loads_link_length'           => 'File link length',
+    'loads_category_length'       => 'Section name length',
 
     'mails_count_days'  => 'Qty. days before sending a private notification by email ',
     'mails_send_emails' => 'Sending emails in one operation',

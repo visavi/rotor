@@ -15,13 +15,13 @@
 
     <div class="mb-3{{ hasError('title') }}">
         <label for="title" class="form-label">{{ __('loads.down_title') }}:</label>
-        <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $down->title) }}" required>
+        <input class="form-control" name="title" id="title" maxlength="{{ setting('down_title_max') }}" value="{{ getInput('title', $down->title) }}" required>
         <div class="invalid-feedback">{{ textError('title') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('text') }}">
         <label for="text" class="form-label">{{ __('loads.down_text') }}:</label>
-        <textarea class="form-control markItUp" id="text" name="text" rows="5" maxlength="5000">{{ getInput('text', $down->text) }}</textarea>
+        <textarea class="form-control markItUp" id="text" name="text" rows="5" maxlength="{{ setting('down_text_max') }}">{{ getInput('text', $down->text) }}</textarea>
         <div class="invalid-feedback">{{ textError('text') }}</div>
         <span class="js-textarea-counter"></span>
     </div>
@@ -36,7 +36,7 @@
             <div class="js-links-list">
                 @for ($i = 0, $countLinks = count($links); $i < $countLinks; $i++)
                     <div class="input-group mt-1 js-links-append">
-                        <input class="form-control" name="links[]" type="text" value="{{ $links[$i] ?? '' }}" maxlength="100" placeholder="https://">
+                        <input class="form-control" name="links[]" type="text" value="{{ $links[$i] ?? '' }}" maxlength="{{ setting('down_link_max') }}" placeholder="https://">
                         <span class="input-group-text">
                             <a class="js-links-remove" href="#"><i class="fa fa-times"></i></a>
                         </span>
@@ -63,7 +63,7 @@
             const listBlock = $('.js-links-list');
 
             listBlock.append('<div class="input-group mt-1 js-links-append">' +
-                '<input class="form-control" name="links[]" type="text" value="" maxlength="100" placeholder="https://">' +
+                '<input class="form-control" name="links[]" type="text" value="" maxlength="<?= setting('down_category_max') ?>" placeholder="https://">' +
                 '<span class="input-group-text">' +
                 '<a class="js-links-remove" href="#"><i class="fa fa-times"></i></a>' +
                 '</span>' +

@@ -54,7 +54,7 @@
                 </div>
 
                 @if ($child->description)
-                    <div class="section-description text-muted fst-italic small">{{ $child->description }}</div>
+                    <div class="section-description text-muted fst-italic small">{{ bbCode($child->description) }}</div>
                 @endif
 
                 @if ($child->lastTopic->id)

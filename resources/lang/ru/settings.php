@@ -48,10 +48,13 @@ return [
     'contacts_max_users' => 'Максимальное кол. в контакт-листе',
     'ignores_max_users'  => 'Максимальное кол. в игнор-листе',
 
-    'topics_per_page'      => 'Тем в форуме на стр.',
-    'posts_per_page'       => 'Сообщений в форуме на стр.',
-    'posts_symbols'        => 'Символов в сообщении форума',
-    'forums_upload_points' => 'Актива для загрузки файлов',
+    'topics_per_page'          => 'Тем в форуме на стр.',
+    'posts_per_page'           => 'Сообщений в форуме на стр.',
+    'forum_title_length'       => 'Длина темы',
+    'forum_text_length'        => 'Длина текста сообщения',
+    'forum_note_length'        => 'Длина объявления темы',
+    'forum_category_length'    => 'Длина названия раздела',
+    'forum_description_length' => 'Длина описания раздела',
 
     'guestbook_guests_allow' => 'Разрешить гостям писать в гостевой',
     'guestbook_points_add'   => 'Начислять баллы в гостевой',
@@ -78,6 +81,10 @@ return [
     'loads_files_allow'           => 'Разрешать загружать файлы пользователям',
     'loads_guests_download_allow' => 'Разрешать гостям скачивать файлы',
     'down_allow_links'            => 'Разрешать добавлять ссылки на файлы',
+    'loads_title_length'          => 'Длина названия загрузки',
+    'loads_text_length'           => 'Длина описания загрузки',
+    'loads_link_length'           => 'Длина ссылки на файл',
+    'loads_category_length'       => 'Длина названия раздела',
 
     'mails_count_days'  => 'Кол. дней перед отправкой уведомления о привате на email',
     'mails_send_emails' => 'Рассылка писем на email за одну операцию',

@@ -83,7 +83,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "12.1-dev"
+            "dev-master": "12.4-dev"
         },
         "laravel": {
             "dont-discover": []

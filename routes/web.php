@@ -119,7 +119,6 @@ Route::redirect('/downs/comments/{id}', '/downs/{id}/comments', 301);
 Route::redirect('/downs/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
 Route::redirect('/downs/end/{id}', '/downs/{id}/comments', 301);
 Route::redirect('/downs/rss/{id}', '/downs/{id}/rss', 301);
-Route::redirect('/downs/download/{id}', '/downs/{id}/download', 301);
 Route::redirect('/down/{id}', '/downs/{id}', 301);
 Route::redirect('/down', '/downs', 301);
 Route::redirect('/loads/top', '/downs?sort=rating', 301);

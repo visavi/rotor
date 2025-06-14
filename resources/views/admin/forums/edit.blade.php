@@ -36,13 +36,13 @@
 
             <div class="mb-3{{ hasError('title') }}">
                 <label for="title" class="form-label">{{ __('forums.forum') }}:</label>
-                <input class="form-control" name="title" id="title" maxlength="50" value="{{ getInput('title', $forum->title) }}" required>
+                <input class="form-control" name="title" id="title" maxlength="{{ setting('forum_category_max') }}" value="{{ getInput('title', $forum->title) }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('description') }}">
                 <label for="description" class="form-label">{{ __('main.description') }}:</label>
-                <input class="form-control" name="description" id="description" maxlength="100" value="{{ getInput('description', $forum->description) }}">
+                <textarea class="form-control markItUp" id="description" maxlength="{{ setting('forum_description_max') }}" name="description" rows="3">{{ getInput('description', $forum->description) }}</textarea>
                 <div class="invalid-feedback">{{ textError('description') }}</div>
             </div>
 
