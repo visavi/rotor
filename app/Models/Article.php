@@ -80,7 +80,8 @@ class Article extends BaseModel
     {
         return [
             'date'     => ['field' => 'created_at', 'label' => __('main.date')],
-            'visits'   => ['field' => 'title', 'label' => __('main.views')],
+            'name'     => ['field' => 'title', 'label' => __('main.title')],
+            'visits'   => ['field' => 'visits', 'label' => __('main.views')],
             'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
             'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
         ];
