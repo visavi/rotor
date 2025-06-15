@@ -87,7 +87,7 @@
             <form action="{{ route('admin.blogs.create') }}" method="post">
                 @csrf
                 <div class="input-group{{ hasError('name') }}">
-                    <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ getInput('name') }}" placeholder="{{ __('blogs.blog') }}" required>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="{{ setting('blog_category_max') }}" value="{{ getInput('name') }}" placeholder="{{ __('blogs.blog') }}" required>
                     <button class="btn btn-primary">{{ __('main.create') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('name') }}</div>

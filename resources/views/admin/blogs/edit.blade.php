@@ -42,13 +42,13 @@
 
             <div class="mb-3{{ hasError('name') }}">
                 <label for="name" class="form-label">{{ __('blogs.name') }}:</label>
-                <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $category->name) }}" required>
+                <input class="form-control" name="name" id="name" maxlength="{{ setting('blog_category_max') }}" value="{{ getInput('name', $category->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('sort') }}">
                 <label for="sort" class="form-label">{{ __('main.position') }}:</label>
-                <input type="number" class="form-control" name="sort" id="sort" maxlength="2" value="{{ getInput('sort', $category->sort) }}" required>
+                <input type="number" class="form-control" name="sort" id="sort" maxlength="3" value="{{ getInput('sort', $category->sort) }}" required>
                 <div class="invalid-feedback">{{ textError('sort') }}</div>
             </div>
 

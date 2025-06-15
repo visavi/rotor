@@ -127,13 +127,13 @@ class ArticleController extends Controller
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
+                ->length($title, setting('blog_title_min'), setting('blog_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('blog_text_min'), setting('blog_text_max'), ['text' => __('validator.text')])
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
 
             foreach ($tags as $tag) {
-                $validator->length($tag, 2, 30, ['tags' => __('blogs.article_error_tags')]);
+                $validator->length($tag, setting('blog_tag_min'), setting('blog_tag_max'), ['tags' => __('blogs.article_error_tags')]);
             }
 
             if ($category) {
@@ -223,14 +223,14 @@ class ArticleController extends Controller
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 100, setting('maxblogpost'), ['text' => __('validator.text')])
+                ->length($title, setting('blog_title_min'), setting('blog_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('blog_text_min'), setting('blog_text_max'), ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
 
             foreach ($tags as $tag) {
-                $validator->length($tag, 2, 30, ['tags' => __('blogs.article_error_tags')]);
+                $validator->length($tag, setting('blog_tag_min'), setting('blog_tag_max'), ['tags' => __('blogs.article_error_tags')]);
             }
 
             if ($category) {
