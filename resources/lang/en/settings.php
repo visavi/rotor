@@ -63,7 +63,7 @@ return [
     'guestbook_points_add'   => 'To earn points in the guest room',
     'guestbook_moderation'   => 'Message moderation for guests',
     'guestbook_per_page'     => 'Guest posts on page',
-    'guestbook_symbols'      => 'Characters in guest message',
+    'guestbook_text_length'  => 'Message text length',
 
     'images_reduction_size'  => 'Reducing photos when uploading',
     'images_preview_size'    => 'Size preview',

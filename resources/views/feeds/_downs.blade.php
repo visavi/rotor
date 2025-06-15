@@ -34,7 +34,7 @@
     </div>
 
     @if ($post->getImages()->isNotEmpty())
-        @include('app/_viewer', ['model' => $post, 'files' => $post->getImages()])
+        @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
     @endif
 
     <div class="section-message">
@@ -53,7 +53,7 @@
 
                     @if ($file->isVideo())
                         <div>
-                            <video src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
+                            <video src="{{ $file->path }}" class="img-fluid rounded" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
                         </div>
                     @endif
 

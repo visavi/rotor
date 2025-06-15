@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Guestbook
@@ -20,10 +25,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int    $edit_user_id
  * @property bool   $active
  * @property int    $updated_at
+ * @property-read Collection<File> $files
  */
 class Guestbook extends BaseModel
 {
+    use ConvertVideoTrait;
     use SearchableTrait;
+    use UploadTrait;
 
     /**
      * The table associated with the model.
@@ -44,6 +52,11 @@ class Guestbook extends BaseModel
      * Morph name
      */
     public static string $morphName = 'guestbook';
+
+    /**
+     * Директория загрузки файлов
+     */
+    public string $uploadPath = '/uploads/guestbook';
 
     /**
      * Возвращает поля участвующие в поиске
@@ -68,5 +81,47 @@ class Guestbook extends BaseModel
     public function editUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает загруженные файлы
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'relate');
+    }
+
+    /**
+     * Возвращает файлы
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files->filter(static function (File $value, $key) {
+            return ! $value->isImage();
+        });
+    }
+
+    /**
+     * Возвращает картинки
+     */
+    public function getImages(): Collection
+    {
+        return $this->files->filter(static function (File $value, $key) {
+            return $value->isImage();
+        });
+    }
+
+    /**
+     * Удаление записи и загруженных файлов
+     */
+    public function delete(): ?bool
+    {
+        return DB::transaction(function () {
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
+
+            return parent::delete();
+        });
     }
 }

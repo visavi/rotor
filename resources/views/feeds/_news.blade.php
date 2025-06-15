@@ -33,7 +33,7 @@
         </div>
 
         @if ($post->getImages()->isNotEmpty())
-            @include('app/_viewer', ['model' => $post, 'files' => $post->getImages()])
+            @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
         @endif
 
         @if ($post->getFiles()->isNotEmpty())
@@ -41,13 +41,13 @@
                 <div class="media-file">
                     @if ($file->isVideo())
                         <div>
-                            <video src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls playsinline></video>
+                            <video src="{{ $file->path }}" class="img-fluid rounded" preload="metadata" controls playsinline></video>
                         </div>
                     @endif
 
                     @if ($file->isAudio())
                         <div>
-                            <audio src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls></audio>
+                            <audio src="{{ $file->path }}" class="img-fluid rounded" preload="metadata" controls></audio>
                         </div>
                     @endif
 

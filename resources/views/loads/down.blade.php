@@ -67,7 +67,7 @@
 
                         @if ($file->extension === 'mp4')
                             <div>
-                                <video src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
+                                <video src="{{ $file->path }}" class="img-fluid rounded" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
                             </div>
                         @endif
 

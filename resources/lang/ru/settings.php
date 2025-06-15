@@ -63,7 +63,7 @@ return [
     'guestbook_points_add'   => 'Начислять баллы в гостевой',
     'guestbook_moderation'   => 'Модерация сообщений для гостей',
     'guestbook_per_page'     => 'Сообщений в гостевой на стр',
-    'guestbook_symbols'      => 'Символов в сообщении гостевой',
+    'guestbook_text_length'  => 'Длина текста сообщения',
 
     'images_reduction_size'  => 'Уменьшение фото при загрузке',
     'images_preview_size'    => 'Размер превью',

@@ -1,5 +1,5 @@
 @php
-    $files = $files ?? $model->files;
+    $files ??= $model->files;
     $countFiles = $files->count();
 @endphp
 

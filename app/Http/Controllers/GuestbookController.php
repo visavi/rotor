@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Validator;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Guestbook;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,16 @@ class GuestbookController extends Controller
 
         $unpublished = Guestbook::query()->active(false)->count();
 
-        return view('guestbook/index', compact('posts', 'unpublished'));
+        $files = collect();
+        if ($user = getUser()) {
+            $files = File::query()
+                ->where('relate_type', Guestbook::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->get();
+        }
+
+        return view('guestbook/index', compact('posts', 'unpublished', 'files'));
     }
 
     /**
@@ -38,7 +48,7 @@ class GuestbookController extends Controller
         $user = getUser();
 
         $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-            ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')])
+            ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
         /* Проверка для гостей */
@@ -65,7 +75,7 @@ class GuestbookController extends Controller
                 $user->increment('money', 5);
             }
 
-            Guestbook::query()->create([
+            $guestbook = Guestbook::query()->create([
                 'user_id'    => $user->id ?? null,
                 'text'       => $msg,
                 'ip'         => getIp(),
@@ -74,6 +84,12 @@ class GuestbookController extends Controller
                 'active'     => $active,
                 'created_at' => SITETIME,
             ]);
+
+            File::query()
+                ->where('relate_type', Guestbook::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->update(['relate_id' => $guestbook->id]);
 
             clearCache('statGuestbook');
             $flood->saveState();
@@ -111,7 +127,7 @@ class GuestbookController extends Controller
 
         if ($request->isMethod('post')) {
             $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
+                ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $post->update([

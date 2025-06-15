@@ -29,9 +29,15 @@
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('guestbook_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
+
+            @include('app/_upload_file', [
+                'id'    => $post->id,
+                'files' => $post->files,
+                'type' => App\Models\Guestbook::$morphName,
+            ])
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>

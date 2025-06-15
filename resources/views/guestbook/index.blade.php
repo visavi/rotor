@@ -82,6 +82,8 @@
                         {{ bbCode($post->text) }}
                     </div>
 
+                    @include('app/_media_viewer', ['model' => $post])
+
                     @if ($post->edit_user_id)
                         <div class="small"><i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($post->updated_at) }}</small></div>
                     @endif
@@ -110,10 +112,15 @@
                 @csrf
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('guesttextlength') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control markItUp" maxlength="{{ setting('guestbook_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
                 </div>
+
+                @include('app/_upload_file', [
+                    'files' => $files,
+                    'type' => App\Models\Guestbook::$morphName,
+                ])
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>
@@ -131,7 +138,7 @@
 
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guesttextlength') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control" id="msg" rows="5" maxlength="{{ setting('guestbook_text_max') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                 </div>
 

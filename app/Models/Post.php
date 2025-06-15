@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
@@ -36,7 +35,6 @@ use Illuminate\Support\Facades\DB;
  */
 class Post extends BaseModel
 {
-    use AddFileToArchiveTrait;
     use ConvertVideoTrait;
     use SearchableTrait;
     use SortableTrait;

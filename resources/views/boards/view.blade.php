@@ -51,7 +51,7 @@
             @if ($item->files->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
-                        @include('app/_viewer', ['model' => $item])
+                        @include('app/_image_viewer', ['model' => $item])
                     </div>
                 </div>
             @endif

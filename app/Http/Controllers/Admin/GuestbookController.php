@@ -44,7 +44,7 @@ class GuestbookController extends AdminController
             $msg = $request->input('msg');
 
             $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
+                ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -83,7 +83,7 @@ class GuestbookController extends AdminController
             $reply = $request->input('reply');
 
             $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($reply, 5, setting('guesttextlength'), ['msg' => __('validator.text')]);
+                ->length($reply, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $post->update([

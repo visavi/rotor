@@ -28,10 +28,16 @@
         <div class="invalid-feedback">{{ textError('sets[bookpost]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[guesttextlength]') }}">
-        <label for="guesttextlength" class="form-label">{{ __('settings.guestbook_symbols') }}:</label>
-        <input type="number" class="form-control" id="guesttextlength" name="sets[guesttextlength]" maxlength="5" value="{{ getInput('sets.guesttextlength', $settings['guesttextlength']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[guesttextlength]') }}</div>
+    <div class="mb-3">
+        <label for="guestbook_text_min" class="form-label">{{ __('settings.guestbook_text_length') }}:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[guestbook_text_min]') }}" id="guestbook_text_min" name="sets[guestbook_text_min]" value="{{ old('sets.guestbook_text_min', $settings['guestbook_text_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[guestbook_text_max]') }}" name="sets[guestbook_text_max]" value="{{ old('sets.guestbook_text_max', $settings['guestbook_text_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[guestbook_title_max]') }}</div>
+            <div>{{ textError('sets[guestbook_text_max]') }}</div>
+        </div>
     </div>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>

@@ -124,7 +124,8 @@ textarea.form-control {
     margin-bottom: 1rem;
 }
 
-.media-file img {
+.media-file img,
+.media-file video {
     max-height: 450px;
 }
 

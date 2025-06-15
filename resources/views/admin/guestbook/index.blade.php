@@ -73,6 +73,8 @@
                             {{ bbCode($post->text) }}
                         </div>
 
+                        @include('app/_media_viewer', ['model' => $post])
+
                         @if ($post->edit_user_id)
                             <div class="small">
                                 <i class="fa fa-exclamation-circle text-danger"></i> {{ __('main.changed') }}: {{ $post->editUser->getName() }}

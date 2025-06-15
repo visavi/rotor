@@ -232,6 +232,7 @@ class AjaxController extends Controller
             Message::$morphName,
             News::$morphName,
             Post::$morphName,
+            Guestbook::$morphName,
         ];
 
         $id = int($request->input('id'));
@@ -299,8 +300,13 @@ class AjaxController extends Controller
                     'type'    => $fileData['type'],
                 ];
             } else {
-                $model->convertVideo($fileData);
-                $model->addFileToArchive($fileData);
+                if (method_exists($model, 'convertVideo')) {
+                    $model->convertVideo($fileData);
+                }
+
+                if (method_exists($model, 'addFileToArchive')) {
+                    $model->addFileToArchive($fileData);
+                }
 
                 $data = [
                     'success' => true,
@@ -334,6 +340,7 @@ class AjaxController extends Controller
             Message::$morphName,
             Photo::$morphName,
             Post::$morphName,
+            Guestbook::$morphName,
         ];
 
         $id = int($request->input('id'));

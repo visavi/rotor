@@ -63,7 +63,7 @@ return [
     'guestbook_guests_allow' => 'Дозволити гостям писати в гостьовій',
     'guestbook_points_add'   => 'Нараховувати бали в гостьовій',
     'guestbook_per_page'     => 'Повідомлень у гостьовій на стор',
-    'guestbook_symbols'      => 'Символів у повідомленні гостьової',
+    'guestbook_text_length'  => 'Довжина тексту повідомлення',
 
     'images_reduction_size'  => 'Зменшення фотографій під час завантаження',
     'images_preview_size'    => 'Розмір прев\'ю',

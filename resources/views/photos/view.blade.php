@@ -42,7 +42,7 @@
 
 @section('content')
     <div class="section mb-3 shadow">
-        @include('app/_viewer', ['model' => $photo, 'files' => $photo->files])
+        @include('app/_image_viewer', ['model' => $photo, 'files' => $photo->files])
 
         <div class="section-content">
             @if ($photo->text)
