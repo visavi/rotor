@@ -50,8 +50,8 @@
             @endphp
 
             @include('app/_upload_file', [
+                'model' => App\Models\Post::getModel(),
                 'files' => $files,
-                'type'  => App\Models\Post::$morphName,
             ])
 
             <label class="form-check mb-3">

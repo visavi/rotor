@@ -48,9 +48,7 @@
     @endif
 
     @include('app/_upload_file', [
-        'id'       => $down->id,
-        'files'    => $files,
-        'type'     => $down->getMorphClass(),
+        'model'    => $down,
         'showForm' => true,
     ])
 

@@ -35,11 +35,7 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            @include('app/_upload_file', [
-                'id'    => $post->id,
-                'files' => $post->files,
-                'type'  => $post->getMorphClass(),
-            ])
+            @include('app/_upload_file', ['model' => $post])
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>
         </form>

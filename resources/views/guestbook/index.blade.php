@@ -118,8 +118,8 @@
                 </div>
 
                 @include('app/_upload_file', [
+                    'model' => App\Models\Guestbook::getModel(),
                     'files' => $files,
-                    'type' => App\Models\Guestbook::$morphName,
                 ])
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>

@@ -214,7 +214,10 @@
                         <span class="js-textarea-counter"></span>
                     </div>
 
-                    @include('app/_upload_file', ['files' => $files, 'type' => App\Models\Post::$morphName])
+                    @include('app/_upload_file', [
+                        'model' => App\Models\Post::getModel(),
+                        'files' => $files,
+                    ])
 
                     <button class="btn btn-primary">{{ __('main.write') }}</button>
                 </form>

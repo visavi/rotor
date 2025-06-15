@@ -31,11 +31,7 @@
                 <span class="js-textarea-counter"></span>
             </div>
 
-            @include('app/_upload_file', [
-                'id'    => $news->id,
-                'files' => $news->files,
-                'type'  => $news->getMorphClass(),
-            ])
+            @include('app/_upload_file', ['model' => $news])
 
             <div class="form-check">
                 <input type="hidden" value="0" name="closed">

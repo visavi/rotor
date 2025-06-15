@@ -76,7 +76,10 @@
                     <span class="js-textarea-counter"></span>
                 </div>
 
-                @include('app/_upload_file', ['files' => $files, 'type' => App\Models\Message::$morphName])
+                @include('app/_upload_file', [
+                    'model' => App\Models\Message::getModel(),
+                    'files' => $files,
+                ])
 
                 @if (getUser('point') < setting('privatprotect'))
                     {{ getCaptcha() }}

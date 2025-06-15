@@ -33,11 +33,7 @@
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 
-            @include('app/_upload_file', [
-                'id'    => $post->id,
-                'files' => $post->files,
-                'type' => App\Models\Guestbook::$morphName,
-            ])
+            @include('app/_upload_file', ['model' => $post])
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>

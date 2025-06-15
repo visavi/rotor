@@ -52,7 +52,10 @@
             <div class="invalid-feedback">{{ textError('phone') }}</div>
         </div>
 
-        @include('app/_upload_image', ['files' => $files, 'type' => App\Models\Item::$morphName])
+        @include('app/_upload_image', [
+            'model' => App\Models\Item::getModel(),
+            'files' => $files,
+        ])
 
         <p class="text-muted fst-italic">
             {{ __('boards.boards_period_days', ['days' => setting('boards_period')]) }}

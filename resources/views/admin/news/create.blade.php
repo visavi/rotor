@@ -31,8 +31,8 @@
             </div>
 
             @include('app/_upload_file', [
+                'model' => App\Models\News::getModel(),
                 'files' => $files,
-                'type' => App\Models\News::$morphName,
             ])
 
             <div class="form-check">
