@@ -46,8 +46,8 @@ class NewsController extends AdminController
             $top = empty($request->input('top')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 5, 10000, ['text' => __('validator.text')]);
+                ->length($title, setting('news_title_min'), setting('news_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('news_text_min'), setting('news_text_max'), ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $news->update([
@@ -87,8 +87,8 @@ class NewsController extends AdminController
             $top = empty($request->input('top')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 5, 10000, ['text' => __('validator.text')]);
+                ->length($title, setting('news_title_min'), setting('news_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('news_text_min'), setting('news_text_max'), ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $news = News::query()->create([

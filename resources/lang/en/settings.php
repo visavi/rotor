@@ -109,8 +109,10 @@ return [
     'messages_per_page' => 'Letters in private on page',
     'messages_captcha'  => 'Threshold for turning off the protective picture',
 
-    'news_main'     => 'The code. news on the main ',
-    'news_per_page' => 'News per page',
+    'news_main'         => 'The code. news on the main ',
+    'news_per_page'     => 'News per page',
+    'news_title_length' => 'Length of news title',
+    'news_text_length'  => 'Length of news text',
 
     'offers_per_page' => 'Suggestions per page',
     'offers_points'   => 'Asset to create a proposal or problem',

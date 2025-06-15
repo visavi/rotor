@@ -19,13 +19,13 @@
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="title" class="form-label">{{ __('main.title') }}:</label>
-                <input type="text" class="form-control" id="title" name="title" maxlength="100" value="{{ getInput('title') }}" placeholder="{{ __('main.title') }}" required>
+                <input type="text" class="form-control" id="title" name="title" maxlength="{{ setting('news_title_max') }}" value="{{ getInput('title') }}" placeholder="{{ __('main.title') }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('main.text') }}:</label>
-                <textarea class="form-control markItUp" maxlength="10000" id="text" rows="10" name="text" placeholder="{{ __('main.text') }}" required>{{ getInput('text') }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('news_text_max') }}" id="text" rows="10" name="text" placeholder="{{ __('main.text') }}" required>{{ getInput('text') }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>
