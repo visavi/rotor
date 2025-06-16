@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Log;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminLogger
@@ -27,8 +28,8 @@ class AdminLogger
         if ($user) {
             Log::query()->create([
                 'user_id'    => $user->id,
-                'request'    => utfSubstr($request->getRequestUri(), 0, 250),
-                'referer'    => utfSubstr($request->header('referer'), 0, 250),
+                'request'    => Str::substr($request->getRequestUri(), 0, 250),
+                'referer'    => Str::substr($request->header('referer'), 0, 250),
                 'ip'         => getIp(),
                 'brow'       => getBrowser(),
                 'created_at' => SITETIME,

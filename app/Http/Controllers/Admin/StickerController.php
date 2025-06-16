@@ -10,6 +10,7 @@ use App\Models\StickersCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class StickerController extends AdminController
@@ -160,7 +161,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code = utfLower((string) $request->input('code'));
+            $code = Str::lower((string) $request->input('code'));
             $sticker = $request->file('sticker');
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
@@ -219,7 +220,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code = utfLower((string) $request->input('code'));
+            $code = Str::lower((string) $request->input('code'));
             $cid = int($request->input('cid'));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))

@@ -21,6 +21,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class TopicController extends Controller
@@ -175,7 +176,7 @@ class TopicController extends Controller
                 && $post->created_at + 600 > SITETIME
                 && $user->id === $post->user_id
                 && $countFiles + $post->files->count() <= setting('maxfiles')
-                && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forum_text_max'))
+                && (Str::length($msg) + Str::length($post->text) <= setting('forum_text_max'))
             ) {
                 $post->update(['text' => $post->text . PHP_EOL . $msg]);
             } else {
@@ -402,7 +403,7 @@ class TopicController extends Controller
                     $answers = array_unique(array_diff($answers, ['']));
 
                     foreach ($answers as $answer) {
-                        if (utfStrlen($answer) > 50) {
+                        if (Str::length($answer) > 50) {
                             $validator->addError(['answers' => __('votes.answer_wrong_length')]);
                             break;
                         }

@@ -110,7 +110,7 @@ class UserController extends Controller
                 $password2 = $request->input('password2');
                 $invite = setting('invite') ? $request->input('invite') : '';
                 $email = strtolower((string) $request->input('email'));
-                $domain = utfSubstr(strrchr($email, '@'), 1);
+                $domain = Str::substr(strrchr($email, '@'), 1);
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
                 $level = User::USER;
                 $activateLink = null;
@@ -119,7 +119,7 @@ class UserController extends Controller
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
-                    ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
+                    ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
                     ->email($email, ['email' => __('validator.email')])
                     ->length($invite, 12, 16, ['invite' => __('users.invite_length_requirements')], (bool) setting('invite'))
                     ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
@@ -268,7 +268,7 @@ class UserController extends Controller
                 }
 
                 if ($validator->isValid()) {
-                    $login = utfLower((string) $request->input('login'));
+                    $login = Str::lower((string) $request->input('login'));
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
@@ -363,8 +363,8 @@ class UserController extends Controller
             }
 
             if ($validator->isValid()) {
-                $country = utfSubstr($country, 0, 30);
-                $city = utfSubstr($city, 0, 50);
+                $country = Str::substr($country, 0, 30);
+                $city = Str::substr($city, 0, 50);
 
                 $user->update([
                     'name'     => $name,
@@ -418,7 +418,7 @@ class UserController extends Controller
         /* Повторная отправка */
         if ($request->has('email') && $request->isMethod('post')) {
             $email = strtolower((string) $request->input('email'));
-            $domain = utfSubstr(strrchr($email, '@'), 1);
+            $domain = Str::substr(strrchr($email, '@'), 1);
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
@@ -813,7 +813,7 @@ class UserController extends Controller
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
             ->regex($login, '|^[a-z0-9\-]+$|i', __('validator.login'))
-            ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', __('users.login_begin_requirements'))
+            ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', __('users.login_begin_requirements'))
             ->length($login, 3, 20, __('users.login_length_requirements'))
             ->false(ctype_digit($login), __('users.field_characters_requirements'))
             ->false(substr_count($login, '-') > 2, __('users.login_hyphens_requirements'));

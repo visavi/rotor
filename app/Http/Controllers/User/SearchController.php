@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SearchController extends Controller
@@ -26,7 +27,7 @@ class SearchController extends Controller
     public function search(Request $request): View|RedirectResponse
     {
         $find = $request->input('find');
-        $strlen = utfStrlen($find);
+        $strlen = Str::length($find);
 
         if ($strlen < 2 || $strlen > 20) {
             setInput($request->all());

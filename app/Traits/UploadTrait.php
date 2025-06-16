@@ -6,6 +6,7 @@ namespace App\Traits;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 
 trait UploadTrait
@@ -20,7 +21,7 @@ trait UploadTrait
         $mime = $file->getClientMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
         $basename = getBodyName($file->getClientOriginalName());
-        $basename = utfSubstr($basename, 0, 50) . '.' . $extension;
+        $basename = Str::substr($basename, 0, 50) . '.' . $extension;
         $filename = uniqueName($extension);
         $path = $this->uploadPath . '/' . $filename;
         $fullPath = public_path($path);

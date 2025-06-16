@@ -18,6 +18,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -116,7 +117,7 @@ class ForumController extends Controller
                 $answers = array_unique(array_diff($answers, ['']));
 
                 foreach ($answers as $answer) {
-                    if (utfStrlen($answer) > 50) {
+                    if (Str::length($answer) > 50) {
                         $validator->addError(['answers' => __('votes.answer_wrong_length')]);
                         break;
                     }

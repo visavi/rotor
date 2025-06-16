@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ListController extends Controller
@@ -48,7 +49,7 @@ class ListController extends Controller
                 ->lazy();
 
             $position = $search->search(function ($userModel) use ($user) {
-                return utfLower($userModel->login) === utfLower($user)
+                return Str::lower($userModel->login) === Str::lower($user)
                     || mb_stripos($userModel->login, $user) !== false
                     || mb_stripos((string) $userModel->name, $user) !== false;
             });

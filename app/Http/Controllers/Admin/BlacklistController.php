@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\BlackList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class BlacklistController extends AdminController
@@ -36,7 +37,7 @@ class BlacklistController extends AdminController
         $type = $this->type;
 
         if ($request->isMethod('post')) {
-            $value = utfLower((string) $request->input('value'));
+            $value = Str::lower((string) $request->input('value'));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($value, 1, 100, ['value' => __('validator.text')]);

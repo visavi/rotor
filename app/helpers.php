@@ -103,50 +103,6 @@ function dateFixed(
 }
 
 /**
- * Конвертирует строку в кодировку utf-8
- */
-function winToUtf(string $str): string
-{
-    return mb_convert_encoding($str, 'utf-8', 'windows-1251');
-}
-
-/**
- * Преобразует строку в нижний регистр
- */
-function utfLower(string $str): string
-{
-    return mb_strtolower($str, 'utf-8');
-}
-
-/**
- * Обрезает строку
- */
-function utfSubstr(mixed $str, int $start, ?int $length = null): string
-{
-    if (! $length) {
-        $length = utfStrlen($str);
-    }
-
-    return mb_substr((string) $str, $start, $length, 'utf-8');
-}
-
-/**
- * Возвращает длину строки
- */
-function utfStrlen(string $str): int
-{
-    return mb_strlen($str, 'utf-8');
-}
-
-/**
- * Является ли кодировка utf-8
- */
-function isUtf(string $str): bool
-{
-    return mb_check_encoding($str, 'utf-8');
-}
-
-/**
  * Преобразует специальные символы в HTML-сущности
  */
 function check(array|string|null $string, bool $doubleEncode = true): array|string
@@ -754,25 +710,6 @@ function icons(string $ext): HtmlString
 }
 
 /**
- * Перемешивает элементы ассоциативного массива, сохраняя ключи
- */
-function shuffleAssoc(array &$array): bool
-{
-    $keys = array_keys($array);
-
-    shuffle($keys);
-    $new = [];
-
-    foreach ($keys as $key) {
-        $new[$key] = $array[$key];
-    }
-
-    $array = $new;
-
-    return true;
-}
-
-/**
  * Возвращает обрезанный текст с закрытием тегов
  */
 function bbCodeTruncate(?string $text, int $words = 20, string $end = '...'): HtmlString
@@ -1026,19 +963,6 @@ function restatement(string $mode): void
 }
 
 /**
- * Возвращает количество строк в файле
- */
-function counterString(string $file): int
-{
-    $countLines = 0;
-    if (file_exists($file)) {
-        $countLines = count(file($file));
-    }
-
-    return $countLines;
-}
-
-/**
  * Форматирует вывод числа
  */
 function formatNum(int|float $num): HtmlString
@@ -1286,10 +1210,10 @@ function saveErrorLog(int $code, ?string $message = null): void
     if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([
             'code'       => $code,
-            'request'    => utfSubstr(request()->getRequestUri(), 0, 250),
-            'referer'    => utfSubstr(request()->header('referer'), 0, 250),
+            'request'    => Str::substr(request()->getRequestUri(), 0, 250),
+            'referer'    => Str::substr(request()->header('referer'), 0, 250),
             'user_id'    => getUser('id'),
-            'message'    => utfSubstr($message, 0, 250),
+            'message'    => Str::substr($message, 0, 250),
             'ip'         => getIp(),
             'brow'       => getBrowser(),
             'created_at' => SITETIME,
@@ -1307,6 +1231,9 @@ function showError(string|array $errors): HtmlString
     return new HtmlString(view('app/_error', compact('errors')));
 }
 
+/**
+ * Get captcha
+ */
 function getCaptcha(): HtmlString
 {
     return new HtmlString(view('app/_captcha'));

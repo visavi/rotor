@@ -9,6 +9,7 @@ use App\Models\Antimat;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AntimatController extends AdminController
@@ -19,7 +20,7 @@ class AntimatController extends AdminController
     public function index(Request $request, Validator $validator): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
-            $word = utfLower((string) $request->input('word'));
+            $word = Str::lower((string) $request->input('word'));
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))

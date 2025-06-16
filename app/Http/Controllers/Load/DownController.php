@@ -592,8 +592,8 @@ class DownController extends Controller
             exit($content);
         }
 
-        if (! isUtf($content)) {
-            $content = winToUtf($content);
+        if (! mb_check_encoding($content, 'utf-8')) {
+            $content = mb_convert_encoding($content, 'utf-8', 'windows-1251');
         }
 
         return view('loads/zip_view', compact('down', 'file', 'document', 'content'));

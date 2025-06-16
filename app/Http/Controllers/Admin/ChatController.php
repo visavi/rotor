@@ -9,6 +9,7 @@ use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ChatController extends AdminController
@@ -38,7 +39,7 @@ class ChatController extends AdminController
                 if ($post
                     && $post->created_at + 1800 > SITETIME
                     && $user->id === $post->user_id
-                    && (utfStrlen($msg) + utfStrlen($post->text) <= 1500)
+                    && (Str::length($msg) + Str::length($post->text) <= 1500)
                 ) {
                     $post->update([
                         'text' => $post->text . PHP_EOL . $msg,

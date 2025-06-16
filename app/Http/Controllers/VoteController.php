@@ -11,6 +11,7 @@ use App\Models\VoteAnswer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class VoteController extends Controller
@@ -182,7 +183,7 @@ class VoteController extends Controller
                 ->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
 
             foreach ($answers as $answer) {
-                if (utfStrlen($answer) > 50) {
+                if (Str::length($answer) > 50) {
                     $validator->addError(['answer' => __('votes.answer_wrong_length')]);
                     break;
                 }

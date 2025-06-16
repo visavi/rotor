@@ -28,6 +28,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 /**
  * Class User
@@ -490,7 +491,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     {
         $name = $this->getName();
         $color = '#' . substr(dechex(crc32($this->login)), 0, 6);
-        $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
+        $letter = mb_strtoupper(Str::substr($name, 0, 1), 'utf-8');
 
         return new HtmlString('<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>');
     }

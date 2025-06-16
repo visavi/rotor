@@ -93,7 +93,7 @@ class Social extends BaseModel
         }
 
         foreach ($variants as $variant) {
-            $variant = utfSubstr($variant, 0, 20);
+            $variant = Str::substr($variant, 0, 20);
 
             if (! getUserByLogin($variant)) {
                 return $variant;
@@ -102,7 +102,7 @@ class Social extends BaseModel
 
         $i = 0;
         while (true) {
-            $firstName = utfSubstr($firstName, 0, 18);
+            $firstName = Str::substr($firstName, 0, 18);
             $login = $firstName . ++$i;
 
             if (! getUserByLogin($login)) {

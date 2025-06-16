@@ -34,65 +34,6 @@ class HelperTest extends \Tests\TestCase
     }
 
     /**
-     * Testing winToUtf
-     */
-    public function testWinToUtf(): void
-    {
-        $str = winToUtf('ABCDEFGHabcdefgh');
-        self::assertSame('ABCDEFGHabcdefgh', $str);
-
-        $str = winToUtf(chr(192) . chr(193) . chr(194) . chr(195) . chr(196) . chr(197) . chr(168) . chr(224) . chr(225) . chr(226) . chr(227) . chr(228) . chr(229) . chr(184));
-        self::assertSame('АБВГДЕЁабвгдеё', $str);
-    }
-
-    /**
-     * Testing utfLower
-     */
-    public function testUtfLower(): void
-    {
-        self::assertSame('abcdefghabcdefgh', utfLower('ABCDEFGHabcdefgh'));
-        self::assertSame('абвгдеёабвгдеё', utfLower('АБВГДЕЁабвгдеё'));
-    }
-
-    /**
-     * Testing utfSubstr
-     */
-    public function testUtfSubstr(): void
-    {
-        self::assertSame('abc', utfSubstr('abcdefgh', 0, 3));
-        self::assertSame('абв', utfSubstr('абвгдеё', 0, 3));
-        self::assertSame('гдеё', utfSubstr('абвгдеё', 3, 4));
-        self::assertSame('ё', utfSubstr('абвгдеё', -1));
-    }
-
-    /**
-     * Testing utfStrlen
-     */
-    public function testUtfStrlen(): void
-    {
-        self::assertSame(8, utfStrlen('abcdefgh'));
-        self::assertSame(7, utfStrlen('абвгдеё'));
-        self::assertSame(1, utfStrlen('0'));
-        self::assertSame(1, utfStrlen(true));
-        self::assertSame(0, utfStrlen(false));
-        self::assertSame(0, utfStrlen(''));
-    }
-
-    /**
-     * Testing isUtf
-     */
-    public function testIsUtf(): void
-    {
-        $this->assertTrue(isUtf(''));
-        $this->assertTrue(isUtf('абвгдеё'));
-        $this->assertTrue(isUtf('0'));
-        $this->assertTrue(isUtf(0));
-        $this->assertTrue(isUtf(false));
-        $this->assertTrue(isUtf('🤓 😃 😊'));
-        $this->assertFalse(isUtf(chr(192) . chr(193) . chr(194)));
-    }
-
-    /**
      * Testing check
      */
     public function testCheck(): void

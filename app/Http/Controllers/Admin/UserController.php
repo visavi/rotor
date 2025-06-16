@@ -15,6 +15,7 @@ use App\Models\UserField;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class UserController extends AdminController
@@ -129,9 +130,9 @@ class UserController extends AdminController
                     $password = $user->password;
                 }
 
-                $name = utfSubstr($name, 0, 20);
-                $country = utfSubstr($country, 0, 30);
-                $city = utfSubstr($city, 0, 50);
+                $name = Str::substr($name, 0, 20);
+                $country = Str::substr($country, 0, 30);
+                $city = Str::substr($city, 0, 50);
                 $rating = $posrating - $negrating;
 
                 $user->update([

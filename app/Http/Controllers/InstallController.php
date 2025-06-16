@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class InstallController extends Controller
@@ -126,7 +127,7 @@ class InstallController extends Controller
 
         if ($request->isMethod('post')) {
             $validator->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
-                ->regex(utfSubstr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
+                ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
                 ->email($email, ['email' => __('validator.email')])
                 ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
                 ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
