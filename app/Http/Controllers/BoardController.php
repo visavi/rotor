@@ -105,8 +105,8 @@ class BoardController extends Controller
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->length($title, setting('board_title_min'), setting('board_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('board_text_min'), setting('board_text_max'), ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($board, ['category' => __('boards.category_not_exist')]);
@@ -183,8 +183,8 @@ class BoardController extends Controller
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->length($title, setting('board_title_min'), setting('board_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('board_text_min'), setting('board_text_max'), ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['category' => __('boards.category_not_exist')])
                 ->equal($item->user_id, $user->id, __('boards.item_not_author'));

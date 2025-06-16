@@ -22,5 +22,41 @@
         <div class="invalid-feedback">{{ textError('sets[boards_per_page]') }}</div>
     </div>
 
+    <div class="mb-3">
+        <label for="board_title_min" class="form-label">{{ __('settings.board_title_length') }}:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[board_title_min]') }}" id="board_title_min" name="sets[board_title_min]" value="{{ old('sets.board_title_min', $settings['board_title_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[board_title_max]') }}" name="sets[board_title_max]" value="{{ old('sets.board_title_max', $settings['board_title_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[board_title_min]') }}</div>
+            <div>{{ textError('sets[board_title_max]') }}</div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="board_text_min" class="form-label">{{ __('settings.board_text_length') }}:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[board_text_min]') }}" id="board_text_min" name="sets[board_text_min]" value="{{ old('sets.board_text_min', $settings['board_text_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[board_text_max]') }}" name="sets[board_text_max]" value="{{ old('sets.board_text_max', $settings['board_text_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[board_text_min]') }}</div>
+            <div>{{ textError('sets[board_text_max]') }}</div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="board_category_min" class="form-label">{{ __('settings.board_category_length') }}:</label>
+        <div class="d-flex gap-2">
+            <input type="number" class="form-control{{ hasError('sets[board_category_min]') }}" id="board_category_min" name="sets[board_category_min]" value="{{ old('sets.board_category_min', $settings['board_category_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets[board_category_max]') }}" name="sets[board_category_max]" value="{{ old('sets.board_category_max', $settings['board_category_max']) }}" placeholder="{{ __('main.max') }}" required>
+        </div>
+        <div class="invalid-feedback d-block">
+            <div>{{ textError('sets[board_category_min]') }}</div>
+            <div>{{ textError('sets[board_category_max]') }}</div>
+        </div>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

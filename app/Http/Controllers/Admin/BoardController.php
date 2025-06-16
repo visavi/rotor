@@ -82,7 +82,7 @@ class BoardController extends AdminController
         $name = $request->input('name');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($name, 3, 50, ['name' => __('validator.text')]);
+            ->length($name, setting('board_category_min'), setting('board_category_max'), ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Board::query()->max('sort') + 1;
@@ -125,7 +125,7 @@ class BoardController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($name, 3, 50, ['name' => __('validator.text')])
+                ->length($name, setting('board_category_min'), setting('board_category_max'), ['name' => __('validator.text')])
                 ->notEqual($parent, $board->id, ['parent' => __('boards.category_parent_invalid')]);
 
             if (! empty($parent) && $board->children->isNotEmpty()) {
@@ -210,8 +210,8 @@ class BoardController extends AdminController
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 50, 5000, ['text' => __('validator.text')])
+                ->length($title, setting('board_title_min'), setting('board_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('board_text_min'), setting('board_text_max'), ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->notEmpty($board, ['bid' => __('boards.category_not_exist')]);
 

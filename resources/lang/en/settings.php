@@ -218,7 +218,10 @@ return [
     'invite_rating' => 'Rating required to receive keys',
     'invite_count'  => 'Number of keys received by the user',
 
-    'boards_create'   => 'Allow users to post ads',
-    'boards_period'   => 'Advertisement placement period',
-    'boards_per_page' => 'Number of ads per page',
+    'boards_create'         => 'Allow users to post ads',
+    'boards_period'         => 'Advertisement placement period',
+    'boards_per_page'       => 'Number of ads per page',
+    'board_title_length'    => 'Board title length',
+    'board_text_length'     => 'Board text length',
+    'board_category_length' => 'Board category length',
 ];

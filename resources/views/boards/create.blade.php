@@ -30,13 +30,13 @@
 
         <div class="mb-3{{ hasError('title') }}">
             <label for="inputTitle" class="form-label">{{ __('boards.name') }}:</label>
-            <input class="form-control" id="inputTitle" name="title" value="{{ getInput('title') }}" required>
+            <input class="form-control" id="inputTitle" maxlength="{{ setting('board_title_max') }}" name="title" value="{{ getInput('title') }}" required>
             <div class="invalid-feedback">{{ textError('title') }}</div>
         </div>
 
         <div class="mb-3{{ hasError('text') }}">
             <label for="text" class="form-label">{{ __('boards.text') }}:</label>
-            <textarea class="form-control markItUp" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
+            <textarea class="form-control markItUp" maxlength="{{ setting('board_text_max') }}" id="text" rows="10" name="text" required>{{ getInput('text') }}</textarea>
             <div class="invalid-feedback">{{ textError('text') }}</div>
         </div>
 
