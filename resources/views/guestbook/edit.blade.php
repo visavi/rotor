@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/">{{ __('index.guestbook') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a></li>
             <li class="breadcrumb-item active">{{ __('guestbook.title_edit') }}</li>
         </ol>
     </nav>
@@ -24,6 +24,8 @@
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>
+
+            @include('app/_upload_file', ['model' => $post])
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>
