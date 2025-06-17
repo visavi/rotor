@@ -166,7 +166,7 @@ class StickerController extends AdminController
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
-                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => __('stickers.sticker_requirements')]);
+                ->regex($code, '|^:[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.sticker_requirements')]);
 
             $category = StickersCategory::query()->where('id', $cid)->first();
             $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
@@ -200,8 +200,9 @@ class StickerController extends AdminController
                 return redirect('admin/stickers/' . $cid);
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('/admin/stickers/sticker/create')
+                ->withErrors($validator->getErrors())
+                ->withInput();
         }
 
         return view('admin/stickers/create_sticker', compact('categories', 'cid'));
@@ -225,7 +226,7 @@ class StickerController extends AdminController
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
-                ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', ['code' => __('stickers.sticker_requirements')]);
+                ->regex($code, '|^:[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.sticker_requirements')]);
 
             $duplicate = Sticker::query()->where('code', $code)->where('id', '<>', $sticker->id)->first();
             $validator->empty($duplicate, ['code' => __('stickers.sticker_exists')]);

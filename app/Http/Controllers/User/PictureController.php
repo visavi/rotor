@@ -81,8 +81,9 @@ class PictureController extends Controller
                 return redirect('profile');
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('/pictures')
+                ->withErrors($validator->getErrors())
+                ->withInput();
         }
 
         $user = $this->user;

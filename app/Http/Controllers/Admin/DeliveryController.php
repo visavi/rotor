@@ -23,7 +23,7 @@ class DeliveryController extends AdminController
             $users = collect();
 
             $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->between($type, 1, 4, __('admin.delivery.not_recipients_selected'));
 
             // Рассылка пользователям, которые в онлайне

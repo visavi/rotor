@@ -208,7 +208,7 @@ class PhotoController extends Controller
             $validator
                 ->true($user, __('main.not_authorized'))
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($photo->closed, ['msg' => __('main.closed_comments')]);
 
@@ -293,7 +293,7 @@ class PhotoController extends Controller
 
             $validator
                 ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->empty($photo->closed, __('main.closed_comments'));
 
             if ($validator->isValid()) {

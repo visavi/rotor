@@ -134,7 +134,7 @@ class MessageController extends Controller
         }
 
         $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-            ->length($msg, 5, setting('comment_length'), ['msg' => __('validator.text')])
+            ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->notEqual($user->id, $this->user->id, __('messages.send_yourself'));
 
