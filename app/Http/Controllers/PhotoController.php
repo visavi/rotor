@@ -83,8 +83,8 @@ class PhotoController extends Controller
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 0, 1000, ['text' => __('validator.text_long')])
+                ->length($title, setting('photo_title_min'), setting('photo_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('photo_text_min'), setting('photo_text_max'), ['text' => __('validator.text_long')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             $existFiles = File::query()
@@ -153,8 +153,8 @@ class PhotoController extends Controller
             $closed = empty($request->input('closed')) ? 0 : 1;
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, 3, 50, ['title' => __('validator.text')])
-                ->length($text, 0, 1000, ['text' => __('validator.text_long')]);
+                ->length($title, setting('photo_title_min'), setting('photo_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('photo_text_min'), setting('photo_text_max'), ['text' => __('validator.text_long')]);
 
             if ($validator->isValid()) {
                 $text = antimat($text);

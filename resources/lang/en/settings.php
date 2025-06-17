@@ -147,9 +147,11 @@ return [
     'ratinglist_per_page'    => 'Votes in ranking history',
     'votes_per_page'         => 'Number of votes on page',
 
-    'photos_per_page' => 'Number of photos on page',
-    'photos_groups'   => 'Groups per page in the gallery',
-    'photos_create'   => 'Allow users to upload photos',
+    'photos_per_page'    => 'Number of photos on page',
+    'photos_groups'      => 'Groups per page in the gallery',
+    'photos_create'      => 'Allow users to upload photos',
+    'photo_title_length' => 'Photo title length',
+    'photo_text_length'  => 'Photo text length',
 
     'points_transfer'     => 'Asset for money transfer',
     'points_rating_edit'  => 'Asset for changing reputation',

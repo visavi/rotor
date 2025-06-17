@@ -20,13 +20,13 @@
             @csrf
             <div class="mb-3{{ hasError('title') }}">
                 <label for="title" class="form-label">{{ __('photos.name') }}:</label>
-                <input class="form-control" id="title" name="title" type="text" value="{{ getInput('title', $photo->title) }}" maxlength="50" required>
+                <input class="form-control" id="title" name="title" type="text" value="{{ getInput('title', $photo->title) }}" maxlength="{{ setting('photo_title_max') }}" required>
                 <div class="invalid-feedback">{{ textError('title') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('photos.description') }}:</label>
-                <textarea id="text" class="form-control" cols="25" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
+                <textarea id="text" class="form-control" maxlength="{{ setting('photo_text_max') }}" cols="25" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
