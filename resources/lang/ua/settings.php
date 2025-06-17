@@ -117,8 +117,11 @@ return [
     'news_title_length' => 'Довжина назви новини',
     'news_text_length'  => 'Довжина тексту новини',
 
-    'offers_per_page' => 'Пропозицій на сторінку',
-    'offers_points'   => 'Актив для створення пропозиції або проблеми',
+    'offers_per_page'    => 'Пропозицій на сторінку',
+    'offers_points'      => 'Актив для створення пропозиції або проблеми',
+    'offer_title_length' => 'Довжина назви речення',
+    'offer_text_length'  => 'Довжина тексту речення',
+    'offer_reply_length' => 'Довжина відповіді на пропозицію',
 
     'log_enable'      => 'Включити запис логів',
     'description'     => 'Короткий опис (description)',

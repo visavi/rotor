@@ -117,8 +117,11 @@ return [
     'news_title_length' => 'Length of news title',
     'news_text_length'  => 'Length of news text',
 
-    'offers_per_page' => 'Suggestions per page',
-    'offers_points'   => 'Asset to create a proposal or problem',
+    'offers_per_page'    => 'Suggestions per page',
+    'offers_points'      => 'Asset to create a proposal or problem',
+    'offer_title_length' => 'Offer title length',
+    'offer_text_length'  => 'Offer text length',
+    'offer_reply_length' => 'Offer reply length',
 
     'log_enable'      => 'Enable logging',
     'description'     => 'Short description (description)',

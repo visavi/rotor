@@ -20,7 +20,7 @@
             @csrf
             <div class="mb-3{{ hasError('reply') }}">
                 <label for="reply" class="form-label">{{ __('offers.answer') }}:</label>
-                <textarea class="form-control markItUp" id="reply" rows="5" name="reply" required>{{ getInput('reply', $offer->reply) }}</textarea>
+                <textarea class="form-control markItUp" maxlength="{{ setting('offer_reply_max') }}" id="reply" rows="5" name="reply" required>{{ getInput('reply', $offer->reply) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reply') }}</div>
             </div>
 
