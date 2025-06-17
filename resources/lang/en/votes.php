@@ -17,7 +17,7 @@ return [
     'hint_text'      => 'Created answer choices cannot be deleted!',
     'hint_answers'   => 'Allowed from 2 to 10 answer options',
 
-    'answer_wrong_length'       => 'The length of the answer options should not exceed 50 characters!',
+    'answer_wrong_length'       => 'The answer option is too long or too short!',
     'answer_not_enough'         => 'Not enough answer options!',
     'answer_changed_impossible' => 'Change of answer options is available only until voting!',
     'voting_not_found'          => 'Voting not found!',

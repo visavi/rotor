@@ -24,6 +24,7 @@ return [
     'feeds'       => 'Лента постов',
     'invitations' => 'Приглашения',
     'boards'      => 'Объявления',
+    'votes'       => 'Голосования',
 
     'adverts_count_links' => 'Кол. рекламных ссылок',
     'adverts_price'       => 'Цена рекламы',
@@ -148,7 +149,6 @@ return [
     'history_login_per_page' => 'История авторизаций',
     'transfers_per_page'     => 'Денежные операции',
     'ratinglist_per_page'    => 'Голосов в истории рейтинга',
-    'votes_per_page'         => 'Кол-во голосований на стр.',
 
     'photos_per_page'    => 'Kол-во фото на стр.',
     'photos_groups'      => 'Групп на страницу в галерее',
@@ -229,4 +229,9 @@ return [
     'board_title_length'    => 'Длина названия объявления',
     'board_text_length'     => 'Длина текста объявления',
     'board_category_length' => 'Длина категории объявления',
+
+    'votes_per_page'     => 'Кол-во голосований на стр.',
+    'vote_title_length'  => 'Длина заголовка объявления',
+    'vote_text_length'   => 'Длина текста объявления',
+    'vote_answer_length' => 'Длина варианта ответа объявления',
 ];

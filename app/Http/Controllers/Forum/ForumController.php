@@ -18,7 +18,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -113,14 +112,11 @@ class ForumController extends Controller
             }
 
             if ($vote) {
-                $validator->length($question, 5, 100, ['question' => __('validator.text')]);
+                $validator->length($question, setting('vote_title_min'), setting('vote_title_max'), ['question' => __('validator.text')]);
                 $answers = array_unique(array_diff($answers, ['']));
 
                 foreach ($answers as $answer) {
-                    if (Str::length($answer) > 50) {
-                        $validator->addError(['answers' => __('votes.answer_wrong_length')]);
-                        break;
-                    }
+                    $validator->length($answer, setting('vote_answer_min'), setting('vote_answer_max'), ['answers' => __('votes.answer_wrong_length')]);
                 }
 
                 $validator->between(count($answers), 2, 10, ['answers' => __('votes.answer_not_enough')]);

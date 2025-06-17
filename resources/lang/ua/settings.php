@@ -24,6 +24,7 @@ return [
     'feeds'       => 'Стрічка постів',
     'invitations' => 'Запрошення',
     'boards'      => 'Оголошення',
+    'votes'       => 'Голосування',
 
     'adverts_count_links' => 'Кільк. рекламних посилань',
     'adverts_price'       => 'Ціна реклами',
@@ -148,7 +149,6 @@ return [
     'history_login_per_page' => 'Історія авторизацій',
     'transfers_per_page'     => 'Грошові операції',
     'ratinglist_per_page'    => 'Голосів в історії рейтингу',
-    'votes_per_page'         => 'Кількість голосувань на стор.',
 
     'photos_per_page'    => 'Кількість фото на стор.',
     'photos_groups'      => 'Груп на сторінку в галереї',
@@ -229,4 +229,9 @@ return [
     'board_title_length'    => 'Довжина назви оголошення',
     'board_text_length'     => 'Довжина тексту оголошення',
     'board_category_length' => 'Довжина категорії оголошення',
+
+    'votes_per_page'     => 'Кількість голосувань на стор.',
+    'vote_title_length'  => 'Довжина заголовка оголошення',
+    'vote_text_length'   => 'Довжина тексту оголошення',
+    'vote_answer_length' => 'Довжина варіанта відповіді оголошення',
 ];

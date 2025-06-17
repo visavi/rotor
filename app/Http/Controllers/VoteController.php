@@ -11,7 +11,6 @@ use App\Models\VoteAnswer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class VoteController extends Controller
@@ -178,15 +177,12 @@ class VoteController extends Controller
             $answers = array_unique(array_diff($answers, ['']));
 
             $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($question, 5, 100, ['question' => __('validator.text')])
-                ->length($description, 5, 1000, ['description' => __('validator.text')], false)
+                ->length($question, setting('vote_title_min'), setting('vote_title_max'), ['question' => __('validator.text')])
+                ->length($description, setting('vote_text_min'), setting('vote_text_max'), ['description' => __('validator.text')])
                 ->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);
 
             foreach ($answers as $answer) {
-                if (Str::length($answer) > 50) {
-                    $validator->addError(['answer' => __('votes.answer_wrong_length')]);
-                    break;
-                }
+                $validator->length($answer, setting('vote_answer_min'), setting('vote_answer_max'), ['answers' => __('votes.answer_wrong_length')]);
             }
 
             if ($validator->isValid()) {

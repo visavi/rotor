@@ -54,6 +54,7 @@ class Setting extends BaseModel
             'feeds',
             'invitations',
             'boards',
+            'votes',
         ];
     }
 

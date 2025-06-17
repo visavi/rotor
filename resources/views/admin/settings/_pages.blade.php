@@ -94,11 +94,5 @@
         <div class="invalid-feedback">{{ textError('sets[ratinglist]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[allvotes]') }}">
-        <label for="allvotes" class="form-label">{{ __('settings.votes_per_page') }}:</label>
-        <input type="number" class="form-control" id="allvotes" name="sets[allvotes]" maxlength="2" value="{{ getInput('sets.allvotes', $settings['allvotes']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[allvotes]') }}</div>
-    </div>
-
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

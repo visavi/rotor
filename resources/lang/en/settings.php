@@ -24,6 +24,7 @@ return [
     'feeds'       => 'Post feed',
     'invitations' => 'Invitations',
     'boards'      => 'Ads',
+    'votes'       => 'Voting',
 
     'adverts_count_links' => 'Qty. sponsored links',
     'adverts_price'       => 'Advertising price',
@@ -148,7 +149,6 @@ return [
     'history_login_per_page' => 'Authorization History',
     'transfers_per_page'     => 'Cash transactions',
     'ratinglist_per_page'    => 'Votes in ranking history',
-    'votes_per_page'         => 'Number of votes on page',
 
     'photos_per_page'    => 'Number of photos on page',
     'photos_groups'      => 'Groups per page in the gallery',
@@ -229,4 +229,9 @@ return [
     'board_title_length'    => 'Board title length',
     'board_text_length'     => 'Board text length',
     'board_category_length' => 'Board category length',
+
+    'votes_per_page'     => 'Number of votes on page',
+    'vote_title_length'  => 'Vote title length',
+    'vote_text_length'   => 'Vote text length',
+    'vote_answer_length' => 'Vote answer length',
 ];
