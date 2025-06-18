@@ -12,11 +12,10 @@ use App\Models\Down;
 use App\Models\Post;
 use App\Models\Search;
 use App\Models\Topic;
-use Gregwar\Captcha\CaptchaBuilder;
-use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Mobicms\Captcha\Image as MobicmsCaptcha;
 use Symfony\Component\HttpFoundation\Response;
 use Visavi\Captcha\CaptchaBuilder as AnimatedCaptchaBuilder;
 use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
@@ -137,17 +136,13 @@ class HomeController extends Controller
             $captcha = new AnimatedCaptchaBuilder($phrase);
             $captcha = $captcha->render();
         } else {
-            $phrase = new PhraseBuilder();
-            $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
-
-            $captcha = new CaptchaBuilder($phrase);
-            $captcha->setMaxOffset(setting('captcha_offset'))
-                ->setMaxAngle(setting('captcha_angle'))
-                ->setDistortion(setting('captcha_distortion'))
-                ->setInterpolation(setting('captcha_interpolation'))
-                ->build();
-
-            $captcha = $captcha->get();
+            $captcha = new MobicmsCaptcha();
+            $captcha->imageWidth = 180;
+            $captcha->imageHeight = 50;
+            $captcha->lengthMax = setting('captcha_maxlength');
+            $captcha->characterSet = (string) setting('captcha_symbols');
+            $phrase = $captcha->getCode();
+            $captcha = $captcha->build();
         }
 
         $request->session()->put('protect', $phrase);

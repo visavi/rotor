@@ -201,6 +201,12 @@ class SettingSeeder extends Seeder
             ['name' => 'title', 'value' => 'Rotor'],
             ['name' => 'userlist', 'value' => 10],
             ['name' => 'usersearch', 'value' => 30],
+            ['name' => 'vote_title_min', 'value' => 5],
+            ['name' => 'vote_title_max', 'value' => 50],
+            ['name' => 'vote_text_min', 'value' => 0],
+            ['name' => 'vote_text_max', 'value' => 1000],
+            ['name' => 'vote_answer_min', 'value' => 1],
+            ['name' => 'vote_answer_max', 'value' => 50],
             ['name' => 'wallpost', 'value' => 10],
             ['name' => 'ziplist', 'value' => 50],
         ];
