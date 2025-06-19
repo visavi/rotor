@@ -10,7 +10,7 @@ return new class extends Migration {
         if (! Schema::hasTable('news')) {
             Schema::create('news', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('title', 100);
+                $table->string('title');
                 $table->text('text');
                 $table->integer('user_id');
                 $table->integer('count_comments')->default(0);

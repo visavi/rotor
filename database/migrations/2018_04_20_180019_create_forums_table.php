@@ -12,8 +12,8 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->integer('sort')->default(0);
                 $table->integer('parent_id')->default(0);
-                $table->string('title', 50);
-                $table->string('description', 100)->nullable();
+                $table->string('title');
+                $table->string('description')->nullable();
                 $table->integer('last_topic_id')->default(0);
                 $table->boolean('closed')->default(false);
                 $table->integer('count_topics')->default(0);

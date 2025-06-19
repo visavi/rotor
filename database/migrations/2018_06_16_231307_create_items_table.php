@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('items', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('board_id');
-                $table->string('title', 100);
+                $table->string('title');
                 $table->text('text');
                 $table->integer('user_id');
                 $table->integer('price')->default(0);

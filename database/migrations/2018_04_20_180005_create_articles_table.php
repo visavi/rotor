@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->integer('category_id');
                 $table->integer('user_id');
-                $table->string('title', 50);
+                $table->string('title');
                 $table->string('slug');
                 $table->text('text');
                 $table->integer('rating')->default(0);

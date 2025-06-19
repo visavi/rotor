@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('offers', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('type', 20);
-                $table->string('title', 50);
+                $table->string('title');
                 $table->text('text');
                 $table->integer('user_id');
                 $table->integer('rating')->default(0);

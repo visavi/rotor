@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->integer('sort')->default(0);
                 $table->integer('parent_id')->default(0);
-                $table->string('name', 100);
+                $table->string('name');
                 $table->integer('count_downs')->default(0);
                 $table->boolean('closed')->default(false);
             });

@@ -10,7 +10,7 @@ return new class extends Migration {
         if (! Schema::hasTable('votes')) {
             Schema::create('votes', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('title', 100);
+                $table->string('title');
                 $table->text('description')->nullable();
                 $table->integer('count')->default(0);
                 $table->boolean('closed')->default(false);

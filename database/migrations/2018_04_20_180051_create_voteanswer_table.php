@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('voteanswer', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('vote_id');
-                $table->string('answer', 50);
+                $table->string('answer');
                 $table->integer('result')->default(0);
             });
         }

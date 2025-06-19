@@ -8,7 +8,7 @@ return new class extends Migration {
     {
         Setting::query()->where('name', 'slug_template')->updateOrCreate([], [
             'name'  => 'slug_template',
-            'value' => '%id%-%slug%',
+            'value' => '%id%',
         ]);
 
         clearCache('settings');

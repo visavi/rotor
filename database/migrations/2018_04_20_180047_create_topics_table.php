@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('topics', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('forum_id');
-                $table->string('title', 50);
+                $table->string('title');
                 $table->integer('user_id');
                 $table->boolean('closed')->default(false);
                 $table->boolean('locked')->default(false);

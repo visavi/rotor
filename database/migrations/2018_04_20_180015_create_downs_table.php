@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('downs', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('category_id');
-                $table->string('title', 100);
+                $table->string('title');
                 $table->text('text')->nullable();
                 $table->integer('user_id');
                 $table->integer('count_comments')->default(0);

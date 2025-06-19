@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('photos', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('user_id');
-                $table->string('title', 50);
+                $table->string('title');
                 $table->text('text');
                 $table->integer('rating')->default(0);
                 $table->boolean('closed')->default(false);
