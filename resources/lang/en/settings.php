@@ -25,6 +25,7 @@ return [
     'invitations' => 'Invitations',
     'boards'      => 'Ads',
     'votes'       => 'Voting',
+    'seo'         => 'SEO',
 
     'adverts_count_links' => 'Qty. sponsored links',
     'adverts_price'       => 'Advertising price',
@@ -234,4 +235,6 @@ return [
     'vote_title_length'  => 'Vote title length',
     'vote_text_length'   => 'Vote text length',
     'vote_answer_length' => 'Vote answer length',
+
+    'seo_slug_template' => 'Link template',
 ];

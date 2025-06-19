@@ -78,8 +78,14 @@ class SettingController extends AdminController
             'recaptcha_v3' => 'Recaptcha v3',
         ];
 
+        $slugs = [
+            '%id%'             => 'id',
+            '%id%-%slug%'      => 'id-slug',
+            '%id%-%slug%.html' => 'id-slug.html',
+        ];
+
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/settings/index', compact('settings', 'act', 'counters', 'statsite', 'protects'));
+        return view('admin/settings/index', compact('settings', 'act', 'counters', 'statsite', 'protects', 'slugs'));
     }
 }

@@ -25,6 +25,7 @@ return [
     'invitations' => 'Приглашения',
     'boards'      => 'Объявления',
     'votes'       => 'Голосования',
+    'seo'         => 'SEO / ЧПУ',
 
     'adverts_count_links' => 'Кол. рекламных ссылок',
     'adverts_price'       => 'Цена рекламы',
@@ -234,4 +235,6 @@ return [
     'vote_title_length'  => 'Длина заголовка объявления',
     'vote_text_length'   => 'Длина текста объявления',
     'vote_answer_length' => 'Длина варианта ответа объявления',
+
+    'seo_slug_template' => 'Шаблон ссылок',
 ];

@@ -31,7 +31,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
+                    <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
                 </div>
 
                 <div class="section-content mb-2">

@@ -56,7 +56,7 @@
 
                 <div class="section-body border-top">
                     @if ($child->lastArticle)
-                        {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['id' => $child->lastArticle->id]) }}">{{ $child->lastArticle->title }}</a>
+                        {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['slug' => $child->lastArticle->slug]) }}">{{ $child->lastArticle->title }}</a>
 
                         @if ($child->lastArticle->isNew())
                             <span class="badge text-bg-success">NEW</span>
@@ -82,7 +82,7 @@
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-pencil-alt"></i>
-                            <a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a>
+                            <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ $article->title }}</a>
                             @if ($article->isNew())
                                 <span class="badge text-bg-success">NEW</span>
                             @endif

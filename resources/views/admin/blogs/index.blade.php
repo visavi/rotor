@@ -65,7 +65,7 @@
 
             <div class="section-body border-top">
                 @if ($category->lastArticle)
-                    {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['id' => $category->lastArticle->id]) }}">{{ $category->lastArticle->title }}</a>
+                    {{ __('blogs.article') }}: <a href="{{ route('articles.view', ['slug' => $category->lastArticle->slug]) }}">{{ $category->lastArticle->title }}</a>
 
                     @if ($category->lastArticle->isNew())
                         <span class="badge text-bg-success">NEW</span>

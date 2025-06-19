@@ -12,12 +12,12 @@
 
         <item>
             <title>{{ $article->title }}</title>
-            <link>{{ route('articles.view', ['id' => $article->id]) }}</link>
+            <link>{{ route('articles.view', ['slug' => $article->slug]) }}</link>
             <description>{{ $article->text }}</description>
             <author>{{ $article->user->getName() }}</author>
             <pubDate>{{ date('r', $article->created_at) }}</pubDate>
             <category>{{ __('index.blogs') }}</category>
-            <guid>{{ route('articles.view', ['id' => $article->id]) }}</guid>
+            <guid>{{ route('articles.view', ['slug' => $article->slug]) }}</guid>
         </item>
     @endforeach
 @stop

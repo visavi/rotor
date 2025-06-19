@@ -75,8 +75,10 @@ class ArticleController extends Controller
     /**
      * Просмотр статьи
      */
-    public function view(int $id): View
+    public function view(string $slug): View
     {
+        $id = Str::before($slug, '-');
+
         $article = Article::query()
             ->select('articles.*', 'polls.vote')
             ->where('articles.id', $id)
@@ -164,7 +166,7 @@ class ArticleController extends Controller
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
 
-                return redirect()->route('articles.view', ['id' => $article->id]);
+                return redirect()->route('articles.view', ['slug' => $article->slug]);
             }
 
             setInput($request->all());
@@ -244,6 +246,7 @@ class ArticleController extends Controller
                     'category_id' => $cid,
                     'user_id'     => $user->id,
                     'title'       => $title,
+                    'slug'        => $title,
                     'text'        => $text,
                     'created_at'  => SITETIME,
                 ]);
@@ -269,7 +272,7 @@ class ArticleController extends Controller
 
                 setFlash('success', __('blogs.article_success_created'));
 
-                return redirect()->route('articles.view', ['id' => $article->id]);
+                return redirect()->route('articles.view', ['slug' => $article->slug]);
             }
 
             setInput($request->all());

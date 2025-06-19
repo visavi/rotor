@@ -11,5 +11,5 @@
 
     <br><br>
 
-    URL: <a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ route('articles.view', ['id' => $article->id]) }}</a>
+    URL: <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ route('articles.view', ['slug' => $article->slug]) }}</a>
 @stop

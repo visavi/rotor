@@ -228,7 +228,7 @@ class ArticleController extends AdminController
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
 
-                return redirect()->route('articles.view', ['id' => $article->id]);
+                return redirect()->route('articles.view', ['slug' => $article->slug]);
             }
 
             setInput($request->all());
@@ -274,7 +274,7 @@ class ArticleController extends AdminController
 
                 setFlash('success', __('blogs.article_success_moved'));
 
-                return redirect()->route('articles.view', ['id' => $article->id]);
+                return redirect()->route('articles.view', ['slug' => $article->slug]);
             }
 
             setInput($request->all());

@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item"><a href="{{ route('blogs.blog', ['id' => $parent->id]) }}">{{ $parent->name }}</a></li>
             @endforeach
 
-            <li class="breadcrumb-item"><a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ $article->title }}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a></li>
             <li class="breadcrumb-item active">{{ __('blogs.title_edit_comment') }}</li>
         </ol>

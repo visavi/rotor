@@ -105,6 +105,7 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '\d+');
 Route::pattern('cid', '\d+');
 Route::pattern('fid', '\d+');
+Route::pattern('slug', '[a-z0-9-\.]+');
 Route::pattern('login', '[\w\-]+');
 
 /* Временные редиректы на новые роуты */
@@ -232,10 +233,10 @@ Route::controller(ArticleController::class)
     ->name('articles.')
     ->group(function () {
         Route::get('/', 'newArticles')->name('index');
-        Route::get('/{id}', 'view')->name('view');
+        Route::get('/{slug}', 'view')->name('view');
         Route::get('/{id}/print', 'print')->name('print');
         Route::get('/{id}/rss', 'rssComments')->name('rss-comments');
-        Route::get('/comments', 'newComments')->name('new-comments');
+        Route::get('/new/comments', 'newComments')->name('new-comments');
         Route::get('/active/articles', 'userArticles')->name('user-articles');
         Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');

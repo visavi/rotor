@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 /**
  * Class Article
@@ -23,6 +25,7 @@ use Illuminate\Support\HtmlString;
  * @property int    $category_id
  * @property int    $user_id
  * @property string $title
+ * @property string $slug
  * @property string $text
  * @property int    $rating
  * @property int    $visits
@@ -85,6 +88,17 @@ class Article extends BaseModel
             'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
             'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
         ];
+    }
+
+    /**
+     * Get the slug
+     */
+    protected function slug(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => str_replace(['%id%', '%slug%'], [$this->id, $value], setting('slug_template')),
+            set: fn ($value) => Str::slug($this->title),
+        );
     }
 
     /**
@@ -169,7 +183,7 @@ class Article extends BaseModel
      */
     public function shortText(int $words = 100): HtmlString
     {
-        $more = view('app/_more', ['link' => route('articles.view', ['id' => $this->id])]);
+        $more = view('app/_more', ['link' => route('articles.view', ['slug' => $this->slug])]);
 
         if (str_contains($this->text, '[cut]')) {
             $this->text = bbCode(current(explode('[cut]', $this->text)));

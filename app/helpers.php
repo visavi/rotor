@@ -1686,7 +1686,7 @@ function captchaVerify(): bool
     }
 
     if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
-        return strtolower($request->input('protect')) === $request->session()->get('protect');
+        return strtolower($request->input('protect')) === strtolower($request->session()->get('protect'));
     }
 
     return false;

@@ -41,6 +41,7 @@
                     <a class="nav-link" href="/admin/settings?act=invitations" id="invitations">{{ __('settings.invitations') }}</a>
                     <a class="nav-link" href="/admin/settings?act=boards" id="boards">{{ __('settings.boards') }}</a>
                     <a class="nav-link" href="/admin/settings?act=votes" id="votes">{{ __('settings.votes') }}</a>
+                    <a class="nav-link" href="/admin/settings?act=seo" id="votes">{{ __('settings.seo') }}</a>
                 </div>
             </div>
             <div class="col-md-8 section shadow">

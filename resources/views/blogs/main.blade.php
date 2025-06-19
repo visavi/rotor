@@ -28,7 +28,7 @@
         @foreach ($articles as $article)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title"><a href="{{ route('articles.view', ['id' => $article->id]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span></h5>
+                    <h5 class="card-title"><a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span></h5>
 
                     @if ($article->category->parent->id)
                         <a href="{{ route('blogs.blog', ['id' => $article->category->parent->id]) }}">{{ $article->category->parent->name }}</a> /

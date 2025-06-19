@@ -25,6 +25,7 @@ return [
     'invitations' => 'Запрошення',
     'boards'      => 'Оголошення',
     'votes'       => 'Голосування',
+    'seo'         => 'SEO',
 
     'adverts_count_links' => 'Кільк. рекламних посилань',
     'adverts_price'       => 'Ціна реклами',
@@ -234,4 +235,6 @@ return [
     'vote_title_length'  => 'Довжина заголовка оголошення',
     'vote_text_length'   => 'Довжина тексту оголошення',
     'vote_answer_length' => 'Довжина варіанта відповіді оголошення',
+
+    'seo_slug_template' => 'Шаблон посилання',
 ];
