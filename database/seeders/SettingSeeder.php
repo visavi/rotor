@@ -190,6 +190,7 @@ class SettingSeeder extends Seeder
             ['name' => 'sendmailpacket', 'value' => 3],
             ['name' => 'sendmoneypoint', 'value' => 50],
             ['name' => 'sendprivatmailday', 'value' => 3],
+            ['name' => 'slug_template', 'value' => '%id%-%slug%'],
             ['name' => 'stickerlist', 'value' => 20],
             ['name' => 'stickermaxsize', 'value' => 1048576],
             ['name' => 'stickermaxweight', 'value' => 500],
