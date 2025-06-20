@@ -168,12 +168,9 @@ return [
     'moneys_bonus'        => 'Daily bonus',
     'moneys_registration' => 'Money for registration',
 
+    'captcha_type'          => 'Captcha type',
     'captcha_valid_symbols' => 'Valid captcha characters',
     'captcha_symbols'       => 'Maximum number of characters',
-    'captcha_rotate'        => 'Turn letters',
-    'captcha_amplitude'     => 'Amplitude of character vibrations',
-    'captcha_distortion'    => 'Distortion',
-    'captcha_blur'          => 'Blur',
     'captcha_public'        => 'Public key',
     'captcha_private'       => 'The secret key',
 

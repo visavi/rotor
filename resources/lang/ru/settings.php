@@ -168,12 +168,9 @@ return [
     'moneys_bonus'        => 'Ежедневный бонус',
     'moneys_registration' => 'Денег за регистрацию',
 
+    'captcha_type'          => 'Вид captcha',
     'captcha_valid_symbols' => 'Допустимые символы captcha',
     'captcha_symbols'       => 'Максимальное количество символов',
-    'captcha_rotate'        => 'Поворот букв',
-    'captcha_amplitude'     => 'Амплитуда колебаний символов',
-    'captcha_distortion'    => 'Искажение',
-    'captcha_blur'          => 'Размытие',
     'captcha_public'        => 'Публичный ключ',
     'captcha_private'       => 'Секретный ключ',
 

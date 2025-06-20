@@ -7,7 +7,7 @@
     <?php $inputCaptcha = getInput('sets.captcha_type', $settings['captcha_type']); ?>
 
     <div class="mb-3{{ hasError('sets[captcha_type]') }}">
-        <label for="captcha_type" class="form-label">{{ __('main.type') }}:</label>
+        <label for="captcha_type" class="form-label">{{ __('settings.captcha_type') }}:</label>
         <select class="form-select" id="captcha_type" name="sets[captcha_type]">
 
             @foreach ($protects as $key => $captcha)
@@ -29,30 +29,6 @@
         <label for="captcha_maxlength" class="form-label">{{ __('settings.captcha_symbols') }} [4-8]:</label>
         <input type="number" min="4" max="8" class="form-control" id="captcha_maxlength" name="sets[captcha_maxlength]" maxlength="1" value="{{ getInput('sets.captcha_maxlength', $settings['captcha_maxlength']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[captcha_maxlength]') }}</div>
-    </div>
-
-    <div class="mb-3{{ hasError('sets[captcha_angle]') }}">
-        <label for="captcha_angle" class="form-label">{{ __('settings.captcha_rotate') }} [0-50]:</label>
-        <input type="number" min="0" max="50" class="form-control" id="captcha_angle" name="sets[captcha_angle]" maxlength="2" value="{{ getInput('sets.captcha_angle', $settings['captcha_angle']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[captcha_angle]') }}</div>
-    </div>
-
-    <div class="mb-3{{ hasError('sets[captcha_offset]') }}">
-        <label for="captcha_offset" class="form-label">{{ __('settings.captcha_amplitude') }} [0-10]:</label>
-        <input type="number" min="0" max="10" class="form-control" id="captcha_offset" name="sets[captcha_offset]" maxlength="2" value="{{ getInput('sets.captcha_offset', $settings['captcha_offset']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[captcha_offset]') }}</div>
-    </div>
-
-    <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[captcha_distortion]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[captcha_distortion]" id="captcha_distortion"{{ getInput('sets.captcha_distortion', $settings['captcha_distortion']) ? ' checked' : '' }}>
-        <label for="captcha_distortion" class="form-check-label">{{ __('settings.captcha_distortion') }}</label>
-    </div>
-
-    <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[captcha_interpolation]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[captcha_interpolation]" id="captcha_interpolation"{{ getInput('sets.captcha_interpolation', $settings['captcha_interpolation']) ? ' checked' : '' }}>
-        <label for="captcha_interpolation" class="form-check-label">{{ __('settings.captcha_blur') }}</label>
     </div>
 
     <h3 class="mt-3">reCaptcha</h3>
