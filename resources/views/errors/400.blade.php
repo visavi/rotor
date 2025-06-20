@@ -15,7 +15,7 @@
         <div class="col-12 text-center">
             <h1>{{ __('errors.error') }} 400!</h1>
 
-            <div class="lead">Bad request</div>
+            <div class="lead">{{ $exception->getMessage() ?: 'Bad request' }}</div>
 
             <div class="my-3">
                 @if (url()->previous() === url()->current())

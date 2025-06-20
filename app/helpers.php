@@ -1205,7 +1205,7 @@ function returnUrl(?string $url = null): ?string
  */
 function saveErrorLog(int $code, ?string $message = null): void
 {
-    $errorCodes = [401, 403, 404, 405, 419, 429, 500, 503, 666];
+    $errorCodes = [400, 401, 403, 404, 405, 419, 429, 500, 503, 666];
 
     if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([

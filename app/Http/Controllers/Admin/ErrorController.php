@@ -23,6 +23,7 @@ class ErrorController extends AdminController
     {
         $this->code = int($request->input('code', 404));
         $this->lists = [
+            400 => 400,
             401 => 401,
             403 => 403,
             404 => 404,
