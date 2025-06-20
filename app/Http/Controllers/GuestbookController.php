@@ -85,11 +85,13 @@ class GuestbookController extends Controller
                 'created_at' => SITETIME,
             ]);
 
-            File::query()
-                ->where('relate_type', Guestbook::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
-                ->update(['relate_id' => $guestbook->id]);
+            if ($user) {
+                File::query()
+                    ->where('relate_type', Guestbook::$morphName)
+                    ->where('relate_id', 0)
+                    ->where('user_id', $user->id)
+                    ->update(['relate_id' => $guestbook->id]);
+            }
 
             clearCache('statGuestbook');
             $flood->saveState();
