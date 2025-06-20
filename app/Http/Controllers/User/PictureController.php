@@ -65,11 +65,11 @@ class PictureController extends Controller
                 $file = $this->user->uploadFile($photo, false);
 
                 // -------- Генерируем аватар -------//
-                $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
-
                 $image = $imageManager->read($photo);
                 $image->coverDown(64, 64);
-                $image->toPng();
+
+                $extension = strtolower($photo->getClientOriginalExtension());
+                $avatar = $this->user->uploadAvatarPath . '/' . uniqueName($extension);
                 $image->save(public_path($avatar));
 
                 $this->user->picture = $file['path'];
