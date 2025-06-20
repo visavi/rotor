@@ -33,6 +33,8 @@ trait UploadTrait
 
             if ($image->width() <= 100 && $image->height() <= 100) {
                 $file->move(public_path($this->uploadPath), $filename);
+            } elseif ($image->isAnimated() && $image->width() <= setting('screensize') && $image->height() <= setting('screensize')) {
+                $file->move(public_path($this->uploadPath), $filename);
             } else {
                 $image->scaleDown(setting('screensize'), setting('screensize'));
 
