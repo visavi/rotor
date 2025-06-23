@@ -38,6 +38,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -1449,24 +1450,6 @@ function access(string $level): bool
 }
 
 /**
- * Возвращает текущего пользователя
- */
-function getUserFromSession(): ?User
-{
-    $session = app('session');
-
-    if ($session->has(['id', 'password'])) {
-        $user = getUserById($session->get('id'));
-
-        if ($user && $session->get('password') === $user->password) {
-            return $user;
-        }
-    }
-
-    return null;
-}
-
-/**
  * Возвращает объект пользователя по логину
  */
 function getUserByLogin(?string $login): Builder|User|null
@@ -1508,7 +1491,7 @@ function getUser(?string $key = null): mixed
     static $user;
 
     if (! $user) {
-        $user = getUserFromSession();
+        $user = Auth::user();
     }
 
     return $key ? ($user->$key ?? null) : $user;

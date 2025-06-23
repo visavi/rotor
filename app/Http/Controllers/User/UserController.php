@@ -10,14 +10,16 @@ use App\Models\BlackList;
 use App\Models\ChangeMail;
 use App\Models\Flood;
 use App\Models\Invite;
+use App\Models\Login;
 use App\Models\User;
 use App\Models\UserField;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -90,8 +92,6 @@ class UserController extends Controller
 
     /**
      * Registration
-     *
-     * @throws GuzzleException
      */
     public function register(Request $request, Validator $validator): View|RedirectResponse
     {
@@ -181,7 +181,7 @@ class UserController extends Controller
 
                     $user = User::query()->create([
                         'login'         => $login,
-                        'password'      => password_hash($password, PASSWORD_BCRYPT),
+                        'password'      => Hash::make($password),
                         'email'         => $email,
                         'level'         => $level,
                         'gender'        => $gender,
@@ -210,7 +210,7 @@ class UserController extends Controller
 
                     // --- Уведомление о регистрации на email ---//
                     $subject = 'Регистрация на ' . setting('title');
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
+                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a>, сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
 
                     $data = [
                         'to'           => $email,
@@ -222,7 +222,7 @@ class UserController extends Controller
 
                     sendMail('mailer.register', $data);
 
-                    User::auth($login, $password);
+                    Auth::login($user, true);
 
                     setFlash('success', __('users.welcome', ['login' => $login]));
 
@@ -232,14 +232,6 @@ class UserController extends Controller
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
-
-            if ($request->has('token')) {
-                if ($user = User::socialAuth($request->input('token'))) {
-                    setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-
-                    return redirect($request->input('return', '/'));
-                }
-            }
         }
 
         return view('users/register');
@@ -247,8 +239,6 @@ class UserController extends Controller
 
     /**
      * Login
-     *
-     * @throws GuzzleException
      */
     public function login(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
@@ -272,10 +262,21 @@ class UserController extends Controller
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
-                    if ($user = User::auth($login, $password, $remember)) {
-                        setFlash('success', __('users.welcome', ['login' => $user->getName()]));
+                    $field = strpos($request->input('login'), '@') ? 'email' : 'login';
 
-                        return redirect($request->input('return', '/'));
+                    $credentials = [
+                        $field     => $login,
+                        'password' => $password,
+                    ];
+
+                    if (Auth::attempt($credentials, $remember)) {
+                        $request->session()->regenerate();
+                        $user = Auth::user();
+
+                        $user->saveVisit(Login::AUTH);
+
+                        return redirect($request->input('return', '/'))
+                            ->with('success', __('users.welcome', ['login' => $user->getName()]));
                     }
 
                     $flood->saveState(300);
@@ -288,14 +289,6 @@ class UserController extends Controller
 
                 return redirect('login');
             }
-
-            if ($request->has('token')) {
-                if ($user = User::socialAuth($request->input('token'))) {
-                    setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-
-                    return redirect($request->input('return', '/'));
-                }
-            }
         }
 
         return view('users/login', compact('cookieLogin', 'isFlood'));
@@ -307,8 +300,10 @@ class UserController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         if ($request->input('_token') === csrf_token()) {
-            $request->session()->flush();
-            cookie()->queue(cookie()->forget('password'));
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -742,8 +737,10 @@ class UserController extends Controller
 
         if ($validator->isValid()) {
             $user->update([
-                'password' => password_hash($newpass, PASSWORD_BCRYPT),
+                'password' => Hash::make($newpass),
             ]);
+
+            $request->session()->regenerate();
 
             $subject = 'Изменение пароля на ' . setting('title');
             $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
@@ -756,11 +753,9 @@ class UserController extends Controller
 
             sendMail('mailer.default', $data);
 
-            $request->session()->forget(['id', 'password']);
-
             setFlash('success', __('users.password_success_changed'));
 
-            return redirect('login');
+            return redirect('/');
         }
 
         setInput($request->all());

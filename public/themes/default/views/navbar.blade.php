@@ -105,7 +105,7 @@
                     <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>
                     <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
                     @hook('navbarMenuEnd')
-                    <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)"><i class="fas fa-sign-out-alt fa-lg"></i> {{ __('index.logout') }}</a>
+                    <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)"><i class="fa-solid fa-right-from-bracket fa-lg"></i> {{ __('index.logout') }}</a>
                     </li>
                 </ul>
             </li>

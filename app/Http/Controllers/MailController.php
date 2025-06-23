@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -147,7 +148,7 @@ class MailController extends Controller
 
         if ($validator->isValid()) {
             $newpass = Str::random();
-            $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
+            $hashnewpas = Hash::make($newpass);
 
             $user->update([
                 'password'   => $hashnewpas,
