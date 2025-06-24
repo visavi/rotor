@@ -48,7 +48,7 @@
                 <div class="section mb-3 shadow">
                     <div class="section-title">
                         <i class="fa fa-file"></i>
-                        <a href="{{ route('admin.offers.view', ['id' => $data->id]) }}">{{ $data->title }}</a> ({{ __('main.votes') }}: {{ $data->rating }})
+                        <a href="{{ route('admin.offers.view', ['id' => $data->id]) }}">{{ $data->title }}</a> <span class="badge bg-adaptive">{{ formatNum($data->rating) }}</span>
                         <div class="float-end">
                             <a href="{{ route('admin.offers.reply', ['id' => $data->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
                             <a href="{{ route('admin.offers.edit', ['id' => $data->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
