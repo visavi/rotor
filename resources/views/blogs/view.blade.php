@@ -3,6 +3,7 @@
 @section('title', $article->title)
 
 @section('description', truncateDescription(bbCode($article->text, false)))
+@section('canonical', route('articles.view', ['slug' => $article->slug]))
 
 @section('header')
     @if (getUser())
