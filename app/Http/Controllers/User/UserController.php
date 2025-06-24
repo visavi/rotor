@@ -113,8 +113,6 @@ class UserController extends Controller
                 $email = strtolower((string) $request->input('email'));
                 $domain = Str::substr(strrchr($email, '@'), 1);
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-                //$activateLink = null;
-                //$activateKey = null;
                 $invitation = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
