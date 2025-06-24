@@ -556,7 +556,7 @@ Route::controller(MailController::class)
 Route::controller(UserController::class)
     ->group(function () {
         Route::get('/logout', 'logout');
-        Route::match(['get', 'post'], '/key', 'key');
+        Route::match(['get', 'post'], '/confirm', 'confirm')->name('confirm');
         Route::match(['get', 'post'], '/login', 'login');
         Route::match(['get', 'post'], '/register', 'register');
         Route::match(['get', 'post'], '/profile', 'profile');

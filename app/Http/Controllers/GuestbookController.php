@@ -53,9 +53,6 @@ class GuestbookController extends Controller
 
         /* Проверка для гостей */
         if (! $user && setting('bookadds')) {
-            \Log::info('Captcha4: ' . $request->session()->get('protect'));
-            \Log::info('Sess: ' . $request->session()->getId());
-
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
             $validator->true(! str_contains($msg ?? '', '//'), ['msg' => __('guestbook.without_links')]);
             $validator->length($request->input('guest_name'), 3, 20, ['guest_name' => __('users.name_short_or_long')], false);

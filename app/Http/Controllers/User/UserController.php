@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -112,9 +113,8 @@ class UserController extends Controller
                 $email = strtolower((string) $request->input('email'));
                 $domain = Str::substr(strrchr($email, '@'), 1);
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-                $level = User::USER;
-                $activateLink = null;
-                $activateKey = null;
+                //$activateLink = null;
+                //$activateKey = null;
                 $invitation = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
@@ -173,32 +173,31 @@ class UserController extends Controller
 
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
-                    if (setting('regkeys')) {
-                        $activateKey = Str::random();
-                        $activateLink = config('app.url') . '/key?code=' . $activateKey;
-                        $level = User::PENDED;
-                    }
-
                     $user = User::query()->create([
-                        'login'         => $login,
-                        'password'      => Hash::make($password),
-                        'email'         => $email,
-                        'level'         => $level,
-                        'gender'        => $gender,
-                        'themes'        => setting('themes'),
-                        'point'         => 0,
-                        'language'      => setting('language'),
-                        'money'         => setting('registermoney'),
-                        'confirmregkey' => $activateKey,
-                        'subscribe'     => Str::random(32),
-                        'updated_at'    => SITETIME,
-                        'created_at'    => SITETIME,
+                        'login'      => $login,
+                        'password'   => Hash::make($password),
+                        'email'      => $email,
+                        'level'      => setting('regkeys') ? User::PENDED : User::USER,
+                        'gender'     => $gender,
+                        'themes'     => setting('themes'),
+                        'point'      => 0,
+                        'language'   => setting('language'),
+                        'money'      => setting('registermoney'),
+                        'subscribe'  => Str::random(32),
+                        'updated_at' => SITETIME,
+                        'created_at' => SITETIME,
                     ]);
+
+                    // Подтверждение регистрации
+                    $confirmUrl = null;
+                    if (setting('regkeys')) {
+                        $confirmUrl = URL::signedRoute('confirm', ['hash' => sha1($email)]);
+                    }
 
                     // Активация пригласительного ключа
                     if ($invitation && setting('invite')) {
                         $invitation->update([
-                            'used'           => 1,
+                            'used'           => true,
                             'used_at'        => SITETIME,
                             'invite_user_id' => $user->id,
                         ]);
@@ -210,14 +209,12 @@ class UserController extends Controller
 
                     // --- Уведомление о регистрации на email ---//
                     $subject = 'Регистрация на ' . setting('title');
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a>, сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
-
                     $data = [
-                        'to'           => $email,
-                        'subject'      => $subject,
-                        'text'         => $message,
-                        'activateKey'  => $activateKey,
-                        'activateLink' => $activateLink,
+                        'to'         => $email,
+                        'subject'    => $subject,
+                        'login'      => $login,
+                        'password'   => $password,
+                        'confirmUrl' => $confirmUrl,
                     ];
 
                     sendMail('mailer.register', $data);
@@ -396,9 +393,9 @@ class UserController extends Controller
     /**
      * Confirmation of registration
      */
-    public function key(Request $request, Validator $validator): View|RedirectResponse
+    public function confirm(Request $request, Validator $validator): View|RedirectResponse
     {
-        if (! $user = getUser()) {
+        if (! $user = $request->user()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -429,30 +426,26 @@ class UserController extends Controller
             $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
 
             if ($validator->isValid()) {
-                $activateKey = Str::random();
-                $activateLink = config('app.url') . '/key?code=' . $activateKey;
+                $confirmUrl = URL::signedRoute('confirm', ['hash' => sha1($email)]);
 
                 $user->update([
-                    'email'         => $email,
-                    'confirmregkey' => $activateKey,
+                    'email' => $email,
                 ]);
 
                 /* Уведомление о регистрации на email */
                 $subject = 'Регистрация на ' . setting('title');
-                $message = 'Добро пожаловать, ' . e($user->getName()) . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
-
                 $data = [
-                    'to'           => $email,
-                    'subject'      => $subject,
-                    'text'         => $message,
-                    'activateKey'  => $activateKey,
-                    'activateLink' => $activateLink,
+                    'to'         => $email,
+                    'subject'    => $subject,
+                    'login'      => $user->login,
+                    'password'   => '*****',
+                    'confirmUrl' => $confirmUrl,
                 ];
 
                 sendMail('mailer.register', $data);
                 setFlash('success', __('users.confirm_code_success_sent'));
 
-                return redirect('/');
+                return redirect()->route('confirm');
             }
 
             setInput($request->all());
@@ -460,13 +453,13 @@ class UserController extends Controller
         }
 
         /* Подтверждение кода */
-        if ($request->has('code')) {
-            $code = $request->input('code');
-
-            if ($code === $user->confirmregkey) {
+        if ($request->has('hash') && $request->has('signature')) {
+            if (
+                $request->hasValidSignature()
+                && hash_equals($request->hash, sha1($user->email))
+            ) {
                 $user->update([
-                    'confirmregkey' => null,
-                    'level'         => User::USER,
+                    'level' => User::USER,
                 ]);
 
                 setFlash('success', __('users.account_success_activated'));
@@ -477,7 +470,7 @@ class UserController extends Controller
             setFlash('danger', __('users.confirm_code_invalid'));
         }
 
-        return view('users/key', compact('user'));
+        return view('users/confirm', compact('user'));
     }
 
     /**

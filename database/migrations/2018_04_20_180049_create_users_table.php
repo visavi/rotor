@@ -46,7 +46,6 @@ return new class extends Migration {
                 $table->integer('timepasswd')->default(0);
                 $table->boolean('sendprivatmail')->default(false);
                 $table->integer('timebonus')->default(0);
-                $table->string('confirmregkey', 30)->nullable();
                 $table->integer('newchat')->nullable();
                 $table->boolean('notify')->default(true);
                 $table->string('apikey', 32)->nullable();

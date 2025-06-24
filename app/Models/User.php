@@ -67,7 +67,6 @@ use Illuminate\Support\Str;
  * @property int    $timepasswd
  * @property int    $sendprivatmail
  * @property int    $timebonus
- * @property string $confirmregkey
  * @property int    $newchat
  * @property int    $notify
  * @property string $apikey

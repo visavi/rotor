@@ -13,22 +13,14 @@
 
 @section('content')
     {{ __('users.welcome', ['login' => getUser('login')]) }}<br>
-    {{ __('users.confirm_enter_code') }}<br><br>
-
-    <div class="section-form mb-3 shadow">
-        <label for="code" class="form-label">{{ __('users.confirm_code') }}:</label>
-        <form method="get" action="/key">
-            <input class="form-control" name="code" id="code" maxlength="30" required>
-            <button class="btn btn-primary">{{ __('main.confirm') }}</button>
-        </form>
-    </div>
+    {{ __('users.confirm_enter') }}<br>
 
     <?php $checkEmail = getInput('email') ? true : false; ?>
     <?php $display = $checkEmail ? '' : ' style="display: none"'; ?>
 
     <div class="js-resending-form"{!! $display !!}>
         <div class="section-form my-3 shadow">
-            <form method="post" action="/key">
+            <form method="post" action="{{ route('confirm') }}">
                 @csrf
                 <div class="mb-3{{ hasError('email') }}">
                     <label for="email" class="form-label">{{ __('users.email') }}:</label>
@@ -47,8 +39,8 @@
     </div>
 
     @if (! $checkEmail)
-        <div class="js-resending-link">
-            <i class="fas fa-redo"></i> <a href="#" onclick="return resendingCode();">{{ __('users.resend_code') }}</a>
+        <div class="js-resending-link my-3">
+            <a href="#" class="btn btn-primary" onclick="return resendingCode();"><i class="fas fa-redo"></i> {{ __('users.resend_code') }}</a>
         </div>
     @endif
 

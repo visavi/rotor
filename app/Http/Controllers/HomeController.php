@@ -147,10 +147,6 @@ class HomeController extends Controller
 
         $request->session()->put('protect', $phrase);
 
-        \Log::info('Captcha1: ' . $phrase);
-        \Log::info('Captcha2: ' . $request->session()->get('protect'));
-        \Log::info('Sess: ' . $request->session()->getId());
-
         return response($captcha)
             ->header('Content-Type', setting('captcha_type') === 'animated' ? 'image/gif' : 'image/png');
     }

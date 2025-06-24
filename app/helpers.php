@@ -1315,28 +1315,28 @@ function textError(string $field): ?string
  */
 function sendMail(string $view, array $data): bool
 {
-    try {
-        Mail::send($view, $data, static function (Message $message) use ($data) {
-            $message->subject($data['subject'])
-                ->to($data['to'])
-                ->from(config('mail.from.address'), config('mail.from.name'));
+    //try {
+    Mail::send($view, $data, static function (Message $message) use ($data) {
+        $message->subject($data['subject'])
+            ->to($data['to'])
+            ->from(config('mail.from.address'), config('mail.from.name'));
 
-            if (isset($data['from'])) {
-                [$fromEmail, $fromName] = $data['from'];
-                $message->replyTo($fromEmail, $fromName);
-            }
+        if (isset($data['from'])) {
+            [$fromEmail, $fromName] = $data['from'];
+            $message->replyTo($fromEmail, $fromName);
+        }
 
-            if (isset($data['unsubscribe'])) {
-                $headers = $message->getHeaders();
-                $headers->addTextHeader(
-                    'List-Unsubscribe',
-                    '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>'
-                );
-            }
-        });
-    } catch (Exception) {
-        return false;
-    }
+        if (isset($data['unsubscribe'])) {
+            $headers = $message->getHeaders();
+            $headers->addTextHeader(
+                'List-Unsubscribe',
+                '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>'
+            );
+        }
+    });
+    //} catch (Exception) {
+    //    return false;
+    // }
 
     return true;
 }

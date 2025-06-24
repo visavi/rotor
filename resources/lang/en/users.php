@@ -40,20 +40,16 @@ return [
     Recovering a profile or data after that will be impossible<br>
     Be careful not to break more rules<br>',
 
-    'welcome'            => 'Welcome :login!',
-    'confirm_enter_code' => 'To confirm registration, you need to enter the code that was sent to you by email',
-    'confirm_code'       => 'Confirmation code',
-    'resend_code'        => 'Resend code',
-    'old_code_invalid'   => 'When you resend, the old verification code will become invalid',
-    'confirm_text'       => '
+    'welcome'          => 'Welcome :login!',
+    'confirm_enter'    => 'To confirm your registration, you need to follow the link that was sent to your email.',
+    'resend_code'      => 'Resend code',
+    'old_code_invalid' => 'If you resend, the old link will become invalid.',
+    'confirm_text'     => '
     Until you confirm the registration, you will not be able to log in to the site <br>
     Account activation must be completed within 24 hours <br>
     After 24 hours, unverified accounts are automatically deleted.',
     'logout' => 'Logout',
 
-    'social_auth_text' => '
-    The profile is not associated with any account on the site. Log in or register to link your account with a social network profile.<br>
-    Or select another social network to enter.',
     'login_or_email'  => 'Login or email',
     'login'           => 'Login',
     'password'        => 'Password',

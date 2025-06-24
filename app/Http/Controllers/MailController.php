@@ -114,7 +114,7 @@ class MailController extends Controller
                 sendMail('mailer.recovery', $data);
                 setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
 
-                return redirect('login');
+                return redirect('/');
             }
 
             setInput($request->all());

@@ -40,8 +40,7 @@ class DeletePending extends Command
             User::query()
                 ->where('level', User::PENDED)
                 ->update([
-                    'confirmregkey' => null,
-                    'level'         => User::USER,
+                    'level' => User::USER,
                 ]);
         }
 

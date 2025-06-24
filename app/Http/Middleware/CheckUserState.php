@@ -25,8 +25,8 @@ class CheckUserState
             }
 
             // Проверка статуса pending
-            if ($user->isPended() && ! $request->is('key', 'ban', 'logout', 'captcha')) {
-                return redirect('key?user=' . $user->login);
+            if ($user->isPended() && ! $request->is('confirm', 'ban', 'logout', 'captcha')) {
+                return redirect()->route('confirm', ['user' => $user->login]);
             }
 
             // Обновление данных пользователя
