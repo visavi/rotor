@@ -71,7 +71,7 @@
                 <span class="avatar-micro">{{ $news->user->getAvatarImage() }}</span> {{ $news->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($news->created_at) }}</small>
             </div>
 
-            <div class="section-action js-rating">
+            <div class="js-rating">
                 {{ __('main.rating') }}:
                 @if (getUser() && getUser('id') !== $news->user_id)
                     <a class="post-rating-down{{ $news->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $news->id }}" data-type="{{ $news->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fas fa-arrow-down"></i></a>

@@ -2,15 +2,18 @@
 <html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
 <head>
     <meta charset="utf-8">
-    <meta name="theme-color" content="#2e8cc2">
-    <meta name="description" content="@yield('description', setting('description'))">
-    <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2e8cc2">
+    <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
+    <meta name="description" content="@yield('description', setting('description'))">
+    <meta name="image" content="{{ asset('/assets/img/images/icon.png') }}">
     <title>@yield('title') - {{ setting('title') }}</title>
-    <link rel="canonical" href="{{ request()->url() }}">
-    <link href="/favicon.ico" rel="icon">
-    <link href="/assets/img/images/icon.png" rel="image_src">
+    <link rel="canonical" href="@yield('canonical', request()->url())">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/assets/img/images/icon.svg">
+    <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
+    <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
     <link rel="stylesheet" type="text/css" href="{{ mix('/assets/dist/css/default.css') }}">
     @stack('styles')

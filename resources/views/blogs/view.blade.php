@@ -3,6 +3,7 @@
 @section('title', $article->title)
 
 @section('description', truncateDescription(bbCode($article->text, false)))
+@section('canonical', route('articles.view', ['slug' => $article->slug]))
 
 @section('header')
     @if (getUser())
@@ -64,7 +65,7 @@
             @endforeach
         </div>
 
-        <div class="section-action js-rating">{{ __('main.rating') }}:
+        <div class="js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $article->user_id)
                 <a class="post-rating-down<?= $article->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $article->id }}" data-type="{{ $article->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
             @endif

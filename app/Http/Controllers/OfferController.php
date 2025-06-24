@@ -31,7 +31,7 @@ class OfferController extends Controller
         $offers = Offer::query()
             ->where('type', $type)
             ->orderBy(...$orderBy)
-            ->with('user')
+            ->with('user', 'poll')
             ->paginate(setting('postoffers'))
             ->appends(compact('type', 'sort', 'order'));
 

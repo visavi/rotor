@@ -44,7 +44,7 @@
                 {{ $offer->getStatus() }}
             </div>
 
-            <div class="section-action js-rating">
+            <div class="js-rating">
                 {{ __('main.rating') }}:
                 @if (getUser() && getUser('id') !== $offer->user_id)
                     <a class="post-rating-down{{ $offer->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ $offer->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>

@@ -46,9 +46,19 @@
 
         @foreach ($offers as $data)
             <div class="section mb-3 shadow">
+                <div class="float-end js-rating">
+                    @if (getUser() && getUser('id') !== $data->user_id)
+                        <a class="post-rating-down{{ $data->poll?->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
+                    @endif
+                    <b>{{ formatNum($data->rating) }}</b>
+                    @if (getUser() && getUser('id') !== $data->user_id)
+                        <a class="post-rating-up{{ $data->poll?->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
+                    @endif
+                </div>
+
                 <div class="section-title">
                     <i class="fa fa-file"></i>
-                    <a href="{{ route('offers.view', ['id' => $data->id]) }}">{{ $data->title }}</a> ({{ __('main.votes') }}: {{ $data->rating }})<br>
+                    <a href="{{ route('offers.view', ['id' => $data->id]) }}">{{ $data->title }}</a>
                 </div>
 
                 <div class="section-body">

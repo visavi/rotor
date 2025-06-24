@@ -759,7 +759,7 @@ function truncateWord(HtmlString|string $value, int $words = 20, string $end = '
  */
 function truncateDescription(HtmlString|string $value, int $words = 20, string $end = ''): string
 {
-    $value = strip_tags(preg_replace('/\s+/', ' ', $value));
+    $value = strip_tags(preg_replace('/[\s\n\r]+/', ' ', $value));
 
     return Str::words(trim($value), $words, $end);
 }
