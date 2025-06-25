@@ -6,10 +6,6 @@ return [
     'name'              => 'Name',
     'email'             => 'Email',
     'message'           => 'Message',
-    'success_recovery'  => 'Password has been successfully recovered!',
-    'details'           => 'Your new login details',
-    'login'             => 'Login',
-    'password'          => 'Password',
 
     'recovery_text1' => 'If for some reason the letter does not arrive or access to the mailbox is lost, then you need to contact support',
     'recovery_text2' => 'A letter with instructions for resetting the password will be sent to the email address specified in the profile',
@@ -25,8 +21,9 @@ return [
     'password_recovery_time' => 'You can recover your password no more than once per hour!',
     'recovery_instructions'  => 'Password recovery instructions sent to :email',
     'password_not_recovery'  => 'This user did not reset the password!',
-    'secret_key_invalid'     => 'The secret key is invalid!',
-    'secret_key_missing'     => 'Missing secret key!',
-    'secret_key_expired'     => 'The secret key is already out of date!',
+    'token_invalid'          => 'The token is invalid!',
+    'token_missing'          => 'Token missing!',
+    'token_expired'          => 'The token is already out of date!',
+    'success_recovery'       => 'Password has been successfully recovered! Your new password: :password',
     'success_unsubscribed'   => 'You have successfully unsubscribed from the newsletter!',
 ];

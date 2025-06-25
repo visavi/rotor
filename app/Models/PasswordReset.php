@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-/**
- * Class Online
- *
- * @property string $ip
- * @property string $brow
- * @property int    $updated_at
- * @property int    $user_id
- */
-class Online extends BaseModel
-{
-    /**
-     * The table associated with the model.
-     */
-    protected $table = 'online';
+use Illuminate\Support\Facades\Date;
 
+/**
+ * Class PasswordReset
+ *
+ * @property string $email
+ * @property int    $token
+ * @property Date   $created_at
+ */
+class PasswordReset extends BaseModel
+{
     /**
      * The primary key for the model.
      */
-    protected $primaryKey = 'uid';
+    protected $primaryKey = 'email';
 
     /**
      * Indicates if the IDs are auto-incrementing.

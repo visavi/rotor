@@ -14,19 +14,22 @@ class CheckUserState
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Route::has('install') && $request->is('install*')) {
+        if (
+            $request->routeIs('ipban')
+            || (Route::has('install') && $request->is('install*'))
+        ) {
             return $next($request);
         }
 
         if ($user = Auth::user()) {
             // Проверка бана
-            if ($user->isBanned() && ! $request->is('ban', 'rules', 'logout')) {
+            if ($user->isBanned() && ! $request->routeIs('ban', 'rules', 'logout')) {
                 return redirect('ban?user=' . $user->login);
             }
 
             // Проверка статуса pending
-            if ($user->isPended() && ! $request->is('confirm', 'ban', 'logout', 'captcha')) {
-                return redirect()->route('confirm', ['user' => $user->login]);
+            if ($user->isPended() && ! $request->routeIs('verify', 'confirm', 'ban', 'logout', 'captcha')) {
+                return redirect()->route('verify', ['user' => $user->login]);
             }
 
             // Обновление данных пользователя

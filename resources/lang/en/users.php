@@ -169,7 +169,6 @@ return [
     'password_different'            => 'The entered password does not match the data in the profile!',
     'confirm_already_sent'          => 'You have already sent a confirmation code to the new mail address!',
     'confirm_success_sent'          => 'Verification email sent successfully!',
-    'changed_code_empty'            => 'You have not entered an email change code!',
     'changed_code_not_found'        => 'This email change code was not found!',
     'email_success_changed'         => 'Email address successfully changed!',
     'status_changed_not_ban'        => 'You must not have violations to change your status!',

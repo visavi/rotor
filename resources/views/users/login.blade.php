@@ -17,7 +17,7 @@
 
             <div class="mb-3">
                 <label for="inputLogin" class="form-label">{{ __('users.login_or_email') }}:</label>
-                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login', $cookieLogin) }}" required>
+                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login') }}" required>
 
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
                 <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ getInput('password') }}" required>
@@ -36,6 +36,6 @@
         </form>
     </div>
 
-    <a href="/register">{{ __('index.register') }}</a><br>
-    <a href="/recovery">{{ __('users.forgot_password') }}</a><br><br>
+    <i class="fa-solid fa-pen-to-square"></i> <a href="{{ route('register') }}">{{ __('index.register') }}</a><br>
+    <i class="fa-solid fa-unlock-keyhole"></i> <a href="{{ route('recovery') }}">{{ __('users.forgot_password') }}</a><br><br>
 @stop

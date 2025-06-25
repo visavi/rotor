@@ -16,7 +16,7 @@
     <h3>{{ __('users.change_email') }}</h3>
 
     <div class="section-form mb-3 shadow">
-        <form method="post" action="/accounts/changemail">
+        <form method="post" action="{{ route('accounts.change-mail') }}">
             @csrf
             <div class="mb-3{{ hasError('email') }}">
                 <label for="email" class="form-label">{{ __('users.email') }}:</label>

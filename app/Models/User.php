@@ -63,8 +63,6 @@ use Illuminate\Support\Str;
  * @property int    $rating
  * @property int    $posrating
  * @property int    $negrating
- * @property string keypasswd
- * @property int    $timepasswd
  * @property int    $sendprivatmail
  * @property int    $timebonus
  * @property int    $newchat
@@ -72,6 +70,7 @@ use Illuminate\Support\Str;
  * @property string $apikey
  * @property string $subscribe
  * @property string $remember_token
+ * @property string $confirm_token
  * @property int    $updated_at
  * @property int    $created_at
  * @property-read Collection<UserData> $data

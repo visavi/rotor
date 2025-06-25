@@ -22,6 +22,7 @@ Disallow: /messages
 Disallow: /settings
 Disallow: /notebooks
 Disallow: /authlogs
+Disallow: /verify
 Disallow: /confirm
 Disallow: /walls
 Disallow: /users
