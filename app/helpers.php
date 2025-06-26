@@ -1243,7 +1243,8 @@ function getCaptcha(): HtmlString
 /**
  * Сохраняет flash уведомления
  *
- * @deprecated since 10.1 - Use redirect->with('success', 'Message') or $request->session()->flash()
+ * @deprecated since 10.1 - Use redirect()->with('success', 'Message') or redirect()->withErrors($validator->getErrors())
+ * $request->session()->flash('flash.{status}', $message);
  */
 function setFlash(string $status, mixed $message): void
 {
@@ -1253,7 +1254,7 @@ function setFlash(string $status, mixed $message): void
 /**
  * Сохраняет POST данные введенных пользователем
  *
- * @deprecated since 10.1 - Use $request->session()->flash() or redirect()->withInput();
+ * @deprecated since 10.1 - Use $request->flash() or redirect()->withInput();
  */
 function setInput(array $data): void
 {

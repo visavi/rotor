@@ -130,7 +130,7 @@ return [
     'explain_sent_success'          => 'Explanation sent successfully!',
     'rating_position'               => 'Position in rating: :position',
     'request_requirements'          => 'Too short or long request, from 2 to 20 characters!',
-    'note_to_big'                   => 'Too big note!',
+    'note_to_big'                   => 'The note is too long or too short!',
     'note_saved_success'            => 'Note saved successfully!',
     'already_registered'            => 'You have already registered, it is forbidden to create multiple accounts!',
     'registration_suspended'        => 'Registration is temporarily suspended, please check back later!',

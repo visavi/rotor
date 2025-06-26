@@ -528,8 +528,8 @@ Route::prefix('users')
 Route::controller(UserController::class)
     ->prefix('users')
     ->group(function () {
-        Route::get('/{login}', 'index');
-        Route::match(['get', 'post'], '/{login}/note', 'note');
+        Route::get('/{login}', 'index')->name('users.user');
+        Route::match(['get', 'post'], '/{login}/note', 'note')->name('users.note');
     });
 
 /* Почта */

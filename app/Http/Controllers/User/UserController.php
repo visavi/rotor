@@ -66,7 +66,7 @@ class UserController extends Controller
         if ($request->isMethod('post')) {
             $notice = $request->input('notice');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['notice' => __('validator.token')])
+            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
@@ -76,13 +76,13 @@ class UserController extends Controller
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', __('users.note_saved_success'));
-
-                return redirect('users/' . $user->login);
+                return redirect()
+                    ->route('users.user', ['login' => $user->login])
+                    ->with('success', __('users.note_saved_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            $request->flash();
+            $request->session()->flash('flash.danger', $validator->getErrors());
         }
 
         return view('users/note', compact('user'));
