@@ -23,9 +23,7 @@ class RecoveryController extends Controller
     public function recovery(Request $request, Validator $validator): View|RedirectResponse
     {
         if (getUser()) {
-            setFlash('danger', __('main.already_authorized'));
-
-            return redirect('/');
+            return redirect('/')->with('danger', __('main.already_authorized'));
         }
 
         if ($request->isMethod('post')) {
@@ -121,6 +119,7 @@ class RecoveryController extends Controller
             ->where('created_at', '<', now()->subHour())
             ->delete();
 
-        return redirect('/')->with('success', __('mails.success_recovery', ['password' => $password]));
+        return redirect('/')
+            ->with('success', __('mails.success_recovery', ['password' => $password]));
     }
 }
