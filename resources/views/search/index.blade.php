@@ -1,6 +1,10 @@
 @extends('layout')
 
-@section('title', __('index.search'))
+@section('title', $query ? __('main.search_results', ['query' => $query]) : __('index.search'))
+@section('description', $query ? __('main.search_results', ['query' => $query]) : setting('description'))
+@section('header')
+    <h1>{{ __('index.search') }}</h1>
+@stop
 
 @section('breadcrumb')
     <nav>

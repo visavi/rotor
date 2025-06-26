@@ -111,7 +111,7 @@ return [
     'relevance'      => 'Relevance',
     'new_first'      => 'New first',
     'old_first'      => 'Old first',
-    'search_results' => 'Search results: ":query"',
+    'search_results' => 'Search results: «:query»',
 
     'cost'              => 'Cost',
     'cash_money'        => 'You have in stock',
