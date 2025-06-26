@@ -48,11 +48,11 @@ class AccountController extends Controller
             ->email($email, ['email' => __('validator.email')])
             ->true(Hash::check($password, $user->password), ['password' => __('users.password_different')]);
 
-        $isEMailExists = User::query()->where('email', $email)->exists();
-        $validator->empty($isEMailExists, ['email' => __('users.email_already_exists')]);
+        $isEmailExists = User::query()->where('email', $email)->exists();
+        $validator->false($isEmailExists, ['email' => __('users.email_already_exists')]);
 
         $isEmailBlacklisted = BlackList::query()->where('type', 'email')->where('value', $email)->exists();
-        $validator->empty($isEmailBlacklisted, ['email' => __('users.email_is_blacklisted')]);
+        $validator->false($isEmailBlacklisted, ['email' => __('users.email_is_blacklisted')]);
 
         EmailChange::query()
             ->where('created_at', '<', now()->subHour())
@@ -112,11 +112,11 @@ class AccountController extends Controller
         $validator->notEmpty($emailChange, __('users.changed_code_not_found'));
 
         if ($emailChange) {
-            $isEMailExists = User::query()->where('email', $emailChange->email)->exists();
-            $validator->empty($isEMailExists, __('users.email_already_exists'));
+            $isEmailExists = User::query()->where('email', $emailChange->email)->exists();
+            $validator->false($isEmailExists, __('users.email_already_exists'));
 
             $isEmailBlacklisted = BlackList::query()->where('type', 'email')->where('value', $emailChange->email)->exists();
-            $validator->empty($isEmailBlacklisted, __('users.email_is_blacklisted'));
+            $validator->false($isEmailBlacklisted, __('users.email_is_blacklisted'));
         }
 
         if ($validator->isValid()) {
@@ -214,47 +214,44 @@ class AccountController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $newpass = $request->input('newpass');
-        $newpass2 = $request->input('newpass2');
-        $oldpass = $request->input('oldpass');
+        $newPassword = $request->input('new_password');
+        $confirmPassword = $request->input('confirm_password');
+        $password = $request->input('old_password');
 
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(password_verify((string) $oldpass, $user->password), ['oldpass' => __('users.password_different')])
-            ->length($newpass, 6, 20, ['newpass' => __('users.password_length_requirements')])
-            ->notEqual($user->login, $newpass, ['newpass' => __('users.login_different')])
-            ->equal($newpass, $newpass2, ['newpass2' => __('users.passwords_different')]);
+            ->true(Hash::check($password, $user->password), ['old_password' => __('users.password_not_different')])
+            ->false(Hash::check($newPassword, $user->password), ['old_password' => __('users.password_different')])
+            ->length($newPassword, 6, 20, ['new_password' => __('users.password_length_requirements')])
+            ->notEqual($user->login, $newPassword, ['new_password' => __('users.login_different')])
+            ->equal($newPassword, $confirmPassword, ['confirm_password' => __('users.passwords_different')]);
 
-        if (ctype_digit($newpass)) {
-            $validator->addError(['newpass' => __('users.field_characters_requirements')]);
+        if (ctype_digit($newPassword)) {
+            $validator->addError(['new_password' => __('users.field_characters_requirements')]);
         }
 
         if ($validator->isValid()) {
             $user->update([
-                'password' => Hash::make($newpass),
+                'password' => Hash::make($newPassword),
             ]);
 
             $request->session()->regenerate();
 
             $subject = 'Изменение пароля на ' . setting('title');
-            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
-
             $data = [
-                'to'      => $user->email,
-                'subject' => $subject,
-                'text'    => $message,
+                'to'       => $user->email,
+                'subject'  => $subject,
+                'username' => $user->getName(),
+                'password' => $newPassword,
             ];
 
-            sendMail('mailer.default', $data);
+            sendMail('mailer.change_password', $data);
 
-            setFlash('success', __('users.password_success_changed'));
-
-            return redirect('/');
+            return redirect('/')->with('success', __('users.password_success_changed'));
         }
 
-        setInput($request->all());
-        setFlash('danger', $validator->getErrors());
-
-        return redirect('accounts');
+        return redirect('accounts')
+            ->withErrors($validator->getErrors())
+            ->withInput();
     }
 
     /**
@@ -267,7 +264,7 @@ class AccountController extends Controller
         }
 
         if ($request->input('_token') === csrf_token()) {
-            $apiKey = md5($user->login . Str::random());
+            $apiKey = Str::random(32);
             $message = __('users.token_success_changed');
 
             if ($request->input('action') === 'create') {
@@ -307,18 +304,18 @@ class AccountController extends Controller
             ->false(substr_count($login, '-') > 2, __('users.login_hyphens_requirements'));
 
         if ($validator->isValid()) {
-            $existLogin = User::query()
+            $isLoginExists = User::query()
                 ->where('login', $login)
                 ->exists();
 
-            $blackLogin = Blacklist::query()
+            $isLoginBlacklisted = Blacklist::query()
                 ->where('type', 'login')
                 ->where('value', strtolower($login))
                 ->exists();
 
             $validator
-                ->false($existLogin, __('users.login_already_exists'))
-                ->false($blackLogin, __('users.login_is_blacklisted'));
+                ->false($isLoginExists, __('users.login_already_exists'))
+                ->false($isLoginBlacklisted, __('users.login_is_blacklisted'));
         }
 
         if ($validator->isValid()) {

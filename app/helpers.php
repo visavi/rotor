@@ -1253,7 +1253,7 @@ function setFlash(string $status, mixed $message): void
 /**
  * Сохраняет POST данные введенных пользователем
  *
- * @deprecated since 10.1 - Use $request->session()->flash();
+ * @deprecated since 10.1 - Use $request->session()->flash() or redirect()->withInput();
  */
 function setInput(array $data): void
 {
