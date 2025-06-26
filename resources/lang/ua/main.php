@@ -111,7 +111,7 @@ return [
     'relevance'      => 'За релевантністю',
     'new_first'      => 'Нові спочатку',
     'old_first'      => 'Старі спочатку',
-    'search_results' => 'Результати пошуку: ":query"',
+    'search_results' => 'Результати пошуку: «:query»',
 
     'cost'              => 'Ціна',
     'cash_money'        => 'У вас є',

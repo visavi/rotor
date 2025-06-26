@@ -1,6 +1,11 @@
 @extends('layout')
 
-@section('title', __('blogs.title_tags'))
+@section('title', __('main.search_results', ['query' => $tag]))
+@section('description', __('main.search_results', ['query' => $tag]))
+@section('header')
+    <h1>{{ __('blogs.title_tags') }}</h1>
+@stop
+
 
 @section('breadcrumb')
     <nav>
@@ -14,6 +19,8 @@
 @stop
 
 @section('content')
+    <h2>{{ __('main.search_results', ['query' => $tag]) }}</h2>
+
     <p>{{ __('main.total_found') }}: {{ $articles->total() }}</p>
 
     @foreach ($articles as $article)

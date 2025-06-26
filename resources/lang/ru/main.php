@@ -111,7 +111,7 @@ return [
     'relevance'      => 'По релевантности',
     'new_first'      => 'Новые сначала',
     'old_first'      => 'Старые сначала',
-    'search_results' => 'Результаты поиска: ":query"',
+    'search_results' => 'Результаты поиска: «:query»',
 
     'cost'              => 'Цена',
     'cash_money'        => 'У вас в наличии',

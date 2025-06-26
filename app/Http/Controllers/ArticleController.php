@@ -502,16 +502,16 @@ class ArticleController extends Controller
         $tag = urldecode($tag);
 
         if (Str::length($tag) < 2) {
-            setFlash('danger', __('blogs.tag_search_rule'));
-
-            return redirect()->route('blogs.tags');
+            return redirect()
+                ->route('blogs.tags')
+                ->with('danger', __('blogs.tag_search_rule'));
         }
 
         $tagModel = Tag::query()->where('name', $tag)->first();
         if (! $tagModel) {
-            setFlash('danger', __('main.empty_found'));
-
-            return redirect()->route('blogs.tags');
+            return redirect()
+                ->route('blogs.tags')
+                ->with('danger', __('main.empty_found'));
         }
 
         $articles = $tagModel->articles()
