@@ -46,7 +46,7 @@ class AccountController extends Controller
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEqual($email, $user->email, ['email' => __('users.email_different')])
             ->email($email, ['email' => __('validator.email')])
-            ->true(Hash::check($password, $user->password), ['password' => __('users.password_different')]);
+            ->true(Hash::check($password, $user->password), ['password' => __('users.password_not_different')]);
 
         $isEmailExists = User::query()->where('email', $email)->exists();
         $validator->false($isEmailExists, ['email' => __('users.email_already_exists')]);

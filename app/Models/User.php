@@ -99,34 +99,34 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * Администраторы
      */
     public const ADMIN_GROUPS = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
         self::EDITOR,
+        self::MODER,
+        self::ADMIN,
+        self::BOSS,
     ];
 
     /**
      * Участники
      */
     public const USER_GROUPS = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
-        self::EDITOR,
         self::USER,
+        self::EDITOR,
+        self::MODER,
+        self::ADMIN,
+        self::BOSS,
     ];
 
     /**
      * Все пользователи
      */
     public const ALL_GROUPS = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
-        self::EDITOR,
-        self::USER,
-        self::PENDED,
         self::BANNED,
+        self::PENDED,
+        self::USER,
+        self::EDITOR,
+        self::MODER,
+        self::ADMIN,
+        self::BOSS,
     ];
 
     /**

@@ -23,7 +23,7 @@ class CheckAccessSite
         // Сайт закрыт для гостей
         if (
             setting('closedsite') === 1
-            && ! getUser()
+            && ! $request->user()
             && ! $request->is('login', 'register', 'recovery', 'captcha')
         ) {
             setFlash('danger', __('main.not_authorized'));

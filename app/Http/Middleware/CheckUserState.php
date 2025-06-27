@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class CheckUserState
@@ -21,7 +20,7 @@ class CheckUserState
             return $next($request);
         }
 
-        if ($user = Auth::user()) {
+        if ($user = $request->user()) {
             // Проверка бана
             if ($user->isBanned() && ! $request->routeIs('ban', 'rules', 'logout')) {
                 return redirect('ban?user=' . $user->login);

@@ -23,7 +23,7 @@ class AdminLogger
      */
     public function terminate(Request $request, Response $response): void
     {
-        $user = getUser();
+        $user = $request->user();
 
         if ($user) {
             Log::query()->create([

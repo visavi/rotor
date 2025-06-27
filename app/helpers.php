@@ -38,7 +38,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -1443,11 +1442,15 @@ function isAdmin(?string $level = null): bool
  */
 function access(string $level): bool
 {
+    $user = auth()->user();
+    if (! $user) {
+        return false;
+    }
+
     $access = array_flip(User::ALL_GROUPS);
 
-    return getUser()
-        && isset($access[$level], $access[getUser('level')])
-        && $access[getUser('level')] <= $access[$level];
+    return isset($access[$user->level], $access[$level])
+        && $access[$user->level] >= $access[$level];
 }
 
 /**
@@ -1492,7 +1495,7 @@ function getUser(?string $key = null): mixed
     static $user;
 
     if (! $user) {
-        $user = Auth::user();
+        $user = auth()->user();
     }
 
     return $key ? ($user->$key ?? null) : $user;
