@@ -1,3 +1,4 @@
+@use('App\Classes\Feed')
 @extends('layout')
 
 @section('title', setting('logos'))
@@ -11,7 +12,7 @@
     @include('ads/_top')
 
     @if (setting('homepage_view') === 'feed')
-        {{ (new \App\Classes\Feed())->getFeed() }}
+        {{ (new Feed())->getFeed() }}
     @else
         @include('widgets/_classic')
     @endif
