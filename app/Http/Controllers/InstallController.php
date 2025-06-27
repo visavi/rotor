@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -149,7 +150,7 @@ class InstallController extends Controller
             if ($validator->isValid()) {
                 $user = User::query()->create([
                     'login'      => $login,
-                    'password'   => password_hash($password, PASSWORD_BCRYPT),
+                    'password'   => Hash::make($password),
                     'email'      => $email,
                     'level'      => User::BOSS,
                     'gender'     => User::MALE,

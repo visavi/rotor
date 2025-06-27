@@ -16,9 +16,9 @@
     <div class="section-form mb-3 shadow">
         <form action="/users/{{ $user->login }}/note" method="post">
             @csrf
-            <div class="mb-3{{ hasError('notice') }}">
+            <div class="mb-3">
                 <label for="notice" class="form-label">{{ __('index.note') }}:</label>
-                <textarea class="form-control markItUp" id="notice" rows="5" name="notice" required>{{ getInput('notice', $user->note->text) }}</textarea>
+                <textarea class="form-control{{ hasError('notice') }} markItUp" id="notice" rows="5" name="notice" required>{{ old('notice', $user->note->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('notice') }}</div>
             </div>
 

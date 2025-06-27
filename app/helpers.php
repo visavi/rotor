@@ -1242,7 +1242,8 @@ function getCaptcha(): HtmlString
 /**
  * Сохраняет flash уведомления
  *
- * @deprecated since 10.1 - Use redirect->with('success', 'Message') or $request->session()->flash()
+ * @deprecated since 10.1 - Use redirect()->with('success', 'Message') or redirect()->withErrors($validator->getErrors())
+ * $request->session()->flash('flash.{status}', $message);
  */
 function setFlash(string $status, mixed $message): void
 {
@@ -1252,7 +1253,7 @@ function setFlash(string $status, mixed $message): void
 /**
  * Сохраняет POST данные введенных пользователем
  *
- * @deprecated since 10.1 - Use $request->session()->flash();
+ * @deprecated since 10.1 - Use $request->flash() or redirect()->withInput();
  */
 function setInput(array $data): void
 {
@@ -1441,29 +1442,15 @@ function isAdmin(?string $level = null): bool
  */
 function access(string $level): bool
 {
-    $access = array_flip(User::ALL_GROUPS);
-
-    return getUser()
-        && isset($access[$level], $access[getUser('level')])
-        && $access[getUser('level')] <= $access[$level];
-}
-
-/**
- * Возвращает текущего пользователя
- */
-function getUserFromSession(): ?User
-{
-    $session = app('session');
-
-    if ($session->has(['id', 'password'])) {
-        $user = getUserById($session->get('id'));
-
-        if ($user && $session->get('password') === $user->password) {
-            return $user;
-        }
+    $user = auth()->user();
+    if (! $user) {
+        return false;
     }
 
-    return null;
+    $access = array_flip(User::ALL_GROUPS);
+
+    return isset($access[$user->level], $access[$level])
+        && $access[$user->level] >= $access[$level];
 }
 
 /**
@@ -1508,7 +1495,7 @@ function getUser(?string $key = null): mixed
     static $user;
 
     if (! $user) {
-        $user = getUserFromSession();
+        $user = auth()->user();
     }
 
     return $key ? ($user->$key ?? null) : $user;

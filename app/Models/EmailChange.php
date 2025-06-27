@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Date;
+
 /**
- * Class ChangeMail
+ * Class EmailChange
  *
  * @property int    $id
  * @property int    $user_id
- * @property string $mail
- * @property string $hash
- * @property int    $created_at
+ * @property string $email
+ * @property string $token
+ * @property Date   $created_at
  */
-class ChangeMail extends BaseModel
+class EmailChange extends BaseModel
 {
-    /**
-     * The table associated with the model.
-     */
-    protected $table = 'changemail';
-
     /**
      * Indicates if the model should be timestamped.
      */

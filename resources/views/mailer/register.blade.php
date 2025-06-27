@@ -9,30 +9,32 @@
 @section('content')
     <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
         <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                {!! $text !!}
+            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 10px;" valign="top">
+                <div style="font-weight: bold; padding: 0 0 10px;">Добро пожаловать, {{ $login }}</div>
+                <div>Теперь вы зарегистрированный пользователь сайта <a href="{{ config('app.url') }}">{{ setting('title') }}</a>, сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.</div>
+                <div style="padding: 0 0 10px;">Ваши данные для входа на сайт</div>
+
+                <div style="font-weight: bold;">Логин: {{ $login }}</div>
+                <div style="font-weight: bold;">Пароль: {{ $password }}</div>
             </td>
         </tr>
         <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-
-                @if (setting('regkeys'))
+            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 10px;" valign="top">
+                @if ($confirmUrl)
                     <p>
                         {{ __('mailer.activation_text1') }}<br>
-                        {{ __('mailer.activation_code') }}: <b>{{ $activateKey }}</b><br>
-                        {{ __('mailer.activation_text2') }}
                     </p>
 
-                    <a href="{{ $activateLink }}" class="btn-success" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #5cb85c; margin: 0; border-color: #5cb85c; border-style: solid; border-width: 10px 20px;">{{ __('mailer.activate_account') }}</a>
+                    <a href="{{ $confirmUrl }}" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #5cb85c; margin: 0; border-color: #5cb85c; border-style: solid; border-width: 10px 20px;">{{ __('mailer.activate_account') }}</a>
 
                     <p>
                         {{ __('mailer.follow_link') }}:<br>
-                        {{ $activateLink }}<br><br>
+                        <b>{{ $confirmUrl }}</b><br><br>
 
-                        {{ __('mailer.activation_text3') }}
+                        {{ __('mailer.activation_text2') }}
                     </p>
                 @else
-                    <a href="{{ $activateLink }}" class="btn-success" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #5cb85c; margin: 0; border-color: #5cb85c; border-style: solid; border-width: 10px 20px;">{{ __('mailer.enter_site') }}</a>
+                    <a href="{{ config('app.url') }}" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #5cb85c; margin: 0; border-color: #5cb85c; border-style: solid; border-width: 10px 20px;">{{ __('mailer.enter_site') }}</a>
                 @endif
 
                 <p>

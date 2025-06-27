@@ -12,7 +12,7 @@ class CheckUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! getUser()) {
+        if (! $request->user()) {
             abort(403, __('main.not_authorized'));
         }
 

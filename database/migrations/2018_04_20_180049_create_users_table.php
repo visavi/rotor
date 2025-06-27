@@ -42,15 +42,14 @@ return new class extends Migration {
                 $table->integer('rating')->default(0);
                 $table->integer('posrating')->default(0);
                 $table->integer('negrating')->default(0);
-                $table->string('keypasswd', 20)->nullable();
-                $table->integer('timepasswd')->default(0);
                 $table->boolean('sendprivatmail')->default(false);
                 $table->integer('timebonus')->default(0);
-                $table->string('confirmregkey', 30)->nullable();
                 $table->integer('newchat')->nullable();
                 $table->boolean('notify')->default(true);
                 $table->string('apikey', 32)->nullable();
                 $table->string('subscribe', 32)->nullable();
+                $table->string('confirm_token', 100)->nullable();
+                $table->rememberToken();
                 $table->integer('updated_at')->nullable();
                 $table->integer('created_at');
 

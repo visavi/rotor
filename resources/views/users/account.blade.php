@@ -16,7 +16,7 @@
     <h3>{{ __('users.change_email') }}</h3>
 
     <div class="section-form mb-3 shadow">
-        <form method="post" action="/accounts/changemail">
+        <form method="post" action="{{ route('accounts.change-mail') }}">
             @csrf
             <div class="mb-3{{ hasError('email') }}">
                 <label for="email" class="form-label">{{ __('users.email') }}:</label>
@@ -57,7 +57,10 @@
 
         </div>
     @else
-        {{ showError(__('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))])) }}
+        <div class="alert alert-warning">
+            <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+            {{ __('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))]) }}
+        </div>
     @endif
 
     <h3>{{ __('users.color_change') }}</h3>
@@ -84,7 +87,10 @@
 
         </div>
     @else
-        {{ showError(__('users.color_change_condition', ['point' => plural(setting('editcolorpoint'), setting('scorename'))])) }}
+        <div class="alert alert-warning">
+            <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+            {{ __('users.color_change_condition', ['point' => plural(setting('editcolorpoint'), setting('scorename'))]) }}
+        </div>
     @endif
 
     <h3>{{ __('users.change_password') }}</h3>
@@ -92,22 +98,22 @@
     <div class="section-form mb-3 shadow">
         <form method="post" action="/accounts/editpassword">
             @csrf
-            <div class="mb-3{{ hasError('newpass') }}">
-                <label for="newpass" class="form-label">{{ __('users.new_password') }}:</label>
-                <input class="form-control" id="newpass" name="newpass" maxlength="20" value="{{ getInput('newpass') }}">
-                <div class="invalid-feedback">{{ textError('newpass') }}</div>
+            <div class="mb-3{{ hasError('new_password') }}">
+                <label for="new_password" class="form-label">{{ __('users.new_password') }}:</label>
+                <input class="form-control" id="new_password" name="new_password" maxlength="20" value="{{ getInput('new_password') }}">
+                <div class="invalid-feedback">{{ textError('new_password') }}</div>
             </div>
 
-            <div class="mb-3{{ hasError('newpass2') }}">
-                <label for="newpass2" class="form-label">{{ __('users.confirm_password') }}:</label>
-                <input class="form-control" id="newpass2" name="newpass2" maxlength="20" value="{{ getInput('newpass2') }}">
-                <div class="invalid-feedback">{{ textError('newpass2') }}</div>
+            <div class="mb-3{{ hasError('confirm_password') }}">
+                <label for="confirm_password" class="form-label">{{ __('users.confirm_password') }}:</label>
+                <input class="form-control" id="confirm_password" name="confirm_password" maxlength="20" value="{{ getInput('confirm_password') }}">
+                <div class="invalid-feedback">{{ textError('confirm_password') }}</div>
             </div>
 
-            <div class="mb-3{{ hasError('oldpass') }}">
-                <label for="oldpass" class="form-label">{{ __('users.current_password') }}:</label>
-                <input class="form-control" type="password" id="oldpass" name="oldpass" maxlength="20">
-                <div class="invalid-feedback">{{ textError('oldpass') }}</div>
+            <div class="mb-3{{ hasError('old_password') }}">
+                <label for="old_password" class="form-label">{{ __('users.current_password') }}:</label>
+                <input class="form-control" type="password" id="old_password" name="old_password" maxlength="20">
+                <div class="invalid-feedback">{{ textError('old_password') }}</div>
             </div>
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>

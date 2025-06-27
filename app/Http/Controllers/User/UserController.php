@@ -7,17 +7,17 @@ namespace App\Http\Controllers\User;
 use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\BlackList;
-use App\Models\ChangeMail;
 use App\Models\Flood;
 use App\Models\Invite;
+use App\Models\Login;
 use App\Models\User;
 use App\Models\UserField;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -66,7 +66,7 @@ class UserController extends Controller
         if ($request->isMethod('post')) {
             $notice = $request->input('notice');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['notice' => __('validator.token')])
+            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
@@ -76,13 +76,13 @@ class UserController extends Controller
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', __('users.note_saved_success'));
-
-                return redirect('users/' . $user->login);
+                return redirect()
+                    ->route('users.user', ['login' => $user->login])
+                    ->with('success', __('users.note_saved_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            $request->flash();
+            $request->session()->flash('flash.danger', $validator->getErrors());
         }
 
         return view('users/note', compact('user'));
@@ -90,8 +90,6 @@ class UserController extends Controller
 
     /**
      * Registration
-     *
-     * @throws GuzzleException
      */
     public function register(Request $request, Validator $validator): View|RedirectResponse
     {
@@ -112,9 +110,6 @@ class UserController extends Controller
                 $email = strtolower((string) $request->input('email'));
                 $domain = Str::substr(strrchr($email, '@'), 1);
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-                $level = User::USER;
-                $activateLink = null;
-                $activateKey = null;
                 $invitation = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
@@ -171,26 +166,28 @@ class UserController extends Controller
                     $validator->notEmpty($invitation, ['invite' => __('users.invitation_invalid')]);
                 }
 
+                // Подтверждение регистрации
+                $confirmToken = null;
+                $confirmUrl = null;
+                if (setting('regkeys')) {
+                    $confirmToken = Str::random(32);
+                    $confirmUrl = route('confirm', ['token' => $confirmToken]);
+                }
+
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
-                    if (setting('regkeys')) {
-                        $activateKey = Str::random();
-                        $activateLink = config('app.url') . '/key?code=' . $activateKey;
-                        $level = User::PENDED;
-                    }
-
                     $user = User::query()->create([
                         'login'         => $login,
-                        'password'      => password_hash($password, PASSWORD_BCRYPT),
+                        'password'      => Hash::make($password),
                         'email'         => $email,
-                        'level'         => $level,
+                        'level'         => setting('regkeys') ? User::PENDED : User::USER,
                         'gender'        => $gender,
                         'themes'        => setting('themes'),
                         'point'         => 0,
                         'language'      => setting('language'),
                         'money'         => setting('registermoney'),
-                        'confirmregkey' => $activateKey,
                         'subscribe'     => Str::random(32),
+                        'confirm_token' => $confirmToken,
                         'updated_at'    => SITETIME,
                         'created_at'    => SITETIME,
                     ]);
@@ -198,7 +195,7 @@ class UserController extends Controller
                     // Активация пригласительного ключа
                     if ($invitation && setting('invite')) {
                         $invitation->update([
-                            'used'           => 1,
+                            'used'           => true,
                             'used_at'        => SITETIME,
                             'invite_user_id' => $user->id,
                         ]);
@@ -210,19 +207,17 @@ class UserController extends Controller
 
                     // --- Уведомление о регистрации на email ---//
                     $subject = 'Регистрация на ' . setting('title');
-                    $message = 'Добро пожаловать, ' . $login . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $login . '</b><br><b>Пароль: ' . $password . '</b>';
-
                     $data = [
-                        'to'           => $email,
-                        'subject'      => $subject,
-                        'text'         => $message,
-                        'activateKey'  => $activateKey,
-                        'activateLink' => $activateLink,
+                        'to'         => $email,
+                        'subject'    => $subject,
+                        'login'      => $login,
+                        'password'   => $password,
+                        'confirmUrl' => $confirmUrl,
                     ];
 
                     sendMail('mailer.register', $data);
 
-                    User::auth($login, $password);
+                    Auth::login($user, true);
 
                     setFlash('success', __('users.welcome', ['login' => $login]));
 
@@ -232,14 +227,6 @@ class UserController extends Controller
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
-
-            if ($request->has('token')) {
-                if ($user = User::socialAuth($request->input('token'))) {
-                    setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-
-                    return redirect($request->input('return', '/'));
-                }
-            }
         }
 
         return view('users/register');
@@ -247,18 +234,13 @@ class UserController extends Controller
 
     /**
      * Login
-     *
-     * @throws GuzzleException
      */
     public function login(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
     {
-        if (getUser()) {
-            setFlash('danger', __('main.already_authorized'));
-
-            return redirect('/');
+        if (Auth::check()) {
+            return redirect('/')->with('danger', __('main.already_authorized'));
         }
 
-        $cookieLogin = $request->cookie('login');
         $isFlood = $flood->isFlood();
 
         if ($request->isMethod('post')) {
@@ -272,10 +254,21 @@ class UserController extends Controller
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
-                    if ($user = User::auth($login, $password, $remember)) {
-                        setFlash('success', __('users.welcome', ['login' => $user->getName()]));
+                    $field = strpos($request->input('login'), '@') ? 'email' : 'login';
 
-                        return redirect($request->input('return', '/'));
+                    $credentials = [
+                        $field     => $login,
+                        'password' => $password,
+                    ];
+
+                    if (Auth::attempt($credentials, $remember)) {
+                        $request->session()->regenerate();
+                        $user = Auth::user();
+
+                        $user->saveVisit(Login::AUTH);
+
+                        return redirect($request->input('return', '/'))
+                            ->with('success', __('users.welcome', ['login' => $user->getName()]));
                     }
 
                     $flood->saveState(300);
@@ -288,17 +281,9 @@ class UserController extends Controller
 
                 return redirect('login');
             }
-
-            if ($request->has('token')) {
-                if ($user = User::socialAuth($request->input('token'))) {
-                    setFlash('success', __('users.welcome', ['login' => $user->getName()]));
-
-                    return redirect($request->input('return', '/'));
-                }
-            }
         }
 
-        return view('users/login', compact('cookieLogin', 'isFlood'));
+        return view('users/login', compact('isFlood'));
     }
 
     /**
@@ -307,8 +292,10 @@ class UserController extends Controller
     public function logout(Request $request): RedirectResponse
     {
         if ($request->input('_token') === csrf_token()) {
-            $request->session()->flush();
-            cookie()->queue(cookie()->forget('password'));
+            Auth::logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         } else {
             setFlash('danger', __('validator.token'));
         }
@@ -399,11 +386,11 @@ class UserController extends Controller
     }
 
     /**
-     * Confirmation of registration
+     * Verify registration
      */
-    public function key(Request $request, Validator $validator): View|RedirectResponse
+    public function verify(Request $request, Validator $validator): View|RedirectResponse
     {
-        if (! $user = getUser()) {
+        if (! $user = $request->user()) {
             abort(403, __('main.not_authorized'));
         }
 
@@ -434,55 +421,53 @@ class UserController extends Controller
             $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
 
             if ($validator->isValid()) {
-                $activateKey = Str::random();
-                $activateLink = config('app.url') . '/key?code=' . $activateKey;
+                $token = Str::random(32);
+                $confirmUrl = route('confirm', ['token' => $token]);
 
                 $user->update([
                     'email'         => $email,
-                    'confirmregkey' => $activateKey,
+                    'confirm_token' => $token,
                 ]);
 
                 /* Уведомление о регистрации на email */
                 $subject = 'Регистрация на ' . setting('title');
-                $message = 'Добро пожаловать, ' . e($user->getName()) . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . config('app.url') . '">' . setting('title') . '</a> , сохраните ваш логин и пароль в надежном месте, они вам еще пригодятся.';
-
                 $data = [
-                    'to'           => $email,
-                    'subject'      => $subject,
-                    'text'         => $message,
-                    'activateKey'  => $activateKey,
-                    'activateLink' => $activateLink,
+                    'to'         => $email,
+                    'subject'    => $subject,
+                    'login'      => $user->login,
+                    'password'   => '*****',
+                    'confirmUrl' => $confirmUrl,
                 ];
 
                 sendMail('mailer.register', $data);
                 setFlash('success', __('users.confirm_code_success_sent'));
 
-                return redirect('/');
+                return redirect()->route('verify');
             }
 
             setInput($request->all());
             setFlash('danger', $validator->getErrors());
         }
 
-        /* Подтверждение кода */
-        if ($request->has('code')) {
-            $code = $request->input('code');
+        return view('users/verify', compact('user'));
+    }
 
-            if ($code === $user->confirmregkey) {
-                $user->update([
-                    'confirmregkey' => null,
-                    'level'         => User::USER,
-                ]);
-
-                setFlash('success', __('users.account_success_activated'));
-
-                return redirect('/');
-            }
-
-            setFlash('danger', __('users.confirm_code_invalid'));
+    /**
+     * Confirm registration
+     */
+    public function confirm(string $token): RedirectResponse
+    {
+        $user = User::query()->where('confirm_token', $token)->first();
+        if (! $user) {
+            abort(200, __('users.confirm_code_invalid'));
         }
 
-        return view('users/key', compact('user'));
+        $user->update([
+            'level'         => User::USER,
+            'confirm_token' => null,
+        ]);
+
+        return redirect('/')->with('success', __('users.account_success_activated'));
     }
 
     /**
@@ -531,276 +516,6 @@ class UserController extends Controller
         }
 
         return view('users/settings', compact('user', 'setting'));
-    }
-
-    /**
-     * User data
-     */
-    public function account(): View
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        return view('users/account', compact('user'));
-    }
-
-    /**
-     * Initialize email change
-     */
-    public function changeMail(Request $request, Validator $validator): RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $email = strtolower((string) $request->input('email'));
-        $password = $request->input('password');
-
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->notEqual($email, $user->email, ['email' => __('users.email_different')])
-            ->email($email, ['email' => __('validator.email')])
-            ->true(password_verify((string) $password, $user->password), ['password' => __('users.password_different')]);
-
-        $regMail = User::query()->where('email', $email)->first();
-        $validator->empty($regMail, ['email' => __('users.email_already_exists')]);
-
-        // Проверка email в черном списке
-        $blackMail = BlackList::query()->where('type', 'email')->where('value', $email)->first();
-        $validator->empty($blackMail, ['email' => __('users.email_is_blacklisted')]);
-
-        ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
-
-        $changeMail = ChangeMail::query()->where('user_id', $user->id)->first();
-        $validator->empty($changeMail, __('users.confirm_already_sent'));
-
-        if ($validator->isValid()) {
-            $genkey = Str::random();
-
-            $subject = 'Изменение email на ' . setting('title');
-            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="' . config('app.url') . '/accounts/editmail?key=' . $genkey . '">' . config('app.url') . '/accounts/editmail?key=' . $genkey . '</a><br><br>Ссылка будет дейстительной в течение суток до ' . date('j.m.y / H:i', strtotime('+1 day', SITETIME)) . '<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
-
-            $data = [
-                'to'      => $email,
-                'subject' => $subject,
-                'text'    => $message,
-            ];
-
-            sendMail('mailer.default', $data);
-
-            changeMail::query()->create([
-                'user_id'    => $user->id,
-                'mail'       => $email,
-                'hash'       => $genkey,
-                'created_at' => strtotime('+1 hour', SITETIME),
-            ]);
-
-            setFlash('success', __('users.confirm_success_sent'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return redirect('accounts');
-    }
-
-    /**
-     * Email change
-     */
-    public function editMail(Request $request, Validator $validator): RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $key = $request->input('key');
-
-        ChangeMail::query()->where('created_at', '<', SITETIME)->delete();
-
-        $changeMail = ChangeMail::query()->where('hash', $key)->where('user_id', $user->id)->first();
-
-        $validator->notEmpty($key, __('users.changed_code_empty'))
-            ->notEmpty($changeMail, __('users.changed_code_not_found'));
-
-        if ($changeMail) {
-            $validator->notEqual($changeMail->mail, $user->mail, __('users.email_different'));
-
-            $regMail = User::query()->where('email', $changeMail->mail)->count();
-            $validator->empty($regMail, __('users.email_already_exists'));
-
-            $blackMail = BlackList::query()->where('type', 'email')->where('value', $changeMail->mail)->count();
-            $validator->empty($blackMail, __('users.email_is_blacklisted'));
-        }
-
-        if ($validator->isValid()) {
-            $user->update([
-                'email' => $changeMail->mail,
-            ]);
-
-            $changeMail->delete();
-
-            setFlash('success', __('users.email_success_changed'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return redirect('accounts');
-    }
-
-    /**
-     * Status change
-     */
-    public function editStatus(Request $request, Validator $validator): RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $status = $request->input('status');
-        $status = ! empty($status) ? $status : null;
-        $cost = $status ? setting('editstatusmoney') : 0;
-
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
-            ->notEqual($status, $user->status, ['status' => __('users.status_different')])
-            ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
-            ->gte($user->money, $cost, ['status' => __('users.status_moneys')])
-            ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false);
-
-        if ($validator->isValid()) {
-            $user->update([
-                'status' => $status,
-                'money'  => DB::raw('money - ' . $cost),
-            ]);
-
-            clearCache('status');
-            setFlash('success', __('users.status_success_changed'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return redirect('accounts');
-    }
-
-    /**
-     * Color change
-     */
-    public function editColor(Request $request, Validator $validator): RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $color = $request->input('color');
-        $color = ! empty($color) ? $color : null;
-        $cost = $color ? setting('editcolormoney') : 0;
-
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->notEqual($color, $user->color, ['color' => __('users.color_different')])
-            ->gte($user->point, setting('editcolorpoint'), ['color' => __('users.color_points')])
-            ->gte($user->money, $cost, ['color' => __('users.color_moneys')])
-            ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
-
-        if ($validator->isValid()) {
-            $user->update([
-                'color' => $color,
-                'money' => DB::raw('money - ' . $cost),
-            ]);
-
-            setFlash('success', __('users.color_success_changed'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return redirect('accounts');
-    }
-
-    /**
-     * Password change
-     */
-    public function editPassword(Request $request, Validator $validator): RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $newpass = $request->input('newpass');
-        $newpass2 = $request->input('newpass2');
-        $oldpass = $request->input('oldpass');
-
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(password_verify((string) $oldpass, $user->password), ['oldpass' => __('users.password_different')])
-            ->length($newpass, 6, 20, ['newpass' => __('users.password_length_requirements')])
-            ->notEqual($user->login, $newpass, ['newpass' => __('users.login_different')])
-            ->equal($newpass, $newpass2, ['newpass2' => __('users.passwords_different')]);
-
-        if (ctype_digit($newpass)) {
-            $validator->addError(['newpass' => __('users.field_characters_requirements')]);
-        }
-
-        if ($validator->isValid()) {
-            $user->update([
-                'password' => password_hash($newpass, PASSWORD_BCRYPT),
-            ]);
-
-            $subject = 'Изменение пароля на ' . setting('title');
-            $message = 'Здравствуйте, ' . e($user->getName()) . '<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: ' . $newpass . '</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Время: ' . date('j.m.y / H:i', SITETIME);
-
-            $data = [
-                'to'      => $user->email,
-                'subject' => $subject,
-                'text'    => $message,
-            ];
-
-            sendMail('mailer.default', $data);
-
-            $request->session()->forget(['id', 'password']);
-
-            setFlash('success', __('users.password_success_changed'));
-
-            return redirect('login');
-        }
-
-        setInput($request->all());
-        setFlash('danger', $validator->getErrors());
-
-        return redirect('accounts');
-    }
-
-    /**
-     * Key generation
-     */
-    public function apikey(Request $request): RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        if ($request->input('_token') === csrf_token()) {
-            $apiKey = md5($user->login . Str::random());
-            $message = __('users.token_success_changed');
-
-            if ($request->input('action') === 'create') {
-                $message = __('users.token_success_created');
-            }
-
-            if ($request->input('action') === 'delete') {
-                $apiKey = '';
-                $message = __('users.token_success_deleted');
-            }
-
-            $user->update([
-                'apikey' => $apiKey,
-            ]);
-
-            setFlash('success', $message);
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
-
-        return redirect('accounts');
     }
 
     /**

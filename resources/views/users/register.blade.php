@@ -28,20 +28,6 @@
         </div>
     @endif
 
-    @if (session()->has('social'))
-        <div class="bg-success text-light p-1">
-            <img class="rounded-circle border" alt="photo" src="{{ session()->get('social')->photo }}" style="width: 48px; height: 48px;">
-            <span class="badge bg-primary">{{ session()->get('social')->network }}</span> {{ session()->get('social')->first_name }} {{ session()->get('social')->last_name }} {{ isset(session()->get('social')->nickname) ? '('.session()->get('social')->nickname.')' : '' }}
-        </div>
-        <div class="bg-info text-white p-1 mb-3">
-            {!! __('users.social_auth_text') !!}
-        </div>
-    @endif
-
-    <script src="//ulogin.ru/js/ulogin.js" async defer></script>
-    <div class="mb-3" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,google,yandex,instagram;redirect_uri={{ config('app.url') }}/register;mobilebuttons=0;">
-    </div>
-
     <div class="section-form mb-3 shadow">
         <form action="/register" method="post">
 

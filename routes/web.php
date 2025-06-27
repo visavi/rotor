@@ -79,9 +79,11 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\TransferController;
+use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BanController;
 use App\Http\Controllers\User\ListController;
 use App\Http\Controllers\User\PictureController;
+use App\Http\Controllers\User\RecoveryController;
 use App\Http\Controllers\User\SearchController as UserSearchController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VoteController;
@@ -165,9 +167,9 @@ Route::controller(HomeController::class)
         Route::get('/', 'index');
         Route::get('/closed', 'closed');
         Route::get('/search', 'search')->name('search');
-        Route::get('/captcha', 'captcha');
+        Route::get('/captcha', 'captcha')->name('captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+');
-        Route::match(['get', 'post'], '/ipban', 'ipban');
+        Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban');
 
         Route::get('/403', 'error403');
         Route::get('/404', 'error404');
@@ -396,19 +398,6 @@ Route::controller(VoteController::class)
         Route::match(['get', 'post'], '/create', 'create')->name('create');
     });
 
-/* Мои данные */
-Route::controller(UserController::class)
-    ->prefix('accounts')
-    ->group(function () {
-        Route::get('/', 'account');
-        Route::get('/editmail', 'editMail');
-        Route::post('/changemail', 'changeMail');
-        Route::post('/editstatus', 'editStatus');
-        Route::post('/editcolor', 'editColor');
-        Route::post('/editpassword', 'editPassword');
-        Route::post('/apikey', 'apikey');
-    });
-
 /* Фото профиля */
 Route::controller(PictureController::class)
     ->prefix('pictures')
@@ -517,7 +506,7 @@ Route::controller(RatingController::class)
 Route::get('/api', [ApiController::class, 'index']);
 
 /* Бан */
-Route::match(['get', 'post'], '/ban', [BanController::class, 'ban']);
+Route::match(['get', 'post'], '/ban', [BanController::class, 'ban'])->name('ban');
 
 /* Авторизации пользователя */
 Route::get('/authlogs', [LoginController::class, 'index']);
@@ -539,29 +528,49 @@ Route::prefix('users')
 Route::controller(UserController::class)
     ->prefix('users')
     ->group(function () {
-        Route::get('/{login}', 'index');
-        Route::match(['get', 'post'], '/{login}/note', 'note');
+        Route::get('/{login}', 'index')->name('users.user');
+        Route::match(['get', 'post'], '/{login}/note', 'note')->name('users.note');
     });
 
 /* Почта */
 Route::controller(MailController::class)
+    ->name('mails.')
     ->group(function () {
-        Route::get('/restore', 'restore');
-        Route::match(['get', 'post'], '/recovery', 'recovery');
         Route::match(['get', 'post'], '/mails', 'index');
-        Route::match(['get', 'post'], '/unsubscribe', 'unsubscribe');
+        Route::match(['get', 'post'], '/unsubscribe', 'unsubscribe')->name('unsubscribe');
     });
 
 /* Авторизация - регистрация */
 Route::controller(UserController::class)
     ->group(function () {
-        Route::get('/logout', 'logout');
-        Route::match(['get', 'post'], '/key', 'key');
-        Route::match(['get', 'post'], '/login', 'login');
-        Route::match(['get', 'post'], '/register', 'register');
-        Route::match(['get', 'post'], '/profile', 'profile');
-        Route::match(['get', 'post'], '/settings', 'setting');
-        Route::post('/check-login', 'checkLogin');
+        Route::get('/logout', 'logout')->name('logout');
+        Route::match(['get', 'post'], '/verify', 'verify')->name('verify');
+        Route::get('/confirm/{token}', 'confirm')->name('confirm')->where('token', '[\w]+');
+        Route::match(['get', 'post'], '/login', 'login')->name('login');
+        Route::match(['get', 'post'], '/register', 'register')->name('register');
+        Route::match(['get', 'post'], '/profile', 'profile')->name('profile');
+        Route::match(['get', 'post'], '/settings', 'setting')->name('settings');
+        Route::post('/check-login', 'checkLogin')->name('check-login');
+    });
+
+Route::controller(RecoveryController::class)
+    ->group(function () {
+        Route::match(['get', 'post'], '/recovery', 'recovery')->name('recovery');
+        Route::get('/restore/{token}', 'restore')->name('restore')->where('token', '[\w]+');
+    });
+
+/* Мои данные */
+Route::controller(AccountController::class)
+    ->prefix('accounts')
+    ->name('accounts.')
+    ->group(function () {
+        Route::get('/', 'account')->name('account');
+        Route::post('/changemail', 'changeMail')->name('change-mail');
+        Route::get('/editmail/{token}', 'editMail')->name('edit-mail');
+        Route::post('/editstatus', 'editStatus')->name('edit-status');
+        Route::post('/editcolor', 'editColor')->name('edit-color');
+        Route::post('/editpassword', 'editPassword')->name('edit-password');
+        Route::post('/apikey', 'apikey')->name('apikey');
     });
 
 /* Страницы сайта */
@@ -573,7 +582,7 @@ Route::controller(PageController::class)
         Route::get('/pages/{page?}', 'index')->where('page', '[\w\-]+');
         Route::get('/menu', 'menu');
         Route::get('/tags', 'tags');
-        Route::get('/rules', 'rules');
+        Route::get('/rules', 'rules')->name('rules');
         Route::get('/stickers', 'stickers');
         Route::get('/stickers/{id}', 'stickersCategory');
     });

@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class MailController extends Controller
@@ -69,113 +68,6 @@ class MailController extends Controller
     }
 
     /**
-     * Восстановление пароля
-     */
-    public function recovery(Request $request, Validator $validator): View|RedirectResponse
-    {
-        if (getUser()) {
-            setFlash('danger', __('main.already_authorized'));
-
-            return redirect('/');
-        }
-
-        $cookieLogin = $request->cookie('login');
-
-        if ($request->isMethod('post')) {
-            $user = getUserByLoginOrEmail($request->input('user'));
-            if (! $user) {
-                abort(200, __('validator.user'));
-            }
-
-            $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->lte($user->timepasswd, SITETIME, ['user' => __('mails.password_recovery_time')]);
-
-            if ($validator->isValid()) {
-                $resetKey = Str::random();
-                $resetLink = config('app.url') . '/restore?key=' . $resetKey;
-
-                $user->update([
-                    'keypasswd'  => $resetKey,
-                    'timepasswd' => strtotime('+1 hour', SITETIME),
-                ]);
-
-                //Инструкция по восстановлению пароля на email
-                $subject = 'Восстановление пароля на ' . setting('title');
-                $message = 'Здравствуйте, ' . $user->getName() . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . config('app.url') . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
-
-                $data = [
-                    'to'        => $user->email,
-                    'subject'   => $subject,
-                    'text'      => $message,
-                    'resetLink' => $resetLink,
-                ];
-
-                sendMail('mailer.recovery', $data);
-                setFlash('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
-
-                return redirect('login');
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return view('mails/recovery', compact('cookieLogin'));
-    }
-
-    /**
-     * Восстановление пароля
-     */
-    public function restore(Request $request, Validator $validator): View|RedirectResponse
-    {
-        if (getUser()) {
-            setFlash('danger', __('main.already_authorized'));
-
-            return redirect('/');
-        }
-
-        $key = $request->input('key');
-
-        $user = User::query()->where('keypasswd', $key)->first();
-        if (! $user) {
-            abort(200, __('mails.secret_key_invalid'));
-        }
-
-        $validator->notEmpty($key, __('mails.secret_key_missing'))
-            ->notEmpty($user->keypasswd, __('mails.password_not_recovery'))
-            ->gte($user->timepasswd, SITETIME, __('mails.secret_key_expired'));
-
-        if ($validator->isValid()) {
-            $newpass = Str::random();
-            $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
-
-            $user->update([
-                'password'   => $hashnewpas,
-                'keypasswd'  => null,
-                'timepasswd' => 0,
-            ]);
-
-            // Восстановление пароля на email
-            $subject = 'Восстановление пароля на ' . setting('title');
-            $message = 'Здравствуйте, ' . $user->getName() . '<br>Ваши новые данные для входа на на сайт <a href="' . config('app.url') . '">' . setting('title') . '</a><br><b>Логин: ' . $user->login . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
-
-            $data = [
-                'to'      => $user->email,
-                'subject' => $subject,
-                'text'    => $message,
-            ];
-
-            sendMail('mailer.default', $data);
-
-            return view('mails/restore', ['login' => $user->login, 'password' => $newpass]);
-        }
-
-        setFlash('danger', current($validator->getErrors()));
-
-        return redirect('/');
-    }
-
-    /**
      * Отписка от рассылки
      */
     public function unsubscribe(Request $request): RedirectResponse
@@ -183,13 +75,13 @@ class MailController extends Controller
         $key = $request->input('key');
 
         if (! $key) {
-            abort(200, __('mails.secret_key_missing'));
+            abort(200, __('mails.token_missing'));
         }
 
         $user = User::query()->where('subscribe', $key)->first();
 
         if (! $user) {
-            abort(200, __('mails.secret_key_expired'));
+            abort(200, __('mails.token_expired'));
         }
 
         $user->subscribe = null;

@@ -7,8 +7,6 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -57,6 +55,7 @@ use Illuminate\Support\Str;
  * @property string $timezone
  * @property int    $point
  * @property int    $money
+ * @property int    $timeban
  * @property string $status
  * @property string $color
  * @property string $avatar
@@ -64,16 +63,14 @@ use Illuminate\Support\Str;
  * @property int    $rating
  * @property int    $posrating
  * @property int    $negrating
- * @property string keypasswd
- * @property int    $timepasswd
  * @property int    $sendprivatmail
  * @property int    $timebonus
- * @property string $confirmregkey
  * @property int    $newchat
  * @property int    $notify
  * @property string $apikey
  * @property string $subscribe
- * @property int    $timeban
+ * @property string $remember_token
+ * @property string $confirm_token
  * @property int    $updated_at
  * @property int    $created_at
  * @property-read Collection<UserData> $data
@@ -102,34 +99,34 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * Администраторы
      */
     public const ADMIN_GROUPS = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
         self::EDITOR,
+        self::MODER,
+        self::ADMIN,
+        self::BOSS,
     ];
 
     /**
      * Участники
      */
     public const USER_GROUPS = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
-        self::EDITOR,
         self::USER,
+        self::EDITOR,
+        self::MODER,
+        self::ADMIN,
+        self::BOSS,
     ];
 
     /**
      * Все пользователи
      */
     public const ALL_GROUPS = [
-        self::BOSS,
-        self::ADMIN,
-        self::MODER,
-        self::EDITOR,
-        self::USER,
-        self::PENDED,
         self::BANNED,
+        self::PENDED,
+        self::USER,
+        self::EDITOR,
+        self::MODER,
+        self::ADMIN,
+        self::BOSS,
     ];
 
     /**
@@ -277,74 +274,6 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         }
 
         return new HtmlString('<i class="fa fa-male fa-lg"></i>');
-    }
-
-    /**
-     * Авторизует пользователя
-     */
-    public static function auth(string $login, string $password, bool $remember = true): User|bool
-    {
-        if (! empty($login) && ! empty($password)) {
-            $user = getUserByLoginOrEmail($login);
-
-            if ($user && password_verify($password, $user->password)) {
-                (new self())->rememberUser($user, $remember);
-
-                // Сохранение привязки к соц. сетям
-                if (app('session')->has('social')) {
-                    Social::query()->create([
-                        'user_id'    => $user->id,
-                        'network'    => app('session')->get('social')->network,
-                        'uid'        => app('session')->get('social')->uid,
-                        'created_at' => SITETIME,
-                    ]);
-                }
-
-                $user->saveVisit(Login::AUTH);
-
-                return $user;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Авторизует через социальные сети
-     *
-     * @throws GuzzleException
-     */
-    public static function socialAuth(string $token): User|bool
-    {
-        $client = new Client(['timeout' => 30.0]);
-
-        $response = $client->get('//ulogin.ru/token.php', [
-            'query' => [
-                'token' => $token,
-                'host'  => $_SERVER['HTTP_HOST'],
-            ],
-        ]);
-
-        if ($response->getStatusCode() === 200) {
-            $network = json_decode($response->getBody()->getContents());
-
-            session()->put('social', $network);
-
-            $social = Social::query()
-                ->where('network', $network->network)
-                ->where('uid', $network->uid)
-                ->first();
-
-            if ($social && $user = getUserById($social->user_id)) {
-                (new self())->rememberUser($user, true);
-
-                $user->saveVisit(Login::SOCIAL);
-
-                return $user;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -732,20 +661,5 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         }
 
         $this->increment('visits');
-    }
-
-    /**
-     * Remember user
-     */
-    private function rememberUser(User $user, bool $remember = false): void
-    {
-        if ($remember) {
-            cookie()->queue(cookie()->forever('login', $user->login));
-            cookie()->queue(cookie()->forever('password', $user->password));
-        }
-
-        app('session')->put('id', $user->id);
-        app('session')->put('password', $user->password);
-        app('session')->put('online');
     }
 }

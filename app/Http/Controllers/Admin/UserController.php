@@ -15,6 +15,7 @@ use App\Models\UserField;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -124,7 +125,7 @@ class UserController extends AdminController
             if ($validator->isValid()) {
                 if ($password) {
                     $text = __('users.user_new_password', ['password' => $password]);
-                    $password = password_hash($password, PASSWORD_BCRYPT);
+                    $password = Hash::make($password);
                 } else {
                     $text = null;
                     $password = $user->password;

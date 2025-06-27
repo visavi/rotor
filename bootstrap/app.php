@@ -16,20 +16,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->prepend([
+        $middleware->append([
             \Illuminate\Cookie\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            \App\Http\Middleware\CheckInstallSite::class,
-            \App\Http\Middleware\AuthenticateCookie::class,
+            \App\Http\Middleware\ApplySettings::class,
         ]);
 
         $middleware->group('web', [
+            \App\Http\Middleware\CheckInstallSite::class,
             \App\Http\Middleware\CheckAccessSite::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+            \App\Http\Middleware\CheckUserState::class,
+
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            // \App\Http\Middleware\VerifyCsrfToken::class,
+            // \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // \Illuminate\Session\Middleware\AuthenticateSession::class,
         ]);
 
         $middleware->alias([
@@ -63,6 +65,14 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->renderable(function (HttpExceptionInterface $exception, Request $request) {
+            /* $sessionMiddleware = resolve(StartSession::class);
+             $AddQueuedCookiesToResponse = resolve(AddQueuedCookiesToResponse::class);
+
+             $decrypter = resolve(EncryptCookies::class);
+             $decrypter->handle(request(), fn () => $sessionMiddleware->handle(request(), fn () => response('')));
+
+             dd($request->user(), $request->session()->all());*/
+
             saveErrorLog($exception->getStatusCode(), $exception->getMessage());
 
             if ($request->wantsJson()) {

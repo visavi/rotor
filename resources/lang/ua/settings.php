@@ -168,7 +168,7 @@ return [
     'moneys_bonus'        => 'Щоденний бонус',
     'moneys_registration' => 'Грошей за реєстрацію',
 
-    'captcha_rotate'        => 'Вид captcha',
+    'captcha_type'          => 'Вид captcha',
     'captcha_valid_symbols' => 'Допустимі символи captcha',
     'captcha_symbols'       => 'Максимальна кількість символів',
     'captcha_public'        => 'Публічний ключ',

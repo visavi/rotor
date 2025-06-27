@@ -40,20 +40,16 @@ return [
     Recovering a profile or data after that will be impossible<br>
     Be careful not to break more rules<br>',
 
-    'welcome'            => 'Welcome :login!',
-    'confirm_enter_code' => 'To confirm registration, you need to enter the code that was sent to you by email',
-    'confirm_code'       => 'Confirmation code',
-    'resend_code'        => 'Resend code',
-    'old_code_invalid'   => 'When you resend, the old verification code will become invalid',
-    'confirm_text'       => '
+    'welcome'          => 'Welcome :login!',
+    'confirm_enter'    => 'To confirm your registration, you need to follow the link that was sent to your email.',
+    'resend_code'      => 'Resend code',
+    'old_code_invalid' => 'If you resend, the old link will become invalid.',
+    'confirm_text'     => '
     Until you confirm the registration, you will not be able to log in to the site <br>
     Account activation must be completed within 24 hours <br>
     After 24 hours, unverified accounts are automatically deleted.',
     'logout' => 'Logout',
 
-    'social_auth_text' => '
-    The profile is not associated with any account on the site. Log in or register to link your account with a social network profile.<br>
-    Or select another social network to enter.',
     'login_or_email'  => 'Login or email',
     'login'           => 'Login',
     'password'        => 'Password',
@@ -134,7 +130,7 @@ return [
     'explain_sent_success'          => 'Explanation sent successfully!',
     'rating_position'               => 'Position in rating: :position',
     'request_requirements'          => 'Too short or long request, from 2 to 20 characters!',
-    'note_to_big'                   => 'Too big note!',
+    'note_to_big'                   => 'The note is too long or too short!',
     'note_saved_success'            => 'Note saved successfully!',
     'already_registered'            => 'You have already registered, it is forbidden to create multiple accounts!',
     'registration_suspended'        => 'Registration is temporarily suspended, please check back later!',
@@ -170,10 +166,10 @@ return [
     'timezone_invalid'              => 'Invalid time shift! (Range -12 - +12 hours)! ',
     'settings_success_changed'      => 'Settings successfully changed!',
     'email_different'               => 'The new email address must be different from the current one!',
-    'password_different'            => 'The entered password does not match the data in the profile!',
+    'password_different'            => 'The new password must be different from the current one!',
+    'password_not_different'        => 'The entered password does not match the data in the profile!',
     'confirm_already_sent'          => 'You have already sent a confirmation code to the new mail address!',
     'confirm_success_sent'          => 'Verification email sent successfully!',
-    'changed_code_empty'            => 'You have not entered an email change code!',
     'changed_code_not_found'        => 'This email change code was not found!',
     'email_success_changed'         => 'Email address successfully changed!',
     'status_changed_not_ban'        => 'You must not have violations to change your status!',
