@@ -22,7 +22,7 @@
     @if ($item->expires_at > SITETIME)
         <div class="alert alert-info">{{ __('boards.expires') }}: {{ dateFixed($item->expires_at) }}</div>
     @else
-        <div class="alert alert-danger">{{ __('boards.item_not_active') }}</div>
+        <div class="alert alert-warning">{{ __('boards.item_not_active') }}</div>
     @endif
 
     @if ($item->expires_at > SITETIME)

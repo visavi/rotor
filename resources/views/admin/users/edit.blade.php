@@ -26,7 +26,7 @@
     </h3>
 
     @if (getUser('id') === $user->id)
-        <div class="alert alert-danger">{{ __('users.edit_user_notice') }}</div>
+        <div class="alert alert-warning">{{ __('users.edit_user_notice') }}</div>
     @endif
 
     <div class="section-form mb-3 shadow">
@@ -188,7 +188,7 @@
                         <div class="invalid-feedback">{{ textError('field' . $field->id) }}</div>
                     </div>
                 @empty
-                    <div class="alert alert-danger">
+                    <div class="alert alert-warning">
                         {{ __('users.empty_custom_fields') }}
                     </div>
                 @endforelse

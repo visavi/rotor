@@ -13,7 +13,7 @@
 
 @section('content')
     @if (setting('regkeys'))
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
             <i class="fa fa-pencil-alt text-muted"></i>
             <b>{{ __('users.confirm_registration') }}</b><br>
             {{ __('users.confirm_registration_hint') }}
@@ -21,7 +21,7 @@
     @endif
 
     @if (setting('invite'))
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
             <i class="fa fa-pencil-alt text-muted"></i>
             <b>{{ __('users.invite_registration') }}</b><br>
             {{ __('users.invite_registration_hint') }}

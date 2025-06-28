@@ -20,7 +20,7 @@
                     {{ __('adverts.expires') }}: {{ dateFixed($advert->deleted_at) }}
                 </div>
             @else
-                <div class="alert alert-danger">
+                <div class="alert alert-warning">
                     {{ __('adverts.expired') }}: {{ dateFixed($advert->deleted_at) }}
                 </div>
             @endif

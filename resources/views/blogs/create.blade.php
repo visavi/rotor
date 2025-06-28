@@ -67,8 +67,6 @@
         </form>
     </div>
 
-    <p class="text-muted fst-italic">{{ __('blogs.text_create1') }}</p>
-
     <a href="/rules">{{ __('main.rules') }}</a> /
     <a href="/stickers">{{ __('main.stickers') }}</a> /
     <a href="/tags">{{ __('main.tags') }}</a><br><br>
