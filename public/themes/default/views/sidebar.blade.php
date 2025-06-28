@@ -96,10 +96,10 @@
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->is('blogs') ? ' active' : '' }}" href="{{ route('blogs.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.blogs_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('blogs/main') ? ' active' : '' }}" href="{{ route('blogs.main') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.articles_all') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('articles') ? ' active' : '' }}" href="{{ route('articles.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_articles') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('articles/comments') ? ' active' : '' }}" href="{{ route('articles.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_comments') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('blogs.index') ? ' active' : '' }}" href="{{ route('blogs.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.blogs_list') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('blogs.main') ? ' active' : '' }}" href="{{ route('blogs.main') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.articles_all') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('articles.index') ? ' active' : '' }}" href="{{ route('articles.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_articles') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('articles.new-comments') ? ' active' : '' }}" href="{{ route('articles.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blogs.new_comments') }}</a></li>
             </ul>
         </li>
 
@@ -110,9 +110,9 @@
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->is('loads') ? ' active' : '' }}" href="{{ route('loads.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.loads_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('downs') ? ' active' : '' }}" href="{{ route('downs.new-files') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_downs') }}</a></li>
-                <li><a class="treeview-item{{ request()->is('downs/comments') ? ' active' : '' }}" href="{{ route('downs.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('loads.index') ? ' active' : '' }}" href="{{ route('loads.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.loads_list') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('downs.new-files') ? ' active' : '' }}" href="{{ route('downs.new-files') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_downs') }}</a></li>
+                <li><a class="treeview-item{{ request()->routeIs('downs.new-comments') ? ' active' : '' }}" href="{{ route('downs.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
             </ul>
         </li>
 

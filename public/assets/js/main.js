@@ -134,31 +134,22 @@ $(function () {
     })
 
     /* Set theme */
-    $('[data-bs-theme-value]').click(function() {
-        let currentTheme = $(this).data('bs-theme-value');
-        let activeThemeClass = $(this).find('i').attr('class');
+    function setTheme(theme) {
+        $('html').attr('data-bs-theme', theme);
 
-        $('html').attr('data-bs-theme', currentTheme);
-
-        $('[data-bs-theme-value]').removeClass('active');
-        $(this).addClass('active');
-        $('#theme-icon-active').attr('class', activeThemeClass);
+        const icon = theme === 'dark' ? 'fa-moon' : 'fa-sun';
+        $('#theme-icon-active').attr('class', `fa-solid ${icon} fa-lg`);
 
         $.ajax({
             type: 'POST',
             url: '/ajax/set-theme',
-            data: {
-                theme: currentTheme,
-            }
+            data: { theme: theme }
         });
+    }
+
+    $('[data-bs-theme-value]').on('click', function() {
+        setTheme($(this).data('bs-theme-value'));
     });
-
-    let theme = html.data('bs-theme');
-    let currentTheme = $("[data-bs-theme-value='" + theme + "']");
-    let activeThemeClass = currentTheme.find('i').attr('class');
-
-    currentTheme.addClass('active');
-    $('#theme-icon-active').attr('class', activeThemeClass);
 
     /* Offset при переходе по якорю */
     if (window.location.hash) {

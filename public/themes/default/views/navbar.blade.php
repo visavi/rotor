@@ -16,7 +16,7 @@
         @hook('navbarStart')
         <li class="dropdown">
             <a href="#" class="app-nav__item" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                <i class="fa-solid fa-sun fa-lg" id="theme-icon-active"></i>
+                <i class="fa-solid {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" style="--bs-dropdown-min-width: 8rem;">
                 <li>
