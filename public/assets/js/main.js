@@ -57,6 +57,15 @@ $(function () {
     $('[data-bs-toggle="tooltip"]').tooltip();
     $('[data-bs-toggle="popover"]').popover();
 
+    /* Hide popover poppers anywhere */
+    $('body').on('click', function (e) {
+        //did not click a popover toggle or popover
+        if ($(e.target).data('bs-toggle') !== 'popover'
+            && $(e.target).parents('.popover.in').length === 0) {
+            $('[data-bs-toggle="popover"]').popover('hide');
+        }
+    });
+
     /* Spoiler */
     $('.spoiler-title').on('click', function () {
         let spoiler = $(this).parent();
