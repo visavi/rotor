@@ -150,7 +150,7 @@ Route::redirect('/articles/end/{id}', '/articles/{id}/comments', 301);
 Route::redirect('/blogs/top', '/articles?sort=rating', 301);
 
 Route::redirect('/photos/comments/{id}', '/photos/{id}/comments', 301);
-Route::redirect('/photos/comment/{id}/{cid}', '/downs/{id}/comments?cid={cid}', 301);
+Route::redirect('/photos/comment/{id}/{cid}', '/photos/{id}/comments?cid={cid}', 301);
 Route::redirect('/photos/albums/{login}', '/photos/active/albums?user={login}', 301);
 Route::redirect('/photos/comments/active/{login}', '/photos/active/comments?user={login}', 301);
 Route::redirect('/photos/end/{id}', '/photos/{id}/comments', 301);
