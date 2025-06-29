@@ -39,39 +39,23 @@ $(function () {
         // Your custom options
     });
 
-    $('.markItUp').markItUp(mySettings).on('input', function () {
-        var maxlength = $(this).attr('maxlength');
-        var text      = $(this).val().replace(/(\r\n|\n|\r)/g, "\r\n");
+    $('.markItUp').markItUp(mySettings).on('input', function() {
+        const $this = $(this);
+        const maxlength = $this.attr('maxlength');
+        const text = $this.val().replace(/(\r\n|\n|\r)/g, "\r\n");
+        const currentLength = text.length;
+        const $counter = $('.js-textarea-counter');
 
-        var currentLength = text.length;
-        var counter = $('.js-textarea-counter');
+        $counter.toggleClass('text-danger', currentLength > maxlength);
 
-        if (currentLength > maxlength) {
-            counter.addClass('text-danger');
-        } else {
-            counter.removeClass('text-danger');
-        }
-
-        counter.text(translate.characters_left + ': ' + (maxlength - currentLength));
-
-        if (currentLength === 0) {
-            counter.empty();
-        }
+        const remaining = maxlength - currentLength;
+        $counter.text(currentLength === 0 ? '' : translate.characters_left + ': ' + remaining);
     });
 
     $('.markItUpHtml').markItUp(myHtmlSettings);
 
     $('[data-bs-toggle="tooltip"]').tooltip();
     $('[data-bs-toggle="popover"]').popover();
-
-    /* Hide popover poppers anywhere */
-    $('body').on('click', function (e) {
-        //did not click a popover toggle or popover
-        if ($(e.target).data('bs-toggle') !== 'popover'
-            && $(e.target).parents('.popover.in').length === 0) {
-            $('[data-bs-toggle="popover"]').popover('hide');
-        }
-    });
 
     /* Spoiler */
     $('.spoiler-title').on('click', function () {
@@ -97,12 +81,8 @@ $(function () {
     $('.birthday').mask('00.00.0000');
 
     /* Scroll up */
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 200) {
-            $('.scrollup').fadeIn();
-        } else {
-            $('.scrollup').fadeOut();
-        }
+    $(window).on('scroll', function() {
+        $('.scrollup').stop().fadeTo(200, $(this).scrollTop() > 200 ? 1 : 0);
     });
 
     $('.scrollup').click(function () {
@@ -699,32 +679,30 @@ let checkTimeout;
 checkLogin = function (el) {
     const block = $(el).closest('.mb-3');
     const message = block.find('.invalid-feedback');
+    const login = $(el).val().trim();
 
-    if ($(el).val().length < 3) {
+    if (login.length < 3) {
         block.removeClass('is-valid is-invalid');
         message.empty();
 
-        return false;
+        return;
     }
 
     clearTimeout(checkTimeout);
 
     checkTimeout = setTimeout(function () {
         $.ajax({
-            data: {
-                login: $(el).val()
-            },
-            dataType: 'json',
-            type: 'post',
             url: '/check-login',
-            success: function (data) {
-                if (data.success) {
-                    block.removeClass('is-invalid').addClass('is-valid');
-                    message.empty();
-                } else {
-                    block.removeClass('is-valid').addClass('is-invalid');
-                    message.text(data.message)
-                }
+            method: 'POST',
+            dataType: 'json',
+            data: {login: login},
+            success: (data) => {
+                block.toggleClass('is-valid', data.success);
+                block.toggleClass('is-invalid', !data.success);
+                message.text(data.success ? '' : data.message);
+            },
+            error: () => {
+                block.removeClass('is-valid').addClass('is-invalid');
             }
         });
     }, 1000);
