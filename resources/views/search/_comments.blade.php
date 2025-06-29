@@ -4,14 +4,17 @@
             <i class="fa-regular fa-message"></i> <a href="{{ $post->relate_type }}" class="text-muted"> {{ $post->getRelateType() }}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="/{{ $post->relate_type }}/{{ $post->relate_id }}" class="text-muted">{{ $post->relate->title }}</a>
+            @php
+                $params = $post->relate->slug ? ['slug' => $post->relate->slug] : ['id' => $post->relate_id];
+            @endphp
+            <a href="{{ route($post->relate_type . '.view', $params) }}" class="text-muted">{{ $post->relate->title }}</a>
         </li>
     </ol>
 
     <div class="section-header d-flex align-items-center">
         <div class="flex-grow-1">
             <div class="section-title">
-                <h3><a class="post-title" href="/{{ $post->relate_type }}/comment/{{ $post->relate_id }}/{{ $post->id }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
+                <h3><a class="post-title" href="{{ route($post->relate_type . '.comments', ['id' => $post->relate_id, 'cid' => $post->id]) }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
             </div>
         </div>
     </div>
