@@ -72,7 +72,7 @@ class RecoveryController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('mails/recovery');
+        return view('users/recovery');
     }
 
     /**
