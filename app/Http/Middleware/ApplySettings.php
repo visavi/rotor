@@ -14,7 +14,7 @@ class ApplySettings
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
+        $user = auth()->user();
 
         $language = $user->language ?? setting('language');
         $theme = $user->themes ?? setting('themes');

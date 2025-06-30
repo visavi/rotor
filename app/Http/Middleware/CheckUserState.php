@@ -20,7 +20,7 @@ class CheckUserState
             return $next($request);
         }
 
-        if ($user = $request->user()) {
+        if ($user = auth()->user()) {
             // Проверка бана
             if ($user->isBanned() && ! $request->routeIs('ban', 'rules', 'logout')) {
                 return redirect('ban?user=' . $user->login);

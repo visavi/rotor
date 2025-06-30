@@ -23,11 +23,9 @@ class AdminLogger
      */
     public function terminate(Request $request, Response $response): void
     {
-        $user = $request->user();
-
-        if ($user) {
+        if (auth()->check()) {
             Log::query()->create([
-                'user_id'    => $user->id,
+                'user_id'    => auth()->id(),
                 'request'    => Str::substr($request->getRequestUri(), 0, 250),
                 'referer'    => Str::substr($request->header('referer'), 0, 250),
                 'ip'         => getIp(),

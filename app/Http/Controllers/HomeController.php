@@ -163,7 +163,7 @@ class HomeController extends Controller
         $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
 
         if (preg_match('/^[a-z]+$/', $lang) && in_array($lang, $languages, true)) {
-            if ($user = getUser()) {
+            if ($user = $request->user()) {
                 $user->update([
                     'language' => $lang,
                 ]);

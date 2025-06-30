@@ -23,12 +23,10 @@ class CheckAccessSite
         // Сайт закрыт для гостей
         if (
             setting('closedsite') === 1
-            && ! $request->user()
             && ! $request->is('login', 'register', 'recovery', 'captcha')
+            && auth()->guest()
         ) {
-            setFlash('danger', __('main.not_authorized'));
-
-            return redirect('login');
+            return redirect()->route('login')->with('danger', __('main.not_authorized'));
         }
 
         // Сайт закрыт для всех
