@@ -72,6 +72,10 @@ class ModuleController extends AdminController
             $moduleConfig['hooks'] = file_get_contents($modulePath . '/hooks.php');
         }
 
+        if (file_exists($modulePath . '/middleware.php')) {
+            $moduleConfig['middleware'] = file_get_contents($modulePath . '/middleware.php');
+        }
+
         $module = Module::query()->where('name', $moduleName)->first();
 
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));

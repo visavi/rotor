@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Module;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class ModuleServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,7 @@ class ModuleServiceProvider extends ServiceProvider
         $modules = Module::getEnabledModules();
 
         foreach ($modules as $module) {
-            $moduleKey = strtolower($module);
+            $moduleKey = Str::snake($module);
 
             // Загрузка hooks
             $hooksFile = base_path('modules/' . $module . '/hooks.php');

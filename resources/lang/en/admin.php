@@ -201,6 +201,7 @@ return [
         'config'                   => 'Config',
         'routes'                   => 'Routes',
         'hooks'                    => 'Hooks',
+        'middleware'               => 'Middleware',
         'empty_modules'            => 'Modules not loaded yet!',
         'confirm_delete'           => 'Do you really want to remove the module?',
         'hint'                     => 'Attention! When you remove the module, all migrations and changes to the database will be deleted',

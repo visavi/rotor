@@ -96,6 +96,11 @@
         <?= bbCode('[spoiler][code]' . $moduleConfig['hooks'] . '[/code][/spoiler]') ?>
     @endif
 
+    @if (isset($moduleConfig['middleware']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.middleware') }}</div>
+        <?= bbCode('[spoiler][code]' . $moduleConfig['middleware'] . '[/code][/spoiler]') ?>
+    @endif
+
     <br>
     @if ($module)
         @if (version_compare($moduleConfig['version'], $module->version, '>'))
