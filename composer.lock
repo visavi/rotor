@@ -2244,12 +2244,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mobicms/captcha.git",
-                "reference": "51034dccb7fcd8c40ed143ddde01bb193d7f9d5a"
+                "reference": "b690904e18e2b1960d4060525cf55479671a5cf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mobicms/captcha/zipball/51034dccb7fcd8c40ed143ddde01bb193d7f9d5a",
-                "reference": "51034dccb7fcd8c40ed143ddde01bb193d7f9d5a",
+                "url": "https://api.github.com/repos/mobicms/captcha/zipball/b690904e18e2b1960d4060525cf55479671a5cf7",
+                "reference": "b690904e18e2b1960d4060525cf55479671a5cf7",
                 "shasum": ""
             },
             "require": {
@@ -2293,7 +2293,7 @@
                 "issues": "https://github.com/mobicms/captcha/issues",
                 "source": "https://github.com/mobicms/captcha"
             },
-            "time": "2025-06-29T08:00:15+00:00"
+            "time": "2025-06-29T10:29:22+00:00"
         },
         {
             "name": "monolog/monolog",
