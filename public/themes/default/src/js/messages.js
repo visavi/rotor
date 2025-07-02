@@ -29,11 +29,11 @@ $(document).ready(function () {
 
     setInterval(() => {
         const now = Date.now();
-        const lastReq = parseInt(localStorage.getItem('messageLastRequest') || '0');
+        const lastReq = parseInt(localStorage.getItem('messageTime') || '0');
 
         if (now - lastReq < INTERVAL - 100) return;
 
-        localStorage.setItem('messageLastRequest', now);
+        localStorage.setItem('messageTime', now);
 
         $.get('/messages/new').then(data => {
             localStorage.setItem('messageData', JSON.stringify(data));
