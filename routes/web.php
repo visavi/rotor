@@ -149,12 +149,11 @@ Route::redirect('/articles/print/{id}', '/articles/{id}/print', 301);
 Route::redirect('/articles/end/{id}', '/articles/{id}/comments', 301);
 Route::redirect('/blogs/top', '/articles?sort=rating', 301);
 Route::get('/blogs/active/articles', function () {
-    return Redirect::to('/articles/active/articles?' . request()->server('QUERY_STRING'), 301);
+    return redirect('/articles/active/articles?' . request()->server('QUERY_STRING'), 301);
 });
 Route::get('/blogs/active/comments', function () {
-    return Redirect::to('/articles/active/comments?' . request()->server('QUERY_STRING'), 301);
+    return redirect('/articles/active/comments?' . request()->server('QUERY_STRING'), 301);
 });
-
 
 Route::redirect('/photos/comments/{id}', '/photos/{id}/comments', 301);
 Route::redirect('/photos/comment/{id}/{cid}', '/photos/{id}/comments?cid={cid}', 301);
