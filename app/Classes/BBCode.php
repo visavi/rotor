@@ -119,7 +119,7 @@ class BBCode
             'callback' => 'userReplace',
         ],
         'hashtag' => [
-            'pattern'  => '/(?<!\w)#([\p{L}][\p{L}\w\-\+]{2,29})(?!\w)/u',
+            'pattern'  => '/(?<=^|\s)#([\p{L}][\p{L}\w\-\+]{2,29})(?!\w)/u',
             'callback' => 'hashtagReplace',
         ],
     ];
