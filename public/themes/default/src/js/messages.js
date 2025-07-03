@@ -2,8 +2,7 @@ $(document).ready(function () {
     const INTERVAL = 60000;
     const SOUND = new Audio('/assets/ding.mp3');
     const $item = $('.js-messages-block .app-nav__item');
-
-    let prevCount = parseInt(localStorage.getItem('messageCount') || '0');
+    const originalTitle = document.title.trim();
 
     function updateBadge(data) {
         if (!$item.length || !data?.success || data.countMessages <= 0) return;
@@ -13,11 +12,13 @@ $(document).ready(function () {
 
         badge.length ? badge.text(count) : $item.append(`<span class="badge bg-notify">${count}</span>`);
 
+        const prevCount = parseInt(localStorage.getItem('messageCount') || '0');
+
         if (count > prevCount && !document.hidden) {
             SOUND.play().catch(() => {});
+            document.title = `🔴 ${originalTitle}`;
         }
 
-        prevCount = count;
         localStorage.setItem('messageCount', count);
     }
 

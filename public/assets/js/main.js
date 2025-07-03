@@ -613,39 +613,52 @@ showQueries = function () {
     $('.js-queries').slideToggle();
 };
 
+/* Update message count */
+updateMessageCount = function (newCount) {
+    const data = JSON.parse(localStorage.getItem('messageData') || '{}');
+    data.countMessages = parseInt(newCount) || 0;
+    localStorage.setItem('messageData', JSON.stringify(data));
+    localStorage.setItem('messageCount', newCount);
+
+    window.dispatchEvent(new Event('storage'));
+}
+
 /* Get new messages */
 getNewMessages = function () {
-    const notify_item = $('.js-messages-block .app-nav__item');
-    const notify_badge = notify_item.find('.badge');
-    const notify_span = $('.app-notification__title span');
+    const $notifyItem = $('.js-messages-block .app-nav__item');
+    const $badge = $notifyItem.find('.badge');
+    const $titleSpan = $('.app-notification__title span');
 
     $.ajax({
         dataType: 'json',
-        type: 'get',
+        type: 'GET',
         url: '/messages/new',
-        beforeSend: function () {
+        beforeSend() {
             $('.js-messages').append('<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>');
         },
-        complete: function () {
+        complete() {
             $('.js-message-spin').remove();
         },
-        success: function (data) {
-            if (data.success) {
-                if (notify_badge.length > 0) {
-                    notify_badge.html(data.countMessages);
-                } else {
-                    notify_item.append('<span class="badge bg-notify">' + data.countMessages + '</span>');
-                }
-                notify_span.html(data.countMessages);
-                $('.js-messages-block').find('.js-messages').empty().append(data.dialogues);
-            } else {
-                if (notify_badge.length > 0) {
-                    notify_span.html(0);
-                    notify_badge.remove();
-                }
-
-                return false;
+        success(data) {
+            if (!data?.success) {
+                $badge.remove();
+                $titleSpan.text(0);
+                return;
             }
+
+            const count = data.countMessages;
+            const $newBadge = $('<span>', { class: 'badge bg-notify', text: count });
+
+            if ($badge.length) {
+                $badge.text(count);
+            } else {
+                $notifyItem.append($newBadge);
+            }
+
+            updateMessageCount(count);
+
+            $titleSpan.text(count);
+            $('.js-messages-block .js-messages').empty().append(data.dialogues);
         }
     });
 

@@ -28,7 +28,7 @@ class MessageController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->user = getUser();
+            $this->user = $request->user();
 
             return $next($request);
         });
@@ -114,9 +114,10 @@ class MessageController extends Controller
             ->orderBy('created_at')
             ->get();
 
+        $countMessages = $this->user->newprivat;
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
-        return view($view, compact('messages', 'user', 'files'));
+        return view($view, compact('messages', 'user', 'files', 'countMessages'));
     }
 
     /**
