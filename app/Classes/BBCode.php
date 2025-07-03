@@ -115,8 +115,12 @@ class BBCode
             'replace' => '<div><audio src="$1" style="max-width:100%;" preload="metadata" controls></audio></div>',
         ],
         'username' => [
-            'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,))/',
+            'pattern'  => '/(?<=^|\s)@([\w\-]{3,20}+)(?=(\s|,|$))/',
             'callback' => 'userReplace',
+        ],
+        'hashtag' => [
+            'pattern'  => '/(?<!\w)#([\p{L}][\p{L}\w\-\+]{2,29})(?!\w)/u',
+            'callback' => 'hashtagReplace',
         ],
     ];
 
@@ -299,21 +303,29 @@ class BBCode
         if (empty($listUsers)) {
             $listUsers = Cache::remember('users', 3600, static function () {
                 return User::query()
-                    ->select('login', 'name')
                     ->where('point', '>', 0)
-                    ->get()
                     ->pluck('name', 'login')
+                    ->mapWithKeys(fn ($name, $login) => [strtolower($login) => $name])
                     ->toArray();
             });
         }
 
-        if (! array_key_exists($match[1], $listUsers)) {
+        $login = strtolower($match[1]);
+        if (! array_key_exists($login, $listUsers)) {
             return $match[0];
         }
 
-        $name = $listUsers[$match[1]] ?: $match[1];
+        $name = $listUsers[$login] ?: $match[1];
 
         return '<a href="/users/' . $match[1] . '">' . check($name) . '</a>';
+    }
+
+    /**
+     * Обрабатывает хештеги
+     */
+    public function hashtagReplace(array $match): string
+    {
+        return '<a href="' . route('search', ['query' => check($match[1])]) . '">' . check($match[0]) . '</a>';
     }
 
     /**

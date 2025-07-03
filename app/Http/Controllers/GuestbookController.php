@@ -22,7 +22,7 @@ class GuestbookController extends Controller
         $posts = Guestbook::query()
             ->active()
             ->orderByDesc('created_at')
-            ->with('user', 'editUser')
+            ->with('user', 'editUser', 'files')
             ->paginate(10);
 
         $unpublished = Guestbook::query()->active(false)->count();

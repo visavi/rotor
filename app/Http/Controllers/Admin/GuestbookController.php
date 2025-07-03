@@ -20,7 +20,7 @@ class GuestbookController extends AdminController
     {
         $posts = Guestbook::query()
             ->orderByDesc('created_at')
-            ->with('user', 'editUser')
+            ->with('user', 'editUser', 'files')
             ->paginate(setting('bookpost'));
 
         $unpublished = Guestbook::query()->active(false)->count();
