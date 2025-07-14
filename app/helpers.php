@@ -50,7 +50,7 @@ use Illuminate\Support\ViewErrorBag;
 use Intervention\Image\ImageManager;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '12.5.0';
+const ROTOR_VERSION = '12.6.0';
 define('SITETIME', time());
 
 /**

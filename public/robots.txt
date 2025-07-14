@@ -55,3 +55,9 @@ Disallow: /
 
 User-agent: DotBot
 Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: Yatcybot
+Disallow: /

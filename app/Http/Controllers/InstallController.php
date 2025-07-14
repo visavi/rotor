@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
@@ -163,7 +164,7 @@ class InstallController extends Controller
                 ]);
 
                 // ------------- Авторизация -----------//
-                User::auth($login, $password);
+                Auth::login($user, true);
 
                 // -------------- Приват ---------------//
                 $text = __('install.text_message', ['login' => $login]);
