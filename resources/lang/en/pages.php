@@ -35,6 +35,15 @@ return [
     'faq_active_text9'  => 'Also, the more points the less the time of anti-flood',
     'faq_active_text10' => 'The ability to set a personal status',
 
+    'faq_money'           => 'Accrual of assets and money',
+    'faq_money_comment'   => 'Adding a comment',
+    'faq_money_guestbook' => 'Adding a message to the guestbook',
+    'faq_money_down'      => 'Adding a file to downloads',
+    'faq_money_blog'      => 'Adding an article to blogs',
+    'faq_money_forum'     => 'Adding a message to the forum',
+    'faq_money_register'  => 'Accrual of money for registration',
+    'faq_money_bonus'     => 'Daily bonus',
+
     'why_register' => '
     <b>Why sign up</b><br>
     Registration is intended for those who intend to often visit the site and have full access to all sections of the site<br>
