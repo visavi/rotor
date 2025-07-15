@@ -129,6 +129,15 @@ class OfferController extends AdminController
                     'updated_at'    => SITETIME,
                 ]);
 
+                $text = textNotice('offer_reply', [
+                    'url'    => route('offers.view', ['id' => $offer->id], false),
+                    'title'  => $offer->title,
+                    'text'   => $offer->reply,
+                    'status' => strip_tags($offer->getStatus()->toHtml()),
+                ]);
+
+                $offer->user->sendMessage(null, $text);
+
                 setFlash('success', __('offers.answer_success_added'));
 
                 return redirect()->route('admin.offers.view', ['id' => $offer->id]);
