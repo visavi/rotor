@@ -34,6 +34,18 @@
         <label for="down_allow_links" class="form-check-label">{{ __('settings.down_allow_links') }}</label>
     </div>
 
+    <div class="mb-3{{ hasError('sets[down_point]') }}">
+        <label for="down_point" class="form-label">{{ __('settings.down_point') }}:</label>
+        <input type="number" class="form-control" id="down_point" name="sets[down_point]" maxlength="2" value="{{ getInput('sets.down_point', $settings['down_point']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[down_point]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[down_money]') }}">
+        <label for="down_money" class="form-label">{{ __('settings.down_money') }}:</label>
+        <input type="number" class="form-control" id="down_money" name="sets[down_money]" maxlength="2" value="{{ getInput('sets.down_money', $settings['down_money']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[down_money]') }}</div>
+    </div>
+
     <div class="mb-3">
         <label for="down_title_min" class="form-label">{{ __('settings.loads_title_length') }}:</label>
         <div class="d-flex gap-2">

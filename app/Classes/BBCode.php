@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\DB;
  * Класс обработки BB-кодов
  *
  * @license Code and contributions have MIT License
+ *
  * @link    https://visavi.net
+ *
  * @author  Alexander Grigorev <admin@visavi.net>
  */
 class BBCode

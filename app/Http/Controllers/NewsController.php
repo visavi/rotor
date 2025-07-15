@@ -106,8 +106,8 @@ class NewsController extends Controller
 
                 $user = getUser();
                 $user->increment('allcomments');
-                $user->increment('point');
-                $user->increment('money', 5);
+                $user->increment('point', setting('comment_point'));
+                $user->increment('money', setting('comment_money'));
 
                 $news->increment('count_comments');
 

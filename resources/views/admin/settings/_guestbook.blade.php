@@ -11,12 +11,6 @@
     </div>
 
     <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[bookscores]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[bookscores]" id="bookscores"{{ getInput('sets.bookscores', $settings['bookscores']) ? ' checked' : '' }}>
-        <label class="form-check-label" for="bookscores">{{ __('settings.guestbook_points_add') }}</label>
-    </div>
-
-    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[guest_moderation]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[guest_moderation]" id="guest_moderation"{{ getInput('sets.guest_moderation', $settings['guest_moderation']) ? ' checked' : '' }}>
         <label class="form-check-label" for="guest_moderation">{{ __('settings.guestbook_moderation') }}</label>
@@ -26,6 +20,18 @@
         <label for="bookpost" class="form-label">{{ __('settings.guestbook_per_page') }}:</label>
         <input type="number" class="form-control" id="bookpost" name="sets[bookpost]" maxlength="2" value="{{ getInput('sets.bookpost', $settings['bookpost']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[bookpost]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[guestbook_point]') }}">
+        <label for="guestbook_point" class="form-label">{{ __('settings.guestbook_point') }}:</label>
+        <input type="number" class="form-control" id="guestbook_point" name="sets[guestbook_point]" maxlength="2" value="{{ getInput('sets.guestbook_point', $settings['guestbook_point']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[guestbook_point]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[guestbook_money]') }}">
+        <label for="guestbook_money" class="form-label">{{ __('settings.guestbook_money') }}:</label>
+        <input type="number" class="form-control" id="guestbook_money" name="sets[guestbook_money]" maxlength="2" value="{{ getInput('sets.guestbook_money', $settings['guestbook_money']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[guestbook_money]') }}</div>
     </div>
 
     <div class="mb-3">

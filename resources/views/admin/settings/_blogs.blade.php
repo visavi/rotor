@@ -16,10 +16,16 @@
         <div class="invalid-feedback">{{ textError('sets[bloggroup]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[blogvotepoint]') }}">
-        <label for="blogvotepoint" class="form-label">{{ __('settings.blogs_points') }}:</label>
-        <input type="number" class="form-control" id="blogvotepoint" name="sets[blogvotepoint]" maxlength="3" value="{{ getInput('sets.blogvotepoint', $settings['blogvotepoint']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[blogvotepoint]') }}</div>
+    <div class="mb-3{{ hasError('sets[blog_point]') }}">
+        <label for="blog_point" class="form-label">{{ __('settings.blog_point') }}:</label>
+        <input type="number" class="form-control" id="blog_point" name="sets[blog_point]" maxlength="2" value="{{ getInput('sets.blog_point', $settings['blog_point']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[blog_point]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[blog_money]') }}">
+        <label for="blog_money" class="form-label">{{ __('settings.blog_money') }}:</label>
+        <input type="number" class="form-control" id="blog_money" name="sets[blog_money]" maxlength="2" value="{{ getInput('sets.blog_money', $settings['blog_money']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[blog_money]') }}</div>
     </div>
 
     <div class="form-check mb-3">

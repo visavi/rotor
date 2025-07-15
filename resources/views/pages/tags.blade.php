@@ -41,8 +41,8 @@
     <i class="fa fa-list-ul"></i> [list]{{ __('pages.unorderedlist') }}[/list]{{ bbCode('[list]' . __('pages.unorderedlist') . '[/list]') }}<br>
     <i class="fa fa-list-ol"></i> [list=1]{{ __('pages.orderedlist') }}[/list]{{ bbCode('[list=1]' . __('pages.orderedlist') . '[/list]') }}<br>
 
-    <i class="fa fa-text-height"></i> [spoiler]{{ __('pages.spoiler_text') }}[/spoiler]{{ bbCode('[spoiler]' . __('pages.spoiler_text') . '[/spoiler]') }}<br>
-    <i class="fa fa-text-height"></i> [spoiler={{ __('pages.spoiler_title') }}]{{ __('pages.spoiler_text') }}[/spoiler]{{ bbCode('[spoiler=' . __('pages.spoiler_title') . ']' . __('pages.spoiler_text') . '[/spoiler]') }}<br>
+    <i class="fa fa-plus-square"></i> [spoiler]{{ __('pages.spoiler_text') }}[/spoiler]{{ bbCode('[spoiler]' . __('pages.spoiler_text') . '[/spoiler]') }}<br>
+    <i class="fa fa-plus-square"></i> [spoiler={{ __('pages.spoiler_title') }}]{{ __('pages.spoiler_text') }}[/spoiler]{{ bbCode('[spoiler=' . __('pages.spoiler_title') . ']' . __('pages.spoiler_text') . '[/spoiler]') }}<br>
 
     <i class="fa fa-eye-slash"></i> [hide]{{ __('pages.hide_text') }}[/hide]{{ bbCode('[hide]' . __('pages.hide_text') . '[/hide]') }}<br>
     <i class="fa fa-quote-right"></i> [quote]{{ __('pages.quote') }}[/quote]{{ bbCode('[quote]' . __('pages.quote') . '[/quote]') }}<br>

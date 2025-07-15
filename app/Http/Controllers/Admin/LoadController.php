@@ -343,10 +343,16 @@ class LoadController extends AdminController
                 $status = __('loads.down_success_published');
                 $down->category->increment('count_downs');
                 $text = textNotice('down_publish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
+
+                $down->user->increment('point', setting('down_point'));
+                $down->user->increment('money', setting('down_money'));
             } else {
                 $status = __('loads.down_success_unpublished');
                 $down->category->decrement('count_downs');
                 $text = textNotice('down_unpublish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
+
+                $down->user->decrement('point', setting('down_point'));
+                $down->user->decrement('money', setting('down_money'));
             }
 
             $down->user->sendMessage(null, $text);

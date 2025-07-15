@@ -45,7 +45,7 @@ class GuestbookController extends Controller
     public function add(Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
         $msg = $request->input('msg');
-        $user = getUser();
+        $user = $request->user();
 
         $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
             ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')])
@@ -68,11 +68,10 @@ class GuestbookController extends Controller
             if ($user) {
                 $active = true;
                 $guestName = null;
-                $bookscores = setting('bookscores') ? 1 : 0;
 
                 $user->increment('allguest');
-                $user->increment('point', $bookscores);
-                $user->increment('money', 5);
+                $user->increment('point', setting('guestbook_point'));
+                $user->increment('money', setting('guestbook_money'));
             }
 
             $guestbook = Guestbook::query()->create([

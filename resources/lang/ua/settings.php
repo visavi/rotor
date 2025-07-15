@@ -37,16 +37,19 @@ return [
 
     'blogs_per_page'       => 'Статій на сторінку',
     'blogs_groups'         => 'Групи блогів на сторінці',
-    'blogs_points'         => 'Актива для голосування за статті',
     'blogs_publish'        => 'Дозволяти користувачам публікувати статті',
     'blog_title_length'    => 'Довжина заголовка статті',
     'blog_text_length'     => 'Довжина тексту статті',
     'blog_tag_length'      => 'Довжина тега статті',
     'blog_category_length' => 'Довжина категорії статті',
+    'blog_point'           => 'Сума балів, що нараховуються',
+    'blog_money'           => 'Сума нарахованих грошей',
 
     'comments_symbols'  => 'Символів у коментарях',
     'comments_per_page' => 'Коментарів на сторінку',
     'chat_per_page'     => 'Повідомлень в адмін-чаті на стор',
+    'comment_point'     => 'Сума балів, що нараховуються',
+    'comment_money'     => 'Сума нарахованих грошей',
 
     'contacts_per_page'  => 'Лістинг у контакт-листі',
     'ignores_per_page'   => 'Лістинг в ігнор-листі',
@@ -61,11 +64,14 @@ return [
     'forum_note_length'        => 'Довжина оголошення теми',
     'forum_category_length'    => 'Довжина назви розділу',
     'forum_description_length' => 'Довжина опису розділу',
+    'forum_point'              => 'Сума балів, що нараховуються',
+    'forum_money'              => 'Сума нарахованих грошей',
 
     'guestbook_guests_allow' => 'Дозволити гостям писати в гостьовій',
-    'guestbook_points_add'   => 'Нараховувати бали в гостьовій',
     'guestbook_per_page'     => 'Повідомлень у гостьовій на стор',
     'guestbook_text_length'  => 'Довжина тексту повідомлення',
+    'guestbook_point'        => 'Сума балів, що нараховуються',
+    'guestbook_money'        => 'Сума нарахованих грошей',
 
     'images_reduction_size'  => 'Зменшення фотографій під час завантаження',
     'images_preview_size'    => 'Розмір прев\'ю',
@@ -90,6 +96,8 @@ return [
     'loads_text_length'           => 'Довжина опису завантаження',
     'loads_link_length'           => 'Довжина посилання на файл',
     'loads_category_length'       => 'Довжина назви розділу',
+    'down_point'                  => 'Сума балів, що нараховуються',
+    'down_money'                  => 'Сума нарахованих грошей',
 
     'mails_count_days'  => 'Кільк. днів перед відправкою повідомлення про приват на email',
     'mails_send_emails' => 'Розсилка листів на email за одну операцію',

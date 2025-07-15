@@ -16,6 +16,18 @@
         <div class="invalid-feedback">{{ textError('sets[forumpost]') }}</div>
     </div>
 
+    <div class="mb-3{{ hasError('sets[forum_point]') }}">
+        <label for="forum_point" class="form-label">{{ __('settings.forum_point') }}:</label>
+        <input type="number" class="form-control" id="forum_point" name="sets[forum_point]" maxlength="2" value="{{ getInput('sets.forum_point', $settings['forum_point']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[forum_point]') }}</div>
+    </div>
+
+    <div class="mb-3{{ hasError('sets[forum_money]') }}">
+        <label for="forum_money" class="form-label">{{ __('settings.forum_money') }}:</label>
+        <input type="number" class="form-control" id="forum_money" name="sets[forum_money]" maxlength="2" value="{{ getInput('sets.forum_money', $settings['forum_money']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[forum_money]') }}</div>
+    </div>
+
     <div class="mb-3">
         <label for="forum_title_min" class="form-label">{{ __('settings.forum_title_length') }}:</label>
         <div class="d-flex gap-2">

@@ -37,16 +37,19 @@ return [
 
     'blogs_per_page'       => 'Articles per page',
     'blogs_groups'         => 'Blog groups on page',
-    'blogs_points'         => 'Asset to vote on articles',
     'blogs_publish'        => 'Allow users to publish articles',
     'blog_title_length'    => 'Article title length',
     'blog_text_length'     => 'Article text length',
     'blog_tag_length'      => 'Article tag length',
     'blog_category_length' => 'Article category length',
+    'blog_point'           => 'Total points awarded',
+    'blog_money'           => 'Total moneys awarded',
 
     'comments_symbols'  => 'Characters in the comments',
     'comments_per_page' => 'Comments per page',
     'chat_per_page'     => 'Posts in admin chat on page',
+    'comment_point'     => 'Total points awarded',
+    'comment_money'     => 'Total moneys awarded',
 
     'contacts_per_page'  => 'Listing in the contact list',
     'ignores_per_page'   => 'Listing on the ignore list',
@@ -60,12 +63,15 @@ return [
     'forum_note_length'        => 'Topic note length',
     'forum_category_length'    => 'Forum name length',
     'forum_description_length' => 'Forum description length',
+    'forum_point'              => 'Total points awarded',
+    'forum_money'              => 'Total moneys awarded',
 
     'guestbook_guests_allow' => 'Allow guests to write in guestbook',
-    'guestbook_points_add'   => 'To earn points in the guest room',
     'guestbook_moderation'   => 'Message moderation for guests',
     'guestbook_per_page'     => 'Guest posts on page',
     'guestbook_text_length'  => 'Message text length',
+    'guestbook_point'        => 'Total points awarded',
+    'guestbook_money'        => 'Total moneys awarded',
 
     'images_reduction_size'  => 'Reducing photos when uploading',
     'images_preview_size'    => 'Size preview',
@@ -90,6 +96,8 @@ return [
     'loads_text_length'           => 'Download text length',
     'loads_link_length'           => 'File link length',
     'loads_category_length'       => 'Section name length',
+    'down_point'                  => 'Total points awarded',
+    'down_money'                  => 'Total moneys awarded',
 
     'mails_count_days'  => 'Qty. days before sending a private notification by email ',
     'mails_send_emails' => 'Sending emails in one operation',

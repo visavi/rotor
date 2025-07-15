@@ -258,8 +258,8 @@ class ArticleController extends Controller
 
                 $category->increment('count_articles');
 
-                $user->increment('point', 5);
-                $user->increment('money', 100);
+                $user->increment('point', setting('blog_point'));
+                $user->increment('money', setting('blog_money'));
 
                 File::query()
                     ->where('relate_type', Article::$morphName)
@@ -330,8 +330,8 @@ class ArticleController extends Controller
                 ]);
 
                 $user->increment('allcomments');
-                $user->increment('point');
-                $user->increment('money', 5);
+                $user->increment('point', setting('comment_point'));
+                $user->increment('money', setting('comment_money'));
 
                 $article->increment('count_comments');
 

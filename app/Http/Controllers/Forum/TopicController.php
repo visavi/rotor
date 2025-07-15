@@ -190,8 +190,8 @@ class TopicController extends Controller
                 ]);
 
                 $user->increment('allforum');
-                $user->increment('point');
-                $user->increment('money', 5);
+                $user->increment('point', setting('forum_point'));
+                $user->increment('money', setting('forum_money'));
 
                 $topic->increment('count_posts');
                 $topic->update([

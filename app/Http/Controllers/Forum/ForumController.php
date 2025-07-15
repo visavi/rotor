@@ -129,8 +129,8 @@ class ForumController extends Controller
                 $msg = antimat($msg);
 
                 $user->increment('allforum');
-                $user->increment('point');
-                $user->increment('money', 5);
+                $user->increment('point', setting('forum_point'));
+                $user->increment('money', setting('forum_money'));
 
                 $topic = Topic::query()->create([
                     'forum_id'    => $forum->id,

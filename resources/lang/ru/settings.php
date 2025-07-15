@@ -37,16 +37,19 @@ return [
 
     'blogs_per_page'       => 'Статей на страницу',
     'blogs_groups'         => 'Группы блогов на стр.',
-    'blogs_points'         => 'Актива для голосования за статьи',
     'blogs_publish'        => 'Разрешать пользователям публиковать статьи',
     'blog_title_length'    => 'Длина заголовка статьи',
     'blog_text_length'     => 'Длина текста статьи',
     'blog_tag_length'      => 'Длина тега статьи',
     'blog_category_length' => 'Длина категории статьи',
+    'blog_point'           => 'Сумма начисляемых баллов',
+    'blog_money'           => 'Сумма начисляемых денег',
 
     'comments_symbols'  => 'Символов в комментариях',
     'comments_per_page' => 'Комментариев на страницу',
     'chat_per_page'     => 'Сообщений в админ-чате на стр',
+    'comment_point'     => 'Сумма начисляемых баллов',
+    'comment_money'     => 'Сумма начисляемых денег',
 
     'contacts_per_page'  => 'Листинг в контакт-листе',
     'ignores_per_page'   => 'Листинг в игнор-листе',
@@ -60,12 +63,15 @@ return [
     'forum_note_length'        => 'Длина объявления темы',
     'forum_category_length'    => 'Длина названия раздела',
     'forum_description_length' => 'Длина описания раздела',
+    'forum_point'              => 'Сумма начисляемых баллов',
+    'forum_money'              => 'Сумма начисляемых денег',
 
     'guestbook_guests_allow' => 'Разрешить гостям писать в гостевой',
-    'guestbook_points_add'   => 'Начислять баллы в гостевой',
     'guestbook_moderation'   => 'Модерация сообщений для гостей',
     'guestbook_per_page'     => 'Сообщений в гостевой на стр',
     'guestbook_text_length'  => 'Длина текста сообщения',
+    'guestbook_point'        => 'Сумма начисляемых баллов',
+    'guestbook_money'        => 'Сумма начисляемых денег',
 
     'images_reduction_size'  => 'Уменьшение фото при загрузке',
     'images_preview_size'    => 'Размер превью',
@@ -90,6 +96,8 @@ return [
     'loads_text_length'           => 'Длина описания загрузки',
     'loads_link_length'           => 'Длина ссылки на файл',
     'loads_category_length'       => 'Длина названия раздела',
+    'down_point'                  => 'Сумма начисляемых баллов',
+    'down_money'                  => 'Сумма начисляемых денег',
 
     'mails_count_days'  => 'Кол. дней перед отправкой уведомления о привате на email',
     'mails_send_emails' => 'Рассылка писем на email за одну операцию',
