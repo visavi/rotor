@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -26,6 +28,7 @@ use Illuminate\Support\HtmlString;
  * @property int    $created_at
  * @property int    $updated_at
  * @property int    $expires_at
+ * @property bool   $active
  * @property-read Board            $category
  * @property-read Collection<File> $files
  */
@@ -56,6 +59,16 @@ class Item extends BaseModel
     public static string $morphName = 'items';
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'active' => 'bool',
+        ];
+    }
+
+    /**
      * Возвращает поля участвующие в поиске
      */
     public function searchableFields(): array
@@ -73,6 +86,15 @@ class Item extends BaseModel
             'price' => ['field' => 'price', 'label' => __('main.cost')],
             'name'  => ['field' => 'title', 'label' => __('main.title')],
         ];
+    }
+
+    /**
+     * Scope a query to only include active records.
+     */
+    #[Scope]
+    protected function active(Builder $query, bool $active = true): void
+    {
+        $query->where('active', $active);
     }
 
     /**

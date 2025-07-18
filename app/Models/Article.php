@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -31,6 +34,8 @@ use Illuminate\Support\Str;
  * @property int    $visits
  * @property int    $count_comments
  * @property int    $created_at
+ * @property bool   $active
+ * @property Date   $published_at
  * @property-read Collection<File>    $files
  * @property-read Collection<Comment> $comments
  * @property-read Collection<Poll>    $polls
@@ -69,6 +74,17 @@ class Article extends BaseModel
     public static string $morphName = 'articles';
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'active'       => 'bool',
+            'published_at' => 'datetime',
+        ];
+    }
+
+    /**
      * Возвращает поля участвующие в поиске
      */
     public function searchableFields(): array
@@ -99,6 +115,15 @@ class Article extends BaseModel
             get: fn (string $value) => str_replace(['%id%', '%slug%'], [$this->id, $value], setting('slug_template')),
             set: fn ($value) => Str::slug($this->title),
         );
+    }
+
+    /**
+     * Scope a query to only include active records.
+     */
+    #[Scope]
+    protected function active(Builder $query, bool $active = true): void
+    {
+        $query->where('active', $active);
     }
 
     /**

@@ -58,6 +58,7 @@ class Load extends BaseModel
     public function lastDown(): hasOne
     {
         return $this->hasOne(Down::class, 'category_id')
+            ->active()
             ->latest('created_at')
             ->limit(1);
     }

@@ -17,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -57,15 +58,10 @@ class ArticleController extends Controller
         [$sorting, $orderBy] = Article::getSorting($sort, $order);
 
         $articles = Article::query()
-            ->select('articles.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('articles.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Article::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
+            ->active()
             ->where('category_id', $id)
             ->orderBy(...$orderBy)
-            ->with('user')
+            ->with('user', 'poll')
             ->paginate(setting('blogpost'))
             ->appends(compact('sort', 'order'));
 
@@ -80,14 +76,8 @@ class ArticleController extends Controller
         $id = Str::before($slug, '-');
 
         $article = Article::query()
-            ->select('articles.*', 'polls.vote')
-            ->where('articles.id', $id)
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('articles.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Article::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
-            ->with('category.parent', 'tags')
+            ->where('id', $id)
+            ->with('category.parent', 'tags', 'poll')
             ->first();
 
         if (! $article) {
@@ -124,6 +114,8 @@ class ArticleController extends Controller
             $text = $request->input('text');
             $tags = (array) $request->input('tags');
             $tags = array_unique(array_diff($tags, ['']));
+            $delay = (bool) $request->input('delay');
+            $published = $request->input('published');
 
             $category = Blog::query()->find($cid);
 
@@ -134,6 +126,10 @@ class ArticleController extends Controller
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
 
+            if (isAdmin() && $delay && Date::parse($published) < now()) {
+                $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
+            }
+
             foreach ($tags as $tag) {
                 $validator->length($tag, setting('blog_tag_min'), setting('blog_tag_max'), ['tags' => __('blogs.article_error_tags')]);
             }
@@ -143,16 +139,14 @@ class ArticleController extends Controller
             }
 
             if ($validator->isValid()) {
-                // Обновление счетчиков
-                if ($article->category_id !== $category->id) {
-                    $category->increment('count_articles');
-                    Blog::query()->where('id', $article->category_id)->decrement('count_articles');
-                }
+                $oldCategory = $article->category;
 
                 $article->update([
-                    'category_id' => $category->id,
-                    'title'       => $title,
-                    'text'        => $text,
+                    'category_id'  => $category->id,
+                    'title'        => $title,
+                    'text'         => $text,
+                    'active'       => ! $delay,
+                    'published_at' => isAdmin() && $delay ? $published : null,
                 ]);
 
                 $tagIds = [];
@@ -162,6 +156,13 @@ class ArticleController extends Controller
                 }
 
                 $article->tags()->sync($tagIds);
+
+                // Обновление счетчиков
+                $category->restatement();
+
+                if ($oldCategory->id !== $category->id) {
+                    $oldCategory->restatement();
+                }
 
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 setFlash('success', __('blogs.article_success_edited'));
@@ -184,6 +185,7 @@ class ArticleController extends Controller
     public function authors(): View
     {
         $articles = Article::query()
+            ->active()
             ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'articles.user_id', 'users.id')
@@ -215,11 +217,18 @@ class ArticleController extends Controller
             abort(404, __('blogs.categories_not_created'));
         }
 
+        $files = File::query()
+            ->where('relate_type', Article::$morphName)
+            ->where('relate_id', 0)
+            ->where('user_id', $user->id);
+
         if ($request->isMethod('post')) {
             $title = $request->input('title');
             $text = $request->input('text');
             $tags = (array) $request->input('tags');
             $tags = array_unique(array_diff($tags, ['']));
+            $delay = (bool) $request->input('delay');
+            $published = $request->input('published');
 
             $category = Blog::query()->find($cid);
 
@@ -230,6 +239,10 @@ class ArticleController extends Controller
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
+
+            if (isAdmin() && $delay && Date::parse($published) < now()) {
+                $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
+            }
 
             foreach ($tags as $tag) {
                 $validator->length($tag, setting('blog_tag_min'), setting('blog_tag_max'), ['tags' => __('blogs.article_error_tags')]);
@@ -243,12 +256,14 @@ class ArticleController extends Controller
                 $text = antimat($text);
 
                 $article = Article::query()->create([
-                    'category_id' => $cid,
-                    'user_id'     => $user->id,
-                    'title'       => $title,
-                    'slug'        => $title,
-                    'text'        => $text,
-                    'created_at'  => SITETIME,
+                    'category_id'  => $category->id,
+                    'user_id'      => $user->id,
+                    'title'        => $title,
+                    'slug'         => $title,
+                    'text'         => $text,
+                    'created_at'   => SITETIME,
+                    'active'       => ! $delay,
+                    'published_at' => isAdmin() && $delay ? $published : null,
                 ]);
 
                 foreach ($tags as $key => $tagName) {
@@ -256,16 +271,12 @@ class ArticleController extends Controller
                     $article->tags()->attach($tag->id, ['sort' => $key]);
                 }
 
-                $category->increment('count_articles');
+                $category->restatement();
 
                 $user->increment('point', setting('blog_point'));
                 $user->increment('money', setting('blog_money'));
 
-                File::query()
-                    ->where('relate_type', Article::$morphName)
-                    ->where('relate_id', 0)
-                    ->where('user_id', $user->id)
-                    ->update(['relate_id' => $article->id]);
+                $files->update(['relate_id' => $article->id]);
 
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 $flood->saveState();
@@ -279,13 +290,10 @@ class ArticleController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        $files = File::query()
-            ->where('relate_type', Article::$morphName)
-            ->where('relate_id', 0)
-            ->where('user_id', $user->id)
-            ->get();
+        $article = new Article();
+        $files = $files->get();
 
-        return view('blogs/create', compact('categories', 'cid', 'files'));
+        return view('blogs/create', compact('article', 'categories', 'cid', 'files'));
     }
 
     /**
@@ -441,6 +449,7 @@ class ArticleController extends Controller
     public function rss(): View
     {
         $articles = Article::query()
+            ->active()
             ->orderByDesc('created_at')
             ->with('user')
             ->limit(15)
@@ -564,6 +573,7 @@ class ArticleController extends Controller
         [$sorting, $orderBy] = Article::getSorting($sort, $order);
 
         $articles = Article::query()
+            ->active()
             ->orderBy(...$orderBy)
             ->with('user', 'category')
             ->paginate(setting('blogpost'))
@@ -600,7 +610,9 @@ class ArticleController extends Controller
             abort(404, __('validator.user'));
         }
 
-        $articles = Article::query()->where('user_id', $user->id)
+        $articles = Article::query()
+            ->active()
+            ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'))
@@ -640,6 +652,7 @@ class ArticleController extends Controller
     public function main(): View
     {
         $articles = Article::query()
+            ->active()
             ->orderByDesc('created_at')
             ->with('user', 'category.parent')
             ->paginate(setting('blogpost'));

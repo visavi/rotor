@@ -198,6 +198,7 @@ class Feed
     {
         return Cache::remember('ArticleFeed', 600, static function () {
             return Article::query()
+                ->active()
                 ->where('rating', '>', setting('feed_downs_rating'))
                 ->with('user', 'files', 'category.parent')
                 ->orderByDesc('created_at')
@@ -233,6 +234,7 @@ class Feed
     {
         return Cache::remember('ItemFeed', 600, static function () {
             return Item::query()
+                ->active()
                 ->where('expires_at', '>', SITETIME)
                 ->with('user', 'files', 'category.parent')
                 ->orderByDesc('created_at')

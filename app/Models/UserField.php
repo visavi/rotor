@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * Class User
+ * Class UserField
  *
  * @property int    $id
  * @property int    $sort
@@ -36,15 +36,6 @@ class UserField extends BaseModel
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var string[]
-     */
-    protected $casts = [
-        'required' => 'bool',
-    ];
-
-    /**
      * Indicates if the model should be timestamped.
      */
     public $timestamps = false;
@@ -62,6 +53,16 @@ class UserField extends BaseModel
         'max',
         'required',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'required' => 'bool',
+        ];
+    }
 
     /**
      * Возвращает данные

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddc26abc9e97879e426e3d95f654df73",
+    "content-hash": "e40b8c3c5258e465970e2351f6b3f9fa",
     "packages": [
         {
             "name": "brick/math",
@@ -2240,16 +2240,16 @@
         },
         {
             "name": "mobicms/captcha",
-            "version": "dev-main",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mobicms/captcha.git",
-                "reference": "b79168f23a5dc0398ab9957924dfbc9456327a89"
+                "reference": "af5e023c5bba8981f32d3efce96bb71d146a4f70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mobicms/captcha/zipball/b79168f23a5dc0398ab9957924dfbc9456327a89",
-                "reference": "b79168f23a5dc0398ab9957924dfbc9456327a89",
+                "url": "https://api.github.com/repos/mobicms/captcha/zipball/af5e023c5bba8981f32d3efce96bb71d146a4f70",
+                "reference": "af5e023c5bba8981f32d3efce96bb71d146a4f70",
                 "shasum": ""
             },
             "require": {
@@ -2262,7 +2262,6 @@
                 "squizlabs/php_codesniffer": "^3.13",
                 "vimeo/psalm": "^6.12"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2293,7 +2292,7 @@
                 "issues": "https://github.com/mobicms/captcha/issues",
                 "source": "https://github.com/mobicms/captcha"
             },
-            "time": "2025-07-07T11:06:19+00:00"
+            "time": "2025-07-03T18:10:46+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -7331,16 +7330,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.17",
+            "version": "2.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "89b5ef665716fa2a52ecd2633f21007a6a349053"
+                "reference": "ee1f390b7a70cdf74a2b737e554f68afea885db7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/89b5ef665716fa2a52ecd2633f21007a6a349053",
-                "reference": "89b5ef665716fa2a52ecd2633f21007a6a349053",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ee1f390b7a70cdf74a2b737e554f68afea885db7",
+                "reference": "ee1f390b7a70cdf74a2b737e554f68afea885db7",
                 "shasum": ""
             },
             "require": {
@@ -7385,7 +7384,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-21T20:55:28+00:00"
+            "time": "2025-07-17T17:22:31+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -9405,9 +9404,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "mobicms/captcha": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

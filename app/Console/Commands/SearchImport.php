@@ -29,18 +29,18 @@ class SearchImport extends Command
     public function handle(): int
     {
         $models = [
-            Article::class,
+            /*Article::class,
             Comment::class,
             Down::class,
-            Guestbook::class,
-            // Item::class,
-            News::class,
+            Guestbook::class,*/
+            Item::class,
+            /*News::class,
             Offer::class,
             Photo::class,
             Post::class,
             Topic::class,
             User::class,
-            Vote::class,
+            Vote::class,*/
         ];
 
         DB::disableQueryLog();
@@ -73,18 +73,16 @@ class SearchImport extends Command
                 return;
             }
 
-            $query = method_exists($model, 'active')
-                ? $model->active()
-                : $model->newQuery();
+            $total = 0;
+            $count = $model->count();
 
-            $count = $query->count();
             $this->line("Found {$count} records to index");
 
             $progressBar = $this->output->createProgressBar($count);
             $progressBar->start();
 
             // Используем chunkById для стабильной пакетной обработки
-            $query->chunkById(1000, function ($records) use ($progressBar) {
+            $model->chunkById(1000, function ($records) use ($progressBar, &$total) {
                 $searchData = [];
 
                 foreach ($records as $record) {
@@ -99,18 +97,17 @@ class SearchImport extends Command
                         'relate_id'   => $record->getKey(),
                     ];
 
+                    $total++;
                     $progressBar->advance();
                 }
 
-                DB::table('search')->upsert(
-                    $searchData,
-                    ['relate_type', 'relate_id'],
-                    ['text', 'created_at'],
-                );
+                if ($searchData) {
+                    DB::table('search')->insert($searchData);
+                }
             });
 
             $progressBar->finish();
-            $this->info(PHP_EOL . "Successfully indexed {$count} records for {$modelClass}");
+            $this->info(PHP_EOL . "Successfully indexed {$total} of {$count} records for {$modelClass}");
         } catch (\Exception $e) {
             $this->error("Error processing {$modelClass}: " . $e->getMessage());
         }

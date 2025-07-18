@@ -55,6 +55,7 @@ class SitemapController extends Controller
     private function articles(): View
     {
         $articles = Article::query()
+            ->active()
             ->selectRaw('articles.*, max(c.created_at) as last_time')
             ->leftJoin('comments as c', static function (JoinClause $join) {
                 $join->on('articles.id', 'c.relate_id')

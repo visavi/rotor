@@ -58,9 +58,18 @@ class Blog extends BaseModel
     public function new(): hasOne
     {
         return $this->hasOne(Article::class, 'category_id')
+            ->active()
             ->selectRaw('category_id, count(*) as count_articles')
             ->where('created_at', '>', strtotime('-3 day', SITETIME))
             ->groupBy('category_id');
+    }
+
+    /**
+     * Возвращает статьи
+     */
+    public function articles(): HasMany
+    {
+        return $this->hasMany(Article::class, 'category_id');
     }
 
     /**
@@ -69,7 +78,18 @@ class Blog extends BaseModel
     public function lastArticle(): hasOne
     {
         return $this->hasOne(Article::class, 'category_id')
+            ->active()
             ->latest('created_at')
             ->limit(1);
+    }
+
+    /**
+     * Пересчет раздела
+     */
+    public function restatement(): void
+    {
+        $this->update([
+            'count_articles' => $this->articles()->active()->count(),
+        ]);
     }
 }

@@ -128,7 +128,7 @@ class ArticleController extends AdminController
         $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true($category->children->isEmpty(), __('blogs.category_has_subcategories'));
 
-        $article = Article::query()->where('category_id', $category->id)->first();
+        $article = Article::query()->where('category_id', $category->id)->exists();
         if ($article) {
             $validator->addError(__('blogs.articles_in_category'));
         }
@@ -176,6 +176,7 @@ class ArticleController extends AdminController
         }
 
         $articles = Article::query()
+            ->active()
             ->where('category_id', $id)
             ->orderByDesc('created_at')
             ->with('user')

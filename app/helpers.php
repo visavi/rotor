@@ -482,8 +482,8 @@ function photoNavigation(int $id): ?array
 function statsBlog(): string
 {
     return Cache::remember('statArticles', 900, static function () {
-        $stat = Article::query()->count();
-        $totalNew = Article::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
+        $stat = Article::query()->active()->count();
+        $totalNew = Article::query()->active()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
 
         return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
     });
@@ -914,7 +914,7 @@ function statsOffers(): string
         $offers = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
 
-        return $offers . '/' . $problems;
+        return sprintf('%d/%d', $offers, $problems);
     });
 }
 
@@ -931,12 +931,12 @@ function restatement(string $mode): void
             break;
 
         case 'blogs':
-            DB::update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id)');
+            DB::update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id and active = true)');
             DB::update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
             break;
 
         case 'loads':
-            DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
+            DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = true)');
             DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "' . Down::$morphName . '" and downs.id = comments.relate_id)');
             break;
 
@@ -953,7 +953,7 @@ function restatement(string $mode): void
             break;
 
         case 'boards':
-            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.expires_at > ' . SITETIME . ');');
+            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.active = true);');
             break;
 
         case 'votes':

@@ -26,7 +26,11 @@
                 </div>
 
                 <div class="section-content">
-                    {{ __('main.author') }}: {{ $article->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small><br>
+                    <div class="mb-2">
+                        {{ __('blogs.blog') }}: <a href="{{ route('blogs.blog', ['id' => $article->category->id]) }}">{{ $article->category->name }}</a><br>
+                        {{ __('main.author') }}: {{ $article->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small>
+                    </div>
+
                     <i class="fa fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
                 </div>
             </div>
