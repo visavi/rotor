@@ -4,6 +4,7 @@ translate_en = {
     confirm_complain_submit: 'Do you really want to send a complaint?',
     complain_submitted: 'Complaint successfully sent!',
     confirm_message_delete: 'Are you sure you want to delete the record?',
+    confirm_file_delete: 'Are you sure you want to delete the file?',
     message_deleted: 'Message successfully deleted!',
     record_deleted: 'Record successfully deleted!',
     copied: 'Copied!',

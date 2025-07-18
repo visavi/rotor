@@ -29,18 +29,18 @@ class SearchImport extends Command
     public function handle(): int
     {
         $models = [
-            /*Article::class,
+            Article::class,
             Comment::class,
             Down::class,
-            Guestbook::class,*/
+            Guestbook::class,
             Item::class,
-            /*News::class,
+            News::class,
             Offer::class,
             Photo::class,
             Post::class,
             Topic::class,
             User::class,
-            Vote::class,*/
+            Vote::class,
         ];
 
         DB::disableQueryLog();

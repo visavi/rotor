@@ -45,7 +45,7 @@
 @section('content')
     @if (getUser())
         <div class="mb-3">
-            <i class="far fa-list-alt"></i> <a href="{{ route('items.create') }}">{{ __('boards.my_items') }}</a>
+            <i class="far fa-list-alt"></i> <a href="{{ route('boards.active') }}">{{ __('boards.my_items') }}</a>
         </div>
     @endif
 

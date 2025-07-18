@@ -4,6 +4,7 @@ translate_ua = {
     confirm_complain_submit: 'Ви дійсно хочете відправити траур?',
     complain_submitted: 'Жалоба успішно відправлена!',
     confirm_message_delete: 'Ви дійсно хочете видалити запис?',
+    confirm_file_delete: 'Ви хочете видалити файл?',
     message_deleted: 'Повідомлення успішно видалено!',
     record_deleted: 'Запис успішно видалено!',
     copied: 'Скопійовано!',

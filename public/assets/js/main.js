@@ -221,27 +221,27 @@ logout = function (el) {
 /* Отправка жалобы на спам */
 sendComplaint = function (el) {
     bootbox.confirm(translate.confirm_complain_submit, function (result) {
-        if (result) {
-            $.ajax({
-                data: {
-                    id: $(el).data('id'),
-                    type: $(el).data('type'),
-                    page: $(el).data('page'),
-                    _token: $(el).data('token')
-                },
-                dataType: 'json', type: 'post', url: '/ajax/complaint',
-                success: function (data) {
+        if (!result) return;
 
-                    $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
+        $.ajax({
+            data: {
+                id: $(el).data('id'),
+                type: $(el).data('type'),
+                page: $(el).data('page'),
+                _token: $(el).data('token')
+            },
+            dataType: 'json', type: 'post', url: '/ajax/complaint',
+            success: function (data) {
 
-                    if (data.success) {
-                        toastr.success(translate.complain_submitted);
-                    } else {
-                        toastr.error(data.message);
-                    }
+                $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
+
+                if (data.success) {
+                    toastr.success(translate.complain_submitted);
+                } else {
+                    toastr.error(data.message);
                 }
-            });
-        }
+            }
+        });
     });
 
     return false;
@@ -282,47 +282,53 @@ bookmark = function (el) {
 /* Удаление записей */
 deletePost = function (el) {
     bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (result) {
-            $.ajax({
-                data: {_token: $(el).data('token'),},
-                dataType: 'json', type: 'delete', url: $(el).attr('href'),
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        $(el).closest('.section').hide('slow');
-                    } else {
-                        toastr.error(data.message);
-                    }
+        if (!result) return;
+
+        const $el = $(el);
+        const token = $el.data('_token');
+        const url = $el.attr('href');
+
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+            data: { _token: token },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    $el.closest('.section').hide('slow');
+                } else {
+                    toastr.error(data.message);
                 }
-            });
-        }
+            }
+        });
     });
 
     return false;
-}
+};
 
 /* Удаление комментариев */
 deleteComment = function (el) {
     bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (result) {
-            $.ajax({
-                data: {
-                    id: $(el).data('id'),
-                    rid: $(el).data('rid'),
-                    type: $(el).data('type'),
-                    _token: $(el).data('token')
-                },
-                dataType: 'json', type: 'post', url: '/ajax/delcomment',
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(translate.message_deleted);
-                        $(el).closest('.section').hide('slow');
-                    } else {
-                        toastr.error(data.message);
-                    }
+        if (!result) return;
+
+        $.ajax({
+            data: {
+                id: $(el).data('id'),
+                rid: $(el).data('rid'),
+                type: $(el).data('type'),
+                _token: $(el).data('token')
+            },
+            dataType: 'json', type: 'post', url: '/ajax/delcomment',
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(translate.message_deleted);
+                    $(el).closest('.section').hide('slow');
+                } else {
+                    toastr.error(data.message);
                 }
-            });
-        }
+            }
+        });
     });
 
     return false;
@@ -367,23 +373,23 @@ changeRating = function (el) {
  */
 deleteRating = function (el) {
     bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (result) {
-            $.ajax({
-                data: {
-                    id: $(el).data('id'),
-                    _token: $(el).data('token')
-                },
-                dataType: 'json', type: 'post', url: '/ratings/delete',
-                success: (data)=> {
-                    if (data.success) {
-                        toastr.success(translate.record_deleted);
-                        $(el).closest('.section').hide('slow');
-                    } else {
-                        toastr.error(data.message);
-                    }
+        if (!result) return;
+
+        $.ajax({
+            data: {
+                id: $(el).data('id'),
+                _token: $(el).data('token')
+            },
+            dataType: 'json', type: 'post', url: '/ratings/delete',
+            success: (data)=> {
+                if (data.success) {
+                    toastr.success(translate.record_deleted);
+                    $(el).closest('.section').hide('slow');
+                } else {
+                    toastr.error(data.message);
                 }
-            });
-        }
+            }
+        });
     });
 
     return false;
@@ -414,20 +420,20 @@ deleteSpam = function (el) {
  */
 deleteWall = function (el) {
     bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (result) {
-            $.ajax({
-                data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
-                dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(translate.record_deleted);
-                        $(el).closest('.section').hide('slow');
-                    } else {
-                        toastr.error(data.message);
-                    }
+        if (!result) return;
+
+        $.ajax({
+            data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
+            dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(translate.record_deleted);
+                    $(el).closest('.section').hide('slow');
+                } else {
+                    toastr.error(data.message);
                 }
-            });
-        }
+            }
+        });
     });
 
     return false;
@@ -571,30 +577,35 @@ cutImage = function (path) {
 
 /* Удаление файла */
 deleteFile = function (el) {
-    const id = $(el).data('id');
-    const type = $(el).data('type');
-    const token = $(el).data('token');
+    bootbox.confirm(translate.confirm_file_delete, function (result) {
+        if (!result) return;
 
-    $.ajax({
-        data: { id, type, _token: token },
-        dataType: 'json',
-        type: 'post',
-        url: '/ajax/file/delete',
-        success: function (data) {
-            if (!data.success) {
-                toastr.error(data.message);
-                return;
+        const $el = $(el);
+        const id = $el.data('id');
+        const type = $el.data('type');
+        const token = $el.data('token');
+
+        $.ajax({
+            url: '/ajax/file/delete',
+            type: 'POST',
+            dataType: 'json',
+            data: { id, type, _token: token },
+            success: function (data) {
+                if (!data.success) {
+                    toastr.error(data.message);
+                    return;
+                }
+
+                if (data.path) {
+                    cutImage(data.path);
+                }
+
+                $el.closest('.js-file').hide('fast');
+            },
+            error: function (jqXHR, textStatus) {
+                toastr.error('Ошибка удаления файла: ' + textStatus);
             }
-
-            if (data.path) {
-                cutImage(data.path);
-            }
-
-            $(el).closest('.js-file').hide('fast');
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            toastr.error('Ошибка удаления файла: ' + textStatus);
-        }
+        });
     });
 
     return false;

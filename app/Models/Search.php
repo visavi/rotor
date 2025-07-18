@@ -50,6 +50,7 @@ class Search extends BaseModel
             Comment::$morphName   => __('index.comments'),
             Down::$morphName      => __('index.loads'),
             Guestbook::$morphName => __('index.guestbook'),
+            Item::$morphName      => __('index.boards'),
             News::$morphName      => __('index.news'),
             Offer::$morphName     => __('index.offers'),
             Photo::$morphName     => __('index.photos'),

@@ -4,6 +4,7 @@ translate_ru = {
     confirm_complain_submit: 'Вы действительно хотите отправить жалобу?',
     complain_submitted: 'Жалоба успешно отправлена!',
     confirm_message_delete: 'Вы действительно хотите удалить запись?',
+    confirm_file_delete: 'Вы действительно хотите удалить файл?',
     message_deleted: 'Сообщение успешно удалено!',
     record_deleted: 'Запись успешно удалена!',
     copied: 'Скопировано!',
