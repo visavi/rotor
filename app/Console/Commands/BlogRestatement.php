@@ -30,10 +30,11 @@ class BlogRestatement extends Command
         Article::query()
             ->active(false)
             ->where('published_at', '<=', now())
-            ->each(function ($item) {
+            ->each(function (Article $item) {
                 $item->category->increment('count_articles');
                 $item->update([
-                    'active' => true,
+                    'active'     => true,
+                    'created_at' => strtotime($item->published_at),
                 ]);
             });
 
