@@ -49,7 +49,7 @@ class HomeController extends Controller
     {
         $posts = paginate([], 10);
         $query = (string) $request->input('query', $request->input('q', ''));
-        $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', urldecode($query)));
+        $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $query));
 
         $types = Search::getRelateTypes();
 
