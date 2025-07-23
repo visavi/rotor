@@ -14,7 +14,7 @@ $(document).ready(function () {
 
         const prevCount = parseInt(localStorage.getItem('messageCount') || '0');
 
-        if (count > prevCount && !document.hidden) {
+        if (count > prevCount) {
             SOUND.play().catch(() => {});
             document.title = `🔴 ${originalTitle}`;
         }
@@ -34,11 +34,17 @@ $(document).ready(function () {
 
         if (now - lastReq < INTERVAL - 100) return;
 
+        if (localStorage.getItem('messageLock')) return;
+        localStorage.setItem('messageLock', '1');
+
         localStorage.setItem('messageTime', now);
 
         $.get('/messages/new').then(data => {
             localStorage.setItem('messageData', JSON.stringify(data));
             updateBadge(data);
+            localStorage.removeItem('messageLock');
+        }).catch(() => {
+            localStorage.removeItem('messageLock');
         });
     }, INTERVAL);
 });
