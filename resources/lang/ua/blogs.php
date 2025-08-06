@@ -2,6 +2,7 @@
 
 return [
     'add'                    => 'Додати',
+    'add_draft'              => 'В чорновику',
     'blog'                   => 'Розділ',
     'parent_blog'            => 'Батьківський розділ',
     'blogs_list'             => 'Список розділів',
@@ -38,6 +39,7 @@ return [
     'article_not_exist'          => 'Цієї статті не існує!',
     'category_success_created'   => 'Новий розділ успішно створено!',
     'article_success_created'    => 'Стаття успішно опубліковано!',
+    'article_success_drafts'     => 'Стаття додана в чернетки!',
     'category_has_subcategories' => 'Цей розділ має підрозділи!',
     'articles_in_category'       => 'У цьому розділі є статті!',
     'category_success_deleted'   => 'Розділ успішно видалено!',

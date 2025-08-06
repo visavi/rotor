@@ -21,38 +21,6 @@
 
 @section('content')
     <div class="section-form mb-3 shadow cut">
-        <form action="{{ route('admin.articles.edit', ['id' => $article->id]) }}" method="post">
-            @csrf
-            <div class="mb-3{{ hasError('title') }}">
-                <label for="inputTitle" class="form-label">{{ __('blogs.name') }}:</label>
-                <input type="text" class="form-control" id="inputTitle" name="title" maxlength="{{ setting('blog_title_max') }}" value="{{ getInput('title', $article->title) }}" required>
-                <div class="invalid-feedback">{{ textError('title') }}</div>
-            </div>
-
-            <div class="mb-3{{ hasError('text') }}">
-                <label for="text" class="form-label">{{ __('blogs.article') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('blog_text_max') }}" id="text" rows="5" name="text" required>{{ getInput('text', $article->text) }}</textarea>
-                <div class="invalid-feedback">{{ textError('text') }}</div>
-            </div>
-
-            <?php $inputTags = getInput('tags', $article->tags->pluck('name')); ?>
-            <div class="mb-3{{ hasError('tags') }}">
-                <label for="tags" class="form-label">{{ __('blogs.tags') }}:</label>
-                <select class="form-select input-tag" id="tags" name="tags[]" multiple required>
-                    <option disabled value="">{{ __('blogs.tags') }}...</option>
-                    @foreach ($inputTags as $tag)
-                        <option value="{{ $tag }}" selected>{{ $tag }}</option>
-                    @endforeach
-                </select>
-                <div class="invalid-feedback">{{ textError('tags') }}</div>
-            </div>
-
-            @include('app/_upload_image', [
-                'model' => $article,
-                'paste' => true,
-             ])
-
-            <button class="btn btn-primary">{{ __('main.change') }}</button>
-        </form>
+        @include('blogs/_form')
     </div>
 @stop

@@ -46,6 +46,24 @@
 @stop
 
 @section('content')
+    @if (! $article->active)
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> Не опубликовано<br>
+        </div>
+    @endif
+
+    @if (! $article->isPublished())
+        <div class="alert alert-info">
+            <i class="fas fa-exclamation-triangle"></i> Отложенная<br>
+        </div>
+    @endif
+
+    @if ($article->draft)
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> Данная статья находится в черновике<br>
+        </div>
+    @endif
+
     <i class="fas fa-print"></i> <a class="me-3" href="{{ route('articles.print', ['id' => $article->id]) }}">{{ __('main.print') }}</a>
     <i class="fas fa-rss"></i> <a href="{{ route('articles.rss-comments', ['id' => $article->id]) }}">{{ __('main.rss') }}</a>
     <hr>

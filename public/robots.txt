@@ -26,6 +26,7 @@ Disallow: /verify
 Disallow: /confirm
 Disallow: /walls
 Disallow: /users
+Disallow: /language
 
 Sitemap: /sitemap.xml
 

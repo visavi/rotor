@@ -90,113 +90,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Редактирование статьи
-     */
-    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $article = Article::query()->find($id);
-
-        if (! $article) {
-            abort(404, __('blogs.article_not_exist'));
-        }
-
-        if ($user->id !== $article->user_id) {
-            abort(200, __('main.article_not_author'));
-        }
-
-        if ($request->isMethod('post')) {
-            $cid = int($request->input('cid'));
-            $title = $request->input('title');
-            $text = $request->input('text');
-            $tags = (array) $request->input('tags');
-            $tags = array_unique(array_diff($tags, ['']));
-            $delay = (bool) $request->input('delay');
-            $published = $request->input('published');
-
-            $category = Blog::query()->find($cid);
-
-            $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($title, setting('blog_title_min'), setting('blog_title_max'), ['title' => __('validator.text')])
-                ->length($text, setting('blog_text_min'), setting('blog_text_max'), ['text' => __('validator.text')])
-                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
-                ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
-
-            if (isAdmin() && $delay && Date::parse($published) < now()) {
-                $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
-            }
-
-            foreach ($tags as $tag) {
-                $validator->length($tag, setting('blog_tag_min'), setting('blog_tag_max'), ['tags' => __('blogs.article_error_tags')]);
-            }
-
-            if ($category) {
-                $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
-            }
-
-            if ($validator->isValid()) {
-                $oldCategory = $article->category;
-
-                $article->update([
-                    'category_id'  => $category->id,
-                    'title'        => $title,
-                    'text'         => $text,
-                    'active'       => ! $delay,
-                    'published_at' => isAdmin() && $delay ? $published : null,
-                ]);
-
-                $tagIds = [];
-                foreach ($tags as $key => $tagName) {
-                    $tag = Tag::query()->firstOrCreate(['name' => Str::lower($tagName)]);
-                    $tagIds[$tag->id] = ['sort' => $key];
-                }
-
-                $article->tags()->sync($tagIds);
-
-                // Обновление счетчиков
-                $category->restatement();
-
-                if ($oldCategory->id !== $category->id) {
-                    $oldCategory->restatement();
-                }
-
-                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
-                setFlash('success', __('blogs.article_success_edited'));
-
-                return redirect()->route('articles.view', ['slug' => $article->slug]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        $categories = $article->category->getChildren();
-
-        return view('blogs/edit', compact('article', 'categories'));
-    }
-
-    /**
-     * Просмотр по категориям
-     */
-    public function authors(): View
-    {
-        $articles = Article::query()
-            ->active()
-            ->select('user_id', 'login')
-            ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
-            ->join('users', 'articles.user_id', 'users.id')
-            ->groupBy('user_id')
-            ->orderByDesc('cnt')
-            ->paginate(setting('bloggroup'));
-
-        return view('blogs/authors', compact('articles'));
-    }
-
-    /**
      * Создание статьи
      */
     public function create(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
@@ -227,8 +120,11 @@ class ArticleController extends Controller
             $text = $request->input('text');
             $tags = (array) $request->input('tags');
             $tags = array_unique(array_diff($tags, ['']));
-            $delay = (bool) $request->input('delay');
             $published = $request->input('published');
+
+            $isDelay = (bool) $request->input('delay');
+            $isDraft = $request->input('action') === 'draft';
+            $isActive = ! $isDraft && ! $isDelay;
 
             $category = Blog::query()->find($cid);
 
@@ -240,7 +136,7 @@ class ArticleController extends Controller
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
 
-            if (isAdmin() && $delay && Date::parse($published) < now()) {
+            if ($isDelay && isAdmin() && Date::parse($published) < now()) {
                 $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
             }
 
@@ -262,8 +158,9 @@ class ArticleController extends Controller
                     'slug'         => $title,
                     'text'         => $text,
                     'created_at'   => SITETIME,
-                    'active'       => ! $delay,
-                    'published_at' => isAdmin() && $delay ? $published : null,
+                    'draft'        => $isDraft,
+                    'active'       => $isActive,
+                    'published_at' => isAdmin() && $isDelay ? $published : null,
                 ]);
 
                 foreach ($tags as $key => $tagName) {
@@ -273,17 +170,16 @@ class ArticleController extends Controller
 
                 $category->restatement();
 
-                $user->increment('point', setting('blog_point'));
-                $user->increment('money', setting('blog_money'));
-
                 $files->update(['relate_id' => $article->id]);
 
                 clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 $flood->saveState();
 
-                setFlash('success', __('blogs.article_success_created'));
+                $flash = $isDraft ? __('blogs.article_success_drafts') : __('blogs.article_success_created');
 
-                return redirect()->route('articles.view', ['slug' => $article->slug]);
+                return redirect()
+                    ->route('articles.view', ['slug' => $article->slug])
+                    ->with('success', $flash);
             }
 
             setInput($request->all());
@@ -294,6 +190,127 @@ class ArticleController extends Controller
         $files = $files->get();
 
         return view('blogs/create', compact('article', 'categories', 'cid', 'files'));
+    }
+
+    /**
+     * Редактирование статьи
+     */
+    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
+    {
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
+        $article = Article::query()->find($id);
+
+        if (! $article) {
+            abort(404, __('blogs.article_not_exist'));
+        }
+
+        if ($user->id !== $article->user_id) {
+            abort(200, __('main.article_not_author'));
+        }
+
+        if ($request->isMethod('post')) {
+            $cid = int($request->input('cid'));
+            $title = $request->input('title');
+            $text = $request->input('text');
+            $tags = (array) $request->input('tags');
+            $tags = array_unique(array_diff($tags, ['']));
+            $published = $request->input('published');
+
+            $isDelay = (bool) $request->input('delay');
+            $isPublish = $request->input('action') === 'publish';
+
+            $category = Blog::query()->find($cid);
+
+            $validator
+                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
+                ->length($title, setting('blog_title_min'), setting('blog_title_max'), ['title' => __('validator.text')])
+                ->length($text, setting('blog_text_min'), setting('blog_text_max'), ['text' => __('validator.text')])
+                ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])
+                ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
+
+            if ($isDelay && isAdmin() && Date::parse($published) < now()) {
+                $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
+            }
+
+            foreach ($tags as $tag) {
+                $validator->length($tag, setting('blog_tag_min'), setting('blog_tag_max'), ['tags' => __('blogs.article_error_tags')]);
+            }
+
+            if ($category) {
+                $validator->empty($category->closed, ['cid' => __('blogs.category_closed')]);
+            }
+
+            if ($validator->isValid()) {
+                $oldCategory = $article->category;
+
+                if ($isPublish) {
+                    $isDraft = false;
+                    $isActive = ! $isDelay;
+                } else {
+                    $isDraft = $article->draft;
+                    $isActive = $article->active;
+                }
+
+                $article->update([
+                    'category_id'  => $category->id,
+                    'title'        => $title,
+                    'text'         => $text,
+                    'draft'        => $isDraft,
+                    'active'       => $isActive,
+                    'published_at' => isAdmin() && $isDelay ? $published : null,
+                ]);
+
+                $tagIds = [];
+                foreach ($tags as $key => $tagName) {
+                    $tag = Tag::query()->firstOrCreate(['name' => Str::lower($tagName)]);
+                    $tagIds[$tag->id] = ['sort' => $key];
+                }
+
+                $article->tags()->sync($tagIds);
+
+                // Обновление счетчиков
+                $category->restatement();
+
+                if ($oldCategory->id !== $category->id) {
+                    $oldCategory->restatement();
+                }
+
+                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
+
+                $flash = $isPublish ? __('blogs.article_success_created') : __('blogs.article_success_edited');
+
+                return redirect()
+                    ->route('articles.view', ['slug' => $article->slug])
+                    ->with('success', $flash);
+            }
+
+            setInput($request->all());
+            setFlash('danger', $validator->getErrors());
+        }
+
+        $categories = $article->category->getChildren();
+
+        return view('blogs/edit', compact('article', 'categories'));
+    }
+
+    /**
+     * Просмотр по категориям
+     */
+    public function authors(): View
+    {
+        $articles = Article::query()
+            ->active()
+            ->select('user_id', 'login')
+            ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
+            ->join('users', 'articles.user_id', 'users.id')
+            ->groupBy('user_id')
+            ->orderByDesc('cnt')
+            ->paginate(setting('bloggroup'));
+
+        return view('blogs/authors', compact('articles'));
     }
 
     /**
@@ -603,6 +620,7 @@ class ArticleController extends Controller
      */
     public function userArticles(Request $request): View
     {
+        $active = (bool) $request->input('active', true);
         $login = $request->input('user', getUser('login'));
         $user = getUserByLogin($login);
 
@@ -611,14 +629,18 @@ class ArticleController extends Controller
         }
 
         $articles = Article::query()
-            ->active()
+            ->active($active)
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->with('user')
             ->paginate(setting('blogpost'))
             ->appends(['user' => $user->login]);
 
-        return view('blogs/active_articles', compact('articles', 'user'));
+        $activeCount = Article::query()->active()->where('user_id', $user->id)->count();
+        $delayCount = Article::query()->active(false)->where('user_id', $user->id)->count();
+        $draftCount = Article::query()->active(false)->where('draft', true)->where('user_id', $user->id)->count();
+
+        return view('blogs/active_articles', compact('articles', 'user', 'activeCount', 'delayCount', 'active'));
     }
 
     /**

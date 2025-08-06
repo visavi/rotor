@@ -2,6 +2,7 @@
 
 return [
     'add'                    => 'Добавить',
+    'add_draft'              => 'В черновик',
     'blog'                   => 'Раздел',
     'parent_blog'            => 'Родительский раздел',
     'blogs_list'             => 'Список разделов',
@@ -38,6 +39,7 @@ return [
     'article_not_exist'          => 'Данной статьи не существует!',
     'category_success_created'   => 'Новый раздел успешно создан!',
     'article_success_created'    => 'Статья успешно опубликована!',
+    'article_success_drafts'     => 'Статья добавлена в черновики!',
     'category_has_subcategories' => 'Данный раздел имеет подразделы!',
     'articles_in_category'       => 'В данном разделе имеются статьи!',
     'category_success_deleted'   => 'Раздел успешно удален!',

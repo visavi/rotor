@@ -2,6 +2,7 @@
 
 return [
     'add'                    => 'Add',
+    'add_draft'              => 'In draft',
     'blog'                   => 'Section',
     'parent_blog'            => 'Parent section',
     'blogs_list'             => 'List of sections',
@@ -38,6 +39,7 @@ return [
     'article_not_exist'          => 'This article does not exist!',
     'category_success_created'   => 'New section successfully created!',
     'article_success_created'    => 'Article successfully published!',
+    'article_success_drafts'     => 'The article has been added to drafts!',
     'category_has_subcategories' => 'This section has subsections!',
     'articles_in_category'       => 'There are articles in this section!',
     'category_success_deleted'   => 'Section deleted successfully!',

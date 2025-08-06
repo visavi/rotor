@@ -60,7 +60,14 @@
         'paste' => true,
     ])
 
-    <button class="btn btn-primary">{{ $article->id ? __('main.change') : __('blogs.add') }}</button>
+    <button class="btn btn-primary">{{ $article->id ? __('main.change') : __('main.publish') }}</button>
+
+    @if (! $article->exists || $article->draft)
+        <button type="submit" class="btn {{ $article->draft ? 'btn-success' : 'btn-secondary' }}"
+                name="action" value="{{ $article->draft ? 'publish' : 'draft' }}">
+            {{ $article->draft ? __('main.publish') : __('blogs.add_draft') }}
+        </button>
+    @endif
 </form>
 
 @push('scripts')

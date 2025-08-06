@@ -233,6 +233,14 @@ class Article extends BaseModel
         return $this->created_at > strtotime('-3 day');
     }
 
+    /*
+     * Is published
+     */
+    public function isPublished(): bool
+    {
+        return $this->published_at && ! $this->published_at->isFuture();
+    }
+
     /**
      * Удаление статьи и загруженных файлов
      */

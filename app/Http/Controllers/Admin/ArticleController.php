@@ -236,7 +236,9 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('admin/blogs/edit_blog', compact('article'));
+        $categories = $article->category->getChildren();
+
+        return view('admin/blogs/edit_blog', compact('article', 'categories'));
     }
 
     /**
