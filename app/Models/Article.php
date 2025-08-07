@@ -238,7 +238,7 @@ class Article extends BaseModel
      */
     public function isPublished(): bool
     {
-        return $this->published_at && ! $this->published_at->isFuture();
+        return $this->published_at === null || ! $this->published_at->isFuture();
     }
 
     /**

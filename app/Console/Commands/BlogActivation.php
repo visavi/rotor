@@ -2,42 +2,43 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Item;
+use App\Models\Article;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
-class BoardRestatement extends Command
+class BlogActivation extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'board:restatement';
+    protected $signature = 'blog:activation';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Board restatement';
+    protected $description = 'Blog activation';
 
     /**
      * Пересчитывает счетчик объявлений
      */
     public function handle(): int
     {
-        Item::query()
-            ->active()
-            ->where('expires_at', '<', SITETIME)
-            ->each(function ($item) {
-                $item->category->decrement('count_items');
+        Article::query()
+            ->active(false)
+            ->where('published_at', '<=', now())
+            ->each(function (Article $item) {
+                $item->category->increment('count_articles');
                 $item->update([
-                    'active' => false,
+                    'active'     => true,
+                    'created_at' => strtotime($item->published_at),
                 ]);
             });
 
-        $this->info('Board restatement successfully.');
+        $this->info('Blog successfully activated.');
 
         return SymfonyCommand::SUCCESS;
     }

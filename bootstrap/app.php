@@ -44,8 +44,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->command('blog:restatement')->everyMinute();
-        $schedule->command('board:restatement')->hourly();
+        $schedule->command('blog:activation')->everyMinute();
+        $schedule->command('board:deactivation')->hourly();
         $schedule->command('delete:files')->daily();
         $schedule->command('delete:logins')->daily();
         $schedule->command('delete:logs')->daily();
