@@ -26,20 +26,21 @@ class CheckThrottle
             return $next($request);
         }
 
-        $key = 'request_' . $ip;
+        $key = 'throttle_' . $ip;
         $requests = Cache::add($key, 0, 60) ? 1 : Cache::increment($key);
 
         /* Автоматическая блокировка */
         if ($requests > $limit) {
-            if (! Ban::query()->where('ip', getIp())->exists()) {
+            if (! Ban::query()->where('ip', $ip)->exists()) {
                 Ban::query()->insertOrIgnore([
                     'ip'         => $ip,
                     'created_at' => SITETIME,
                 ]);
+
+                clearCache('ipBan');
             }
 
             clearCache($key);
-            clearCache('ipBan');
             saveErrorLog(666);
 
             return redirect()->route('ipban')->setStatusCode(403);
