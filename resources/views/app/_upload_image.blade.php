@@ -17,7 +17,7 @@ $pointer = empty($paste) ? null : 'cursor-pointer';
 
 <div class="js-image-template d-none">
     <span class="js-file">
-        <span onclick="{{ $click }}" class="{{ $pointer }}"><img src="#" alt="" class="thumbnail"></span>
+        <span onclick="{{ $click }}" class="{{ $pointer }}"><img src="" alt="" class="thumbnail"></span>
         <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
     </span>
 </div>

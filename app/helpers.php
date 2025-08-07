@@ -1609,20 +1609,6 @@ function getQueryLog(): array
 }
 
 /**
- * Выводит список забаненных ip
- */
-function ipBan(bool $clear = false): array
-{
-    if ($clear) {
-        clearCache('ipBan');
-    }
-
-    return Cache::rememberForever('ipBan', static function () {
-        return Ban::query()->get()->pluck('id', 'ip')->all();
-    });
-}
-
-/**
  * Возвращает настройки сайта по ключу
  */
 function setting(?string $key = null, mixed $default = null): mixed

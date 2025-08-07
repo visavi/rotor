@@ -35,7 +35,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
 
 <div class="js-image-template d-none">
     <span class="js-file">
-        <img src="#" alt="" class="thumbnail">
+        <img src="" alt="" class="thumbnail">
         <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" data-token="{{ csrf_token() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>

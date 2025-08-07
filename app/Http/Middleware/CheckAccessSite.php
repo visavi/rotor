@@ -2,10 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Ban;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class CheckAccessSite
 {
@@ -14,12 +12,6 @@ class CheckAccessSite
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($this->isBanned($request)) {
-            return redirect('ipban');
-        }
-
-        $this->frequencyLimit();
-
         // Сайт закрыт для гостей
         if (
             setting('closedsite') === 1
@@ -39,48 +31,5 @@ class CheckAccessSite
         }
 
         return $next($request);
-    }
-
-    /**
-     * Проверка на ip-бан
-     */
-    private function isBanned(Request $request): bool
-    {
-        $ipBan = ipBan();
-
-        return isset($ipBan[getIp()]) && ! isAdmin() && ! $request->is('ipban', 'captcha');
-    }
-
-    /**
-     * Ограничение частоты запросов
-     */
-    private function frequencyLimit(): void
-    {
-        if (empty(setting('doslimit'))) {
-            return;
-        }
-
-        $key = 'request_' . getIp();
-        Cache::remember($key, 60, static function () {
-            return 0;
-        });
-
-        $requests = Cache::increment($key);
-
-        /* Автоматическая блокировка */
-        if ($requests > setting('doslimit')) {
-            $ipban = Ban::query()->where('ip', getIp())->first();
-
-            if (! $ipban) {
-                Ban::query()->insertOrIgnore([
-                    'ip'         => getIp(),
-                    'created_at' => SITETIME,
-                ]);
-            }
-
-            ipBan(true);
-            saveErrorLog(666);
-            clearCache($key);
-        }
     }
 }

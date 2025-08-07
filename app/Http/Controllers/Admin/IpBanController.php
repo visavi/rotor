@@ -34,7 +34,7 @@ class IpBanController extends AdminController
                     'created_at' => SITETIME,
                 ]);
 
-                ipBan(true);
+                clearCache('ipBan');
 
                 setFlash('success', __('admin.ipbans.ip_success_added'));
 
@@ -66,7 +66,7 @@ class IpBanController extends AdminController
 
         if ($validator->isValid()) {
             Ban::query()->whereIn('id', $del)->delete();
-            ipBan(true);
+            clearCache('ipBan');
 
             setFlash('success', __('admin.ipbans.ip_selected_deleted'));
         } else {
@@ -87,7 +87,7 @@ class IpBanController extends AdminController
 
         if ($validator->isValid()) {
             Ban::query()->truncate();
-            ipBan(true);
+            clearCache('ipBan');
 
             setFlash('success', __('admin.ipbans.ip_success_cleared'));
         } else {

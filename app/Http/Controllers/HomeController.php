@@ -102,7 +102,7 @@ class HomeController extends Controller
             ->first();
 
         if (! $ban) {
-            ipBan(true);
+            clearCache('ipBan');
 
             return redirect('/');
         }
@@ -114,7 +114,7 @@ class HomeController extends Controller
             && captchaVerify()
         ) {
             $ban->delete();
-            ipBan(true);
+            clearCache('ipBan');
 
             setFlash('success', __('pages.ip_success_unbanned'));
 

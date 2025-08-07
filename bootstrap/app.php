@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->group('web', [
             \App\Http\Middleware\CheckInstallSite::class,
+            \App\Http\Middleware\CheckThrottle::class,
             \App\Http\Middleware\CheckAccessSite::class,
             \App\Http\Middleware\CheckUserState::class,
 
