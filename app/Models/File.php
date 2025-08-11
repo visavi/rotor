@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $path
  * @property string $name
  * @property int    $size
+ * @property string $mime_type
  * @property int    $user_id
  * @property int    $created_at
  * @property-read string    $extension
@@ -46,11 +47,11 @@ class File extends BaseModel
     }
 
     /**
-     * Возвращает расширение файла
+     * Возвращает url файла
      */
-    public function getExtensionAttribute(): string
+    public function getUrl(): string
     {
-        return getExtension($this->path);
+        return asset($this->path);
     }
 
     /**

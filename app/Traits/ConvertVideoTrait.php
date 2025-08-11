@@ -16,7 +16,7 @@ trait ConvertVideoTrait
      */
     public function convertVideo(array $file): void
     {
-        $isVideo = str_contains($file['mime'], 'video/');
+        $isVideo = str_contains($file['mime_type'], 'video/');
 
         // Обработка видео
         if ($isVideo && config('ffmpeg.enabled')) {

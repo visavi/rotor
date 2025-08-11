@@ -4,8 +4,10 @@
 
 @section('content')
     @foreach ($down->lastComments as $data)
-        <?php $data->text = bbCode($data->text); ?>
-        <?php $data->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $data->text); ?>
+        @php
+            $data->text = bbCode($data->text);
+            $data->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $data->text);
+        @endphp
 
         <item>
             <title>{{ $data->text }}</title>

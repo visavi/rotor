@@ -18,14 +18,14 @@ trait UploadTrait
      */
     public function uploadFile(UploadedFile $file, bool $record = true): array
     {
-        $mime = $file->getClientMimeType();
+        $mimeType = $file->getMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
         $basename = getBodyName($file->getClientOriginalName());
         $basename = Str::substr($basename, 0, 50) . '.' . $extension;
         $filename = uniqueName($extension);
         $path = $this->uploadPath . '/' . $filename;
         $fullPath = public_path($path);
-        $isImage = str_starts_with($file->getMimeType(), 'image');
+        $isImage = str_starts_with($mimeType, 'image');
 
         if ($isImage) {
             $imageManager = app(ImageManager::class);
@@ -62,6 +62,8 @@ trait UploadTrait
                 'path'        => $path,
                 'name'        => $basename,
                 'size'        => $filesize,
+                'extension'   => $extension,
+                'mime_type'   => $mimeType,
                 'user_id'     => getUser('id'),
                 'created_at'  => SITETIME,
             ]);
@@ -71,9 +73,9 @@ trait UploadTrait
             'id'        => $upload->id ?? 0,
             'path'      => $path,
             'name'      => $basename,
-            'extension' => $extension,
-            'mime'      => $mime,
             'size'      => formatSize($filesize),
+            'mime_type' => $mimeType,
+            'extension' => $extension,
             'type'      => $isImage ? 'image' : 'file',
         ];
     }
