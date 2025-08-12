@@ -50,9 +50,9 @@
 <script src="{{ mix('/assets/dist/js/vendor.js') }}"></script>
 <script src="{{ mix('/assets/dist/js/lang.js') }}"></script>
 <script src="{{ mix('/assets/dist/js/default.js') }}"></script>
-@auth
+{{--@auth
 <script src="{{ mix('/assets/dist/js/messages.js') }}"></script>
-@endauth
+@endauth--}}
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>
