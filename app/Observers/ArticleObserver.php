@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Article;
+use App\Models\Blog;
 
 class ArticleObserver
 {
@@ -11,7 +12,8 @@ class ArticleObserver
      */
     public function created(Article $article): void
     {
-        //
+        $article->category->restatement();
+        clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
     }
 
     /**
@@ -19,6 +21,18 @@ class ArticleObserver
      */
     public function updated(Article $article): void
     {
+        if ($article->isDirty('category_id')) {
+            $oldCategoryId = $article->getOriginal('category_id');
+            $newCategoryId = $article->category_id;
+
+            if ($oldCategoryId !== $newCategoryId) {
+                $oldCategory = Blog::query()->find($oldCategoryId);
+                $oldCategory?->restatement();
+            }
+
+            $article->category->restatement();
+        }
+
         if ($article->wasChanged('active')) {
             $user = $article->user;
             $pointAmount = setting('blog_point');
@@ -32,6 +46,8 @@ class ArticleObserver
                 $user->decrement('money', min($moneyAmount, $user->money));
             }
         }
+
+        clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
     }
 
     /**
@@ -39,7 +55,8 @@ class ArticleObserver
      */
     public function deleted(Article $article): void
     {
-        //
+        $article->category->restatement();
+        clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
     }
 
     /**

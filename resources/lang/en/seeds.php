@@ -85,5 +85,19 @@ Cool!!!',
 
         'explain_name' => 'Explanation of violation',
         'explain_text' => 'Explanation of violation: %message%',
+
+        'offer_reply_name' => 'Answer to problem / suggestion',
+        'offer_reply_text' => <<<'INFO'
+Notification of the answer to your problem / proposal
+Your problem or suggestion [b][url=%url%]%title%[/url][/b] has been answered
+Reply text: %text%
+Entry status: %status%
+INFO,
+
+        'article_publish_name' => 'Notification of article publication',
+        'article_publish_text' => 'Your article [b][url=%url%]%title%[/url][/b] has been published',
+
+        'article_unpublish_name' => 'Notice of removal from publication',
+        'article_unpublish_text' => 'Your article [b][url=%url%]%title%[/url][/b] has been removed from publication',
     ],
 ];

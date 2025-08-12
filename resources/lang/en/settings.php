@@ -38,6 +38,7 @@ return [
     'blogs_per_page'       => 'Articles per page',
     'blogs_groups'         => 'Blog groups on page',
     'blogs_publish'        => 'Allow users to publish articles',
+    'blog_moderation'      => 'Moderation of user articles',
     'blog_title_length'    => 'Article title length',
     'blog_text_length'     => 'Article text length',
     'blog_tag_length'      => 'Article tag length',

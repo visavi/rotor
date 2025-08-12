@@ -34,6 +34,12 @@
         <label class="form-check-label" for="blog_create">{{ __('settings.blogs_publish') }}</label>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="sets[article_moderation]">
+        <input type="checkbox" class="form-check-input" value="1" name="sets[article_moderation]" id="article_moderation"{{ getInput('sets.article_moderation', $settings['article_moderation']) ? ' checked' : '' }}>
+        <label class="form-check-label" for="article_moderation">{{ __('settings.blog_moderation') }}</label>
+    </div>
+
     <div class="mb-3">
         <label for="blog_title_min" class="form-label">{{ __('settings.blog_title_length') }}:</label>
         <div class="d-flex gap-2">

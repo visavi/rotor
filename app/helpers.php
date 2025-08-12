@@ -490,6 +490,17 @@ function statsBlog(): string
 }
 
 /**
+ * Возвращает количество новых статей
+ */
+function statsNewArticles(): int
+{
+    return Article::query()
+        ->active(false)
+        ->where('draft', false)
+        ->count();
+}
+
+/**
  * Возвращает количество тем и сообщений в форуме
  */
 function statsForum(): string

@@ -21,6 +21,11 @@
 @stop
 
 @section('content')
+    @if ($new)
+        <a href="{{ route('admin.downs.new') }}" class="btn btn-success btn-sm">{{ __('loads.pending') }} <span class="badge bg-adaptive">{{ $new }}</span></a>
+        <hr>
+    @endif
+
     @if ($categories->isNotEmpty())
         @foreach ($categories as $category)
             <div class="section mb-3 shadow">

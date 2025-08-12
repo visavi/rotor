@@ -45,11 +45,11 @@
         @endphp
         <div class="form-check mb-3">
             <input type="checkbox" class="form-check-input" value="1" name="delay" id="delay" onchange="showDelayForm(this);" @checked($isDelayed)>
-            <label for="delay" class="form-check-label">Отложенная публикация</label>
+            <label for="delay" class="form-check-label">{{ __('blogs.delay_publication') }}</label>
         </div>
 
         <div class="col-sm-6 col-md-4 mb-3 js-published" @style(['display: none' => !$isDelayed])>
-            <label for="published" class="form-label">Дата публикации</label>
+            <label for="published" class="form-label">{{ __('blogs.date_publication') }}</label>
             <input class="form-control<?= hasError('published') ?>" type="datetime-local" name="published" id="published" value="{{ old('published', date('Y-m-d\TH:i', $article->published_at?->timestamp)) }}">
             <div class="invalid-feedback">{{ textError('published') }}</div>
         </div>
@@ -60,12 +60,17 @@
         'paste' => true,
     ])
 
-    <button class="btn btn-primary">{{ $article->id ? __('main.change') : __('main.publish') }}</button>
+    <button class="btn btn-primary">
+        {{ $article->exists ? __('main.change') : __('main.publish') }}
+    </button>
 
-    @if (! $article->exists || $article->draft)
-        <button type="submit" class="btn {{ $article->draft ? 'btn-success' : 'btn-secondary' }}"
-                name="action" value="{{ $article->draft ? 'publish' : 'draft' }}">
-            {{ $article->draft ? __('main.publish') : __('blogs.add_draft') }}
+    @if (! $article->exists)
+        <button type="submit" class="btn btn-secondary" name="action" value="draft">
+            {{ __('blogs.add_draft') }}
+        </button>
+    @elseif ($article->draft)
+        <button type="submit" class="btn btn-success" name="action" value="publish">
+            {{ __('main.publish') }}
         </button>
     @endif
 </form>

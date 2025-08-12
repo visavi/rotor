@@ -19,6 +19,24 @@
 @stop
 
 @section('content')
+    @if (! $article->active)
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> {{ __('blogs.article_not_active_text') }}<br>
+        </div>
+    @endif
+
+    @if (! $article->isPublished())
+        <div class="alert alert-info">
+            <i class="fas fa-exclamation-triangle"></i> {{ __('blogs.article_delayed_text') }}<br>
+        </div>
+    @endif
+
+    @if ($article->draft)
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> {{ __('blogs.article_draft_text') }}<br>
+        </div>
+    @endif
+
     <div class="section-form mb-3 shadow cut">
         @include('blogs/_form')
     </div>

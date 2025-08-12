@@ -99,6 +99,7 @@ return [
     'cash_transactions' => 'Cash transactions',
     'ip_ban'            => 'IP ban',
     'phpinfo'           => 'PHP info',
+    'new_articles'      => 'New articles',
     'new_loads'         => 'New publications',
     'errors'            => 'Errors / Bans',
     'stickers'          => 'Stickers',

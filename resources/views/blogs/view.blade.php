@@ -19,7 +19,6 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="{{ route('admin.articles.edit', ['id' => $article->id]) }}">{{ __('main.edit') }}</a>
-                        <a class="dropdown-item" href="{{ route('admin.articles.move', ['id' => $article->id]) }}">{{ __('main.move') }}</a>
                         <a class="dropdown-item" href="{{ route('admin.articles.delete', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
                     </div>
                 </div>
@@ -48,19 +47,19 @@
 @section('content')
     @if (! $article->active)
         <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i> Не опубликовано<br>
+            <i class="fas fa-exclamation-triangle"></i> {{ __('blogs.article_not_active_text') }}<br>
         </div>
     @endif
 
     @if (! $article->isPublished())
         <div class="alert alert-info">
-            <i class="fas fa-exclamation-triangle"></i> Отложенная<br>
+            <i class="fas fa-exclamation-triangle"></i> {{ __('blogs.article_delayed_text') }}<br>
         </div>
     @endif
 
     @if ($article->draft)
         <div class="alert alert-warning">
-            <i class="fas fa-exclamation-triangle"></i> Данная статья находится в черновике<br>
+            <i class="fas fa-exclamation-triangle"></i> {{ __('blogs.article_draft_text') }}<br>
         </div>
     @endif
 

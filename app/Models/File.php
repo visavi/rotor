@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\DB;
  * @property string $path
  * @property string $name
  * @property int    $size
+ * @property string $extension
  * @property string $mime_type
  * @property int    $user_id
  * @property int    $created_at
- * @property-read string    $extension
  * @property-read BaseModel $relate
  */
 class File extends BaseModel

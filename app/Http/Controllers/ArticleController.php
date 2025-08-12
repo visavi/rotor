@@ -124,7 +124,8 @@ class ArticleController extends Controller
 
             $isDelay = (bool) $request->input('delay');
             $isDraft = $request->input('action') === 'draft';
-            $isActive = ! $isDraft && ! $isDelay;
+            $isModeration = setting('article_moderation') && ! isAdmin();
+            $isActive = ! $isDraft && ! $isDelay && ! $isModeration;
 
             $category = Blog::query()->find($cid);
 
@@ -137,7 +138,7 @@ class ArticleController extends Controller
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
 
             if ($isDelay && isAdmin() && Date::parse($published) < now()) {
-                $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
+                $validator->addError(['published' => __('blogs.article_delayed_time')]);
             }
 
             foreach ($tags as $tag) {
@@ -168,14 +169,11 @@ class ArticleController extends Controller
                     $article->tags()->attach($tag->id, ['sort' => $key]);
                 }
 
-                $category->restatement();
-
                 $files->update(['relate_id' => $article->id]);
-
-                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
                 $flood->saveState();
 
-                $flash = $isDraft ? __('blogs.article_success_drafts') : __('blogs.article_success_created');
+                $created = $isModeration ? __('blogs.article_moderation_text') : __('blogs.article_success_created');
+                $flash = $isDraft ? __('blogs.article_success_drafts') : $created;
 
                 return redirect()
                     ->route('articles.view', ['slug' => $article->slug])
@@ -232,7 +230,7 @@ class ArticleController extends Controller
                 ->between(count($tags), 1, 10, ['tags' => __('blogs.article_count_tags')]);
 
             if ($isDelay && isAdmin() && Date::parse($published) < now()) {
-                $validator->addError(['published' => 'Дата отложенной публикации должна быть больше текущего времени!']);
+                $validator->addError(['published' => __('blogs.article_delayed_time')]);
             }
 
             foreach ($tags as $tag) {
@@ -244,15 +242,9 @@ class ArticleController extends Controller
             }
 
             if ($validator->isValid()) {
-                $oldCategory = $article->category;
-
-                if ($isPublish) {
-                    $isDraft = false;
-                    $isActive = ! $isDelay;
-                } else {
-                    $isDraft = $article->draft;
-                    $isActive = $article->active;
-                }
+                $isModeration = setting('article_moderation') && ! isAdmin();
+                $isDraft = $article->draft && ! $isPublish;
+                $isActive = ! $isDraft && ! $isDelay && ! $isModeration;
 
                 $article->update([
                     'category_id'  => $category->id,
@@ -271,16 +263,8 @@ class ArticleController extends Controller
 
                 $article->tags()->sync($tagIds);
 
-                // Обновление счетчиков
-                $category->restatement();
-
-                if ($oldCategory->id !== $category->id) {
-                    $oldCategory->restatement();
-                }
-
-                clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
-
-                $flash = $isPublish ? __('blogs.article_success_created') : __('blogs.article_success_edited');
+                $created = $isModeration ? __('blogs.article_moderation_text') : __('blogs.article_success_created');
+                $flash = $isDraft ? __('blogs.article_success_edited') : $created;
 
                 return redirect()
                     ->route('articles.view', ['slug' => $article->slug])

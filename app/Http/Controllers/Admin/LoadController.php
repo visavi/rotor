@@ -26,7 +26,11 @@ class LoadController extends AdminController
             ->orderBy('sort')
             ->get();
 
-        return view('admin/loads/index', compact('categories'));
+        $new = Down::query()
+            ->active(false)
+            ->count();
+
+        return view('admin/loads/index', compact('categories', 'new'));
     }
 
     /**

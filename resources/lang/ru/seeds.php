@@ -68,7 +68,7 @@ return [
         'ignore_text' => 'Пользователь @%login% добавил вас в свой игнор-лист!',
 
         'transfer_name' => 'Перевод денег',
-        'transfer_text' => 'Пользователь @%login% перечислил вам %money% 
+        'transfer_text' => 'Пользователь @%login% перечислил вам %money%
 Комментарий: %comment%',
 
         'rating_name' => 'Изменение репутации',
@@ -78,12 +78,26 @@ return [
         'surprise_name' => 'Новогодний сюрприз',
         'surprise_text' => 'Поздравляем с новым %year% годом!
 В качестве сюрприза вы получаете:
-%point% 
+%point%
 %money%
 %rating% репутации
 Ура!!!',
 
         'explain_name' => 'Объяснение нарушения',
         'explain_text' => 'Объяснение нарушения: %message%',
+
+        'offer_reply_name' => 'Ответ на проблему / предложение',
+        'offer_reply_text' => <<<'INFO'
+Уведомление об ответе на вашу проблему / предложение
+На вашу проблему или предложение [b][url=%url%]%title%[/url][/b] ответили
+Текст ответа: %text%
+Статус записи: %status%
+INFO,
+
+        'article_publish_name' => 'Уведомление о публикации статьи',
+        'article_publish_text' => 'Ваша статья [b][url=%url%]%title%[/url][/b] опубликована',
+
+        'article_unpublish_name' => 'Уведомление о снятии с публикации',
+        'article_unpublish_text' => 'Ваша статья [b][url=%url%]%title%[/url][/b] снята с публикации',
     ],
 ];

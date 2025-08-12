@@ -30,6 +30,7 @@ class BlogActivation extends Command
         Article::query()
             ->active(false)
             ->where('published_at', '<=', now())
+            ->where('draft', false)
             ->each(function (Article $item) {
                 $item->category->increment('count_articles');
                 $item->update([

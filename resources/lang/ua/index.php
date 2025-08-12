@@ -99,6 +99,7 @@ return [
     'cash_transactions' => 'Грошові операції',
     'ip_ban'            => 'IP-бан',
     'phpinfo'           => 'PHP-інформація',
+    'new_articles'      => 'Нові статті',
     'new_loads'         => 'Нові публікації',
     'errors'            => 'Помилки / Автобани',
     'stickers'          => 'Стікери',

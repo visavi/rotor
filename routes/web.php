@@ -706,8 +706,9 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('articles.')
             ->group(function () {
                 Route::match(['get', 'post'], '/{id}/edit', 'editArticle')->name('edit');
-                Route::match(['get', 'post'], '/{id}/move', 'moveArticle')->name('move');
                 Route::get('/{id}/delete', 'deleteArticle')->name('delete');
+                Route::get('/{id}/publish', 'publish')->name('publish');
+                Route::get('/new', 'new')->name('new');
             });
 
         /* Доска объявлений */

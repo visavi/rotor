@@ -205,7 +205,11 @@ class NewsController extends Controller
      */
     public function rss(): View
     {
-        $newses = News::query()->orderByDesc('created_at')->limit(15)->get();
+        $newses = News::query()
+            ->orderByDesc('created_at')
+            ->with('user', 'files')
+            ->limit(15)
+            ->get();
 
         if ($newses->isEmpty()) {
             abort(200, __('news.empty_news'));

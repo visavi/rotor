@@ -35,6 +35,7 @@ use Illuminate\Support\Str;
  * @property int    $count_comments
  * @property int    $created_at
  * @property bool   $active
+ * @property bool   $draft
  * @property Date   $published_at
  * @property-read Collection<File>    $files
  * @property-read Collection<Comment> $comments

@@ -85,5 +85,19 @@ return [
 
         'explain_name' => 'Пояснення порушення',
         'explain_text' => 'Пояснення порушення: %message%',
+
+        'offer_reply_name' => 'Відповідь на проблему / пропозиція',
+        'offer_reply_text' => <<<'INFO'
+Увідомлення про відповідь на вашу проблему / пропозиція
+На вашу проблему або пропозицію [b][url=%url%]%title%[/url][/b] відповіли
+Текст відповіді: %text%
+Статус запису: %status%
+INFO,
+
+        'article_publish_name' => 'Повідомлення про публікацію статті',
+        'article_publish_text' => 'Ваша стаття [b][url=%url%]%title%[/url][/b] опублікована',
+
+        'article_unpublish_name' => 'Повідомлення про зняття з публікації',
+        'article_unpublish_text' => 'Вашу статтю [b][url=%url%]%title%[/url][/b] знято з публікації',
     ],
 ];

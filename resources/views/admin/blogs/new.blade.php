@@ -1,37 +1,37 @@
 @extends('layout')
 
-@section('title', __('index.blogs') . ' - ' . __('blogs.title_active_articles', ['user' => $user->getName()]) . ' (' . __('main.page_num', ['page' => $articles->currentPage()])  . ')')
+@section('title', __('index.blogs') . ' - ' . __('blogs.new_articles') . ' (' . __('main.page_num', ['page' => $articles->currentPage()])  . ')')
 
 @section('header')
-    <h1>{{ __('blogs.title_active_articles', ['user' => $user->getName()]) }}</h1>
+    <h1>{{ __('blogs.new_articles') }}</h1>
 @stop
 
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('blogs.title_active_articles', ['user' => $user->getName()]) }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.blogs.index') }}">{{ __('index.blogs') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('index.new_articles') }}</li>
         </ol>
     </nav>
 @stop
 
 @section('content')
     @if ($articles->isNotEmpty())
-        @if (getUser() && getUser('id') === $user->id)
-            <?php $type = $active ? 'success' : 'adaptive'; ?>
-            <a href="{{ route('articles.user-articles', ['active' => 1]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('blogs.verified_articles') }} <span class="badge bg-adaptive">{{ $activeCount }}</span></a>
-
-            <?php $type = ! $active ? 'success' : 'adaptive'; ?>
-            <a href="{{ route('articles.user-articles', ['active' => 0]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('blogs.pending_articles') }} <span class="badge bg-adaptive">{{ $delayCount }}</span></a>
-            <hr>
-        @endif
-
         @foreach ($articles as $article)
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
                     <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ $article->title }}</a> <span class="badge bg-adaptive">{{ formatNum($article->rating) }}</span>
+
+                    <div class="float-end">
+                        <a href="{{ route('admin.articles.edit', ['id' => $article->id]) }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+
+                        @if (isAdmin('boss'))
+                            <a href="{{ route('admin.articles.delete', ['id' => $article->id, '_token' => csrf_token()]) }}"  title="{{ __('main.delete') }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')"><i class="fa fa-times"></i></a>
+                        @endif
+                    </div>
                 </div>
 
                 @if (! $article->active)
@@ -40,10 +40,6 @@
 
                 @if (! $article->isPublished())
                     <span class="badge bg-info">{{ __('blogs.delayed') }}</span>
-                @endif
-
-                @if ($article->draft)
-                    <span class="badge bg-warning">{{ __('blogs.draft') }}</span>
                 @endif
 
                 <div class="section-content">

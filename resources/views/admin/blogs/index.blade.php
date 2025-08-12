@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="{{ route('admin.blogs.index') }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-light" href="{{ route('blogs.index') }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.blogs') }}</h1>
@@ -21,6 +21,11 @@
 @stop
 
 @section('content')
+    @if ($new)
+        <a href="{{ route('admin.articles.new') }}" class="btn btn-success btn-sm">{{ __('loads.pending') }} <span class="badge bg-adaptive">{{ $new }}</span></a>
+        <hr>
+    @endif
+
     @foreach ($categories as $key => $category)
         <div class="section mb-3 shadow">
             <div class="section-title">
