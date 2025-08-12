@@ -35,7 +35,7 @@ class SettingSeeder extends Seeder
             ['name' => 'blog_category_min', 'value' => 3],
             ['name' => 'blog_category_max', 'value' => 50],
             ['name' => 'blog_point', 'value' => 5],
-            ['name' => 'blog_point', 'value' => 500],
+            ['name' => 'blog_money', 'value' => 500],
             ['name' => 'boards_create', 'value' => 1],
             ['name' => 'boards_period', 'value' => 30],
             ['name' => 'boards_per_page', 'value' => 10],
