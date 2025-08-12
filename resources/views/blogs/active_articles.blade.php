@@ -17,16 +17,16 @@
 @stop
 
 @section('content')
-    @if ($articles->isNotEmpty())
-        @if (getUser() && getUser('id') === $user->id)
+    @if (getUser() && getUser('id') === $user->id)
             <?php $type = $active ? 'success' : 'adaptive'; ?>
-            <a href="{{ route('articles.user-articles', ['active' => 1]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('blogs.verified_articles') }} <span class="badge bg-adaptive">{{ $activeCount }}</span></a>
+        <a href="{{ route('articles.user-articles', ['active' => 1]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('blogs.verified_articles') }} <span class="badge bg-adaptive">{{ $activeCount }}</span></a>
 
             <?php $type = ! $active ? 'success' : 'adaptive'; ?>
-            <a href="{{ route('articles.user-articles', ['active' => 0]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('blogs.pending_articles') }} <span class="badge bg-adaptive">{{ $delayCount }}</span></a>
-            <hr>
-        @endif
+        <a href="{{ route('articles.user-articles', ['active' => 0]) }}" class="btn btn-{{ $type }} btn-sm">{{ __('blogs.pending_articles') }} <span class="badge bg-adaptive">{{ $delayCount }}</span></a>
+        <hr>
+    @endif
 
+    @if ($articles->isNotEmpty())
         @foreach ($articles as $article)
             <div class="section mb-3 shadow">
                 <div class="section-title">
