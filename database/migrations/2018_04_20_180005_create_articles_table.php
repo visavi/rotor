@@ -18,6 +18,9 @@ return new class extends Migration {
                 $table->integer('rating')->default(0);
                 $table->integer('visits')->default(0);
                 $table->integer('count_comments')->default(0);
+                $table->boolean('active')->default(true);
+                $table->boolean('draft')->default(false);
+                $table->timestamp('published_at')->nullable();
                 $table->integer('created_at');
 
                 $table->index('category_id');

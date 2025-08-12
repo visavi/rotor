@@ -16,6 +16,7 @@ return new class extends Migration {
                 $table->integer('user_id');
                 $table->integer('price')->default(0);
                 $table->string('phone', 15)->nullable();
+                $table->boolean('active')->default(true);
                 $table->integer('created_at');
                 $table->integer('updated_at');
                 $table->integer('expires_at');

@@ -15,6 +15,8 @@ return new class extends Migration {
                 $table->string('path', 100);
                 $table->string('name', 60);
                 $table->integer('size');
+                $table->string('extension', 10)->nullable();
+                $table->string('mime_type', 100)->nullable();
                 $table->integer('user_id');
                 $table->integer('created_at');
 

@@ -130,6 +130,33 @@ class NoticeSeeder extends Seeder
                 'updated_at' => SITETIME,
                 'protect'    => 1,
             ],
+            [
+                'type'       => 'offer_reply',
+                'name'       => __('seeds.notices.offer_reply_name'),
+                'text'       => __('seeds.notices.offer_reply_text'),
+                'user_id'    => 1,
+                'created_at' => SITETIME,
+                'updated_at' => SITETIME,
+                'protect'    => 1,
+            ],
+            [
+                'type'       => 'article_publish',
+                'name'       => __('seeds.notices.article_publish_name'),
+                'text'       => __('seeds.notices.article_publish_text'),
+                'user_id'    => 1,
+                'created_at' => SITETIME,
+                'updated_at' => SITETIME,
+                'protect'    => 1,
+            ],
+            [
+                'type'       => 'article_unpublish',
+                'name'       => __('seeds.notices.article_unpublish_name'),
+                'text'       => __('seeds.notices.article_unpublish_text'),
+                'user_id'    => 1,
+                'created_at' => SITETIME,
+                'updated_at' => SITETIME,
+                'protect'    => 1,
+            ],
         ];
 
         Notice::query()->truncate();
