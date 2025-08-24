@@ -1445,23 +1445,16 @@ function getBrowser(?string $userAgent = null): string
  */
 function isAdmin(?string $level = null): bool
 {
-    return access($level ?? User::EDITOR);
-}
-
-/**
- * Имеет ли пользователь доступ по уровню
- */
-function access(string $level): bool
-{
     $user = auth()->user();
     if (! $user) {
         return false;
     }
 
-    $access = array_flip(User::ALL_GROUPS);
+    $levels = array_flip(User::ADMIN_GROUPS);
+    $level = $level ?? User::EDITOR;
 
-    return isset($access[$user->level], $access[$level])
-        && $access[$user->level] >= $access[$level];
+    return isset($levels[$user->level], $levels[$level])
+        && $levels[$user->level] >= $levels[$level];
 }
 
 /**

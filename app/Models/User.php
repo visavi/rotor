@@ -191,6 +191,18 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     /**
+     * Is admin
+     */
+    public function isAdmin(?string $level = null): bool
+    {
+        $level = $level ?? self::EDITOR;
+        $levels = array_flip(self::ADMIN_GROUPS);
+
+        return isset($levels[$this->level], $levels[$level])
+            && $levels[$this->level] >= $levels[$level];
+    }
+
+    /**
      * Связь с таблицей online
      */
     public function online(): BelongsTo

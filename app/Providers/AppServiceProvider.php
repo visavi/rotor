@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -47,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
             $args = isset($args[1]) ? trim($args[1]) : 'null';
 
             return "<?= \\App\\Classes\\Hook::call($hookName, $args); ?>";
+        });
+
+        Gate::define('viewPulse', function (User $user) {
+            return $user->isAdmin(User::BOSS);
         });
 
         /*if (app()->environment('production')) {
