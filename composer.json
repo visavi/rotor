@@ -30,7 +30,6 @@
         "google/recaptcha": "~1.3",
         "intervention/image": "^3.11",
         "laravel/framework": "^12.0",
-        "laravel/pulse": "^1.4",
         "mobicms/captcha": "^5.1",
         "php-ffmpeg/php-ffmpeg": "^1.3",
         "visavi/captcha": "^3.0",
