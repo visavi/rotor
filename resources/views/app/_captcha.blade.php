@@ -5,13 +5,14 @@
 @endif
 
 @if (setting('captcha_type') === 'recaptcha_v3')
-    <script src="//www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;render={{ setting('recaptcha_public') }}&amp;hl={{ app()->getLocale() }}" async defer></script>
+    <script src="//www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;hl={{ app()->getLocale() }}" async defer></script>
     <script>
         function recaptchaCallback() {
             grecaptcha.ready(function () {
-                grecaptcha.execute('{{ setting('recaptcha_public') }}').then(function (token) {
-                    $('#recaptchaResponse').val(token);
-                });
+                grecaptcha.execute('{{ setting('recaptcha_public') }}', { action: 'homepage' })
+                    .then(function (token) {
+                        document.getElementById('recaptchaResponse').value = token;
+                    });
             });
         }
     </script>
@@ -42,7 +43,7 @@
 @endpush
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(document).ready(function() {
             const currentTheme = $('html').data('bs-theme');
             $('.g-recaptcha').attr("data-theme", currentTheme);

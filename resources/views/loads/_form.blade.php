@@ -56,7 +56,7 @@
 </form>
 
 @push('scripts')
-    <script>
+    <script type="module">
         $('.js-links-add').click(function () {
             const listBlock = $('.js-links-list');
 

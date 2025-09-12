@@ -69,7 +69,7 @@
 @stop
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(document).ready(function() {
             $(".message-block").click(function() {
                 window.location = $(this).data('href');

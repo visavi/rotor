@@ -1,4 +1,4 @@
-translate_en = {
+export default {
     characters_left: 'Characters left',
     confirm_logout: 'Are you sure you want to quit?',
     confirm_complain_submit: 'Do you really want to send a complaint?',
@@ -48,4 +48,4 @@ translate_en = {
         enter_title: 'Enter the title...',
         alt: 'Alternative text',
     }
-};
+}

@@ -46,7 +46,7 @@
         <label for="color" class="form-label">{{ __('admin.paid_adverts.color') }}:</label>
         <div class="input-group">
             <input type="text" name="color" class="form-control colorpicker" id="color" maxlength="7" value="{{ $color }}">
-            <input type="color" class="form-control form-control-color colorpicker-addon" id="color-picker" value="{{ $color }}">
+            <input type="color" class="form-control form-control-color colorpicker-addon" id="color-picker" value="{{ $color ?? '#000000' }}">
         </div>
         <div class="invalid-feedback">{{ textError('color') }}</div>
     </div>
@@ -73,7 +73,7 @@
 </form>
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(".js-advert-add").click(function () {
             $('.js-advert-list').append('<div class="input-group mt-1 js-advert-append">' +
                 '<input class="form-control" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('admin.paid_adverts.name') ?>">' +

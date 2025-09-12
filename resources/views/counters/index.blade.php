@@ -44,8 +44,7 @@
 @stop
 
 @push('styles')
-    <link rel="stylesheet" href="{{ mix('/assets/dist/css/chartist-bundle.css') }}">
-
+    @vite('public/assets/css/chartist.css')
     <style>
         .ct-label{
             color: var(--bs-body-color);
@@ -68,9 +67,33 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ mix('/assets/dist/js/chartist-bundle.js') }}"></script>
-    <script>
-        new Chartist.Line('.ct-chart31', {
+    @vite('public/assets/js/chartist.js')
+    <script type="module">
+        new LineChart('.ct-chart24', {
+            onlyInteger: true,
+            labels: @json($counts24['labels']),
+            series: [
+                @json($counts24['hits']),
+                @json($counts24['hosts'])
+            ]
+        }, {
+            reverseData: true,
+            fullWidth: true,
+            chartPadding: {
+                right: 35
+            },
+            axisY: {
+                onlyInteger: true,
+                offset: 35
+            },
+            axisX: {
+                labelInterpolationFnc: function (value, index) {
+                    return index % 3 === 0 ? value : null;
+                }
+            }
+        });
+
+        new LineChart('.ct-chart31', {
             onlyInteger: true,
             labels: @json($counts31['labels']),
             series: [
@@ -78,9 +101,6 @@
                 @json($counts31['hosts'])
             ]
         }, {
-            plugins: [
-                Chartist.plugins.tooltip()
-            ],
             reverseData: true,
             fullWidth: true,
             chartPadding: {
@@ -107,32 +127,5 @@
                 }
             }]
         ]);
-
-        new Chartist.Line('.ct-chart24', {
-            onlyInteger: true,
-            labels: @json($counts24['labels']),
-            series: [
-                @json($counts24['hits']),
-                @json($counts24['hosts'])
-            ]
-        }, {
-            plugins: [
-                Chartist.plugins.tooltip()
-            ],
-            reverseData: true,
-            fullWidth: true,
-            chartPadding: {
-                right: 35
-            },
-            axisY: {
-                onlyInteger: true,
-                offset: 35
-            },
-            axisX: {
-                labelInterpolationFnc: function (value, index) {
-                    return index % 3 === 0 ? value : null;
-                }
-            }
-        });
     </script>
 @endpush

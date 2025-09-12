@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
-    <link rel="stylesheet" type="text/css" href="{{ mix('/assets/dist/css/motor.css') }}">
+    @vite('public/themes/motor/src/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
@@ -93,10 +93,7 @@
         </div>
     </div>
 </div>
-<script src="{{ mix('/assets/dist/js/manifest.js') }}"></script>
-<script src="{{ mix('/assets/dist/js/vendor.js') }}"></script>
-<script src="{{ mix('/assets/dist/js/lang.js') }}"></script>
-<script src="{{ mix('/assets/dist/js/motor.js') }}"></script>
+@vite('public/themes/motor/src/js/app.js')
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>

@@ -68,7 +68,7 @@
 @stop
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(document).ready(function() {
             const query = new URLSearchParams(window.location.search).get('query');
 

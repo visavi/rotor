@@ -1,31 +1,32 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700,700i&display=swap');
 
 // This files are essential for the theme
-@import 'variables';
+@import 'themes/default/src/sass/variables';
 @import 'bootstrap/scss/bootstrap';
 
 // This styles are essential for theme
-@import 'main';
+@import 'themes/default/src/sass/main';
 
 // Component
-@import 'header';
-@import 'sidebar';
-@import 'footer';
+@import 'themes/default/src/sass/header';
+@import 'themes/default/src/sass/sidebar';
+@import 'themes/default/src/sass/footer';
 
 // This styles are optional based on your preference
-@import 'component/badge';
-@import 'component/dropdown';
-@import 'component/button';
-@import 'component/app-title';
-@import 'component/widgets';
+@import 'themes/default/src/sass/component/badge';
+@import 'themes/default/src/sass/component/dropdown';
+@import 'themes/default/src/sass/component/button';
+@import 'themes/default/src/sass/component/app-title';
+@import 'themes/default/src/sass/component/widgets';
 
-@import '@fortawesome/fontawesome-free/scss/brands';
-@import '@fortawesome/fontawesome-free/scss/regular';
-@import '@fortawesome/fontawesome-free/scss/solid';
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import 'fa/scss/brands';
+@import 'fa/scss/regular';
+@import 'fa/scss/solid';
+@import 'fa/scss/fontawesome';
+
 @import 'bootstrap5-tags/tags';
-
 @import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
 @import 'css/markitup';
 @import 'css/toastr';
 @import 'css/prettify';

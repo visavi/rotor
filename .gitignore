@@ -15,10 +15,9 @@
 /node_modules
 /vendor
 /upgrade
-/public/hot
+/public/build
 /public/storage
 /storage/*.key
-mix-manifest.json
 composer.phar
 .env
 .idea/

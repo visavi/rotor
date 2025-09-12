@@ -36,7 +36,7 @@
                 <label for="color" class="form-label">{{ __('main.color') }}:</label>
                 <div class="input-group">
                     <input type="text" name="color" class="form-control colorpicker" id="color" maxlength="7" value="{{ $color }}">
-                    <input type="color" class="form-control form-control-color colorpicker-addon" value="{{ $color }}">
+                    <input type="color" class="form-control form-control-color colorpicker-addon" value="{{ $color ?? '#000000' }}">
                 </div>
                 <div class="invalid-feedback">{{ textError('color') }}</div>
             </div>

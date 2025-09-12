@@ -1,4 +1,4 @@
-translate_ru = {
+export default {
     characters_left: 'Осталось символов',
     confirm_logout:  'Вы уверены, что хотите выйти?',
     confirm_complain_submit: 'Вы действительно хотите отправить жалобу?',
@@ -48,4 +48,4 @@ translate_ru = {
         enter_title: 'Введите название...',
         alt: 'Альтернативный текст',
     }
-};
+}

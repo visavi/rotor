@@ -1,8 +1,4 @@
 $(function () {
-    let html = $('html');
-    let currentLang = html.attr('lang');
-    translate = window['translate_' + currentLang];
-
     prettyPrint();
 
     tags.init(".input-tag", {
@@ -18,9 +14,9 @@ $(function () {
     });
 
     bootbox.addLocale('my', {
-        OK : translate.buttons.ok,
-        CANCEL : translate.buttons.cancel,
-        CONFIRM : translate.buttons.ok,
+        OK : __('buttons.ok'),
+        CANCEL : __('buttons.cancel'),
+        CONFIRM : __('buttons.ok'),
     });
 
     bootbox.setDefaults({
@@ -49,7 +45,7 @@ $(function () {
         $counter.toggleClass('text-danger', currentLength > maxlength);
 
         const remaining = maxlength - currentLength;
-        $counter.text(currentLength === 0 ? '' : translate.characters_left + ': ' + remaining);
+        $counter.text(currentLength === 0 ? '' : __('characters_left') + ': ' + remaining);
     });
 
     $('.markItUpHtml').markItUp(myHtmlSettings);
@@ -152,7 +148,7 @@ $(function () {
 });
 
 /* Показ формы загрузки файла */
-showAttachForm = function () {
+window.showAttachForm = function () {
     $('.js-attach-button').hide();
     $('.js-attach-form').slideDown();
 
@@ -160,14 +156,14 @@ showAttachForm = function () {
 };
 
 /* Переход к форме ввода */
-postJump = function () {
+window.postJump = function () {
     $('html, body').animate({
         scrollTop: ($('.section-form').offset().top - 50)
     }, 100);
 };
 
 /* Ответ на сообщение */
-postReply = function (el) {
+window.postReply = function (el) {
     postJump();
 
     var field  = $('.markItUpEditor');
@@ -183,7 +179,7 @@ postReply = function (el) {
 };
 
 /* Цитирование сообщения */
-postQuote = function (el) {
+window.postQuote = function (el) {
     postJump();
 
     let field   = $('.markItUpEditor');
@@ -208,8 +204,8 @@ postQuote = function (el) {
 };
 
 /* Выход с сайта */
-logout = function (el) {
-    bootbox.confirm(translate.confirm_logout, function (result) {
+window.logout = function (el) {
+    bootbox.confirm(__('confirm_logout'), function (result) {
         if (result) {
             window.location = $(el).attr("href");
         }
@@ -219,8 +215,8 @@ logout = function (el) {
 };
 
 /* Отправка жалобы на спам */
-sendComplaint = function (el) {
-    bootbox.confirm(translate.confirm_complain_submit, function (result) {
+window.sendComplaint = function (el) {
+    bootbox.confirm(__('confirm_complain_submit'), function (result) {
         if (!result) return;
 
         $.ajax({
@@ -236,7 +232,7 @@ sendComplaint = function (el) {
                 $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
                 if (data.success) {
-                    toastr.success(translate.complain_submitted);
+                    toastr.success(__('complain_submitted'));
                 } else {
                     toastr.error(data.message);
                 }
@@ -248,7 +244,7 @@ sendComplaint = function (el) {
 };
 
 /* Добавление или удаление закладок */
-bookmark = function (el) {
+window.bookmark = function (el) {
     $.ajax({
         data: {
             tid: $(el).data('tid'),
@@ -280,9 +276,9 @@ bookmark = function (el) {
 };
 
 /* Удаление записей */
-deletePost = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (!result) return;
+window.deletePost = function (el) {
+    bootbox.confirm(__('confirm_message_delete'), function (result) {
+        if (! result) return;
 
         const $el = $(el);
         const token = $el.data('_token');
@@ -308,9 +304,9 @@ deletePost = function (el) {
 };
 
 /* Удаление комментариев */
-deleteComment = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (!result) return;
+window.deleteComment = function (el) {
+    bootbox.confirm(__('confirm_message_delete'), function (result) {
+        if (! result) return;
 
         $.ajax({
             data: {
@@ -322,7 +318,7 @@ deleteComment = function (el) {
             dataType: 'json', type: 'post', url: '/ajax/delcomment',
             success: function (data) {
                 if (data.success) {
-                    toastr.success(translate.message_deleted);
+                    toastr.success(__('message_deleted'));
                     $(el).closest('.section').hide('slow');
                 } else {
                     toastr.error(data.message);
@@ -335,7 +331,7 @@ deleteComment = function (el) {
 };
 
 /* Изменение рейтинга */
-changeRating = function (el) {
+window.changeRating = function (el) {
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -371,9 +367,9 @@ changeRating = function (el) {
 /**
  * Удаляет запись из истории рейтинга
  */
-deleteRating = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
-        if (!result) return;
+window.deleteRating = function (el) {
+    bootbox.confirm(__('confirm_message_delete'), function (result) {
+        if (! result) return;
 
         $.ajax({
             data: {
@@ -383,7 +379,7 @@ deleteRating = function (el) {
             dataType: 'json', type: 'post', url: '/ratings/delete',
             success: (data)=> {
                 if (data.success) {
-                    toastr.success(translate.record_deleted);
+                    toastr.success(__('record_deleted'));
                     $(el).closest('.section').hide('slow');
                 } else {
                     toastr.error(data.message);
@@ -398,13 +394,13 @@ deleteRating = function (el) {
 /**
  * Удаляет запись из списка жалоб
  */
-deleteSpam = function (el) {
+window.deleteSpam = function (el) {
     $.ajax({
         data: {id: $(el).data('id'), _token: $(el).data('token')},
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
             if (data.success) {
-                toastr.success(translate.record_deleted);
+                toastr.success(__('record_deleted'));
                 $(el).closest('.section').hide('slow');
             } else {
                 toastr.error(data.message);
@@ -418,8 +414,8 @@ deleteSpam = function (el) {
 /**
  * Удаляет запись со стены сообщений
  */
-deleteWall = function (el) {
-    bootbox.confirm(translate.confirm_message_delete, function (result) {
+window.deleteWall = function (el) {
+    bootbox.confirm(__('confirm_message_delete'), function (result) {
         if (!result) return;
 
         $.ajax({
@@ -427,7 +423,7 @@ deleteWall = function (el) {
             dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
             success: function (data) {
                 if (data.success) {
-                    toastr.success(translate.record_deleted);
+                    toastr.success(__('record_deleted'));
                     $(el).closest('.section').hide('slow');
                 } else {
                     toastr.error(data.message);
@@ -440,12 +436,12 @@ deleteWall = function (el) {
 };
 
 /* Копирует текст в input */
-copyToClipboard = function (el) {
+window.copyToClipboard = function (el) {
     let form = $(el).closest('.input-group');
     form.find('input').select();
 
     form.find('.input-group-text')
-        .attr('data-bs-original-title', translate.copied)
+        .attr('data-bs-original-title', __('copied'))
         .tooltip('update')
         .tooltip('show');
 
@@ -455,7 +451,7 @@ copyToClipboard = function (el) {
 };
 
 /* Загрузка изображения */
-submitFile = function (el) {
+window.submitFile = function (el) {
     const form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
@@ -507,7 +503,7 @@ submitFile = function (el) {
 };
 
 /* Загрузка изображения */
-submitImage = function (el, paste) {
+window.submitImage = function (el, paste) {
     const form = new FormData();
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
@@ -556,7 +552,7 @@ submitImage = function (el, paste) {
 };
 
 /* Вставка изображения в форму */
-pasteImage = function (el) {
+window.pasteImage = function (el) {
     let field = $('.markItUpEditor');
     let paste = '[img]' + $(el).find('img').data('source') + '[/img]';
 
@@ -564,7 +560,7 @@ pasteImage = function (el) {
 };
 
 /* Удаление изображения из формы */
-cutImage = function (path) {
+window.cutImage = function (path) {
     let field = $('.markItUpEditor');
 
     if (field.length && field.val()) {
@@ -576,8 +572,8 @@ cutImage = function (path) {
 
 
 /* Удаление файла */
-deleteFile = function (el) {
-    bootbox.confirm(translate.confirm_file_delete, function (result) {
+window.deleteFile = function (el) {
+    bootbox.confirm(__('confirm_file_delete'), function (result) {
         if (!result) return;
 
         const $el = $(el);
@@ -612,7 +608,7 @@ deleteFile = function (el) {
 };
 
 /* Показывает форму для повторной отправки кода подтверждения */
-resendingCode = function () {
+window.resendingCode = function () {
     $('.js-resending-link').hide();
     $('.js-resending-form').show();
 
@@ -620,12 +616,12 @@ resendingCode = function () {
 };
 
 /* Показывает панель с запросами */
-showQueries = function () {
+window.showQueries = function () {
     $('.js-queries').slideToggle();
 };
 
 /* Update message count */
-updateMessageCount = function (newCount) {
+window.updateMessageCount = function (newCount) {
     const data = JSON.parse(localStorage.getItem('messageData') || '{}');
     data.countMessages = parseInt(newCount) || 0;
     localStorage.setItem('messageData', JSON.stringify(data));
@@ -635,7 +631,7 @@ updateMessageCount = function (newCount) {
 }
 
 /* Get new messages */
-getNewMessages = function () {
+window.getNewMessages = function () {
     const $notifyItem = $('.js-messages-block .app-nav__item');
     const $badge = $notifyItem.find('.badge');
     const $titleSpan = $('.app-notification__title span');
@@ -677,7 +673,7 @@ getNewMessages = function () {
 };
 
 /* Инициализирует главное изображение слайдера */
-initSlideMainImage = function (el) {
+window.initSlideMainImage = function (el) {
     const mainHref = $(el).attr('href');
     const slider = $(el).closest('.media-file');
 
@@ -687,7 +683,7 @@ initSlideMainImage = function (el) {
 };
 
 /* Инициализирует миниатюру слайдера */
-initSlideThumbImage = function (e, el) {
+window.initSlideThumbImage = function (e, el) {
     e.preventDefault();
 
     const newImg = $(el).find('img');
@@ -709,7 +705,7 @@ initSlideThumbImage = function (e, el) {
 
 let checkTimeout;
 /* Проверка логина */
-checkLogin = function (el) {
+window.checkLogin = function (el) {
     const block = $(el).closest('.mb-3');
     const message = block.find('.invalid-feedback');
     const login = $(el).val().trim();

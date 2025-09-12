@@ -76,7 +76,7 @@
 </form>
 
 @push('scripts')
-    <script>
+    <script type="module">
         function showDelayForm(el) {
             $('.js-published').toggle($(el).is(':checked'));
             return false;

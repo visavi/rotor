@@ -1,30 +1,27 @@
 // ----------------------------------------------------------------------------
 // markItUp bb-code setting!
 // ----------------------------------------------------------------------------
-var currentLang = $('html').attr('lang');
-var translate = window['translate_' + currentLang];
-
-mySettings = {
+window.mySettings = {
     previewParserPath: '/ajax/bbcode', // path to your BBCode parser
     previewAutoRefresh: false,
     onTab: {keepDefault: false, openWith: '    '},
     markupSet: [
-        {title: translate.editor.bold, name: '<i class="fa fa-bold"></i>', className: 'bb-bold', key: 'B', openWith: '[b]', closeWith: '[/b]'},
-        {title: translate.editor.italic, name: '<i class="fa fa-italic"></i>', className: 'bb-italic', key: 'I', openWith: '[i]', closeWith: '[/i]'},
-        {title: translate.editor.underline, name: '<i class="fa fa-underline"></i>', className: 'bb-underline', key: 'U', openWith: '[u]', closeWith: '[/u]'},
-        {title: translate.editor.strike, name: '<i class="fa fa-strikethrough"></i>', className: 'bb-strike', key: 'S', openWith: '[s]', closeWith: '[/s]'},
+        {title: __('editor.bold'), name: '<i class="fa fa-bold"></i>', className: 'bb-bold', key: 'B', openWith: '[b]', closeWith: '[/b]'},
+        {title: __('editor.italic'), name: '<i class="fa fa-italic"></i>', className: 'bb-italic', key: 'I', openWith: '[i]', closeWith: '[/i]'},
+        {title: __('editor.underline'), name: '<i class="fa fa-underline"></i>', className: 'bb-underline', key: 'U', openWith: '[u]', closeWith: '[/u]'},
+        {title: __('editor.strike'), name: '<i class="fa fa-strikethrough"></i>', className: 'bb-strike', key: 'S', openWith: '[s]', closeWith: '[/s]'},
 
         {separator: '---------------'},
-        {title: translate.editor.link, name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '[url=[![' + translate.editor.link + ':!:https://]!]]', closeWith: '[/url]', placeHolder: translate.editor.link_text},
+        {title: __('editor.link'), name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '[url=[![' + __('editor.link') + ':!:https://]!]]', closeWith: '[/url]', placeHolder: __('editor.link_text')},
 
-        {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-image', openWith: '[img][![' + translate.editor.image_text + ':!:https://]!]', closeWith: '[/img]'},
+        {title: __('editor.image'), name: '<i class="fa fa-image"></i>', className: 'bb-image', openWith: '[img][![' + __('editor.image_text') + ':!:https://]!]', closeWith: '[/img]'},
 
-        {title: translate.editor.video, name: '<i class="fab fa-youtube"></i>', className: 'bb-video', openWith: '[video][![' + translate.editor.video_link + ':!:https://]!]', closeWith: '[/video]'},
+        {title: __('editor.video'), name: '<i class="fab fa-youtube"></i>', className: 'bb-video', openWith: '[video][![' + __('editor.video_link') + ':!:https://]!]', closeWith: '[/video]'},
 
-        {title: translate.editor.audio, name: '<i class="fa-solid fa-music"></i>', className: 'bb-audio', openWith: '[audio][![' + translate.editor.audio_link + ':!:https://]!]', closeWith: '[/audio]'},
+        {title: __('editor.audio'), name: '<i class="fa-solid fa-music"></i>', className: 'bb-audio', openWith: '[audio][![' + __('editor.audio_link') + ':!:https://]!]', closeWith: '[/audio]'},
 
         {separator: '---------------'},
-        {title: translate.editor.color, name: '<i class="fa fa-th"></i>', className: 'bb-color', openWith: '[color=[![' + translate.editor.color_code + ']!]]', closeWith: '[/color]',
+        {title: __('editor.color'), name: '<i class="fa fa-th"></i>', className: 'bb-color', openWith: '[color=[![' + __('editor.color_code') + ']!]]', closeWith: '[/color]',
         dropMenu: [
             {name: 'Yellow', openWith: '[color=#ffd700]', closeWith: '[/color]', className: 'col1-1'},
             {name: 'Orange', openWith: '[color=#ffa500]', closeWith: '[/color]', className: 'col1-2'},
@@ -39,7 +36,7 @@ mySettings = {
             {name: 'Cyan', openWith: '[color=#00ffff]', closeWith: '[/color]', className: 'col3-3'}
         ]},
 
-        {title: translate.editor.font_size, name: '<i class="fa fa-font"></i>', className: 'bb-size', openWith: '[size=[![' + translate.editor.font_text + ']!]]', closeWith: '[/size]',
+        {title: __('editor.font_size'), name: '<i class="fa fa-font"></i>', className: 'bb-size', openWith: '[size=[![' + __('editor.font_text') + ']!]]', closeWith: '[/size]',
         dropMenu :[
             {name: 'x-small', openWith: '[size=1]', closeWith: '[/size]'},
             {name: 'small', openWith: '[size=2]', closeWith: '[/size]'},
@@ -49,77 +46,98 @@ mySettings = {
         ]},
 
         {
-            title: translate.editor.sticker,
+            title: __('editor.sticker'),
             name: '<i class="fa fa-smile"></i>',
             className: 'bb-sticker',
             beforeInsert: function () {
-                const stikerModal = $('#stickersModal');
-
-                if (stikerModal.length) {
-                    stikerModal.modal('show');
-
+                const stickerModal = $('#stickersModal');
+                //const stikerModal = document.getElementById('stickersModal');
+                if (stickerModal.length) {
+                    /*const modal = new bootstrap.Modal(stikerModal);
+                    modal.show();*/
+                    $('#stickersModal').modal('show')
                     return false;
                 }
 
                 $.ajax({
-                    dataType: 'json', type: 'get', url: '/ajax/getstickers',
-                    success: function (data) {
-                        if (data.success) {
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/ajax/getstickers',
+                    success: function(data) {
+                        if (data.success && data.stickers) {
                             $('body').append(data.stickers);
+                            const newModal = $('#stickersModal');
+                            //const newModal = document.getElementById('stickersModal');
+                            if (newModal.length) {
+                                /*const modal = new bootstrap.Modal(newModal);
+                                modal.show();*/
+                                $('#stickersModal').modal('show')
+                            }
                         }
-
-                        $('#stickersModal').modal('show')
-                    }
+                    },
                 });
+
+                return false;
             }
         },
 
         {separator: '---------------'},
-        {title: translate.editor.spoiler, name: '<i class="fa fa-plus-square"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + translate.editor.spoiler_title + ']!]]', closeWith: '[/spoiler]', placeHolder: translate.editor.spoiler_text},
-        {title: translate.editor.hide, name: '<i class="fa fa-eye-slash"></i>', className: 'bb-hide', openWith: '[hide]', closeWith: '[/hide]'},
-        {title: translate.editor.quote, name: '<i class="fa fa-quote-right"></i>', className: 'bb-quote', openWith: '[quote]', closeWith: '[/quote]'},
-        {title: translate.editor.code, name: '<i class="fa fa-code"></i>', className: 'bb-code', openWith: '[code]', closeWith: '[/code]'},
+        {title: __('editor.spoiler'), name: '<i class="fa fa-plus-square"></i>', className: 'bb-spoiler', openWith: '[spoiler=[![' + __('editor.spoiler_title') + ']!]]', closeWith: '[/spoiler]', placeHolder: __('editor.spoiler_text')},
+        {title: __('editor.hide'), name: '<i class="fa fa-eye-slash"></i>', className: 'bb-hide', openWith: '[hide]', closeWith: '[/hide]'},
+        {title: __('editor.quote'), name: '<i class="fa fa-quote-right"></i>', className: 'bb-quote', openWith: '[quote]', closeWith: '[/quote]'},
+        {title: __('editor.code'), name: '<i class="fa fa-code"></i>', className: 'bb-code', openWith: '[code]', closeWith: '[/code]'},
 
         {separator: '---------------'},
-        {title: translate.editor.center, name: '<i class="fa fa-align-center"></i>', className: 'bb-center', openWith: '[center]', closeWith: '[/center]'},
-        {title: translate.editor.unorderedlist, name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
-        {title: translate.editor.orderedlist, name: '<i class="fa fa-list-ol"></i>', className: 'bb-orderedlist', multiline:true, openBlockWith: '[list=1]\n', closeBlockWith: '\n[/list]', placeHolder: translate.editor.list_text},
+        {title: __('editor.center'), name: '<i class="fa fa-align-center"></i>', className: 'bb-center', openWith: '[center]', closeWith: '[/center]'},
+        {title: __('editor.unorderedlist'), name: '<i class="fa fa-list-ul"></i>', className: 'bb-unorderedlist', multiline:true, openBlockWith: '[list]\n', closeBlockWith: '\n[/list]', placeHolder: __('editor.list_text')},
+        {title: __('editor.orderedlist'), name: '<i class="fa fa-list-ol"></i>', className: 'bb-orderedlist', multiline:true, openBlockWith: '[list=1]\n', closeBlockWith: '\n[/list]', placeHolder: __('editor.list_text')},
 
         {separator: '---------------'},
-        {title: translate.editor.clean, name: '<i class="fa fa-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
-        {title: translate.editor.cutpage, name: '<i class="fa fa-cut"></i>', className: 'bb-cutpage', openWith: '[cut]'},
-        {title: translate.editor.preview, name: '<i class="fa fa-check-square"></i>', classname: 'bb-preview',  call: 'preview'}
+        {title: __('editor.clean'), name: '<i class="fa fa-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
+        {title: __('editor.cutpage'), name: '<i class="fa fa-cut"></i>', className: 'bb-cutpage', openWith: '[cut]'},
+        /*{title: __('editor.preview, name: '<i class="fa fa-check-square"></i>', classname: 'bb-preview',  call: 'preview'},*/
+        {
+            title: __('editor.preview'),
+            name: '<i class="fa fa-check-square"></i>',
+            className: 'bb-preview',
+            call: function(e) {
+                const markItUp = $(this).closest('.markItUp').find('textarea').data('markItUp');
+                if (markItUp && markItUp.preview) {
+                    markItUp.preview();
+                }
+            }
+        }
     ]
 };
 
 // ----------------------------------------------------------------------------
 // markItUp Html setting!
 // ----------------------------------------------------------------------------
-myHtmlSettings = {
+window.myHtmlSettings = {
     onCtrlEnter: {keepDefault: false, replaceWith: '<br />\r'},
     onTab: {keepDefault: false, openWith: '    '},
     markupSet: [
         {title: 'Div', name: '<i class="fa fa-list-alt"></i>', className: 'bb-div', openWith: '<div(!( class="[![Class]!]")!)>', closeWith: '</div>\n'},
         {title: 'Span', name: '<i class="fa fa-columns"></i>', className: 'bb-span', openWith: '<span(!( class="[![Class]!]")!)>', closeWith: '</span>\n'},
         {title: 'Paragraph', name: '<i class="fa fa-paragraph"></i>', className: 'bb-paragraph', openWith: '<p(!( class="[![Class]!]")!)>', closeWith: '</p>\n'},
-        {title: 'Paragraph', name: '<i class="fa fa-table"></i>', className: 'bb-table', openWith: '<table(!( class="[![Class]!]")!)>\n	<tr>\n		<td>', closeWith: '</td>\n	</tr>\n</table>'},
+        {title: 'Table', name: '<i class="fa fa-table"></i>', className: 'bb-table', openWith: '<table(!( class="[![Class]!]")!)>\n	<tr>\n		<td>', closeWith: '</td>\n	</tr>\n</table>'},
         {separator: '---------------'},
-        {title: 'Heading 1', name: '<i class="fa fa-heading">1</i>', className: 'bb-heading1', key: '1', openWith: '<h1(!( class="[![Class]!]")!)>', closeWith: '</h1>', placeHolder: translate.editor.enter_title},
-        {title: 'Heading 2', name: '<i class="fa fa-heading">2</i>', className: 'bb-heading2', key: '2', openWith: '<h2(!( class="[![Class]!]")!)>', closeWith: '</h2>', placeHolder: translate.editor.enter_title},
-        {title: 'Heading 3', name: '<i class="fa fa-heading">3</i>', className: 'bb-heading3', key: '3', openWith: '<h3(!( class="[![Class]!]")!)>', closeWith: '</h3>', placeHolder: translate.editor.enter_title},
+        {title: 'Heading 1', name: '<i class="fa fa-heading">1</i>', className: 'bb-heading1', key: '1', openWith: '<h1(!( class="[![Class]!]")!)>', closeWith: '</h1>', placeHolder: __('editor.enter_title')},
+        {title: 'Heading 2', name: '<i class="fa fa-heading">2</i>', className: 'bb-heading2', key: '2', openWith: '<h2(!( class="[![Class]!]")!)>', closeWith: '</h2>', placeHolder: __('editor.enter_title')},
+        {title: 'Heading 3', name: '<i class="fa fa-heading">3</i>', className: 'bb-heading3', key: '3', openWith: '<h3(!( class="[![Class]!]")!)>', closeWith: '</h3>', placeHolder: __('editor.enter_title')},
         {separator: '---------------'},
-        {title: translate.editor.bold, name: '<i class="fa fa-bold"></i>', className: 'bb-bold', key: 'B', openWith: '(!(<strong>|!|<b>)!)', closeWith: '(!(</strong>|!|</b>)!)'},
-        {title: translate.editor.italic, name: '<i class="fa fa-italic"></i>', className: 'bb-italic', key: 'I', openWith: '(!(<em>|!|<i>)!)', closeWith: '(!(</em>|!|</i>)!)'},
-        {title: translate.editor.underline, name: '<i class="fa fa-underline"></i>', className: 'bb-underline', key: 'U', openWith: '<u>', closeWith: '</u>'},
-        {title: translate.editor.strike, name: '<i class="fa fa-strikethrough"></i>', className: 'bb-strike', key: 'S', openWith: '<del>', closeWith: '</del>'},
+        {title: __('editor.bold'), name: '<i class="fa fa-bold"></i>', className: 'bb-bold', key: 'B', openWith: '(!(<strong>|!|<b>)!)', closeWith: '(!(</strong>|!|</b>)!)'},
+        {title: __('editor.italic'), name: '<i class="fa fa-italic"></i>', className: 'bb-italic', key: 'I', openWith: '(!(<em>|!|<i>)!)', closeWith: '(!(</em>|!|</i>)!)'},
+        {title: __('editor.underline'), name: '<i class="fa fa-underline"></i>', className: 'bb-underline', key: 'U', openWith: '<u>', closeWith: '</u>'},
+        {title: __('editor.strike'), name: '<i class="fa fa-strikethrough"></i>', className: 'bb-strike', key: 'S', openWith: '<del>', closeWith: '</del>'},
         {separator: '---------------'},
         {title: 'Ul', name: '<i class="fa fa-list-ul"></i>', className: 'bb-ul', openWith: '<ul>\n', closeWith: '</ul>\n'},
         {title: 'Ol', name: '<i class="fa fa-list-ol"></i>', className: 'bb-ol', openWith: '<ol>\n', closeWith: '</ol>\n'},
         {title: 'Li', name: '<i class="fa fa-minus"></i>', className: 'bb-li', openWith: '<li>', closeWith: '</li>'},
         {separator: '---------------'},
-        {title: translate.editor.image, name: '<i class="fa fa-image"></i>', className: 'bb-picture', key: 'P', replaceWith: '<img src="[![' + translate.editor.image_text + ':!:https://]!]" alt="[![' + translate.editor.alt + ']!]" />'},
-        {title: translate.editor.link, name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '<a href="[![' + translate.editor.link + ':!:https://]!]"(!( title="[![Title]!]")!)>', closeWith: '</a>', placeHolder: translate.editor.link_text},
+        {title: __('editor.image'), name: '<i class="fa fa-image"></i>', className: 'bb-picture', key: 'P', replaceWith: '<img src="[![' + __('editor.image_text') + ':!:https://]!]" alt="[![' + __('editor.alt') + ']!]" />'},
+        {title: __('editor.link'), name: '<i class="fa fa-link"></i>', className: 'bb-link', key: 'L', openWith: '<a href="[![' + __('editor.link') + ':!:https://]!]"(!( title="[![Title]!]")!)>', closeWith: '</a>', placeHolder: __('editor.link_text')},
         {separator: '---------------'},
-        {title: translate.editor.clean, name: '<i class="fa fa-eraser"></i>', classname: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } }
+        {title: __('editor.clean'), name: '<i class="fa fa-eraser"></i>', classname: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } }
     ]
 };

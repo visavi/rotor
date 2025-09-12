@@ -81,7 +81,7 @@
 @stop
 
 @push('scripts')
-    <script>
+    <script type="module">
         function showVoteForm() {
             $('.js-vote-form').toggle();
         }

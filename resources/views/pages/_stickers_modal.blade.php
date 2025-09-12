@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
         pasteSticker = function (el) {
             var field = $('.markItUpEditor');
             var paste = $(el).find('img').attr('alt') + ' ';
@@ -30,6 +30,3 @@
         };
     </script>
 </div>
-
-
-

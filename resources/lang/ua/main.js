@@ -1,4 +1,4 @@
-translate_ua = {
+export default {
     characters_left: 'Залишилось символів',
     confirm_logout: 'Ви впевнені, що хочете вийти?',
     confirm_complain_submit: 'Ви дійсно хочете відправити траур?',
@@ -48,4 +48,4 @@ translate_ua = {
         enter_title: 'Введіть назву...',
         alt: 'Альтернативний текст',
     }
-};
+}

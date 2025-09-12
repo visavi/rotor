@@ -1,1 +1,575 @@
-!function($){$.fn.markItUp=function(settings,extraSettings){var method,params,options,ctrlKey,shiftKey,altKey;ctrlKey=shiftKey=altKey=!1,"string"==typeof settings&&(method=settings,params=extraSettings),options={id:"",nameSpace:"",root:"",previewHandler:!1,previewInWindow:"",previewInElement:"",previewAutoRefresh:!0,previewPosition:"after",previewTemplatePath:"~/templates/preview.html",previewParser:!1,previewParserPath:"",previewParserVar:"data",previewParserAjaxType:"POST",resizeHandle:!0,beforeInsert:"",afterInsert:"",onEnter:{},onShiftEnter:{},onCtrlEnter:{},onTab:{},markupSet:[{}]},$.extend(options,settings,extraSettings),options.root||$("script").each(function(e,t){var r=$(t).get(0).src.match(/(.*)jquery\.markitup(\.pack)?\.js$/);null!==r&&(options.root=r[1])});var uaMatch=function(e){e=e.toLowerCase();var t=/(chrome)[ \/]([\w.]+)/.exec(e)||/(webkit)[ \/]([\w.]+)/.exec(e)||/(opera)(?:.*version|)[ \/]([\w.]+)/.exec(e)||/(msie) ([\w.]+)/.exec(e)||e.indexOf("compatible")<0&&/(mozilla)(?:.*? rv:([\w.]+)|)/.exec(e)||[];return{browser:t[1]||"",version:t[2]||"0"}},matched=uaMatch(navigator.userAgent),browser={};return matched.browser&&(browser[matched.browser]=!0,browser.version=matched.version),browser.chrome?browser.webkit=!0:browser.webkit&&(browser.safari=!0),this.each(function(){var $$,textarea,levels,scrollPosition,caretPosition,caretOffset,clicked,hash,header,footer,previewWindow,template,iFrame,abort;if($$=$(this),textarea=this,levels=[],abort=!1,scrollPosition=caretPosition=0,caretOffset=-1,options.previewParserPath=localize(options.previewParserPath),options.previewTemplatePath=localize(options.previewTemplatePath),method)switch(method){case"remove":remove();break;case"insert":markup(params);break;default:$.error("Method "+method+" does not exist on jQuery.markItUp")}else init();function localize(e,t){return t?e.replace(/("|')~\//g,"$1"+options.root):e.replace(/^~\//,options.root)}function init(){id="",nameSpace="",options.id?id='id="'+options.id+'"':$$.attr("id")&&(id='id="markItUp'+$$.attr("id").substr(0,1).toUpperCase()+$$.attr("id").substr(1)+'"'),options.nameSpace&&(nameSpace='class="'+options.nameSpace+'"'),$$.wrap("<div "+nameSpace+"></div>"),$$.wrap("<div "+id+' class="markItUp"></div>'),$$.wrap('<div class="markItUpContainer"></div>'),$$.addClass("markItUpEditor"),header=$('<div class="markItUpHeader"></div>').insertBefore($$),$(dropMenus(options.markupSet)).appendTo(header),footer=$('<div class="markItUpFooter"></div>').insertAfter($$),!0===options.resizeHandle&&!0!==browser.safari&&(resizeHandle=$('<div class="markItUpResizeHandle"></div>').insertAfter($$).bind("mousedown.markItUp",function(e){var t,r,i=$$.height(),n=e.clientY;t=function(e){return $$.css("height",Math.max(20,e.clientY+i-n)+"px"),!1},r=function(e){return $("html").unbind("mousemove.markItUp",t).unbind("mouseup.markItUp",r),!1},$("html").bind("mousemove.markItUp",t).bind("mouseup.markItUp",r)}),footer.append(resizeHandle)),$$.bind("keydown.markItUp",keyPressed).bind("keyup",keyPressed),$$.bind("insertion.markItUp",function(e,t){!1!==t.target&&get(),textarea===$.markItUp.focused&&markup(t)}),$$.bind("focus.markItUp",function(){$.markItUp.focused=this}),options.previewInElement&&refreshPreview()}function dropMenus(markupSet){var ul=$("<ul></ul>"),i=0;return $("li:hover > ul",ul).css("display","block"),$.each(markupSet,function(){var button=this,t="",title,li,j;if(title=button.title?button.key?(button.title||"")+" [Ctrl+"+button.key+"]":button.title||"":button.key?(button.name||"")+" [Ctrl+"+button.key+"]":button.name||"",key=button.key?'accesskey="'+button.key+'"':"",button.separator)li=$('<li class="markItUpSeparator">'+(button.separator||"")+"</li>").appendTo(ul);else{for(i++,j=levels.length-1;0<=j;j--)t+=levels[j]+"-";li=$('<li class="markItUpButton markItUpButton'+t+i+" "+(button.className||"")+'"><a href="#" '+key+' title="'+title+'">'+(button.name||"")+"</a></li>").bind("contextmenu.markItUp",function(){return!1}).bind("click.markItUp",function(e){e.preventDefault()}).bind("focusin.markItUp",function(){$$.focus()}).bind("mouseup",function(e){return button.call&&eval(button.call)(e),setTimeout(function(){markup(button)},1),!1}).bind("mouseenter.markItUp",function(){$("> ul",this).show(),$(document).one("click",function(){$("ul ul",header).hide()})}).bind("mouseleave.markItUp",function(){$("> ul",this).hide()}).appendTo(ul),button.dropMenu&&(levels.push(i),$(li).addClass("markItUpDropMenu").append(dropMenus(button.dropMenu)))}}),levels.pop(),ul}function magicMarkups(e){return e?e=(e=(e=e.toString()).replace(/\(\!\(([\s\S]*?)\)\!\)/g,function(e,t){var r=t.split("|!|");return!0===altKey?void 0!==r[1]?r[1]:r[0]:void 0===r[1]?"":r[0]})).replace(/\[\!\[([\s\S]*?)\]\!\]/g,function(e,t){var r=t.split(":!:");return!0!==abort&&(value=prompt(r[0],r[1]?r[1]:""),null===value&&(abort=!0),value)}):""}function prepare(e){return $.isFunction(e)&&(e=e(hash)),magicMarkups(e)}function build(e){var t=prepare(clicked.openWith),r=prepare(clicked.placeHolder),i=prepare(clicked.replaceWith),n=prepare(clicked.closeWith),o=prepare(clicked.openBlockWith),a=prepare(clicked.closeBlockWith),s=clicked.multiline;if(""!==i)block=t+i+n;else if(""===selection&&""!==r)block=t+r+n;else{var l=[e=e||selection],c=[];!0===s&&(l=e.split(/\r?\n/));for(var p=0;p<l.length;p++){var u;line=l[p],(u=line.match(/ *$/))?c.push(t+line.replace(/ *$/g,"")+n+u):c.push(t+line+n)}block=c.join("\n")}return block=o+block+a,{block:block,openBlockWith:o,openWith:t,replaceWith:i,placeHolder:r,closeWith:n,closeBlockWith:a}}function markup(e){var t,r,i,n;if(hash=clicked=e,get(),$.extend(hash,{line:"",root:options.root,textarea:textarea,selection:selection||"",caretPosition:caretPosition,ctrlKey:ctrlKey,shiftKey:shiftKey,altKey:altKey}),prepare(options.beforeInsert),prepare(clicked.beforeInsert),(!0===ctrlKey&&!0===shiftKey||!0===e.multiline)&&prepare(clicked.beforeMultiInsert),$.extend(hash,{line:1}),!0===ctrlKey&&!0===shiftKey){for(lines=selection.split(/\r?\n/),r=0,i=lines.length,n=0;n<i;n++)""!==$.trim(lines[n])?($.extend(hash,{line:++r,selection:lines[n]}),lines[n]=build(lines[n]).block):lines[n]="";string={block:lines.join("\n")},start=caretPosition,t=string.block.length+(browser.opera?i-1:0)}else!0===ctrlKey?(string=build(selection),start=caretPosition+string.openWith.length,t=string.block.length-string.openWith.length-string.closeWith.length,t-=string.block.match(/ $/)?1:0,t-=fixIeBug(string.block)):!0===shiftKey?(string=build(selection),start=caretPosition,t=string.block.length,t-=fixIeBug(string.block)):(string=build(selection),start=caretPosition+string.block.length,t=0,start-=fixIeBug(string.block));""===selection&&""===string.replaceWith&&(caretOffset+=fixOperaBug(string.block),start=caretPosition+string.openBlockWith.length+string.openWith.length,t=string.block.length-string.openBlockWith.length-string.openWith.length-string.closeWith.length-string.closeBlockWith.length,caretOffset=$$.val().substring(caretPosition,$$.val().length).length,caretOffset-=fixOperaBug($$.val().substring(0,caretPosition))),$.extend(hash,{caretPosition:caretPosition,scrollPosition:scrollPosition}),string.block!==selection&&!1===abort?(insert(string.block),set(start,t)):caretOffset=-1,get(),$.extend(hash,{line:"",selection:selection}),(!0===ctrlKey&&!0===shiftKey||!0===e.multiline)&&prepare(clicked.afterMultiInsert),prepare(clicked.afterInsert),prepare(options.afterInsert),previewWindow&&options.previewAutoRefresh&&refreshPreview(),textarea.dispatchEvent(new Event("input")),shiftKey=altKey=ctrlKey=abort=!1}function fixOperaBug(e){return browser.opera?e.length-e.replace(/\n*/g,"").length:0}function fixIeBug(e){return browser.msie?e.length-e.replace(/\r*/g,"").length:0}function insert(e){document.selection?document.selection.createRange().text=e:textarea.value=textarea.value.substring(0,caretPosition)+e+textarea.value.substring(caretPosition+selection.length,textarea.value.length)}function set(e,t){if(textarea.createTextRange){if(browser.opera&&9.5<=browser.version&&0==t)return!1;range=textarea.createTextRange(),range.collapse(!0),range.moveStart("character",e),range.moveEnd("character",t),range.select()}else textarea.setSelectionRange&&textarea.setSelectionRange(e,e+t);textarea.scrollTop=scrollPosition,textarea.focus()}function get(){if(textarea.focus(),scrollPosition=textarea.scrollTop,document.selection)if(selection=document.selection.createRange().text,browser.msie){var e=document.selection.createRange(),t=e.duplicate();for(t.moveToElementText(textarea),caretPosition=-1;t.inRange(e);)t.moveStart("character"),caretPosition++}else caretPosition=textarea.selectionStart;else caretPosition=textarea.selectionStart,selection=textarea.value.substring(caretPosition,textarea.selectionEnd);return selection}function preview(){"function"==typeof options.previewHandler?previewWindow=!0:options.previewInElement?previewWindow=$(options.previewInElement):!previewWindow||previewWindow.closed?options.previewInWindow?(previewWindow=window.open("","preview",options.previewInWindow),$(window).unload(function(){previewWindow.close()})):(iFrame=$('<iframe class="markItUpPreviewFrame"></iframe>'),"after"==options.previewPosition?iFrame.insertAfter(footer):iFrame.insertBefore(header),previewWindow=iFrame[iFrame.length-1].contentWindow||frame[iFrame.length-1]):!0===altKey&&(iFrame?iFrame.remove():previewWindow.close(),previewWindow=iFrame=!1),options.previewAutoRefresh||refreshPreview(),options.previewInWindow&&previewWindow.focus()}function refreshPreview(){renderPreview()}function renderPreview(){var t=$$.val();return options.previewParser&&"function"==typeof options.previewParser&&(t=options.previewParser(t)),options.previewHandler&&"function"==typeof options.previewHandler?options.previewHandler(t):""!==options.previewParserPath?$.ajax({type:options.previewParserAjaxType,dataType:"text",global:!1,url:options.previewParserPath,data:options.previewParserVar+"="+encodeURIComponent(t),success:function(e){writeInPreview(localize(e,1))}}):template||$.ajax({url:options.previewTemplatePath,dataType:"text",global:!1,success:function(e){writeInPreview(localize(e,1).replace(/<!-- content -->/g,t))}}),!1}function writeInPreview(e){if(options.previewInElement)$(options.previewInElement).html(e);else if(previewWindow&&previewWindow.document){try{sp=previewWindow.document.documentElement.scrollTop}catch(e){sp=0}previewWindow.document.open(),previewWindow.document.write(e),previewWindow.document.close(),previewWindow.document.documentElement.scrollTop=sp}}function keyPressed(e){if(shiftKey=e.shiftKey,altKey=e.altKey,ctrlKey=(!e.altKey||!e.ctrlKey)&&(e.ctrlKey||e.metaKey),"keydown"===e.type){if(!0===ctrlKey&&(li=$('a[accesskey="'+(13==e.keyCode?"\\n":String.fromCharCode(e.keyCode))+'"]',header).parent("li"),0!==li.length))return ctrlKey=!1,setTimeout(function(){li.triggerHandler("mouseup")},1),!1;if(13===e.keyCode||10===e.keyCode)return!0===ctrlKey?(ctrlKey=!1,markup(options.onCtrlEnter),options.onCtrlEnter.keepDefault):!0===shiftKey?(shiftKey=!1,markup(options.onShiftEnter),options.onShiftEnter.keepDefault):(markup(options.onEnter),options.onEnter.keepDefault);if(9===e.keyCode)return 1!=shiftKey&&1!=ctrlKey&&1!=altKey&&(-1!==caretOffset?(get(),set(caretOffset=$$.val().length-caretOffset,0),!(caretOffset=-1)):(markup(options.onTab),options.onTab.keepDefault))}}function remove(){$$.unbind(".markItUp").removeClass("markItUpEditor"),$$.parent("div").parent("div.markItUp").parent("div").replaceWith($$);var e=$$.parent("div").parent("div.markItUp").parent("div");e.length&&e.replaceWith($$),$$.data("markItUp",null)}})},$.fn.markItUpRemove=function(){return this.each(function(){$(this).markItUp("remove")})},$.markItUp=function(e){var t={target:!1};if($.extend(t,e),t.target)return $(t.target).each(function(){$(this).focus(),$(this).trigger("insertion",[t])});$("textarea").trigger("insertion",[t])}}(jQuery);
+(function($) {
+    "use strict";
+
+    $.fn.markItUp = function(o, extraSettings) {
+        let method, params, options, r, a, l;
+        r = a = l = false; // ctrlKey, shiftKey, altKey
+
+        if (typeof o === "string") {
+            method = o;
+            params = extraSettings;
+        }
+
+        options = {
+            id: "",
+            nameSpace: "",
+            root: "",
+            previewHandler: false,
+            previewInWindow: "",
+            previewInElement: "",
+            previewAutoRefresh: true,
+            previewPosition: "after",
+            previewTemplatePath: "~/templates/preview.html",
+            previewParser: false,
+            previewParserPath: "",
+            previewParserVar: "data",
+            previewParserAjaxType: "POST",
+            resizeHandle: true,
+            beforeInsert: "",
+            afterInsert: "",
+            onEnter: {},
+            onShiftEnter: {},
+            onCtrlEnter: {},
+            onTab: {},
+            markupSet: [{}]
+        };
+
+        $.extend(options, o, extraSettings);
+
+        if (!options.root) {
+            $("script").each(function(e, t) {
+                const r = $(t).get(0).src.match(/(.*)jquery\.markitup(\.pack)?\.js$/);
+                if (r !== null) {
+                    options.root = r[1];
+                }
+            });
+        }
+
+        return this.each(function() {
+            let $$, u, levels, scrollPosition, f, m, g, v, header, footer, previewWindow, template, iFrame, abort, I;
+            $$ = $(this);
+            u = this; // textarea
+            levels = [];
+            abort = false;
+            scrollPosition = f = 0; // caretPosition
+            m = -1; // caretOffset
+            I = ""; // selection
+            g = null; // clicked (button object)
+
+            // Store plugin methods for access in call handlers
+            const pluginMethods = {
+                preview: preview,
+                markup: markup,
+                get: get,
+                insert: insert,
+                set: set
+            };
+
+            options.previewParserPath = localize(options.previewParserPath);
+            options.previewTemplatePath = localize(options.previewTemplatePath);
+
+            if (method) {
+                switch (method) {
+                    case "remove":
+                        remove();
+                        break;
+                    case "insert":
+                        markup(params);
+                        break;
+                    default:
+                        $.error(`Method ${method} does not exist on jQuery.markItUp`);
+                }
+                return;
+            } else {
+                init();
+            }
+
+            function localize(e, t) {
+                return t ? e.replace(/("|')~\//g, `$1${options.root}`) : e.replace(/^~\//, options.root);
+            }
+
+            function init() {
+                let id = "", nameSpace = "";
+                if (options.id) {
+                    id = `id="${options.id}"`;
+                } else if ($$.attr("id")) {
+                    id = `id="markItUp${$$.attr("id").substr(0, 1).toUpperCase() + $$.attr("id").substr(1)}"`;
+                }
+                if (options.nameSpace) {
+                    nameSpace = `class="${options.nameSpace}"`;
+                }
+
+                $$.wrap(`<div ${nameSpace}></div>`);
+                $$.wrap(`<div ${id} class="markItUp"></div>`);
+                $$.wrap('<div class="markItUpContainer"></div>');
+                $$.addClass("markItUpEditor");
+
+                // Store plugin methods in jQuery data
+                $$.data('markItUp', pluginMethods);
+
+                header = $('<div class="markItUpHeader"></div>').insertBefore($$);
+                $(dropMenus(options.markupSet)).appendTo(header);
+
+                footer = $('<div class="markItUpFooter"></div>').insertAfter($$);
+
+                if (options.resizeHandle === true) {
+                    const resizeHandle = $('<div class="markItUpResizeHandle"></div>').insertAfter($$).on("mousedown.markItUp", function(e) {
+                        const i = $$.height(), n = e.clientY;
+                        const t = function(e) {
+                            $$.css("height", Math.max(20, e.clientY + i - n) + "px");
+                            return false;
+                        };
+                        const r = function(e) {
+                            $("html").off("mousemove.markItUp", t).off("mouseup.markItUp", r);
+                            return false;
+                        };
+                        $("html").on("mousemove.markItUp", t).on("mouseup.markItUp", r);
+                    });
+                    footer.append(resizeHandle);
+                }
+
+                $$.on("keydown.markItUp", keyPressed).on("keyup", keyPressed);
+                $$.on("insertion.markItUp", function(e, t) {
+                    if (t.target !== false) {
+                        get();
+                    }
+                    if (u === $.markItUp.focused) {
+                        markup(t);
+                    }
+                });
+                $$.on("focus.markItUp", function() {
+                    $.markItUp.focused = this;
+                });
+
+                if (options.previewInElement) {
+                    refreshPreview();
+                }
+            }
+
+            function dropMenus(markupSet) {
+                const ul = $("<ul></ul>");
+                let i = 0;
+                $("li:hover > ul", ul).css("display", "block");
+
+                $.each(markupSet, function() {
+                    const g = this; // button (minified as g)
+                    let t = "", title, li, j;
+                    title = g.title
+                        ? g.key
+                            ? (g.title || "") + ` [Ctrl+${g.key}]`
+                            : (g.title || "")
+                        : g.key
+                            ? (g.name || "") + ` [Ctrl+${g.key}]`
+                            : (g.name || "");
+                    const key = g.key ? `accesskey="${g.key}"` : "";
+
+                    if (g.separator) {
+                        li = $(`<li class="markItUpSeparator">${g.separator || ""}</li>`).appendTo(ul);
+                    } else {
+                        i++;
+                        for (j = levels.length - 1; j >= 0; j--) {
+                            t += levels[j] + "-";
+                        }
+                        li = $(`<li class="markItUpButton markItUpButton${t + i} ${g.className || ""}"><a href="#" ${key} title="${title}">${g.name || ""}</a></li>`)
+                            .on("contextmenu.markItUp", function() {
+                                return false;
+                            })
+                            .on("click.markItUp", function(e) {
+                                e.preventDefault();
+                            })
+                            .on("focusin.markItUp", function() {
+                                $$.focus();
+                            })
+                            .on("mouseup", function(e) {
+                                if (typeof g.call === "function") {
+                                    g.call.call(this, e); // Ensure 'this' is the <a> element
+                                }
+                                setTimeout(() => markup(g), 1);
+                                return false;
+                            })
+                            .on("mouseenter.markItUp", function() {
+                                $("> ul", this).show();
+                                $(document).one("click", () => $("ul ul", header).hide());
+                            })
+                            .on("mouseleave.markItUp", function() {
+                                $("> ul", this).hide();
+                            })
+                            .appendTo(ul);
+
+                        if (g.dropMenu) {
+                            levels.push(i);
+                            $(li).addClass("markItUpDropMenu").append(dropMenus(g.dropMenu));
+                        }
+                    }
+                });
+                levels.pop();
+                return ul;
+            }
+
+            function magicMarkups(e) {
+                if (!e) return "";
+                e = e.toString();
+                e = e.replace(/\(\!\(([\s\S]*?)\)\!\)/g, function(e, t) {
+                    const r = t.split("|!|");
+                    return l === true ? (r[1] !== undefined ? r[1] : r[0]) : (r[1] === undefined ? "" : r[0]);
+                });
+                e = e.replace(/\[\!\[([\s\S]*?)\]\!\]/g, function(e, t) {
+                    const r = t.split(":!:");
+                    if (abort === true) return false;
+                    const value = prompt(r[0], r[1] ? r[1] : "");
+                    if (value === null) {
+                        abort = true;
+                    }
+                    return value;
+                });
+                return e;
+            }
+
+            function prepare(e) {
+                if ($.isFunction(e)) {
+                    e = e(v);
+                }
+                return magicMarkups(e);
+            }
+
+            function build(e) {
+                const R = prepare(g.openWith);
+                const x = prepare(g.placeHolder);
+                const A = prepare(g.replaceWith);
+                const F = prepare(g.closeWith);
+                const L = prepare(g.openBlockWith);
+                const N = prepare(g.closeBlockWith);
+                const q = g.multiline;
+                let block;
+
+                if (A !== "") {
+                    block = R + A + F;
+                } else if (I === "" && x !== "") {
+                    block = R + x + F;
+                } else {
+                    e = e || I;
+                    let lines = [e], c = []; // Changed 'const l' to 'let lines'
+                    if (q === true) {
+                        lines = e.split(/\r?\n/);
+                    }
+                    for (let p = 0; p < lines.length; p++) {
+                        let line = lines[p];
+                        let u;
+                        if ((u = line.match(/ *$/))) {
+                            c.push(R + line.replace(/ *$/g, "") + F + u);
+                        } else {
+                            c.push(R + line + F);
+                        }
+                    }
+                    block = c.join("\n");
+                }
+                block = L + block + N;
+                return { block, openBlockWith: L, openWith: R, replaceWith: A, placeHolder: x, closeWith: F, closeBlockWith: N };
+            }
+
+            function markup(e) {
+                let t, r, i, n, string, start;
+                v = g = e;
+                I = get();
+                $.extend(v, {
+                    line: "",
+                    root: options.root,
+                    textarea: u,
+                    selection: I || "",
+                    caretPosition: f,
+                    ctrlKey: r,
+                    shiftKey: a,
+                    altKey: l
+                });
+
+                prepare(options.beforeInsert);
+                prepare(g.beforeInsert);
+
+                if ((r === true && a === true) || e.multiline === true) {
+                    prepare(g.beforeMultiInsert);
+                }
+
+                $.extend(v, { line: 1 });
+
+                if (r === true && a === true) {
+                    const lines = I.split(/\r?\n/);
+                    r = 0;
+                    i = lines.length;
+                    for (n = 0; n < i; n++) {
+                        if ($.trim(lines[n]) !== "") {
+                            $.extend(v, { line: ++r, selection: lines[n] });
+                            lines[n] = build(lines[n]).block;
+                        } else {
+                            lines[n] = "";
+                        }
+                    }
+                    string = { block: lines.join("\n") };
+                    start = f;
+                    t = string.block.length;
+                } else if (r === true) {
+                    string = build(I);
+                    start = f + string.openWith.length;
+                    t = string.block.length - string.openWith.length - string.closeWith.length;
+                    t -= string.block.match(/ $/)? 1 : 0;
+                } else if (a === true) {
+                    string = build(I);
+                    start = f;
+                    t = string.block.length;
+                } else {
+                    string = build(I);
+                    start = f + string.block.length;
+                    t = 0;
+                }
+
+                if (I === "" && string.replaceWith === "") {
+                    m += string.block.length;
+                    start = f + string.openBlockWith.length + string.openWith.length;
+                    t = string.block.length - string.openBlockWith.length - string.openWith.length - string.closeWith.length - string.closeBlockWith.length;
+                    m = $$.val().substring(f, $$.val().length).length;
+                }
+
+                $.extend(v, { caretPosition: f, scrollPosition });
+
+                if (string.block !== I && abort === false) {
+                    insert(string.block);
+                    set(start, t);
+                } else {
+                    m = -1;
+                }
+
+                get();
+                $.extend(v, { line: "", selection: I });
+
+                if ((r === true && a === true) || e.multiline === true) {
+                    prepare(g.afterMultiInsert);
+                }
+                prepare(g.afterInsert);
+                prepare(options.afterInsert);
+
+                if (previewWindow && options.previewAutoRefresh) {
+                    refreshPreview();
+                }
+
+                u.dispatchEvent(new Event("input"));
+                a = l = r = abort = false;
+            }
+
+            function insert(e) {
+                if (document.selection) {
+                    document.selection.createRange().text = e;
+                } else {
+                    u.value = u.value.substring(0, f) + e + u.value.substring(f + I.length, u.value.length);
+                }
+            }
+
+            function set(e, t) {
+                if (u.createTextRange) {
+                    const range = u.createTextRange();
+                    range.collapse(true);
+                    range.moveStart("character", e);
+                    range.moveEnd("character", t);
+                    range.select();
+                } else if (u.setSelectionRange) {
+                    u.setSelectionRange(e, e + t);
+                }
+                u.scrollTop = scrollPosition;
+                u.focus();
+            }
+
+            function get() {
+                "use strict";
+                let T;
+                u.focus();
+                scrollPosition = u.scrollTop;
+                if (document.selection) {
+                    T = document.selection.createRange().text;
+                    if ($.browser && $.browser.msie) {
+                        const range = document.selection.createRange(), t = range.duplicate();
+                        t.moveToElementText(u);
+                        f = -1;
+                        while (t.inRange(range)) {
+                            t.moveStart("character");
+                            f++;
+                        }
+                    } else {
+                        f = u.selectionStart;
+                    }
+                } else {
+                    f = u.selectionStart;
+                    T = u.value.substring(f, u.selectionEnd);
+                }
+                I = T;
+                return T;
+            }
+
+            function preview() {
+                if (typeof options.previewHandler === "function") {
+                    previewWindow = true;
+                    options.previewHandler($$.val());
+                } else if (options.previewInElement) {
+                    previewWindow = $(options.previewInElement);
+                    refreshPreview();
+                } else if (!previewWindow || previewWindow.closed) {
+                    if (options.previewInWindow) {
+                        previewWindow = window.open("", "preview", options.previewInWindow);
+                        $(window).on("unload", () => previewWindow.close());
+                        refreshPreview();
+                    } else {
+                        iFrame = $('<iframe class="markItUpPreviewFrame"></iframe>');
+                        if (options.previewPosition === "after") {
+                            iFrame.insertAfter(footer);
+                        } else {
+                            iFrame.insertBefore(header);
+                        }
+                        previewWindow = iFrame[iFrame.length - 1].contentWindow || iFrame[iFrame.length - 1];
+                        refreshPreview();
+                    }
+                } else if (l === true) { // altKey to close preview
+                    if (iFrame) {
+                        iFrame.remove();
+                    } else {
+                        previewWindow.close();
+                    }
+                    previewWindow = iFrame = false;
+                }
+
+                if (!options.previewAutoRefresh) {
+                    refreshPreview();
+                }
+                if (options.previewInWindow) {
+                    previewWindow.focus();
+                }
+            }
+
+            function refreshPreview() {
+                renderPreview();
+            }
+
+            function renderPreview() {
+                let t = $$.val();
+                if (options.previewParser && typeof options.previewParser === "function") {
+                    t = options.previewParser(t);
+                }
+                if (typeof options.previewHandler === "function") {
+                    options.previewHandler(t);
+                } else if (options.previewParserPath !== "") {
+                    $.ajax({
+                        type: options.previewParserAjaxType,
+                        dataType: "text",
+                        global: false,
+                        url: options.previewParserPath,
+                        data: `${options.previewParserVar}=${encodeURIComponent(t)}`,
+                        success: function(e) {
+                            writeInPreview(localize(e, 1));
+                        },
+                        error: function(err) {
+                            console.error("Preview AJAX error:", err);
+                        }
+                    });
+                } else if (!template) {
+                    $.ajax({
+                        url: options.previewTemplatePath,
+                        dataType: "text",
+                        global: false,
+                        success: function(e) {
+                            writeInPreview(localize(e, 1).replace(/<!-- content -->/g, t));
+                        },
+                        error: function(err) {
+                            console.error("Template AJAX error:", err);
+                        }
+                    });
+                }
+            }
+
+            function writeInPreview(e) {
+                if (options.previewInElement) {
+                    $(options.previewInElement).html(e);
+                } else if (previewWindow && previewWindow.document) {
+                    try {
+                        const sp = previewWindow.document.documentElement.scrollTop;
+                        previewWindow.document.open();
+                        previewWindow.document.write(e);
+                        previewWindow.document.close();
+                        previewWindow.document.documentElement.scrollTop = sp;
+                    } catch (err) {
+                        console.error("Error writing to preview window:", err);
+                    }
+                }
+            }
+
+            function keyPressed(e) {
+                a = e.shiftKey;
+                l = e.altKey;
+                r = (!e.altKey && !e.ctrlKey) && (e.ctrlKey || e.metaKey);
+
+                if (e.type === "keydown") {
+                    if (r === true) {
+                        const li = $(`a[accesskey="${e.keyCode === 13 ? "\\n" : String.fromCharCode(e.keyCode)}"]`, header).parent("li");
+                        if (li.length !== 0) {
+                            r = false;
+                            setTimeout(() => li.triggerHandler("mouseup"), 1);
+                            return false;
+                        }
+                    }
+                    if (e.keyCode === 13 || e.keyCode === 10) {
+                        if (r === true) {
+                            r = false;
+                            markup(options.onCtrlEnter);
+                            return options.onCtrlEnter.keepDefault;
+                        }
+                        if (a === true) {
+                            a = false;
+                            markup(options.onShiftEnter);
+                            return options.onShiftEnter.keepDefault;
+                        }
+                        markup(options.onEnter);
+                        return options.onEnter.keepDefault;
+                    }
+                    if (e.keyCode === 9) {
+                        if (a !== true && r !== true && l !== true) {
+                            if (m !== -1) {
+                                get();
+                                m = $$.val().length - m;
+                                set(m, 0);
+                                m = -1;
+                                return false;
+                            } else {
+                                markup(options.onTab);
+                                return options.onTab.keepDefault;
+                            }
+                        }
+                    }
+                }
+            }
+
+            function remove() {
+                $$.off(".markItUp").removeClass("markItUpEditor");
+                $$.parent("div").parent("div.markItUp").parent("div").replaceWith($$);
+                const e = $$.parent("div").parent("div.markItUp").parent("div");
+                if (e.length) {
+                    e.replaceWith($$);
+                }
+                $$.data("markItUp", null);
+            }
+        });
+    };
+
+    $.fn.markItUpRemove = function() {
+        return this.each(function() {
+            $(this).markItUp("remove");
+        });
+    };
+
+    $.markItUp = function(e) {
+        const t = { target: false };
+        $.extend(t, e);
+        if (t.target) {
+            return $(t.target).each(function() {
+                $(this).focus();
+                $(this).trigger("insertion", [t]);
+            });
+        } else {
+            $("textarea").trigger("insertion", [t]);
+        }
+    };
+})($);

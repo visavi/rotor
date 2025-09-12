@@ -52,7 +52,7 @@
 @stop
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(function () {
             $('#{{ $act }}').addClass('active');
         })

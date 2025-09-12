@@ -36,7 +36,7 @@
                 <label for="color" class="form-label">{{ __('adverts.color') }}:</label>
                 <div class="input-group">
                     <input type="text" name="color" class="form-control colorpicker js-color" id="color" maxlength="7" value="{{ $color }}" placeholder="{{ __('adverts.color') }}">
-                    <input type="color" class="form-control form-control-color colorpicker-addon js-color" value="{{ $color }}">
+                    <input type="color" class="form-control form-control-color colorpicker-addon js-color" value="{{ $color ?? '#000000' }}">
                 </div>
                 <div class="invalid-feedback">{{ textError('color') }}</div>
             </div>
@@ -59,7 +59,7 @@
 @stop
 
 @push('scripts')
-    <script>
+    <script type="module">
         $(document).ready(function() {
             var rekuserprice    = <?= setting('rekuserprice'); ?>;
             var rekuseroptprice = <?= setting('rekuseroptprice'); ?>;
