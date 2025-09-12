@@ -147,8 +147,8 @@ textarea.form-control {
 
 .blockquote:before {
     content: "\f10e";
-    font-size: 1.4em !important;
     font: var(--fa-font-solid);
+    font-size: 1.4em;
     float: left;
     margin-right: 10px;
     color: #c73401;

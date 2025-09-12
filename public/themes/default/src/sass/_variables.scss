@@ -1,3 +1,4 @@
+// Fontawesome fonts path
 @use 'fa/scss/variables' with (
   $font-path: "fa/webfonts",
 );
@@ -94,9 +95,6 @@ $sidebar-dark-link-color: #fff;
 // and link hover color when using a light sidebar color
 $sidebar-light-color: #000;
 $sidebar-light-link-color: #333;
-
-// Fontawesome fonts path
-/*$fa-font-path: "fa/webfonts";*/
 
 //
 // Customize bootstrap variables to match
