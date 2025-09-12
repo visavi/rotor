@@ -8,7 +8,7 @@
             ]);
         @endphp
 
-        <a href="{{ $file->path }}" class="slide-main-link" data-fancybox="gallery-{{ $model->id }}" onclick="return initSlideMainImage(this)">{{ $image }}</a>
+        <a href="{{ $file->path }}" class="slide-main-link" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}" onclick="return initSlideMainImage(this)">{{ $image }}</a>
     </div>
 
     @if ($countFiles > 1)
@@ -22,7 +22,7 @@
                     ]);
                 @endphp
 
-                <a href="{{ $file->path }}" class="slide-thumb-link" data-fancybox="gallery-{{ $model->id }}" onclick="return initSlideThumbImage(event, this)">{{ $image }}</a>
+                <a href="{{ $file->path }}" class="slide-thumb-link" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}" onclick="return initSlideThumbImage(event, this)">{{ $image }}</a>
             @endforeach
         </div>
     @endif

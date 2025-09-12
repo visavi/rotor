@@ -14,7 +14,7 @@
                     @php
                         $image = resizeImage($file->path, ['alt' => $model->title]);
                     @endphp
-                    <a href="{{ $file->path }}" data-fancybox="gallery-{{ $model->id }}">{{ $image }}</a>
+                    <a href="{{ $file->path }}" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}">{{ $image }}</a>
                 </div>
             @endforeach
         </div>

@@ -212,18 +212,20 @@ class Article extends BaseModel
         $more = view('app/_more', ['link' => route('articles.view', ['slug' => $this->slug])]);
 
         if (str_contains($this->text, '[cut]')) {
-            $this->text = bbCode(current(explode('[cut]', $this->text)));
-
-            return new HtmlString($this->text . $more);
+            $result = bbCode(current(explode('[cut]', $this->text))) . $more;
+        } elseif (wordCount($this->text) > $words) {
+            $result = bbCodeTruncate($this->text, $words) . $more;
+        } else {
+            $result = bbCode($this->text)->toHtml();
         }
 
-        if (wordCount($this->text) > $words) {
-            $this->text = bbCodeTruncate($this->text, $words);
+        $result = str_replace(
+            'data-fancybox="gallery"',
+            'data-fancybox="' . $this->getMorphClass() . '-' . $this->id . '"',
+            $result
+        );
 
-            return new HtmlString($this->text . $more);
-        }
-
-        return new HtmlString(bbCode($this->text));
+        return new HtmlString($result);
     }
 
     /**

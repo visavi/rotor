@@ -123,7 +123,7 @@ $(function () {
         $('html').attr('data-bs-theme', theme);
 
         const icon = theme === 'dark' ? 'fa-moon' : 'fa-sun';
-        $('#theme-icon-active').attr('class', `fa-solid ${icon} fa-lg`);
+        $('#theme-icon-active').attr('class', `fa-regular ${icon} fa-lg`);
 
         $.ajax({
             type: 'POST',

@@ -16,18 +16,18 @@
         @hook('navbarStart')
         <li class="dropdown">
             <a href="#" class="app-nav__item" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                <i class="fa-solid {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
+                <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" style="--bs-dropdown-min-width: 8rem;">
                 <li>
                     <a type="button" class="dropdown-item" data-bs-theme-value="light">
-                        <i class="fa-solid fa-sun fa-lg"></i>
+                        <i class="fa-regular fa-sun fa-lg"></i>
                         Светлая
                     </a>
                 </li>
                 <li>
                     <a type="button" class="dropdown-item" data-bs-theme-value="dark">
-                        <i class="fa-solid fa-moon fa-lg"></i>
+                        <i class="fa-regular fa-moon fa-lg"></i>
                         Темная
                     </a>
                 </li>
