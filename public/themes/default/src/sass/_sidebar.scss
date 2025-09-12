@@ -72,7 +72,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 12px 15px;
+  padding: 12px 12px;
   border-left: 3px solid transparent;
   transition: border-left-color 0.3s ease,
   background-color 0.3s ease;
@@ -91,7 +91,7 @@
 
 .app-menu__icon {
   flex: 0 0 auto;
-  width: 25px;
+  margin-right: 8px;
 }
 
 .app-menu__label {

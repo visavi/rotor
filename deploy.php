@@ -33,7 +33,7 @@ host('production')
 task('build', function () {
     cd('{{release_path}}');
     run('{{bin/npm}} ci');
-    run('{{bin/npm}} run prod');
+    run('{{bin/npm}} run build');
 });
 
 before('deploy:success', artisan('module:link'));

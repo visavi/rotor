@@ -1,6 +1,6 @@
 <div class="section mb-3 shadow">
     <div class="section-title">
-        <i class="far fa-circle fa-lg text-muted"></i>
+        <i class="far fa-circle text-muted"></i>
         <a href="{{ route('news.index') }}" class="">{{ __('index.news') }}</a>
         <span class="badge bg-adaptive">{{ statsNewsDate() }}</span>
     </div>
@@ -13,10 +13,10 @@
         <a href="/pages/recent">{{ __('index.communication') }}</a>
     </div>
     <div class="section-body">
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a> <span class="badge bg-adaptive">{{ statsGuestbook() }}</span><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a> <span class="badge bg-adaptive">{{ statsPhotos() }}</span><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('votes.index') }}">{{ __('index.votes') }}</a> <span class="badge bg-adaptive">{{ statVotes()}}</span><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="{{ route('offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span><br>
+        <i class="far fa-circle text-muted"></i> <a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a> <span class="badge bg-adaptive">{{ statsGuestbook() }}</span><br>
+        <i class="far fa-circle text-muted"></i> <a href="{{ route('photos.index') }}">{{ __('index.photos') }}</a> <span class="badge bg-adaptive">{{ statsPhotos() }}</span><br>
+        <i class="far fa-circle text-muted"></i> <a href="{{ route('votes.index') }}">{{ __('index.votes') }}</a> <span class="badge bg-adaptive">{{ statVotes()}}</span><br>
+        <i class="far fa-circle text-muted"></i> <a href="{{ route('offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span><br>
     </div>
 </div>
 
@@ -62,10 +62,10 @@
         <a href="/pages">{{ __('index.pages') }}</a>
     </div>
     <div class="section-body">
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/files/docs">{{ __('index.docs') }}</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/search">{{ __('index.search') }}</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/mails">{{ __('index.mails') }}</a><br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/users">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span><br>
+        <i class="far fa-circle text-muted"></i> <a href="/files/docs">{{ __('index.docs') }}</a><br>
+        <i class="far fa-circle text-muted"></i> <a href="/search">{{ __('index.search') }}</a><br>
+        <i class="far fa-circle text-muted"></i> <a href="/mails">{{ __('index.mails') }}</a><br>
+        <i class="far fa-circle text-muted"></i> <a href="/users">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span><br>
     </div>
 </div>
 

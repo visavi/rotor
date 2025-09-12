@@ -146,11 +146,9 @@ textarea.form-control {
 }
 
 .blockquote:before {
-    content: "\f10d";
-    line-height: 1.0em;
-    font-size: 130%;
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    content: "\f10e";
+    font-size: 1.4em !important;
+    font: var(--fa-font-solid);
     float: left;
     margin-right: 10px;
     color: #c73401;
@@ -203,8 +201,7 @@ textarea.form-control {
 
 .spoiler:before {
     content: "\f0da";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    font: var(--fa-font-solid);
     font-size: 17px;
     color: #bbb;
     margin: 0 5px 0 2px;
@@ -212,8 +209,7 @@ textarea.form-control {
 
 .spoiler.spoiler-open:before {
     content: "\f0d7";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    font: var(--fa-font-solid);
     font-size: 17px;
     color: #bbb;
     margin: 0 5px 0 2px;
@@ -272,8 +268,7 @@ textarea.form-control {
 
 .scrollup:before {
     content: "\f139";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    font: var(--fa-font-solid);
     font-size: 30px;
 }
 

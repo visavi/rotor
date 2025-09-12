@@ -46,8 +46,7 @@
 
 .app-icon {
   padding: 0 10px;
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
+  font: var(--fa-font-solid);
   color: #fff;
   line-height: 2.4;
   transition: background-color 0.3s ease;
@@ -79,7 +78,7 @@
 
 .app-nav__item {
   display: block;
-  padding: 15px;
+  padding: 15px 12px;
   line-height: 20px;
   color: #fff;
   transition: background-color 0.3s ease;
@@ -90,7 +89,9 @@
     background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
   }
-  @media(max-width: 767px) { padding: 15px 10px; }
+  @media(max-width: 767px) {
+      padding: 15px 8px;
+  }
 }
 
 .app-search {

@@ -45,8 +45,7 @@
 
 .markItUpHeader ul .markItUpDropMenu:after {
     content: "\f0d7";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    font: var(--fa-font-solid);
     font-size: 10px;
 }
 
@@ -69,8 +68,7 @@
 
 .markItUpHeader ul ul .markItUpDropMenu:after {
     content: "\f0da";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    font: var(--fa-font-solid);
 }
 .markItUpHeader ul .markItUpSeparator {
     margin: 5px;
@@ -166,8 +164,7 @@
 
 .markItUp .bb-sticker a:after {
     content: "\f0d7";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
+    font: var(--fa-font-solid);
     font-size: 10px;
     margin-left: 3px;
 }

@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Build and run production scripts
-        run: npm run prod
+        run: npm run build
 
       - name: Clear vendor
         run: php vendor/bin/cleanup

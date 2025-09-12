@@ -1,3 +1,7 @@
+@use 'fa/scss/variables' with (
+  $font-path: "fa/webfonts",
+);
+
 :root,
 [data-bs-theme=light] {
     --base-bg: #f2f2f2;
@@ -92,7 +96,7 @@ $sidebar-light-color: #000;
 $sidebar-light-link-color: #333;
 
 // Fontawesome fonts path
-$fa-font-path: "fa/webfonts";
+/*$fa-font-path: "fa/webfonts";*/
 
 //
 // Customize bootstrap variables to match

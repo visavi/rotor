@@ -157,7 +157,7 @@ try_files $uri $uri/ /index.php?$query_string;
 Для сборки css и js необходимо установить npm и nodejs, после этого запустить команды
 ```
 npm ci
-npm run prod
+npm run build
 ```
 
 ### Author

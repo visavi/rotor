@@ -157,7 +157,7 @@ If, when the server starts, the console displays information that port 8000 is b
 To build css and js, you need to install npm and nodejs, then run the commands
 ```
 npm ci
-npm run prod
+npm run build
 ```
 
 ### Author

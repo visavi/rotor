@@ -9,9 +9,9 @@
     </nav>
 @stop
 
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/rules">{{ __('index.site_rules') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/tags">{{ __('index.tag_help') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/stickers">{{ __('index.stickers_help') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/faq">{{ __('index.faq') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/api">{{ __('index.api_interface') }}</a><br>
-<i class="far fa-circle fa-lg text-muted"></i> <a href="/statusfaq">{{ __('index.user_statuses') }}</a><br>
+<i class="far fa-circle text-muted"></i> <a href="/rules">{{ __('index.site_rules') }}</a><br>
+<i class="far fa-circle text-muted"></i> <a href="/tags">{{ __('index.tag_help') }}</a><br>
+<i class="far fa-circle text-muted"></i> <a href="/stickers">{{ __('index.stickers_help') }}</a><br>
+<i class="far fa-circle text-muted"></i> <a href="/faq">{{ __('index.faq') }}</a><br>
+<i class="far fa-circle text-muted"></i> <a href="/api">{{ __('index.api_interface') }}</a><br>
+<i class="far fa-circle text-muted"></i> <a href="/statusfaq">{{ __('index.user_statuses') }}</a><br>
