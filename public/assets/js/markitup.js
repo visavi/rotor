@@ -19,7 +19,6 @@
             previewInElement: "",
             previewAutoRefresh: true,
             previewPosition: "after",
-            previewTemplatePath: "~/templates/preview.html",
             previewParser: false,
             previewParserPath: "",
             previewParserVar: "data",
@@ -46,7 +45,7 @@
         }
 
         return this.each(function() {
-            let $$, u, levels, scrollPosition, f, m, g, v, header, footer, previewWindow, template, iFrame, abort, I;
+            let $$, u, levels, scrollPosition, f, m, g, v, header, footer, previewWindow, abort, I;
             $$ = $(this);
             u = this; // textarea
             levels = [];
@@ -66,7 +65,6 @@
             };
 
             options.previewParserPath = localize(options.previewParserPath);
-            options.previewTemplatePath = localize(options.previewTemplatePath);
 
             if (method) {
                 switch (method) {
@@ -140,10 +138,6 @@
                 $$.on("focus.markItUp", function() {
                     $.markItUp.focused = this;
                 });
-
-                if (options.previewInElement) {
-                    refreshPreview();
-                }
             }
 
             function dropMenus(markupSet) {
@@ -248,7 +242,7 @@
                     block = R + x + F;
                 } else {
                     e = e || I;
-                    let lines = [e], c = []; // Changed 'const l' to 'let lines'
+                    let lines = [e], c = [];
                     if (q === true) {
                         lines = e.split(/\r?\n/);
                     }
@@ -404,41 +398,28 @@
 
             function preview() {
                 if (typeof options.previewHandler === "function") {
-                    previewWindow = true;
                     options.previewHandler($$.val());
-                } else if (options.previewInElement) {
-                    previewWindow = $(options.previewInElement);
-                    refreshPreview();
-                } else if (!previewWindow || previewWindow.closed) {
-                    if (options.previewInWindow) {
-                        previewWindow = window.open("", "preview", options.previewInWindow);
-                        $(window).on("unload", () => previewWindow.close());
-                        refreshPreview();
-                    } else {
-                        iFrame = $('<iframe class="markItUpPreviewFrame"></iframe>');
-                        if (options.previewPosition === "after") {
-                            iFrame.insertAfter(footer);
-                        } else {
-                            iFrame.insertBefore(header);
-                        }
-                        previewWindow = iFrame[iFrame.length - 1].contentWindow || iFrame[iFrame.length - 1];
-                        refreshPreview();
-                    }
-                } else if (l === true) { // altKey to close preview
-                    if (iFrame) {
-                        iFrame.remove();
-                    } else {
-                        previewWindow.close();
-                    }
-                    previewWindow = iFrame = false;
+                    return;
                 }
 
-                if (!options.previewAutoRefresh) {
+                if (options.previewInElement) {
                     refreshPreview();
+                    options.previewInElement.show();
+                    return;
                 }
-                if (options.previewInWindow) {
-                    previewWindow.focus();
+
+                const previewContainer = $('<div class="markItUpPreview" style="display: none;"></div>');
+                if (options.previewPosition === "after") {
+                    previewContainer.insertAfter(footer);
+                } else {
+                    previewContainer.insertBefore(header);
                 }
+
+                options.previewInElement = previewContainer;
+                previewContainer.show();
+                refreshPreview();
+
+                previewWindow = previewContainer[0];
             }
 
             function refreshPreview() {
@@ -447,12 +428,14 @@
 
             function renderPreview() {
                 let t = $$.val();
+
                 if (options.previewParser && typeof options.previewParser === "function") {
                     t = options.previewParser(t);
+                    writeInPreview(t);
+                    return;
                 }
-                if (typeof options.previewHandler === "function") {
-                    options.previewHandler(t);
-                } else if (options.previewParserPath !== "") {
+
+                if (options.previewParserPath !== "") {
                     $.ajax({
                         type: options.previewParserAjaxType,
                         dataType: "text",
@@ -466,34 +449,17 @@
                             console.error("Preview AJAX error:", err);
                         }
                     });
-                } else if (!template) {
-                    $.ajax({
-                        url: options.previewTemplatePath,
-                        dataType: "text",
-                        global: false,
-                        success: function(e) {
-                            writeInPreview(localize(e, 1).replace(/<!-- content -->/g, t));
-                        },
-                        error: function(err) {
-                            console.error("Template AJAX error:", err);
-                        }
-                    });
+                    return;
                 }
+
+                writeInPreview(t);
             }
 
             function writeInPreview(e) {
-                if (options.previewInElement) {
-                    $(options.previewInElement).html(e);
-                } else if (previewWindow && previewWindow.document) {
-                    try {
-                        const sp = previewWindow.document.documentElement.scrollTop;
-                        previewWindow.document.open();
-                        previewWindow.document.write(e);
-                        previewWindow.document.close();
-                        previewWindow.document.documentElement.scrollTop = sp;
-                    } catch (err) {
-                        console.error("Error writing to preview window:", err);
-                    }
+                if (options.previewInElement && options.previewInElement.length) {
+                    options.previewInElement.html(e);
+
+                    $$.trigger('markitup:previewUpdated');
                 }
             }
 

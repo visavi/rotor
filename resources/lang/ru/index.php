@@ -105,7 +105,7 @@ return [
     'stickers'          => 'Стикеры',
     'blacklist'         => 'Черный список',
     'site_settings'     => 'Настройки сайта',
-    'cache_clear'       => 'Очистка кэша',
+    'cache_clear'       => 'Очистка кеша',
     'backup'            => 'Backup',
     'site_scan'         => 'Сканирование сайта',
     'private_mailing'   => 'Приват-рассылка',

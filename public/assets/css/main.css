@@ -202,7 +202,7 @@ textarea.form-control {
 .spoiler:before {
     content: "\f0da";
     font: var(--fa-font-solid);
-    font-size: 17px;
+    font-size: 13px;
     color: #bbb;
     margin: 0 5px 0 2px;
 }
@@ -210,7 +210,7 @@ textarea.form-control {
 .spoiler.spoiler-open:before {
     content: "\f0d7";
     font: var(--fa-font-solid);
-    font-size: 17px;
+    font-size: 13px;
     color: #bbb;
     margin: 0 5px 0 2px;
 }

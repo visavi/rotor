@@ -33,7 +33,7 @@ class AdminAdvert extends BaseModel
     protected $guarded = [];
 
     /**
-     * Кэширует ссылки админской рекламы
+     * Кеширует ссылки админской рекламы
      */
     public static function statAdverts(): array
     {

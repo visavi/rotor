@@ -18,7 +18,7 @@
     </div>
 
     <script type="module">
-        pasteSticker = function (el) {
+        window.pasteSticker = function (el) {
             var field = $('.markItUpEditor');
             var paste = $(el).find('img').attr('alt') + ' ';
 

@@ -3,7 +3,7 @@
 @section('title', (setting('app_installed') ? __('install.update') : __('install.install')) . ' Rotor')
 
 @section('content')
-    <div class="container border bg-white px-5">
+    <div class="container border px-5" style="background: var(--bs-body-bg);">
         <div class="py-5 text-center">
             <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2>Mobile CMS</h2>
@@ -32,7 +32,7 @@
 
                 <div class="row mb-3">
                     <div class="col-12">
-                        <div class="card bg-light text-dark">
+                        <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">{{ __('install.env') }}</h5>
                                 <p class="card-text">
@@ -57,7 +57,7 @@
 
                 <div class="row mb-3">
                     <div class="col-sm-6">
-                        <div class="card bg-light text-dark mb-3">
+                        <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ __('install.check_requirements') }}</h5>
                                 <p class="card-text">
@@ -116,7 +116,7 @@
                         @endif
                     </div>
                     <div class="col-sm-6">
-                        <div class="card bg-light text-dark">
+                        <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">{{ __('install.chmod_rights') }}</h5>
                                 <p class="card-text">

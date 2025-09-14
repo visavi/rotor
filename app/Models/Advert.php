@@ -31,7 +31,7 @@ class Advert extends BaseModel
     protected $guarded = [];
 
     /**
-     * Кэширует ссылки пользовательской рекламы
+     * Кеширует ссылки пользовательской рекламы
      */
     public static function statAdverts(): array
     {

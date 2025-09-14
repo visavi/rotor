@@ -81,7 +81,7 @@ class PaidAdvert extends BaseModel
     }
 
     /**
-     * Кэширует ссылки платной рекламы
+     * Кеширует ссылки платной рекламы
      */
     public static function statAdverts(): array
     {

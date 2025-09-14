@@ -3,7 +3,7 @@
 @section('title', __('install.step5_install'))
 
 @section('content')
-    <div class="container border bg-white px-5">
+    <div class="container border px-5">
         <div class="py-5 text-center">
             <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2>Mobile CMS</h2>

@@ -1,4 +1,6 @@
 $(function () {
+    let body = $('body');
+
     prettyPrint();
 
     tags.init(".input-tag", {
@@ -35,18 +37,22 @@ $(function () {
         // Your custom options
     });
 
-    $('.markItUp').markItUp(mySettings).on('input', function() {
-        const $this = $(this);
-        const maxlength = $this.attr('maxlength');
-        const text = $this.val().replace(/(\r\n|\n|\r)/g, "\r\n");
-        const currentLength = text.length;
-        const $counter = $('.js-textarea-counter');
+    $('.markItUp').markItUp(mySettings)
+        .on('input', function() {
+            const $this = $(this);
+            const maxlength = $this.attr('maxlength');
+            const text = $this.val().replace(/(\r\n|\n|\r)/g, "\r\n");
+            const currentLength = text.length;
+            const $counter = $('.js-textarea-counter');
 
-        $counter.toggleClass('text-danger', currentLength > maxlength);
+            $counter.toggleClass('text-danger', currentLength > maxlength);
 
-        const remaining = maxlength - currentLength;
-        $counter.text(currentLength === 0 ? '' : __('characters_left') + ': ' + remaining);
-    });
+            const remaining = maxlength - currentLength;
+            $counter.text(currentLength === 0 ? '' : __('characters_left') + ': ' + remaining);
+        })
+        .on('markitup:previewUpdated', function() {
+            prettyPrint();
+        });
 
     $('.markItUpHtml').markItUp(myHtmlSettings);
 
@@ -54,7 +60,7 @@ $(function () {
     $('[data-bs-toggle="popover"]').popover();
 
     /* Hide popover poppers anywhere */
-    $('body').on('click', function (e) {
+    body.on('click', function (e) {
         //did not click a popover toggle or popover
         if ($(e.target).data('bs-toggle') !== 'popover'
             && $(e.target).parents('.popover.in').length === 0) {
@@ -63,14 +69,16 @@ $(function () {
     });
 
     /* Spoiler */
-    $('.spoiler-title').on('click', function () {
-        let spoiler = $(this).parent();
-        spoiler.toggleClass('spoiler-open');
-        spoiler.find('.spoiler-text:first').slideToggle();
+    body.on('click', '.spoiler-title', function () {
+        const $spoiler = $(this).closest('.spoiler');
+        const $spoilerText = $spoiler.find('.spoiler-text:first');
+
+        $spoiler.toggleClass('spoiler-open');
+        $spoilerText.slideToggle();
     });
 
     /* Show news on the main */
-    $('.news-title').on('click', function () {
+    body.on('click', '.news-title', function () {
         $(this).toggleClass('fa-rotate-180');
         $(this).nextAll(".news-text:first").slideToggle();
     });
