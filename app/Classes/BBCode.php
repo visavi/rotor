@@ -168,7 +168,6 @@ class BBCode
     public function parse(string $source): string
     {
         $source = nl2br($source, false);
-        $source = str_replace('[cut]', '', $source);
 
         foreach ($this->parsers as $parser) {
             $iterate = $parser['iterate'] ?? 1;
@@ -181,6 +180,8 @@ class BBCode
                 }
             }
         }
+
+        $source = str_replace('[cut]', '', $source);
 
         return $this->clearBreakLines($source);
     }
