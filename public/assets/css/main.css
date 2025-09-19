@@ -238,7 +238,7 @@ textarea.form-control {
     display: flex;
     align-items: center;
     justify-content: end;
-    gap: 5px;
+    gap: 3px;
 }
 
 .post-rating-up.active {

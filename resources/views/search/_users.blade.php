@@ -5,7 +5,7 @@
         </li>
     </ol>
 
-    <div class="section-header d-flex align-items-center">
+    <div class="section-header d-flex align-items-start">
         <div class="flex-grow-1">
             <div class="section-title">
                 <h3><a class="post-title" href="/users/{{ $post->login }}">{{ $post->login }}</a></h3>
@@ -20,7 +20,7 @@
                 {{ $post->getOnline() }}
             </div>
 
-            <div class="section-user d-flex align-items-center">
+            <div class="section-user d-flex align-items-start">
                 <div class="flex-grow-1">
                     {{ $post->getProfile() }}
                     <small class="fst-italic">{{ $post->getStatus() }}</small>

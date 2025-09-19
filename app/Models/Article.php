@@ -43,6 +43,8 @@ use Illuminate\Support\Str;
  * @property-read Collection<Poll>    $polls
  * @property-read Poll                $poll
  * @property-read Blog                $category
+ *
+ * @mixin ShortTextTrait
  */
 class Article extends BaseModel
 {

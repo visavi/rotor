@@ -32,7 +32,7 @@
                         <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                     @endif
                 </div>
-                <div class="section-user d-flex align-items-center">
+                <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         @if ($record->relate)
                             @if ($user)

@@ -16,7 +16,7 @@
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="section mb-3 shadow">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <i class="fa fa-comment fa-lg text-muted"></i>
                         <b><a href="{{ route('news.comments', ['id' => $data->relate_id, 'cid' => $data->id]) }}">{{ $data->title }}</a></b>

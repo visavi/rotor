@@ -94,7 +94,7 @@ return [
     'amount'            => 'Сума',
     'not_specified'     => 'Не вказано',
     'read_more'         => 'Читати далі',
-    'show_full'         => 'показати повністю',
+    'show_full'         => 'Показати повністю',
     'import'            => 'Імпорт',
     'export'            => 'Експорт',
 

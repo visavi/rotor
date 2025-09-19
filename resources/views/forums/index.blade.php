@@ -44,7 +44,7 @@
     @if ($forums->isNotEmpty())
         @foreach ($forums as $forum)
             <div class="section mb-3 shadow">
-                <div class="section-header d-flex align-items-center position-relative">
+                <div class="section-header d-flex align-items-start position-relative">
                     <div class="flex-grow-1">
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
                         <a href="{{ route('forums.forum', ['id' => $forum->id]) }}" class="section-title position-relative">{{ $forum->title }}</a>

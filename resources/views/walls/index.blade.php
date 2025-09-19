@@ -27,7 +27,7 @@
                     {{ $data->author->getOnline() }}
                 </div>
 
-                <div class="section-user d-flex align-items-center">
+                <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         {{ $data->author->getProfile() }}
                         <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>

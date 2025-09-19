@@ -15,7 +15,7 @@
         </li>
     </ol>
 
-    <div class="section-header d-flex align-items-center">
+    <div class="section-header d-flex align-items-start">
         <div class="flex-grow-1">
             <div class="section-title">
                 <h3><a class="post-title" href="{{ route('articles.view', ['slug' => $post->slug]) }}">{{ $post->title }}</a></h3>

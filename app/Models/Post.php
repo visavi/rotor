@@ -84,7 +84,7 @@ class Post extends BaseModel
     }
 
     /**
-     * Возвращает настройки полного текста
+     * Возвращает настройки сокращенного текста
      */
     protected function setShortText(): array
     {

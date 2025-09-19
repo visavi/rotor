@@ -26,7 +26,7 @@
         @csrf
         @foreach ($photos as $photo)
             <div class="section mb-3 shadow">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-image"></i>

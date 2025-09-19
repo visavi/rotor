@@ -27,7 +27,7 @@
                         {{ $firstPost->user->getOnline() }}
                     </div>
 
-                    <div class="section-user d-flex align-items-center">
+                    <div class="section-user d-flex align-items-start">
                         <div class="flex-grow-1">
                             {{ $firstPost->user->getProfile() }}
                             <small class="section-date text-muted fst-italic">{{ dateFixed($firstPost->created_at) }}</small><br>

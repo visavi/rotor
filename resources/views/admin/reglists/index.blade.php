@@ -34,7 +34,7 @@
                         {{ $user->getOnline() }}
                     </div>
 
-                    <div class="section-user d-flex align-items-center">
+                    <div class="section-user d-flex align-items-start">
                         <div class="flex-grow-1">
                             {{ $user->getProfile() }}
                         </div>

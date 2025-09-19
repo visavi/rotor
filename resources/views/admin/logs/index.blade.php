@@ -21,7 +21,7 @@
                     {{ $log->user->getOnline() }}
                 </div>
 
-                <div class="section-user d-flex align-items-center">
+                <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         {{ $log->user->getProfile() }}
                         <small class="section-date text-muted fst-italic">{{ dateFixed($log->created_at) }}</small>

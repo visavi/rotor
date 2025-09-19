@@ -25,7 +25,7 @@
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
             <div class="section mb-3 shadow">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <i class="fa fa-file-alt fa-lg text-muted"></i>
                         <a class="section-title" href="{{ route('news.view', ['id' => $data->id]) }}">{{ $data->title }}</a>

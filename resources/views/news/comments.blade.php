@@ -26,7 +26,7 @@
                     {{ $comment->user->getOnline() }}
                 </div>
 
-                <div class="section-user d-flex align-items-center">
+                <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         {{ $comment->user->getProfile() }}
                         <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>

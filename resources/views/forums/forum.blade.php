@@ -40,7 +40,7 @@
         @php $forum->children->load('children'); @endphp
         @foreach ($forum->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
@@ -75,7 +75,7 @@
     @if ($topics->isNotEmpty())
         @foreach ($topics as $topic)
             <div class="section mb-3 shadow" id="topic_{{ $topic->id }}">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa {{ $topic->getIcon() }} text-muted"></i>

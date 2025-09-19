@@ -37,7 +37,7 @@
         @php $category->children->load(['children', 'lastArticle.user']); @endphp
         @foreach ($category->children as $child)
             <div class="section mb-3 shadow border-start border-info border-5">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-file-alt fa-lg text-muted"></i>
@@ -78,7 +78,7 @@
     @if ($articles->isNotEmpty())
         @foreach ($articles as $article)
             <div class="section mb-3 shadow">
-                <div class="section-header d-flex align-items-center">
+                <div class="section-header d-flex align-items-start">
                     <div class="flex-grow-1">
                         <div class="section-title">
                             <i class="fa fa-pencil-alt"></i>

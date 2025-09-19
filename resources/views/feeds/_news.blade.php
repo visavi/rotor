@@ -5,7 +5,7 @@
         </li>
     </ol>
 
-    <div class="section-header d-flex align-items-center">
+    <div class="section-header d-flex align-items-start">
         <div class="flex-grow-1">
             <div class="section-title d-flex align-items-baseline">
                 <h3><a class="post-title" href="{{ route('news.view', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
