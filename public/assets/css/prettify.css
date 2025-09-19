@@ -21,4 +21,9 @@
   tab-size: 2;
   padding: 5px;
   font-size: 90%;
+  margin: 0.5rem 0;
+}
+
+.prettyprint ol {
+    margin-bottom: 0;
 }

@@ -244,7 +244,7 @@ textarea.form-control {
 .post-rating-up.active {
     color: #fff;
     background-color: #78c062;
-    padding: 0 3px;
+    padding: 0 1px;
     display: inline-block;
     border-radius: 3px;
 }
@@ -252,7 +252,7 @@ textarea.form-control {
 .post-rating-down.active {
     color: #fff;
     background-color: #f75c48;
-    padding: 0 3px;
+    padding: 0 1px;
     display: inline-block;
     border-radius: 3px;
 }

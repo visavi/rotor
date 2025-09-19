@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "watch": "vite build --watch"
     },
     "dependencies": {
         "@fancyapps/ui": "^6.0.29",
