@@ -33,13 +33,13 @@
     </div>
 
     <div class="section-content">
-        <div class="section-message">
-            {{ $post->lastPost->text ? bbCode($post->lastPost->text) : 'Удалено' }}
-        </div>
-
         @if ($post->lastPost->getImages()->isNotEmpty())
             @include('app/_image_viewer', ['model' => $post, 'files' => $post->lastPost->getImages()])
         @endif
+
+        <div class="section-message">
+            {{ $post->lastPost->text ? $post->lastPost->shortText() : 'Удалено' }}
+        </div>
 
         @if ($post->lastPost->getFiles()->isNotEmpty())
             @foreach ($post->lastPost->getFiles() as $file)

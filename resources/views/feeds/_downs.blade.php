@@ -38,7 +38,7 @@
     @endif
 
     <div class="section-message">
-        {{ bbCode($post->text) }}
+        {{ $post->shortText() }}
     </div>
 
     @if ($post->links || $post->files->isNotEmpty())

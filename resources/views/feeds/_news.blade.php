@@ -28,13 +28,13 @@
     </div>
 
     <div class="section-content">
-        <div class="section-message">
-            {{ bbCode($post->text) }}
-        </div>
-
         @if ($post->getImages()->isNotEmpty())
             @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
         @endif
+
+        <div class="section-message">
+            {{ $post->shortText() }}
+        </div>
 
         @if ($post->getFiles()->isNotEmpty())
             @foreach ($post->getFiles() as $file)

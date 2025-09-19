@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
+use App\Traits\ShortTextTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,11 +33,14 @@ use Illuminate\Support\Facades\DB;
  * @property-read Poll             $poll
  * @property-read Topic            $topic
  * @property-read User             $editUser
+ *
+ * @mixin ShortTextTrait
  */
 class Post extends BaseModel
 {
     use ConvertVideoTrait;
     use SearchableTrait;
+    use ShortTextTrait;
     use SortableTrait;
     use UploadTrait;
 
@@ -76,6 +80,18 @@ class Post extends BaseModel
         return [
             'date'   => ['field' => 'created_at', 'label' => __('main.date')],
             'rating' => ['field' => 'rating', 'label' => __('main.rating')],
+        ];
+    }
+
+    /**
+     * Возвращает настройки полного текста
+     */
+    protected function setShortText(): array
+    {
+        return [
+            'words' => 100,
+            'text'  => __('main.show_full'),
+            'url'   => route('topics.topic', ['id' => $this->topic_id, 'pid' => $this->id]),
         ];
     }
 

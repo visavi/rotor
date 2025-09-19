@@ -94,6 +94,7 @@ return [
     'amount'            => 'Amount',
     'not_specified'     => 'Not specified',
     'read_more'         => 'Read more',
+    'show_full'         => 'Show in full',
     'import'            => 'Import',
     'export'            => 'Export',
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use App\Traits\ShortTextTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -46,6 +47,7 @@ use Illuminate\Support\Str;
 class Article extends BaseModel
 {
     use SearchableTrait;
+    use ShortTextTrait;
     use SortableTrait;
     use UploadTrait;
 
@@ -104,6 +106,19 @@ class Article extends BaseModel
             'visits'   => ['field' => 'visits', 'label' => __('main.views')],
             'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
             'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
+        ];
+    }
+
+    /**
+     * Возвращает настройки сокращенного текста
+     */
+    protected function setShortText(): array
+    {
+        return [
+            'words'   => 100,
+            'cut'     => true,
+            'url'     => route('articles.view', ['slug' => $this->slug]),
+            'handler' => fn ($text) => preg_replace('/\[img].*?\[\/img]/', '', $text),
         ];
     }
 
@@ -212,26 +227,6 @@ class Article extends BaseModel
         }
 
         return new HtmlString('<img src="' . $image->path . '" atl="' . $this->title . '" class="card-img-top">');
-    }
-
-    /**
-     * Возвращает сокращенный текст статьи
-     */
-    public function shortText(int $words = 100): HtmlString
-    {
-        $more = view('app/_more', ['link' => route('articles.view', ['slug' => $this->slug])]);
-
-        $result = preg_replace('/\[img](.*?)\[\/img]/', '', $this->text);
-
-        if (str_contains($this->text, '[cut]')) {
-            $result = bbCode(current(explode('[cut]', $result))) . $more;
-        } elseif (wordCount($result) > $words) {
-            $result = bbCodeTruncate($result, $words) . $more;
-        } else {
-            $result = bbCode($result)->toHtml();
-        }
-
-        return new HtmlString($result);
     }
 
     /**
