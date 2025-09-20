@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -41,6 +42,8 @@ class AdminController extends Controller
             $gdInfo = parseVersion($gdInfo['GD Version']);
         }
 
-        return view('admin/phpinfo', compact('iniInfo', 'gdInfo'));
+        $dbVersion = DB::select('SELECT VERSION() as version')[0]->version ?? 'N/A';
+
+        return view('admin/phpinfo', compact('iniInfo', 'gdInfo', 'dbVersion'));
     }
 }

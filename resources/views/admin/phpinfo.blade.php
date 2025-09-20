@@ -14,15 +14,28 @@
 
 @section('content')
     <div class="mb-3">
-        <span class="badge bg-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
+        <h5>Environment Info</h5>
+        <span class="badge bg-primary">OS {{ PHP_OS_FAMILY }}</span>
+        <span class="badge bg-primary">PHP {{ parseVersion(PHP_VERSION) }}</span>
 
-        @if (zend_version())
-            <span class="badge bg-success">Zend {{ parseVersion(zend_version()) }}</span>
+    @if ($gdInfo)
+            <span class="badge bg-primary">GD {{ $gdInfo }}</span>
         @endif
 
-        @if ($gdInfo)
-            <span class="badge bg-success">GD {{ $gdInfo }}</span>
-        @endif
+        <span class="badge bg-primary">MySQL {{ $dbVersion }}</span>
+        <br>
+
+        <span class="badge bg-primary">Laravel {{ app()->version() }}</span>
+        <span class="badge {{ config('app.debug') ? 'bg-warning' : 'bg-success' }}">
+            Debug: {{ config('app.debug') ? 'false' : 'true' }}
+        </span>
+        <span class="badge {{ config('app.env') === 'production' ? 'bg-success' : 'bg-secondary' }} ">
+            Env: {{ config('app.env') }}
+        </span>
+
+        <span class="badge bg-primary">Memory Limit: {{ ini_get('memory_limit') }}</span>
+        <span class="badge bg-primary">Upload Max: {{ ini_get('upload_max_filesize') }}</span>
+        <span class="badge bg-primary">Timezone: {{ date_default_timezone_get() }}</span>
     </div>
 
     @if ($iniInfo)

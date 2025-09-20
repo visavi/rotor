@@ -67,6 +67,11 @@
                                     <?php $errors['critical']['pdo_mysql'] = extension_loaded('pdo_mysql') ?>
                                     <?php $version = strtok(\App\Http\Controllers\InstallController::getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-'); ?>
                                     <span class="{{ $errors['critical']['pdo_mysql'] ? 'text-success' : 'text-danger' }}">PDO-MySQL: {{ $version }}</span><br>
+                                    <?php
+
+                                    $dbVersion = DB::select('SELECT VERSION() as version')[0]->version ?? 'N/A';
+                                    ?>
+                                    <span class="{{ version_compare($dbVersion, $versions['mysql']) >= 0 ? 'text-success' : 'text-danger' }}">MySQL: {{ $dbVersion }}</span><br>
 
                                     <?php $errors['simple']['bcmath'] = extension_loaded('bcmath') ?>
                                     <span class="{{ $errors['simple']['bcmath'] ? 'text-success' : 'text-danger' }}">BCMath</span><br>

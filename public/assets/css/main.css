@@ -161,6 +161,7 @@ textarea.form-control {
     border-left: 5px solid;
     border-color: rgba(var(--bs-primary-rgb), 0.5);
     font-style: italic;
+    margin: 0.5rem 0;
 }
 
 .blockquote-footer {
