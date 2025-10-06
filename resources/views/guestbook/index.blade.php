@@ -110,6 +110,44 @@
         <div class="section-form mb-3 shadow">
             <form action="{{ route('guestbook.create') }}" method="post">
                 @csrf
+
+                <!-- Меню -->
+                <div class="control-group">
+                    <div class="button-group" id="menuBar">
+                        <button data-action="bold">Bold</button>
+                        <button data-action="italic">Italic</button>
+                        <button data-action="strike">Strike</button>
+                        <button data-action="code">Code</button>
+                        <button data-action="clearMarks">Clear marks</button>
+                        <button data-action="clearNodes">Clear nodes</button>
+
+                        <button data-action="paragraph">Paragraph</button>
+                        <button data-action="heading" data-level="1">H1</button>
+                        <button data-action="heading" data-level="2">H2</button>
+                        <button data-action="heading" data-level="3">H3</button>
+                        <button data-action="heading" data-level="4">H4</button>
+                        <button data-action="heading" data-level="5">H5</button>
+                        <button data-action="heading" data-level="6">H6</button>
+
+                        <button data-action="bulletList">Bullet list</button>
+                        <button data-action="orderedList">Ordered list</button>
+                        <button data-action="codeBlock">Code block</button>
+                        <button data-action="blockquote">Blockquote</button>
+                        <button data-action="horizontalRule">Horizontal rule</button>
+                        <button data-action="hardBreak">Hard break</button>
+
+                        <button data-action="undo">Undo</button>
+                        <button data-action="redo">Redo</button>
+                    </div>
+                </div>
+
+                <!-- Редактор -->
+                <div class="form-control element"></div>
+
+                <!-- Скрытое поле -->
+                <input type="hidden" name="content" id="contentInput">
+
+
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>
                     <textarea class="form-control markItUp" maxlength="{{ setting('guestbook_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
