@@ -1,4 +1,4 @@
-<div class="section mb-3 shadow">
+<div class="section mb-3 shadow text-container">
     <ol class="breadcrumb mb-1">
         <li class="breadcrumb-item">
             <i class="fa-solid fa-newspaper"></i> <a href="{{ route('news.index') }}" class="text-muted"> {{ __('index.news') }}</a>
@@ -32,9 +32,10 @@
             @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
         @endif
 
-        <div class="section-message">
+        <div class="section-message text-content">
             {{ $post->shortText() }}
         </div>
+        <button class="toggle-btn">Показать полностью</button>
 
         @if ($post->getFiles()->isNotEmpty())
             @foreach ($post->getFiles() as $file)

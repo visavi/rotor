@@ -423,7 +423,9 @@ class PhotoController extends Controller
             ->leftJoin('photos', 'comments.relate_id', 'photos.id')
             ->orderByDesc('comments.created_at')
             ->with('user', 'relate')
-            ->paginate(setting('comments_per_page'));
+            ->paginate(setting('comments_per_page'))
+            ->appends(['user' => $user->login]);
+        ;
 
         return view('photos/user_comments', compact('comments', 'user'));
     }

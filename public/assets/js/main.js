@@ -153,6 +153,24 @@ $(function () {
             }
         }, 100);
     }
+
+    $('.text-container').each(function () {
+        const $container = $(this);
+        const $content = $container.find('.text-content');
+        const $button = $container.find('.toggle-btn');
+
+        if ($content.length === 0 || $button.length === 0) return;
+
+        const fullHeight = $content[0].scrollHeight;
+        const maxHeight = parseInt($content.css('max-height'), 10);
+
+        if (fullHeight > maxHeight) {
+            $button.show().on('click', function () {
+                $content.addClass('expanded');
+                $button.hide(); // ← кнопка исчезает
+            });
+        }
+    });
 });
 
 /* Показ формы загрузки файла */
