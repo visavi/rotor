@@ -380,7 +380,8 @@ class PhotoController extends Controller
             ->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->with('user', 'files')
-            ->paginate(setting('fotolist'));
+            ->paginate(setting('fotolist'))
+            ->appends(['user' => $user->login]);
 
         $moder = getUser() && getUser('id') === $user->id ? 1 : 0;
 
