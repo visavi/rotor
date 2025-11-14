@@ -9,7 +9,7 @@ use App\Models\Down;
 use App\Models\News;
 use App\Models\Topic;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
@@ -23,36 +23,40 @@ class SitemapController extends Controller
     /**
      * Генерируем главную страницу
      */
-    public function index(): View
+    public function index(): Response
     {
         $locs = [];
 
         foreach ($this->pages as $page) {
             $locs[] = [
                 'loc'     => config('app.url') . '/sitemap/' . $page . '.xml',
-                'lastmod' => date('c', SITETIME),
+                'lastmod' => gmdate('Y-m-d', SITETIME),
             ];
         }
 
-        return view('sitemap/index', compact('locs'));
+        return response()
+            ->view('sitemap/index', compact('locs'))
+            ->header('Content-Type', 'application/xml; charset=utf-8');
     }
 
     /**
      * Вызывает страницу
      */
-    public function page(string $page): View
+    public function page(string $page): Response
     {
         if (! in_array($page, $this->pages, true)) {
             abort(404);
         }
 
-        return $this->$page();
+        return response()
+            ->view('sitemap/url', ['locs' => $this->$page()])
+            ->header('Content-Type', 'application/xml; charset=utf-8');
     }
 
     /**
      * Генерируем статьи
      */
-    private function articles(): View
+    private function articles(): array
     {
         $articles = Article::query()
             ->active()
@@ -70,24 +74,19 @@ class SitemapController extends Controller
         foreach ($articles as $article) {
             $changeTime = ($article->last_time > $article->created_at) ? $article->last_time : $article->created_at;
 
-            // Обновлено менее 1 месяца
-            $new = strtotime('+1 month', $changeTime) > SITETIME;
-
             $locs[] = [
-                'loc'        => route('articles.view', ['slug' => $article->slug]),
-                'lastmod'    => date('c', $changeTime),
-                'changefreq' => $new ? 'weekly' : 'monthly',
-                'priority'   => $new ? '1.0' : '0.5',
+                'loc'     => route('articles.view', ['slug' => $article->slug]),
+                'lastmod' => gmdate('c', $changeTime),
             ];
         }
 
-        return view('sitemap/url', compact('locs'));
+        return $locs;
     }
 
     /**
      * Генерируем новости
      */
-    private function news(): View
+    private function news(): array
     {
         $newses = News::query()
             ->selectRaw('news.*, max(c.created_at) as last_time')
@@ -104,48 +103,38 @@ class SitemapController extends Controller
         foreach ($newses as $news) {
             $changeTime = ($news->last_time > $news->created_at) ? $news->last_time : $news->created_at;
 
-            // Обновлено менее 1 месяца
-            $new = strtotime('+1 month', $changeTime) > SITETIME;
-
             $locs[] = [
-                'loc'        => route('news.view', ['id' => $news->id]),
-                'lastmod'    => date('c', $changeTime),
-                'changefreq' => $new ? 'weekly' : 'monthly',
-                'priority'   => $new ? '1.0' : '0.5',
+                'loc'     => route('news.view', ['id' => $news->id]),
+                'lastmod' => gmdate('c', $changeTime),
             ];
         }
 
-        return view('sitemap/url', compact('locs'));
+        return $locs;
     }
 
     /**
      * Генерируем темы форума
      */
-    private function topics(): View
+    private function topics(): array
     {
         $topics = Topic::query()->orderByDesc('updated_at')->limit(15000)->get();
 
         $locs = [];
 
         foreach ($topics as $topic) {
-            // Обновлено менее 1 месяца
-            $new = strtotime('+1 month', $topic->updated_at) > SITETIME;
-
             $locs[] = [
-                'loc'        => route('topics.topic', ['id' => $topic->id]),
-                'lastmod'    => date('c', $topic->updated_at),
-                'changefreq' => $new ? 'weekly' : 'monthly',
-                'priority'   => $new ? '1.0' : '0.5',
+                'loc'     => route('topics.topic', ['id' => $topic->id]),
+                'lastmod' => gmdate('c', $topic->updated_at),
             ];
         }
 
-        return view('sitemap/url', compact('locs'));
+        return $locs;
     }
 
     /**
      * Генерируем загрузки
      */
-    private function downs(): View
+    private function downs(): array
     {
         $downs = Down::query()
             ->selectRaw('downs.*, max(c.created_at) as last_time')
@@ -161,17 +150,12 @@ class SitemapController extends Controller
         foreach ($downs as $down) {
             $changeTime = ($down->last_time > $down->created_at) ? $down->last_time : $down->created_at;
 
-            // Обновлено менее 1 месяца
-            $new = strtotime('+1 month', $changeTime) > SITETIME;
-
             $locs[] = [
-                'loc'        => route('downs.view', ['id' => $down->id]),
-                'lastmod'    => date('c', $changeTime),
-                'changefreq' => $new ? 'weekly' : 'monthly',
-                'priority'   => $new ? '1.0' : '0.5',
+                'loc'     => route('downs.view', ['id' => $down->id]),
+                'lastmod' => gmdate('c', $changeTime),
             ];
         }
 
-        return view('sitemap/url', compact('locs'));
+        return $locs;
     }
 }
