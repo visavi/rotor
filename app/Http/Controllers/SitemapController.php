@@ -8,12 +8,12 @@ use App\Models\Article;
 use App\Models\Down;
 use App\Models\News;
 use App\Models\Topic;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class SitemapController extends Controller
 {
-    public array $pages = [
+    private array $pages = [
         'news',
         'articles',
         'topics',
@@ -21,17 +21,19 @@ class SitemapController extends Controller
     ];
 
     /**
-     * Генерируем главную страницу
+     * Генерирует главную страницу
      */
     public function index(): Response
     {
         $locs = [];
 
         foreach ($this->pages as $page) {
-            $locs[] = [
-                'loc'     => config('app.url') . '/sitemap/' . $page . '.xml',
-                'lastmod' => gmdate('Y-m-d', SITETIME),
-            ];
+            if ($this->$page()) {
+                $locs[] = [
+                    'loc'     => config('app.url') . '/sitemap/' . $page . '.xml',
+                    'lastmod' => gmdate('Y-m-d', SITETIME),
+                ];
+            }
         }
 
         return response()
@@ -54,108 +56,96 @@ class SitemapController extends Controller
     }
 
     /**
-     * Генерируем статьи
-     */
-    private function articles(): array
-    {
-        $articles = Article::query()
-            ->active()
-            ->selectRaw('articles.*, max(c.created_at) as last_time')
-            ->leftJoin('comments as c', static function (JoinClause $join) {
-                $join->on('articles.id', 'c.relate_id')
-                    ->where('relate_type', Article::$morphName);
-            })
-            ->groupBy('articles.id')
-            ->orderByDesc('last_time')
-            ->get();
-
-        $locs = [];
-
-        foreach ($articles as $article) {
-            $changeTime = ($article->last_time > $article->created_at) ? $article->last_time : $article->created_at;
-
-            $locs[] = [
-                'loc'     => route('articles.view', ['slug' => $article->slug]),
-                'lastmod' => gmdate('c', $changeTime),
-            ];
-        }
-
-        return $locs;
-    }
-
-    /**
-     * Генерируем новости
+     * Генерирует новости
      */
     private function news(): array
     {
-        $newses = News::query()
-            ->selectRaw('news.*, max(c.created_at) as last_time')
-            ->leftJoin('comments as c', static function (JoinClause $join) {
-                $join->on('news.id', 'c.relate_id')
-                    ->where('relate_type', News::$morphName);
-            })
-            ->groupBy('news.id')
-            ->orderByDesc('last_time')
-            ->get();
+        return Cache::remember('NewsSitemap', 600, static function () {
+            $newses = News::query()
+                ->orderByDesc('created_at')
+                ->limit(10000)
+                ->get();
 
-        $locs = [];
+            $locs = [];
+            foreach ($newses as $news) {
+                $locs[] = [
+                    'loc'     => route('news.view', ['id' => $news->id]),
+                    'lastmod' => gmdate('c', $news->created_at),
+                ];
+            }
 
-        foreach ($newses as $news) {
-            $changeTime = ($news->last_time > $news->created_at) ? $news->last_time : $news->created_at;
-
-            $locs[] = [
-                'loc'     => route('news.view', ['id' => $news->id]),
-                'lastmod' => gmdate('c', $changeTime),
-            ];
-        }
-
-        return $locs;
+            return $locs;
+        });
     }
 
     /**
-     * Генерируем темы форума
+     * Генерирует статьи
+     */
+    private function articles(): array
+    {
+        return Cache::remember('ArticlesSitemap', 600, static function () {
+            $articles = Article::query()
+                ->active()
+                ->orderByDesc('created_at')
+                ->limit(10000)
+                ->get();
+
+            $locs = [];
+            foreach ($articles as $article) {
+                $locs[] = [
+                    'loc'     => route('articles.view', ['slug' => $article->slug]),
+                    'lastmod' => gmdate('c', $article->created_at),
+                ];
+            }
+
+            return $locs;
+        });
+    }
+
+    /**
+     * Генерирует темы форума
      */
     private function topics(): array
     {
-        $topics = Topic::query()->orderByDesc('updated_at')->limit(15000)->get();
+        return Cache::remember('TopicsSitemap', 600, static function () {
+            $topics = Topic::query()
+                ->orderByDesc('created_at')
+                ->limit(10000)
+                ->get();
 
-        $locs = [];
+            $locs = [];
+            foreach ($topics as $topic) {
+                $locs[] = [
+                    'loc'     => route('topics.topic', ['id' => $topic->id]),
+                    'lastmod' => gmdate('c', $topic->created_at),
+                ];
+            }
 
-        foreach ($topics as $topic) {
-            $locs[] = [
-                'loc'     => route('topics.topic', ['id' => $topic->id]),
-                'lastmod' => gmdate('c', $topic->updated_at),
-            ];
-        }
-
-        return $locs;
+            return $locs;
+        });
     }
 
     /**
-     * Генерируем загрузки
+     * Генерирует загрузки
      */
     private function downs(): array
     {
-        $downs = Down::query()
-            ->selectRaw('downs.*, max(c.created_at) as last_time')
-            ->leftJoin('comments as c', static function (JoinClause $join) {
-                $join->on('downs.id', 'c.relate_id')
-                    ->where('relate_type', Down::$morphName);
-            })
-            ->groupBy('downs.id')
-            ->orderByDesc('last_time')
-            ->get();
+        return Cache::remember('DownsSitemap', 600, static function () {
+            $downs = Down::query()
+                ->active()
+                ->orderByDesc('created_at')
+                ->limit(10000)
+                ->get();
 
-        $locs = [];
-        foreach ($downs as $down) {
-            $changeTime = ($down->last_time > $down->created_at) ? $down->last_time : $down->created_at;
+            $locs = [];
+            foreach ($downs as $down) {
+                $locs[] = [
+                    'loc'     => route('downs.view', ['id' => $down->id]),
+                    'lastmod' => gmdate('c', $down->created_at),
+                ];
+            }
 
-            $locs[] = [
-                'loc'     => route('downs.view', ['id' => $down->id]),
-                'lastmod' => gmdate('c', $changeTime),
-            ];
-        }
-
-        return $locs;
+            return $locs;
+        });
     }
 }
