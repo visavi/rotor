@@ -31,7 +31,7 @@ class SitemapController extends Controller
             if ($this->$page()) {
                 $locs[] = [
                     'loc'     => config('app.url') . '/sitemap/' . $page . '.xml',
-                    'lastmod' => gmdate('Y-m-d', SITETIME),
+                    'lastmod' => $this->$page()[0]['lastmod'],
                 ];
             }
         }
