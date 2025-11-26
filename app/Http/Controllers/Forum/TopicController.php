@@ -159,7 +159,7 @@ class TopicController extends Controller
 
         // Проверка сообщения на схожесть
         $post = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->first();
-        $validator->notEqual($msg, $post->text, ['msg' => __('forums.post_repeat')]);
+        $validator->notEqual($msg, $post->text ?? false, ['msg' => __('forums.post_repeat')]);
 
         if ($validator->isValid()) {
             $msg = antimat($msg);
