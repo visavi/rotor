@@ -86,9 +86,11 @@
                     </div>
                 </div>
                 <div class="section-content">
-                    @if ($topic->lastPost)
+                    @if ($topic->lastPost->exists)
                         {{ $topic->pagination('/admin/topics') }}
                         {{ __('forums.post') }}: {{ $topic->lastPost->user->getName() }} <small class="section-date text-muted fst-italic">{{ dateFixed($topic->lastPost->created_at) }}</small>
+                    @else
+                        {{ __('forums.empty_posts') }}
                     @endif
                 </div>
             </div>
