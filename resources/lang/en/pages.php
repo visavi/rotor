@@ -122,7 +122,6 @@ return [
     'quote'         => 'Quote',
     'quote_author'  => 'Quote author',
     'code'          => 'Source',
-    'cutpage'       => 'Serves for trimming text (Works only in news and blogs)',
     'clean_text'    => 'Clearing selected text from bb code',
     'sticker'       => 'Insert sticker from ready-made kit',
     'preview'       => 'Preview processed text',

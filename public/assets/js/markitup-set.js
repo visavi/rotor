@@ -94,7 +94,6 @@ window.mySettings = {
 
         {separator: '---------------'},
         {title: __('editor.clean'), name: '<i class="fa fa-eraser"></i>', className: 'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
-        {title: __('editor.cutpage'), name: '<i class="fa fa-cut"></i>', className: 'bb-cutpage', openWith: '[cut]'},
         /*{title: __('editor.preview, name: '<i class="fa fa-check-square"></i>', classname: 'bb-preview',  call: 'preview'},*/
         {
             title: __('editor.preview'),

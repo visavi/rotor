@@ -173,13 +173,6 @@
     margin-left: 3px;
 }
 
-.markItUp .bb-cutpage a {
-    display: none;
-}
-.cut .bb-cutpage a {
-    display: block;
-}
-
 @media (max-width: 768px) {
     .markItUpHeader ul {
         display: flex;

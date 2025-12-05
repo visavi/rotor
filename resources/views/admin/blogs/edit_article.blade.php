@@ -49,7 +49,7 @@
     <i class="fas fa-times"></i> <a class="me-3" href="{{ route('admin.articles.delete', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
     <hr>
 
-    <div class="section-form mb-3 shadow cut">
+    <div class="section-form mb-3 shadow">
         @include('blogs/_form')
     </div>
 @stop

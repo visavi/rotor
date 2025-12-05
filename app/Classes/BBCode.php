@@ -181,8 +181,6 @@ class BBCode
             }
         }
 
-        $source = str_replace('[cut]', '', $source);
-
         return $this->clearBreakLines($source);
     }
 

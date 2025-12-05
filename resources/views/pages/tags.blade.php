@@ -49,7 +49,6 @@
     <i class="fa fa-quote-right"></i> [quote={{ __('pages.quote_author') }}]{{ __('pages.quote') }}[/quote]{{ bbCode('[quote=' . __('pages.quote_author')  . ']' . __('pages.quote') . '[/quote]') }}<br>
 
     <i class="fa fa-code"></i> [code]{{ __('pages.code') }}[/code]{{ bbCode('[code]' . __('pages.code') . '[/code]') }}<br>
-    <i class="fa fa-cut"></i> [cut] - {{ __('pages.cutpage') }}<br>
     <i class="fa fa-eraser"></i> {{ __('pages.clean_text') }}<br>
     <i class="fa fa-smile"></i> {{ __('pages.sticker') }}<br>
     <i class="fa fa-check-square"></i> {{ __('pages.preview') }}<br><br>

@@ -13,7 +13,7 @@
 @stop
 
 @section('content')
-    <div class="section-form mb-3 shadow cut">
+    <div class="section-form mb-3 shadow">
         @include('blogs/_form')
     </div>
 

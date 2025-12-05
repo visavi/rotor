@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-    <div class="section-form mb-3 shadow cut">
+    <div class="section-form mb-3 shadow">
         <form action="{{ route('admin.news.create') }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('title') }}">
