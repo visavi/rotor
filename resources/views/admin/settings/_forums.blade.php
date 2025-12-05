@@ -88,5 +88,11 @@
         </div>
     </div>
 
+    <div class="form-check mb-3">
+        <input type="hidden" value="0" name="sets[forum_merge_posts]">
+        <input type="checkbox" class="form-check-input" value="1" name="sets[forum_merge_posts]" id="forum_merge_posts"{{ getInput('sets.forum_merge_posts', $settings['forum_merge_posts']) ? ' checked' : '' }}>
+        <label class="form-check-label" for="forum_merge_posts">{{ __('settings.forum_merge_posts') }}</label>
+    </div>
+
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

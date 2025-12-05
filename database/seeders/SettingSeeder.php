@@ -122,6 +122,7 @@ class SettingSeeder extends Seeder
             ['name' => 'forum_description_max', 'value' => 100],
             ['name' => 'forum_point', 'value' => 1],
             ['name' => 'forum_money', 'value' => 50],
+            ['name' => 'forum_merge_posts', 'value' => 1],
             ['name' => 'fotolist', 'value' => 5],
             ['name' => 'guestsuser', 'value' => __('seeds.settings.guest_user')],
             ['name' => 'guestbook_text_min', 'value' => 5],

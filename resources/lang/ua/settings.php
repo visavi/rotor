@@ -67,6 +67,7 @@ return [
     'forum_description_length' => 'Довжина опису розділу',
     'forum_point'              => 'Сума балів, що нараховуються',
     'forum_money'              => 'Сума нарахованих грошей',
+    'forum_merge_posts'        => 'Дозволити склеювання повідомлень',
 
     'guestbook_guests_allow' => 'Дозволити гостям писати в гостьовій',
     'guestbook_per_page'     => 'Повідомлень у гостьовій на стор',

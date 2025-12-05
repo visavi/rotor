@@ -175,6 +175,7 @@ class TopicController extends Controller
                 $post
                 && $post->created_at + 600 > SITETIME
                 && $user->id === $post->user_id
+                && setting('forum_merge_posts')
                 && $countFiles + $post->files->count() <= setting('maxfiles')
                 && (Str::length($msg) + Str::length($post->text) <= setting('forum_text_max'))
             ) {

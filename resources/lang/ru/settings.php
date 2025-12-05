@@ -66,6 +66,7 @@ return [
     'forum_description_length' => 'Длина описания раздела',
     'forum_point'              => 'Сумма начисляемых баллов',
     'forum_money'              => 'Сумма начисляемых денег',
+    'forum_merge_posts'        => 'Разрешить склейку сообщений',
 
     'guestbook_guests_allow' => 'Разрешить гостям писать в гостевой',
     'guestbook_moderation'   => 'Модерация сообщений для гостей',

@@ -66,6 +66,7 @@ return [
     'forum_description_length' => 'Forum description length',
     'forum_point'              => 'Total points awarded',
     'forum_money'              => 'Total moneys awarded',
+    'forum_merge_posts'        => 'Allow to merge posts',
 
     'guestbook_guests_allow' => 'Allow guests to write in guestbook',
     'guestbook_moderation'   => 'Message moderation for guests',
