@@ -95,9 +95,9 @@
                     </div>
                 </div>
 
-                <div class="section-content">
+                <div class="section-content short-view">
                     <div class="section-message">
-                        {{ $article->shortText() }}
+                        {{ $article->getText() }}
                     </div>
 
                     <div class="mb-2">

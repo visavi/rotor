@@ -33,13 +33,13 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         @if ($post->getImages()->isNotEmpty())
             @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
         @endif
 
         <div class="section-message">
-            {{ $post->shortText() }}
+            {{ $post->getText(withImages: false) }}
         </div>
 
         <div class="section-body">

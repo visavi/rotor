@@ -6,7 +6,7 @@
         <i class="fas fa-angle-down news-title cursor-pointer"></i><br>
 
         <div class="news-text" style="display: none;">
-            {{ $data->shortText() }}
+            {{ $data->getText() }}
             <div>
                 <a href="{{ route('news.comments', ['id' => $data->id]) }}">Комментарии</a>
             </div>

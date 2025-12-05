@@ -154,23 +154,31 @@ $(function () {
         }, 100);
     }
 
-    $('.text-container').each(function () {
-        const $container = $(this);
-        const $content = $container.find('.text-content');
-        const $button = $container.find('.toggle-btn');
+    setTimeout(function() {
+        $('.section-content.short-view').each(function() {
+            const $el = $(this);
+            const el = this;
 
-        if ($content.length === 0 || $button.length === 0) return;
+            // Вычисляем сколько пикселей скрыто
+            const hiddenPixels = el.scrollHeight - el.clientHeight;
 
-        const fullHeight = $content[0].scrollHeight;
-        const maxHeight = parseInt($content.css('max-height'), 10);
+            if (hiddenPixels > 100) {
+                $el.addClass('clamped');
 
-        if (fullHeight > maxHeight) {
-            $button.show().on('click', function () {
-                $content.addClass('expanded');
-                $button.hide(); // ← кнопка исчезает
-            });
-        }
-    });
+                const $btn = $('<button>')
+                    .addClass('btn btn-sm btn-adaptive mt-2')
+                    .text('Показать полностью')
+                    .on('click', function() {
+                        $el.addClass('expanded').removeClass('clamped');
+                        $btn.remove();
+                    });
+
+                $el.after($btn);
+            } else if (hiddenPixels > 0) {
+                $el.removeClass('short-view');
+            }
+        });
+    }, 300);
 });
 
 /* Показ формы загрузки файла */

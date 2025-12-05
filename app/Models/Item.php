@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
-use App\Traits\ShortTextTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -32,13 +31,10 @@ use Illuminate\Support\HtmlString;
  * @property bool   $active
  * @property-read Board            $category
  * @property-read Collection<File> $files
- *
- * @mixin ShortTextTrait
  */
 class Item extends BaseModel
 {
     use SearchableTrait;
-    use ShortTextTrait;
     use SortableTrait;
     use UploadTrait;
 
@@ -93,17 +89,6 @@ class Item extends BaseModel
     }
 
     /**
-     * Возвращает настройки сокращенного текста
-     */
-    protected function setShortText(): array
-    {
-        return [
-            'words' => 100,
-            'url'   => route('items.view', ['id' => $this->id]),
-        ];
-    }
-
-    /**
      * Scope a query to only include active records.
      */
     #[Scope]
@@ -138,6 +123,22 @@ class Item extends BaseModel
         $path = $image->path ?? null;
 
         return resizeImage($path, ['alt' => $this->title, 'class' => 'img-fluid']);
+    }
+
+    /**
+     * Get text
+     */
+    public function getText($words = null): HtmlString
+    {
+        $text = $this->text;
+
+        if ($words && wordCount($text) > $words) {
+            $text = bbCodeTruncate($text, $words);
+        } else {
+            $text = bbCode($text);
+        }
+
+        return new HtmlString($text);
     }
 
     /**

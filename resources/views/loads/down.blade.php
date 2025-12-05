@@ -42,7 +42,7 @@
     <i class="fas fa-rss"></i> <a class="me-3" href="{{ route('downs.rss', ['id' => $down->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
-    <div class="mb-3">
+    <div class="section-content">
         @if ($down->getImages()->isNotEmpty())
             @foreach ($down->getImages() as $image)
                 <div class="media-file mb-3">
@@ -100,22 +100,22 @@
         @else
             {{ showError(__('main.not_uploaded')) }}
         @endif
+    </div>
 
-        <div class="mb-3">
-            <i class="fa fa-comment"></i> <a href="{{ route('downs.comments', ['id' => $down->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $down->count_comments }}</span>
+    <div class="my-3">
+        <i class="fa fa-comment"></i> <a href="{{ route('downs.comments', ['id' => $down->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $down->count_comments }}</span>
 
-            <div class="my-2 js-rating">{{ __('main.rating') }}:
-                @if (getUser() && getUser('id') !== $down->user_id)
-                    <a class="post-rating-down<?= $down->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
-                @endif
-                <b>{{ formatNum($down->rating) }}</b>
-                @if (getUser() && getUser('id') !== $down->user_id)
-                    <a class="post-rating-up<?= $down->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
-                @endif
-            </div>
-
-            {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
-            {{ __('main.author') }}: {{ $down->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
+        <div class="my-2 js-rating">{{ __('main.rating') }}:
+            @if (getUser() && getUser('id') !== $down->user_id)
+                <a class="post-rating-down<?= $down->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
+            @endif
+            <b>{{ formatNum($down->rating) }}</b>
+            @if (getUser() && getUser('id') !== $down->user_id)
+                <a class="post-rating-up<?= $down->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
+            @endif
         </div>
+
+        {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
+        {{ __('main.author') }}: {{ $down->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
     </div>
 @stop

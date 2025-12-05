@@ -89,7 +89,7 @@
                                     </div>
 
                                     <div class="section-message">
-                                        {{ $item->shortText() }}
+                                        {{ $item->getText(words: 100) }}
                                     </div>
 
                                     <p class="card-text">

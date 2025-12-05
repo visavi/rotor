@@ -150,6 +150,14 @@ class Offer extends BaseModel
     }
 
     /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return new HtmlString(bbCode($this->text));
+    }
+
+    /**
      * Возвращает статус записи
      */
     public function getStatus(): HtmlString

@@ -23,12 +23,12 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         @include('app/_image_viewer', ['model' => $post])
 
         @if ($post->text)
             <div class="section-message">
-                {{ bbCode($post->text) }}
+                {{ $post->getText() }}
             </div>
         @endif
     </div>

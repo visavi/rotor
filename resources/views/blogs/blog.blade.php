@@ -105,11 +105,13 @@
                     </div>
                 </div>
 
-                <span class="section-content">
+                <div class="section-content short-view">
                     <div class="section-message">
-                        {{ $article->shortText() }}
+                        {{ $article->getText() }}
                     </div>
+                </div>
 
+                <div class="section-footer">
                     <div class="mb-2">
                         {{ __('main.views') }}: {{ $article->visits }}<br>
                         {{ __('main.author') }}: {{ $article->user->getProfile() }}

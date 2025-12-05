@@ -26,9 +26,9 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         <div class="section-message">
-            {{ bbCode($post->text) }}
+            {{ $post->getText() }}
         </div>
     </div>
 

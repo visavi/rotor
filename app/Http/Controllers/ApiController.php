@@ -32,7 +32,7 @@ class ApiController extends Controller
      */
     public function user(Request $request): Response
     {
-        $user = $request->attributes->get('user');
+        $user = $request->user();
 
         return response()->json([
             'success' => true,
@@ -115,7 +115,7 @@ class ApiController extends Controller
      */
     public function dialogues(Request $request): Response
     {
-        $user = $request->attributes->get('user');
+        $user = $request->user();
 
         $lastMessage = Dialogue::query()
             ->select('author_id', DB::raw('max(message_id) as message_id'))
@@ -156,7 +156,7 @@ class ApiController extends Controller
      */
     public function talk(string $login, Request $request): Response
     {
-        $user = $request->attributes->get('user');
+        $user = $request->user();
 
         if (is_numeric($login)) {
             $author = new User();

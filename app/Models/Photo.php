@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Photo
@@ -108,6 +109,14 @@ class Photo extends BaseModel
     {
         return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
+    }
+
+    /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return new HtmlString(bbCode($this->text));
     }
 
     /**

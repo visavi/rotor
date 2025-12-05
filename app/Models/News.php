@@ -6,12 +6,12 @@ namespace App\Models;
 
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
-use App\Traits\ShortTextTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class News
@@ -28,14 +28,11 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection<File>    $files
  * @property-read Collection<Poll>    $polls
  * @property-read Poll                $poll
- *
- * @mixin ShortTextTrait
  */
 class News extends BaseModel
 {
     use ConvertVideoTrait;
     use SearchableTrait;
-    use ShortTextTrait;
     use UploadTrait;
 
     /**
@@ -120,6 +117,14 @@ class News extends BaseModel
     }
 
     /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return new HtmlString(bbCode($this->text));
+    }
+
+    /**
      * Возвращает иконку в зависимости от статуса
      */
     public function getIcon(): string
@@ -131,18 +136,6 @@ class News extends BaseModel
         }
 
         return $icon;
-    }
-
-    /**
-     * Возвращает настройки сокращенного текста
-     */
-    protected function setShortText(): array
-    {
-        return [
-            'words' => 100,
-            'cut'   => true,
-            'url'   => route('news.view', ['id' => $this->id]),
-        ];
     }
 
     /**

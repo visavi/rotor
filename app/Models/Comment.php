@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Comment
@@ -75,6 +76,14 @@ class Comment extends BaseModel
     {
         return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
+    }
+
+    /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return new HtmlString(bbCode($this->text));
     }
 
     /**

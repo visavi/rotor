@@ -33,57 +33,59 @@
         </div>
     </div>
 
-    @if ($post->getImages()->isNotEmpty())
-        @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
-    @endif
+    <div class="section-content short-view">
+        @if ($post->getImages()->isNotEmpty())
+            @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
+        @endif
 
-    <div class="section-message">
-        {{ $post->shortText() }}
-    </div>
+        <div class="section-message">
+            {{ $post->getText() }}
+        </div>
 
-    @if ($post->links || $post->files->isNotEmpty())
-        @foreach ($post->getFiles() as $file)
-            <div class="media-file mb-3">
-                @if ($file->path && file_exists(public_path($file->path)))
-                    @if ($file->isAudio())
-                        <div>
-                            <audio src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
-                        </div>
+        @if ($post->links || $post->files->isNotEmpty())
+            @foreach ($post->getFiles() as $file)
+                <div class="media-file">
+                    @if ($file->path && file_exists(public_path($file->path)))
+                        @if ($file->isAudio())
+                            <div>
+                                <audio src="{{ $file->path }}" style="max-width:100%;" preload="metadata" controls controlsList="{{ $allowDownload ? null : 'nodownload' }}"></audio>
+                            </div>
+                        @endif
+
+                        @if ($file->isVideo())
+                            <div>
+                                <video src="{{ $file->path }}" class="img-fluid rounded" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
+                            </div>
+                        @endif
+
+                        {{ icons($file->extension) }}
+                        <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
+
+                        @if ($allowDownload)
+                            <a class="btn btn-sm btn-success" href="{{ route('downs.download', ['id' => $post->id, 'fid' => $file->id]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                        @endif
+                    @else
+                        <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
                     @endif
-
-                    @if ($file->isVideo())
-                        <div>
-                            <video src="{{ $file->path }}" class="img-fluid rounded" preload="metadata" controls playsinline controlsList="{{ $allowDownload ? null : 'nodownload' }}"></video>
-                        </div>
-                    @endif
-
-                    {{ icons($file->extension) }}
-                    <b>{{ $file->name }}</b> ({{ formatSize($file->size) }})<br>
-
-                    @if ($allowDownload)
-                        <a class="btn btn-sm btn-success" href="{{ route('downs.download', ['id' => $post->id, 'fid' => $file->id]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
-                    @endif
-                @else
-                    <i class="fa fa-download"></i> {{ __('main.file_not_found') }}
-                @endif
-            </div>
-        @endforeach
-
-        @if ($post->links && $allowDownload)
-            @foreach ($post->links as $linkId => $link)
-                <div class="media-file mb-3">
-                    <b>{{ basename($link) }}</b><br>
-                    <a class="btn btn-sm btn-success" href="{{ route('downs.download-link', ['id' => $post->id, 'lid' => $linkId]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
                 </div>
             @endforeach
-        @endif
 
-        @if (! $allowDownload)
-            {{ showError(__('loads.download_authorized')) }}
+            @if ($post->links && $allowDownload)
+                @foreach ($post->links as $linkId => $link)
+                    <div class="media-file mb-3">
+                        <b>{{ basename($link) }}</b><br>
+                        <a class="btn btn-sm btn-success" href="{{ route('downs.download-link', ['id' => $post->id, 'lid' => $linkId]) }}"><i class="fa fa-download"></i> {{ __('main.download') }}</a><br>
+                    </div>
+                @endforeach
+            @endif
+
+            @if (! $allowDownload)
+                {{ showError(__('loads.download_authorized')) }}
+            @endif
+        @else
+            {{ showError(__('main.not_uploaded')) }}
         @endif
-    @else
-        {{ showError(__('main.not_uploaded')) }}
-    @endif
+    </div>
 
     <div class="section-body">
         <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}

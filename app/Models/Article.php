@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
-use App\Traits\ShortTextTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -43,13 +42,10 @@ use Illuminate\Support\Str;
  * @property-read Collection<Poll>    $polls
  * @property-read Poll                $poll
  * @property-read Blog                $category
- *
- * @mixin ShortTextTrait
  */
 class Article extends BaseModel
 {
     use SearchableTrait;
-    use ShortTextTrait;
     use SortableTrait;
     use UploadTrait;
 
@@ -108,19 +104,6 @@ class Article extends BaseModel
             'visits'   => ['field' => 'visits', 'label' => __('main.views')],
             'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
             'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
-        ];
-    }
-
-    /**
-     * Возвращает настройки сокращенного текста
-     */
-    protected function setShortText(): array
-    {
-        return [
-            'words'   => 100,
-            'cut'     => true,
-            'url'     => route('articles.view', ['slug' => $this->slug]),
-            'handler' => fn ($text) => preg_replace('/\[img].*?\[\/img]/', '', $text),
         ];
     }
 
@@ -245,6 +228,18 @@ class Article extends BaseModel
     public function isPublished(): bool
     {
         return $this->published_at === null || ! $this->published_at->isFuture();
+    }
+
+    /**
+     * Get text
+     */
+    public function getText($withImages = true): HtmlString
+    {
+        $text = $withImages
+            ? $this->text
+            : preg_replace('/\[img].*?\[\/img]/', '', $this->text);
+
+        return new HtmlString(bbCode($text));
     }
 
     /**

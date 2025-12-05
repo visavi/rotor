@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
-use App\Traits\ShortTextTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -18,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Down
@@ -39,15 +39,12 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection<Poll>    $polls
  * @property-read Poll                $poll
  * @property-read Load                $category
- *
- * @mixin ShortTextTrait
  */
 class Down extends BaseModel
 {
     use AddFileToArchiveTrait;
     use ConvertVideoTrait;
     use SearchableTrait;
-    use ShortTextTrait;
     use SortableTrait;
     use UploadTrait;
 
@@ -111,17 +108,6 @@ class Down extends BaseModel
             'name'     => ['field' => 'title', 'label' => __('main.title')],
             'rating'   => ['field' => 'rating', 'label' => __('main.rating')],
             'comments' => ['field' => 'count_comments', 'label' => __('main.comments')],
-        ];
-    }
-
-    /**
-     * Возвращает настройки сокращенного текста
-     */
-    protected function setShortText(): array
-    {
-        return [
-            'words' => 100,
-            'url'   => route('downs.view', ['id' => $this->id]),
         ];
     }
 
@@ -205,6 +191,14 @@ class Down extends BaseModel
         return $this->files->filter(static function (File $value, $key) {
             return $value->isImage();
         });
+    }
+
+    /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return new HtmlString(bbCode($this->text));
     }
 
     /**

@@ -37,7 +37,7 @@
                     <a href="{{ route('blogs.blog', ['id' => $article->category->id]) }}">{{ $article->category->name }}</a>
 
                     <p class="card-text">
-                        {{ $article->shortText() }}
+                        {{ $article->getText() }}
                     </p>
                 </div>
                 <div class="card-footer text-muted">

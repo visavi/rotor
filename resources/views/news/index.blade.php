@@ -46,9 +46,9 @@
                     </div>
                 </div>
 
-                <div class="section-content">
+                <div class="section-content short-view">
                     <div class="section-message">
-                        {{ $data->shortText() }}
+                        {{ $data->getText() }}
                     </div>
 
                     @if ($data->getImages()->isNotEmpty())

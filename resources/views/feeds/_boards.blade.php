@@ -17,7 +17,7 @@
 
     <h3><a class="post-title" href="{{ route('items.view', ['id' => $post->id]) }}">{{ $post->title }}</a></h3>
 
-    <div class="col-md-12">
+    <div class="section-content short-view col-md-12">
         @if ($post->files->isNotEmpty())
             <div class="row">
                 <div class="col-md-12">
@@ -29,19 +29,7 @@
         <div class="row">
             <div class="col-md-10">
                 <div class="section-message">
-                    {{ $post->shortText() }}
-                </div>
-                <div>
-                    @if ($post->phone)
-                        <p class="card-text">
-                            <a href="tel:{{ $post->phone }}" class="text-decoration-none">
-                                <i class="fa-solid fa-phone fs-5 me-2"></i> {{ $post->phone }}
-                            </a>
-                        </p>
-                    @endif
-
-                    <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
-                    <small class="section-date text-muted fst-italic">{{ dateFixed($post->updated_at) }}</small>
+                    {{ $post->getText() }}
                 </div>
             </div>
 
@@ -53,5 +41,18 @@
                 @endif
             </div>
         </div>
+    </div>
+
+    <div class="section-body">
+        @if ($post->phone)
+            <p class="card-text">
+                <a href="tel:{{ $post->phone }}" class="text-decoration-none">
+                    <i class="fa-solid fa-phone fs-5 me-2"></i> {{ $post->phone }}
+                </a>
+            </p>
+        @endif
+
+        <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
+        <small class="section-date text-muted fst-italic">{{ dateFixed($post->updated_at) }}</small>
     </div>
 </div>
