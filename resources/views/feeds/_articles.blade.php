@@ -41,12 +41,12 @@
         <div class="section-message">
             {{ $post->getText(withImages: false) }}
         </div>
-
-        <div class="section-body">
-            <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
-            <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
-        </div>
-
-        <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $post->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $post->count_comments }}</span>
     </div>
+
+    <div class="section-body">
+        <span class="avatar-micro">{{ $post->user->getAvatarImage() }}</span> {{ $post->user->getProfile() }}
+        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
+    </div>
+
+    <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $post->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $post->count_comments }}</span>
 </div>
