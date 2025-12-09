@@ -36,6 +36,7 @@
         "visavi/cleanup": "^1.5"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.16",
         "deployer/deployer": "^7.5",
         "fakerphp/faker": "^1.24",
         "laravel/pint": "^1.22",
