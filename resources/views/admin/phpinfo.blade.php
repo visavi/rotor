@@ -27,7 +27,7 @@
 
         <span class="badge bg-primary">Laravel {{ app()->version() }}</span>
         <span class="badge {{ config('app.debug') ? 'bg-warning' : 'bg-success' }}">
-            Debug: {{ config('app.debug') ? 'false' : 'true' }}
+            Debug: {{ config('app.debug') ? 'true' : 'false' }}
         </span>
         <span class="badge {{ config('app.env') === 'production' ? 'bg-success' : 'bg-secondary' }} ">
             Env: {{ config('app.env') }}

@@ -35,7 +35,8 @@ class AppServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom([database_path('upgrades')]);
         }
 
-        Schema::defaultStringLength(191);
+        // Only old database
+        // Schema::defaultStringLength(191);
 
         // Immutable date
         Date::use(CarbonImmutable::class);
