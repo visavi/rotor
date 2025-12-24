@@ -21,7 +21,7 @@
         <div class="sort-links border-bottom pb-3 mb-3">
             {{ __('main.sort') }}:
             @foreach ($sorting as $key => $option)
-                <a href="{{ route('forums.active-topics', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc']) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
+                <a href="{{ route('forums.active-topics', ['sort' => $key, 'order' => $option['inverse'] ?? 'desc', 'user' => $user->login]) }}" class="badge bg-{{ $option['badge'] ?? 'adaptive' }}">
                     {{ $option['label'] }}{{ $option['icon'] ?? '' }}
                 </a>
             @endforeach
