@@ -15,14 +15,14 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
-    @vite('public/themes/default/src/sass/app.scss')
+    @vite('public/assets/themes/default/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
 <body class="app">
 
-@include('navbar')
-@include('sidebar')
+@include('themes/default/navbar')
+@include('themes/default/sidebar')
 
 <main class="app-content">
     <div class="app-title">
@@ -45,8 +45,8 @@
     @yield('advertBottom')
 </main>
 
-@include('footer')
-@vite('public/themes/default/src/js/app.js')
+@include('themes/default/footer')
+@vite('public/assets/themes/default/js/app.js')
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>

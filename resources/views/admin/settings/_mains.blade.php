@@ -79,7 +79,7 @@
         {{ __('settings.fallback_language_hint') }}
     </p>
 
-    <?php $themes = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR)); ?>
+    <?php $themes = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR)); ?>
     <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
 
     <div class="mb-3{{ hasError('sets[themes]') }}">

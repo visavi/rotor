@@ -1,4 +1,4 @@
-@extends('theme')
+@extends('theme::layout')
 
 @section('header')
     <h1>@yield('title')</h1>

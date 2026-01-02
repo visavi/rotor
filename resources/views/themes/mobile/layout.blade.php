@@ -14,7 +14,7 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
-    @vite('public/themes/mobile/src/sass/app.scss')
+    @vite('public/assets/themes/mobile/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
@@ -27,7 +27,7 @@
 </div>
 
 <div class="menu">
-    @include('menu')
+    @include('themes/mobile/menu')
 
     <div class="float-end">
         <a href="/language/ru{{ returnUrl() }}">RU</a> /
@@ -41,7 +41,7 @@
         @yield('advertAdmin')
         @yield('advertUser')
 
-        @include('note')
+        @include('themes/motor/note')
         @hook('header')
 
         @yield('flash')
@@ -64,7 +64,7 @@
 <div class="site" style="text-align:center">
     @yield('performance')
 </div>
-@vite('public/themes/mobile/src/js/app.js')
+@vite('public/assets/themes/mobile/js/app.js')
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>

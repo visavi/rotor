@@ -2,7 +2,7 @@ body {
     margin-top : 0;
     font-size : 14px;
     color : #5c5c5c;
-    background: #f0f0f0 url(/themes/motor/src/img/back.gif) repeat-x scroll;
+    background: #f0f0f0 url(/assets/themes/motor/img/back.gif) repeat-x scroll;
     line-height: 1.3;
 }
 
@@ -55,10 +55,10 @@ a {
     margin-top : 0;
 }
 .backgr_top {
-    background: url(/themes/motor/src/img/back_top.gif) repeat-y;
+    background: url(/assets/themes/motor/img/back_top.gif) repeat-y;
 }
 .backgr {
-    background: url(/themes/motor/src/img/back_l.gif) repeat-y;
+    background: url(/assets/themes/motor/img/back_l.gif) repeat-y;
 }
 .container {
     float : left;
@@ -127,7 +127,7 @@ a {
 }
 .fdivider {
     clear : both;
-    background: url(/themes/motor/src/img/footerdiver.gif) repeat-x bottom;
+    background: url(/assets/themes/motor/img/footerdiver.gif) repeat-x bottom;
     margin : 0 14px 0 14px;
     padding-top : 10px;
 }
@@ -219,7 +219,7 @@ textarea {
 .form {
     color: #666;
     padding : 3px;
-    background: #ddd url(/themes/motor/src/img/bp.gif);
+    background: #ddd url(/assets/themes/motor/img/bp.gif);
     border: 1px solid #ccc;
     border-radius:5px;
 }

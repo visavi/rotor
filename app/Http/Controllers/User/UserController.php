@@ -479,7 +479,7 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $setting['themes'] = array_map('basename', glob(public_path('themes/*'), GLOB_ONLYDIR));
+        $setting['themes'] = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR));
         $setting['languages'] = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
         $setting['timezones'] = range(-12, 12);
 

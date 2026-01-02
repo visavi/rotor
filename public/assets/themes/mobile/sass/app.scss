@@ -1,9 +1,9 @@
 // This files are essential for the theme
-@import 'themes/default/src/sass/variables';
+@import 'themes/default/sass/variables';
 @import 'bootstrap/scss/bootstrap';
 
-@import 'themes/default/src/sass/component/badge';
-@import 'themes/default/src/sass/component/button';
+@import 'themes/default/sass/component/badge';
+@import 'themes/default/sass/component/button';
 
 @import '@fortawesome/fontawesome-free/scss/brands';
 @import '@fortawesome/fontawesome-free/scss/regular';
@@ -17,4 +17,4 @@
 @import 'css/prettify';
 @import 'css/main';
 
-@import 'themes/mobile/src/sass/style';
+@import 'themes/mobile/sass/style';

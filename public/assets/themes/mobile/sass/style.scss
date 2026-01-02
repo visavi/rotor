@@ -8,7 +8,7 @@ body, td, tr {
 body {
     padding: 1px;
     color: #858585;
-    background: #fff url(/themes/mobile/src/img/bg.png);
+    background: #fff url(/assets/themes/mobile/img/bg.png);
     max-width: 768px;
     text-align: left;
     border: 1px solid #ccc;
@@ -54,7 +54,7 @@ a:hover {
 
 .site {
     padding: 5px;
-    background-image: url(/themes/mobile/src/img/f.png);
+    background-image: url(/assets/themes/mobile/img/f.png);
 }
 
 .site a:not(.btn):not(.badge) {
@@ -69,7 +69,7 @@ a:hover {
 
 .menu {
     padding : 2px 6px;
-    background-image: url(/themes/mobile/src/img/bp.gif);
+    background-image: url(/assets/themes/mobile/img/bp.gif);
     border-top : 1px solid #ccc;
     border-bottom : 1px solid #ccc;
     line-height: 30px;
@@ -116,14 +116,14 @@ table {
 
 .a {
     color: #666;
-    background: #ddd url(/themes/mobile/src/img/aa.gif);
+    background: #ddd url(/assets/themes/mobile/img/aa.gif);
     border: 1px solid #ccc;
 }
 .b {
     font-size: 14px;
     color: #888888;
     border: 1px solid #ccc;
-    background: #eee url(/themes/mobile/src/img/bb.gif);
+    background: #eee url(/assets/themes/mobile/img/bb.gif);
     overflow:hidden;
     margin: 6px 0 6px 0;
     padding: 2px;
@@ -136,19 +136,19 @@ table {
 
 .c {
     color: #aaa;
-    background: #ddd url(/themes/mobile/src/img/aa.gif);
+    background: #ddd url(/assets/themes/mobile/img/aa.gif);
     border: 1px solid #ccc;
 }
 
 .cs {
     color: #666;
     text-align : center;
-    background: #eee url(/themes/mobile/src/img/ff.gif);
+    background: #eee url(/assets/themes/mobile/img/ff.gif);
 }
 
 .lol {
     color: #fff;
-    background: #eee url(/themes/mobile/src/img/lol.gif);
+    background: #eee url(/assets/themes/mobile/img/lol.gif);
     border-top: 1px solid #ccc;
     text-align:center;
     padding: 6px 0 6px 0;
@@ -157,7 +157,7 @@ table {
 .form {
     color: #666;
     padding : 3px;
-    background: #ddd url(/themes/mobile/src/img/bp.gif);
+    background: #ddd url(/assets/themes/mobile/img/bp.gif);
     border: 1px solid #ccc;
 }
 

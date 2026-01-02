@@ -1,23 +1,23 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700,700i&display=swap');
 
 // This files are essential for the theme
-@import 'themes/default/src/sass/variables';
+@import 'themes/default/sass/variables';
 @import 'bootstrap/scss/bootstrap';
 
 // This styles are essential for theme
-@import 'themes/default/src/sass/main';
+@import 'themes/default/sass/main';
 
 // Component
-@import 'themes/default/src/sass/header';
-@import 'themes/default/src/sass/sidebar';
-@import 'themes/default/src/sass/footer';
+@import 'themes/default/sass/header';
+@import 'themes/default/sass/sidebar';
+@import 'themes/default/sass/footer';
 
 // This styles are optional based on your preference
-@import 'themes/default/src/sass/component/badge';
-@import 'themes/default/src/sass/component/dropdown';
-@import 'themes/default/src/sass/component/button';
-@import 'themes/default/src/sass/component/app-title';
-@import 'themes/default/src/sass/component/widgets';
+@import 'themes/default/sass/component/badge';
+@import 'themes/default/sass/component/dropdown';
+@import 'themes/default/sass/component/button';
+@import 'themes/default/sass/component/app-title';
+@import 'themes/default/sass/component/widgets';
 
 @import 'fa/scss/brands';
 @import 'fa/scss/regular';

@@ -27,12 +27,12 @@ class ApplySettings
             $language = setting('language');
         }
 
-        if (! file_exists(public_path('themes/' . $theme))) {
+        if (! file_exists(resource_path('views/themes/' . $theme))) {
             $theme = setting('themes');
         }
 
         App::setLocale($language);
-        View::addLocation(public_path('themes/' . $theme . '/views'));
+        View::addNamespace('theme', resource_path('views/themes/' . $theme));
 
         return $next($request);
     }

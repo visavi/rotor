@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
-    @vite('public/themes/motor/src/sass/app.scss')
+    @vite('public/assets/themes/motor/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
@@ -24,7 +24,7 @@
     <div class="main" id="up">
 
         <div class="panelTop">
-            <img src="/themes/motor/src/img/panel_top.gif" alt="">
+            <img src="/assets/themes/motor/img/panel_top.gif" alt="">
         </div>
         <div class="backgr_top">
             <div class="content">
@@ -46,7 +46,7 @@
                     <a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a>
 
                     <span class="mright">
-                        @include('menu')
+                        @include('themes/motor/menu')
                     </span>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                     @yield('advertAdmin')
                     @yield('advertUser')
 
-                    @include('note')
+                    @include('themes/motor/note')
                     @hook('header')
 
                     @yield('flash')
@@ -86,14 +86,14 @@
                     {{ setting('copy') }}
                 </div>
                 <div class="footer-image">
-                    <a href="/"><img src="/themes/motor/src/img/smalllogo2.gif" alt="smalllogo"></a>
+                    <a href="/"><img src="/assets/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>
                 </div>
             </div>
-            <img src="/themes/motor/src/img/panel_bot.gif" alt="">
+            <img src="/assets/themes/motor/img/panel_bot.gif" alt="">
         </div>
     </div>
 </div>
-@vite('public/themes/motor/src/js/app.js')
+@vite('public/assets/themes/motor/js/app.js')
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>
