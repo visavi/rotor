@@ -72,6 +72,7 @@ class SettingController extends AdminController
         ];
 
         $protects = [
+            'disable'      => __('main.disable'),
             'graphical'    => __('settings.graphical'),
             'animated'     => __('settings.animated'),
             'recaptcha_v2' => 'Recaptcha v2',

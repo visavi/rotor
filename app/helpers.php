@@ -1251,6 +1251,39 @@ function getCaptcha(): HtmlString
 }
 
 /**
+ * Проверяет captcha
+ */
+function captchaVerify(): bool
+{
+    $request = request();
+
+    if (setting('captcha_type') === 'recaptcha_v2') {
+        $recaptcha = new ReCaptcha(setting('recaptcha_private'));
+
+        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+            ->verify($request->input('g-recaptcha-response'), getIp());
+
+        return $response->isSuccess();
+    }
+
+    if (setting('captcha_type') === 'recaptcha_v3') {
+        $recaptcha = new ReCaptcha(setting('recaptcha_private'));
+
+        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+            ->setScoreThreshold(0.5)
+            ->verify($request->input('protect'), getIp());
+
+        return $response->isSuccess();
+    }
+
+    if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
+        return strtolower($request->input('protect')) === strtolower($request->session()->get('protect'));
+    }
+
+    return true;
+}
+
+/**
  * Сохраняет flash уведомления
  *
  * @deprecated since 10.1 - Use redirect()->with('success', 'Message') or redirect()->withErrors($validator->getErrors())
@@ -1634,39 +1667,6 @@ function parseVersion(string $version): string
     $ver = explode('.', strtok($version, '-'));
 
     return $ver[0] . '.' . $ver[1] . '.' . ($ver[2] ?? '0');
-}
-
-/**
- * Проверяет captcha
- */
-function captchaVerify(): bool
-{
-    $request = request();
-
-    if (setting('captcha_type') === 'recaptcha_v2') {
-        $recaptcha = new ReCaptcha(setting('recaptcha_private'));
-
-        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
-            ->verify($request->input('g-recaptcha-response'), getIp());
-
-        return $response->isSuccess();
-    }
-
-    if (setting('captcha_type') === 'recaptcha_v3') {
-        $recaptcha = new ReCaptcha(setting('recaptcha_private'));
-
-        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
-            ->setScoreThreshold(0.5)
-            ->verify($request->input('protect'), getIp());
-
-        return $response->isSuccess();
-    }
-
-    if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
-        return strtolower($request->input('protect')) === strtolower($request->session()->get('protect'));
-    }
-
-    return false;
 }
 
 /**
