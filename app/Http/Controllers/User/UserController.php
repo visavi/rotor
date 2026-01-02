@@ -268,7 +268,7 @@ class UserController extends Controller
                         $user->saveVisit(Login::AUTH);
 
                         return redirect($request->input('return', '/'))
-                            ->with('success', __('users.welcome', ['login' => $user->getName()]));
+                            ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));
                     }
 
                     $flood->saveState(300);
