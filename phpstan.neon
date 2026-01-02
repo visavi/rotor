@@ -1,16 +1,8 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
 parameters:
-    level: 1
-
     paths:
         - app
-        - database
-        - routes
-
+    level: 5
+    ignoreErrors:
     excludePaths:
-        analyseAndScan:
-            - '**/*Test.php'
-            - '**/*test.php'
-            - '**/*Factory.php'
-            - database/migrations
-            - bootstrap/cache
-            - storage
