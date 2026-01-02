@@ -349,6 +349,7 @@ textarea.form-control {
     cursor: pointer;
     -webkit-flex: none;
     flex: none;
+    margin-right: 5px;
 }
 
 .surprise-ded {
@@ -374,7 +375,6 @@ textarea.form-control {
     position: absolute;
     top: -15px;
     left: -15px;
-    z-index: 1;
     opacity: 0;
     transition: 0.3s opacity ease-out;
 }
