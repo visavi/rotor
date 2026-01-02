@@ -1,10 +1,16 @@
 parameters:
     level: 1
-    universalObjectCratesClasses:
-        - Illuminate\Database\Eloquent\Model
-        - Illuminate\Http\Request
+
     paths:
         - app
-    bootstrapFiles:
-        - bootstrap/app.php
-    reportUnmatchedIgnoredErrors: false
+        - database
+        - routes
+
+    excludePaths:
+        analyseAndScan:
+            - '**/*Test.php'
+            - '**/*test.php'
+            - '**/*Factory.php'
+            - database/migrations
+            - bootstrap/cache
+            - storage

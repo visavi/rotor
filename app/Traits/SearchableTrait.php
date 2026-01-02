@@ -59,7 +59,7 @@ trait SearchableTrait
 
         $text = $this->buildSearchText();
 
-        Search::updateOrCreate(
+        Search::query()->updateOrCreate(
             [
                 'relate_type' => $this->getMorphClass(),
                 'relate_id'   => $this->getKey(),
@@ -76,7 +76,8 @@ trait SearchableTrait
      */
     public function removeFromSearchIndex(): void
     {
-        Search::where('relate_type', $this->getMorphClass())
+        Search::query()
+            ->where('relate_type', $this->getMorphClass())
             ->where('relate_id', $this->getKey())
             ->delete();
     }

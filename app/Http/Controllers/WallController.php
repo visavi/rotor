@@ -44,7 +44,7 @@ class WallController extends Controller
     }
 
     /**
-     * Добавление сообщения
+     * Добавляет сообщения
      */
     public function create(string $login, Request $request, Validator $validator, Flood $flood): RedirectResponse
     {
@@ -92,9 +92,9 @@ class WallController extends Controller
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());
             }
-
-            return redirect('walls/' . $user->login);
         }
+
+        return redirect('walls/' . $user->login);
     }
 
     /**
