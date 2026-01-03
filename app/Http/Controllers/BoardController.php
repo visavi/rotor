@@ -81,7 +81,7 @@ class BoardController extends Controller
     {
         $bid = int($request->input('bid'));
 
-        if (! isAdmin() && ! setting('board_create')) {
+        if (! isAdmin() && ! setting('boards_create')) {
             abort(200, __('boards.boards_closed'));
         }
 

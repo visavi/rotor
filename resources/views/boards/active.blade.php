@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        @if (isAdmin() || (getUser() && setting('board_create')))
+        @if (isAdmin() || (getUser() && setting('boards_create')))
             <a class="btn btn-success" href="{{ route('items.create') }}">{{ __('main.add') }}</a>
         @endif
     </div>
