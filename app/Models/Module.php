@@ -44,7 +44,8 @@ class Module extends BaseModel
     protected function casts(): array
     {
         return [
-            'active' => 'bool',
+            'active'   => 'bool',
+            'settings' => 'array',
         ];
     }
 
@@ -144,7 +145,10 @@ class Module extends BaseModel
     {
         return Cache::rememberForever('modules', static function () {
             try {
-                return self::query()->where('active', true)->pluck('name')->all();
+                return self::query()
+                    ->where('active', true)
+                    ->pluck('settings', 'name')
+                    ->all();
             } catch (Exception) {
                 return [];
             }

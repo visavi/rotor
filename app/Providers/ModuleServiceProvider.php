@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Module;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -24,7 +25,7 @@ class ModuleServiceProvider extends ServiceProvider
     {
         $modules = Module::getEnabledModules();
 
-        foreach ($modules as $module) {
+        foreach ($modules as $module => $settings) {
             $moduleKey = Str::snake($module);
 
             // Загрузка hooks
@@ -55,6 +56,13 @@ class ModuleServiceProvider extends ServiceProvider
             $configFile = base_path('modules/' . $module . '/config.php');
             if (file_exists($configFile)) {
                 $this->mergeConfigFrom($configFile, $moduleKey);
+
+                if ($settings) {
+                    Config::set($moduleKey, array_replace_recursive(
+                        config($moduleKey, []),
+                        $settings
+                    ));
+                }
             }
 
             // Регистрация middleware
