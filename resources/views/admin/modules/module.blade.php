@@ -15,9 +15,28 @@
 
 @section('header')
     @if ($module && $module->active && isset($moduleConfig['panel']))
-        <div class="float-end">
-            <a class="btn btn-success" href="{{ $moduleConfig['panel'] }}">{{ __('main.management') }}</a>
-        </div>
+        @php
+            $links = is_string($moduleConfig['panel'])
+                ? [$moduleConfig['panel'] => __('main.management')]
+                : $moduleConfig['panel'];
+        @endphp
+
+        @if (count($links) === 1)
+            <div class="float-end">
+                <a class="btn btn-adaptive" href="{{ key($links) }}">{{ current($links) }}</a>
+            </div>
+        @else
+            <div class="btn-group float-end">
+                <button type="button" class="btn btn-adaptive dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ __('main.management') }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    @foreach ($links as $url => $label)
+                        <a class="dropdown-item" href="{{ $url }}">{{ $label }}</a>
+                    @endforeach
+                </div>
+            </div>
+        @endif
     @endif
 
     <h1>{{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}</h1>
