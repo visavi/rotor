@@ -39,7 +39,7 @@ class ModuleController extends AdminController
      */
     public function module(Request $request): View
     {
-        $moduleName = $request->input('module');
+        $moduleName = (string) $request->input('module');
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
@@ -47,6 +47,7 @@ class ModuleController extends AdminController
         }
 
         $moduleConfig = include $modulePath . '/module.php';
+        $module = Module::query()->where('name', $moduleName)->first();
 
         if (file_exists($modulePath . '/screenshots')) {
             $moduleConfig['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg,webp}', GLOB_BRACE);
@@ -64,6 +65,10 @@ class ModuleController extends AdminController
             $moduleConfig['config'] = file_get_contents($modulePath . '/config.php');
         }
 
+        if ($module && $module->settings) {
+            $moduleConfig['settings'] = var_export($module->settings, true);
+        }
+
         if (file_exists($modulePath . '/routes.php')) {
             $moduleConfig['routes'] = file_get_contents($modulePath . '/routes.php');
         }
@@ -75,8 +80,6 @@ class ModuleController extends AdminController
         if (file_exists($modulePath . '/middleware.php')) {
             $moduleConfig['middleware'] = file_get_contents($modulePath . '/middleware.php');
         }
-
-        $module = Module::query()->where('name', $moduleName)->first();
 
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));
     }

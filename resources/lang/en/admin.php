@@ -199,6 +199,7 @@ return [
         'migrations'               => 'Migrations',
         'symlink'                  => 'Symlink',
         'config'                   => 'Config',
+        'settings'                 => 'Advanced settings',
         'routes'                   => 'Routes',
         'hooks'                    => 'Hooks',
         'middleware'               => 'Middleware',

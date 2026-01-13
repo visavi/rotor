@@ -1044,11 +1044,12 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Модули */
             Route::controller(ModuleController::class)
                 ->prefix('modules')
+                ->name('modules.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/module', 'module');
-                    Route::get('/install', 'install');
-                    Route::get('/uninstall', 'uninstall');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/module', 'module')->name('module');
+                    Route::get('/install', 'install')->name('install');
+                    Route::get('/uninstall', 'uninstall')->name('uninstall');
                 });
         });
     });

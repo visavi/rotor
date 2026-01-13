@@ -197,6 +197,7 @@ return [
         'migrations'               => 'Міграції',
         'symlink'                  => 'Сімлінк',
         'config'                   => 'Налаштування',
+        'settings'                 => 'Розширені налаштування',
         'routes'                   => 'Роути',
         'hooks'                    => 'Хукі',
         'middleware'               => 'Middleware',

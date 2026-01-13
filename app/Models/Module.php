@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
  * @property string $name
  * @property string $version
  * @property bool   $active
+ * @property array  $settings
  * @property int    $updated_at
  * @property int    $created_at
  */

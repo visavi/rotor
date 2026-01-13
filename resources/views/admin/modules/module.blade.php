@@ -105,6 +105,11 @@
             <?= bbCode('[spoiler][code]' . $moduleConfig['config'] . '[/code][/spoiler]') ?>
     @endif
 
+    @if (isset($moduleConfig['settings']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.settings') }}</div>
+            <?= bbCode('[spoiler][code]' . $moduleConfig['settings'] . '[/code][/spoiler]') ?>
+    @endif
+
     @if (isset($moduleConfig['routes']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.routes') }}</div>
             <?= bbCode('[spoiler][code]' . $moduleConfig['routes'] . '[/code][/spoiler]') ?>
