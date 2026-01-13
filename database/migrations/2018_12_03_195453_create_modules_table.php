@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('modules', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name', 50);
-                $table->string('version', 10);
+                $table->string('version', 15);
                 $table->boolean('active')->default(true);
                 $table->json('settings')->nullable();
                 $table->integer('updated_at')->nullable();
