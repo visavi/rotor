@@ -113,7 +113,8 @@ class ArticleController extends Controller
         $files = File::query()
             ->where('relate_type', Article::$morphName)
             ->where('relate_id', 0)
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->orderBy('created_at');
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');

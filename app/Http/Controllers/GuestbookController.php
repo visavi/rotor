@@ -33,6 +33,7 @@ class GuestbookController extends Controller
                 ->where('relate_type', Guestbook::$morphName)
                 ->where('relate_id', 0)
                 ->where('user_id', $user->id)
+                ->orderBy('created_at')
                 ->get();
         }
 

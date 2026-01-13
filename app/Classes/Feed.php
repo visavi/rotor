@@ -165,7 +165,7 @@ class Feed
         return Cache::remember('NewsFeed', 600, static function () {
             return News::query()
                 ->where('rating', '>', setting('feed_news_rating'))
-                ->with('user')
+                ->with('user', 'files')
                 ->orderByDesc('created_at')
                 ->limit(setting('feed_last_record'))
                 ->get();

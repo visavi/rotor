@@ -78,7 +78,8 @@ class NewsController extends AdminController
         $files = File::query()
             ->where('relate_type', News::$morphName)
             ->where('relate_id', 0)
-            ->where('user_id', getUser('id'));
+            ->where('user_id', getUser('id'))
+            ->orderBy('created_at');
 
         if ($request->isMethod('post')) {
             $title = $request->input('title');

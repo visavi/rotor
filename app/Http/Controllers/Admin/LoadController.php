@@ -210,6 +210,7 @@ class LoadController extends AdminController
         $files = File::query()
             ->where('relate_type', Down::$morphName)
             ->where('relate_id', $down->id)
+            ->orderBy('created_at')
             ->get();
 
         if ($request->isMethod('post')) {

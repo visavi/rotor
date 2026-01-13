@@ -160,7 +160,8 @@ class Article extends BaseModel
      */
     public function files(): MorphMany
     {
-        return $this->morphMany(File::class, 'relate');
+        return $this->morphMany(File::class, 'relate')
+            ->orderBy('created_at');
     }
 
     /**
