@@ -37,7 +37,7 @@
                         <span class="badge bg-danger">{{ __('main.not_installed') }}</span><br>
                     @endif
                     {{ $moduleConfig['description'] }}<br>
-                    {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>
+                    {{ __('main.version') }}: {{ $moduleInstall[$name]->version ?? $moduleConfig['version'] }}<br>
                     {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a>
                 </div>
             </div>

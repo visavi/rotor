@@ -53,7 +53,7 @@
         </div>
     @endif
 
-    {{ __('main.version') }}: {{ $moduleConfig['version'] }}<br>
+    {{ __('main.version') }}: {{ $module->version ?? $moduleConfig['version']  }}<br>
     {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
 
     @if (isset($moduleConfig['screenshots']))
