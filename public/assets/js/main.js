@@ -221,7 +221,7 @@ window.postQuote = function (el) {
     let author  = post.find('.section-author').data('login');
     let date    = post.find('.section-date').text();
     let text    = post.find('.section-message').clone();
-    let message = $.trim(text.find('blockquote').remove().end().text());
+    let message = text.find('blockquote').remove().end().text().trim();
 
     let $lastSymbol = field.val().slice(field.val().length - 1);
     let separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';

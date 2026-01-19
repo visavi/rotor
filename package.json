@@ -10,26 +10,26 @@
         "watch": "vite build --watch"
     },
     "dependencies": {
-        "@fancyapps/ui": "^6.0.29",
-        "@fortawesome/fontawesome-free": "^7.0",
+        "@fancyapps/ui": "^6.1.7",
+        "@fortawesome/fontawesome-free": "^7.1",
         "@popperjs/core": "^2.11.8",
         "bootbox": "^6.0.4",
         "bootstrap": "^5.3.8",
-        "bootstrap5-tags": "^1.7.15",
-        "chartist": "^1.4.0",
-        "jquery": "^3.7.1",
+        "bootstrap5-tags": "^1.7.16",
+        "chartist": "^1.5.0",
+        "jquery": "^4.0.0",
         "jquery-mask-plugin": "^1.14.16",
         "toastr": "^2.1.4"
     },
     "devDependencies": {
-        "axios": "^1.11",
+        "axios": "^1.13",
         "laravel-vite-plugin": "^2.0.1",
         "lodash": "^4.17.21",
         "postcss": "^8.5.6",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.91.0",
-        "sass-loader": "^16.0.5",
-        "vite": "^7.1.11"
+        "sass": "^1.91.2",
+        "sass-loader": "^16.0.6",
+        "vite": "^7.3.1"
     },
     "repository": {
         "type": "git",

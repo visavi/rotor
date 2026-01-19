@@ -220,7 +220,7 @@
             }
 
             function prepare(e) {
-                if ($.isFunction(e)) {
+                if (typeof e === "function") {
                     e = e(v);
                 }
                 return magicMarkups(e);
