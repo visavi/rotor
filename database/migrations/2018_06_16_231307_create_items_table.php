@@ -17,6 +17,7 @@ return new class extends Migration {
                 $table->integer('price')->default(0);
                 $table->string('phone', 15)->nullable();
                 $table->boolean('active')->default(true);
+                $table->integer('visits')->default(0);
                 $table->integer('created_at');
                 $table->integer('updated_at');
                 $table->integer('expires_at');

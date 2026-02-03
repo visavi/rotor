@@ -9,6 +9,7 @@ use App\Models\Board;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Item;
+use App\Models\Reader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -70,6 +71,9 @@ class BoardController extends Controller
         if ($item->expires_at <= SITETIME && getUser() && getUser('id') !== $item->user_id) {
             abort(200, __('boards.item_not_active'));
         }
+
+        // Visits
+        Reader::countingStat($item);
 
         return view('boards/view', compact('item'));
     }

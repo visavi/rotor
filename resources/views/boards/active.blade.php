@@ -53,6 +53,10 @@
                                     <a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
+                                    <div class="float-end" data-bs-toggle="tooltip" title="{{ __('main.views') }}">
+                                        <i class="far fa-eye"></i> {{ $item->visits }}
+                                    </div>
+
                                     <h5><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></h5>
                                     <small><i class="fas fa-angle-right"></i> <a href="{{ route('boards.index', ['id' => $item->category->id]) }}">{{ $item->category->name }}</a></small>
                                     <div class="section-message">

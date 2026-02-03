@@ -71,8 +71,11 @@
                                     <a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
-
                                     <div class="float-end">
+                                        <span data-bs-toggle="tooltip" title="{{ __('main.views') }}">
+                                            <i class="far fa-eye"></i> {{ $item->visits }}
+                                        </span>
+
                                         <a href="{{ route('admin.items.edit', ['id' => $item->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
                                         <a href="{{ route('admin.items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                                     </div>

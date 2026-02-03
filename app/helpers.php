@@ -964,7 +964,7 @@ function restatement(string $mode): void
             break;
 
         case 'boards':
-            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.active = true);');
+            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.active = true and items.expires_at >= ?);', [SITETIME]);
             break;
 
         case 'votes':

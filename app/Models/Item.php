@@ -29,6 +29,7 @@ use Illuminate\Support\HtmlString;
  * @property int    $updated_at
  * @property int    $expires_at
  * @property bool   $active
+ * @property int    $visits
  * @property-read Board            $category
  * @property-read Collection<File> $files
  */
@@ -57,6 +58,11 @@ class Item extends BaseModel
      * Morph name
      */
     public static string $morphName = 'items';
+
+    /**
+     * Counting field
+     */
+    public string $countingField = 'visits';
 
     /**
      * Get the attributes that should be cast.

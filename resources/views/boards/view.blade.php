@@ -51,6 +51,10 @@
             @if ($item->files->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="float-end" data-bs-toggle="tooltip" title="{{ __('main.views') }}">
+                            <i class="far fa-eye"></i> {{ $item->visits }}
+                        </div>
+
                         @include('app/_image_viewer', ['model' => $item])
                     </div>
                 </div>

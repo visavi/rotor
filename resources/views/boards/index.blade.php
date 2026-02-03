@@ -81,6 +81,10 @@
                                     <a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->getFirstImage() }}</a>
                                 </div>
                                 <div class="col-md-7">
+                                    <div class="float-end" data-bs-toggle="tooltip" title="{{ __('main.views') }}">
+                                        <i class="far fa-eye"></i> {{ $item->visits }}
+                                    </div>
+
                                     <h5><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></h5>
 
                                     <div class="small my-2">
