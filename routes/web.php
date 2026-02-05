@@ -170,8 +170,8 @@ Route::redirect('/votes/voters/{id}', '/votes/{id}/voters', 301);
 
 Route::controller(HomeController::class)
     ->group(function () {
-        Route::get('/', 'index');
-        Route::get('/closed', 'closed');
+        Route::get('/', 'index')->name('home');
+        Route::get('/closed', 'closed')->name('closed');
         Route::get('/search', 'search')->name('search');
         Route::get('/captcha', 'captcha')->name('captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+');

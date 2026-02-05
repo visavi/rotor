@@ -35,13 +35,13 @@
 @section('content')
     <div class="mb-3">
         <div class="section-content">
-            <div class="section-message">
-                {{ bbCode($news->text) }}
-            </div>
-
             @if ($news->getImages()->isNotEmpty())
                 @include('app/_image_viewer', ['model' => $news, 'files' => $news->getImages()])
             @endif
+
+            <div class="section-message">
+                {{ bbCode($news->text) }}
+            </div>
 
             @if ($news->getFiles()->isNotEmpty())
                 @foreach ($news->getFiles() as $file)

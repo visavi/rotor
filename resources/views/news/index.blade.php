@@ -47,13 +47,13 @@
                 </div>
 
                 <div class="section-content short-view">
-                    <div class="section-message">
-                        {{ $data->getText() }}
-                    </div>
-
                     @if ($data->getImages()->isNotEmpty())
                         @include('app/_image_viewer', ['model' => $data, 'files' => $data->getImages()])
                     @endif
+
+                    <div class="section-message">
+                        {{ $data->getText() }}
+                    </div>
 
                     @if ($data->getFiles()->isNotEmpty())
                         @foreach ($data->getFiles() as $file)
