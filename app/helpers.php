@@ -727,7 +727,7 @@ function bbCodeTruncate(?string $text, int $words = 20, string $end = '...'): Ht
 {
     $bbCode = new BBCode();
 
-    $text = Str::words($text, $words, $end);
+    $text = Str::words((string) $text, $words, $end);
     $bbText = bbCode($bbCode->closeTags($text));
 
     return new HtmlString(preg_replace('/\[(.*?)]/', '', $bbText));
