@@ -11,7 +11,7 @@ class Hook
     /**
      * Возвращает все хуки
      */
-    public static function getHooks()
+    public static function getHooks(): array
     {
         return self::$hooks;
     }
@@ -31,14 +31,14 @@ class Hook
         ];
 
         usort(self::$hooks[$hookName], function ($a, $b) {
-            return $b['priority'] - $a['priority'];
+            return $b['priority'] <=> $a['priority'];
         });
     }
 
     /**
      * Вызывает хук
      */
-    public static function call(string $hookName, mixed $args = null, mixed $result = null): mixed
+    public static function call(string $hookName, mixed $args = null, string $result = ''): ?string
     {
         $result .= '<!--@' . $hookName . '-->';
 
