@@ -288,10 +288,10 @@ class ArticleController extends Controller
     {
         $articles = Article::query()
             ->active()
-            ->select('user_id', 'login')
-            ->selectRaw('count(*) as cnt, sum(count_comments) as count_comments')
+            ->selectRaw('user_id, count(*) as cnt, sum(count_comments) as count_comments')
             ->join('users', 'articles.user_id', 'users.id')
-            ->groupBy('user_id')
+            ->with('user')
+            ->groupBy('articles.user_id')
             ->orderByDesc('cnt')
             ->paginate(setting('bloggroup'));
 

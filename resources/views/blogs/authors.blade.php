@@ -18,7 +18,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-pencil-alt"></i>
-                    <a href="{{ route('articles.user-articles', ['user' => $article->login]) }}">{{ $article->login }}</a>
+                    <a href="{{ route('articles.user-articles', ['user' => $article->user->login]) }}">{{ $article->user->getName() }}</a>
                 </div>
 
                 {{ $article->cnt }} {{ __('blogs.all_articles') }} / {{ $article->count_comments }} {{ __('main.comments') }}
