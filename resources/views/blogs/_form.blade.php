@@ -77,9 +77,9 @@
 
 @push('scripts')
     <script type="module">
-        function showDelayForm(el) {
+        window.showDelayForm = function(el) {
             $('.js-published').toggle($(el).is(':checked'));
             return false;
-        }
+        };
     </script>
 @endpush

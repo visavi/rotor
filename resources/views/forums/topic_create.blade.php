@@ -82,8 +82,9 @@
 
 @push('scripts')
     <script type="module">
-        function showVoteForm() {
+        window.showVoteForm = function() {
             $('.js-vote-form').toggle();
-        }
+            return false;
+        };
     </script>
 @endpush
