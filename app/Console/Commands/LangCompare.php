@@ -9,15 +9,11 @@ class LangCompare extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'lang:compare {lang1} {lang2}';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Compare lang files';
 

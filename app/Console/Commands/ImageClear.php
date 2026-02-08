@@ -9,15 +9,11 @@ class ImageClear extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'image:clear';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Flush the application image thumbnails';
 

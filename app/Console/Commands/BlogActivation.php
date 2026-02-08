@@ -10,15 +10,11 @@ class BlogActivation extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'blog:activation';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Blog activation';
 

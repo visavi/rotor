@@ -10,15 +10,11 @@ class AppPermission extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'app:permission';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Set file permissions';
 

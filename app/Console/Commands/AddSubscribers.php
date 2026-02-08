@@ -11,15 +11,11 @@ class AddSubscribers extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'add:subscribers';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Add subscribers';
 

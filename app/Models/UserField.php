@@ -43,8 +43,6 @@ class UserField extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var string[]
      */
     protected $fillable = [
         'sort',

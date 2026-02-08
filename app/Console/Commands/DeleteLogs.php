@@ -11,15 +11,11 @@ class DeleteLogs extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'delete:logs';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Delete logs';
 

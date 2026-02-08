@@ -11,15 +11,11 @@ class AddBirthdays extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'add:birthdays';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Add birthdays';
 

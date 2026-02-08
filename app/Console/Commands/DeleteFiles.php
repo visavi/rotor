@@ -10,15 +10,11 @@ class DeleteFiles extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'delete:files';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Delete unattached files';
 

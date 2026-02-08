@@ -10,15 +10,11 @@ class BoardDeactivation extends Command
 {
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
     protected $signature = 'board:deactivation';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected $description = 'Board deactivation';
 
