@@ -53,7 +53,8 @@
                                 @else
                                     <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                                 @endif
-                                <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
+                                <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                                <small class="fst-italic">{{ setting('guestsuser') }}</small>
                             @endif
 
                             @if (! $post->active)
