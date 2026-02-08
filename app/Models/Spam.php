@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -16,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property int    $created_at
  * @property string $path
  */
-class Spam extends BaseModel
+class Spam extends Model
 {
     /**
      * The table associated with the model.
@@ -32,6 +34,24 @@ class Spam extends BaseModel
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 
     /**
      * Возвращает связанные объекты

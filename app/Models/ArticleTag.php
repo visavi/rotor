@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class ArticleTag
  *
@@ -11,7 +13,7 @@ namespace App\Models;
  * @property int $article_id
  * @property int $tag_id
  */
-class ArticleTag extends BaseModel
+class ArticleTag extends Model
 {
     /**
      * Indicates if the model should be timestamped.

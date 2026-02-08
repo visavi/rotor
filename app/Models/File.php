@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
 
@@ -20,9 +22,9 @@ use Illuminate\Support\Facades\DB;
  * @property string $mime_type
  * @property int    $user_id
  * @property int    $created_at
- * @property-read BaseModel $relate
+ * @property-read Model $relate
  */
-class File extends BaseModel
+class File extends Model
 {
     public const VIDEO_EXTENSIONS = ['mp4', 'webm'];
     public const AUDIO_EXTENSIONS = ['mp3', 'wav', 'ogg'];
@@ -37,6 +39,24 @@ class File extends BaseModel
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 
     /**
      * Возвращает связанные объекты

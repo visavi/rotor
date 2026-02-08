@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\CategoryTreeTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read Load             $parent
  * @property-read Collection<Load> $children
  */
-class Load extends BaseModel
+class Load extends Model
 {
     use CategoryTreeTrait;
 

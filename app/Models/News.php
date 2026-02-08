@@ -8,6 +8,8 @@ use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +31,7 @@ use Illuminate\Support\HtmlString;
  * @property-read Collection<Poll>    $polls
  * @property-read Poll                $poll
  */
-class News extends BaseModel
+class News extends Model
 {
     use ConvertVideoTrait;
     use SearchableTrait;
@@ -61,6 +63,24 @@ class News extends BaseModel
     public function searchableFields(): array
     {
         return ['title', 'text'];
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**

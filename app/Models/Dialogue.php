@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read User    $author
  * @property-read Message $message
  */
-class Dialogue extends BaseModel
+class Dialogue extends Model
 {
     public const IN = 'in';   // Принятые
     public const OUT = 'out';  // Отправленные
@@ -36,7 +37,25 @@ class Dialogue extends BaseModel
     protected $guarded = [];
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь пользователя
      */
     public function author(): BelongsTo
     {

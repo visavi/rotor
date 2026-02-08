@@ -9,6 +9,7 @@ use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -34,7 +35,7 @@ use Illuminate\Support\HtmlString;
  * @property-read Topic            $topic
  * @property-read User             $editUser
  */
-class Post extends BaseModel
+class Post extends Model
 {
     use ConvertVideoTrait;
     use SearchableTrait;
@@ -81,7 +82,25 @@ class Post extends BaseModel
     }
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь пользователя
      */
     public function editUser(): BelongsTo
     {

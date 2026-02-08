@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int    $created_at
  * @property int    $deleted_at
  */
-class AdminAdvert extends BaseModel
+class AdminAdvert extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -31,6 +33,24 @@ class AdminAdvert extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 
     /**
      * Кеширует ссылки админской рекламы

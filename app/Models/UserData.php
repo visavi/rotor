@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Collection;
  * @property string $value
  * @property-read Collection<UserField> $field
  */
-class UserData extends BaseModel
+class UserData extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -32,6 +33,24 @@ class UserData extends BaseModel
         'value',
         'field_id',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 
     /**
      * Return field

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class Counter31
  *
@@ -12,7 +14,7 @@ namespace App\Models;
  * @property int    $hosts
  * @property int    $hits
  */
-class Counter31 extends BaseModel
+class Counter31 extends Model
 {
     /**
      * The table associated with the model.

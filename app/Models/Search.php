@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string $text
  * @property int    $created_at
  */
-class Search extends BaseModel
+class Search extends Model
 {
     /**
      * The table associated with the model.

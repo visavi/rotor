@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  * @property int    $created_at
  */
-class Ignore extends BaseModel
+class Ignore extends Model
 {
     /**
      * The table associated with the model.
@@ -33,7 +34,25 @@ class Ignore extends BaseModel
     protected $guarded = [];
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь пользователя
      */
     public function ignoring(): BelongsTo
     {

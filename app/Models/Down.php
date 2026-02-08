@@ -12,6 +12,7 @@ use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -40,7 +41,7 @@ use Illuminate\Support\HtmlString;
  * @property-read Poll                $poll
  * @property-read Load                $category
  */
-class Down extends BaseModel
+class Down extends Model
 {
     use AddFileToArchiveTrait;
     use ConvertVideoTrait;
@@ -84,8 +85,9 @@ class Down extends BaseModel
     protected function casts(): array
     {
         return [
-            'active' => 'bool',
-            'links'  => 'array',
+            'active'  => 'bool',
+            'links'   => 'array',
+            'user_id' => 'int',
         ];
     }
 
@@ -118,6 +120,14 @@ class Down extends BaseModel
     protected function active(Builder $query, bool $type = true): void
     {
         $query->where('active', $type);
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**

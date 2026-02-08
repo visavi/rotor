@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -35,7 +36,7 @@ use Illuminate\Support\HtmlString;
  * @property-read Collection<Bookmark> $bookmarks
  * @property-read Vote                 $vote
  */
-class Topic extends BaseModel
+class Topic extends Model
 {
     use SearchableTrait;
     use SortableTrait;
@@ -78,6 +79,24 @@ class Topic extends BaseModel
             'visits' => ['field' => 'visits', 'label' => __('main.views')],
             'posts'  => ['field' => 'count_posts', 'label' => __('main.messages')],
         ];
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  * @property int    $created_at
  */
-class Wall extends BaseModel
+class Wall extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -33,7 +34,26 @@ class Wall extends BaseModel
     public static string $morphName = 'walls';
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'author_id' => 'int',
+            'user_id'   => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь владельца
      */
     public function author(): BelongsTo
     {

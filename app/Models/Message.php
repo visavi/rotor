@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection<File> $files
  * @property-read Collection<Dialogue> $dialogues
  */
-class Message extends BaseModel
+class Message extends Model
 {
     use ConvertVideoTrait;
     use UploadTrait;
@@ -55,7 +55,25 @@ class Message extends BaseModel
     public string $uploadPath = '/uploads/messages';
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь владельца
      */
     public function author(): BelongsTo
     {

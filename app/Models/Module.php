@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -22,7 +23,7 @@ use Illuminate\Support\Str;
  * @property int    $updated_at
  * @property int    $created_at
  */
-class Module extends BaseModel
+class Module extends Model
 {
     /**
      * Indicates if the model should be timestamped.

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class StickersCategory
  *
@@ -12,7 +14,7 @@ namespace App\Models;
  * @property int    $updated_at
  * @property int    $created_at
  */
-class StickersCategory extends BaseModel
+class StickersCategory extends Model
 {
     /**
      * Indicates if the model should be timestamped.

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class VoteAnswer
  *
@@ -12,7 +14,7 @@ namespace App\Models;
  * @property string $answer
  * @property int    $result
  */
-class VoteAnswer extends BaseModel
+class VoteAnswer extends Model
 {
     /**
      * The table associated with the model.

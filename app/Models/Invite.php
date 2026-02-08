@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int    $used_at
  * @property int    $created_at
  */
-class Invite extends BaseModel
+class Invite extends Model
 {
     /**
      * The table associated with the model.
@@ -38,7 +38,25 @@ class Invite extends BaseModel
     protected $guarded = [];
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь получателя
      */
     public function inviteUser(): BelongsTo
     {

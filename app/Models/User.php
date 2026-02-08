@@ -75,7 +75,7 @@ use Illuminate\Support\Str;
  * @property int    $created_at
  * @property-read Collection<UserData> $data
  */
-class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable;
     use Authorizable;

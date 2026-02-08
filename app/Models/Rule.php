@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class Rule
  *
@@ -11,7 +13,7 @@ namespace App\Models;
  * @property string $text
  * @property int    $created_at
  */
-class Rule extends BaseModel
+class Rule extends Model
 {
     /**
      * Indicates if the model should be timestamped.

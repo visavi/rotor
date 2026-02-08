@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class Counter
  *
@@ -16,7 +18,7 @@ namespace App\Models;
  * @property int    $hosts24
  * @property int    $hits24
  */
-class Counter extends BaseModel
+class Counter extends Model
 {
     /**
      * Indicates if the model should be timestamped.

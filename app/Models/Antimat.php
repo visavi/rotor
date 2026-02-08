@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
  * @property int    $id
  * @property string $string
  */
-class Antimat extends BaseModel
+class Antimat extends Model
 {
     /**
      * The table associated with the model.

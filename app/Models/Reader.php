@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * Class Reader
  *
@@ -13,7 +16,7 @@ namespace App\Models;
  * @property string $ip
  * @property int    $created_at
  */
-class Reader extends BaseModel
+class Reader extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -26,9 +29,27 @@ class Reader extends BaseModel
     protected $guarded = [];
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
      * Counting stat
      */
-    public static function countingStat(BaseModel $model): void
+    public static function countingStat(Model $model): void
     {
         $reader = self::query()
             ->where('relate_type', $model->getMorphClass())

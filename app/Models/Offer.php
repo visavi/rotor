@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -35,7 +36,7 @@ use Illuminate\Support\HtmlString;
  * @property-read Poll                $poll
  * @property-read User                $replyUser
  */
-class Offer extends BaseModel
+class Offer extends Model
 {
     use SearchableTrait;
     use SortableTrait;
@@ -101,6 +102,24 @@ class Offer extends BaseModel
             'name'     => ['field' => 'title', 'label' => __('main.title')],
             'status'   => ['field' => 'status', 'label' => __('main.status')],
         ];
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**

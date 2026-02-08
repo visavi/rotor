@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * Class Online
  *
@@ -12,7 +15,7 @@ namespace App\Models;
  * @property int    $updated_at
  * @property int    $user_id
  */
-class Online extends BaseModel
+class Online extends Model
 {
     /**
      * The table associated with the model.
@@ -38,4 +41,22 @@ class Online extends BaseModel
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 }

@@ -5,4 +5,5 @@ return [
     App\Providers\EventServiceProvider::class,
     App\Providers\ImageServiceProvider::class,
     App\Providers\ModuleServiceProvider::class,
+    App\Providers\MorphMapServiceProvider::class,
 ];

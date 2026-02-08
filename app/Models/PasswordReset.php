@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Date;
  * @property int    $token
  * @property Date   $created_at
  */
-class PasswordReset extends BaseModel
+class PasswordReset extends Model
 {
     /**
      * The primary key for the model.

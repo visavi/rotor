@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
 
@@ -19,7 +20,7 @@ use Illuminate\Support\HtmlString;
  * @property int    $created_at
  * @property int    $explain
  */
-class Banhist extends BaseModel
+class Banhist extends Model
 {
     /**
      * The table associated with the model.
@@ -39,6 +40,16 @@ class Banhist extends BaseModel
     protected $guarded = [];
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
      * Типы банов
      */
     public const BAN = 'ban';    // Бан
@@ -46,7 +57,15 @@ class Banhist extends BaseModel
     public const CHANGE = 'change'; // Изменение
 
     /**
-     * Возвращает связь пользователей
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь пользователя
      */
     public function sendUser(): BelongsTo
     {

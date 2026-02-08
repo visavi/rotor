@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 /**
  * Class Error
  *
@@ -17,7 +20,7 @@ namespace App\Models;
  * @property string $brow
  * @property int    $created_at
  */
-class Error extends BaseModel
+class Error extends Model
 {
     /**
      * Indicates if the model should be timestamped.
@@ -28,4 +31,22 @@ class Error extends BaseModel
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 }

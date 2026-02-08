@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection<VoteAnswer> $answers
  * @property-read Collection<Poll>       $polls
  */
-class Vote extends BaseModel
+class Vote extends Model
 {
     use SearchableTrait;
 

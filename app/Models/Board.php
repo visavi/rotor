@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Traits\CategoryTreeTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Board             $parent
  * @property-read Collection<Board> $children
  */
-class Board extends BaseModel
+class Board extends Model
 {
     use CategoryTreeTrait;
     use UploadTrait;

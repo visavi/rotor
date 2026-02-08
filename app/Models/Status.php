@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class Status
  *
@@ -13,7 +15,7 @@ namespace App\Models;
  * @property string $name
  * @property string $color
  */
-class Status extends BaseModel
+class Status extends Model
 {
     /**
      * The table associated with the model.

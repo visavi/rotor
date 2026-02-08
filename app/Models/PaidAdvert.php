@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int    $created_at
  * @property int    $deleted_at
  */
-class PaidAdvert extends BaseModel
+class PaidAdvert extends Model
 {
     public const TOP_ALL = 'top_all';
     public const TOP = 'top';
@@ -44,8 +46,9 @@ class PaidAdvert extends BaseModel
     protected function casts(): array
     {
         return [
-            'bold'  => 'bool',
-            'names' => 'array',
+            'bold'    => 'bool',
+            'names'   => 'array',
+            'user_id' => 'int',
         ];
     }
 
@@ -58,6 +61,14 @@ class PaidAdvert extends BaseModel
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
 
     /**
      * Get places

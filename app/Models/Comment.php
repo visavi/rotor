@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -26,7 +28,7 @@ use Illuminate\Support\HtmlString;
  * @property-read Collection<Poll> $polls
  * @property-read Poll             $poll
  */
-class Comment extends BaseModel
+class Comment extends Model
 {
     use SearchableTrait;
 
@@ -41,6 +43,16 @@ class Comment extends BaseModel
     protected $guarded = [];
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
      * Morph name
      */
     public static string $morphName = 'comments';
@@ -51,6 +63,14 @@ class Comment extends BaseModel
     public function searchableFields(): array
     {
         return ['text'];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**

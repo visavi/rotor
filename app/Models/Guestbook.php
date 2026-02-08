@@ -8,6 +8,7 @@ use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\DB;
  * @property int    $updated_at
  * @property-read Collection<File> $files
  */
-class Guestbook extends BaseModel
+class Guestbook extends Model
 {
     use ConvertVideoTrait;
     use SearchableTrait;
@@ -76,7 +77,25 @@ class Guestbook extends BaseModel
     }
 
     /**
-     * Возвращает связь пользователей
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'user_id' => 'int',
+        ];
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    /**
+     * Возвращает связь пользователя
      */
     public function editUser(): BelongsTo
     {

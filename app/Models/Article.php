@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -43,7 +44,7 @@ use Illuminate\Support\Str;
  * @property-read Poll                $poll
  * @property-read Blog                $category
  */
-class Article extends BaseModel
+class Article extends Model
 {
     use SearchableTrait;
     use SortableTrait;
@@ -82,6 +83,7 @@ class Article extends BaseModel
         return [
             'active'       => 'bool',
             'published_at' => 'datetime',
+            'user_id'      => 'int',
         ];
     }
 
@@ -125,6 +127,14 @@ class Article extends BaseModel
     protected function active(Builder $query, bool $active = true): void
     {
         $query->where('active', $active);
+    }
+
+    /**
+     * Возвращает связь пользователя
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**
