@@ -254,6 +254,7 @@ class ArticleController extends AdminController
                 }
 
                 $article->tags()->sync($tagIds);
+                clearCache('tagCloud');
 
                 $flash = $isDraft ? __('blogs.article_success_edited') : __('blogs.article_success_created');
 
@@ -288,6 +289,8 @@ class ArticleController extends AdminController
 
         if ($validator->isValid()) {
             $article->delete();
+
+            clearCache('tagCloud');
 
             setFlash('success', __('blogs.article_success_deleted'));
         } else {

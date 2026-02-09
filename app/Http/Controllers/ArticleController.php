@@ -263,6 +263,7 @@ class ArticleController extends Controller
                 }
 
                 $article->tags()->sync($tagIds);
+                clearCache('tagCloud');
 
                 $created = $isModeration ? __('blogs.article_moderation_text') : __('blogs.article_success_created');
                 $flash = $isDraft ? __('blogs.article_success_edited') : $created;
