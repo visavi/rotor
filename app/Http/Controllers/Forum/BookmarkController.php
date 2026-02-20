@@ -50,8 +50,6 @@ class BookmarkController extends Controller
 
         $tid = int($request->input('tid'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
         $topic = Topic::query()->find($tid);
         $validator->true($topic, __('forums.topic_not_exist'));
 
@@ -97,8 +95,7 @@ class BookmarkController extends Controller
     {
         $topicIds = intar($request->input('del'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->notEmpty($topicIds, __('forums.bookmarks_missing'));
+        $validator->notEmpty($topicIds, __('forums.bookmarks_missing'));
 
         if ($validator->isValid()) {
             Bookmark::query()

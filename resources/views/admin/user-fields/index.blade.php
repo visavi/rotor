@@ -29,7 +29,7 @@
                     {{ $field->name }}
                     <div class="float-end">
                         <a href="/admin/user-fields/{{ $field->id }}/edit"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/user-fields/{{ $field->id }}" onclick="return deletePost(this)" data-token="{{ csrf_token() }}"><i class="fa fa-times text-muted"></i></a>
+                        <a href="/admin/user-fields/{{ $field->id }}" onclick="return deletePost(this)"><i class="fa fa-times text-muted"></i></a>
                     </div>
                 </div>
 

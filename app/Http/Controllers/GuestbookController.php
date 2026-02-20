@@ -48,8 +48,7 @@ class GuestbookController extends Controller
         $msg = $request->input('msg');
         $user = $request->user();
 
-        $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-            ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')])
+        $validator->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
         /* Проверка для гостей */
@@ -128,8 +127,7 @@ class GuestbookController extends Controller
         }
 
         if ($request->isMethod('post')) {
-            $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $post->update([

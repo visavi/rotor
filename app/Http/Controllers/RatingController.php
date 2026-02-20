@@ -155,7 +155,6 @@ class RatingController extends Controller
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
             ->true(isAdmin(User::ADMIN), __('main.page_only_admins'))
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEmpty($id, [__('validator.deletion')]);
 
         if ($validator->isValid()) {

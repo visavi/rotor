@@ -82,7 +82,6 @@ class AjaxController extends Controller
         $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 
         $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->true($model, __('main.message_not_found'))
             ->false($spam, __('ajax.complaint_already_sent'));
 
@@ -119,8 +118,6 @@ class AjaxController extends Controller
         $type = $request->input('type');
         $rid = int($request->input('rid'));
         $id = int($request->input('id'));
-
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
 
         if ($validator->isValid()) {
             $delComments = Comment::query()
@@ -162,10 +159,6 @@ class AjaxController extends Controller
             Comment::$morphName,
         ];
 
-        if ($request->input('_token') !== csrf_token()) {
-            return response()->json(['success' => false, 'message' => 'Invalid token']);
-        }
-
         $type = $request->input('type');
         $vote = $request->input('vote');
 
@@ -184,7 +177,7 @@ class AjaxController extends Controller
             ->first();
 
         if (! $post) {
-            return response()->json(['success' => false, 'message' => 'Record not found']);
+            return response()->json(['success' => false, 'message' => __('main.record_not_found')]);
         }
 
         $poll = $post->poll()->firstOrNew();
@@ -269,7 +262,6 @@ class AjaxController extends Controller
             ->count();
 
         $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
 
         if ($model->id) {
@@ -364,7 +356,7 @@ class AjaxController extends Controller
             ]);
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->true($file->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
 
         if ($validator->isValid()) {

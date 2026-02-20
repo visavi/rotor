@@ -133,11 +133,11 @@
 
                             <div class="section-action js-rating">
                                 @if (getUser() && getUser('id') !== $data->user_id)
-                                    <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-minus"></i></a>
+                                    <a class="post-rating-down{{ $data->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-"><i class="fa fa-minus"></i></a>
                                 @endif
                                 <b>{{ formatNum($data->rating) }}</b>
                                 @if (getUser() && getUser('id') !== $data->user_id)
-                                    <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-plus"></i></a>
+                                    <a class="post-rating-up{{ $data->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+"><i class="fa fa-plus"></i></a>
                                 @endif
                             </div>
                         </div>

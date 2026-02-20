@@ -51,7 +51,7 @@
 
                     <div class="text-end">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteSpam(this)" data-id="{{ $record->id }}" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                            <a href="#" onclick="return deleteSpam(this)" data-id="{{ $record->id }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>

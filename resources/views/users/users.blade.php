@@ -39,6 +39,7 @@
 
         <div class="section-form mb-3 shadow">
             <form action="{{ route('users.index', ['type' => $type, 'sort' => $sort]) }}" method="post">
+                @csrf
                 <div class="input-group{{ hasError('user') }}">
                     <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user', $user) }}" placeholder="{{ __('main.user_login') }}" required>
                     <button class="btn btn-primary">{{ __('main.search') }}</button>

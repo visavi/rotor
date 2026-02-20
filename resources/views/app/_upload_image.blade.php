@@ -9,7 +9,7 @@ $pointer = empty($paste) ? null : 'cursor-pointer';
         @foreach ($files as $file)
             <span class="js-file">
                 <span onclick="{{ $click }}" class="{{ $pointer }}">{{ resizeImage($file->path, ['class' => 'thumbnail']) }}</span>
-                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
+                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
             </span>
         @endforeach
     @endif
@@ -18,13 +18,13 @@ $pointer = empty($paste) ? null : 'cursor-pointer';
 <div class="js-image-template d-none">
     <span class="js-file">
         <span onclick="{{ $click }}" class="{{ $pointer }}"><img src="" alt="" class="thumbnail"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" data-token="{{ csrf_token() }}"><i class="fas fa-times"></i></a>
+        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
     </span>
 </div>
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" accept="image/*" onchange="return submitImage(this, {{ $paste ?? false }});" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" data-token="{{ csrf_token() }}" hidden>
+        <input id="file" type="file" name="file" accept="image/*" onchange="return submitImage(this, {{ $paste ?? false }});" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>

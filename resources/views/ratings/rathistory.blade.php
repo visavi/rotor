@@ -40,7 +40,7 @@
 
                     <div class="float-end">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>

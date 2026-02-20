@@ -507,8 +507,7 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($del, __('validator.deletion'));
+        $validator->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             $posts = Post::query()

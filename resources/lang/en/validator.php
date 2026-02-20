@@ -3,7 +3,7 @@
 return [
     'user'         => 'User is not found!',
     'user_login'   => 'User :login not found!',
-    'token'        => 'Invalid session id, retry action!',
+    'token'        => 'Your session has expired, please try again!',
     'flood'        => 'Anti-flood! Please wait :sec seconds before sending again!',
     'text'         => 'Post text is too long or short!',
     'text_long'    => 'Post text is too long!',

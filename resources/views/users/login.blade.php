@@ -14,7 +14,7 @@
 @section('content')
     <div class="section-form mb-3 shadow">
         <form method="post">
-
+            @csrf
             <div class="mb-3">
                 <label for="inputLogin" class="form-label">{{ __('users.login_or_email') }}:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login') }}" required>

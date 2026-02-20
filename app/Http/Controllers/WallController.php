@@ -111,7 +111,6 @@ class WallController extends Controller
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEmpty($id, __('validator.deletion'))
             ->notEmpty($user, __('validator.user'))
             ->true(isAdmin() || getUser('id') === $user->id, __('main.deleted_only_admins'));

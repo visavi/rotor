@@ -59,11 +59,11 @@
 
                     <div class="text-end section-action js-rating">
                         @if (getUser() && getUser('id') !== $photo->user_id)
-                            <a class="post-rating-down<?= $photo->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
+                            <a class="post-rating-down<?= $photo->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="-"><i class="fa fa-arrow-down"></i></a>
                         @endif
                         <b>{{ formatNum($photo->rating) }}</b>
                         @if (getUser() && getUser('id') !== $photo->user_id)
-                            <a class="post-rating-up<?= $photo->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
+                            <a class="post-rating-up<?= $photo->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo->id }}" data-type="{{ $photo->getMorphClass() }}" data-vote="+"><i class="fa fa-arrow-up"></i></a>
                         @endif
                     </div>
                 </div>

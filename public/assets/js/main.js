@@ -1,6 +1,12 @@
 $(function () {
     let body = $('body');
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     prettyPrint();
 
     tags.init(".input-tag", {
@@ -258,11 +264,9 @@ window.sendComplaint = function (el) {
                 id: $(el).data('id'),
                 type: $(el).data('type'),
                 page: $(el).data('page'),
-                _token: $(el).data('token')
             },
             dataType: 'json', type: 'post', url: '/ajax/complaint',
             success: function (data) {
-
                 $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
                 if (data.success) {
@@ -282,7 +286,6 @@ window.bookmark = function (el) {
     $.ajax({
         data: {
             tid: $(el).data('tid'),
-            _token: $(el).data('token')
         },
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function (data) {
@@ -315,14 +318,12 @@ window.deletePost = function (el) {
         if (! result) return;
 
         const $el = $(el);
-        const token = $el.data('_token');
         const url = $el.attr('href');
 
         $.ajax({
             url: url,
-            type: 'DELETE',
+            type: 'delete',
             dataType: 'json',
-            data: { _token: token },
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
@@ -347,7 +348,6 @@ window.deleteComment = function (el) {
                 id: $(el).data('id'),
                 rid: $(el).data('rid'),
                 type: $(el).data('type'),
-                _token: $(el).data('token')
             },
             dataType: 'json', type: 'post', url: '/ajax/delcomment',
             success: function (data) {
@@ -371,7 +371,6 @@ window.changeRating = function (el) {
             id: $(el).data('id'),
             type: $(el).data('type'),
             vote: $(el).data('vote'),
-            _token: $(el).data('token')
         },
         dataType: 'json',
         type: 'post',
@@ -408,7 +407,6 @@ window.deleteRating = function (el) {
         $.ajax({
             data: {
                 id: $(el).data('id'),
-                _token: $(el).data('token')
             },
             dataType: 'json', type: 'post', url: '/ratings/delete',
             success: (data)=> {
@@ -430,7 +428,7 @@ window.deleteRating = function (el) {
  */
 window.deleteSpam = function (el) {
     $.ajax({
-        data: {id: $(el).data('id'), _token: $(el).data('token')},
+        data: {id: $(el).data('id')},
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
             if (data.success) {
@@ -453,7 +451,7 @@ window.deleteWall = function (el) {
         if (!result) return;
 
         $.ajax({
-            data: {id: $(el).data('id'), login: $(el).data('login'), _token: $(el).data('token')},
+            data: {id: $(el).data('id'), login: $(el).data('login')},
             dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
             success: function (data) {
                 if (data.success) {
@@ -490,7 +488,6 @@ window.submitFile = function (el) {
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
-    form.append('_token', $(el).data('token'));
 
     $.ajax({
         data: form,
@@ -542,7 +539,6 @@ window.submitImage = function (el, paste) {
     form.append('file', el.files[0]);
     form.append('id', $(el).data('id'));
     form.append('type', $(el).data('type'));
-    form.append('_token', $(el).data('token'));
 
     $.ajax({
         data: form,
@@ -613,13 +609,12 @@ window.deleteFile = function (el) {
         const $el = $(el);
         const id = $el.data('id');
         const type = $el.data('type');
-        const token = $el.data('token');
 
         $.ajax({
             url: '/ajax/file/delete',
             type: 'POST',
             dataType: 'json',
-            data: { id, type, _token: token },
+            data: { id, type},
             success: function (data) {
                 if (!data.success) {
                     toastr.error(data.message);

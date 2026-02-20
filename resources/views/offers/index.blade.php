@@ -48,11 +48,11 @@
             <div class="section mb-3 shadow">
                 <div class="float-end js-rating">
                     @if (getUser() && getUser('id') !== $data->user_id)
-                        <a class="post-rating-down{{ $data->poll?->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
+                        <a class="post-rating-down{{ $data->poll?->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="-"><i class="fa fa-arrow-down"></i></a>
                     @endif
                     <b>{{ formatNum($data->rating) }}</b>
                     @if (getUser() && getUser('id') !== $data->user_id)
-                        <a class="post-rating-up{{ $data->poll?->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
+                        <a class="post-rating-up{{ $data->poll?->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ $data->getMorphClass() }}" data-vote="+"><i class="fa fa-arrow-up"></i></a>
                     @endif
                 </div>
 

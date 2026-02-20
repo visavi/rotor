@@ -18,7 +18,7 @@
 
         <div class="section-form mb-3 shadow">
             <form action="/admin/delusers" method="post">
-
+                @csrf
                 <div class="mb-3">
                     <label for="period" class="form-label">{{ __('main.period') }}:</label>
                     <select class="form-select" id="period" name="period">

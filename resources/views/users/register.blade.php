@@ -30,7 +30,7 @@
 
     <div class="section-form mb-3 shadow">
         <form action="/register" method="post">
-
+            @csrf
             <div class="mb-3{{ hasError('login') }}">
                 <label for="inputLogin" class="form-label">{{ __('users.login') }}:</label>
                 <input onkeyup="return checkLogin(this);" class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>

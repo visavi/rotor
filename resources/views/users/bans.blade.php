@@ -9,6 +9,7 @@
         @if (! $banhist->explain && setting('addbansend'))
             <div class="section-form mb-3 shadow">
                 <form method="post" action="/ban">
+                    @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('users.explanation') }}:</label>
                         <textarea class="form-control" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>

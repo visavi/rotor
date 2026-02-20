@@ -175,7 +175,8 @@ Route::controller(HomeController::class)
         Route::get('/search', 'search')->name('search');
         Route::get('/captcha', 'captcha')->name('captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+');
-        Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban');
+        Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban')
+            ->withoutMiddleware('web');
 
         Route::get('/403', 'error403');
         Route::get('/404', 'error404');

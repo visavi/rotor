@@ -85,7 +85,6 @@ class SpamController extends AdminController
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
             ->notEmpty($id, __('validator.deletion'));
 
         if ($validator->isValid()) {

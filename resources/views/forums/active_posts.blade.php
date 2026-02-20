@@ -32,7 +32,7 @@
                 <i class="fa fa-file-alt"></i> <b><a href="{{ route('topics.topic', ['id' => $data->topic_id, 'pid' => $data->id]) }}">{{ $data->topic->title }}</a></b>
 
                 @if (isAdmin())
-                    <a href="{{ route('forums.active-delete', ['id' => $data->id]) }}" class="float-end" onclick="return deletePost(this)" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
+                    <a href="{{ route('forums.active-delete', ['id' => $data->id]) }}" class="float-end" onclick="return deletePost(this)" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></a>
                 @endif
 
                 <div class="section-message">

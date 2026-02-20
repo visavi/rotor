@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -30,7 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CheckUserState::class,
 
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            // \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
         ]);
@@ -67,15 +68,23 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->renderable(function (HttpExceptionInterface $exception, Request $request) {
-            /* $sessionMiddleware = resolve(StartSession::class);
-             $AddQueuedCookiesToResponse = resolve(AddQueuedCookiesToResponse::class);
-
-             $decrypter = resolve(EncryptCookies::class);
-             $decrypter->handle(request(), fn () => $sessionMiddleware->handle(request(), fn () => response('')));
-
-             dd($request->user(), $request->session()->all());*/
-
             saveErrorLog($exception->getStatusCode(), $exception->getMessage());
+
+            if (
+                $exception instanceof TokenMismatchException
+                || ($exception->getPrevious() instanceof TokenMismatchException)
+            ) {
+                if (! $request->expectsJson()) {
+                    return redirect()->back()
+                        ->withInput($request->except('_token'))
+                        ->withErrors(['token' => __('validator.token')]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => __('validator.token'),
+                ]);
+            }
 
             if ($request->wantsJson()) {
                 return response()->json([

@@ -107,11 +107,11 @@
 
         <div class="my-2 js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $down->user_id)
-                <a class="post-rating-down<?= $down->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="-" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-down"></i></a>
+                <a class="post-rating-down<?= $down->vote === '-' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="-"><i class="fa fa-arrow-down"></i></a>
             @endif
             <b>{{ formatNum($down->rating) }}</b>
             @if (getUser() && getUser('id') !== $down->user_id)
-                <a class="post-rating-up<?= $down->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="+" data-token="{{ csrf_token() }}"><i class="fa fa-arrow-up"></i></a>
+                <a class="post-rating-up<?= $down->vote === '+' ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $down->id }}" data-type="{{ $down->getMorphClass() }}" data-vote="+"><i class="fa fa-arrow-up"></i></a>
             @endif
         </div>
 

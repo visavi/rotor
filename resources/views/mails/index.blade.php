@@ -14,7 +14,7 @@
 @section('content')
     <div class="section-form mb-3 shadow">
         <form method="post" action="/mails">
-
+            @csrf
             @if (! getUser())
                 <div class="mb-3{{ hasError('name') }}">
                     <label for="inputName" class="form-label">{{ __('mails.name') }}:</label>
