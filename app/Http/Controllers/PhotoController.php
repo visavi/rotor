@@ -82,7 +82,7 @@ class PhotoController extends Controller
             $text = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('photo_title_min'), setting('photo_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('photo_text_min'), setting('photo_text_max'), ['text' => __('validator.text_long')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
@@ -153,7 +153,7 @@ class PhotoController extends Controller
             $text = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('photo_title_min'), setting('photo_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('photo_text_min'), setting('photo_text_max'), ['text' => __('validator.text_long')]);
 
@@ -208,7 +208,6 @@ class PhotoController extends Controller
 
             $validator
                 ->true($user, __('main.not_authorized'))
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($photo->closed, ['msg' => __('main.closed_comments')]);
@@ -293,7 +292,6 @@ class PhotoController extends Controller
             $msg = $request->input('msg');
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->empty($photo->closed, __('main.closed_comments'));
 

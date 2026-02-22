@@ -31,8 +31,6 @@ class IgnoreController extends Controller
         if ($request->isMethod('post')) {
             $page = int($request->input('page', 1));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
             $user = getUserByLogin($login);
             $validator->notEmpty($user, ['user' => __('validator.user')]);
 
@@ -93,8 +91,7 @@ class IgnoreController extends Controller
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, 0, 1000, ['msg' => __('users.note_to_big')]);
+            $validator->length($msg, 0, 1000, ['msg' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
                 $ignore->update([

@@ -64,8 +64,7 @@ class RatingController extends Controller
         if ($request->isMethod('post')) {
             $text = $request->input('text');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($text, 5, 250, ['text' => __('validator.text')]);
+            $validator->length($text, 5, 250, ['text' => __('validator.text')]);
 
             if ($vote === 'minus' && $this->user->rating < 1) {
                 $validator->addError(__('ratings.reputation_positive'));

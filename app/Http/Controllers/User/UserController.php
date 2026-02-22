@@ -66,8 +66,7 @@ class UserController extends Controller
         if ($request->isMethod('post')) {
             $notice = $request->input('notice');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
+            $validator->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
 
             if ($validator->isValid()) {
                 $user->note()->updateOrCreate([], [
@@ -332,7 +331,7 @@ class UserController extends Controller
             $birthday = $request->input('birthday');
             $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->url($site, ['site' => __('validator.site')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
                 ->phone($phone, ['phone' => __('validator.phone')], false)
@@ -407,7 +406,7 @@ class UserController extends Controller
             $email = strtolower((string) $request->input('email'));
             $domain = Str::substr(strrchr($email, '@'), 1);
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->email($email, ['email' => __('validator.email')]);
 
@@ -490,7 +489,7 @@ class UserController extends Controller
             $notify = $request->input('notify') ? 1 : 0;
             $subscribe = $request->input('subscribe') ? Str::random(32) : null;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => __('users.theme_invalid')])
                 ->true(in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => __('users.theme_not_installed')])
                 ->regex($language, '|^[a-z]+$|', ['language' => __('users.language_invalid')])

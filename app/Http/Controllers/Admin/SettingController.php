@@ -28,12 +28,11 @@ class SettingController extends AdminController
             $mods = $request->input('mods');
             $opt = $request->input('opt');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
+            $validator->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
 
             foreach ($sets as $name => $value) {
                 if (empty($opt[$name]) || ! empty($value)) {
-                    $validator->length($sets[$name], 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => $name])]);
+                    $validator->length($value, 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => $name])]);
                 }
             }
 

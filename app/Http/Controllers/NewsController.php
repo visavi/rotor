@@ -87,8 +87,8 @@ class NewsController extends Controller
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->true(getUser(), __('main.not_authorized'))
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
+                ->true(getUser(), __('main.not_authorized'))
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->empty($news->closed, ['msg' => __('news.closed_news')]);
@@ -177,9 +177,7 @@ class NewsController extends Controller
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

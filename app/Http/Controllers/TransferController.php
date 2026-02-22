@@ -48,7 +48,6 @@ class TransferController extends Controller
         $msg = $request->input('msg');
 
         $validator
-            ->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
             ->true($this->user, ['user' => __('validator.user')])
             ->length($msg, 0, setting('comment_text_max'), ['msg' => __('validator.comment_long')])
             ->gte(getUser('point'), setting('sendmoneypoint'), ['money' => __('transfers.transfer_point', ['point' => plural(setting('sendmoneypoint'), setting('scorename'))])])

@@ -43,8 +43,7 @@ class GuestbookController extends AdminController
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($msg, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
@@ -82,8 +81,7 @@ class GuestbookController extends AdminController
         if ($request->isMethod('post')) {
             $reply = $request->input('reply');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($reply, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($reply, setting('guestbook_text_min'), setting('guestbook_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $post->update([
@@ -110,8 +108,7 @@ class GuestbookController extends AdminController
         $page = int($request->input('page', 1));
         $del = intar($request->input('chosen'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($del, __('validator.deletion'));
+        $validator->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             $posts = Guestbook::query()->whereIn('id', $del)->get();
@@ -137,8 +134,7 @@ class GuestbookController extends AdminController
         $page = int($request->input('page', 1));
         $active = intar($request->input('chosen'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($active, __('validator.published'));
+        $validator->true($active, __('validator.published'));
 
         if ($validator->isValid()) {
             $posts = Guestbook::query()->whereIn('id', $active)->get();

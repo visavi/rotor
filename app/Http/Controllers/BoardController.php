@@ -108,7 +108,6 @@ class BoardController extends Controller
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, setting('board_title_min'), setting('board_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('board_text_min'), setting('board_text_max'), ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)
@@ -187,7 +186,6 @@ class BoardController extends Controller
             $board = Board::query()->find($bid);
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, setting('board_title_min'), setting('board_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('board_text_min'), setting('board_text_max'), ['text' => __('validator.text')])
                 ->phone($phone, ['phone' => __('validator.phone')], false)

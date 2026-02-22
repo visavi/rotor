@@ -54,7 +54,7 @@ class VoteController extends Controller
             $poll = int($request->input('poll'));
             $votePoll = $vote->poll()->first();
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->empty($votePoll, __('votes.voting_passed'))
                 ->notEmpty($poll, __('votes.answer_not_chosen'));
 
@@ -176,7 +176,7 @@ class VoteController extends Controller
 
             $answers = array_unique(array_diff($answers, ['']));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($question, setting('vote_title_min'), setting('vote_title_max'), ['question' => __('validator.text')])
                 ->length($description, setting('vote_text_min'), setting('vote_text_max'), ['description' => __('validator.text')])
                 ->between(count($answers), 2, 10, ['answer' => __('votes.answer_not_enough')]);

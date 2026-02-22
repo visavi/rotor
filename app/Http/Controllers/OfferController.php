@@ -75,7 +75,7 @@ class OfferController extends Controller
             $title = $request->input('title');
             $text = $request->input('text');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('offer_title_min'), setting('offer_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('offer_text_min'), setting('offer_text_max'), ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -137,7 +137,7 @@ class OfferController extends Controller
             $text = $request->input('text');
             $type = $request->input('type');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('offer_title_min'), setting('offer_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('offer_text_min'), setting('offer_text_max'), ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
@@ -192,7 +192,6 @@ class OfferController extends Controller
 
             $validator
                 ->true(getUser(), __('main.not_authorized'))
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($offer->closed, ['msg' => __('offers.offer_closed')]);
@@ -277,9 +276,7 @@ class OfferController extends Controller
             $msg = $request->input('msg');
             $page = int($request->input('page', 1));
 
-            $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

@@ -22,9 +22,7 @@ class AntimatController extends AdminController
         if ($request->isMethod('post')) {
             $word = Str::lower((string) $request->input('word'));
 
-            $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->notEmpty($word, __('admin.antimat.not_enter_word'));
+            $validator->notEmpty($word, __('admin.antimat.not_enter_word'));
 
             $duplicate = Antimat::query()->where('string', $word)->first();
             $validator->empty($duplicate, __('admin.antimat.word_listed'));

@@ -47,8 +47,7 @@ class ArticleController extends AdminController
 
         $name = $request->input('name');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($name, setting('blog_category_min'), setting('blog_category_max'), ['name' => __('validator.text')]);
+        $validator->length($name, setting('blog_category_min'), setting('blog_category_max'), ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Blog::query()->max('sort') + 1;
@@ -92,7 +91,7 @@ class ArticleController extends AdminController
             $sort = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($name, setting('blog_category_min'), setting('blog_category_max'), ['title' => __('validator.text')])
                 ->notEqual($parent, $category->id, ['parent' => __('blogs.category_not_exist')]);
 
@@ -216,7 +215,6 @@ class ArticleController extends AdminController
             $category = Blog::query()->find($cid);
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, setting('blog_title_min'), setting('blog_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('blog_text_min'), setting('blog_text_max'), ['text' => __('validator.text')])
                 ->notEmpty($category, ['cid' => __('blogs.category_not_exist')])

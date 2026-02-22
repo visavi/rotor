@@ -69,7 +69,7 @@ class OfferController extends AdminController
             $type = $request->input('type');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('offer_title_min'), setting('offer_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('offer_text_min'), setting('offer_text_max'), ['text' => __('validator.text')])
                 ->in($type, Offer::TYPES, ['type' => __('offers.type_invalid')]);
@@ -114,7 +114,7 @@ class OfferController extends AdminController
             $status = $request->input('status');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($reply, setting('offer_reply_min'), setting('offer_reply_max'), ['reply' => __('validator.text')])
                 ->in($status, Offer::STATUSES, ['status' => __('offers.status_invalid')]);
 

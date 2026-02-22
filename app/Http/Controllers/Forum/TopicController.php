@@ -152,7 +152,7 @@ class TopicController extends Controller
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
+        $validator
             ->empty($topic->closed, ['msg' => __('forums.topic_closed')])
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
@@ -255,7 +255,7 @@ class TopicController extends Controller
 
         $isModer = in_array($user->login, explode(',', (string) $topic->moderators), true);
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($del, __('validator.deletion'))
             ->empty($topic->closed, __('forums.topic_closed'))
             ->equal($isModer, true, __('forums.posts_deleted_curators'));
@@ -388,7 +388,7 @@ class TopicController extends Controller
             $question = $request->input('question');
             $answers = (array) $request->input('answers');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('forum_title_min'), setting('forum_title_max'), ['title' => __('validator.text')]);
 
             if ($post) {
@@ -503,7 +503,7 @@ class TopicController extends Controller
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
@@ -543,7 +543,7 @@ class TopicController extends Controller
         $poll = int($request->input('poll'));
         $page = int($request->input('page'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($poll, __('votes.answer_not_chosen'))
             ->empty($vote->closed, __('votes.voting_closed'));
 

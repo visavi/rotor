@@ -45,7 +45,7 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('news_title_min'), setting('news_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('news_text_min'), setting('news_text_max'), ['text' => __('validator.text')]);
 
@@ -87,7 +87,7 @@ class NewsController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $top = empty($request->input('top')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('news_title_min'), setting('news_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('news_text_min'), setting('news_text_max'), ['text' => __('validator.text')]);
 

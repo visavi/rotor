@@ -34,7 +34,6 @@ class StatusController extends AdminController
             $color = $request->input('color');
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($name, 3, 30, ['name' => __('statuses.status_length')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
@@ -78,7 +77,6 @@ class StatusController extends AdminController
             $color = $request->input('color');
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($name, 3, 30, ['name' => __('statuses.status_length')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 

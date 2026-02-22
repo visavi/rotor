@@ -87,7 +87,7 @@ class AdvertController extends Controller
                 $price += setting('rekuseroptprice');
             }
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->gte($this->user->point, setting('rekuserpoint'), __('adverts.advert_point', ['point' => plural(50, setting('scorename'))]))
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])

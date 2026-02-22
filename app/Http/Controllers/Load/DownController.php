@@ -87,7 +87,6 @@ class DownController extends Controller
             $category = Load::query()->find($cid);
 
             $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($title, setting('down_title_min'), setting('down_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('down_text_min'), setting('down_text_max'), ['text' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
@@ -190,7 +189,7 @@ class DownController extends Controller
 
             $category = Load::query()->find($cid);
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('down_title_min'), setting('down_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('down_text_min'), setting('down_text_max'), ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')])
@@ -332,7 +331,6 @@ class DownController extends Controller
 
             $validator
                 ->true(getUser(), __('main.not_authorized'))
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
@@ -415,9 +413,7 @@ class DownController extends Controller
             $msg = $request->input('msg');
             $page = int($request->input('page', 1));
 
-            $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

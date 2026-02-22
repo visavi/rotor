@@ -43,7 +43,7 @@ class PhotoController extends AdminController
             $text = $request->input('text');
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('photo_title_min'), setting('photo_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('photo_text_min'), setting('photo_text_max'), ['text' => __('validator.text_long')]);
 

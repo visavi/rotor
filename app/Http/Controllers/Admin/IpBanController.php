@@ -21,8 +21,7 @@ class IpBanController extends AdminController
         if ($request->isMethod('post')) {
             $ip = $request->input('ip');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->ip($ip, ['ip' => __('admin.ipbans.ip_invalid')]);
+            $validator->ip($ip, ['ip' => __('admin.ipbans.ip_invalid')]);
 
             $duplicate = Ban::query()->where('ip', $ip)->first();
             $validator->empty($duplicate, ['ip' => __('admin.ipbans.ip_exists')]);
@@ -61,8 +60,7 @@ class IpBanController extends AdminController
         $page = int($request->input('page', 1));
         $del = intar($request->input('del'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($del, __('validator.deletion'));
+        $validator->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             Ban::query()->whereIn('id', $del)->delete();

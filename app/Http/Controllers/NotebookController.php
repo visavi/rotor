@@ -48,9 +48,7 @@ class NotebookController extends Controller
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator
-                ->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, 0, 10000, ['msg' => __('validator.text_long')], false);
+            $validator->length($msg, 0, 10000, ['msg' => __('validator.text_long')], false);
 
             if ($validator->isValid()) {
                 $this->note->fill([
