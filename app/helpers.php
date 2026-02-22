@@ -32,6 +32,7 @@ use App\Models\Sticker;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
+use cbschuld\Browser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
