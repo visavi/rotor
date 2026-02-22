@@ -56,8 +56,9 @@ class InvitationController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         $newKeys = [];
+        $inviteCount = setting('invite_count');
 
-        for ($i = 0; $i < setting('invite_count'); $i++) {
+        for ($i = 0; $i < $inviteCount; $i++) {
             $newKeys[] = [
                 'hash'       => Str::random(),
                 'user_id'    => $this->user->id,
@@ -67,6 +68,8 @@ class InvitationController extends Controller
 
         Invite::query()->insert($newKeys);
 
-        return redirect('/invitations')->with('success', __('admin.invitations.keys_success_created'));
+        return redirect()
+            ->route('invitations.index')
+            ->with('success', __('admin.invitations.keys_success_created'));
     }
 }

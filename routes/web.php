@@ -479,9 +479,10 @@ Route::controller(TransferController::class)
 
 Route::controller(InvitationController::class)
     ->prefix('invitations')
+    ->name('invitations.')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::post('/create', 'store');
+        Route::get('/', 'index')->name('index');
+        Route::post('/create', 'store')->name('store');
     });
 
 /* Личные заметки */

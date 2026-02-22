@@ -8,24 +8,18 @@ use Illuminate\Validation\Validator;
 
 class StoreRequest extends FormRequest
 {
-    public function __construct(private InviteService $inviteService)
-    {
-        parent::__construct();
-    }
-
     /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
-        return [
-            '_token' => 'required|in:' . csrf_token(),
-        ];
+        return [];
     }
 
     public function withValidator(Validator $validator)
     {
-        $lastInvite = $this->inviteService->getLastInviteByUserId(getUser('id'));
+        $inviteService = app(InviteService::class);
+        $lastInvite = $inviteService->getLastInviteByUserId($this->user()->id);
 
         $validator->after(function ($validator) use ($lastInvite) {
             if ($lastInvite) {
