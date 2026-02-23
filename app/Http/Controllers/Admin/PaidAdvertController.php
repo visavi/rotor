@@ -64,7 +64,7 @@ class PaidAdvertController extends AdminController
             $term = strtotime($term);
             $names = array_unique(array_diff($names, ['']));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->in($place, $places, ['place' => __('admin.paid_adverts.place_invalid')])
                 ->url($site, ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
@@ -128,7 +128,7 @@ class PaidAdvertController extends AdminController
             $term = strtotime($term);
             $names = array_unique(array_diff($names, ['']));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->in($place, $places, ['place' => __('admin.paid_adverts.place_invalid')])
                 ->url($site, ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])

@@ -102,7 +102,7 @@ class ForumController extends Controller
 
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->notEmpty($forum, ['fid' => 'Форума для новой темы не существует!'])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($title, setting('forum_title_min'), setting('forum_title_max'), ['title' => __('validator.text')])

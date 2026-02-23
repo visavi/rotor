@@ -42,7 +42,7 @@ class BanController extends AdminController
             $reason = $request->input('reason');
             $notice = $request->input('notice');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->false($user->level === User::BANNED && $user->timeban > SITETIME, __('admin.bans.user_banned'))
                 ->gt($time, 0, ['time' => __('admin.bans.time_not_indicated')])
                 ->in($type, ['minutes', 'hours', 'days'], ['type' => __('admin.bans.time_not_selected')])
@@ -112,7 +112,7 @@ class BanController extends AdminController
             $timeban = strtotime($timeban);
             $term = $timeban - SITETIME;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->gt($term, 0, ['timeban' => __('admin.bans.time_empty')])
                 ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
 

@@ -216,7 +216,7 @@ class LoadController extends AdminController
 
             $category = Load::query()->find($cid);
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('down_title_min'), setting('down_title_max'), ['title' => __('validator.text')])
                 ->length($text, setting('down_text_min'), setting('down_text_max'), ['text' => __('validator.text')])
                 ->notEmpty($category, ['category' => __('loads.load_not_exist')]);

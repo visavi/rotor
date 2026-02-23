@@ -22,7 +22,7 @@ class ReglistController extends AdminController
             $choice = intar($request->input('choice'));
             $action = $request->input('action');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->notEmpty($choice, __('admin.reglists.users_not_selected'))
                 ->in($action, ['yes', 'no'], ['action' => __('main.action_not_selected')]);
 

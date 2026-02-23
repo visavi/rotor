@@ -47,7 +47,7 @@ class BackupController extends AdminController
             $method = $request->input('method');
             $level = int($request->input('level'));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->notEmpty($sheets, ['sheets' => __('admin.backup.no_tables_save')])
                 ->in($method, ['none', 'gzip', 'bzip'], ['method' => __('admin.backup.wrong_compression_method')])
                 ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);

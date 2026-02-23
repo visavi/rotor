@@ -40,9 +40,7 @@ class RuleController extends AdminController
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator
-                ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->notEmpty($msg, ['msg' => __('admin.rules.rules_empty')]);
+            $validator->notEmpty($msg, ['msg' => __('admin.rules.rules_empty')]);
 
             if ($validator->isValid()) {
                 $rules->fill([

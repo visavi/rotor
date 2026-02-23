@@ -45,8 +45,7 @@ class ForumController extends AdminController
 
         $title = $request->input('title');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($title, setting('forum_category_min'), setting('forum_category_max'), ['title' => __('validator.text')]);
+        $validator->length($title, setting('forum_category_min'), setting('forum_category_max'), ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Forum::query()->max('sort') + 1;
@@ -89,7 +88,7 @@ class ForumController extends AdminController
             $sort = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('forum_category_min'), setting('forum_category_max'), ['title' => __('validator.text')])
                 ->length($description, setting('forum_description_min'), setting('forum_description_max'), ['description' => __('validator.text')])
                 ->notEqual($parent, $forum->id, ['parent' => __('forums.forum_invalid')]);
@@ -216,7 +215,7 @@ class ForumController extends AdminController
             $closed = empty($request->input('closed')) ? 0 : 1;
             $closeUserId = $closed ? getUser('id') : null;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($title, setting('forum_title_min'), setting('forum_title_max'), ['title' => __('validator.text')])
                 ->length($note, setting('forum_note_min'), setting('forum_note_max'), ['note' => __('validator.text_long')]);
 
@@ -268,8 +267,7 @@ class ForumController extends AdminController
 
             $forum = Forum::query()->find($fid);
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->notEmpty($forum, ['forum' => __('forums.forum_not_exist')]);
+            $validator->notEmpty($forum, ['forum' => __('forums.forum_not_exist')]);
 
             if ($forum) {
                 $validator->empty($forum->closed, ['forum' => __('forums.forum_closed')]);
@@ -464,8 +462,7 @@ class ForumController extends AdminController
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
+            $validator->length($msg, setting('forum_text_min'), setting('forum_text_max'), ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);
