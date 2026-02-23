@@ -105,6 +105,11 @@
             </form>
         </div>
 
-        <i class="fa fa-sync"></i> <a href="{{ route('admin.loads.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
+        <form action="{{ route('admin.loads.restatement') }}" method="post">
+            @csrf
+            <button class="btn btn-primary">
+                <i class="fa fa-sync"></i> {{ __('main.recount') }}
+            </button>
+        </form>
     @endif
 @stop

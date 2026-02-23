@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\Finder\Finder;
@@ -35,7 +34,7 @@ class CheckerController extends AdminController
     /**
      * Сканирование сайта
      */
-    public function scan(Request $request): RedirectResponse
+    public function scan(): RedirectResponse
     {
         $files = $this->scanFiles(base_path());
 

@@ -113,7 +113,15 @@
     {{ $items->links() }}
 
     @if (isAdmin('boss'))
-        <i class="far fa-list-alt"></i> <a href="{{ route('admin.boards.categories') }}">{{ __('boards.categories') }}</a><br>
-        <i class="fa fa-sync"></i> <a href="{{ route('admin.boards.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
+        <div class="mb-3">
+            <i class="far fa-list-alt"></i> <a href="{{ route('admin.boards.categories') }}">{{ __('boards.categories') }}</a>
+        </div>
+
+        <form action="{{ route('admin.boards.restatement') }}" method="post">
+            @csrf
+            <button class="btn btn-primary">
+                <i class="fa fa-sync"></i> {{ __('main.recount') }}
+            </button>
+        </form>
     @endif
 @stop

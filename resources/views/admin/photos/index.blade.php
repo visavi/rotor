@@ -62,7 +62,12 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-sync"></i> <a href="{{ route('admin.photos.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
+            <form action="{{ route('admin.photos.restatement') }}" method="post">
+                @csrf
+                <button class="btn btn-primary">
+                    <i class="fa fa-sync"></i> {{ __('main.recount') }}
+                </button>
+            </form>
         @endif
     @else
         {{ showError(__('photos.empty_photos')) }}

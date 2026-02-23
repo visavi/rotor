@@ -63,9 +63,16 @@
 
     {{ $votes->links() }}
 
-    @if (isAdmin('boss'))
-        <i class="fa fa-sync"></i> <a href="{{ route('admin.votes.restatement', ['_token' => csrf_token()]) }}">{{ __('main.recount') }}</a><br>
-    @endif
+    <div class="mb-3">
+        <i class="fa fa-briefcase"></i> <a href="{{ route('admin.votes.history') }}">{{ __('votes.archive_votes') }}</a><br>
+    </div>
 
-    <i class="fa fa-briefcase"></i> <a href="{{ route('admin.votes.history') }}">{{ __('votes.archive_votes') }}</a><br>
+    @if (isAdmin('boss'))
+        <form action="{{ route('admin.votes.restatement') }}" method="post">
+            @csrf
+            <button class="btn btn-primary">
+                <i class="fa fa-sync"></i> {{ __('main.recount') }}
+            </button>
+        </form>
+    @endif
 @stop

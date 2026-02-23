@@ -155,21 +155,17 @@ class OfferController extends AdminController
     /**
      * Пересчет комментариев
      */
-    public function restatement(Request $request): RedirectResponse
+    public function restatement(): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            restatement('offers');
+        restatement('offers');
 
-            setFlash('success', __('main.success_recounted'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
-
-        return redirect()->route('admin.offers.index');
+        return redirect()
+            ->route('admin.offers.index')
+            ->with('success', __('main.success_recounted'));
     }
 
     /**

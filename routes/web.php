@@ -654,7 +654,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                 Route::get('/{id}/delete', 'delete')->name('delete');
-                Route::get('/restatement', 'restatement')->name('restatement');
+                Route::post('/restatement', 'restatement')->name('restatement');
             });
 
         /* Темы */
@@ -686,7 +686,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/', 'index')->name('index');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                 Route::get('/{id}/delete', 'delete')->name('delete');
-                Route::get('/restatement', 'restatement')->name('restatement');
+                Route::post('/restatement', 'restatement')->name('restatement');
             });
 
         /* Блоги */
@@ -697,9 +697,9 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/', 'index')->name('index');
                 Route::get('/{id}', 'blog')->name('blog');
                 Route::post('/create', 'create')->name('create');
-                Route::get('/restatement', 'restatement')->name('restatement');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                 Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::post('/restatement', 'restatement')->name('restatement');
             });
 
         /* Статьи */
@@ -719,11 +719,11 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('boards.')
             ->group(function () {
                 Route::get('/{id?}', 'index')->name('index');
-                Route::get('/restatement', 'restatement')->name('restatement');
                 Route::get('/categories', 'categories')->name('categories');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                 Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::post('/restatement', 'restatement')->name('restatement');
             });
 
         /* Объявления */
@@ -782,7 +782,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::get('/close/{id}', 'close')->name('close');
                     Route::get('/delete/{id}', 'delete')->name('delete');
-                    Route::get('/restatement', 'restatement')->name('restatement');
+                    Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
             /* Антимат */
@@ -841,8 +841,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index')->name('index');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::match(['get', 'post'], '/create', 'create')->name('create');
-                    Route::get('/restatement', 'restatement')->name('restatement');
                     Route::get('/{id}/delete', 'delete')->name('delete');
+                    Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
             /* IP-бан */
@@ -866,8 +866,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::post('/create', 'create')->name('create');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::get('/{id}/delete', 'delete')->name('delete');
-                    Route::get('/restatement', 'restatement')->name('restatement');
                     Route::get('/{id}', 'load')->name('load');
+                    Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
             Route::controller(AdminLoadController::class)
@@ -905,8 +905,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/{id}', 'view')->name('view');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::match(['get', 'post'], '/{id}/reply', 'reply')->name('reply');
-                    Route::get('/restatement', 'restatement')->name('restatement');
                     Route::match(['get', 'post'], '/delete', 'delete')->name('delete');
+                    Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
             /* Стикеры */

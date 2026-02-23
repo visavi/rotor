@@ -158,21 +158,17 @@ class ForumController extends AdminController
     /**
      * Пересчет данных
      */
-    public function restatement(Request $request): RedirectResponse
+    public function restatement(): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            restatement('forums');
+        restatement('forums');
 
-            setFlash('success', __('main.success_recounted'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
-
-        return redirect()->route('admin.forums.index');
+        return redirect()
+            ->route('admin.forums.index')
+            ->with('success', __('main.success_recounted'));
     }
 
     /**

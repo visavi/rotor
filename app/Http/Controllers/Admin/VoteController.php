@@ -77,12 +77,12 @@ class VoteController extends AdminController
                 $countAnswers = $vote->answers()->count();
 
                 foreach ($answers as $answerId => $answer) {
-                    $ans = $vote->answers()->firstOrNew(['id' => $answerId]);
+                    $ans = $vote->answers()->find($answerId);
 
-                    if ($ans->exists) {
+                    if ($ans && $ans->exists) {
                         $ans->update(['answer' => $answer]);
                     } elseif ($countAnswers < 10) {
-                        $ans->fill(['answer' => $answer])->save();
+                        $vote->answers()->create(['answer' => $answer]);
                         $countAnswers++;
                     }
                 }
@@ -166,20 +166,16 @@ class VoteController extends AdminController
     /**
      * Пересчет голосов
      */
-    public function restatement(Request $request): RedirectResponse
+    public function restatement(): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            restatement('votes');
+        restatement('votes');
 
-            setFlash('success', __('main.success_recounted'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
-
-        return redirect()->route('admin.votes.index');
+        return redirect()
+            ->route('admin.votes.index')
+            ->with('success', __('main.success_recounted'));
     }
 }

@@ -103,20 +103,16 @@ class PhotoController extends AdminController
     /**
      * Пересчет комментариев
      */
-    public function restatement(Request $request): RedirectResponse
+    public function restatement(): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(200, __('main.page_only_owner'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            restatement('photos');
+        restatement('photos');
 
-            setFlash('success', __('main.success_recounted'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
-
-        return redirect()->route('admin.photos.index');
+        return redirect()
+            ->route('admin.photos.index')
+            ->with('success', __('main.success_recounted'));
     }
 }

@@ -121,21 +121,17 @@ class NewsController extends AdminController
     /**
      * Пересчет комментариев
      */
-    public function restatement(Request $request): RedirectResponse
+    public function restatement(): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            restatement('news');
+        restatement('news');
 
-            setFlash('success', __('main.success_recounted'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
-
-        return redirect()->route('admin.news.index');
+        return redirect()
+            ->route('admin.news.index')
+            ->with('success', __('main.success_recounted'));
     }
 
     /**
