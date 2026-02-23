@@ -48,5 +48,10 @@
         {{ __('admin.checkers.invalid_extensions') }}: {{ setting('nocheck') }}
     </p>
 
-    <p><a class="btn btn-primary" href="/admin/checkers/scan?_token={{ csrf_token() }}"><i class="fa fa-sync"></i> {{ __('admin.checkers.scan') }}</a></p>
+    <form action="{{ route('admin.checkers.scan') }}" method="post">
+        @csrf
+        <button class="btn btn-primary">
+            <i class="fa fa-sync"></i> {{ __('admin.checkers.scan') }}
+        </button>
+    </form>
 @stop

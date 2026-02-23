@@ -43,7 +43,7 @@ class AccountController extends Controller
         $email = strtolower((string) $request->input('email'));
         $password = $request->input('password');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEqual($email, $user->email, ['email' => __('users.email_different')])
             ->email($email, ['email' => __('validator.email')])
             ->true(Hash::check($password, $user->password), ['password' => __('users.password_not_different')]);
@@ -148,7 +148,7 @@ class AccountController extends Controller
         $status = ! empty($status) ? $status : null;
         $cost = $status ? setting('editstatusmoney') : 0;
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
             ->notEqual($status, $user->status, ['status' => __('users.status_different')])
             ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
@@ -184,7 +184,7 @@ class AccountController extends Controller
         $color = ! empty($color) ? $color : null;
         $cost = $color ? setting('editcolormoney') : 0;
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEqual($color, $user->color, ['color' => __('users.color_different')])
             ->gte($user->point, setting('editcolorpoint'), ['color' => __('users.color_points')])
             ->gte($user->money, $cost, ['color' => __('users.color_moneys')])
@@ -218,7 +218,7 @@ class AccountController extends Controller
         $confirmPassword = $request->input('confirm_password');
         $password = $request->input('old_password');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->true(Hash::check($password, $user->password), ['old_password' => __('users.password_not_different')])
             ->false(Hash::check($newPassword, $user->password), ['old_password' => __('users.password_different')])
             ->length($newPassword, 6, 20, ['new_password' => __('users.password_length_requirements')])
@@ -263,27 +263,23 @@ class AccountController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            $apiKey = Str::random(32);
-            $message = __('users.token_success_changed');
+        $apiKey = Str::random(32);
+        $message = __('users.token_success_changed');
 
-            if ($request->input('action') === 'create') {
-                $message = __('users.token_success_created');
-            }
-
-            if ($request->input('action') === 'delete') {
-                $apiKey = '';
-                $message = __('users.token_success_deleted');
-            }
-
-            $user->update([
-                'apikey' => $apiKey,
-            ]);
-
-            setFlash('success', $message);
-        } else {
-            setFlash('danger', __('validator.token'));
+        if ($request->input('action') === 'create') {
+            $message = __('users.token_success_created');
         }
+
+        if ($request->input('action') === 'delete') {
+            $apiKey = '';
+            $message = __('users.token_success_deleted');
+        }
+
+        $user->update([
+            'apikey' => $apiKey,
+        ]);
+
+        setFlash('success', $message);
 
         return redirect('accounts');
     }

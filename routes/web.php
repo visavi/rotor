@@ -969,9 +969,10 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Сканирование */
             Route::controller(CheckerController::class)
                 ->prefix('checkers')
+                ->name('checkers.')
                 ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index');
-                    Route::match(['get', 'post'], '/scan', 'scan');
+                    Route::match(['get', 'post'], '/', 'index')->name('index');
+                    Route::post('/scan', 'scan')->name('scan');
                 });
 
             /* Приват рассылка */

@@ -37,15 +37,11 @@ class CheckerController extends AdminController
      */
     public function scan(Request $request): RedirectResponse
     {
-        if ($request->input('_token') === csrf_token()) {
-            $files = $this->scanFiles(base_path());
+        $files = $this->scanFiles(base_path());
 
-            Storage::disk('private')->put($this->filename, json_encode($files));
+        Storage::disk('private')->put($this->filename, json_encode($files));
 
-            setFlash('success', __('admin.checkers.success_crawled'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
+        setFlash('success', __('admin.checkers.success_crawled'));
 
         return redirect('admin/checkers');
     }

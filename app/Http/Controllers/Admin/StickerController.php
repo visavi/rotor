@@ -164,7 +164,7 @@ class StickerController extends AdminController
             $code = Str::lower((string) $request->input('code'));
             $sticker = $request->file('sticker');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
                 ->regex($code, '|^:[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.sticker_requirements')]);
 
@@ -224,7 +224,7 @@ class StickerController extends AdminController
             $code = Str::lower((string) $request->input('code'));
             $cid = int($request->input('cid'));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
                 ->regex($code, '|^:[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.sticker_requirements')]);
 
