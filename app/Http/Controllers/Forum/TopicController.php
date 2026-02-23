@@ -404,10 +404,7 @@ class TopicController extends Controller
                     $answers = array_unique(array_diff($answers, ['']));
 
                     foreach ($answers as $answer) {
-                        if (Str::length($answer) > 50) {
-                            $validator->addError(['answers' => __('votes.answer_wrong_length')]);
-                            break;
-                        }
+                        $validator->length($answer, setting('vote_answer_min'), setting('vote_answer_max'), ['answers' => __('votes.answer_wrong_length')]);
                     }
 
                     $validator->between(count($answers), 2, 10, ['answers' => __('votes.answer_not_enough')]);
@@ -434,15 +431,22 @@ class TopicController extends Controller
                     ]);
 
                     if ($answers) {
+                        $existingAnswerIds = $vote->answers()->pluck('id')->toArray();
+                        $answerIdsToDelete = array_diff($existingAnswerIds, array_keys($answers));
+
+                        if ($answerIdsToDelete !== []) {
+                            $vote->answers()->whereIn('id', $answerIdsToDelete)->delete();
+                        }
+
                         $countAnswers = $vote->answers()->count();
 
                         foreach ($answers as $answerId => $answer) {
-                            $ans = $vote->answers()->firstOrNew(['id' => $answerId]);
+                            $ans = $vote->answers()->find($answerId);
 
-                            if ($ans->exists) {
+                            if ($ans && $ans->exists) {
                                 $ans->update(['answer' => $answer]);
                             } elseif ($countAnswers < 10) {
-                                $ans->fill(['answer' => $answer])->save();
+                                $vote->answers()->create(['answer' => $answer]);
                                 $countAnswers++;
                             }
                         }
