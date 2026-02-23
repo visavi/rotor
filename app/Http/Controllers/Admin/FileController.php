@@ -83,8 +83,7 @@ class FileController extends AdminController
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->true($writable, ['msg' => __('admin.files.writable')]);
+            $validator->true($writable, ['msg' => __('admin.files.writable')]);
 
             if ($validator->isValid()) {
                 file_put_contents(resource_path('views/' . $this->path . $file . '.blade.php'), $msg);
@@ -119,8 +118,6 @@ class FileController extends AdminController
             $fileName = $this->path ? '/' . $filename : $filename;
             $dirName = $this->path ? '/' . $dirname : $dirname;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
             if ($filename) {
                 $validator->length($filename, 1, 30, ['filename' => __('admin.files.file_required')]);
                 $validator->false(file_exists(resource_path('views/' . $this->path . $fileName . '.blade.php')), ['filename' => __('admin.files.file_exist')]);
@@ -142,11 +139,15 @@ class FileController extends AdminController
                 }
 
                 $old = umask(0);
-                mkdir(resource_path('views/' . $this->path . $dirName), 0777, true);
-                umask($old);
-                setFlash('success', __('admin.files.directory_success_created'));
+                if (! mkdir($directory = resource_path('views/' . $this->path . $dirName), 0755, true) && ! is_dir($directory)) {
+                    $flash = ['danger', 'Directory "%s" was not created', $directory];
+                } else {
+                    $flash = ['success', __('admin.files.directory_success_created')];
+                }
 
-                return redirect('admin/files?path=' . $this->path . $dirName);
+                umask($old);
+
+                return redirect('admin/files?path=' . $this->path . $dirName)->with(...$flash);
             }
 
             setInput($request->all());

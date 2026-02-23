@@ -36,7 +36,7 @@ class NoticeController extends AdminController
             $text = $request->input('text');
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
                 ->length($type, 3, 20, ['type' => __('admin.notices.notice_length')])
                 ->length($name, 5, 100, ['name' => __('validator.text')])
@@ -84,7 +84,7 @@ class NoticeController extends AdminController
             $text = $request->input('text');
             $protect = empty($request->input('protect')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($name, 5, 100, ['name' => __('validator.text')])
                 ->length($text, 10, 65000, ['text' => __('validator.text')]);
 

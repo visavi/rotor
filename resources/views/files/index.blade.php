@@ -64,5 +64,5 @@
 @@section('description', 'Описание страницы')
 </pre><br>
 
-    Посмотрите пример страниц в виде <a href="/files/docs">документации Rotor</a><br>
+    Посмотрите пример страниц в виде <a href="/files/example">Примера страницы</a><br>
 @stop

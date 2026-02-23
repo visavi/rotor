@@ -30,8 +30,7 @@ class ChatController extends AdminController
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['msg' => __('validator.token')])
-                ->length($msg, 5, 1500, ['msg' => __('validator.text')]);
+            $validator->length($msg, 5, 1500, ['msg' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $post = Chat::query()->orderByDesc('created_at')->first();

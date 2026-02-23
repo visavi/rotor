@@ -30,7 +30,7 @@ class AppPermission extends Command
         $dirs = array_merge($storage, $uploads, $dirs);
 
         foreach ($dirs as $dir) {
-            $filesystem->chmod($dir, 0777);
+            $filesystem->chmod($dir, 0755);
         }
 
         $this->info('Permissions set successfully.');

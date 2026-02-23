@@ -12,7 +12,6 @@ return [
     'blogs'         => 'Blogs',
     'boards'        => 'Bulletin board',
     'pages'         => 'Useful information',
-    'docs'          => 'Rotor documentation',
     'search'        => 'Site search',
     'mails'         => 'Feedback',
     'users'         => 'Users',

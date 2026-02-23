@@ -49,9 +49,7 @@ class DelUserController extends AdminController
         $period = int($request->input('period'));
         $point = int($request->input('point'));
 
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->gte($period, 180, __('admin.delusers.invalid_period'));
+        $validator->gte($period, 180, __('admin.delusers.invalid_period'));
 
         $users = User::query()
             ->where('updated_at', '<', strtotime('-' . $period . ' days', SITETIME))

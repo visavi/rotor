@@ -11,7 +11,7 @@ $baseDir = __DIR__;
 
 $directory = $baseDir . '/upgrades';
 if (! file_exists($directory)) {
-    mkdir($directory, 0777);
+    mkdir($directory, 0755);
 }
 
 exec('git pull');
@@ -21,7 +21,7 @@ $files = explode(PHP_EOL, $command);
 foreach ($files as $file) {
     if ($file && file_exists($baseDir . '/' . $file)) {
         if (! file_exists($directory . '/' . dirname($file))) {
-            mkdir($directory . '/' . dirname($file), 0777, true);
+            mkdir($directory . '/' . dirname($file), 0755, true);
         }
 
         echo 'copy: ' . $baseDir . '/' . $file . PHP_EOL;

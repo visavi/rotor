@@ -62,7 +62,6 @@
         <a href="/pages">{{ __('index.pages') }}</a>
     </div>
     <div class="section-body">
-        <i class="far fa-circle text-muted"></i> <a href="/files/docs">{{ __('index.docs') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/search">{{ __('index.search') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/mails">{{ __('index.mails') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/users">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span><br>

@@ -27,8 +27,8 @@ class AdminAdvertController extends AdminController
             $color = $request->input('color');
             $bold = empty($request->input('bold')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', ['site' => __('validator.url')])
+            $validator
+                ->regex($site, '|^https?://[а-яa-z0-9_\-.]+(\.[а-яa-z0-9/\-?_=#]+)+$|iu', ['site' => __('validator.url')])
                 ->length($site, 5, 100, ['site' => __('validator.url_text')])
                 ->length($name, 5, 35, ['name' => __('validator.text')])
                 ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);

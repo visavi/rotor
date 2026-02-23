@@ -44,8 +44,7 @@ class LoadController extends AdminController
 
         $name = $request->input('name');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($name, setting('down_category_min'), setting('down_category_max'), ['title' => __('validator.text')]);
+        $validator->length($name, setting('down_category_min'), setting('down_category_max'), ['title' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $max = Load::query()->max('sort') + 1;
@@ -87,7 +86,7 @@ class LoadController extends AdminController
             $sort = int($request->input('sort'));
             $closed = empty($request->input('closed')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->length($name, setting('down_category_min'), setting('down_category_max'), ['title' => __('validator.text')])
                 ->notEqual($parent, $load->id, ['parent' => __('loads.load_parent_invalid')]);
 

@@ -24,7 +24,7 @@ class Validator
     /**
      * Проверяет длину строки
      */
-    public function length($input, int $min, int $max, $label, bool $required = true): Validator
+    public function length(mixed $input, int $min, int $max, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
@@ -43,12 +43,8 @@ class Validator
 
     /**
      * Проверяет число на вхождение в диапазон
-     *
-     * @param int|float $input
-     * @param int|float $min
-     * @param int|float $max
      */
-    public function between($input, $min, $max, $label): Validator
+    public function between(int|float $input, int|float $min, int|float $max, $label): self
     {
         if ($input < $min || $input > $max) {
             $this->addError($label, __('validator.between', ['min' => $min, 'max' => $max]));
@@ -59,11 +55,8 @@ class Validator
 
     /**
      * Проверяет на больше чем число
-     *
-     * @param int|float $input
-     * @param int|float $input2
      */
-    public function gt($input, $input2, $label): Validator
+    public function gt(int|float $input, int|float $input2, $label): self
     {
         if ($input <= $input2) {
             $this->addError($label);
@@ -74,11 +67,8 @@ class Validator
 
     /**
      * Проверяет на больше чем или равно
-     *
-     * @param int|float $input
-     * @param int|float $input2
      */
-    public function gte($input, $input2, $label): Validator
+    public function gte(int|float $input, int|float $input2, $label): self
     {
         if ($input < $input2) {
             $this->addError($label);
@@ -89,11 +79,8 @@ class Validator
 
     /**
      * Проверяет на меньше чем число
-     *
-     * @param int|float $input
-     * @param int|float $input2
      */
-    public function lt($input, $input2, $label): Validator
+    public function lt(int|float $input, int|float $input2, $label): self
     {
         if ($input >= $input2) {
             $this->addError($label);
@@ -104,11 +91,8 @@ class Validator
 
     /**
      * Проверяет на меньше чем или равно
-     *
-     * @param int|float $input
-     * @param int|float $input2
      */
-    public function lte($input, $input2, $label): Validator
+    public function lte(int|float $input, int|float $input2, $label): self
     {
         if ($input > $input2) {
             $this->addError($label);
@@ -120,7 +104,7 @@ class Validator
     /**
      * Проверяет эквивалентны ли данные
      */
-    public function equal($input, $input2, $label): Validator
+    public function equal(mixed $input, mixed $input2, $label): self
     {
         if ($input !== $input2) {
             $this->addError($label);
@@ -132,7 +116,7 @@ class Validator
     /**
      * Проверяет не эквивалентны ли данные
      */
-    public function notEqual($input, $input2, $label): Validator
+    public function notEqual(mixed $input, mixed $input2, $label): self
     {
         if ($input === $input2) {
             $this->addError($label);
@@ -144,7 +128,7 @@ class Validator
     /**
      * Проверяет пустые ли данные
      */
-    public function empty($input, $label): Validator
+    public function empty(mixed $input, $label): self
     {
         if (! empty($input)) {
             $this->addError($label);
@@ -156,7 +140,7 @@ class Validator
     /**
      * Проверяет не пустые ли данные
      */
-    public function notEmpty($input, $label): Validator
+    public function notEmpty(mixed $input, $label): self
     {
         if (empty($input)) {
             $this->addError($label);
@@ -168,7 +152,7 @@ class Validator
     /**
      * Проверяет на true
      */
-    public function true($input, $label): Validator
+    public function true(mixed $input, $label): self
     {
         if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
             $this->addError($label);
@@ -180,7 +164,7 @@ class Validator
     /**
      * Проверяет на false
      */
-    public function false($input, $label): Validator
+    public function false(mixed $input, $label): self
     {
         if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false) {
             $this->addError($label);
@@ -192,9 +176,9 @@ class Validator
     /**
      * Проверяет на вхождение в массив
      */
-    public function in($input, array $haystack, $label): Validator
+    public function in(mixed $input, array $haystack, $label): self
     {
-        if (! is_array($haystack) || ! in_array($input, $haystack, true)) {
+        if (! in_array($input, $haystack, true)) {
             $this->addError($label);
         }
 
@@ -204,9 +188,9 @@ class Validator
     /**
      * Проверяет на не вхождение в массив
      */
-    public function notIn($input, array $haystack, $label): Validator
+    public function notIn(mixed $input, array $haystack, $label): self
     {
-        if (! is_array($haystack) || in_array($input, $haystack, true)) {
+        if (in_array($input, $haystack, true)) {
             $this->addError($label);
         }
 
@@ -216,13 +200,13 @@ class Validator
     /**
      * Проверяет по регулярному выражению
      */
-    public function regex($input, string $pattern, $label, bool $required = true): Validator
+    public function regex(mixed $input, string $pattern, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
         }
 
-        if (! preg_match($pattern, $input)) {
+        if (! preg_match($pattern, (string) $input)) {
             $this->addError($label);
         }
 
@@ -232,7 +216,7 @@ class Validator
     /**
      * Check float
      */
-    public function float($input, $label, bool $required = true): Validator
+    public function float(mixed $input, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
@@ -248,13 +232,13 @@ class Validator
     /**
      * Проверяет адрес сайта
      */
-    public function url($input, $label, bool $required = true): Validator
+    public function url(mixed $input, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
         }
 
-        if (! preg_match('|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', $input)) {
+        if (! preg_match('|^https?://[а-яa-z0-9_\-.]+(\.[а-яa-z0-9/\-?_=#]+)+$|iu', $input)) {
             $this->addError($label);
         }
 
@@ -264,7 +248,7 @@ class Validator
     /**
      * Проверяет email
      */
-    public function email($input, $label, bool $required = true): Validator
+    public function email(mixed $input, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
@@ -283,7 +267,7 @@ class Validator
     /**
      * Check IP address
      */
-    public function ip($input, $label, bool $required = true): Validator
+    public function ip(mixed $input, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
@@ -299,7 +283,7 @@ class Validator
     /**
      * Check phone
      */
-    public function phone($input, $label, bool $required = true): Validator
+    public function phone(mixed $input, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;
@@ -315,7 +299,7 @@ class Validator
     /**
      * Проверяет файл
      */
-    public function file(?UploadedFile $input, array $rules, $label, bool $required = true): Validator
+    public function file(?UploadedFile $input, array $rules, $label, bool $required = true): self
     {
         if (! $required && blank($input)) {
             return $this;

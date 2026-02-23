@@ -39,11 +39,10 @@ class BlacklistController extends AdminController
         if ($request->isMethod('post')) {
             $value = Str::lower((string) $request->input('value'));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($value, 1, 100, ['value' => __('validator.text')]);
+            $validator->length($value, 1, 100, ['value' => __('validator.text')]);
 
             if ($type === 'email') {
-                $validator->regex($value, '#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', ['value' => __('validator.email')]);
+                $validator->regex($value, '#^[a-z0-9_.-]+@[a-z0-9_.-]+(\.[a-z0-9]+)+$#', ['value' => __('validator.email')]);
             }
 
             if ($type === 'login') {
@@ -52,8 +51,12 @@ class BlacklistController extends AdminController
             }
 
             if ($type === 'domain') {
+                if (! preg_match('#^https?://#i', $value)) {
+                    $value = 'https://' . $value;
+                }
                 $value = parse_url(strtolower($value), PHP_URL_HOST);
-                $validator->regex($value, '#([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', ['value' => __('validator.site')]);
+
+                $validator->regex($value, '#^[а-яa-z0-9_.-]+(\.[а-яa-z0-9/]+)+$#u', ['value' => __('validator.site')]);
             }
 
             $duplicate = BlackList::query()->where('type', $type)->where('value', $value)->first();
