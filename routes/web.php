@@ -1039,9 +1039,10 @@ Route::middleware(['check.admin', 'admin.logger'])
 
             Route::controller(SearchController::class)
                 ->prefix('search')
+                ->name('search.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::post('/import', 'import');
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/import', 'import')->name('import');
                 });
 
             /* Модули */

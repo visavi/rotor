@@ -14,7 +14,7 @@
 
 @section('header')
     <div class="float-end">
-        <form action="/admin/search/import" method="post">
+        <form action="{{ route('admin.search.import') }}" method="post">
             @csrf
             <button class="btn btn-success"><i class="fa-solid fa-file-import"></i> {{ __('main.import') }}</button>
         </form>

@@ -59,8 +59,7 @@ class StickerController extends AdminController
     {
         $name = $request->input('name');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->length($name, 3, 50, ['name' => __('validator.text')]);
+        $validator->length($name, 3, 50, ['name' => __('validator.text')]);
 
         if ($validator->isValid()) {
             $category = StickersCategory::query()->create([
@@ -93,8 +92,7 @@ class StickerController extends AdminController
         if ($request->isMethod('post')) {
             $name = $request->input('name');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->length($name, 3, 50, ['name' => __('validator.text')]);
+            $validator->length($name, 3, 50, ['name' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 $category->update([

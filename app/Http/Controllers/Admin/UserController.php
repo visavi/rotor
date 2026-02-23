@@ -100,7 +100,7 @@ class UserController extends AdminController
             $info = $request->input('info');
             $created = $request->input('created');
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+            $validator
                 ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
                 ->length($password, 6, 20, __('users.password_length_requirements'), false)
                 ->email($email, ['email' => __('validator.email')])
@@ -205,8 +205,7 @@ class UserController extends AdminController
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
             $delimages = empty($request->input('delimages')) ? 0 : 1;
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
+            $validator->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
 
             if ($validator->isValid()) {
                 if ($loginblack) {

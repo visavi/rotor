@@ -41,8 +41,6 @@ class PictureController extends Controller
         if ($request->isMethod('post')) {
             $photo = $request->file('photo');
 
-            $validator->equal($request->input('_token'), csrf_token(), ['photo' => __('validator.token')]);
-
             $rules = [
                 'maxsize'    => setting('filesize'),
                 'extensions' => explode(',', setting('image_extensions')),

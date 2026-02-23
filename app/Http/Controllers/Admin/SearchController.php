@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Search;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 
@@ -15,7 +14,7 @@ class SearchController extends AdminController
     /**
      * Главная страница
      */
-    public function index(Request $request): View
+    public function index(): View
     {
         $count = Search::query()->count();
 
@@ -30,16 +29,12 @@ class SearchController extends AdminController
     /**
      * Импорт
      */
-    public function import(Request $request): RedirectResponse
+    public function import(): RedirectResponse
     {
-        if ($request->input('_token') === csrf_token()) {
-            Artisan::call('search:import');
+        Artisan::call('search:import');
 
-            setFlash('success', __('main.records_added_success'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
+        setFlash('success', __('main.records_added_success'));
 
-        return redirect('admin/search');
+        return redirect()->route('admin.search.index');
     }
 }
