@@ -43,7 +43,13 @@
                 @if (is_dir(resource_path('views/' . $path . $fileName)))
                     <li class="list-group-item">
                         <div class="float-end">
-                            <a href="/admin/files/delete?path={{ $path }}&amp;dirname={{ $file }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_dir') }}')"><i class="fa fa-times"></i></a>
+                            <form action="/admin/files/delete" method="post" class="d-inline" onsubmit="return confirm('{{ __('admin.files.confirm_delete_dir') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="path" value="{{ $path }}">
+                                <input type="hidden" name="dirname" value="{{ $file }}">
+                                <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                            </form>
                         </div>
 
                         <i class="fa fa-folder"></i> <b><a href="/admin/files?path={{ $path . $fileName }}">{{ $file }}</a></b><br>
@@ -55,7 +61,13 @@
 
                     <li class="list-group-item">
                         <div class="float-end">
-                            <a href="/admin/files/delete?path={{ $path }}&amp;filename={{ basename($file, '.blade.php') }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.files.confirm_delete_file') }}')"><i class="fa fa-times"></i></a>
+                            <form action="/admin/files/delete" method="post" class="d-inline" onsubmit="return confirm('{{ __('admin.files.confirm_delete_file') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="path" value="{{ $path }}">
+                                <input type="hidden" name="filename" value="{{ basename($file, '.blade.php') }}">
+                                <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                            </form>
                         </div>
 
                         <i class="fa fa-file"></i>

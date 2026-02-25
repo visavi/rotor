@@ -19,7 +19,11 @@
                 <i class="fas fa-chevron-circle-right"></i> <b>{{ $social->network }}</b> ({{ __('main.added') }}: {{ dateFixed($social->created_at) }})
 
                 <div class="float-end">
-                    <a href="/socials/delete/{{ $social->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('socials.text_confirm') }}')"><i class="fas fa-times"></i></a>
+                    <form action="/socials/delete/{{ $social->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('socials.text_confirm') }}')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-link p-0"><i class="fas fa-times"></i></button>
+                    </form>
                 </div>
             </div>
         @endforeach

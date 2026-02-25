@@ -53,8 +53,6 @@ class AntimatController extends AdminController
     {
         $id = int($request->input('id'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
         $word = Antimat::query()->find($id);
         $validator->notEmpty($word, __('main.record_not_found'));
 

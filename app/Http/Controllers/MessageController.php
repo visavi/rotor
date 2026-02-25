@@ -184,7 +184,7 @@ class MessageController extends Controller
             ->where('author_id', $uid)
             ->get();
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($dialogues->count(), ['user' => __('messages.empty_dialogue')])
             ->empty(getUser('newprivat'), __('messages.unread_messages'));
 

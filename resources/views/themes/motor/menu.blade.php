@@ -11,8 +11,8 @@
             <a href="/admin/chats"><span style="color:#ff0000">{{ __('index.chat') }}</span></a> &bull;
         @endif
     @endif
-        <a href="/menu">{{ __('index.menu') }}</a> &bull;
-        <a href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)">{{ __('index.logout') }}</a>
+
+    <a href="/menu">{{ __('index.menu') }}</a>
 @else
     <i class="fa fa-lock fa-lg"></i> <a href="/login{{ returnUrl() }}" rel="nofollow">{{ __('index.login') }}</a> &bull;
     <a href="/register" rel="nofollow">{{ __('index.register') }}</a>

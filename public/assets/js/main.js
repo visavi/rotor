@@ -243,17 +243,6 @@ window.postQuote = function (el) {
     return false;
 };
 
-/* Выход с сайта */
-window.logout = function (el) {
-    bootbox.confirm(__('confirm_logout'), function (result) {
-        if (result) {
-            window.location = $(el).attr("href");
-        }
-    });
-
-    return false;
-};
-
 /* Отправка жалобы на спам */
 window.sendComplaint = function (el) {
     bootbox.confirm(__('confirm_complain_submit'), function (result) {

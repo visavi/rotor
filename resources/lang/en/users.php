@@ -48,7 +48,8 @@ return [
     Until you confirm the registration, you will not be able to log in to the site <br>
     Account activation must be completed within 24 hours <br>
     After 24 hours, unverified accounts are automatically deleted.',
-    'logout' => 'Logout',
+    'logout'         => 'Logout',
+    'confirm_logout' => 'Are you sure you want to quit?',
 
     'login_or_email'  => 'Login or email',
     'login'           => 'Login',

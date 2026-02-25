@@ -168,7 +168,7 @@ class PaidAdvertController extends AdminController
     /**
      * Delete adverts
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
         $advert = PaidAdvert::query()->find($id);
 
@@ -176,16 +176,10 @@ class PaidAdvertController extends AdminController
             abort(404, __('admin.paid_adverts.not_found'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $advert->delete();
 
-        if ($validator->isValid()) {
-            $advert->delete();
-
-            clearCache('paidAdverts');
-            setFlash('success', __('main.record_deleted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        clearCache('paidAdverts');
+        setFlash('success', __('main.record_deleted_success'));
 
         return redirect('admin/paid-adverts?place=' . $advert->place);
     }

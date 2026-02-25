@@ -48,5 +48,9 @@
         {!! __('users.confirm_text') !!}
     </p>
 
-    <i class="fa fa-times"></i> <a href="/logout?_token={{ csrf_token() }}">{{ __('users.logout') }}</a><br>
+    <i class="fa fa-times"></i>
+    <form action="/logout" method="post" class="d-inline">
+        @csrf
+        <button class="btn btn-link p-0">{{ __('users.logout') }}</button>
+    </form><br>
 @stop

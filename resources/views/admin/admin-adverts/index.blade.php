@@ -25,7 +25,12 @@
                 </div>
             @endif
 
-            <i class="fas fa-times"></i> <a class="me-3" href="/admin/admin-adverts/delete?_token={{ csrf_token() }}" onclick="return confirm('{{ __('main.delete') }}')">{{ __('main.delete') }}</a>
+            <i class="fas fa-times"></i>
+            <form action="/admin/admin-adverts/delete" method="post" class="d-inline" onsubmit="return confirm('{{ __('main.delete') }}')">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-link p-0 me-3">{{ __('main.delete') }}</button>
+            </form>
             <hr>
         @endif
 

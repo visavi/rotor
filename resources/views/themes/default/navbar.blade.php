@@ -108,7 +108,11 @@
                     <li><a class="dropdown-item" href="/accounts"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>
                     <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
                     @hook('navbarMenuEnd')
-                    <li><a class="dropdown-item" href="/logout?_token={{ csrf_token() }}" onclick="return logout(this)"><i class="fa-solid fa-right-from-bracket fa-lg"></i> {{ __('index.logout') }}</a>
+                    <li>
+                        <form action="{{ route('logout') }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('users.confirm_logout') }}')">
+                            @csrf
+                            <button class="btn btn-link dropdown-item"><i class="fa-solid fa-right-from-bracket fa-lg"></i> {{ __('index.logout') }}</button>
+                        </form>
                     </li>
                 </ul>
             </li>

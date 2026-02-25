@@ -172,8 +172,6 @@ class FileController extends AdminController
         $fileName = $this->path ? '/' . $filename : $filename;
         $dirName = $this->path ? '/' . $dirname : $dirname;
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
         if ($filename) {
             $validator->true(file_exists(resource_path('views/' . $this->path . $fileName . '.blade.php')), __('admin.files.file_not_exist'));
             $validator->regex($filename, '|^[a-z0-9_\-]+$|', __('admin.files.file_invalid'));

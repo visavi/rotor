@@ -290,14 +290,10 @@ class UserController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
-        if ($request->input('_token') === csrf_token()) {
-            Auth::logout();
+        Auth::logout();
 
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/');
     }

@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Social;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SocialController extends Controller
@@ -44,12 +43,11 @@ class SocialController extends Controller
     /**
      * Удаление привязки
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         $social = Social::query()->where('user_id', $this->user->id)->find($id);
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->notEmpty($social, __('socials.not_found_binding'));
+        $validator->notEmpty($social, __('socials.not_found_binding'));
 
         if ($validator->isValid()) {
             $social->delete();

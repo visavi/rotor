@@ -39,7 +39,13 @@
 
                         <div class="float-end">
                             <a data-bs-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            <a data-bs-toggle="tooltip" title="{{ __('main.delete') }}" href="/admin/status/delete?id={{ $status->id }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('statuses.confirm_delete') }}')"><i class="fa fa-trash-alt text-muted"></i></a>
+
+                            <form action="/admin/status/delete" method="post" class="d-inline" onsubmit="return confirm('{{ __('statuses.confirm_delete') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <input type="hidden" name="id" value="{{ $status->id }}">
+                                <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-trash-alt text-muted"></i></button>
+                            </form>
                         </div>
                     </li>
                 @endforeach

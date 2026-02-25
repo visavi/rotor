@@ -95,7 +95,12 @@
     </div>
 
     @if ($messages->isNotEmpty())
-        <i class="fa fa-times"></i> <a href="/messages/delete/{{ $user->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('messages.delete_confirm') }}')">{{ __('messages.delete_talk') }}</a><br>
+        <i class="fa fa-times"></i>
+        <form action="/messages/delete/{{ $user->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-link p-0">{{ __('messages.delete_talk') }}</button>
+        </form><br>
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>

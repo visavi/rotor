@@ -61,7 +61,7 @@ class AdminAdvertController extends AdminController
     /**
      * Удаление записи
      */
-    public function delete(Request $request, Validator $validator): RedirectResponse
+    public function delete(): RedirectResponse
     {
         $advert = AdminAdvert::query()
             ->where('user_id', getUser('id'))
@@ -71,16 +71,8 @@ class AdminAdvertController extends AdminController
             abort(404, __('main.record_not_found'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $advert->delete();
 
-        if ($validator->isValid()) {
-            $advert->delete();
-
-            $flash = ['success', __('main.record_deleted_success')];
-        } else {
-            $flash = ['danger', current($validator->getErrors())];
-        }
-
-        return redirect('admin/admin-adverts')->with(...$flash);
+        return redirect('admin/admin-adverts')->with('success', __('main.record_deleted_success'));
     }
 }

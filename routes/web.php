@@ -408,9 +408,10 @@ Route::controller(VoteController::class)
 /* Фото профиля */
 Route::controller(PictureController::class)
     ->prefix('pictures')
+    ->name('pictures.')
     ->group(function () {
-        Route::match(['get', 'post'], '/', 'index');
-        Route::get('/delete', 'delete');
+        Route::match(['get', 'post'], '/', 'index')->name('index');
+        Route::delete('/delete', 'delete')->name('delete');
     });
 
 /* Поиск пользователя */
@@ -425,9 +426,10 @@ Route::controller(UserSearchController::class)
 /* Социальные сети */
 Route::controller(SocialController::class)
     ->prefix('socials')
+    ->name('socials.')
     ->group(function () {
-        Route::match(['get', 'post'], '/', 'index');
-        Route::get('/delete/{id}', 'delete');
+        Route::match(['get', 'post'], '/', 'index')->name('index');
+        Route::delete('/delete/{id}', 'delete')->name('delete');
     });
 
 /* Стена сообщений */
@@ -447,7 +449,7 @@ Route::controller(MessageController::class)
         Route::get('/', 'index');
         Route::get('/new', 'newMessages');
         Route::get('/talk/{login}', 'talk');
-        Route::get('/delete/{uid}', 'delete')->whereNumber('uid');
+        Route::delete('/delete/{uid}', 'delete')->whereNumber('uid');
         Route::match(['get', 'post'], '/send', 'send');
     });
 
@@ -551,7 +553,7 @@ Route::controller(MailController::class)
 /* Авторизация - регистрация */
 Route::controller(UserController::class)
     ->group(function () {
-        Route::get('/logout', 'logout')->name('logout');
+        Route::post('/logout', 'logout')->name('logout');
         Route::match(['get', 'post'], '/verify', 'verify')->name('verify');
         Route::get('/confirm/{token}', 'confirm')->name('confirm')->where('token', '[\w]+');
         Route::match(['get', 'post'], '/login', 'login')->name('login');
@@ -741,7 +743,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->prefix('admin-adverts')
             ->group(function () {
                 Route::match(['get', 'post'], '/', 'index');
-                Route::get('/delete', 'delete');
+                Route::delete('/delete', 'delete');
             });
 
         /* Пользовательская реклама */
@@ -764,7 +766,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/edit', 'edit');
                     Route::match(['get', 'post'], '/change', 'change');
-                    Route::get('/unban', 'unban');
+                    Route::post('/unban', 'unban');
                 });
 
             /* Забаненные */
@@ -792,7 +794,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->name('antimat.')
                 ->group(function () {
                     Route::match(['get', 'post'], '/', 'index')->name('index');
-                    Route::get('/delete', 'delete')->name('delete');
+                    Route::delete('/delete', 'delete')->name('delete');
                     Route::post('/clear', 'clear')->name('clear');
                 });
 
@@ -921,10 +923,10 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/{id}', 'category');
                     Route::post('/create', 'create');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::get('/delete/{id}', 'delete');
+                    Route::delete('/delete/{id}', 'delete');
                     Route::match(['get', 'post'], '/sticker/create', 'createSticker');
                     Route::match(['get', 'post'], '/sticker/edit/{id}', 'editSticker');
-                    Route::get('/sticker/delete/{id}', 'deleteSticker');
+                    Route::delete('/sticker/delete/{id}', 'deleteSticker');
                 });
 
             /* Статусы */
@@ -934,7 +936,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/create', 'create');
                     Route::match(['get', 'post'], '/edit', 'edit');
-                    Route::get('/delete', 'delete');
+                    Route::delete('/delete', 'delete');
                 });
         });
 
@@ -967,7 +969,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/create', 'create');
-                    Route::get('/delete', 'delete');
+                    Route::delete('/delete', 'delete');
                 });
 
             /* Сканирование */
@@ -998,7 +1000,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/create', 'create');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::get('/delete/{id}', 'delete');
+                    Route::delete('/delete/{id}', 'delete');
                 });
 
             /* Редактор */
@@ -1008,7 +1010,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/edit', 'edit');
                     Route::match(['get', 'post'], '/create', 'create');
-                    Route::get('/delete', 'delete');
+                    Route::delete('/delete', 'delete');
                 });
 
             /* Пользовательская реклама */
@@ -1026,7 +1028,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/create', 'create');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::get('/delete/{id}', 'delete');
+                    Route::delete('/delete/{id}', 'delete');
                 });
 
             /* Пользовательские поля */

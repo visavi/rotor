@@ -112,11 +112,11 @@ class NoticeController extends AdminController
     /**
      * Удаление шаблона
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         $notice = Notice::query()->find($id);
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($notice, __('admin.notices.notice_not_found'))
             ->empty($notice->protect, __('admin.notices.notice_protect'));
 

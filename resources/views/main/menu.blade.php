@@ -56,6 +56,10 @@
         <i class="fa fa-sign-out-alt fa-lg text-muted"></i> {{ __('index.logout') }}
     </div>
     <div class="section-body">
-        <i class="far fa-circle text-muted"></i> <a href="/logout?_token={{ csrf_token() }}">{{ __('index.logout') }}</a><br>
+        <i class="far fa-circle text-muted"></i>
+        <form action="/logout" method="post" class="d-inline" onsubmit="return confirm('{{ __('users.confirm_logout') }}')">
+            @csrf
+            <button class="btn btn-link p-0">{{ __('index.logout') }}</button>
+        </form><br>
     </div>
 </div>

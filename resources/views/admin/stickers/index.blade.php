@@ -29,7 +29,12 @@
 
                     <div class="float-end">
                         <a href="/admin/stickers/edit/{{ $category->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
-                        <a href="/admin/stickers/delete/{{ $category->id }}?_token={{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+
+                        <form action="/admin/stickers/delete/{{ $category->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('stickers.confirm_delete_category') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></button>
+                        </form>
                     </div>
                 </div>
             </div>

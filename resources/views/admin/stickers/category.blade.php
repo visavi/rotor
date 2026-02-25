@@ -32,7 +32,12 @@
                     <div class="float-end">
                         <a href="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $stickers->currentPage() }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
-                        <a href="/admin/stickers/sticker/delete/{{ $sticker->id }}?page={{ $stickers->currentPage() }}&amp;_token={{ csrf_token() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('stickers.confirm_delete_sticker') }}')"><i class="fa fa-times"></i></a>
+                        <form action="/admin/stickers/sticker/delete/{{ $sticker->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('stickers.confirm_delete_sticker') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="page" value="{{ $stickers->currentPage() }}">
+                            <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></button>
+                        </form>
                     </div>
                 </div>
             </div>

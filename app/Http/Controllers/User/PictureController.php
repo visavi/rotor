@@ -92,10 +92,8 @@ class PictureController extends Controller
     /**
      * Удаление фотографии
      */
-    public function delete(Request $request, Validator $validator): RedirectResponse
+    public function delete(Validator $validator): RedirectResponse
     {
-        $validator->equal($request->input('_token'), csrf_token(), ['photo' => __('validator.token')]);
-
         if (! $this->user->picture) {
             $validator->addError(__('users.photo_not_exist'));
         }

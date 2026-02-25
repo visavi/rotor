@@ -183,7 +183,11 @@
 
                 @if (isAdmin('moder'))
                     @if (setting('invite'))
-                        <i class="fa-solid fa-handshake"></i> <a href="/admin/invitations/send?user={{ $user->login }}&amp;_token={{ csrf_token() }}">{{ __('users.send_invite') }}</a><br>
+                        <form action="/admin/invitations/send" method="post">
+                            @csrf
+                            <input type="hidden" name="user" value="{{ $user->login }}">
+                            <button class="btn btn-link p-0"><i class="fa-solid fa-handshake"></i> {{ __('users.send_invite') }}</button>
+                        </form>
                     @endif
                     <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
                     <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>

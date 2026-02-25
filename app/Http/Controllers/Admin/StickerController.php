@@ -123,8 +123,6 @@ class StickerController extends AdminController
             abort(404, __('stickers.category_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
         $sticker = Sticker::query()->where('category_id', $category->id)->first();
         if ($sticker) {
             $validator->addError(__('stickers.category_has_stickers'));
@@ -256,7 +254,7 @@ class StickerController extends AdminController
     /**
      * Удаление стикера
      s*/
-    public function deleteSticker(int $id, Request $request, Validator $validator): RedirectResponse
+    public function deleteSticker(int $id, Request $request): RedirectResponse
     {
         if (! is_writable(public_path('uploads/stickers'))) {
             abort(200, __('main.directory_not_writable'));
@@ -271,17 +269,11 @@ class StickerController extends AdminController
         $page = int($request->input('page', 1));
         $category = $sticker->category->id;
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        deleteFile(public_path($sticker->name));
+        $sticker->delete();
 
-        if ($validator->isValid()) {
-            deleteFile(public_path($sticker->name));
-            $sticker->delete();
-
-            clearCache('stickers');
-            setFlash('success', __('stickers.sticker_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        clearCache('stickers');
+        setFlash('success', __('stickers.sticker_success_deleted'));
 
         return redirect('admin/stickers/' . $category . '?page=' . $page);
     }

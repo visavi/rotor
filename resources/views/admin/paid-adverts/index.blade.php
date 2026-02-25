@@ -43,7 +43,11 @@
                     @endif
                     <div class="float-end">
                         <a href="/admin/paid-adverts/edit/{{ $data->id }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="/admin/paid-adverts/delete/{{ $data->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.paid_adverts.confirm_delete_advert') }}')"><i class="fa fa-times text-muted"></i></a>
+                        <form action="/admin/paid-adverts/delete/{{ $data->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('admin.paid_adverts.confirm_delete_advert') }}')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-link p-0"><i class="fa fa-times text-muted"></i></button>
+                        </form>
                     </div>
                 </div>
 

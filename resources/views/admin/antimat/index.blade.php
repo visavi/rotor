@@ -23,7 +23,12 @@
 
             <div class="card-body">
                 @foreach ($words as $data)
-                    <a href="/admin/antimat/delete?id={{ $data->id }}&amp;_token={{ csrf_token() }}">{{ $data->string }}</a>{{ $loop->last ? '' : ', ' }}
+                    <form action="/admin/antimat/delete" method="post" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="id" value="{{ $data->id }}">
+                        <button class="btn btn-link p-0">{{ $data->string }}</button>
+                    </form>{{ $loop->last ? '' : ', ' }}
                 @endforeach
             </div>
 

@@ -27,7 +27,12 @@
                 <i class="fa fa-archive"></i> <b>{{ basename($file) }}</b> ({{ formatFileSize($file) }})
 
                 <div class="float-end">
-                    <a href="/admin/backups/delete?file={{ basename($file) }}&amp;_token={{ csrf_token() }}"><i class="fas fa-times"></i></a>
+                    <form action="/admin/backups/delete" method="post" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="file" value="{{ basename($file) }}">
+                        <button class="btn btn-link p-0"><i class="fas fa-times"></i></button>
+                    </form>
                 </div>
             </div>
         @endforeach

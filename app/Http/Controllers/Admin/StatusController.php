@@ -107,8 +107,6 @@ class StatusController extends AdminController
     {
         $id = int($request->input('id'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
-
         $status = Status::query()->find($id);
         $validator->notEmpty($status, __('statuses.status_not_found'));
 

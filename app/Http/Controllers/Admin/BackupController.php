@@ -126,7 +126,7 @@ class BackupController extends AdminController
     {
         $file = $request->input('file');
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($file, __('admin.backup.backup_not_indicated'))
             ->regex($file, '|^[\w\.\-]+$|i', __('admin.backup.invalid_backup_name'))
             ->true(file_exists(storage_path('backups/' . $file)), __('admin.backup.backup_not_exist'));

@@ -32,7 +32,12 @@
         </div>
 
         <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/change?user={{ $user->login }}">{{ __('main.change') }}</a><br>
-        <i class="fa fa-check-circle"></i> <a href="/admin/bans/unban?user={{ $user->login }}&amp;_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.bans.confirm_unban') }}')">{{ __('users.unban') }}</a><hr>
+        <i class="fa fa-check-circle"></i>
+        <form action="/admin/bans/unban" method="post" class="d-inline" onsubmit="return confirm('{{ __('admin.bans.confirm_unban') }}')">
+            @csrf
+            <input type="hidden" name="user" value="{{ $user->login }}">
+            <button class="btn btn-link p-0">{{ __('users.unban') }}</button>
+        </form><hr>
     @else
         <div class="section-form mb-3 shadow">
             <form method="post" action="/admin/bans/edit?user={{ $user->login }}">

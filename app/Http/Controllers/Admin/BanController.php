@@ -146,7 +146,7 @@ class BanController extends AdminController
     /**
      * Снятие бана
      */
-    public function unban(Request $request, Validator $validator): RedirectResponse
+    public function unban(Request $request): RedirectResponse
     {
         $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
 
@@ -158,25 +158,19 @@ class BanController extends AdminController
             abort(200, __('admin.bans.user_not_banned'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $user->update([
+            'level'   => User::USER,
+            'timeban' => null,
+        ]);
 
-        if ($validator->isValid()) {
-            $user->update([
-                'level'   => User::USER,
-                'timeban' => null,
-            ]);
+        Banhist::query()->create([
+            'user_id'      => $user->id,
+            'send_user_id' => getUser('id'),
+            'type'         => Banhist::UNBAN,
+            'created_at'   => SITETIME,
+        ]);
 
-            Banhist::query()->create([
-                'user_id'      => $user->id,
-                'send_user_id' => getUser('id'),
-                'type'         => Banhist::UNBAN,
-                'created_at'   => SITETIME,
-            ]);
-
-            setFlash('success', __('admin.bans.success_unbanned'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        setFlash('success', __('admin.bans.success_unbanned'));
 
         return redirect('admin/bans/edit?user=' . $user->login);
     }

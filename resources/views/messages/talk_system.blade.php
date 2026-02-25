@@ -50,7 +50,11 @@
             {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
         </div>
 
-        <i class="fa fa-times"></i> <a href="/messages/delete/0?_token={{ csrf_token() }}">{{ __('messages.delete_talk') }}</a><br>
+        <form action="/messages/delete/0" method="post" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-link p-0"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>
+        </form><br>
     @else
         {{ showError(__('messages.empty_notifications')) }}
     @endif

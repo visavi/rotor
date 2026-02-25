@@ -32,7 +32,11 @@
                         @if ($notice->protect)
                             <i class="fa fa-lock"></i>
                         @else
-                            <a href="/admin/notices/delete/{{ $notice->id }}?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.notices.confirm_delete') }}')"><i class="fa fa-trash-alt"></i></a>
+                            <form action="/admin/notices/delete/{{ $notice->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('admin.notices.confirm_delete') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-link p-0"><i class="fa fa-trash-alt"></i></button>
+                            </form>
                         @endif
                     </div>
                 </div>
