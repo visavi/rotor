@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $forum->title . ' (' . __('main.page_num', ['page' => $topics->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', $forum->title, __('main.page_num', ['page' => $topics->currentPage()])))
 
 @section('header')
     <div class="float-end">
@@ -47,6 +47,7 @@
                             <a href="{{ route('admin.forums.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                             <form action="{{ route('admin.forums.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_forum') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                             </form>
                         </div>
@@ -87,6 +88,7 @@
                         <a href="{{ route('admin.topics.move', ['id' => $topic->id]) }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
                         <form action="{{ route('admin.topics.delete', ['id' => $topic->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}">
                             @csrf
+                            @method('DELETE')
                             <button class="btn btn-link p-0"><i class="fa fa-times text-muted"></i></button>
                         </form>
                     </div>

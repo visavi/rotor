@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('main.comments') . ' ' . $user->getName() . ' (' . __('main.page_num', ['page' => $comments->currentPage()]) . ')')
+@section('title', sprintf('%s - %s (%s)', __('main.comments'), $user->getName(), __('main.page_num', ['page' => $comments->currentPage()])))
 
 @section('header')
     <h1>{{ __('main.comments') }} {{ $user->getName() }}</h1>

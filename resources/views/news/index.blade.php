@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.news') . ' (' . __('main.page_num', ['page' => $news->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', __('index.news'), __('main.page_num', ['page' => $news->currentPage()])))
 
 @section('header')
     @if (isAdmin('moder'))

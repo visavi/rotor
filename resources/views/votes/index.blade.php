@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.votes') . ' (' . __('main.page_num', ['page' => $votes->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', __('index.votes'), __('main.page_num', ['page' => $votes->currentPage()])))
 
 @section('header')
     <div class="float-end">

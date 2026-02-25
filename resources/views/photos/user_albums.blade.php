@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('photos.album') . ' ' . $user->getName() . ' (' . __('main.page_num', ['page' => $photos->currentPage()]) . ')')
+@section('title', sprintf('%s - %s (%s)', __('photos.album'), $user->getName(), __('main.page_num', ['page' => $photos->currentPage()])))
 
 @section('header')
     <h1>{{ __('photos.album') }} {{ $user->getName() }}</h1>
@@ -26,6 +26,7 @@
                             <a href="{{ route('photos.edit', ['id' => $photo->id, 'page' => $photos->currentPage()]) }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                             <form action="{{ route('photos.delete', ['id' => $photo->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('photos.confirm_delete_photo') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-times text-muted"></i></button>
                             </form>
                         </div>

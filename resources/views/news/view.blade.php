@@ -25,6 +25,7 @@
                     <a class="dropdown-item" href="{{ route('admin.news.edit', ['id' => $news->id]) }}">{{ __('main.edit') }}</a>
                     <form action="{{ route('admin.news.delete', ['id' => $news->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('news.confirm_delete') }}')">
                         @csrf
+                        @method('DELETE')
                         <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
                     </form>
                 </div>

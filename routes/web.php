@@ -205,7 +205,7 @@ Route::controller(BoardController::class)
     ->group(function () {
         Route::get('/{id}', 'view')->name('view');
         Route::post('/{id}/close', 'close')->name('close');
-        Route::post('/{id}/delete', 'delete')->name('delete');
+        Route::delete('/{id}/delete', 'delete')->name('delete');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
@@ -273,7 +273,7 @@ Route::controller(PhotoController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'view')->name('view');
-        Route::post('/{id}/delete', 'delete')->name('delete');
+        Route::delete('/{id}/delete', 'delete')->name('delete');
         Route::get('/albums', 'albums')->name('albums');
         Route::get('/comments', 'allComments')->name('all-comments');
         Route::get('/active/albums', 'album')->name('user-albums');
@@ -654,7 +654,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/{id}', 'forum')->name('forum');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::post('/{id}/delete', 'delete')->name('delete');
+                Route::delete('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -667,7 +667,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::match(['get', 'post'], '/{id}/edit', 'editTopic')->name('edit');
                 Route::match(['get', 'post'], '/{id}/move', 'moveTopic')->name('move');
                 Route::post('/{id}/action', 'actionTopic')->name('action');
-                Route::post('/{id}/delete', 'deleteTopic')->name('delete');
+                Route::delete('/{id}/delete', 'deleteTopic')->name('delete');
             });
 
         /* Посты */
@@ -686,7 +686,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::post('/{id}/delete', 'delete')->name('delete');
+                Route::delete('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -699,7 +699,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/{id}', 'blog')->name('blog');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::post('/{id}/delete', 'delete')->name('delete');
+                Route::delete('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -709,7 +709,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('articles.')
             ->group(function () {
                 Route::match(['get', 'post'], '/{id}/edit', 'editArticle')->name('edit');
-                Route::post('/{id}/delete', 'deleteArticle')->name('delete');
+                Route::delete('/{id}/delete', 'deleteArticle')->name('delete');
                 Route::post('/{id}/publish', 'publish')->name('publish');
                 Route::get('/new', 'new')->name('new');
             });
@@ -723,7 +723,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/categories', 'categories')->name('categories');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::post('/{id}/delete', 'delete')->name('delete');
+                Route::delete('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -733,7 +733,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('items.')
             ->group(function () {
                 Route::match(['get', 'post'], '/{id}/edit', 'editItem')->name('edit');
-                Route::post('/{id}/delete', 'deleteItem')->name('delete');
+                Route::delete('/{id}/delete', 'deleteItem')->name('delete');
             });
 
         /* Админская реклама */
@@ -782,7 +782,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/history', 'history')->name('history');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::post('/close/{id}', 'close')->name('close');
-                    Route::post('/delete/{id}', 'delete')->name('delete');
+                    Route::delete('/delete/{id}', 'delete')->name('delete');
                     Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
@@ -843,7 +843,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index')->name('index');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::match(['get', 'post'], '/create', 'create')->name('create');
-                    Route::post('/{id}/delete', 'delete')->name('delete');
+                    Route::delete('/{id}/delete', 'delete')->name('delete');
                     Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
@@ -868,7 +868,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index')->name('index');
                     Route::post('/create', 'create')->name('create');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::post('/{id}/delete', 'delete')->name('delete');
+                    Route::delete('/{id}/delete', 'delete')->name('delete');
                     Route::get('/{id}', 'load')->name('load');
                     Route::post('/restatement', 'restatement')->name('restatement');
                 });
@@ -880,7 +880,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/{id}/edit', 'editDown')->name('edit');
                     Route::get('/new', 'new')->name('new');
                     Route::post('/{id}/publish', 'publish')->name('publish');
-                    Route::post('/delete/{id}', 'deleteDown')->name('delete');
+                    Route::delete('/delete/{id}', 'deleteDown')->name('delete');
                 });
 
             /* Ошибки */

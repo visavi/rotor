@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('photos.albums') . ' (' . __('main.page_num', ['page' => $albums->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', __('photos.albums'), __('main.page_num', ['page' => $albums->currentPage()])))
 
 @section('header')
     <h1>{{ __('photos.albums') }}</h1>

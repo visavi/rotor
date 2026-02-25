@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.blogs') . ' - ' . __('blogs.new_articles') . ' (' . __('main.page_num', ['page' => $articles->currentPage()])  . ')')
+@section('title', sprintf('%s - %s (%s)', __('index.blogs'), __('blogs.new_articles'), __('main.page_num', ['page' => $articles->currentPage()])))
 
 @section('header')
     <h1>{{ __('blogs.new_articles') }}</h1>
@@ -31,6 +31,7 @@
                         @if (isAdmin('boss'))
                             <form action="{{ route('admin.articles.delete', ['id' => $article->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_delete_article') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></button>
                             </form>
                         @endif

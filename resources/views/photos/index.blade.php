@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.photos') . ' (' . __('main.page_num', ['page' => $photos->currentPage()]) .')')
+@section('title', sprintf('%s (%s)', __('index.photos'), __('main.page_num', ['page' => $photos->currentPage()])))
 
 @section('header')
     <div class="float-end">

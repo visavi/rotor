@@ -45,6 +45,7 @@
                             <a href="{{ route('admin.boards.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                             <form action="{{ route('admin.boards.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_category') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                             </form>
                         @endif
@@ -82,6 +83,7 @@
                                         <a href="{{ route('admin.items.edit', ['id' => $item->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
                                         <form action="{{ route('admin.items.delete', ['id' => $item->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_item') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}">
                                             @csrf
+                                            @method('DELETE')
                                             <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                                         </form>
                                     </div>

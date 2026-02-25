@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.blogs') . ' - ' . __('blogs.new_articles') . ' (' . __('main.page_num', ['page' => $articles->currentPage()])  . ')')
+@section('title', sprintf('%s - %s (%s)', __('index.blogs'), __('blogs.new_articles'), __('main.page_num', ['page' => $articles->currentPage()])))
 
 @section('header')
     <h1>{{ __('blogs.new_articles') }}</h1>

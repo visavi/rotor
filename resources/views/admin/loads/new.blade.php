@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('loads.new_publications') . ' (' . __('main.page_num', ['page' => $downs->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', __('loads.new_publications'), __('main.page_num', ['page' => $downs->currentPage()])))
 
 @section('header')
     <h1>{{ __('loads.new_publications') }}</h1>
@@ -35,6 +35,7 @@
                         @if (isAdmin('boss'))
                             <form action="{{ route('admin.downs.delete', ['id' => $data->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_down') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></button>
                             </form>
                         @endif

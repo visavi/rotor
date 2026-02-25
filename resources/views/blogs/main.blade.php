@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('blogs.articles_all') . ' (' . __('main.page_num', ['page' => $articles->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', __('blogs.articles_all'), __('main.page_num', ['page' => $articles->currentPage()])))
 
 @section('header')
 

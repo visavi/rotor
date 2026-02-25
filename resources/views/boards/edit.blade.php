@@ -39,6 +39,7 @@
 
     <form action="{{ route('items.delete', ['id' => $item->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_item') }}')">
         @csrf
+        @method('DELETE')
         <button class="btn btn-link p-0">{{ __('main.delete') }}</button>
     </form>
 

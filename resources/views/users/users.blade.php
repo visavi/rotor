@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.users') . ' (' . __('main.page_num', ['page' => $users->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', __('index.users'), __('main.page_num', ['page' => $users->currentPage()])))
 
 @section('header')
     <h1>{{ __('index.users') }}</h1>

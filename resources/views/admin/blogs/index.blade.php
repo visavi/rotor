@@ -43,6 +43,7 @@
                         <a href="{{ route('admin.blogs.edit', ['id' => $category->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                         <form action="{{ route('admin.blogs.delete', ['id' => $category->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_delete_blog') }}')">
                             @csrf
+                            @method('DELETE')
                             <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                         </form>
                     </div>
@@ -66,6 +67,7 @@
                                 <a href="{{ route('admin.blogs.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                                 <form action="{{ route('admin.blogs.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_delete_blog') }}')">
                                     @csrf
+                                    @method('DELETE')
                                     <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                                 </form>
                             @endif

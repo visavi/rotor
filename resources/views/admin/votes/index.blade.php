@@ -41,6 +41,7 @@
                         @if (isAdmin('boss'))
                             <form action="{{ route('admin.votes.delete', ['id' => $vote->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('votes.confirm_delete') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></button>
                             </form>
                         @endif

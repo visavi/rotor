@@ -34,6 +34,7 @@
                             <a href="{{ route('admin.forums.edit', ['id' => $forum->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                             <form action="{{ route('admin.forums.delete', ['id' => $forum->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_forum') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                             </form>
                         </div>
@@ -54,6 +55,7 @@
                                 <a href="{{ route('admin.forums.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                                 <form action="{{ route('admin.forums.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_forum') }}')">
                                     @csrf
+                                    @method('DELETE')
                                     <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                                 </form>
                             @endif

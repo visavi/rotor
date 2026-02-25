@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $category->name . ' (' . __('main.page_num', ['page' => $downs->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', $category->name, __('main.page_num', ['page' => $downs->currentPage()])))
 
 @section('header')
     <div class="float-end">
@@ -58,6 +58,7 @@
                             <a href="{{ route('admin.loads.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
                             <form action="{{ route('admin.loads.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_load') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                             </form>
                         </div>
@@ -105,6 +106,7 @@
                         @if (isAdmin('boss'))
                             <form action="{{ route('admin.downs.delete', ['id' => $data->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_down') }}')">
                                 @csrf
+                                @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
                             </form>
                         @endif

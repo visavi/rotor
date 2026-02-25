@@ -51,6 +51,7 @@
         <i class="fas fa-times"></i>
         <form action="{{ route('admin.downs.delete', ['id' => $down->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_down') }}')">
             @csrf
+            @method('DELETE')
             <button class="btn btn-link p-0 me-3">{{ __('main.delete') }}</button>
         </form>
         <hr>

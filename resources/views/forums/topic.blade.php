@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $topic->title . ' (' . __('main.page_num', ['page' => $posts->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', $topic->title, __('main.page_num', ['page' => $posts->currentPage()])))
 
 @section('description', $description)
 
@@ -39,6 +39,7 @@
                 <a class="dropdown-item" href="{{ route('admin.topics.move', ['id' => $topic->id]) }}">{{ __('main.move') }}</a>
                 <form action="{{ route('admin.topics.delete', ['id' => $topic->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_topic') }}')">
                     @csrf
+                    @method('DELETE')
                     <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
                 </form>
                 <a class="dropdown-item" href="{{ route('admin.topics.topic', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}">{{ __('main.management') }}</a>

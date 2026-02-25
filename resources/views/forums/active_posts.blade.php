@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.forums') . ' - ' . __('forums.title_active_posts', ['user' => $user->getName()]) . ' (' . __('main.page_num', ['page' => $posts->currentPage()])  . ')')
+@section('title', sprintf('%s - %s (%s)', __('index.forums'), __('forums.title_active_posts', ['user' => $user->getName()]), __('main.page_num', ['page' => $posts->currentPage()])))
 
 @section('header')
     <h1>{{ __('forums.title_active_posts', ['user' => $user->getName()]) }}</h1>

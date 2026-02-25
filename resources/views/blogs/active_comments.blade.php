@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('index.blogs') . ' - ' . __('blogs.comments_list', ['user' => $user->getName()]) . ' (' . __('main.page_num', ['page' => $comments->currentPage()])  . ')')
+@section('title', sprintf('%s - %s (%s)', __('index.blogs'), __('blogs.comments_list', ['user' => $user->getName()]), __('main.page_num', ['page' => $comments->currentPage()])))
 
 @section('header')
     <h1> {{ __('blogs.comments_list', ['user' => $user->getName()]) }}</h1>

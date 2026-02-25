@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $category->name . ' (' . __('main.page_num', ['page' => $articles->currentPage()]) . ')')
+@section('title', sprintf('%s (%s)', $category->name, __('main.page_num', ['page' => $articles->currentPage()])))
 
 @section('header')
     @if (getUser())

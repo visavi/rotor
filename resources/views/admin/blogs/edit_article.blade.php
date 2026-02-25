@@ -55,6 +55,7 @@
     <i class="fas fa-times"></i>
     <form action="{{ route('admin.articles.delete', ['id' => $article->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_delete_article') }}')">
         @csrf
+        @method('DELETE')
         <button class="btn btn-link p-0 me-3">{{ __('main.delete') }}</button>
     </form>
     <hr>

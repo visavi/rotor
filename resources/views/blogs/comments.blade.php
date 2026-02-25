@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', $article->title . ' - ' . __('main.comments') . ' (' . __('main.page_num', ['page' => $comments->currentPage()]) . ')')
+@section('title', sprintf('%s - %s (%s)', $article->title, __('main.comments'), __('main.page_num', ['page' => $comments->currentPage()])))
 
 @section('header')
     <h1>{{ $article->title }} - {{ __('main.comments') }}</h1>
