@@ -32,9 +32,9 @@
 
                 @if (isAdmin('boss'))
                     <span class="float-end">
-                        <form action="/admin/antimat/clear" method="post">
+                        <form action="/admin/antimat/clear" method="post" onsubmit="return confirm('{{ __('admin.antimat.confirm_clear') }}')">
                             @csrf
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.antimat.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
                         </form>
                     </span>
                 @endif

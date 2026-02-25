@@ -40,9 +40,9 @@
 
         {{ $logs->links() }}
 
-        <form action="/admin/logs/clear" method="post">
+        <form action="/admin/logs/clear" method="post" onsubmit="return confirm('{{ __('admin.logs.confirm_clear') }}')">
             @csrf
-            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
         </form><br>
     @else
         {{ showError(__('admin.logs.empty_logs')) }}

@@ -80,9 +80,9 @@
     </div>
 
     @if ($posts->isNotEmpty() && isAdmin('boss'))
-        <form action="/admin/chats/clear" method="post">
+        <form action="/admin/chats/clear" method="post" onsubmit="return confirm('{{ __('admin.chat.confirm_clear') }}')">
             @csrf
-            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.chat.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('admin.chat.clear') }}</button>
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('admin.chat.clear') }}</button>
         </form><br>
     @endif
 @stop

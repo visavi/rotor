@@ -110,9 +110,9 @@
         </div>
 
         @if (isAdmin('boss'))
-            <form action="{{ route('admin.guestbook.clear') }}" method="post">
+            <form action="{{ route('admin.guestbook.clear') }}" method="post" onsubmit="return confirm('{{ __('guestbook.confirm_delete') }}')">
                 @csrf
-                <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+                <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
             </form><br>
         @endif
     @else
