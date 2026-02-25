@@ -23,10 +23,16 @@
 
                     <div class="float-end">
                         <a href="{{ route('admin.votes.edit', ['id' => $vote->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                        <a href="{{ route('admin.votes.close', ['id' => $vote->id, '_token' => csrf_token()]) }}" data-bs-toggle="tooltip" title="{{ __('main.open') }}"><i class="fa fa-unlock text-muted"></i></a>
+                        <form action="{{ route('admin.votes.close', ['id' => $vote->id]) }}" method="post" class="d-inline">
+                            @csrf
+                            <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.open') }}"><i class="fa fa-unlock text-muted"></i></button>
+                        </form>
 
                         @if (isAdmin('boss'))
-                            <a href="{{ route('admin.votes.delete', ['id' => $vote->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('votes.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                            <form action="{{ route('admin.votes.delete', ['id' => $vote->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('votes.confirm_delete') }}')">
+                                @csrf
+                                <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></button>
+                            </form>
                         @endif
                     </div>
                 </div>

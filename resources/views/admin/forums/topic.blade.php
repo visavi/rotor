@@ -9,20 +9,35 @@
         </button>
         <div class="dropdown-menu dropdown-menu-end">
             @if ($topic->closed)
-                <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'open', 'page' => $posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.open') }}</a>
+                <form action="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'open', 'page' => $posts->currentPage()]) }}" method="post">
+                    @csrf
+                    <button class="btn btn-link dropdown-item">{{ __('main.open') }}</button>
+                </form>
             @else
-                <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'closed', 'page' => $posts->currentPage(), '_token' => csrf_token()]) }}"  onclick="return confirm('{{ __('forums.confirm_close_topic') }}')">{{ __('main.close') }}</a>
+                <form action="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'closed', 'page' => $posts->currentPage()]) }}" method="post" onsubmit="return confirm('{{ __('forums.confirm_close_topic') }}')">
+                    @csrf
+                    <button class="btn btn-link dropdown-item">{{ __('main.close') }}</button>
+                </form>
             @endif
 
             @if ($topic->locked)
-                <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'unlocked', 'page' => $posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.unlock') }}</a>
+                <form action="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'unlocked', 'page' => $posts->currentPage()]) }}" method="post">
+                    @csrf
+                    <button class="btn btn-link dropdown-item">{{ __('main.unlock') }}</button>
+                </form>
             @else
-                <a class="dropdown-item" href="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'locked', 'page' => $posts->currentPage(), '_token' => csrf_token()]) }}">{{ __('main.lock') }}</a>
+                <form action="{{ route('admin.topics.action', ['id' => $topic->id, 'type' => 'locked', 'page' => $posts->currentPage()]) }}" method="post">
+                    @csrf
+                    <button class="btn btn-link dropdown-item">{{ __('main.lock') }}</button>
+                </form>
             @endif
 
             <a class="dropdown-item" href="{{ route('admin.topics.edit', ['id' => $topic->id]) }}">{{ __('main.change') }}</a>
             <a class="dropdown-item" href="{{ route('admin.topics.move', ['id' => $topic->id]) }}">{{ __('main.move') }}</a>
-            <a class="dropdown-item" href="{{ route('admin.topics.delete', ['id' => $topic->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')">{{ __('main.delete') }}</a>
+            <form action="{{ route('admin.topics.delete', ['id' => $topic->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_topic') }}')">
+                @csrf
+                <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
+            </form>
             <a class="dropdown-item" href="{{ route('topics.topic', ['id' => $topic->id, 'page' => $posts->currentPage()]) }}">{{ __('main.review') }}</a>
         </div>
     </div>

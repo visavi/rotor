@@ -24,7 +24,10 @@
                     @if ($moder)
                         <div class="float-end">
                             <a href="{{ route('photos.edit', ['id' => $photo->id, 'page' => $photos->currentPage()]) }}"><i class="fa fa-pencil-alt text-muted"></i></a>
-                            <a href="{{ route('photos.delete', ['id' => $photo->id, 'page' => $photos->currentPage(), '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')"><i class="fa fa-times text-muted"></i></a>
+                            <form action="{{ route('photos.delete', ['id' => $photo->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('photos.confirm_delete_photo') }}')">
+                                @csrf
+                                <button class="btn btn-link p-0"><i class="fa fa-times text-muted"></i></button>
+                            </form>
                         </div>
                     @endif
 

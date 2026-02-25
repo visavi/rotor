@@ -281,7 +281,7 @@ class TopicController extends Controller
     /**
      * Close topic
      */
-    public function close(int $id, Request $request, Validator $validator): RedirectResponse
+    public function close(int $id, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -289,7 +289,7 @@ class TopicController extends Controller
 
         $topic = Topic::query()->find($id);
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->gte($user->point, setting('editforumpoint'), __('forums.topic_edited_points', ['point' => plural(setting('editforumpoint'), setting('scorename'))]))
             ->notEmpty($topic, __('forums.topic_not_exist'))
             ->equal($topic->user_id, $user->id, __('forums.topic_not_author'))
@@ -317,7 +317,7 @@ class TopicController extends Controller
     /**
      * Open topic
      */
-    public function open(int $id, Request $request, Validator $validator): RedirectResponse
+    public function open(int $id, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -325,7 +325,7 @@ class TopicController extends Controller
 
         $topic = Topic::query()->find($id);
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($topic, __('forums.topic_not_exist'))
             ->equal($topic->user_id, $user->id, __('forums.topic_not_author'))
             ->equal($topic->close_user_id, $user->id, __('forums.topic_opened_author'))

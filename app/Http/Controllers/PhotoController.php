@@ -331,9 +331,7 @@ class PhotoController extends Controller
             abort(404, __('photos.photo_not_author'));
         }
 
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->empty($photo->count_comments, __('photos.photo_has_comments'));
+        $validator->empty($photo->count_comments, __('photos.photo_has_comments'));
 
         if ($validator->isValid()) {
             $photo->delete();

@@ -229,7 +229,7 @@ class BoardController extends Controller
     /**
      * Снятие / Публикация объявления
      */
-    public function close(int $id, Request $request, Validator $validator): RedirectResponse
+    public function close(int $id, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -241,8 +241,7 @@ class BoardController extends Controller
             abort(404, __('boards.item_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->equal($item->user_id, $user->id, __('boards.item_not_author'));
+        $validator->equal($item->user_id, $user->id, __('boards.item_not_author'));
 
         if ($validator->isValid()) {
             if ($item->expires_at > SITETIME) {
@@ -275,7 +274,7 @@ class BoardController extends Controller
     /**
      * Удаление объявления
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -287,8 +286,7 @@ class BoardController extends Controller
             abort(404, __('boards.item_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->equal($item->user_id, $user->id, __('boards.item_not_author'));
+        $validator->equal($item->user_id, $user->id, __('boards.item_not_author'));
 
         if ($validator->isValid()) {
             $item->delete();

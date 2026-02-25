@@ -26,12 +26,21 @@
     @endif
 
     @if ($item->expires_at > SITETIME)
-        <a href="{{ route('items.close', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_unpublish_item') }}')">{{ __('main.unpublish') }}</a> /
+        <form action="{{ route('items.close', ['id' => $item->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_unpublish_item') }}')">
+            @csrf
+            <button class="btn btn-link p-0">{{ __('main.unpublish') }}</button>
+        </form> /
     @else
-        <a href="{{ route('items.close', ['id' => $item->id, '_token' => csrf_token()]) }}">{{ __('main.publish') }}</a> /
+        <form action="{{ route('items.close', ['id' => $item->id]) }}" method="post" class="d-inline">
+            @csrf
+            <button class="btn btn-link p-0">{{ __('main.publish') }}</button>
+        </form> /
     @endif
 
-    <a href="{{ route('items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+    <form action="{{ route('items.delete', ['id' => $item->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_item') }}')">
+        @csrf
+        <button class="btn btn-link p-0">{{ __('main.delete') }}</button>
+    </form>
 
     <div class="section-form mb-3 shadow">
         <form action="{{ route('items.edit', ['id' => $item->id]) }}" method="post">

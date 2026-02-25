@@ -45,7 +45,10 @@
                     @if (isAdmin('boss'))
                         <div class="float-end">
                             <a href="{{ route('admin.forums.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="{{ route('admin.forums.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_forum') }}')"><i class="fa fa-times"></i></a>
+                            <form action="{{ route('admin.forums.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_forum') }}')">
+                                @csrf
+                                <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                            </form>
                         </div>
                     @endif
                 </div>
@@ -82,7 +85,10 @@
                     <div class="text-end">
                         <a href="{{ route('admin.topics.edit', ['id' => $topic->id]) }}" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         <a href="{{ route('admin.topics.move', ['id' => $topic->id]) }}" title="{{ __('main.move') }}"><i class="fa fa-arrows-alt text-muted"></i></a>
-                        <a href="{{ route('admin.topics.delete', ['id' => $topic->id, 'page' => $topics->currentPage(), '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <form action="{{ route('admin.topics.delete', ['id' => $topic->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('forums.confirm_delete_topic') }}')" title="{{ __('main.delete') }}">
+                            @csrf
+                            <button class="btn btn-link p-0"><i class="fa fa-times text-muted"></i></button>
+                        </form>
                     </div>
                 </div>
                 <div class="section-content">

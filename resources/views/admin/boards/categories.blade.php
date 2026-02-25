@@ -23,7 +23,10 @@
 
                 <div class="float-end">
                     <a href="{{ route('admin.boards.edit', ['id' => $board->id]) }}"><i class="fa fa-pencil-alt"></i></a>
-                    <a href="{{ route('admin.boards.delete', ['id' => $board->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                    <form action="{{ route('admin.boards.delete', ['id' => $board->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_category') }}')">
+                        @csrf
+                        <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                    </form>
                 </div>
             </div>
 
@@ -36,7 +39,10 @@
                             <span class="badge bg-adaptive">{{ $child->count_items }}</span>
 
                             <a href="{{ route('admin.boards.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="{{ route('admin.boards.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_category') }}')"><i class="fa fa-times"></i></a>
+                            <form action="{{ route('admin.boards.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_category') }}')">
+                                @csrf
+                                <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                            </form>
                         </div>
                     @endforeach
                 @endif

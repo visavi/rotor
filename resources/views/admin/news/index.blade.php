@@ -37,7 +37,10 @@
                             <span class="text-danger">{{ __('news.on_homepage') }}</span><br>
                         @endif
                         <a href="{{ route('admin.news.edit', ['id' => $data->id, 'page' => $news->currentPage()]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                        <a href="{{ route('admin.news.delete', ['id' => $data->id, '_token' => csrf_token()]) }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}" onclick="return confirm('{{ __('news.confirm_delete') }}')"><i class="fas fa-times text-muted"></i></a>
+                        <form action="{{ route('admin.news.delete', ['id' => $data->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('news.confirm_delete') }}')">
+                            @csrf
+                            <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></button>
+                        </form>
                     </div>
                 </div>
 

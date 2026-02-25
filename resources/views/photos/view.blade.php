@@ -22,7 +22,10 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{ route('admin.photos.edit', ['id' => $photo->id]) }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="{{ route('admin.photos.delete', ['id' => $photo->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                    <form action="{{ route('admin.photos.delete', ['id' => $photo->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('photos.confirm_delete_photo') }}')">
+                        @csrf
+                        <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
+                    </form>
                 </div>
             </div>
         @elseif (getUser('id') === $photo->user->id)
@@ -32,7 +35,10 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{ route('photos.edit', ['id' => $photo->id]) }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="{{ route('photos.delete', ['id' => $photo->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('photos.confirm_delete_photo') }}')">{{ __('main.delete') }}</a>
+                    <form action="{{ route('photos.delete', ['id' => $photo->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('photos.confirm_delete_photo') }}')">
+                        @csrf
+                        <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
+                    </form>
                 </div>
             </div>
         @endif

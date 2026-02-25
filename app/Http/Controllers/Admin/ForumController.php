@@ -123,7 +123,7 @@ class ForumController extends AdminController
     /**
      * Удаление раздела
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -135,8 +135,7 @@ class ForumController extends AdminController
             abort(404, __('forums.forum_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($forum->children->isEmpty(), __('forums.forum_has_subforums'));
+        $validator->true($forum->children->isEmpty(), __('forums.forum_has_subforums'));
 
         $topic = Topic::query()->where('forum_id', $forum->id)->first();
         if ($topic) {
@@ -312,50 +311,46 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            switch ($request->input('type')) {
-                case 'closed':
-                    $topic->update([
-                        'closed'        => 1,
-                        'close_user_id' => getUser('id'),
-                    ]);
+        switch ($request->input('type')) {
+            case 'closed':
+                $topic->update([
+                    'closed'        => 1,
+                    'close_user_id' => getUser('id'),
+                ]);
 
-                    if ($topic->vote) {
-                        $topic->vote->update(['closed' => 1]);
-                        $topic->vote->polls()->delete();
-                    }
+                if ($topic->vote) {
+                    $topic->vote->update(['closed' => 1]);
+                    $topic->vote->polls()->delete();
+                }
 
-                    setFlash('success', __('forums.topic_success_closed'));
-                    break;
+                setFlash('success', __('forums.topic_success_closed'));
+                break;
 
-                case 'open':
-                    $topic->update([
-                        'closed'        => 0,
-                        'close_user_id' => null,
-                    ]);
+            case 'open':
+                $topic->update([
+                    'closed'        => 0,
+                    'close_user_id' => null,
+                ]);
 
-                    if ($topic->vote) {
-                        $topic->vote->update(['closed' => 0]);
-                    }
+                if ($topic->vote) {
+                    $topic->vote->update(['closed' => 0]);
+                }
 
-                    setFlash('success', __('forums.topic_success_opened'));
-                    break;
+                setFlash('success', __('forums.topic_success_opened'));
+                break;
 
-                case 'locked':
-                    $topic->update(['locked' => 1]);
-                    setFlash('success', __('forums.topic_success_pinned'));
-                    break;
+            case 'locked':
+                $topic->update(['locked' => 1]);
+                setFlash('success', __('forums.topic_success_pinned'));
+                break;
 
-                case 'unlocked':
-                    $topic->update(['locked' => 0]);
-                    setFlash('success', __('forums.topic_success_unpinned'));
-                    break;
+            case 'unlocked':
+                $topic->update(['locked' => 0]);
+                setFlash('success', __('forums.topic_success_unpinned'));
+                break;
 
-                default:
-                    setFlash('danger', __('main.action_not_selected'));
-            }
-        } else {
-            setFlash('danger', __('validator.token'));
+            default:
+                setFlash('danger', __('main.action_not_selected'));
         }
 
         return redirect()->route('admin.topics.topic', ['id' => $topic->id, 'page' => $page]);
@@ -364,7 +359,7 @@ class ForumController extends AdminController
     /**
      * Удаление тем
      */
-    public function deleteTopic(int $id, Request $request, Validator $validator): RedirectResponse
+    public function deleteTopic(int $id, Request $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -374,17 +369,11 @@ class ForumController extends AdminController
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $topic->delete();
+        $topic->forum->restatement();
 
-        if ($validator->isValid()) {
-            $topic->delete();
-            $topic->forum->restatement();
-
-            clearCache(['statForums', 'recentTopics', 'TopicFeed']);
-            setFlash('success', __('forums.topic_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        clearCache(['statForums', 'recentTopics', 'TopicFeed']);
+        setFlash('success', __('forums.topic_success_deleted'));
 
         return redirect()->route('admin.forums.forum', ['id' => $topic->forum->id, 'page' => $page]);
     }

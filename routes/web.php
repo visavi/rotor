@@ -204,8 +204,8 @@ Route::controller(BoardController::class)
     ->name('items.')
     ->group(function () {
         Route::get('/{id}', 'view')->name('view');
-        Route::get('/{id}/close', 'close')->name('close');
-        Route::get('/{id}/delete', 'delete')->name('delete');
+        Route::post('/{id}/close', 'close')->name('close');
+        Route::post('/{id}/delete', 'delete')->name('delete');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
@@ -273,7 +273,7 @@ Route::controller(PhotoController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'view')->name('view');
-        Route::get('/{id}/delete', 'delete')->name('delete');
+        Route::post('/{id}/delete', 'delete')->name('delete');
         Route::get('/albums', 'albums')->name('albums');
         Route::get('/comments', 'allComments')->name('all-comments');
         Route::get('/active/albums', 'album')->name('user-albums');
@@ -311,8 +311,8 @@ Route::prefix('topics')
 
         Route::get('/{id}', [TopicController::class, 'index'])->name('topic');
         Route::post('/{id}/vote', [TopicController::class, 'vote'])->name('vote');
-        Route::get('/{id}/open', [TopicController::class, 'open'])->name('open');
-        Route::get('/{id}/close', [TopicController::class, 'close'])->name('close');
+        Route::post('/{id}/open', [TopicController::class, 'open'])->name('open');
+        Route::post('/{id}/close', [TopicController::class, 'close'])->name('close');
         Route::post('/{id}/create', [TopicController::class, 'create'])->name('create');
         Route::post('/{id}/delete', [TopicController::class, 'delete'])->name('delete');
         Route::get('/{id}/print', [TopicController::class, 'print'])->name('print');
@@ -654,7 +654,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/{id}', 'forum')->name('forum');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::post('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -666,8 +666,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/{id}', 'topic')->name('topic');
                 Route::match(['get', 'post'], '/{id}/edit', 'editTopic')->name('edit');
                 Route::match(['get', 'post'], '/{id}/move', 'moveTopic')->name('move');
-                Route::get('/{id}/action', 'actionTopic')->name('action');
-                Route::get('/{id}/delete', 'deleteTopic')->name('delete');
+                Route::post('/{id}/action', 'actionTopic')->name('action');
+                Route::post('/{id}/delete', 'deleteTopic')->name('delete');
             });
 
         /* Посты */
@@ -686,7 +686,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::post('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -699,7 +699,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/{id}', 'blog')->name('blog');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::post('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -709,8 +709,8 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('articles.')
             ->group(function () {
                 Route::match(['get', 'post'], '/{id}/edit', 'editArticle')->name('edit');
-                Route::get('/{id}/delete', 'deleteArticle')->name('delete');
-                Route::get('/{id}/publish', 'publish')->name('publish');
+                Route::post('/{id}/delete', 'deleteArticle')->name('delete');
+                Route::post('/{id}/publish', 'publish')->name('publish');
                 Route::get('/new', 'new')->name('new');
             });
 
@@ -723,7 +723,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/categories', 'categories')->name('categories');
                 Route::post('/create', 'create')->name('create');
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::get('/{id}/delete', 'delete')->name('delete');
+                Route::post('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
             });
 
@@ -733,7 +733,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('items.')
             ->group(function () {
                 Route::match(['get', 'post'], '/{id}/edit', 'editItem')->name('edit');
-                Route::get('/{id}/delete', 'deleteItem')->name('delete');
+                Route::post('/{id}/delete', 'deleteItem')->name('delete');
             });
 
         /* Админская реклама */
@@ -781,8 +781,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index')->name('index');
                     Route::get('/history', 'history')->name('history');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::get('/close/{id}', 'close')->name('close');
-                    Route::get('/delete/{id}', 'delete')->name('delete');
+                    Route::post('/close/{id}', 'close')->name('close');
+                    Route::post('/delete/{id}', 'delete')->name('delete');
                     Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
@@ -843,7 +843,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index')->name('index');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                     Route::match(['get', 'post'], '/create', 'create')->name('create');
-                    Route::get('/{id}/delete', 'delete')->name('delete');
+                    Route::post('/{id}/delete', 'delete')->name('delete');
                     Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
@@ -868,7 +868,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index')->name('index');
                     Route::post('/create', 'create')->name('create');
                     Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::get('/{id}/delete', 'delete')->name('delete');
+                    Route::post('/{id}/delete', 'delete')->name('delete');
                     Route::get('/{id}', 'load')->name('load');
                     Route::post('/restatement', 'restatement')->name('restatement');
                 });
@@ -878,9 +878,9 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->name('downs.')
                 ->group(function () {
                     Route::match(['get', 'post'], '/{id}/edit', 'editDown')->name('edit');
-                    Route::match(['get', 'post'], '/delete/{id}', 'deleteDown')->name('delete');
                     Route::get('/new', 'new')->name('new');
-                    Route::get('/{id}/publish', 'publish')->name('publish');
+                    Route::post('/{id}/publish', 'publish')->name('publish');
+                    Route::post('/delete/{id}', 'deleteDown')->name('delete');
                 });
 
             /* Ошибки */

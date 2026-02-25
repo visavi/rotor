@@ -137,7 +137,7 @@ class NewsController extends AdminController
     /**
      * Удаление новостей
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Request $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -147,15 +147,9 @@ class NewsController extends AdminController
             abort(404, __('news.news_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $news->delete();
 
-        if ($validator->isValid()) {
-            $news->delete();
-
-            setFlash('success', __('news.news_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        setFlash('success', __('news.news_success_deleted'));
 
         return redirect()->route('admin.news.index', ['page' => $page]);
     }

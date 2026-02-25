@@ -118,7 +118,7 @@ class ArticleController extends AdminController
     /**
      * Удаление раздела
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -130,8 +130,7 @@ class ArticleController extends AdminController
             abort(404, __('blogs.category_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($category->children->isEmpty(), __('blogs.category_has_subcategories'));
+        $validator->true($category->children->isEmpty(), __('blogs.category_has_subcategories'));
 
         $article = Article::query()->where('category_id', $category->id)->exists();
         if ($article) {
@@ -269,7 +268,7 @@ class ArticleController extends AdminController
     /**
      * Удаление статьи
      */
-    public function deleteArticle(int $id, Request $request, Validator $validator): RedirectResponse
+    public function deleteArticle(int $id, Request $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -279,17 +278,11 @@ class ArticleController extends AdminController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $article->delete();
 
-        if ($validator->isValid()) {
-            $article->delete();
+        clearCache('tagCloud');
 
-            clearCache('tagCloud');
-
-            setFlash('success', __('blogs.article_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        setFlash('success', __('blogs.article_success_deleted'));
 
         return redirect()->route('admin.blogs.blog', ['id' => $article->category_id, 'page' => $page]);
     }
@@ -297,7 +290,7 @@ class ArticleController extends AdminController
     /**
      * Публикация статьи
      */
-    public function publish(int $id, Request $request): RedirectResponse
+    public function publish(int $id): RedirectResponse
     {
         $article = Article::query()->find($id);
 
@@ -305,32 +298,27 @@ class ArticleController extends AdminController
             abort(404, __('blogs.article_not_exist'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            $active = $article->active ^ 1;
+        $active = $article->active ^ 1;
 
-            $article->update([
-                'active'     => $active,
-                'draft'      => false,
-                'created_at' => SITETIME,
-            ]);
+        $article->update([
+            'active'     => $active,
+            'draft'      => false,
+            'created_at' => SITETIME,
+        ]);
 
-            if ($active) {
-                $status = __('blogs.article_success_published');
-                $text = textNotice('article_publish', ['url' => route('articles.view', ['slug' => $article->slug], false), 'title' => $article->title]);
-            } else {
-                $status = __('blogs.article_success_unpublished');
-                $text = textNotice('article_unpublish', ['url' => route('articles.view', ['slug' => $article->slug], false), 'title' => $article->title]);
-            }
-
-            $article->user->sendMessage(null, $text);
-            $flash = ['success', $status];
+        if ($active) {
+            $status = __('blogs.article_success_published');
+            $text = textNotice('article_publish', ['url' => route('articles.view', ['slug' => $article->slug], false), 'title' => $article->title]);
         } else {
-            $flash = ['danger', __('validator.token')];
+            $status = __('blogs.article_success_unpublished');
+            $text = textNotice('article_unpublish', ['url' => route('articles.view', ['slug' => $article->slug], false), 'title' => $article->title]);
         }
+
+        $article->user->sendMessage(null, $text);
 
         return redirect()
             ->route('admin.articles.edit', ['id' => $article->id])
-            ->with(...$flash);
+            ->with('success', $status);
     }
 
     /**

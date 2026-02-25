@@ -36,13 +36,23 @@
     @if (isAdmin('boss'))
         @if ($down->active)
             <i class="fa fa-pencil-alt"></i>
-            <a class="me-3" href="{{ route('admin.downs.publish', ['id' => $down->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_unpublish_down') }}')">{{ __('main.unpublish') }}</a>
+            <form action="{{ route('admin.downs.publish', ['id' => $down->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_unpublish_down') }}')">
+                @csrf
+                <button class="btn btn-link p-0 me-3">{{ __('main.unpublish') }}</button>
+            </form>
         @else
             <i class="fa fa-pencil-alt"></i>
-            <a class="me-3" href="{{ route('admin.downs.publish', ['id' => $down->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_publish_down') }}')">{{ __('main.publish') }}</a>
+            <form action="{{ route('admin.downs.publish', ['id' => $down->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_publish_down') }}')">
+                @csrf
+                <button class="btn btn-link p-0 me-3">{{ __('main.publish') }}</button>
+            </form>
         @endif
 
-        <i class="fas fa-times"></i> <a class="me-3" href="{{ route('admin.downs.delete', ['id' => $down->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_delete_down') }}')">{{ __('main.delete') }}</a>
+        <i class="fas fa-times"></i>
+        <form action="{{ route('admin.downs.delete', ['id' => $down->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_down') }}')">
+            @csrf
+            <button class="btn btn-link p-0 me-3">{{ __('main.delete') }}</button>
+        </form>
         <hr>
     @endif
 

@@ -19,7 +19,10 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="{{ route('admin.articles.edit', ['id' => $article->id]) }}">{{ __('main.edit') }}</a>
-                        <a class="dropdown-item" href="{{ route('admin.articles.delete', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
+                        <form action="{{ route('admin.articles.delete', ['id' => $article->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_delete_article') }}')">
+                            @csrf
+                            <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
+                        </form>
                     </div>
                 </div>
             @endif

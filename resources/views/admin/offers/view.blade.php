@@ -27,7 +27,7 @@
             <div class="float-end">
                 <a href="{{ route('admin.offers.reply', ['id' => $offer->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.reply') }}"><i class="fas fa-reply text-muted"></i></a>
                 <a href="{{ route('admin.offers.edit', ['id' => $offer->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fas fa-pencil-alt text-muted"></i></a>
-                <a href="{{ route('admin.offers.reply', ['id' => $offer->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('offers.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
+                <a href="{{ route('admin.offers.reply', ['id' => $offer->id]) }}" onclick="return confirm('{{ __('offers.confirm_delete') }}')" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fas fa-times text-muted"></i></a>
             </div>
 
             <div class="section-message">

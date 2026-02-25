@@ -72,7 +72,7 @@ class PhotoController extends AdminController
     /**
      * Удаление записей
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Request $request): RedirectResponse
     {
         if (! is_writable(public_path('uploads/photos'))) {
             abort(200, __('main.directory_not_writable'));
@@ -86,16 +86,10 @@ class PhotoController extends AdminController
             abort(404, __('photos.photo_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $photo->delete();
 
-        if ($validator->isValid()) {
-            $photo->delete();
-
-            clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);
-            setFlash('success', __('photos.photo_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);
+        setFlash('success', __('photos.photo_success_deleted'));
 
         return redirect()->route('admin.photos.index', ['page' => $page]);
     }

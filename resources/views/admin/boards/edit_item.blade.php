@@ -25,7 +25,11 @@
         <div class="alert alert-warning">{{ __('boards.item_not_active') }}</div>
     @endif
 
-    <i class="fas fa-times"></i> <a class="me-3" href="{{ route('admin.items.delete', ['id' => $item->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('boards.confirm_delete_item') }}')">{{ __('main.delete') }}</a>
+    <i class="fas fa-times"></i>
+    <form action="{{ route('admin.items.delete', ['id' => $item->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('boards.confirm_delete_item') }}')">
+        @csrf
+        <button class="btn btn-link p-0 me-3">{{ __('main.delete') }}</button>
+    </form>
     <hr>
 
     <div class="section-form mb-3 shadow">

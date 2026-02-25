@@ -115,7 +115,7 @@ class LoadController extends AdminController
     /**
      * Удаление раздела
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -127,8 +127,7 @@ class LoadController extends AdminController
             abort(404, __('loads.load_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($load->children->isEmpty(), __('loads.load_has_subcategories'));
+        $validator->true($load->children->isEmpty(), __('loads.load_has_subcategories'));
 
         $down = Down::query()->where('category_id', $load->id)->first();
         if ($down) {
@@ -277,7 +276,7 @@ class LoadController extends AdminController
     /**
      * Удаление загрузки
      */
-    public function deleteDown(int $id, Request $request): RedirectResponse
+    public function deleteDown(int $id): RedirectResponse
     {
         $down = Down::query()->find($id);
 
@@ -289,18 +288,14 @@ class LoadController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            if ($down->active) {
-                $down->category->decrement('count_downs');
-            }
-
-            $down->delete();
-
-            clearCache(['statLoads', 'recentDowns', 'DownFeed']);
-            setFlash('success', __('loads.down_success_deleted'));
-        } else {
-            setFlash('danger', __('validator.token'));
+        if ($down->active) {
+            $down->category->decrement('count_downs');
         }
+
+        $down->delete();
+
+        clearCache(['statLoads', 'recentDowns', 'DownFeed']);
+        setFlash('success', __('loads.down_success_deleted'));
 
         return redirect()->route('admin.loads.load', ['id' => $down->category_id]);
     }
@@ -322,7 +317,7 @@ class LoadController extends AdminController
     /**
      * Публикация загрузки
      */
-    public function publish(int $id, Request $request): RedirectResponse
+    public function publish(int $id): RedirectResponse
     {
         $down = Down::query()->find($id);
 
@@ -330,38 +325,34 @@ class LoadController extends AdminController
             abort(404, __('loads.down_not_exist'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            $active = $down->active ^ 1;
+        $active = $down->active ^ 1;
 
-            $down->update([
-                'active'     => $active,
-                'updated_at' => SITETIME,
-                'created_at' => SITETIME,
-            ]);
+        $down->update([
+            'active'     => $active,
+            'updated_at' => SITETIME,
+            'created_at' => SITETIME,
+        ]);
 
-            if ($active) {
-                $status = __('loads.down_success_published');
-                $down->category->increment('count_downs');
-                $text = textNotice('down_publish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
+        if ($active) {
+            $status = __('loads.down_success_published');
+            $down->category->increment('count_downs');
+            $text = textNotice('down_publish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
 
-                $down->user->increment('point', setting('down_point'));
-                $down->user->increment('money', setting('down_money'));
-            } else {
-                $status = __('loads.down_success_unpublished');
-                $down->category->decrement('count_downs');
-                $text = textNotice('down_unpublish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
-
-                $down->user->decrement('point', setting('down_point'));
-                $down->user->decrement('money', setting('down_money'));
-            }
-
-            $down->user->sendMessage(null, $text);
-
-            clearCache(['statLoads', 'recentDowns', 'DownFeed']);
-            setFlash('success', $status);
+            $down->user->increment('point', setting('down_point'));
+            $down->user->increment('money', setting('down_money'));
         } else {
-            setFlash('danger', __('validator.token'));
+            $status = __('loads.down_success_unpublished');
+            $down->category->decrement('count_downs');
+            $text = textNotice('down_unpublish', ['url' => route('downs.view', ['id' => $down->id], false), 'title' => $down->title]);
+
+            $down->user->decrement('point', setting('down_point'));
+            $down->user->decrement('money', setting('down_money'));
         }
+
+        $down->user->sendMessage(null, $text);
+
+        clearCache(['statLoads', 'recentDowns', 'DownFeed']);
+        setFlash('success', $status);
 
         return redirect()->route('admin.downs.edit', ['id' => $down->id]);
     }

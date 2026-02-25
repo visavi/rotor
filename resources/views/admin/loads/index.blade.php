@@ -45,7 +45,10 @@
                     @if (isAdmin('boss'))
                         <div class="float-end">
                             <a href="{{ route('admin.loads.edit', ['id' => $category->id]) }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="{{ route('admin.loads.delete', ['id' => $category->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                            <form action="{{ route('admin.loads.delete', ['id' => $category->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_load') }}')">
+                                @csrf
+                                <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                            </form>
                         </div>
                     @endif
                 </div>
@@ -64,7 +67,10 @@
 
                                 @if (isAdmin('boss'))
                                     <a href="{{ route('admin.loads.edit', ['id' => $child->id]) }}"><i class="fa fa-pencil-alt"></i></a>
-                                    <a href="{{ route('admin.loads.delete', ['id' => $child->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('loads.confirm_delete_load') }}')"><i class="fa fa-times"></i></a>
+                                    <form action="{{ route('admin.loads.delete', ['id' => $child->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('loads.confirm_delete_load') }}')">
+                                        @csrf
+                                        <button class="btn btn-link p-0"><i class="fa fa-times"></i></button>
+                                    </form>
                                 @endif
                             </div>
                         @endforeach

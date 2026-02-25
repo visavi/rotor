@@ -156,7 +156,7 @@ class BoardController extends AdminController
     /**
      * Удаление раздела
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id, Validator $validator): RedirectResponse
     {
         if (! isAdmin(User::BOSS)) {
             abort(403, __('errors.forbidden'));
@@ -168,8 +168,7 @@ class BoardController extends AdminController
             abort(404, __('boards.category_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($board->children->isEmpty(), __('boards.category_has_subsections'));
+        $validator->true($board->children->isEmpty(), __('boards.category_has_subsections'));
 
         $item = Item::query()->where('board_id', $board->id)->first();
         if ($item) {
@@ -250,7 +249,7 @@ class BoardController extends AdminController
     /**
      * Удаление объявления
      */
-    public function deleteItem(int $id, Request $request, Validator $validator): RedirectResponse
+    public function deleteItem(int $id): RedirectResponse
     {
         $item = Item::query()->find($id);
 
@@ -258,17 +257,11 @@ class BoardController extends AdminController
             abort(404, __('boards.item_not_exist'));
         }
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'));
+        $item->delete();
+        $item->category->decrement('count_items');
 
-        if ($validator->isValid()) {
-            $item->delete();
-            $item->category->decrement('count_items');
-
-            clearCache(['statBoards', 'recentBoards', 'ItemFeed']);
-            setFlash('success', __('boards.item_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
-        }
+        clearCache(['statBoards', 'recentBoards', 'ItemFeed']);
+        setFlash('success', __('boards.item_success_deleted'));
 
         return redirect()->route('admin.boards.index', ['id' => $item->board_id]);
     }

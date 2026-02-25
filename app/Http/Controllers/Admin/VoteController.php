@@ -104,7 +104,7 @@ class VoteController extends AdminController
     /**
      * Удаление голосования
      */
-    public function delete(int $id, Request $request): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -116,13 +116,9 @@ class VoteController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            $vote->delete();
+        $vote->delete();
 
-            setFlash('success', __('votes.voting_success_deleted'));
-        } else {
-            setFlash('danger', __('validator.token'));
-        }
+        setFlash('success', __('votes.voting_success_deleted'));
 
         return redirect()->route('admin.votes.index');
     }
@@ -130,7 +126,7 @@ class VoteController extends AdminController
     /**
      * Открытие-закрытие голосования
      */
-    public function close(int $id, Request $request): RedirectResponse
+    public function close(int $id): RedirectResponse
     {
         $vote = Vote::query()->where('id', $id)->first();
 
@@ -138,23 +134,19 @@ class VoteController extends AdminController
             abort(404, __('votes.voting_not_exist'));
         }
 
-        if ($request->input('_token') === csrf_token()) {
-            $status = __('votes.voting_success_open');
-            $closed = $vote->closed ^ 1;
+        $status = __('votes.voting_success_open');
+        $closed = $vote->closed ^ 1;
 
-            $vote->update([
-                'closed' => $closed,
-            ]);
+        $vote->update([
+            'closed' => $closed,
+        ]);
 
-            if ($closed) {
-                $vote->polls()->delete();
-                $status = __('votes.voting_success_closed');
-            }
-
-            setFlash('success', $status);
-        } else {
-            setFlash('danger', __('validator.token'));
+        if ($closed) {
+            $vote->polls()->delete();
+            $status = __('votes.voting_success_closed');
         }
+
+        setFlash('success', $status);
 
         if (empty($closed)) {
             return redirect()->route('admin.votes.index');

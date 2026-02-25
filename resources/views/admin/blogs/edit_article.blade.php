@@ -40,13 +40,23 @@
 
     @if ($article->active)
         <i class="fa fa-pencil-alt"></i>
-        <a class="me-3" href="{{ route('admin.articles.publish', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_unpublish_article') }}')">{{ __('main.unpublish') }}</a>
+        <form action="{{ route('admin.articles.publish', ['id' => $article->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_unpublish_article') }}')">
+            @csrf
+            <button class="btn btn-link p-0 me-3">{{ __('main.unpublish') }}</button>
+        </form>
     @else
         <i class="fa fa-pencil-alt"></i>
-        <a class="me-3" href="{{ route('admin.articles.publish', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_publish_article') }}')">{{ __('main.publish') }}</a>
+        <form action="{{ route('admin.articles.publish', ['id' => $article->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_publish_article') }}')">
+            @csrf
+            <button class="btn btn-link p-0 me-3">{{ __('main.publish') }}</button>
+        </form>
     @endif
 
-    <i class="fas fa-times"></i> <a class="me-3" href="{{ route('admin.articles.delete', ['id' => $article->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('blogs.confirm_delete_article') }}')">{{ __('main.delete') }}</a>
+    <i class="fas fa-times"></i>
+    <form action="{{ route('admin.articles.delete', ['id' => $article->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('blogs.confirm_delete_article') }}')">
+        @csrf
+        <button class="btn btn-link p-0 me-3">{{ __('main.delete') }}</button>
+    </form>
     <hr>
 
     <div class="section-form mb-3 shadow">

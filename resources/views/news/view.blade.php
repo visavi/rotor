@@ -23,7 +23,10 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{ route('admin.news.edit', ['id' => $news->id]) }}">{{ __('main.edit') }}</a>
-                    <a class="dropdown-item" href="{{ route('admin.news.delete', ['id' => $news->id, '_token' => csrf_token()]) }}" onclick="return confirm('{{ __('news.confirm_delete') }}')">{{ __('main.delete') }}</a>
+                    <form action="{{ route('admin.news.delete', ['id' => $news->id]) }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('news.confirm_delete') }}')">
+                        @csrf
+                        <button class="btn btn-link dropdown-item">{{ __('main.delete') }}</button>
+                    </form>
                 </div>
             </div>
         </div>
