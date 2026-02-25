@@ -80,6 +80,9 @@
     </div>
 
     @if ($posts->isNotEmpty() && isAdmin('boss'))
-        <i class="fa fa-times"></i> <a href="/admin/chats/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.chat.confirm_clear') }}')">{{ __('admin.chat.clear') }}</a><br>
+        <form action="/admin/chats/clear" method="post">
+            @csrf
+            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.chat.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('admin.chat.clear') }}</button>
+        </form><br>
     @endif
 @stop

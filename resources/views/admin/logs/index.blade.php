@@ -40,7 +40,10 @@
 
         {{ $logs->links() }}
 
-        <i class="fa fa-times"></i> <a href="/admin/logs/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
+        <form action="/admin/logs/clear" method="post">
+            @csrf
+            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+        </form><br>
     @else
         {{ showError(__('admin.logs.empty_logs')) }}
     @endif

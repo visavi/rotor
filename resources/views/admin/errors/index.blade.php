@@ -51,7 +51,10 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-trash-alt"></i> <a href="/admin/errors/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')">{{ __('main.clear') }}</a><br>
+            <form action="/admin/errors/clear" method="post">
+                @csrf
+                <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.logs.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+            </form><br>
         @endif
     @else
         {{ showError(__('main.empty_records')) }}

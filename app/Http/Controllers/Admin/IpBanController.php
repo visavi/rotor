@@ -77,11 +77,9 @@ class IpBanController extends AdminController
     /**
      * Очистка ip
      */
-    public function clear(Request $request, Validator $validator): RedirectResponse
+    public function clear(Validator $validator): RedirectResponse
     {
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
+        $validator->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
             Ban::query()->truncate();
@@ -92,6 +90,6 @@ class IpBanController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/ipbans');
+        return redirect()->route('admin.ipbans.index');
     }
 }

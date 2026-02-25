@@ -625,10 +625,11 @@ Route::middleware(['check.admin', 'admin.logger'])
         /* Админ-чат */
         Route::controller(ChatController::class)
             ->prefix('chats')
+            ->name('chats.')
             ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                Route::get('/clear', 'clear');
+                Route::match(['get', 'post'], '/', 'index')->name('index');
+                Route::match(['get', 'post'], '/edit/{id}', 'edit')->name('edit');
+                Route::post('/clear', 'clear')->name('clear');
             });
 
         /* Гостевая */
@@ -641,7 +642,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::match(['get', 'post'], '/{id}/reply', 'reply')->name('reply');
                 Route::post('/delete', 'delete')->name('delete');
                 Route::post('/publish', 'publish')->name('publish');
-                Route::get('/clear', 'clear')->name('clear');
+                Route::post('/clear', 'clear')->name('clear');
             });
 
         /* Форум */
@@ -788,10 +789,11 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Антимат */
             Route::controller(AntimatController::class)
                 ->prefix('antimat')
+                ->name('antimat.')
                 ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index');
-                    Route::get('/delete', 'delete');
-                    Route::get('/clear', 'clear');
+                    Route::match(['get', 'post'], '/', 'index')->name('index');
+                    Route::get('/delete', 'delete')->name('delete');
+                    Route::post('/clear', 'clear')->name('clear');
                 });
 
             /* История банов */
@@ -848,10 +850,11 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* IP-бан */
             Route::controller(IpBanController::class)
                 ->prefix('ipbans')
+                ->name('ipbans.')
                 ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index');
-                    Route::post('/delete', 'delete');
-                    Route::get('/clear', 'clear');
+                    Route::match(['get', 'post'], '/', 'index')->name('index');
+                    Route::post('/delete', 'delete')->name('delete');
+                    Route::post('/clear', 'clear')->name('clear');
                 });
 
             /* PHP-info */
@@ -883,9 +886,10 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Ошибки */
             Route::controller(ErrorController::class)
                 ->prefix('errors')
+                ->name('errors.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/clear', 'clear');
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/clear', 'clear')->name('clear');
                 });
 
             /* Черный список */
@@ -981,9 +985,10 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Логи */
             Route::controller(LogController::class)
                 ->prefix('logs')
+                ->name('logs.')
                 ->group(function () {
-                    Route::get('/', 'index')->withoutMiddleware('admin.logger');
-                    Route::get('/clear', 'clear');
+                    Route::get('/', 'index')->name('index')->withoutMiddleware('admin.logger');
+                    Route::post('/clear', 'clear')->name('clear');
                 });
 
             /* Шаблоны писем */

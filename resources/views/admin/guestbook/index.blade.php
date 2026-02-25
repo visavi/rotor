@@ -110,7 +110,10 @@
         </div>
 
         @if (isAdmin('boss'))
-            <i class="fa fa-times"></i> <a href="{{ route('admin.guestbook.clear', ['_token' => csrf_token()]) }}" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')">{{ __('main.clear') }}</a><br>
+            <form action="{{ route('admin.guestbook.clear') }}" method="post">
+                @csrf
+                <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('guestbook.confirm_delete') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+            </form><br>
         @endif
     @else
         {{ showError(__('main.empty_messages')) }}

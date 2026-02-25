@@ -121,11 +121,9 @@ class ChatController extends AdminController
     /**
      * Очистка чата
      */
-    public function clear(Request $request, Validator $validator): RedirectResponse
+    public function clear(Validator $validator): RedirectResponse
     {
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('main.page_only_admins'));
+        $validator->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
         if ($validator->isValid()) {
             Chat::query()->truncate();
@@ -135,6 +133,6 @@ class ChatController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/chats');
+        return redirect()->route('admin.chats.index');
     }
 }

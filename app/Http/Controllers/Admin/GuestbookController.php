@@ -157,11 +157,9 @@ class GuestbookController extends AdminController
     /**
      * Очистка сообщений
      */
-    public function clear(Request $request, Validator $validator): RedirectResponse
+    public function clear(Validator $validator): RedirectResponse
     {
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
+        $validator->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
             Guestbook::query()->truncate();

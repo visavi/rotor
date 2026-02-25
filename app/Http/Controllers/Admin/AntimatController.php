@@ -72,11 +72,9 @@ class AntimatController extends AdminController
     /**
      * Очистка списка слов
      */
-    public function clear(Request $request, Validator $validator): RedirectResponse
+    public function clear(Validator $validator): RedirectResponse
     {
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
+        $validator->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         if ($validator->isValid()) {
             Antimat::query()->truncate();
@@ -86,6 +84,6 @@ class AntimatController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/antimat');
+        return redirect()->route('admin.antimat.index');
     }
 }

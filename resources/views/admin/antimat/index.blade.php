@@ -32,7 +32,10 @@
 
                 @if (isAdmin('boss'))
                     <span class="float-end">
-                        <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?_token={{ csrf_token() }}" onclick="return confirm('{{ __('admin.antimat.confirm_clear') }}')">{{ __('main.clear') }}</a>
+                        <form action="/admin/antimat/clear" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('admin.antimat.confirm_clear') }}')"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
+                        </form>
                     </span>
                 @endif
             </div>

@@ -61,11 +61,9 @@ class ErrorController extends AdminController
     /**
      * Очистка логов
      */
-    public function clear(Request $request, Validator $validator): RedirectResponse
+    public function clear(Validator $validator): RedirectResponse
     {
-        $validator
-            ->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('main.page_only_admins'));
+        $validator->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
         if ($validator->isValid()) {
             Error::query()->truncate();
@@ -75,6 +73,6 @@ class ErrorController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return redirect('admin/errors');
+        return redirect()->route('admin.errors.index');
     }
 }
