@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FileResource;
+use App\Http\Resources\DialogueResource;
+use App\Http\Resources\MessageResource;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\TopicResource;
+use App\Http\Resources\UserProfileResource;
+use App\Http\Resources\UserResource;
 use App\Models\Dialogue;
 use App\Models\Forum;
 use App\Models\Message;
@@ -36,38 +41,7 @@ class ApiController extends Controller
         $user = $request->attributes->get('user');
 
         return response()->json([
-            'success' => true,
-            'data'    => [
-                'login'       => $user->login,
-                'email'       => $user->email,
-                'name'        => $user->name,
-                'level'       => $user->level,
-                'country'     => $user->country,
-                'city'        => $user->city,
-                'language'    => $user->language,
-                'info'        => $user->info,
-                'site'        => $user->site,
-                'phone'       => $user->phone,
-                'gender'      => $user->gender,
-                'birthday'    => $user->birthday,
-                'visits'      => $user->visits,
-                'allprivat'   => $user->getCountMessages(),
-                'newprivat'   => $user->newprivat,
-                'newwall'     => $user->newwall,
-                'allforum'    => $user->allforum,
-                'allguest'    => $user->allguest,
-                'allcomments' => $user->allcomments,
-                'themes'      => $user->themes,
-                'timezone'    => $user->timezone,
-                'point'       => $user->point,
-                'money'       => $user->money,
-                'status'      => $user->status ? $user->getStatus()->toHtml() : null,
-                'color'       => $user->color,
-                'avatar'      => $user->avatar ? asset($user->avatar) : null,
-                'picture'     => $user->picture ? asset($user->picture) : null,
-                'rating'      => $user->rating,
-                'lastlogin'   => $user->updated_at,
-            ],
+            'data' => new UserProfileResource($user),
         ]);
     }
 
@@ -83,31 +57,7 @@ class ApiController extends Controller
         }
 
         return response()->json([
-            'success' => true,
-            'data'    => [
-                'login'       => $user->login,
-                'name'        => $user->name,
-                'level'       => $user->level,
-                'country'     => $user->country,
-                'city'        => $user->city,
-                'info'        => $user->info,
-                'site'        => $user->site,
-                'gender'      => $user->gender,
-                'birthday'    => $user->birthday,
-                'visits'      => $user->visits,
-                'allforum'    => $user->allforum,
-                'allguest'    => $user->allguest,
-                'allcomments' => $user->allcomments,
-                'themes'      => $user->themes,
-                'point'       => $user->point,
-                'money'       => $user->money,
-                'status'      => $user->status ? $user->getStatus()->toHtml() : null,
-                'color'       => $user->color,
-                'avatar'      => $user->avatar ? asset($user->avatar) : null,
-                'picture'     => $user->picture ? asset($user->picture) : null,
-                'rating'      => $user->rating,
-                'lastlogin'   => $user->updated_at,
-            ],
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -133,23 +83,9 @@ class ApiController extends Controller
             ->where('d.user_id', $user->id)
             ->with('author')
             ->orderByDesc('d.created_at')
-            ->paginate(setting('privatpost'));
+            ->paginate($this->getPerPage($request, 'privatpost'));
 
-        $messages = [];
-        foreach ($dialogues as $message) {
-            $messageText = bbCode($message->text);
-
-            $messages[] = [
-                'id'         => $message->id,
-                'login'      => $message->author->exists ? $message->author->login : null,
-                'name'       => $message->author_id ? $message->author->getName() : __('messages.system'),
-                'text'       => $messageText->toHtml(),
-                'type'       => $message->getAttribute('type'),
-                'created_at' => $message->created_at,
-            ];
-        }
-
-        return $this->getResponse($dialogues, $messages);
+        return $this->getResponse($dialogues, DialogueResource::collection($dialogues));
     }
 
     /**
@@ -187,32 +123,15 @@ class ApiController extends Controller
             ->where('d.author_id', $author->id)
             ->orderByDesc('d.created_at')
             ->with('user', 'author', 'files')
-            ->paginate(setting('privatpost'));
+            ->paginate($this->getPerPage($request, 'privatpost'));
 
-        $msg = [];
-        foreach ($messages as $message) {
-            $messageText = bbCode($message->text);
-            $type = $message->getAttribute('type');
-            $sender = $type === $message::IN ? $message->author : $message->user;
-
-            $msg[] = [
-                'id'         => $message->id,
-                'login'      => $sender->exists ? $sender->login : null,
-                'name'       => $sender->exists ? $sender->getName() : __('messages.system'),
-                'text'       => $messageText->toHtml(),
-                'type'       => $type,
-                'created_at' => $message->created_at,
-                'files'      => FileResource::collection($message->files),
-            ];
-        }
-
-        return $this->getResponse($messages, $msg);
+        return $this->getResponse($messages, MessageResource::collection($messages));
     }
 
     /**
      * Api форума
      */
-    public function forums(int $id): Response
+    public function forums(int $id, Request $request): Response
     {
         $forum = Forum::query()->find($id);
 
@@ -225,35 +144,15 @@ class ApiController extends Controller
             ->with('user', 'lastPost.user')
             ->orderByDesc('locked')
             ->orderByDesc('updated_at')
-            ->paginate(setting('forumtem'));
+            ->paginate($this->getPerPage($request, 'forumtem'));
 
-        $data = [];
-        foreach ($topics as $topic) {
-            $data[] = [
-                'id'                   => $topic->id,
-                'title'                => $topic->title,
-                'login'                => $topic->user->login,
-                'closed'               => $topic->closed,
-                'locked'               => $topic->locked,
-                'count_posts'          => $topic->count_posts,
-                'visits'               => $topic->visits,
-                'moderators'           => $topic->moderators,
-                'note'                 => $topic->note,
-                'last_post_id'         => $topic->last_post_id,
-                'last_post_user_login' => $topic->lastPost->user->login,
-                'close_user_id'        => $topic->close_user_id,
-                'updated_at'           => $topic->updated_at,
-                'created_at'           => $topic->created_at,
-            ];
-        }
-
-        return $this->getResponse($topics, $data);
+        return $this->getResponse($topics, TopicResource::collection($topics));
     }
 
     /**
      * Api постов темы в форуме
      */
-    public function topics(int $id): Response
+    public function topics(int $id, Request $request): Response
     {
         $topic = Topic::query()->find($id);
 
@@ -265,34 +164,29 @@ class ApiController extends Controller
             ->where('topic_id', $id)
             ->with('user', 'files')
             ->orderBy('created_at')
-            ->paginate(setting('forumpost'));
+            ->paginate($this->getPerPage($request, 'forumpost'));
 
-        $data = [];
-        foreach ($posts as $post) {
-            $postText = bbCode($post->text);
+        return $this->getResponse($posts, PostResource::collection($posts));
+    }
 
-            $data[] = [
-                'id'         => $post->id,
-                'login'      => $post->user->login,
-                'text'       => $postText->toHtml(),
-                'rating'     => $post->rating,
-                'updated_at' => $post->updated_at,
-                'created_at' => $post->created_at,
-                'files'      => FileResource::collection($post->files),
-            ];
-        }
+    /**
+     * Get per page from request or setting
+     */
+    private function getPerPage(Request $request, string $settingKey): int
+    {
+        $default = (int) setting($settingKey);
+        $perPage = $request->integer('per_page', $default);
 
-        return $this->getResponse($posts, $data);
+        return max(1, min($perPage, 100));
     }
 
     /**
      * Get paginate
      */
-    private function getResponse(LengthAwarePaginator $collect, array $data): Response
+    private function getResponse(LengthAwarePaginator $collect, mixed $data): Response
     {
         return response()->json([
-            'success' => true,
-            'data'    => $data,
+            'data' => $data,
             'links'   => [
                 'next' => $collect->nextPageUrl(),
                 'prev' => $collect->previousPageUrl(),
