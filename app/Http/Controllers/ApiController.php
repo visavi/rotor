@@ -32,7 +32,7 @@ class ApiController extends Controller
      */
     public function user(Request $request): Response
     {
-        $user = $request->user();
+        $user = $request->attributes->get('user');
 
         return response()->json([
             'success' => true,
@@ -115,7 +115,7 @@ class ApiController extends Controller
      */
     public function dialogues(Request $request): Response
     {
-        $user = $request->user();
+        $user = $request->attributes->get('user');
 
         $lastMessage = Dialogue::query()
             ->select('author_id', DB::raw('max(message_id) as message_id'))
@@ -156,7 +156,7 @@ class ApiController extends Controller
      */
     public function talk(string $login, Request $request): Response
     {
-        $user = $request->user();
+        $user = $request->attributes->get('user');
 
         if (is_numeric($login)) {
             $author = new User();
@@ -192,12 +192,12 @@ class ApiController extends Controller
         $msg = [];
         foreach ($messages as $message) {
             $message->text = bbCode($message->text);
-            $author = $message->type === $message::IN ? $message->author : $message->user;
+            $sender = $message->type === $message::IN ? $message->author : $message->user;
 
             $msg[] = [
                 'id'         => $message->id,
-                'login'      => $author->exists ? $author->login : null,
-                'name'       => $author->exists ? $author->getName() : __('messages.system'),
+                'login'      => $sender->exists ? $sender->login : null,
+                'name'       => $sender->exists ? $sender->getName() : __('messages.system'),
                 'text'       => $message->text->toHtml(),
                 'type'       => $message->type,
                 'created_at' => $message->created_at,
@@ -220,6 +220,7 @@ class ApiController extends Controller
 
         $topics = Topic::query()
             ->where('forum_id', $id)
+            ->with('user')
             ->orderBy('created_at')
             ->paginate(setting('forumtem'));
 
@@ -258,6 +259,7 @@ class ApiController extends Controller
 
         $posts = Post::query()
             ->where('topic_id', $id)
+            ->with('user')
             ->orderBy('created_at')
             ->paginate(setting('forumpost'));
 

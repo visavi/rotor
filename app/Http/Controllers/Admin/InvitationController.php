@@ -39,8 +39,7 @@ class InvitationController extends AdminController
         if ($request->isMethod('post')) {
             $keys = int($request->input('keys'));
 
-            $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-                ->notEmpty($keys, ['keys' => __('admin.invitations.keys_not_amount')]);
+            $validator->notEmpty($keys, ['keys' => __('admin.invitations.keys_not_amount')]);
 
             if ($validator->isValid()) {
                 $newKeys = [];
@@ -78,7 +77,7 @@ class InvitationController extends AdminController
 
         $user = getUserByLogin($request->input('user'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
+        $validator
             ->notEmpty($user, ['user' => __('validator.user')])
             ->notEmpty($userkeys, ['userkeys' => __('admin.invitations.keys_not_amount')]);
 
@@ -119,8 +118,7 @@ class InvitationController extends AdminController
      */
     public function mail(Request $request, Validator $validator): RedirectResponse
     {
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true(isAdmin(User::BOSS), __('main.page_only_owner'));
+        $validator->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
         $users = User::query()->where('updated_at', '>', strtotime('-1 week', SITETIME))->get();
 
