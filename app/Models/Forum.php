@@ -41,6 +41,16 @@ class Forum extends Model
     protected $guarded = [];
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'closed' => 'bool',
+        ];
+    }
+
+    /**
      * Возвращает связь родительского форума
      */
     public function parent(): BelongsTo

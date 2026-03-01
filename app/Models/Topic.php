@@ -90,6 +90,8 @@ class Topic extends Model
     {
         return [
             'user_id' => 'int',
+            'closed'  => 'bool',
+            'locked'  => 'bool',
         ];
     }
 

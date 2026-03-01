@@ -15,7 +15,7 @@ class DialogueResource extends JsonResource
     {
         return [
             'id'             => $this->id,
-            'login'          => $this->author->exists ? $this->author->login : 0,
+            'login'          => $this->author->exists ? $this->author->login : '0',
             'name'           => $this->author_id ? $this->author->getName() : __('messages.system'),
             'text'           => bbCode($this->text)->toHtml(),
             'type'           => $this->getAttribute('type'),

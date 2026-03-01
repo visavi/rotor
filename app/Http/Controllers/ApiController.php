@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DialogueResource;
+use App\Http\Resources\ForumResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\TopicResource;
@@ -132,7 +133,25 @@ class ApiController extends Controller
     }
 
     /**
-     * Api форума
+     * Api разделов форума
+     */
+    public function categoryForums(): JsonResource
+    {
+        $forums = Forum::query()
+            ->where('parent_id', 0)
+            ->with('children', 'lastTopic.lastPost.user')
+            ->orderBy('sort')
+            ->get();
+
+        if ($forums->isEmpty()) {
+            abort(200, __('forums.empty_forums'));
+        }
+
+        return ForumResource::collection($forums);
+    }
+
+    /**
+     * Api тем форума
      */
     public function forums(int $id, Request $request): JsonResource
     {

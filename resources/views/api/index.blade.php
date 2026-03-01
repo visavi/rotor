@@ -21,16 +21,14 @@
     <h3><i class="fa fa-cog"></i> /api/user</h3>
     {{ __('api.page_user') }}<br>
 
-    {{ __('api.text_example') }}
-    <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
 GET https://visavi.net/api/user
 {
   "token": "key",
 }
 [/code][/spoiler]') ?>
 
-    {{ __('api.text_return') }}
-    <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
 {
     "data": {
         "login": "Vantuz",
@@ -72,16 +70,14 @@ GET https://visavi.net/api/user
         <h3><i class="fa fa-cog"></i> /api/users/{login}</h3>
         {{ __('api.page_users') }}<br>
 
-        {{ __('api.text_example') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
 GET https://visavi.net/api/users/3v
 {
   "token": "key",
 }
 [/code][/spoiler]') ?>
 
-        {{ __('api.text_return') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
 {
     "data": {
         "login": "3v",
@@ -117,8 +113,7 @@ GET https://visavi.net/api/users/3v
         <h3><i class="fa fa-cog"></i> /api/dialogues</h3>
         {{ __('api.page_dialogues') }}<br>
 
-        {{ __('api.text_example') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
 GET https://visavi.net/api/dialogues
 {
   "token": "key",
@@ -127,8 +122,7 @@ GET https://visavi.net/api/dialogues
 }
 [/code][/spoiler]') ?>
 
-        {{ __('api.text_return') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
 {
     "data": [
         {
@@ -158,6 +152,7 @@ GET https://visavi.net/api/dialogues
     "meta": {
         // Информация о пагинации
     }
+}
 [/code][/spoiler]') ?>
     </div>
 
@@ -165,8 +160,7 @@ GET https://visavi.net/api/dialogues
         <h3><i class="fa fa-cog"></i> /api/talk/{login}</h3>
         {{ __('api.page_messages') }}<br>
 
-        {{ __('api.text_example') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
 GET https://visavi.net/api/talk/XaOS
 {
   "token": "key",
@@ -175,8 +169,7 @@ GET https://visavi.net/api/talk/XaOS
 }
 [/code][/spoiler]') ?>
 
-        {{ __('api.text_return') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
 {
     "data": [
         {
@@ -216,6 +209,56 @@ GET https://visavi.net/api/talk/XaOS
     "meta": {
         // Информация о пагинации
     }
+}
+[/code][/spoiler]') ?>
+    </div>
+
+    <div class="mb-3 pb-3 border-bottom">
+        <h3><i class="fa fa-cog"></i> /api/forums</h3>
+        {{ __('api.page_category_forums') }}<br>
+
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
+GET https://visavi.net/api/forums
+{
+  "token": "key"
+}
+[/code][/spoiler]') ?>
+
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
+{
+    "data": [
+        {
+            "id": 1,
+            "parent_id": 0,
+            "sort": 1,
+            "title": "Общение",
+            "description": "Описание раздела",
+            "closed": false,
+            "count_topics": 7473,
+            "count_posts": 258020,
+            "last_topic_id": 44907,
+            "last_topic_title": "Последняя тема в форуме",
+            "last_post_user_login": "Vantuz",
+            "last_post_at": "2026-03-01T03:45:21+03:00",
+            "children": [
+                {
+                    "id": 34,
+                    "parent_id": 1,
+                    "sort": 94,
+                    "title": "Обзор сервисов",
+                    "description": "Описание подраздела",
+                    "closed": false,
+                    "count_topics": 89,
+                    "count_posts": 1269,
+                    "last_topic_id": 44872,
+                    "last_topic_title": "Путь заработка 70$ в сутки",
+                    "last_post_user_login": "Randy",
+                    "last_post_at": "2024-07-10T04:42:53+03:00"
+                }
+            ]
+        }
+    ]
+}
 [/code][/spoiler]') ?>
     </div>
 
@@ -223,8 +266,7 @@ GET https://visavi.net/api/talk/XaOS
         <h3><i class="fa fa-cog"></i> /api/forums/{id}</h3>
         {{ __('api.page_forums') }}<br>
 
-        {{ __('api.text_example') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
 GET https://visavi.net/api/forums/1
 {
   "token": "key",
@@ -233,8 +275,7 @@ GET https://visavi.net/api/forums/1
 }
 [/code][/spoiler]') ?>
 
-        {{ __('api.text_return') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
 {
     "data": [
         {
@@ -276,6 +317,7 @@ GET https://visavi.net/api/forums/1
     "meta": {
         // Информация о пагинации
     }
+}
 [/code][/spoiler]') ?>
     </div>
 
@@ -283,8 +325,7 @@ GET https://visavi.net/api/forums/1
         <h3><i class="fa fa-cog"></i> /api/topics/{id}</h3>
         {{ __('api.page_topics') }}<br>
 
-        {{ __('api.text_example') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.request') . '][code]
 GET https://visavi.net/api/topics/1
 {
   "token": "key",
@@ -293,8 +334,7 @@ GET https://visavi.net/api/topics/1
 }
 [/code][/spoiler]') ?>
 
-        {{ __('api.text_return') }}
-        <?= bbCode('[spoiler][code]
+<?= bbCode('[spoiler=' . __('api.response') . '][code]
 {
     "data": [
         {
@@ -334,6 +374,7 @@ GET https://visavi.net/api/topics/1
     "meta": {
         // Информация о пагинации
     }
+}
 [/code][/spoiler]') ?>
     </div>
 

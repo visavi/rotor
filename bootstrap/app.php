@@ -81,14 +81,12 @@ return Application::configure(basePath: dirname(__DIR__))
                 }
 
                 return response()->json([
-                    'success' => false,
                     'message' => __('validator.token'),
                 ]);
             }
 
             if ($request->wantsJson()) {
                 return response()->json([
-                    'success' => false,
                     'message' => $exception->getMessage() ?: __('errors.error'),
                 ], $exception->getStatusCode());
             }
