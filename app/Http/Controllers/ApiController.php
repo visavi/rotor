@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\FileResource;
 use App\Models\Dialogue;
 use App\Models\Forum;
 use App\Models\Message;
@@ -186,7 +187,7 @@ class ApiController extends Controller
             ->where('d.user_id', $user->id)
             ->where('d.author_id', $author->id)
             ->orderByDesc('d.created_at')
-            ->with('user', 'author')
+            ->with('user', 'author', 'files')
             ->paginate(setting('privatpost'));
 
         $msg = [];
@@ -201,6 +202,7 @@ class ApiController extends Controller
                 'text'       => $message->text->toHtml(),
                 'type'       => $message->type,
                 'created_at' => $message->created_at,
+                'files'      => FileResource::collection($message->files),
             ];
         }
 
@@ -220,26 +222,28 @@ class ApiController extends Controller
 
         $topics = Topic::query()
             ->where('forum_id', $id)
-            ->with('user')
-            ->orderBy('created_at')
+            ->with('user', 'lastPost.user')
+            ->orderByDesc('locked')
+            ->orderByDesc('updated_at')
             ->paginate(setting('forumtem'));
 
         $data = [];
         foreach ($topics as $topic) {
             $data[] = [
-                'id'            => $topic->id,
-                'title'         => $topic->title,
-                'login'         => $topic->user->login,
-                'closed'        => $topic->closed,
-                'locked'        => $topic->locked,
-                'count_posts'   => $topic->count_posts,
-                'visits'        => $topic->visits,
-                'moderators'    => $topic->moderators,
-                'note'          => $topic->note,
-                'last_post_id'  => $topic->last_post_id,
-                'close_user_id' => $topic->close_user_id,
-                'updated_at'    => $topic->updated_at,
-                'created_at'    => $topic->created_at,
+                'id'                   => $topic->id,
+                'title'                => $topic->title,
+                'login'                => $topic->user->login,
+                'closed'               => $topic->closed,
+                'locked'               => $topic->locked,
+                'count_posts'          => $topic->count_posts,
+                'visits'               => $topic->visits,
+                'moderators'           => $topic->moderators,
+                'note'                 => $topic->note,
+                'last_post_id'         => $topic->last_post_id,
+                'last_post_user_login' => $topic->lastPost->user->login,
+                'close_user_id'        => $topic->close_user_id,
+                'updated_at'           => $topic->updated_at,
+                'created_at'           => $topic->created_at,
             ];
         }
 
@@ -259,7 +263,7 @@ class ApiController extends Controller
 
         $posts = Post::query()
             ->where('topic_id', $id)
-            ->with('user')
+            ->with('user', 'files')
             ->orderBy('created_at')
             ->paginate(setting('forumpost'));
 
@@ -274,6 +278,7 @@ class ApiController extends Controller
                 'rating'     => $post->rating,
                 'updated_at' => $post->updated_at,
                 'created_at' => $post->created_at,
+                'files'      => FileResource::collection($post->files),
             ];
         }
 
