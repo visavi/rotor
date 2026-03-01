@@ -29,6 +29,7 @@ use Illuminate\Support\HtmlString;
  * @property string $brow
  * @property int    $edit_user_id
  * @property int    $updated_at
+ * @property-read User             $user
  * @property-read Collection<File> $files
  * @property-read Collection<Poll> $polls
  * @property-read Poll             $poll

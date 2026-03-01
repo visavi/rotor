@@ -137,14 +137,14 @@ class ApiController extends Controller
 
         $messages = [];
         foreach ($dialogues as $message) {
-            $message->text = bbCode($message->text);
+            $messageText = bbCode($message->text);
 
             $messages[] = [
                 'id'         => $message->id,
                 'login'      => $message->author->exists ? $message->author->login : null,
                 'name'       => $message->author_id ? $message->author->getName() : __('messages.system'),
-                'text'       => $message->text->toHtml(),
-                'type'       => $message->type,
+                'text'       => $messageText->toHtml(),
+                'type'       => $message->getAttribute('type'),
                 'created_at' => $message->created_at,
             ];
         }
@@ -159,9 +159,8 @@ class ApiController extends Controller
     {
         $user = $request->attributes->get('user');
 
-        if (is_numeric($login)) {
-            $author = new User();
-            $author->id = $login;
+        if (empty($login)) {
+            $author = (new User())->setAttribute('id', 0);
         } else {
             $author = getUserByLogin($login);
 
@@ -192,15 +191,16 @@ class ApiController extends Controller
 
         $msg = [];
         foreach ($messages as $message) {
-            $message->text = bbCode($message->text);
-            $sender = $message->type === $message::IN ? $message->author : $message->user;
+            $messageText = bbCode($message->text);
+            $type = $message->getAttribute('type');
+            $sender = $type === $message::IN ? $message->author : $message->user;
 
             $msg[] = [
                 'id'         => $message->id,
                 'login'      => $sender->exists ? $sender->login : null,
                 'name'       => $sender->exists ? $sender->getName() : __('messages.system'),
-                'text'       => $message->text->toHtml(),
-                'type'       => $message->type,
+                'text'       => $messageText->toHtml(),
+                'type'       => $type,
                 'created_at' => $message->created_at,
                 'files'      => FileResource::collection($message->files),
             ];
@@ -269,12 +269,12 @@ class ApiController extends Controller
 
         $data = [];
         foreach ($posts as $post) {
-            $post->text = bbCode($post->text);
+            $postText = bbCode($post->text);
 
             $data[] = [
                 'id'         => $post->id,
                 'login'      => $post->user->login,
-                'text'       => $post->text->toHtml(),
+                'text'       => $postText->toHtml(),
                 'rating'     => $post->rating,
                 'updated_at' => $post->updated_at,
                 'created_at' => $post->created_at,

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
  * @property int    $author_id
  * @property string $text
  * @property int    $created_at
+ * @property-read User $user
  * @property-read User $author
  * @property-read Collection<File> $files
  * @property-read Collection<Dialogue> $dialogues

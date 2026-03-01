@@ -31,6 +31,8 @@ use Illuminate\Support\HtmlString;
  * @property string      $note
  * @property int         $last_post_id
  * @property int         $close_user_id
+ * @property-read User                 $user
+ * @property-read Post                 $lastPost
  * @property-read Forum                $forum
  * @property-read Collection<Post>     $posts
  * @property-read Collection<Bookmark> $bookmarks
