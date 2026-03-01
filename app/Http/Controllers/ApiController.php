@@ -18,10 +18,9 @@ use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
 {
@@ -36,19 +35,17 @@ class ApiController extends Controller
     /**
      * Api пользователей
      */
-    public function user(Request $request): Response
+    public function user(Request $request): JsonResource
     {
         $user = $request->attributes->get('user');
 
-        return response()->json([
-            'data' => new UserProfileResource($user),
-        ]);
+        return new UserProfileResource($user);
     }
 
     /**
      * Api пользователей
      */
-    public function users(string $login): Response
+    public function users(string $login): JsonResource
     {
         $user = getUserByLogin($login);
 
@@ -56,42 +53,48 @@ class ApiController extends Controller
             abort(404, __('validator.user'));
         }
 
-        return response()->json([
-            'data' => new UserResource($user),
-        ]);
+        return new UserResource($user);
     }
 
     /**
      * Api диалогов
      */
-    public function dialogues(Request $request): Response
+    public function dialogues(Request $request): JsonResource
     {
         $user = $request->attributes->get('user');
 
         $lastMessage = Dialogue::query()
-            ->select('author_id', DB::raw('max(message_id) as message_id'))
+            ->select(
+                'author_id',
+                DB::raw('max(message_id) as message_id'),
+                DB::raw('min(case when reading then 1 else 0 end) as all_reading')
+            )
             ->where('user_id', $user->id)
             ->groupBy('author_id');
 
         $dialogues = Message::query()
-            ->select('d.*', 'm.text')
+            ->select('d.*', 'm.text', 'd2.all_reading', 'd3.reading as recipient_read')
             ->from('messages as m')
             ->join('dialogues as d', 'd.message_id', 'm.id')
             ->joinSub($lastMessage, 'd2', static function (JoinClause $join) {
                 $join->on('d.message_id', 'd2.message_id');
             })
+            ->leftJoin('dialogues as d3', function ($join) {
+                $join->on('d.user_id', 'd3.author_id')
+                    ->whereColumn('d.message_id', 'd3.message_id');
+            })
             ->where('d.user_id', $user->id)
             ->with('author')
             ->orderByDesc('d.created_at')
-            ->paginate($this->getPerPage($request, 'privatpost'));
+            ->paginate($this->getPerPage($request));
 
-        return $this->getResponse($dialogues, DialogueResource::collection($dialogues));
+        return DialogueResource::collection($dialogues);
     }
 
     /**
      * Api приватных сообщений
      */
-    public function talk(string $login, Request $request): Response
+    public function talk(string $login, Request $request): JsonResource
     {
         $user = $request->attributes->get('user');
 
@@ -123,15 +126,15 @@ class ApiController extends Controller
             ->where('d.author_id', $author->id)
             ->orderByDesc('d.created_at')
             ->with('user', 'author', 'files')
-            ->paginate($this->getPerPage($request, 'privatpost'));
+            ->paginate($this->getPerPage($request));
 
-        return $this->getResponse($messages, MessageResource::collection($messages));
+        return MessageResource::collection($messages);
     }
 
     /**
      * Api форума
      */
-    public function forums(int $id, Request $request): Response
+    public function forums(int $id, Request $request): JsonResource
     {
         $forum = Forum::query()->find($id);
 
@@ -144,15 +147,15 @@ class ApiController extends Controller
             ->with('user', 'lastPost.user')
             ->orderByDesc('locked')
             ->orderByDesc('updated_at')
-            ->paginate($this->getPerPage($request, 'forumtem'));
+            ->paginate($this->getPerPage($request));
 
-        return $this->getResponse($topics, TopicResource::collection($topics));
+        return TopicResource::collection($topics);
     }
 
     /**
      * Api постов темы в форуме
      */
-    public function topics(int $id, Request $request): Response
+    public function topics(int $id, Request $request): JsonResource
     {
         $topic = Topic::query()->find($id);
 
@@ -164,40 +167,18 @@ class ApiController extends Controller
             ->where('topic_id', $id)
             ->with('user', 'files')
             ->orderBy('created_at')
-            ->paginate($this->getPerPage($request, 'forumpost'));
+            ->paginate($this->getPerPage($request));
 
-        return $this->getResponse($posts, PostResource::collection($posts));
+        return PostResource::collection($posts);
     }
 
     /**
-     * Get per page from request or setting
+     * Get per page from request
      */
-    private function getPerPage(Request $request, string $settingKey): int
+    private function getPerPage(Request $request): int
     {
-        $default = (int) setting($settingKey);
-        $perPage = $request->integer('per_page', $default);
+        $perPage = $request->integer('per_page', 10);
 
         return max(1, min($perPage, 100));
-    }
-
-    /**
-     * Get paginate
-     */
-    private function getResponse(LengthAwarePaginator $collect, mixed $data): Response
-    {
-        return response()->json([
-            'data' => $data,
-            'links'   => [
-                'next' => $collect->nextPageUrl(),
-                'prev' => $collect->previousPageUrl(),
-            ],
-            'meta' => [
-                'current_page' => $collect->currentPage(),
-                'last_page'    => $collect->lastPage(),
-                'path'         => $collect->path(),
-                'per_page'     => $collect->perPage(),
-                'total'        => $collect->total(),
-            ],
-        ]);
     }
 }

@@ -26,8 +26,8 @@ class TopicResource extends JsonResource
             'last_post_id'         => $this->last_post_id,
             'last_post_user_login' => $this->lastPost->user->login,
             'close_user_id'        => $this->close_user_id,
-            'updated_at'           => $this->updated_at,
-            'created_at'           => $this->created_at,
+            'updated_at'           => dateFixed($this->updated_at, 'c', true),
+            'created_at'           => dateFixed($this->created_at, 'c', true),
         ];
     }
 }

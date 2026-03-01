@@ -60,8 +60,8 @@ class MessageController extends Controller
                     ->whereColumn('d.message_id', 'd3.message_id');
             })
             ->where('d.user_id', $this->user->id)
-            ->orderByDesc('d.created_at')
             ->with('author')
+            ->orderByDesc('d.created_at')
             ->paginate(setting('privatpost'));
 
         return view('messages/index', compact('messages'));

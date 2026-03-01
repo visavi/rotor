@@ -32,12 +32,12 @@ class UserResource extends JsonResource
             'money'       => $this->money,
             'status'      => $this->status ? $this->getStatus()->toHtml() : null,
             'color'       => $this->color,
-            'avatar'      => $this->avatar ? asset($this->avatar) : null,
-            'picture'     => $this->picture ? asset($this->picture) : null,
+            'avatar'      => $this->avatar ? url($this->avatar) : null,
+            'picture'     => $this->picture ? url($this->picture) : null,
             'rating'      => $this->rating,
             'language'    => $this->language,
             'timezone'    => $this->timezone,
-            'lastlogin'   => $this->updated_at,
+            'lastlogin'   => dateFixed($this->updated_at, 'c', true),
         ];
     }
 }

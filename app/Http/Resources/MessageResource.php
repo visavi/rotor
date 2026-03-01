@@ -22,7 +22,7 @@ class MessageResource extends JsonResource
             'name'       => $sender->exists ? $sender->getName() : __('messages.system'),
             'text'       => bbCode($this->text)->toHtml(),
             'type'       => $type,
-            'created_at' => $this->created_at,
+            'created_at' => dateFixed($this->created_at, 'c', true),
             'files'      => FileResource::collection($this->files),
         ];
     }

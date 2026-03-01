@@ -18,9 +18,9 @@ class PostResource extends JsonResource
             'login'      => $this->user->login,
             'text'       => bbCode($this->text)->toHtml(),
             'rating'     => $this->rating,
-            'updated_at' => $this->updated_at,
-            'created_at' => $this->created_at,
             'files'      => FileResource::collection($this->files),
+            'updated_at' => dateFixed($this->updated_at, 'c', true),
+            'created_at' => dateFixed($this->created_at, 'c', true),
         ];
     }
 }
