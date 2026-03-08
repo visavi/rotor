@@ -116,8 +116,7 @@ class ContactController extends Controller
         $page = int($request->input('page', 1));
         $del = intar($request->input('del'));
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($del, __('validator.deletion'));
+        $validator->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             Contact::query()

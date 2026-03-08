@@ -36,24 +36,20 @@ class CacheController extends AdminController
     {
         $type = $request->input('type');
 
-        if ($request->input('_token') === csrf_token()) {
-            switch ($type) {
-                case 'images':
-                    Artisan::call('image:clear');
-                    break;
-                case 'views':
-                    Artisan::call('view:clear');
-                    break;
-                default:
-                    Artisan::call('cache:clear');
-                    Artisan::call('route:clear');
-                    Artisan::call('config:clear');
-            }
-
-            setFlash('success', __('admin.caches.success_cleared'));
-        } else {
-            setFlash('danger', __('validator.token'));
+        switch ($type) {
+            case 'images':
+                Artisan::call('image:clear');
+                break;
+            case 'views':
+                Artisan::call('view:clear');
+                break;
+            default:
+                Artisan::call('cache:clear');
+                Artisan::call('route:clear');
+                Artisan::call('config:clear');
         }
+
+        setFlash('success', __('admin.caches.success_cleared'));
 
         return redirect('admin/caches?type=' . $type);
     }

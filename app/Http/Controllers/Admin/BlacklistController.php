@@ -98,8 +98,7 @@ class BlacklistController extends AdminController
         $del = intar($request->input('del'));
         $type = $this->type;
 
-        $validator->equal($request->input('_token'), csrf_token(), __('validator.token'))
-            ->true($del, __('validator.deletion'));
+        $validator->true($del, __('validator.deletion'));
 
         if ($validator->isValid()) {
             BlackList::query()->where('type', $type)->whereIn('id', $del)->delete();
