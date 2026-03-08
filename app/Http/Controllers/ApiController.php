@@ -99,8 +99,8 @@ class ApiController extends Controller
     {
         $user = $request->attributes->get('user');
 
-        if (empty($login)) {
-            $author = (new User())->setAttribute('id', 0);
+        if (is_numeric($login)) {
+            $author = (new User())->setAttribute('id', $login);
         } else {
             $author = getUserByLogin($login);
 

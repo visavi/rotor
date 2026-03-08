@@ -243,6 +243,32 @@ window.postQuote = function (el) {
     return false;
 };
 
+/* Подтверждение действия */
+window.confirmAction = function (el) {
+    const $el = $(el);
+    const message = $el.data('confirm') || 'Вы уверены?';
+
+    if ($el.data('confirmed')) {
+        $el.removeData('confirmed');
+        return true;
+    }
+
+    bootbox.confirm(message, function (result) {
+        if (result) {
+            if ($el.is('form') || $el.closest('form').length) {
+                const $form = $el.is('form') ? $el : $el.closest('form');
+                $form.data('confirmed', true);
+                $form[0].submit();
+            } else {
+                const href = $el.attr('href');
+                if (href) window.location.href = href;
+            }
+        }
+    });
+
+    return false;
+};
+
 /* Отправка жалобы на спам */
 window.sendComplaint = function (el) {
     bootbox.confirm(__('confirm_complain_submit'), function (result) {

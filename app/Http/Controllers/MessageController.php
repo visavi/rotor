@@ -73,8 +73,7 @@ class MessageController extends Controller
     public function talk(string $login): View
     {
         if (is_numeric($login)) {
-            $user = new User();
-            $user->id = $login;
+            $user = (new User())->setAttribute('id', $login);
         } else {
             $user = getUserByLogin($login);
 

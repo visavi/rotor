@@ -137,7 +137,7 @@ GET https://visavi.net/api/dialogues
         },
         {
             "id": 228103,
-            "login": 0,
+            "login": "0",
             "name": "Система",
             "text": "Ваша статья <strong><a href=\"/url\">Статья</a></strong> снята с публикации",
             "type": "in",
