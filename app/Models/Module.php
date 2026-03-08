@@ -6,10 +6,10 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 /**
@@ -26,6 +26,11 @@ use Illuminate\Support\Str;
 class Module extends Model
 {
     /**
+     * Assets modules path
+     */
+    protected const ASSETS_PATH = '/assets/modules/';
+
+    /**
      * Indicates if the model should be timestamped.
      */
     public $timestamps = false;
@@ -34,11 +39,6 @@ class Module extends Model
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
-
-    /**
-     * Assets modules path
-     */
-    public string $assetsPath = '/assets/modules/';
 
     /**
      * Get the attributes that should be cast.
@@ -106,8 +106,7 @@ class Module extends Model
             return;
         }
 
-        $filesystem = new Filesystem();
-        $filesystem->link($assetsPath, $originPath);
+        File::link($assetsPath, $originPath);
     }
 
     /**
@@ -120,8 +119,7 @@ class Module extends Model
             return;
         }
 
-        $filesystem = new Filesystem();
-        $filesystem->delete($originPath);
+        File::delete($originPath);
     }
 
     /**
@@ -129,7 +127,7 @@ class Module extends Model
      */
     public function getLinkName(): string
     {
-        return $this->assetsPath . Str::plural(strtolower($this->name));
+        return self::ASSETS_PATH . Str::plural(strtolower($this->name));
     }
 
     /**
@@ -137,7 +135,7 @@ class Module extends Model
      */
     public static function getLinkNameByPath(string $modulePath): string
     {
-        return (new self())->assetsPath . Str::plural(strtolower(basename($modulePath)));
+        return self::ASSETS_PATH . Str::plural(strtolower(basename($modulePath)));
     }
 
     /**
