@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DialogueResource;
 use App\Http\Resources\ForumResource;
 use App\Http\Resources\MessageResource;
-use App\Http\Resources\NewMessageDialogueResource;
+use App\Http\Resources\NewMessageResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\TopicResource;
 use App\Http\Resources\UserProfileResource;
@@ -225,7 +225,7 @@ class ApiController extends Controller
 
         return response()->json([
             'count'     => $countMessages,
-            'dialogues' => NewMessageDialogueResource::collection($dialogues),
+            'dialogues' => NewMessageResource::collection($dialogues),
         ]);
     }
 

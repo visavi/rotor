@@ -215,7 +215,7 @@
                     "files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}}
                 }
             },
-            "NewMessageDialogue": {
+            "NewMessage": {
                 "type": "object",
                 "properties": {
                     "login": {"type": "string"},
@@ -361,7 +361,7 @@
                                     "type": "object",
                                     "properties": {
                                         "count": {"type": "integer", "description": "Общее количество непрочитанных сообщений"},
-                                        "dialogues": {"type": "array", "items": {"$ref": "#/components/schemas/NewMessageDialogue"}}
+                                        "dialogues": {"type": "array", "items": {"$ref": "#/components/schemas/NewMessage"}}
                                     }
                                 }
                             }
