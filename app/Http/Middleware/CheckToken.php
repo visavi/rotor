@@ -13,7 +13,8 @@ class CheckToken
      */
     public function handle(Request $request, Closure $next)
     {
-        $token = $request->input('token');
+        $bearerToken = $request->bearerToken();
+        $token = $bearerToken ?? $request->input('token');
 
         if (! $token) {
             abort(400, 'Api token missing');

@@ -1,0 +1,423 @@
+{
+    "openapi": "3.2.0",
+    "info": {
+        "title": "Rotor API",
+        "version": "1.0.0",
+        "description": "Для доступа к данным нужен API-ключ, который можно получить на странице Мои данные"
+    },
+    "security": [{"BearerToken": []}],
+    "components": {
+        "securitySchemes": {
+            "BearerToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "description": "Передайте API-ключ в заголовке: Authorization: Bearer {token}"
+            },
+            "ApiToken": {
+                "type": "apiKey",
+                "in": "query",
+                "name": "token",
+                "description": "Устаревший способ. Передайте API-ключ через query-параметр token. Используйте заголовок Authorization: Bearer {token}"
+            }
+        },
+        "parameters": {
+            "PerPage": {
+                "name": "per_page",
+                "in": "query",
+                "schema": {"type": "integer", "default": 10, "minimum": 1, "maximum": 100},
+                "description": "Количество элементов на странице"
+            },
+            "Page": {
+                "name": "page",
+                "in": "query",
+                "schema": {"type": "integer", "default": 1, "minimum": 1},
+                "description": "Номер страницы"
+            }
+        },
+        "schemas": {
+            "PaginationLinks": {
+                "type": "object",
+                "properties": {
+                    "first": {"type": "string", "format": "uri"},
+                    "last": {"type": "string", "format": "uri"},
+                    "prev": {"type": ["string", "null"], "format": "uri"},
+                    "next": {"type": ["string", "null"], "format": "uri"}
+                }
+            },
+            "PaginationMeta": {
+                "type": "object",
+                "properties": {
+                    "current_page": {"type": "integer"},
+                    "from": {"type": ["integer", "null"]},
+                    "last_page": {"type": "integer"},
+                    "per_page": {"type": "integer"},
+                    "to": {"type": ["integer", "null"]},
+                    "total": {"type": "integer"}
+                }
+            },
+            "File": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "name": {"type": "string"},
+                    "path": {"type": "string", "format": "uri"},
+                    "size": {"type": "integer"},
+                    "extension": {"type": "string"},
+                    "mime_type": {"type": "string"},
+                    "is_image": {"type": "boolean"},
+                    "is_audio": {"type": "boolean"},
+                    "is_video": {"type": "boolean"}
+                }
+            },
+            "UserProfile": {
+                "type": "object",
+                "properties": {
+                    "login": {"type": "string"},
+                    "name": {"type": ["string", "null"]},
+                    "level": {"type": "string", "enum": ["boss", "admin", "moder", "editor", "user", "pended", "banned"]},
+                    "country": {"type": ["string", "null"]},
+                    "city": {"type": ["string", "null"]},
+                    "info": {"type": ["string", "null"]},
+                    "site": {"type": ["string", "null"]},
+                    "gender": {"type": ["string", "null"], "enum": ["male", "female", null]},
+                    "birthday": {"type": ["string", "null"]},
+                    "visits": {"type": "integer"},
+                    "allforum": {"type": "integer"},
+                    "allguest": {"type": "integer"},
+                    "allcomments": {"type": "integer"},
+                    "themes": {"type": "string"},
+                    "point": {"type": "integer"},
+                    "money": {"type": "integer"},
+                    "status": {"type": ["string", "null"]},
+                    "color": {"type": ["string", "null"]},
+                    "avatar": {"type": ["string", "null"], "format": "uri"},
+                    "picture": {"type": ["string", "null"], "format": "uri"},
+                    "rating": {"type": "integer"},
+                    "language": {"type": "string"},
+                    "timezone": {"type": "string"},
+                    "lastlogin": {"type": ["string", "null"], "format": "date-time"},
+                    "email": {"type": ["string", "null"], "format": "email"},
+                    "phone": {"type": ["string", "null"]},
+                    "allprivat": {"type": "integer"},
+                    "newprivat": {"type": "integer"},
+                    "newwall": {"type": "integer"}
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "login": {"type": "string"},
+                    "name": {"type": ["string", "null"]},
+                    "level": {"type": "string"},
+                    "country": {"type": ["string", "null"]},
+                    "city": {"type": ["string", "null"]},
+                    "info": {"type": ["string", "null"]},
+                    "site": {"type": ["string", "null"]},
+                    "gender": {"type": ["string", "null"]},
+                    "birthday": {"type": ["string", "null"]},
+                    "visits": {"type": "integer"},
+                    "allforum": {"type": "integer"},
+                    "allguest": {"type": "integer"},
+                    "allcomments": {"type": "integer"},
+                    "themes": {"type": "string"},
+                    "point": {"type": "integer"},
+                    "money": {"type": "integer"},
+                    "status": {"type": ["string", "null"]},
+                    "color": {"type": ["string", "null"]},
+                    "avatar": {"type": ["string", "null"], "format": "uri"},
+                    "picture": {"type": ["string", "null"], "format": "uri"},
+                    "rating": {"type": "integer"},
+                    "language": {"type": "string"},
+                    "timezone": {"type": "string"},
+                    "lastlogin": {"type": ["string", "null"], "format": "date-time"}
+                }
+            },
+            "Dialogue": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "login": {"type": "string"},
+                    "name": {"type": ["string", "null"]},
+                    "text": {"type": "string"},
+                    "type": {"type": "string", "enum": ["in", "out"]},
+                    "all_reading": {"type": "boolean"},
+                    "recipient_read": {"type": "boolean"},
+                    "created_at": {"type": "string", "format": "date-time"}
+                }
+            },
+            "Message": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "login": {"type": "string"},
+                    "name": {"type": ["string", "null"]},
+                    "text": {"type": "string"},
+                    "type": {"type": "string", "enum": ["in", "out"]},
+                    "created_at": {"type": "string", "format": "date-time"},
+                    "files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}}
+                }
+            },
+            "ForumCategory": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "parent_id": {"type": "integer"},
+                    "sort": {"type": "integer"},
+                    "title": {"type": "string"},
+                    "description": {"type": ["string", "null"]},
+                    "closed": {"type": "boolean"},
+                    "count_topics": {"type": "integer"},
+                    "count_posts": {"type": "integer"},
+                    "last_topic_id": {"type": ["integer", "null"]},
+                    "last_topic_title": {"type": ["string", "null"]},
+                    "last_post_user_login": {"type": ["string", "null"]},
+                    "last_post_at": {"type": ["string", "null"], "format": "date-time"},
+                    "children": {"type": "array", "items": {"$ref": "#/components/schemas/ForumCategory"}}
+                }
+            },
+            "Topic": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "title": {"type": "string"},
+                    "login": {"type": "string"},
+                    "closed": {"type": "integer"},
+                    "locked": {"type": "integer"},
+                    "count_posts": {"type": "integer"},
+                    "visits": {"type": "integer"},
+                    "moderators": {"type": ["string", "null"]},
+                    "note": {"type": ["string", "null"]},
+                    "last_post_id": {"type": ["integer", "null"]},
+                    "last_post_user_login": {"type": ["string", "null"]},
+                    "close_user_id": {"type": ["integer", "null"]},
+                    "updated_at": {"type": "string", "format": "date-time"},
+                    "created_at": {"type": "string", "format": "date-time"}
+                }
+            },
+            "Post": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "integer"},
+                    "login": {"type": "string"},
+                    "text": {"type": "string"},
+                    "rating": {"type": "integer"},
+                    "updated_at": {"type": "string", "format": "date-time"},
+                    "created_at": {"type": "string", "format": "date-time"},
+                    "files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}}
+                }
+            }
+        }
+    },
+    "paths": {
+        "/user": {
+            "get": {
+                "tags": ["Пользователи"],
+                "summary": "Профиль текущего пользователя",
+                "operationId": "getUser",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"$ref": "#/components/schemas/UserProfile"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {"description": "Api token missing"},
+                    "401": {"description": "Unauthorized"}
+                }
+            }
+        },
+        "/users/{login}": {
+            "get": {
+                "tags": ["Пользователи"],
+                "summary": "Профиль пользователя по логину",
+                "operationId": "getUserByLogin",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "string", "pattern": "^[\\w\\-]+$"}
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"$ref": "#/components/schemas/User"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {"description": "Пользователь не найден"}
+                }
+            }
+        },
+        "/dialogues": {
+            "get": {
+                "tags": ["Сообщения"],
+                "summary": "Список диалогов",
+                "operationId": "getDialogues",
+                "parameters": [
+                    {"$ref": "#/components/parameters/PerPage"},
+                    {"$ref": "#/components/parameters/Page"}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/Dialogue"}},
+                                        "links": {"$ref": "#/components/schemas/PaginationLinks"},
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/talk/{login}": {
+            "get": {
+                "tags": ["Сообщения"],
+                "summary": "Переписка с пользователем",
+                "operationId": "getTalk",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "string", "pattern": "^[\\w\\-]+$"}
+                    },
+                    {"$ref": "#/components/parameters/PerPage"},
+                    {"$ref": "#/components/parameters/Page"}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/Message"}},
+                                        "links": {"$ref": "#/components/schemas/PaginationLinks"},
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {"description": "Пользователь не найден"}
+                }
+            }
+        },
+        "/forums": {
+            "get": {
+                "tags": ["Форум"],
+                "summary": "Разделы форума",
+                "operationId": "getForumCategories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/ForumCategory"}}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/forums/{id}": {
+            "get": {
+                "tags": ["Форум"],
+                "summary": "Темы форума",
+                "operationId": "getForumTopics",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "integer"}
+                    },
+                    {"$ref": "#/components/parameters/PerPage"},
+                    {"$ref": "#/components/parameters/Page"}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/Topic"}},
+                                        "links": {"$ref": "#/components/schemas/PaginationLinks"},
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {"description": "Форум не найден"}
+                }
+            }
+        },
+        "/topics/{id}": {
+            "get": {
+                "tags": ["Форум"],
+                "summary": "Посты темы",
+                "operationId": "getTopicPosts",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "integer"}
+                    },
+                    {"$ref": "#/components/parameters/PerPage"},
+                    {"$ref": "#/components/parameters/Page"}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/Post"}},
+                                        "links": {"$ref": "#/components/schemas/PaginationLinks"},
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {"description": "Тема не найдена"}
+                }
+            }
+        }
+    }
+}
