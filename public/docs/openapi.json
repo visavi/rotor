@@ -73,7 +73,7 @@
                 "type": "object",
                 "properties": {
                     "login": {"type": "string"},
-                    "name": {"type": ["string", "null"]},
+                    "name": {"type": "string"},
                     "level": {"type": "string", "enum": ["boss", "admin", "moder", "editor", "user", "pended", "banned"]},
                     "country": {"type": ["string", "null"]},
                     "city": {"type": ["string", "null"]},
@@ -107,7 +107,7 @@
                 "type": "object",
                 "properties": {
                     "login": {"type": "string"},
-                    "name": {"type": ["string", "null"]},
+                    "name": {"type": "string"},
                     "level": {"type": "string"},
                     "country": {"type": ["string", "null"]},
                     "city": {"type": ["string", "null"]},
@@ -137,7 +137,7 @@
                 "properties": {
                     "id": {"type": "integer"},
                     "login": {"type": "string"},
-                    "name": {"type": ["string", "null"]},
+                    "name": {"type": "string"},
                     "text": {"type": "string"},
                     "type": {"type": "string", "enum": ["in", "out"]},
                     "all_reading": {"type": "boolean"},
@@ -150,7 +150,7 @@
                 "properties": {
                     "id": {"type": "integer"},
                     "login": {"type": "string"},
-                    "name": {"type": ["string", "null"]},
+                    "name": {"type": "string"},
                     "text": {"type": "string"},
                     "type": {"type": "string", "enum": ["in", "out"]},
                     "created_at": {"type": "string", "format": "date-time"},
@@ -171,6 +171,7 @@
                     "last_topic_id": {"type": ["integer", "null"]},
                     "last_topic_title": {"type": ["string", "null"]},
                     "last_post_user_login": {"type": ["string", "null"]},
+                    "last_post_user_name": {"type": ["string", "null"]},
                     "last_post_at": {"type": ["string", "null"], "format": "date-time"},
                     "children": {"type": "array", "items": {"$ref": "#/components/schemas/ForumCategory"}}
                 }
@@ -181,6 +182,7 @@
                     "id": {"type": "integer"},
                     "title": {"type": "string"},
                     "login": {"type": "string"},
+                    "name": {"type": "string"},
                     "closed": {"type": "integer"},
                     "locked": {"type": "integer"},
                     "count_posts": {"type": "integer"},
@@ -189,6 +191,7 @@
                     "note": {"type": ["string", "null"]},
                     "last_post_id": {"type": ["integer", "null"]},
                     "last_post_user_login": {"type": ["string", "null"]},
+                    "last_post_user_name": {"type": ["string", "null"]},
                     "close_user_id": {"type": ["integer", "null"]},
                     "updated_at": {"type": "string", "format": "date-time"},
                     "created_at": {"type": "string", "format": "date-time"}
@@ -204,6 +207,15 @@
                     "updated_at": {"type": "string", "format": "date-time"},
                     "created_at": {"type": "string", "format": "date-time"},
                     "files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}}
+                }
+            },
+            "NewMessageDialogue": {
+                "type": "object",
+                "properties": {
+                    "login": {"type": "string"},
+                    "name": {"type": "string"},
+                    "count": {"type": "integer", "description": "Количество непрочитанных сообщений от этого пользователя"},
+                    "last_message_at": {"type": "string", "format": "date-time"}
                 }
             }
         }
@@ -324,6 +336,31 @@
                         }
                     },
                     "404": {"description": "Пользователь не найден"}
+                }
+            }
+        },
+        "/messages/new": {
+            "get": {
+                "tags": ["Сообщения"],
+                "summary": "Новые непрочитанные сообщения",
+                "operationId": "getNewMessages",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "count": {"type": "integer", "description": "Общее количество непрочитанных сообщений"},
+                                        "dialogues": {"type": "array", "items": {"$ref": "#/components/schemas/NewMessageDialogue"}}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {"description": "Api token missing"},
+                    "401": {"description": "Unauthorized"}
                 }
             }
         },

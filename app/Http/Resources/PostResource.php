@@ -16,6 +16,7 @@ class PostResource extends JsonResource
         return [
             'id'         => $this->id,
             'login'      => $this->user->login,
+            'name'       => $this->user->getName(),
             'text'       => bbCode($this->text)->toHtml(),
             'rating'     => $this->rating,
             'files'      => FileResource::collection($this->files),

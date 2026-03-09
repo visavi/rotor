@@ -223,6 +223,7 @@ class MessageController extends Controller
                 ->selectRaw('count(*) as cnt')
                 ->where('user_id', $this->user->id)
                 ->where('reading', 0)
+                ->with('author')
                 ->groupBy('author_id')
                 ->limit(3)
                 ->get();

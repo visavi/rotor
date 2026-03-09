@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DialogueResource;
 use App\Http\Resources\ForumResource;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\NewMessageDialogueResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\TopicResource;
 use App\Http\Resources\UserProfileResource;
@@ -18,6 +19,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
@@ -189,6 +191,40 @@ class ApiController extends Controller
             ->paginate($this->getPerPage($request));
 
         return PostResource::collection($posts);
+    }
+
+    /**
+     * Api новых сообщений
+     */
+    public function newMessages(Request $request): JsonResponse
+    {
+        $user = $request->attributes->get('user');
+
+        $countMessages = Dialogue::query()
+            ->where('user_id', $user->id)
+            ->where('reading', 0)
+            ->count();
+
+        if (! $countMessages) {
+            return response()->json(['count' => 0, 'dialogues' => []]);
+        }
+
+        $dialogues = Dialogue::query()
+            ->select(
+                'author_id',
+                DB::raw('max(created_at) as last_created_at')
+            )
+            ->selectRaw('count(*) as cnt')
+            ->where('user_id', $user->id)
+            ->where('reading', 0)
+            ->groupBy('author_id')
+            ->with('author')
+            ->get();
+
+        return response()->json([
+            'count'     => $countMessages,
+            'dialogues' => NewMessageDialogueResource::collection($dialogues),
+        ]);
     }
 
     /**

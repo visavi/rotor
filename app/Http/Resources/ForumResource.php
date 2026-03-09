@@ -25,6 +25,7 @@ class ForumResource extends JsonResource
             'last_topic_id'        => $this->last_topic_id,
             'last_topic_title'     => $this->lastTopic->title,
             'last_post_user_login' => $this->lastTopic->lastPost->id ? $this->lastTopic->lastPost->user->login : null,
+            'last_post_user_name'  => $this->lastTopic->lastPost->id ? $this->lastTopic->lastPost->user->getName() : null,
             'last_post_at'         => $this->lastTopic->lastPost->id ? dateFixed($this->lastTopic->lastPost->created_at, 'c', true) : null,
             'children'             => self::collection($this->whenLoaded('children')),
         ];
