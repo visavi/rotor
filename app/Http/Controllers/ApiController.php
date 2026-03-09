@@ -170,7 +170,8 @@ class ApiController extends Controller
             ->orderBy('updated_at', $this->getOrder($request))
             ->paginate($this->getPerPage($request));
 
-        return TopicResource::collection($topics);
+        return TopicResource::collection($topics)
+            ->additional(['forum' => ForumResource::make($forum)]);
     }
 
     /**
@@ -190,7 +191,8 @@ class ApiController extends Controller
             ->orderBy('created_at', $this->getOrder($request, 'asc'))
             ->paginate($this->getPerPage($request));
 
-        return PostResource::collection($posts);
+        return PostResource::collection($posts)
+            ->additional(['topic' => TopicResource::make($topic)]);
     }
 
     /**

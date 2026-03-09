@@ -163,7 +163,7 @@
                     "files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}}
                 }
             },
-            "ForumCategory": {
+            "Forum": {
                 "type": "object",
                 "properties": {
                     "id": {"type": "integer"},
@@ -179,7 +179,7 @@
                     "last_post_user_login": {"type": ["string", "null"]},
                     "last_post_user_name": {"type": ["string", "null"]},
                     "last_post_at": {"type": ["string", "null"], "format": "date-time"},
-                    "children": {"type": "array", "items": {"$ref": "#/components/schemas/ForumCategory"}}
+                    "children": {"type": "array", "items": {"$ref": "#/components/schemas/Forum"}}
                 }
             },
             "Topic": {
@@ -385,7 +385,7 @@
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/ForumCategory"}}
+                                        "data": {"type": "array", "items": {"$ref": "#/components/schemas/Forum"}}
                                     }
                                 }
                             }
@@ -420,7 +420,8 @@
                                     "properties": {
                                         "data": {"type": "array", "items": {"$ref": "#/components/schemas/Topic"}},
                                         "links": {"$ref": "#/components/schemas/PaginationLinks"},
-                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"},
+                                        "forum": {"$ref": "#/components/schemas/Forum"}
                                     }
                                 }
                             }
@@ -456,7 +457,8 @@
                                     "properties": {
                                         "data": {"type": "array", "items": {"$ref": "#/components/schemas/Post"}},
                                         "links": {"$ref": "#/components/schemas/PaginationLinks"},
-                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"},
+                                        "topic": {"$ref": "#/components/schemas/Topic"}
                                     }
                                 }
                             }
