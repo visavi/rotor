@@ -88,7 +88,7 @@ class ApiController extends Controller
             })
             ->where('d.user_id', $user->id)
             ->with('author')
-            ->orderByDesc('d.created_at')
+            ->orderBy('d.created_at', $this->getOrder($request))
             ->paginate($this->getPerPage($request));
 
         return DialogueResource::collection($dialogues);
@@ -127,7 +127,7 @@ class ApiController extends Controller
             ->join('dialogues as d', 'd.message_id', 'm.id')
             ->where('d.user_id', $user->id)
             ->where('d.author_id', $author->id)
-            ->orderByDesc('d.created_at')
+            ->orderBy('d.created_at', $this->getOrder($request))
             ->with('user', 'author', 'files')
             ->paginate($this->getPerPage($request));
 
@@ -167,7 +167,7 @@ class ApiController extends Controller
             ->where('forum_id', $id)
             ->with('user', 'lastPost.user')
             ->orderByDesc('locked')
-            ->orderByDesc('updated_at')
+            ->orderBy('updated_at', $this->getOrder($request))
             ->paginate($this->getPerPage($request));
 
         return TopicResource::collection($topics);
@@ -187,7 +187,7 @@ class ApiController extends Controller
         $posts = Post::query()
             ->where('topic_id', $id)
             ->with('user', 'files')
-            ->orderBy('created_at')
+            ->orderBy('created_at', $this->getOrder($request, 'asc'))
             ->paginate($this->getPerPage($request));
 
         return PostResource::collection($posts);
@@ -225,6 +225,16 @@ class ApiController extends Controller
             'count'     => $countMessages,
             'dialogues' => NewMessageDialogueResource::collection($dialogues),
         ]);
+    }
+
+    /**
+     * Get order direction from request
+     */
+    private function getOrder(Request $request, string $default = 'desc'): string
+    {
+        $order = $request->input('order', $default);
+
+        return in_array($order, ['asc', 'desc']) ? $order : $default;
     }
 
     /**
