@@ -78,11 +78,7 @@
                                     {{ resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) }}
                                 </a><br>
                                 <a href="/pictures">{{ __('main.change') }}</a> /
-                                <form action="/pictures/delete" method="post" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-link p-0">{{ __('main.delete') }}</button>
-                                </form>
+                                <button class="btn btn-link p-0" form="delete-picture-form">{{ __('main.delete') }}</button>
                             @else
                                 <img class="img-fluid rounded" src="/assets/img/images/photo.png" alt="Photo"><br>
                                 <a href="/pictures">{{ __('main.upload') }}</a>
@@ -112,6 +108,10 @@
                     </div>
                 </div>
             </div>
+        </form>
+        <form id="delete-picture-form" action="/pictures/delete" method="post" class="d-none">
+            @csrf
+            @method('DELETE')
         </form>
     </div>
 @stop
