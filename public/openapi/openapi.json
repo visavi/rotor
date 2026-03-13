@@ -347,6 +347,44 @@
                 }
             }
         },
+        "/messages/send": {
+            "post": {
+                "tags": ["Сообщения"],
+                "summary": "Отправить приватное сообщение",
+                "operationId": "sendMessage",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["login", "msg"],
+                                "properties": {
+                                    "login": {"type": "string", "description": "Логин получателя"},
+                                    "msg": {"type": "string", "description": "Текст сообщения"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Сообщение отправлено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {"type": "string"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {"description": "Ошибка валидации (пользователь не найден, флуд, игнор-лист)"}
+                }
+            }
+        },
         "/messages/new": {
             "get": {
                 "tags": ["Сообщения"],

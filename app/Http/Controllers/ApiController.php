@@ -13,11 +13,13 @@ use App\Http\Resources\TopicResource;
 use App\Http\Resources\UserProfileResource;
 use App\Http\Resources\UserResource;
 use App\Models\Dialogue;
+use App\Models\Flood;
 use App\Models\Forum;
 use App\Models\Message;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use Closure;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -193,6 +195,54 @@ class ApiController extends Controller
 
         return PostResource::collection($posts)
             ->additional(['topic' => TopicResource::make($topic)]);
+    }
+
+    /**
+     * Отправляет приватное сообщение
+     */
+    public function send(Request $request, Flood $flood): JsonResponse
+    {
+        $user = $request->attributes->get('user');
+        $login = $request->input('login');
+        $recipient = getUserByLogin($login);
+
+        $validated = $request->validate([
+            'login' => [
+                'required',
+                'string',
+                function (string $attribute, mixed $value, Closure $fail) use ($user, $recipient) {
+                    if (! $recipient) {
+                        return $fail(__('validator.user'));
+                    }
+
+                    if ($recipient->id === $user->id) {
+                        return $fail(__('messages.send_yourself'));
+                    }
+
+                    if ($recipient->isIgnore($user)) {
+                        $fail(__('ignores.you_are_ignoring'));
+                    }
+                },
+            ],
+            'msg' => [
+                'required',
+                'string',
+                'min:' . setting('comment_text_min'),
+                'max:' . setting('comment_text_max'),
+                function (string $attribute, mixed $value, Closure $fail) use ($flood) {
+                    if ($flood->isFlood()) {
+                        $fail(__('validator.flood', ['sec' => $flood->getPeriod()]));
+                    }
+                },
+            ],
+        ]);
+
+        $msg = antimat($validated['msg']);
+        $recipient->sendMessage($user, $msg);
+
+        $flood->saveState();
+
+        return response()->json(['message' => __('messages.success_sent')]);
     }
 
     /**

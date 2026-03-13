@@ -14,7 +14,7 @@
 <div id="swagger-ui"></div>
 <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
 <script>
-    fetch('{{ url('/docs/openapi.json') }}')
+    fetch('{{ url('/openapi/openapi.json') }}')
         .then(r => r.json())
         .then(spec => {
             spec.servers = [{ url: '{{ url('/api') }}' }];
@@ -25,6 +25,7 @@
                 layout: 'BaseLayout',
                 deepLinking: true,
                 tryItOutEnabled: true,
+                persistAuthorization: true,
             });
         });
 </script>

@@ -28,6 +28,7 @@ Route::controller(ApiController::class)
         Route::get('/dialogues', 'dialogues');
         Route::get('/talk/{login}', 'talk');
         Route::get('/messages/new', 'newMessages');
+        Route::post('/messages/send', 'send');
         Route::get('/forums', 'categoryForums');
         Route::get('/forums/{id}', 'forums');
         Route::get('/topics/{id}', 'topics');

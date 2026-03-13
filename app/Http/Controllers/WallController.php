@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Flood;
-use App\Models\Ignore;
 use App\Models\Wall;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -65,12 +64,7 @@ class WallController extends Controller
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
-            $ignoring = Ignore::query()
-                ->where('user_id', $user->id)
-                ->where('ignore_id', getUser('id'))
-                ->first();
-
-            $validator->empty($ignoring, __('ignores.you_are_ignoring'));
+            $validator->false($user->isIgnore(getUser()), __('ignores.you_are_ignoring'));
 
             if ($validator->isValid()) {
                 if (getUser() && getUser('id') !== $user->id) {

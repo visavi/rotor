@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Dialogue;
 use App\Models\File;
 use App\Models\Flood;
-use App\Models\Ignore;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
@@ -142,13 +141,7 @@ class MessageController extends Controller
             $validator->addError(['protect' => __('validator.captcha')]);
         }
 
-        // Проверка на игнор
-        $ignoring = Ignore::query()
-            ->where('user_id', $user->id)
-            ->where('ignore_id', $this->user->id)
-            ->first();
-
-        $validator->empty($ignoring, ['user' => __('ignores.you_are_ignoring')]);
+        $validator->false($user->isIgnore($this->user), ['user' => __('ignores.you_are_ignoring')]);
 
         if ($validator->isValid()) {
             $msg = antimat($msg);

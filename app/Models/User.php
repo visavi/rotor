@@ -484,41 +484,29 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Находится ли пользователь в контактах
      */
-    public function isContact(User $user): bool
+    public function isContact(self $user): bool
     {
-        $isContact = Contact::query()
+        return Contact::query()
             ->where('user_id', $this->id)
             ->where('contact_id', $user->id)
-            ->first();
-
-        if ($isContact) {
-            return true;
-        }
-
-        return false;
+            ->exists();
     }
 
     /**
      * Находится ли пользователь в игноре
      */
-    public function isIgnore(User $user): bool
+    public function isIgnore(self $user): bool
     {
-        $isIgnore = Ignore::query()
+        return Ignore::query()
             ->where('user_id', $this->id)
             ->where('ignore_id', $user->id)
-            ->first();
-
-        if ($isIgnore) {
-            return true;
-        }
-
-        return false;
+            ->exists();
     }
 
     /**
      * Отправляет приватное сообщение
      */
-    public function sendMessage(?User $author, string $text, bool $withAuthor = true): Builder|Model
+    public function sendMessage(?self $author, string $text, bool $withAuthor = true): Builder|Model
     {
         return (new Message())->createDialogue($this, $author, $text, $withAuthor);
     }
