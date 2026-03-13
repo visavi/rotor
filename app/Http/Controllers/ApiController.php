@@ -224,7 +224,7 @@ class ApiController extends Controller
                     }
                 },
             ],
-            'msg' => [
+            'text' => [
                 'required',
                 'string',
                 'min:' . setting('comment_text_min'),
@@ -237,8 +237,8 @@ class ApiController extends Controller
             ],
         ]);
 
-        $msg = antimat($validated['msg']);
-        $recipient->sendMessage($user, $msg);
+        $text = antimat($validated['text']);
+        $recipient->sendMessage($user, $text);
 
         $flood->saveState();
 

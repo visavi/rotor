@@ -350,7 +350,7 @@
         "/messages/send": {
             "post": {
                 "tags": ["Сообщения"],
-                "summary": "Отправить приватное сообщение",
+                "summary": "Отправка приватного сообщения",
                 "operationId": "sendMessage",
                 "requestBody": {
                     "required": true,
@@ -358,10 +358,10 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "required": ["login", "msg"],
+                                "required": ["login", "text"],
                                 "properties": {
                                     "login": {"type": "string", "description": "Логин получателя"},
-                                    "msg": {"type": "string", "description": "Текст сообщения"}
+                                    "text": {"type": "string", "description": "Текст сообщения"}
                                 }
                             }
                         }

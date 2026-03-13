@@ -33,7 +33,6 @@ use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
 use cbschuld\Browser;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -447,10 +446,12 @@ function statsChecker(): string
  */
 function statsInvite(): string
 {
-    $invited = Invite::query()->where('used', 0)->count();
-    $usedInvited = Invite::query()->where('used', 1)->count();
+    $invites = Invite::query()
+        ->selectRaw('used, count(*) as cnt')
+        ->groupBy('used')
+        ->pluck('cnt', 'used');
 
-    return $invited . '/' . $usedInvited;
+    return ($invites[0] ?? 0) . '/' . ($invites[1] ?? 0);
 }
 
 /**
@@ -658,65 +659,41 @@ function pinnedNews(): HtmlString
  */
 function icons(string $ext): HtmlString
 {
-    switch ($ext) {
-        case 'php':
-            $ico = 'fa-regular fa-file-code';
-            break;
-        case 'ppt':
-            $ico = 'fa-regular fa-file-powerpoint';
-            break;
-        case 'doc':
-        case 'docx':
-            $ico = 'fa-regular fa-file-word';
-            break;
-        case 'xls':
-        case 'xlsx':
-            $ico = 'fa-regular fa-file-excel';
-            break;
-        case 'txt':
-        case 'css':
-        case 'dat':
-        case 'html':
-        case 'htm':
-            $ico = 'fa-regular fa-file-alt';
-            break;
-        case 'wav':
-        case 'amr':
-        case 'mp3':
-        case 'mid':
-            $ico = 'fa-regular fa-file-audio';
-            break;
-        case 'zip':
-        case 'rar':
-        case '7z':
-        case 'gz':
-            $ico = 'fa-regular fa-file-archive';
-            break;
-        case '3gp':
-        case 'mp4':
-            $ico = 'fa-regular fa-file-video';
-            break;
-        case 'jpg':
-        case 'jpeg':
-        case 'bmp':
-        case 'wbmp':
-        case 'gif':
-        case 'png':
-        case 'webp':
-            $ico = 'fa-regular fa-file-image';
-            break;
-        case 'ttf':
-            $ico = 'fa-solid fa-font';
-            break;
-        case 'pdf':
-            $ico = 'fa-regular fa-file-pdf';
-            break;
-        case 'csv':
-            $ico = 'fa-regular fa-file-csv';
-            break;
-        default:
-            $ico = 'fa-regular fa-file';
-    }
+    $icons = [
+        'php'  => 'fa-regular fa-file-code',
+        'ppt'  => 'fa-regular fa-file-powerpoint',
+        'doc'  => 'fa-regular fa-file-word',
+        'docx' => 'fa-regular fa-file-word',
+        'xls'  => 'fa-regular fa-file-excel',
+        'xlsx' => 'fa-regular fa-file-excel',
+        'txt'  => 'fa-regular fa-file-alt',
+        'css'  => 'fa-regular fa-file-alt',
+        'dat'  => 'fa-regular fa-file-alt',
+        'html' => 'fa-regular fa-file-alt',
+        'htm'  => 'fa-regular fa-file-alt',
+        'wav'  => 'fa-regular fa-file-audio',
+        'amr'  => 'fa-regular fa-file-audio',
+        'mp3'  => 'fa-regular fa-file-audio',
+        'mid'  => 'fa-regular fa-file-audio',
+        'zip'  => 'fa-regular fa-file-archive',
+        'rar'  => 'fa-regular fa-file-archive',
+        '7z'   => 'fa-regular fa-file-archive',
+        'gz'   => 'fa-regular fa-file-archive',
+        '3gp'  => 'fa-regular fa-file-video',
+        'mp4'  => 'fa-regular fa-file-video',
+        'jpg'  => 'fa-regular fa-file-image',
+        'jpeg' => 'fa-regular fa-file-image',
+        'bmp'  => 'fa-regular fa-file-image',
+        'wbmp' => 'fa-regular fa-file-image',
+        'gif'  => 'fa-regular fa-file-image',
+        'png'  => 'fa-regular fa-file-image',
+        'webp' => 'fa-regular fa-file-image',
+        'ttf'  => 'fa-solid fa-font',
+        'pdf'  => 'fa-regular fa-file-pdf',
+        'csv'  => 'fa-regular fa-file-csv',
+    ];
+
+    $ico = $icons[$ext] ?? 'fa-regular fa-file';
 
     return new HtmlString('<i class="' . $ico . '"></i>');
 }
@@ -993,26 +970,19 @@ function formatNum(int|float $num): HtmlString
 /**
  * Форматирует вывод числа
  */
-function formatShortNum(int $num): float|int|string
+function formatShortNum(int $num): int|string
 {
-    if (! is_numeric($num)) {
-        return '0b';
-    }
+    $thresholds = [
+        1_000_000_000_000 => 'T',
+        1_000_000_000     => 'B',
+        1_000_000         => 'M',
+        1_000             => 'K',
+    ];
 
-    if ($num > 1000000000000) {
-        return round($num / 1000000000000, 1) . 'T';
-    }
-
-    if ($num > 1000000000) {
-        return round($num / 1000000000, 1) . 'B';
-    }
-
-    if ($num > 1000000) {
-        return round($num / 1000000, 1) . 'M';
-    }
-
-    if ($num > 1000) {
-        return round($num / 1000, 1) . 'K';
+    foreach ($thresholds as $threshold => $suffix) {
+        if ($num > $threshold) {
+            return round($num / $threshold, 1) . $suffix;
+        }
     }
 
     return $num;
@@ -1180,18 +1150,10 @@ function performance(): ?HtmlString
 function clearCache(array|string|null $keys = null): bool
 {
     if ($keys) {
-        if (! is_array($keys)) {
-            $keys = [$keys];
-        }
-
-        foreach ($keys as $key) {
-            Cache::forget($key);
-        }
-
-        return true;
+        Cache::deleteMultiple((array) $keys);
+    } else {
+        Cache::flush();
     }
-
-    Cache::flush();
 
     return true;
 }
@@ -1494,7 +1456,7 @@ function isAdmin(?string $level = null): bool
 /**
  * Возвращает объект пользователя по логину
  */
-function getUserByLogin(?string $login): Builder|User|null
+function getUserByLogin(?string $login): ?User
 {
     return User::query()->where('login', $login)->first();
 }
@@ -1502,7 +1464,7 @@ function getUserByLogin(?string $login): Builder|User|null
 /**
  * Возвращает объект пользователя по id
  */
-function getUserById(?int $id): Builder|User|null
+function getUserById(?int $id): ?User
 {
     return User::query()->find($id);
 }
@@ -1510,7 +1472,7 @@ function getUserById(?int $id): Builder|User|null
 /**
  * Возвращает объект пользователя по токену
  */
-function getUserByToken(string $token): Builder|User|null
+function getUserByToken(string $token): ?User
 {
     return User::query()->where('apikey', $token)->first();
 }
@@ -1518,7 +1480,7 @@ function getUserByToken(string $token): Builder|User|null
 /**
  * Возвращает объект пользователя по логину или email
  */
-function getUserByLoginOrEmail(?string $login): Builder|User|null
+function getUserByLoginOrEmail(?string $login): ?User
 {
     $field = strpos($login, '@') ? 'email' : 'login';
 
@@ -1685,7 +1647,7 @@ function uniqueName(?string $extension = null): string
 /**
  * Возвращает курсы валют
  */
-function getCourses(): ?HtmlString
+function getCourses(): HtmlString
 {
     $courses = Cache::remember('courses', 3600, static function () {
         try {

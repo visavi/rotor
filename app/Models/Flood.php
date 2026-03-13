@@ -86,11 +86,7 @@ class Flood extends Model
             ->where('page', request()->getPathInfo())
             ->first();
 
-        if ($flood && $flood->attempts >= $attempts) {
-            return true;
-        }
-
-        return false;
+        return $flood && $flood->attempts >= $attempts;
     }
 
     /**
