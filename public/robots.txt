@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 Crawl-delay: 1
-Disallow: /api
-Disallow: /admin
+Disallow: /api*
+Disallow: /admin*
 Disallow: /login
 Disallow: /logout
 Disallow: /register
@@ -25,8 +25,12 @@ Disallow: /authlogs
 Disallow: /verify
 Disallow: /confirm
 Disallow: /walls
-Disallow: /users
-Disallow: /language
+Disallow: /users*
+Disallow: /language*
+Disallow: /index.php*
+Disallow: /forums/active/*
+Disallow: /downs/active/*
+Disallow: /articles/active/*
 
 Sitemap: /sitemap.xml
 
@@ -64,4 +68,16 @@ User-agent: Yatcybot
 Disallow: /
 
 User-agent: Amzn-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: bingbot
+Disallow: /
+
+User-agent: GenomeCrawlerd
 Disallow: /
