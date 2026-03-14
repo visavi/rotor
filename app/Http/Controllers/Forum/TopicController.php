@@ -159,7 +159,7 @@ class TopicController extends Controller
 
         // Проверка сообщения на схожесть
         $post = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->first();
-        $validator->notEqual($msg, $post->text ?? false, ['msg' => __('forums.post_repeat')]);
+        $validator->notEqual($msg, $post->text ?? '', ['msg' => __('forums.post_repeat')]);
 
         if ($validator->isValid()) {
             $msg = antimat($msg);
@@ -301,7 +301,7 @@ class TopicController extends Controller
                 'close_user_id' => getUser('id'),
             ]);
 
-            if ($topic->vote) {
+            if ($topic->vote->exists()) {
                 $topic->vote->update(['closed' => 1]);
                 $topic->vote->polls()->delete();
             }
@@ -337,7 +337,7 @@ class TopicController extends Controller
                 'close_user_id' => null,
             ]);
 
-            if ($topic->vote) {
+            if ($topic->vote->exists()) {
                 $topic->vote->update(['closed' => 0]);
             }
 
@@ -481,20 +481,19 @@ class TopicController extends Controller
         }
 
         $post = Post::query()
-            ->select('posts.*', 'moderators', 'closed')
-            ->leftJoin('topics', 'posts.topic_id', 'topics.id')
-            ->where('posts.id', $id)
+            ->with('topic')
+            ->where('id', $id)
             ->first();
 
         if (! $post) {
             abort(404, __('forums.post_not_exist'));
         }
 
-        if ($post->closed) {
+        if ($post->topic->closed) {
             abort(200, __('forums.topic_closed'));
         }
 
-        $isModer = in_array($user->login, explode(',', (string) $post->moderators), true);
+        $isModer = in_array($user->login, explode(',', (string) $post->topic->moderators), true);
 
         if (! $isModer && $post->user_id !== $user->id) {
             abort(200, __('forums.posts_edited_curators'));
