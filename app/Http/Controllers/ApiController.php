@@ -40,9 +40,9 @@ class ApiController extends Controller
     /**
      * Api пользователей
      */
-    public function user(Request $request): JsonResource
+    public function user(): JsonResource
     {
-        $user = $request->attributes->get('user');
+        $user = getUser();
 
         return new UserProfileResource($user);
     }
@@ -66,7 +66,7 @@ class ApiController extends Controller
      */
     public function dialogues(Request $request): JsonResource
     {
-        $user = $request->attributes->get('user');
+        $user = getUser();
 
         $lastMessage = Dialogue::query()
             ->select(
@@ -101,7 +101,7 @@ class ApiController extends Controller
      */
     public function talk(string $login, Request $request): JsonResource
     {
-        $user = $request->attributes->get('user');
+        $user = getUser();
 
         if (is_numeric($login)) {
             $author = (new User())->setAttribute('id', $login);
@@ -202,7 +202,7 @@ class ApiController extends Controller
      */
     public function send(Request $request, Flood $flood): JsonResponse
     {
-        $user = $request->attributes->get('user');
+        $user = getUser();
         $login = $request->input('login');
         $recipient = getUserByLogin($login);
 
@@ -248,9 +248,9 @@ class ApiController extends Controller
     /**
      * Api новых сообщений
      */
-    public function newMessages(Request $request): JsonResponse
+    public function newMessages(): JsonResponse
     {
-        $user = $request->attributes->get('user');
+        $user = getUser();
 
         $countMessages = Dialogue::query()
             ->where('user_id', $user->id)
