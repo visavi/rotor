@@ -17,13 +17,14 @@ class MessageResource extends JsonResource
         $sender = $type === Message::IN ? $this->author : $this->user;
 
         return [
-            'id'         => $this->id,
-            'login'      => $sender->exists ? $sender->login : (string) $this->author_id,
-            'name'       => $this->author_id ? $sender->getName() : __('messages.system'),
-            'text'       => bbCode($this->text)->toHtml(),
-            'type'       => $type,
-            'created_at' => dateFixed($this->created_at, 'c', true),
-            'files'      => FileResource::collection($this->files),
+            'id'             => $this->id,
+            'login'          => $sender->exists ? $sender->login : (string) $this->author_id,
+            'name'           => $this->author_id ? $sender->getName() : __('messages.system'),
+            'text'           => bbCode($this->text)->toHtml(),
+            'type'           => $type,
+            'recipient_read' => (bool) $this->getAttribute('recipient_read'),
+            'created_at'     => dateFixed($this->created_at, 'c', true),
+            'files'          => FileResource::collection($this->files),
         ];
     }
 }

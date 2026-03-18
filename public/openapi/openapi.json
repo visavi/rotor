@@ -88,14 +88,14 @@
                     "gender": {"type": ["string", "null"], "enum": ["male", "female", null]},
                     "birthday": {"type": ["string", "null"]},
                     "visits": {"type": "integer"},
-                    "allforum": {"type": "integer"},
-                    "allguest": {"type": "integer"},
-                    "allcomments": {"type": "integer"},
-                    "themes": {"type": "string"},
-                    "point": {"type": "integer"},
-                    "money": {"type": "integer"},
+                    "allforum": {"type": "integer", "description": "Количество постов на форуме"},
+                    "allguest": {"type": "integer", "description": "Количество записей в гостевой"},
+                    "allcomments": {"type": "integer", "description": "Количество комментариев"},
+                    "themes": {"type": "string", "description": "Текущая тема оформления"},
+                    "point": {"type": "integer", "description": "Баллы"},
+                    "money": {"type": "integer", "description": "Монеты"},
                     "status": {"type": ["string", "null"]},
-                    "color": {"type": ["string", "null"]},
+                    "color": {"type": ["string", "null"], "description": "Цвет имени пользователя"},
                     "avatar": {"type": ["string", "null"], "format": "uri"},
                     "picture": {"type": ["string", "null"], "format": "uri"},
                     "rating": {"type": "integer"},
@@ -104,9 +104,9 @@
                     "lastlogin": {"type": ["string", "null"], "format": "date-time"},
                     "email": {"type": ["string", "null"], "format": "email"},
                     "phone": {"type": ["string", "null"]},
-                    "allprivat": {"type": "integer"},
-                    "newprivat": {"type": "integer"},
-                    "newwall": {"type": "integer"}
+                    "allprivat": {"type": "integer", "description": "Всего приватных сообщений"},
+                    "newprivat": {"type": "integer", "description": "Непрочитанных приватных сообщений"},
+                    "newwall": {"type": "integer", "description": "Новых записей на стене"}
                 }
             },
             "User": {
@@ -142,23 +142,25 @@
                 "type": "object",
                 "properties": {
                     "id": {"type": "integer"},
-                    "login": {"type": "string"},
-                    "name": {"type": "string"},
-                    "text": {"type": "string"},
-                    "type": {"type": "string", "enum": ["in", "out"]},
-                    "all_reading": {"type": "boolean"},
-                    "recipient_read": {"type": "boolean"},
-                    "created_at": {"type": "string", "format": "date-time"}
+                    "login": {"type": "string", "description": "Логин собеседника"},
+                    "name": {"type": "string", "description": "Имя собеседника"},
+                    "text": {"type": "string", "description": "Текст последнего сообщения"},
+                    "type": {"type": "string", "enum": ["in", "out"], "description": "Направление: in — входящее, out — исходящее"},
+                    "all_reading": {"type": "boolean", "description": "Все сообщения в диалоге прочитаны"},
+                    "recipient_read": {"type": "boolean", "description": "Получатель прочитал последнее сообщение"},
+                    "can_reply": {"type": "boolean", "description": "Можно ли ответить (false для системных сообщений)"},
+                    "created_at": {"type": "string", "format": "date-time", "description": "Дата последнего сообщения"}
                 }
             },
             "Message": {
                 "type": "object",
                 "properties": {
                     "id": {"type": "integer"},
-                    "login": {"type": "string"},
-                    "name": {"type": "string"},
+                    "login": {"type": "string", "description": "Логин отправителя"},
+                    "name": {"type": "string", "description": "Имя отправителя"},
                     "text": {"type": "string"},
-                    "type": {"type": "string", "enum": ["in", "out"]},
+                    "type": {"type": "string", "enum": ["in", "out"], "description": "Направление: in — входящее, out — исходящее"},
+                    "recipient_read": {"type": "boolean", "description": "Получатель прочитал это сообщение"},
                     "created_at": {"type": "string", "format": "date-time"},
                     "files": {"type": "array", "items": {"$ref": "#/components/schemas/File"}}
                 }
@@ -167,11 +169,11 @@
                 "type": "object",
                 "properties": {
                     "id": {"type": "integer"},
-                    "parent_id": {"type": "integer"},
-                    "sort": {"type": "integer"},
-                    "title": {"type": "string"},
-                    "description": {"type": ["string", "null"]},
-                    "closed": {"type": "boolean"},
+                    "parent_id": {"type": "integer", "description": "ID родительского раздела (0 — корневой)"},
+                    "sort": {"type": "integer", "description": "Порядок сортировки"},
+                    "title": {"type": "string", "description": "Название форума"},
+                    "description": {"type": ["string", "null"], "description": "Короткое описание форума"},
+                    "closed": {"type": "boolean", "description": "Раздел закрыт для новых тем"},
                     "count_topics": {"type": "integer"},
                     "count_posts": {"type": "integer"},
                     "last_topic_id": {"type": ["integer", "null"]},
@@ -179,7 +181,7 @@
                     "last_post_user_login": {"type": ["string", "null"]},
                     "last_post_user_name": {"type": ["string", "null"]},
                     "last_post_at": {"type": ["string", "null"], "format": "date-time"},
-                    "children": {"type": "array", "items": {"$ref": "#/components/schemas/Forum"}}
+                    "children": {"type": "array", "items": {"$ref": "#/components/schemas/Forum"}, "description": "Вложенные подразделы"}
                 }
             },
             "Topic": {
@@ -189,16 +191,16 @@
                     "title": {"type": "string"},
                     "login": {"type": "string"},
                     "name": {"type": "string"},
-                    "closed": {"type": "integer"},
-                    "locked": {"type": "integer"},
+                    "closed": {"type": "integer", "description": "Тема закрыта"},
+                    "locked": {"type": "integer", "description": "Тема закреплена вверху"},
                     "count_posts": {"type": "integer"},
                     "visits": {"type": "integer"},
-                    "moderators": {"type": ["string", "null"]},
-                    "note": {"type": ["string", "null"]},
+                    "moderators": {"type": ["string", "null"], "description": "Список модераторов темы"},
+                    "note": {"type": ["string", "null"], "description": "Примечание модератора"},
                     "last_post_id": {"type": ["integer", "null"]},
                     "last_post_user_login": {"type": ["string", "null"]},
                     "last_post_user_name": {"type": ["string", "null"]},
-                    "close_user_id": {"type": ["integer", "null"]},
+                    "close_user_id": {"type": ["integer", "null"], "description": "ID пользователя, закрывшего тему"},
                     "updated_at": {"type": "string", "format": "date-time"},
                     "created_at": {"type": "string", "format": "date-time"}
                 }
@@ -337,7 +339,8 @@
                                     "properties": {
                                         "data": {"type": "array", "items": {"$ref": "#/components/schemas/Message"}},
                                         "links": {"$ref": "#/components/schemas/PaginationLinks"},
-                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"}
+                                        "meta": {"$ref": "#/components/schemas/PaginationMeta"},
+                                        "dialogue": {"$ref": "#/components/schemas/Dialogue"}
                                     }
                                 }
                             }

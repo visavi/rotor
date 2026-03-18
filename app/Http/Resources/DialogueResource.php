@@ -21,6 +21,7 @@ class DialogueResource extends JsonResource
             'type'           => $this->getAttribute('type'),
             'all_reading'    => (bool) $this->getAttribute('all_reading'),
             'recipient_read' => (bool) $this->getAttribute('recipient_read'),
+            'can_reply'      => (bool) $this->author_id,
             'created_at'     => dateFixed($this->created_at, 'c', true),
         ];
     }

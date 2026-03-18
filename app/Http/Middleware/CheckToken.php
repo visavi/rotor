@@ -28,7 +28,7 @@ class CheckToken
             abort(403, 'User banned');
         }
 
-        auth()->login($user);
+        auth()->setUser($user);
 
         return $next($request);
     }

@@ -62,81 +62,6 @@ class ApiController extends Controller
     }
 
     /**
-     * Api диалогов
-     */
-    public function dialogues(Request $request): JsonResource
-    {
-        $user = getUser();
-
-        $lastMessage = Dialogue::query()
-            ->select(
-                'author_id',
-                DB::raw('max(message_id) as message_id'),
-                DB::raw('min(case when reading then 1 else 0 end) as all_reading')
-            )
-            ->where('user_id', $user->id)
-            ->groupBy('author_id');
-
-        $dialogues = Message::query()
-            ->select('d.*', 'm.text', 'd2.all_reading', 'd3.reading as recipient_read')
-            ->from('messages as m')
-            ->join('dialogues as d', 'd.message_id', 'm.id')
-            ->joinSub($lastMessage, 'd2', static function (JoinClause $join) {
-                $join->on('d.message_id', 'd2.message_id');
-            })
-            ->leftJoin('dialogues as d3', function ($join) {
-                $join->on('d.user_id', 'd3.author_id')
-                    ->whereColumn('d.message_id', 'd3.message_id');
-            })
-            ->where('d.user_id', $user->id)
-            ->with('author')
-            ->orderBy('d.created_at', $this->getOrder($request))
-            ->paginate($this->getPerPage($request));
-
-        return DialogueResource::collection($dialogues);
-    }
-
-    /**
-     * Api приватных сообщений
-     */
-    public function talk(string $login, Request $request): JsonResource
-    {
-        $user = getUser();
-
-        if (is_numeric($login)) {
-            $author = (new User())->setAttribute('id', $login);
-        } else {
-            $author = getUserByLogin($login);
-
-            if (! $author) {
-                abort(404, __('validator.user'));
-            }
-        }
-
-        if ($user->id === $author->id) {
-            abort(200, __('messages.empty_dialogue'));
-        }
-
-        Dialogue::query()
-            ->where('user_id', $user->id)
-            ->where('author_id', $author->id)
-            ->where('reading', 0)
-            ->update(['reading' => 1]);
-
-        $messages = Message::query()
-            ->select('d.*', 'm.id', 'm.text')
-            ->from('messages as m')
-            ->join('dialogues as d', 'd.message_id', 'm.id')
-            ->where('d.user_id', $user->id)
-            ->where('d.author_id', $author->id)
-            ->orderBy('d.created_at', $this->getOrder($request))
-            ->with('user', 'author', 'files')
-            ->paginate($this->getPerPage($request));
-
-        return MessageResource::collection($messages);
-    }
-
-    /**
      * Api разделов форума
      */
     public function categoryForums(): JsonResource
@@ -195,6 +120,89 @@ class ApiController extends Controller
 
         return PostResource::collection($posts)
             ->additional(['topic' => TopicResource::make($topic)]);
+    }
+
+    /**
+     * Api диалогов
+     */
+    public function dialogues(Request $request): JsonResource
+    {
+        $user = getUser();
+
+        $lastMessage = Dialogue::query()
+            ->select(
+                'author_id',
+                DB::raw('max(message_id) as message_id'),
+                DB::raw('min(case when reading then 1 else 0 end) as all_reading')
+            )
+            ->where('user_id', $user->id)
+            ->groupBy('author_id');
+
+        $dialogues = Message::query()
+            ->select('d.*', 'm.text', 'd2.all_reading', 'd3.reading as recipient_read')
+            ->from('messages as m')
+            ->join('dialogues as d', 'd.message_id', 'm.id')
+            ->joinSub($lastMessage, 'd2', static function (JoinClause $join) {
+                $join->on('d.message_id', 'd2.message_id');
+            })
+            ->leftJoin('dialogues as d3', function ($join) {
+                $join->on('d.user_id', 'd3.author_id')
+                    ->whereColumn('d.message_id', 'd3.message_id');
+            })
+            ->where('d.user_id', $user->id)
+            ->with('author')
+            ->orderBy('d.created_at', $this->getOrder($request))
+            ->paginate($this->getPerPage($request));
+
+        return DialogueResource::collection($dialogues);
+    }
+
+    /**
+     * Api приватных сообщений
+     */
+    public function talk(string $login, Request $request): JsonResource
+    {
+        $user = getUser();
+
+        if (is_numeric($login)) {
+            $author = (new User())->setAttribute('id', $login);
+        } else {
+            $author = getUserByLogin($login);
+
+            if (! $author) {
+                abort(404, __('validator.user'));
+            }
+        }
+
+        if ($user->id === $author->id) {
+            abort(200, __('messages.empty_dialogue'));
+        }
+
+        $messages = Message::query()
+            ->select('d.*', 'm.id', 'm.text', 'd2.reading as recipient_read')
+            ->from('messages as m')
+            ->join('dialogues as d', 'd.message_id', 'm.id')
+            ->leftJoin('dialogues as d2', function ($join) {
+                $join->on('d.user_id', 'd2.author_id')
+                    ->whereColumn('d.message_id', 'd2.message_id');
+            })
+            ->where('d.user_id', $user->id)
+            ->where('d.author_id', $author->id)
+            ->orderBy('d.created_at', $this->getOrder($request))
+            ->with('user', 'author', 'files')
+            ->paginate($this->getPerPage($request));
+
+        Dialogue::query()
+            ->where('user_id', $user->id)
+            ->where('author_id', $author->id)
+            ->where('reading', 0)
+            ->update(['reading' => 1]);
+
+        $dialogue = $messages->first();
+        $dialogue?->setAttribute('all_reading', true);
+
+        return MessageResource::collection($messages)
+            ->additional(['dialogue' => DialogueResource::make($dialogue)]);
     }
 
     /**
