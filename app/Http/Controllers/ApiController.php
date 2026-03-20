@@ -281,34 +281,36 @@ class ApiController extends Controller
 
     /**
      * Отправляет приватное сообщение
+     *
+     * @deprecated Используйте POST /talk/{login}
      */
     public function send(Request $request, Flood $flood): JsonResponse
     {
+        return $this->createTalk($request->input('login', ''), $request, $flood);
+    }
+
+    /**
+     * Отправляет приватное сообщение
+     */
+    public function createTalk(string $login, Request $request, Flood $flood): JsonResponse
+    {
         $user = getUser();
-        $login = $request->input('login');
         $recipient = getUserByLogin($login);
 
         $validated = $request->validate([
-            'login' => [
+            'text' => [
                 'required',
                 'string',
-                function (string $attribute, mixed $value, Closure $fail) use ($user, $recipient) {
+                'min:' . setting('comment_text_min'),
+                'max:' . setting('comment_text_max'),
+                function (string $attribute, mixed $value, Closure $fail) use ($user, $recipient, $flood) {
                     if (! $recipient) {
                         $fail(__('validator.user'));
                     } elseif ($recipient->id === $user->id) {
                         $fail(__('messages.send_yourself'));
                     } elseif ($recipient->isIgnore($user)) {
                         $fail(__('ignores.you_are_ignoring'));
-                    }
-                },
-            ],
-            'text' => [
-                'required',
-                'string',
-                'min:' . setting('comment_text_min'),
-                'max:' . setting('comment_text_max'),
-                function (string $attribute, mixed $value, Closure $fail) use ($flood) {
-                    if ($flood->isFlood()) {
+                    } elseif ($flood->isFlood()) {
                         $fail(__('validator.flood', ['sec' => $flood->getPeriod()]));
                     }
                 },

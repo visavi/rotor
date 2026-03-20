@@ -28,7 +28,8 @@ Route::controller(ApiController::class)
         Route::get('/dialogues', 'dialogues');
         Route::get('/talk/{login}', 'talk');
         Route::get('/messages/new', 'newMessages');
-        Route::post('/messages/send', 'send');
+        Route::post('/messages/send', 'send'); // deprecated, используйте POST /talk/{login}
+        Route::post('/talk/{login}', 'createTalk');
         Route::get('/forums', 'categoryForums');
         Route::get('/forums/{id}', 'forums');
         Route::get('/topics/{id}', 'topics');

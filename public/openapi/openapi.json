@@ -348,13 +348,64 @@
                     },
                     "404": {"description": "Пользователь не найден"}
                 }
+            },
+            "post": {
+                "tags": ["Сообщения"],
+                "summary": "Отправить сообщение пользователю",
+                "operationId": "createTalk",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "string", "pattern": "^[\\w\\-]+$"}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["text"],
+                                "properties": {
+                                    "text": {"type": "string", "description": "Текст сообщения"},
+                                    "files[]": {
+                                        "type": "array",
+                                        "items": {"type": "string", "format": "binary"},
+                                        "description": "Прикреплённые файлы (необязательно)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Сообщение отправлено",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {"type": "string"},
+                                        "data": {"$ref": "#/components/schemas/Message"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {"description": "Пользователь не найден"},
+                    "422": {"description": "Ошибка валидации (флуд, игнор-лист, нельзя себе)"}
+                }
             }
         },
         "/messages/send": {
             "post": {
                 "tags": ["Сообщения"],
-                "summary": "Отправка приватного сообщения",
+                "summary": "Отправка приватного сообщения (устарело)",
                 "operationId": "sendMessage",
+                "deprecated": true,
                 "requestBody": {
                     "required": true,
                     "content": {
