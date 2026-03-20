@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -121,7 +120,7 @@ class Message extends Model
     /**
      * Create dialogue
      */
-    public function createDialogue(User $user, ?User $author, string $text, bool $withAuthor): Builder|Model
+    public function createDialogue(User $user, ?User $author, string $text, bool $withAuthor): self
     {
         $authorId = $author->id ?? 0;
 

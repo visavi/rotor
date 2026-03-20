@@ -20,7 +20,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -143,9 +142,8 @@ class TopicController extends Controller
         }
 
         $topic = Topic::query()
-            ->select('topics.*', 'forums.parent_id')
             ->where('topics.id', $id)
-            ->leftJoin('forums', 'topics.forum_id', 'forums.id')
+            ->with('forum.parent')
             ->first();
 
         if (! $topic) {
@@ -189,28 +187,6 @@ class TopicController extends Controller
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
-
-                $user->increment('allforum');
-                $user->increment('point', setting('forum_point'));
-                $user->increment('money', setting('forum_money'));
-
-                $topic->increment('count_posts');
-                $topic->update([
-                    'last_post_id' => $post->id,
-                    'updated_at'   => SITETIME,
-                ]);
-
-                $topic->forum->update([
-                    'count_posts'   => DB::raw('count_posts + 1'),
-                    'last_topic_id' => $topic->id,
-                ]);
-
-                // Обновление родительского форума
-                if ($topic->forum->parent_id) {
-                    $topic->forum->parent->update([
-                        'last_topic_id' => $topic->id,
-                    ]);
-                }
             }
 
             File::query()
@@ -219,7 +195,6 @@ class TopicController extends Controller
                 ->where('user_id', $user->id)
                 ->update(['relate_id' => $post->id]);
 
-            clearCache(['statForums', 'recentTopics', 'TopicFeed']);
             $flood->saveState();
             sendNotify($msg, route('topics.topic', ['id' => $topic->id, 'pid' => $post->id], false), $topic->title);
 
@@ -266,9 +241,6 @@ class TopicController extends Controller
             $posts->each(static function (Post $post) {
                 $post->delete();
             });
-
-            $topic->decrement('count_posts', $posts->count());
-            $topic->forum->decrement('count_posts', $posts->count());
 
             setFlash('success', __('main.messages_deleted_success'));
         } else {

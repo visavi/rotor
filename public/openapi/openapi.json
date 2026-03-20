@@ -358,27 +358,33 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "type": "object",
                                 "required": ["login", "text"],
                                 "properties": {
                                     "login": {"type": "string", "description": "Логин получателя"},
-                                    "text": {"type": "string", "description": "Текст сообщения"}
+                                    "text": {"type": "string", "description": "Текст сообщения"},
+                                    "files[]": {
+                                        "type": "array",
+                                        "items": {"type": "string", "format": "binary"},
+                                        "description": "Прикреплённые файлы (необязательно)"
+                                    }
                                 }
                             }
                         }
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Сообщение отправлено",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "message": {"type": "string"}
+                                        "message": {"type": "string"},
+                                        "data": {"$ref": "#/components/schemas/Message"}
                                     }
                                 }
                             }
@@ -506,6 +512,56 @@
                         }
                     },
                     "404": {"description": "Тема не найдена"}
+                }
+            },
+            "post": {
+                "tags": ["Форум"],
+                "summary": "Создать пост в теме",
+                "operationId": "createPost",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {"type": "integer"}
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": ["text"],
+                                "properties": {
+                                    "text": {"type": "string", "description": "Текст поста"},
+                                    "files[]": {
+                                        "type": "array",
+                                        "items": {"type": "string", "format": "binary"},
+                                        "description": "Прикреплённые файлы (необязательно)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Пост создан",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {"type": "string"},
+                                        "post": {"$ref": "#/components/schemas/Post"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {"description": "Тема не найдена"},
+                    "422": {"description": "Ошибка валидации (тема закрыта, флуд, повтор текста)"}
                 }
             }
         }

@@ -13,7 +13,6 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -506,7 +505,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Отправляет приватное сообщение
      */
-    public function sendMessage(?self $author, string $text, bool $withAuthor = true): Builder|Model
+    public function sendMessage(?self $author, string $text, bool $withAuthor = true): Message
     {
         return (new Message())->createDialogue($this, $author, $text, $withAuthor);
     }

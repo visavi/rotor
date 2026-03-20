@@ -123,6 +123,80 @@ class ApiController extends Controller
     }
 
     /**
+     * Создаёт пост в теме форума
+     */
+    public function createPost(int $id, Request $request, Flood $flood): JsonResponse
+    {
+        $user = getUser();
+
+        $topic = Topic::query()
+            ->where('topics.id', $id)
+            ->with('forum.parent')
+            ->first();
+
+        if (! $topic) {
+            abort(404, __('forums.topic_not_exist'));
+        }
+
+        $lastPost = Post::query()->where('topic_id', $topic->id)->orderByDesc('id')->value('text');
+
+        $validated = $request->validate([
+            'text' => [
+                'required',
+                'string',
+                'min:' . setting('forum_text_min'),
+                'max:' . setting('forum_text_max'),
+                function (string $attribute, mixed $value, Closure $fail) use ($topic, $flood, $lastPost) {
+                    if ($topic->closed) {
+                        $fail(__('forums.topic_closed'));
+                    }
+
+                    if ($flood->isFlood()) {
+                        $fail(__('validator.flood', ['sec' => $flood->getPeriod()]));
+                    }
+
+                    if ($lastPost === $value) {
+                        $fail(__('forums.post_repeat'));
+                    }
+                },
+            ],
+            'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
+            'files.*' => [
+                'file',
+                'max:' . setting('filesize'),
+                'mimes:' . setting('file_extensions'),
+            ],
+        ]);
+
+        $msg = antimat($validated['text']);
+
+        $uploadedFiles = $request->file('files', []);
+
+        $post = Post::query()->create([
+            'topic_id'   => $topic->id,
+            'user_id'    => $user->id,
+            'text'       => $msg,
+            'created_at' => SITETIME,
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
+        ]);
+
+        foreach ($uploadedFiles as $file) {
+            $post->uploadFile($file);
+        }
+
+        $flood->saveState();
+        sendNotify($msg, route('topics.topic', ['id' => $topic->id, 'pid' => $post->id], false), $topic->title);
+
+        $post->load('user', 'files');
+
+        return response()->json([
+            'message' => __('main.message_added_success'),
+            'post'    => PostResource::make($post),
+        ], 201);
+    }
+
+    /**
      * Api диалогов
      */
     public function dialogues(Request $request): JsonResource
@@ -220,14 +294,10 @@ class ApiController extends Controller
                 'string',
                 function (string $attribute, mixed $value, Closure $fail) use ($user, $recipient) {
                     if (! $recipient) {
-                        return $fail(__('validator.user'));
-                    }
-
-                    if ($recipient->id === $user->id) {
-                        return $fail(__('messages.send_yourself'));
-                    }
-
-                    if ($recipient->isIgnore($user)) {
+                        $fail(__('validator.user'));
+                    } elseif ($recipient->id === $user->id) {
+                        $fail(__('messages.send_yourself'));
+                    } elseif ($recipient->isIgnore($user)) {
                         $fail(__('ignores.you_are_ignoring'));
                     }
                 },
@@ -243,14 +313,30 @@ class ApiController extends Controller
                     }
                 },
             ],
+            'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
+            'files.*' => [
+                'file',
+                'max:' . setting('filesize'),
+                'mimes:' . setting('file_extensions'),
+            ],
         ]);
 
         $text = antimat($validated['text']);
-        $recipient->sendMessage($user, $text);
+        $message = $recipient->sendMessage($user, $text);
+
+        foreach ($request->file('files', []) as $file) {
+            $message->uploadFile($file);
+        }
 
         $flood->saveState();
 
-        return response()->json(['message' => __('messages.success_sent')]);
+        $message->load('user', 'files');
+        $message->setAttribute('type', Message::OUT);
+
+        return response()->json([
+            'message' => __('messages.success_sent'),
+            'data'    => MessageResource::make($message),
+        ], 201);
     }
 
     /**
