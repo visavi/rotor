@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
     title: 'Rotor API'
     version: 1.0.0
-    description: 'Для доступа к данным нужен API-ключ, который можно получить на странице Мои данные'
+    description: 'Для доступа к данным нужен API-ключ, который можно получить через авторизацию или на странице Мои данные'
 security:
     -
         BearerToken: {  }
@@ -12,11 +12,6 @@ components:
             type: http
             scheme: bearer
             description: 'Передайте API-ключ в заголовке: Authorization: Bearer {token}'
-        ApiToken:
-            type: apiKey
-            in: query
-            name: token
-            description: 'Устаревший способ. Передайте API-ключ через query-параметр token. Используйте заголовок Authorization: Bearer {token}'
     parameters:
         PerPage:
             name: per_page
@@ -498,6 +493,118 @@ components:
                 total:
                     type: integer
 paths:
+    /auth:
+        post:
+            tags:
+                - Авторизация
+            summary: 'Получить API-токен'
+            operationId: auth
+            security: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - login
+                                - password
+                            properties:
+                                login:
+                                    type: string
+                                    description: 'Логин или email'
+                                password:
+                                    type: string
+                                    format: password
+                                    description: Пароль
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                                        description: 'API-токен для использования в заголовке Authorization: Bearer {token}'
+                401:
+                    description: 'Неверный логин или пароль'
+                403:
+                    description: 'Пользователь заблокирован'
+                422:
+                    description: 'Ошибка валидации'
+    /config:
+        get:
+            tags:
+                - Конфигурация
+            summary: 'Настройки загрузки файлов и лимиты текста'
+            operationId: getConfig
+            security: []
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    site:
+                                        type: object
+                                        properties:
+                                            title:
+                                                type: string
+                                                description: 'Название сайта'
+                                            language:
+                                                type: string
+                                                description: 'Язык по умолчанию'
+                                            money_name:
+                                                type: string
+                                                description: 'Название внутренней валюты'
+                                            score_name:
+                                                type: string
+                                                description: 'Название баллов'
+                                            site_closed:
+                                                type: boolean
+                                                description: 'Сайт закрыт для гостей'
+                                            registration_open:
+                                                type: boolean
+                                                description: 'Регистрация открыта'
+                                            invite_only:
+                                                type: boolean
+                                                description: 'Регистрация только по инвайтам'
+                                    upload:
+                                        type: object
+                                        properties:
+                                            max_files:
+                                                type: integer
+                                                description: 'Максимальное количество файлов за раз'
+                                            max_file_size:
+                                                type: integer
+                                                description: 'Максимальный размер файла в килобайтах'
+                                            extensions:
+                                                type: array
+                                                items:
+                                                    type: string
+                                                description: 'Разрешённые расширения файлов'
+                                    forum:
+                                        type: object
+                                        properties:
+                                            text_min:
+                                                type: integer
+                                                description: 'Минимальная длина текста поста'
+                                            text_max:
+                                                type: integer
+                                                description: 'Максимальная длина текста поста'
+                                    messages:
+                                        type: object
+                                        properties:
+                                            text_min:
+                                                type: integer
+                                                description: 'Минимальная длина текста сообщения'
+                                            text_max:
+                                                type: integer
+                                                description: 'Максимальная длина текста сообщения'
     /user:
         get:
             tags:

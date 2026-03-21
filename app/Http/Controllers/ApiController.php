@@ -24,7 +24,9 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ApiController extends Controller
@@ -35,6 +37,33 @@ class ApiController extends Controller
     public function index(): View
     {
         return view('api/index');
+    }
+
+    /**
+     * Авторизация и получение токена
+     */
+    public function auth(Request $request): JsonResponse
+    {
+        $request->validate([
+            'login'    => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = getUserByLoginOrEmail($request->input('login'));
+
+        if (! $user || ! password_verify($request->input('password'), $user->password)) {
+            abort(401, __('users.incorrect_login_or_password'));
+        }
+
+        if ($user->level === User::BANNED) {
+            abort(403, 'User banned');
+        }
+
+        if (! $user->apikey) {
+            $user->update(['apikey' => Str::random(32)]);
+        }
+
+        return response()->json(['token' => $user->apikey]);
     }
 
     /**
@@ -373,6 +402,39 @@ class ApiController extends Controller
             'count'     => $countMessages,
             'dialogues' => NewMessageResource::collection($dialogues),
         ]);
+    }
+
+    /**
+     * Api конфигурации
+     */
+    public function config(): JsonResponse
+    {
+        $data = Cache::remember('apiConfig', 600, static fn () => [
+            'site' => [
+                'title'             => setting('title'),
+                'language'          => setting('language'),
+                'money_name'        => setting('moneyname'),
+                'score_name'        => setting('scorename'),
+                'site_closed'       => (bool) setting('closedsite'),
+                'registration_open' => (bool) setting('openreg'),
+                'invite_only'       => (bool) setting('invite'),
+            ],
+            'upload' => [
+                'max_files'     => setting('maxfiles'),
+                'max_file_size' => setting('filesize'),
+                'extensions'    => explode(',', setting('file_extensions')),
+            ],
+            'forum' => [
+                'text_min' => setting('forum_text_min'),
+                'text_max' => setting('forum_text_max'),
+            ],
+            'messages' => [
+                'text_min' => setting('comment_text_min'),
+                'text_max' => setting('comment_text_max'),
+            ],
+        ]);
+
+        return response()->json($data);
     }
 
     /**
