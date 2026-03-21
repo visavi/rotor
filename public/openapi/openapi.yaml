@@ -1,0 +1,827 @@
+openapi: 3.2.0
+info:
+    title: 'Rotor API'
+    version: 1.0.0
+    description: 'Для доступа к данным нужен API-ключ, который можно получить на странице Мои данные'
+security:
+    -
+        BearerToken: {  }
+components:
+    securitySchemes:
+        BearerToken:
+            type: http
+            scheme: bearer
+            description: 'Передайте API-ключ в заголовке: Authorization: Bearer {token}'
+        ApiToken:
+            type: apiKey
+            in: query
+            name: token
+            description: 'Устаревший способ. Передайте API-ключ через query-параметр token. Используйте заголовок Authorization: Bearer {token}'
+    parameters:
+        PerPage:
+            name: per_page
+            in: query
+            schema:
+                type: integer
+                default: 10
+                minimum: 1
+                maximum: 100
+            description: 'Количество элементов на странице'
+        Page:
+            name: page
+            in: query
+            schema:
+                type: integer
+                default: 1
+                minimum: 1
+            description: 'Номер страницы'
+        Order:
+            name: order
+            in: query
+            schema:
+                type: string
+                enum:
+                    - asc
+                    - desc
+                default: desc
+            description: 'Порядок сортировки'
+    schemas:
+        UserProfile:
+            type: object
+            properties:
+                login:
+                    type: string
+                name:
+                    type: string
+                level:
+                    type: string
+                    enum:
+                        - boss
+                        - admin
+                        - moder
+                        - editor
+                        - user
+                        - pended
+                        - banned
+                country:
+                    type:
+                        - string
+                        - null
+                city:
+                    type:
+                        - string
+                        - null
+                info:
+                    type:
+                        - string
+                        - null
+                site:
+                    type:
+                        - string
+                        - null
+                gender:
+                    type:
+                        - string
+                        - null
+                    enum:
+                        - male
+                        - female
+                        - null
+                birthday:
+                    type:
+                        - string
+                        - null
+                visits:
+                    type: integer
+                allforum:
+                    type: integer
+                    description: 'Количество постов на форуме'
+                allguest:
+                    type: integer
+                    description: 'Количество записей в гостевой'
+                allcomments:
+                    type: integer
+                    description: 'Количество комментариев'
+                themes:
+                    type: string
+                    description: 'Текущая тема оформления'
+                point:
+                    type: integer
+                    description: Баллы
+                money:
+                    type: integer
+                    description: Монеты
+                status:
+                    type:
+                        - string
+                        - null
+                color:
+                    type:
+                        - string
+                        - null
+                    description: 'Цвет имени пользователя'
+                avatar:
+                    type:
+                        - string
+                        - null
+                    format: uri
+                picture:
+                    type:
+                        - string
+                        - null
+                    format: uri
+                rating:
+                    type: integer
+                language:
+                    type: string
+                timezone:
+                    type: string
+                lastlogin:
+                    type:
+                        - string
+                        - null
+                    format: date-time
+                email:
+                    type:
+                        - string
+                        - null
+                    format: email
+                phone:
+                    type:
+                        - string
+                        - null
+                allprivat:
+                    type: integer
+                    description: 'Всего приватных сообщений'
+                newprivat:
+                    type: integer
+                    description: 'Непрочитанных приватных сообщений'
+                newwall:
+                    type: integer
+                    description: 'Новых записей на стене'
+        User:
+            type: object
+            properties:
+                login:
+                    type: string
+                name:
+                    type: string
+                level:
+                    type: string
+                country:
+                    type:
+                        - string
+                        - null
+                city:
+                    type:
+                        - string
+                        - null
+                info:
+                    type:
+                        - string
+                        - null
+                site:
+                    type:
+                        - string
+                        - null
+                gender:
+                    type:
+                        - string
+                        - null
+                birthday:
+                    type:
+                        - string
+                        - null
+                visits:
+                    type: integer
+                allforum:
+                    type: integer
+                allguest:
+                    type: integer
+                allcomments:
+                    type: integer
+                themes:
+                    type: string
+                point:
+                    type: integer
+                money:
+                    type: integer
+                status:
+                    type:
+                        - string
+                        - null
+                color:
+                    type:
+                        - string
+                        - null
+                avatar:
+                    type:
+                        - string
+                        - null
+                    format: uri
+                picture:
+                    type:
+                        - string
+                        - null
+                    format: uri
+                rating:
+                    type: integer
+                language:
+                    type: string
+                timezone:
+                    type: string
+                lastlogin:
+                    type:
+                        - string
+                        - null
+                    format: date-time
+        Dialogue:
+            type: object
+            properties:
+                id:
+                    type: integer
+                login:
+                    type: string
+                    description: 'Логин собеседника'
+                name:
+                    type: string
+                    description: 'Имя собеседника'
+                text:
+                    type: string
+                    description: 'Текст последнего сообщения'
+                type:
+                    type: string
+                    enum:
+                        - in
+                        - out
+                    description: 'Направление: in — входящее, out — исходящее'
+                all_reading:
+                    type: boolean
+                    description: 'Все сообщения в диалоге прочитаны'
+                recipient_read:
+                    type: boolean
+                    description: 'Получатель прочитал последнее сообщение'
+                can_reply:
+                    type: boolean
+                    description: 'Можно ли ответить (false для системных сообщений)'
+                created_at:
+                    type: string
+                    format: date-time
+                    description: 'Дата последнего сообщения'
+        Message:
+            type: object
+            properties:
+                id:
+                    type: integer
+                login:
+                    type: string
+                    description: 'Логин отправителя'
+                name:
+                    type: string
+                    description: 'Имя отправителя'
+                text:
+                    type: string
+                type:
+                    type: string
+                    enum:
+                        - in
+                        - out
+                    description: 'Направление: in — входящее, out — исходящее'
+                recipient_read:
+                    type: boolean
+                    description: 'Получатель прочитал это сообщение'
+                created_at:
+                    type: string
+                    format: date-time
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+        Forum:
+            type: object
+            properties:
+                id:
+                    type: integer
+                parent_id:
+                    type: integer
+                    description: 'ID родительского раздела (0 — корневой)'
+                sort:
+                    type: integer
+                    description: 'Порядок сортировки'
+                title:
+                    type: string
+                    description: 'Название форума'
+                description:
+                    type:
+                        - string
+                        - null
+                    description: 'Короткое описание форума'
+                closed:
+                    type: boolean
+                    description: 'Раздел закрыт для новых тем'
+                count_topics:
+                    type: integer
+                count_posts:
+                    type: integer
+                last_topic_id:
+                    type:
+                        - integer
+                        - null
+                last_topic_title:
+                    type:
+                        - string
+                        - null
+                last_post_user_login:
+                    type:
+                        - string
+                        - null
+                last_post_user_name:
+                    type:
+                        - string
+                        - null
+                last_post_at:
+                    type:
+                        - string
+                        - null
+                    format: date-time
+                children:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Forum'
+                    description: 'Вложенные подразделы'
+        Topic:
+            type: object
+            properties:
+                id:
+                    type: integer
+                title:
+                    type: string
+                login:
+                    type: string
+                name:
+                    type: string
+                closed:
+                    type: integer
+                    description: 'Тема закрыта'
+                locked:
+                    type: integer
+                    description: 'Тема закреплена вверху'
+                count_posts:
+                    type: integer
+                visits:
+                    type: integer
+                moderators:
+                    type:
+                        - string
+                        - null
+                    description: 'Список модераторов темы'
+                note:
+                    type:
+                        - string
+                        - null
+                    description: 'Примечание модератора'
+                last_post_id:
+                    type:
+                        - integer
+                        - null
+                last_post_user_login:
+                    type:
+                        - string
+                        - null
+                last_post_user_name:
+                    type:
+                        - string
+                        - null
+                close_user_id:
+                    type:
+                        - integer
+                        - null
+                    description: 'ID пользователя, закрывшего тему'
+                updated_at:
+                    type: string
+                    format: date-time
+                created_at:
+                    type: string
+                    format: date-time
+        Post:
+            type: object
+            properties:
+                id:
+                    type: integer
+                login:
+                    type: string
+                text:
+                    type: string
+                rating:
+                    type: integer
+                updated_at:
+                    type: string
+                    format: date-time
+                created_at:
+                    type: string
+                    format: date-time
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+        NewMessage:
+            type: object
+            properties:
+                login:
+                    type: string
+                name:
+                    type: string
+                count:
+                    type: integer
+                    description: 'Количество непрочитанных сообщений от этого пользователя'
+                last_message_at:
+                    type: string
+                    format: date-time
+        File:
+            type: object
+            properties:
+                id:
+                    type: integer
+                name:
+                    type: string
+                path:
+                    type: string
+                    format: uri
+                size:
+                    type: integer
+                extension:
+                    type: string
+                mime_type:
+                    type: string
+                is_image:
+                    type: boolean
+                is_audio:
+                    type: boolean
+                is_video:
+                    type: boolean
+        PaginationLinks:
+            type: object
+            properties:
+                first:
+                    type: string
+                    format: uri
+                last:
+                    type: string
+                    format: uri
+                prev:
+                    type:
+                        - string
+                        - null
+                    format: uri
+                next:
+                    type:
+                        - string
+                        - null
+                    format: uri
+        PaginationMeta:
+            type: object
+            properties:
+                current_page:
+                    type: integer
+                from:
+                    type:
+                        - integer
+                        - null
+                last_page:
+                    type: integer
+                per_page:
+                    type: integer
+                to:
+                    type:
+                        - integer
+                        - null
+                total:
+                    type: integer
+paths:
+    /user:
+        get:
+            tags:
+                - Пользователи
+            summary: 'Профиль текущего пользователя'
+            operationId: getUser
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { $ref: '#/components/schemas/UserProfile' }
+                400:
+                    description: 'Api token missing'
+                401:
+                    description: Unauthorized
+    '/users/{login}':
+        get:
+            tags:
+                - Пользователи
+            summary: 'Профиль пользователя по логину'
+            operationId: getUserByLogin
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { $ref: '#/components/schemas/User' }
+                404:
+                    description: 'Пользователь не найден'
+    /dialogues:
+        get:
+            tags:
+                - Сообщения
+            summary: 'Список диалогов'
+            operationId: getDialogues
+            parameters:
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Dialogue' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    '/talk/{login}':
+        get:
+            tags:
+                - Сообщения
+            summary: 'Переписка с пользователем'
+            operationId: getTalk
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Message' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    dialogue: { $ref: '#/components/schemas/Dialogue' }
+                404:
+                    description: 'Пользователь не найден'
+        post:
+            tags:
+                - Сообщения
+            summary: 'Отправить сообщение пользователю'
+            operationId: createTalk
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - text
+                            properties:
+                                text:
+                                    type: string
+                                    description: 'Текст сообщения'
+                                'files[]':
+                                    type: array
+                                    items: { type: string, format: binary }
+                                    description: 'Прикреплённые файлы (необязательно)'
+            responses:
+                201:
+                    description: 'Сообщение отправлено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    data: { $ref: '#/components/schemas/Message' }
+                404:
+                    description: 'Пользователь не найден'
+                422:
+                    description: 'Ошибка валидации (флуд, игнор-лист, нельзя себе)'
+    /messages/send:
+        post:
+            tags:
+                - Сообщения
+            summary: 'Отправка приватного сообщения (устарело)'
+            operationId: sendMessage
+            deprecated: true
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - login
+                                - text
+                            properties:
+                                login:
+                                    type: string
+                                    description: 'Логин получателя'
+                                text:
+                                    type: string
+                                    description: 'Текст сообщения'
+                                'files[]':
+                                    type: array
+                                    items: { type: string, format: binary }
+                                    description: 'Прикреплённые файлы (необязательно)'
+            responses:
+                201:
+                    description: 'Сообщение отправлено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    data: { $ref: '#/components/schemas/Message' }
+                422:
+                    description: 'Ошибка валидации (пользователь не найден, флуд, игнор-лист)'
+    /messages/new:
+        get:
+            tags:
+                - Сообщения
+            summary: 'Новые непрочитанные сообщения'
+            operationId: getNewMessages
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    count: { type: integer, description: 'Общее количество непрочитанных сообщений' }
+                                    dialogues: { type: array, items: { $ref: '#/components/schemas/NewMessage' } }
+                400:
+                    description: 'Api token missing'
+                401:
+                    description: Unauthorized
+    /forums:
+        get:
+            tags:
+                - Форум
+            summary: 'Разделы форума'
+            operationId: getForumCategories
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Forum' } }
+    '/forums/{id}':
+        get:
+            tags:
+                - Форум
+            summary: 'Темы форума'
+            operationId: getForumTopics
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Topic' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    forum: { $ref: '#/components/schemas/Forum' }
+                404:
+                    description: 'Форум не найден'
+    '/topics/{id}':
+        get:
+            tags:
+                - Форум
+            summary: 'Посты темы'
+            operationId: getTopicPosts
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Post' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    topic: { $ref: '#/components/schemas/Topic' }
+                404:
+                    description: 'Тема не найдена'
+        post:
+            tags:
+                - Форум
+            summary: 'Создать пост в теме'
+            operationId: createPost
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - text
+                            properties:
+                                text:
+                                    type: string
+                                    description: 'Текст поста'
+                                'files[]':
+                                    type: array
+                                    items: { type: string, format: binary }
+                                    description: 'Прикреплённые файлы (необязательно)'
+            responses:
+                201:
+                    description: 'Пост создан'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    post: { $ref: '#/components/schemas/Post' }
+                404:
+                    description: 'Тема не найдена'
+                422:
+                    description: 'Ошибка валидации (тема закрыта, флуд, повтор текста)'
