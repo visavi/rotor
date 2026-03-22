@@ -19,6 +19,8 @@ use App\Models\Message;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
+use App\Models\Vote;
+use App\Models\VoteAnswer;
 use Closure;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
@@ -190,11 +192,7 @@ class ApiController extends Controller
                 },
             ],
             'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*' => [
-                'file',
-                'max:' . setting('filesize'),
-                'mimes:' . setting('file_extensions'),
-            ],
+            'files.*' => ['file', 'max:' . setting('filesize'), 'mimes:' . setting('file_extensions')],
         ]);
 
         $msg = antimat($validated['text']);
@@ -222,6 +220,86 @@ class ApiController extends Controller
         return response()->json([
             'message' => __('main.message_added_success'),
             'post'    => PostResource::make($post),
+        ], 201);
+    }
+
+    /**
+     * Создаёт тему в разделе форума
+     */
+    public function createTopic(int $id, Request $request, Flood $flood): JsonResponse
+    {
+        $user = getUser();
+
+        $forum = Forum::query()->find($id);
+
+        if (! $forum) {
+            abort(404, __('forums.forum_not_exist'));
+        }
+
+        $validated = $request->validate([
+            'title' => [
+                'required',
+                'string',
+                'min:' . setting('forum_title_min'),
+                'max:' . setting('forum_title_max'),
+                function (string $attribute, mixed $value, Closure $fail) use ($forum, $flood) {
+                    if ($forum->closed) {
+                        $fail(__('forums.forum_closed'));
+                    }
+
+                    if ($flood->isFlood()) {
+                        $fail(__('validator.flood', ['sec' => $flood->getPeriod()]));
+                    }
+                },
+            ],
+            'text'      => ['required', 'string', 'min:' . setting('forum_text_min'), 'max:' . setting('forum_text_max')],
+            'question'  => ['nullable', 'string', 'min:' . setting('vote_title_min'), 'max:' . setting('vote_title_max')],
+            'answers'   => ['required_with:question', 'array', 'min:2', 'max:10'],
+            'answers.*' => ['string', 'min:' . setting('vote_answer_min'), 'max:' . setting('vote_answer_max')],
+            'files'     => ['nullable', 'array', 'max:' . setting('maxfiles')],
+            'files.*'   => ['file', 'max:' . setting('filesize'), 'mimes:' . setting('file_extensions')],
+        ]);
+
+        $topic = Topic::query()->create([
+            'forum_id'   => $forum->id,
+            'title'      => antimat($validated['title']),
+            'user_id'    => $user->id,
+            'created_at' => SITETIME,
+            'updated_at' => SITETIME,
+        ]);
+
+        $post = Post::query()->create([
+            'topic_id'   => $topic->id,
+            'user_id'    => $user->id,
+            'text'       => antimat($validated['text']),
+            'created_at' => SITETIME,
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
+        ]);
+
+        foreach ($request->file('files', []) as $file) {
+            $post->uploadFile($file);
+        }
+
+        $flood->saveState();
+
+        if (! empty($validated['question']) && ! empty($validated['answers'])) {
+            $answers = array_unique(array_diff($validated['answers'], ['']));
+            $poll = Vote::query()->create([
+                'title'      => $validated['question'],
+                'topic_id'   => $topic->id,
+                'created_at' => SITETIME,
+            ]);
+
+            $prepareAnswers = array_map(static fn ($answer) => ['vote_id' => $poll->id, 'answer' => $answer], $answers);
+            VoteAnswer::query()->insert($prepareAnswers);
+        }
+
+        $topic->refresh()->load('user', 'lastPost.user');
+
+        return response()->json([
+            'message' => __('forums.topic_success_created'),
+            'topic'   => TopicResource::make($topic),
         ], 201);
     }
 
@@ -345,11 +423,7 @@ class ApiController extends Controller
                 },
             ],
             'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*' => [
-                'file',
-                'max:' . setting('filesize'),
-                'mimes:' . setting('file_extensions'),
-            ],
+            'files.*' => ['file', 'max:' . setting('filesize'), 'mimes:' . setting('file_extensions')],
         ]);
 
         $text = antimat($validated['text']);
@@ -425,10 +499,20 @@ class ApiController extends Controller
                 'extensions'    => explode(',', setting('file_extensions')),
             ],
             'forum' => [
-                'text_min' => setting('forum_text_min'),
-                'text_max' => setting('forum_text_max'),
+                'title_min' => setting('forum_title_min'),
+                'title_max' => setting('forum_title_max'),
+                'text_min'  => setting('forum_text_min'),
+                'text_max'  => setting('forum_text_max'),
             ],
-            'messages' => [
+            'vote' => [
+                'title_min'   => setting('vote_title_min'),
+                'title_max'   => setting('vote_title_max'),
+                'answer_min'  => setting('vote_answer_min'),
+                'answer_max'  => setting('vote_answer_max'),
+                'answers_min' => 2,
+                'answers_max' => 10,
+            ],
+            'message' => [
                 'text_min' => setting('comment_text_min'),
                 'text_max' => setting('comment_text_max'),
             ],

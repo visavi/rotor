@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -152,21 +151,6 @@ class ForumController extends Controller
                 ]);
 
                 $files->update(['relate_id' => $post->id]);
-
-                Topic::query()->where('id', $topic->id)->update(['last_post_id' => $post->id]);
-
-                $forum->update([
-                    'count_topics'  => DB::raw('count_topics + 1'),
-                    'count_posts'   => DB::raw('count_posts + 1'),
-                    'last_topic_id' => $topic->id,
-                ]);
-
-                // Обновление родительского форума
-                if ($forum->parent->id) {
-                    $forum->parent->update([
-                        'last_topic_id' => $topic->id,
-                    ]);
-                }
 
                 // Создание голосования
                 if ($vote) {

@@ -37,6 +37,7 @@ Route::controller(ApiController::class)
         Route::post('/talk/{login}', 'createTalk');
         Route::get('/forums', 'categoryForums');
         Route::get('/forums/{id}', 'forums');
+        Route::post('/forums/{id}', 'createTopic');
         Route::get('/topics/{id}', 'topics');
         Route::post('/topics/{id}', 'createPost');
     });

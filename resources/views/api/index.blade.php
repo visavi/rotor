@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('index.api_interface') }}</title>
     <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+    <link rel="stylesheet" href="https://unpkg.com/swagger-themes@1.4.3/themes/dark.css">
     <style>
         body { margin: 0; }
         .swagger-ui .topbar { display: none; }

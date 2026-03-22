@@ -590,13 +590,40 @@ paths:
                                     forum:
                                         type: object
                                         properties:
+                                            title_min:
+                                                type: integer
+                                                description: 'Минимальная длина названия темы'
+                                            title_max:
+                                                type: integer
+                                                description: 'Максимальная длина названия темы'
                                             text_min:
                                                 type: integer
                                                 description: 'Минимальная длина текста поста'
                                             text_max:
                                                 type: integer
                                                 description: 'Максимальная длина текста поста'
-                                    messages:
+                                    vote:
+                                        type: object
+                                        properties:
+                                            title_min:
+                                                type: integer
+                                                description: 'Минимальная длина вопроса голосования'
+                                            title_max:
+                                                type: integer
+                                                description: 'Максимальная длина вопроса голосования'
+                                            answer_min:
+                                                type: integer
+                                                description: 'Минимальная длина варианта ответа'
+                                            answer_max:
+                                                type: integer
+                                                description: 'Максимальная длина варианта ответа'
+                                            answers_min:
+                                                type: integer
+                                                description: 'Минимальное количество вариантов'
+                                            answers_max:
+                                                type: integer
+                                                description: 'Максимальное количество вариантов'
+                                    message:
                                         type: object
                                         properties:
                                             text_min:
@@ -857,6 +884,59 @@ paths:
                                     forum: { $ref: '#/components/schemas/Forum' }
                 404:
                     description: 'Форум не найден'
+        post:
+            tags:
+                - Форум
+            summary: 'Создать тему в разделе форума'
+            operationId: createTopic
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - title
+                                - text
+                            properties:
+                                title:
+                                    type: string
+                                    description: 'Название темы'
+                                text:
+                                    type: string
+                                    description: 'Текст сообщения'
+                                question:
+                                    type: string
+                                    description: 'Вопрос голосования (необязательно)'
+                                'answers[]':
+                                    type: array
+                                    items: { type: string }
+                                    description: 'Варианты ответов голосования (минимум 2, максимум 10)'
+                                'files[]':
+                                    type: array
+                                    items: { type: string, format: binary }
+                                    description: 'Прикреплённые файлы (необязательно)'
+            responses:
+                201:
+                    description: 'Тема создана'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    topic: { $ref: '#/components/schemas/Topic' }
+                404:
+                    description: 'Форум не найден'
+                422:
+                    description: 'Ошибка валидации (форум закрыт, флуд, неверная длина)'
     '/topics/{id}':
         get:
             tags:
