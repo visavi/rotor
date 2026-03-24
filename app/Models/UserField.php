@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 /**
@@ -61,6 +64,20 @@ class UserField extends Model
         return [
             'required' => 'bool',
         ];
+    }
+
+    /**
+     * Scope для получения полей с данными пользователя
+     */
+    #[Scope]
+    protected function withUserData(Builder $query, int $userId): void
+    {
+        $query->select('user_fields.*', 'user_data.value')
+            ->leftJoin('user_data', static function (JoinClause $join) use ($userId) {
+                $join->on('user_fields.id', 'user_data.field_id')
+                    ->where('user_data.user_id', $userId);
+            })
+            ->orderBy('user_fields.sort');
     }
 
     /**

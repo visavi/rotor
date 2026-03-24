@@ -51,7 +51,7 @@ class TopicController extends Controller
         // Переход к сообщению
         $pid = int($request->input('pid'));
         if ($pid) {
-            $countPosts = $topic->posts->where('id', '<=', $pid)->count();
+            $countPosts = $topic->posts()->where('id', '<=', $pid)->count();
 
             $page = ceil($countPosts / setting('forumpost'));
             $page = $page > 1 ? $page : null;
@@ -80,7 +80,7 @@ class TopicController extends Controller
             $firstPost = Post::query()->where('topic_id', $topic->id)->orderBy('created_at')->first();
         }
 
-        if ($topic->bookmark_posts && $topic->count_posts > $topic->bookmark_posts) {
+        if ($user && $topic->bookmark_posts && $topic->count_posts > $topic->bookmark_posts) {
             Bookmark::query()
                 ->where('topic_id', $topic->id)
                 ->where('user_id', $user->id)
@@ -228,12 +228,10 @@ class TopicController extends Controller
             abort(404, __('forums.topic_not_exist'));
         }
 
-        $isModer = in_array($user->login, explode(',', (string) $topic->moderators), true);
-
         $validator
             ->notEmpty($del, __('validator.deletion'))
             ->empty($topic->closed, __('forums.topic_closed'))
-            ->equal($isModer, true, __('forums.posts_deleted_curators'));
+            ->equal($topic->isModerator($user), true, __('forums.posts_deleted_curators'));
 
         if ($validator->isValid()) {
             $posts = Post::query()->whereIn('id', $del)->get();
@@ -465,7 +463,7 @@ class TopicController extends Controller
             abort(200, __('forums.topic_closed'));
         }
 
-        $isModer = in_array($user->login, explode(',', (string) $post->topic->moderators), true);
+        $isModer = $post->topic->isModerator($user);
 
         if (! $isModer && $post->user_id !== $user->id) {
             abort(200, __('forums.posts_edited_curators'));

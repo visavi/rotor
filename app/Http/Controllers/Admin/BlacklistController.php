@@ -59,8 +59,7 @@ class BlacklistController extends AdminController
                 $validator->regex($value, '#^[а-яa-z0-9_.-]+(\.[а-яa-z0-9/]+)+$#u', ['value' => __('validator.site')]);
             }
 
-            $duplicate = BlackList::query()->where('type', $type)->where('value', $value)->first();
-            $validator->empty($duplicate, ['value' => __('main.record_exists')]);
+            $validator->false(BlackList::isBlacklisted($type, $value), ['value' => __('main.record_exists')]);
 
             if ($validator->isValid()) {
                 BlackList::query()->create([

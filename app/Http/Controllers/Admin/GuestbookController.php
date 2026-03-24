@@ -54,13 +54,12 @@ class GuestbookController extends AdminController
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', __('main.message_edited_success'));
-
-                return redirect()->route('admin.guestbook.index', ['page' => $page]);
+                return redirect()
+                    ->route('admin.guestbook.index', ['page' => $page])
+                    ->with('success', __('main.message_edited_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return back()->withErrors($validator->getErrors())->withInput();
         }
 
         return view('admin/guestbook/edit', compact('post', 'page'));
@@ -88,13 +87,12 @@ class GuestbookController extends AdminController
                     'reply' => $reply,
                 ]);
 
-                setFlash('success', __('guestbook.answer_success_added'));
-
-                return redirect()->route('admin.guestbook.index', ['page' => $page]);
+                return redirect()
+                    ->route('admin.guestbook.index', ['page' => $page])
+                    ->with('success', __('guestbook.answer_success_added'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return back()->withErrors($validator->getErrors())->withInput();
         }
 
         return view('admin/guestbook/reply', compact('post', 'page'));
@@ -118,12 +116,15 @@ class GuestbookController extends AdminController
             });
 
             clearCache('statGuestbook');
-            setFlash('success', __('main.messages_deleted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+
+            return redirect()
+                ->route('admin.guestbook.index', ['page' => $page])
+                ->with('success', __('main.messages_deleted_success'));
         }
 
-        return redirect()->route('admin.guestbook.index', ['page' => $page]);
+        return redirect()
+            ->route('admin.guestbook.index', ['page' => $page])
+            ->withErrors($validator->getErrors());
     }
 
     /**
@@ -146,12 +147,14 @@ class GuestbookController extends AdminController
             });
 
             clearCache('statGuestbook');
-            setFlash('success', __('main.messages_published_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+
+            return redirect()
+                ->route('admin.guestbook.index', ['page' => $page])
+                ->with('success', __('main.messages_published_success'));
         }
 
-        return redirect()->route('admin.guestbook.index', ['page' => $page]);
+        return redirect()->route('admin.guestbook.index', ['page' => $page])
+            ->withErrors($validator->getErrors());
     }
 
     /**
@@ -165,11 +168,13 @@ class GuestbookController extends AdminController
             Guestbook::query()->truncate();
             clearCache('statGuestbook');
 
-            setFlash('success', __('guestbook.messages_success_cleared'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+            return redirect()
+                ->route('admin.guestbook.index')
+                ->with('success', __('guestbook.messages_success_cleared'));
         }
 
-        return redirect()->route('admin.guestbook.index');
+        return redirect()
+            ->route('admin.guestbook.index')
+            ->withErrors($validator->getErrors());
     }
 }

@@ -12,7 +12,6 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\UserField;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,10 +39,12 @@ class UserController extends AdminController
     {
         $q = check($request->input('q'));
 
-        $search = $q === '1' ? "RLIKE '^[-0-9]'" : "LIKE '$q%'";
-
         $users = User::query()
-            ->whereRaw('login ' . $search)
+            ->when(
+                $q === '1',
+                fn ($query) => $query->whereRaw("login RLIKE '^[-0-9]'"),
+                fn ($query) => $query->where('login', 'like', $q . '%')
+            )
             ->orderByDesc('point')
             ->paginate(setting('usersearch'))
             ->appends(['q' => $q]);
@@ -62,7 +63,7 @@ class UserController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        $allThemes = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR));
+        $allThemes = getAvailableThemes();
         $adminGroups = User::ADMIN_GROUPS;
 
         $allGroups = [];
@@ -70,15 +71,7 @@ class UserController extends AdminController
             $allGroups[$level] = User::getLevelByKey($level);
         }
 
-        $fields = UserField::query()
-            ->select('uf.*', 'ud.value')
-            ->from('user_fields as uf')
-            ->leftJoin('user_data as ud', static function (JoinClause $join) use ($user) {
-                $join->on('uf.id', 'ud.field_id')
-                    ->where('ud.user_id', $user->id);
-            })
-            ->orderBy('uf.sort')
-            ->get();
+        $fields = UserField::query()->withUserData($user->id)->get();
 
         if ($request->isMethod('post')) {
             $level = $request->input('level');
@@ -209,27 +202,17 @@ class UserController extends AdminController
 
             if ($validator->isValid()) {
                 if ($loginblack) {
-                    $duplicate = BlackList::query()->where('type', 'login')->where('value', $user->login)->first();
-                    if (! $duplicate) {
-                        BlackList::query()->create([
-                            'type'       => 'login',
-                            'value'      => $user->login,
-                            'user_id'    => getUser('id'),
-                            'created_at' => SITETIME,
-                        ]);
-                    }
+                    BlackList::query()->firstOrCreate(
+                        ['type' => 'login', 'value' => $user->login],
+                        ['user_id' => getUser('id'), 'created_at' => SITETIME],
+                    );
                 }
 
                 if ($mailblack) {
-                    $duplicate = BlackList::query()->where('type', 'email')->where('value', $user->email)->first();
-                    if (! $duplicate) {
-                        BlackList::query()->create([
-                            'type'       => 'email',
-                            'value'      => $user->email,
-                            'user_id'    => getUser('id'),
-                            'created_at' => SITETIME,
-                        ]);
-                    }
+                    BlackList::query()->firstOrCreate(
+                        ['type' => 'email', 'value' => $user->email],
+                        ['user_id' => getUser('id'), 'created_at' => SITETIME],
+                    );
                 }
 
                 // Удаление тем форума

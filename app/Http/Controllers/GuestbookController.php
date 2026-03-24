@@ -96,13 +96,15 @@ class GuestbookController extends Controller
             $flood->saveState();
 
             sendNotify($msg, route('guestbook.index', absolute: false), __('index.guestbook'));
-            setFlash('success', $active ? __('main.message_added_success') : __('main.message_publish_moderation'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+
+            return redirect()
+                ->route('guestbook.index')
+                ->with('success', $active ? __('main.message_added_success') : __('main.message_publish_moderation'));
         }
 
-        return redirect()->route('guestbook.index');
+        return redirect()->route('guestbook.index')
+            ->withErrors($validator->getErrors())
+            ->withInput();
     }
 
     /**
@@ -136,13 +138,12 @@ class GuestbookController extends Controller
                     'updated_at'   => SITETIME,
                 ]);
 
-                setFlash('success', __('main.message_edited_success'));
-
-                return redirect()->route('guestbook.index');
+                return redirect()
+                    ->route('guestbook.index')
+                    ->with('success', __('main.message_edited_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return back()->withErrors($validator->getErrors())->withInput();
         }
 
         return view('guestbook/edit', compact('post'));

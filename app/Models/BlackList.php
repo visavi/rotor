@@ -44,6 +44,14 @@ class BlackList extends Model
     }
 
     /**
+     * Проверяет наличие значения в чёрном списке
+     */
+    public static function isBlacklisted(string $type, string $value): bool
+    {
+        return self::query()->where('type', $type)->where('value', $value)->exists();
+    }
+
+    /**
      * Возвращает связь пользователя
      */
     public function user(): BelongsTo

@@ -51,10 +51,11 @@ class SearchController extends Controller
      */
     public function sort(string $letter): View
     {
-        $search = is_numeric($letter) ? "RLIKE '^[-0-9]'" : "LIKE '$letter%'";
-
         $users = User::query()
-            ->whereRaw('login ' . $search)
+            ->when(is_numeric($letter),
+                fn ($query) => $query->whereRaw("login RLIKE '^[-0-9]'"),
+                fn ($query) => $query->where('login', 'like', $letter . '%')
+            )
             ->orderByDesc('point')
             ->paginate(setting('usersearch'));
 

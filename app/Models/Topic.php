@@ -152,6 +152,14 @@ class Topic extends Model
     }
 
     /**
+     * Проверяет, является ли пользователь модератором темы
+     */
+    public function isModerator(User $user): bool
+    {
+        return in_array($user->login, explode(',', (string) $this->moderators), true);
+    }
+
+    /**
      * Удаление темы и связанных данных
      */
     public function delete(): ?bool

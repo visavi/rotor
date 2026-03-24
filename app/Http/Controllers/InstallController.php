@@ -62,7 +62,7 @@ class InstallController extends Controller
         $dirs = [public_path('assets/modules'), base_path('bootstrap/cache')];
 
         $dirs = array_merge($storage, $uploads, $dirs);
-        $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
+        $languages = getAvailableLanguages();
 
         return view('install/index', compact('keys', 'languages', 'versions', 'dirs'));
     }

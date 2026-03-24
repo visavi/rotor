@@ -51,8 +51,7 @@ class AccountController extends Controller
         $isEmailExists = User::query()->where('email', $email)->exists();
         $validator->false($isEmailExists, ['email' => __('users.email_already_exists')]);
 
-        $isEmailBlacklisted = BlackList::query()->where('type', 'email')->where('value', $email)->exists();
-        $validator->false($isEmailBlacklisted, ['email' => __('users.email_is_blacklisted')]);
+        $validator->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
 
         EmailChange::query()
             ->where('created_at', '<', now()->subHour())
@@ -115,8 +114,7 @@ class AccountController extends Controller
             $isEmailExists = User::query()->where('email', $emailChange->email)->exists();
             $validator->false($isEmailExists, __('users.email_already_exists'));
 
-            $isEmailBlacklisted = BlackList::query()->where('type', 'email')->where('value', $emailChange->email)->exists();
-            $validator->false($isEmailBlacklisted, __('users.email_is_blacklisted'));
+            $validator->false(BlackList::isBlacklisted('email', $emailChange->email), __('users.email_is_blacklisted'));
         }
 
         if ($validator->isValid()) {

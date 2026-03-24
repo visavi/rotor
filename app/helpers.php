@@ -54,16 +54,6 @@ const ROTOR_VERSION = '12.8.0';
 define('SITETIME', time());
 
 /**
- * Форматирует вывод времени из секунд
- */
-function makeTime(int $time): string
-{
-    $format = $time < 3600 ? 'i:s' : 'H:i:s';
-
-    return gmdate($format, $time);
-}
-
-/**
  * Форматирует время с учетом часовых поясов
  */
 function dateFixed(
@@ -730,16 +720,6 @@ function truncateString(HtmlString|string $value, int $limit = 100, string $end 
     }
 
     return trim($string) . $end;
-}
-
-/**
- * Возвращает обрезанную до заданного количества слов строке
- */
-function truncateWord(HtmlString|string $value, int $words = 20, string $end = '...'): string
-{
-    $value = strip_tags($value);
-
-    return Str::words(trim($value), $words, $end);
 }
 
 /**
@@ -1661,4 +1641,20 @@ function getCourses(): HtmlString
     });
 
     return new HtmlString(view('app/_courses', compact('courses')));
+}
+
+/**
+ * Возвращает список доступных тем оформления
+ */
+function getAvailableThemes(): array
+{
+    return array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR) ?: []);
+}
+
+/**
+ * Возвращает список доступных языков
+ */
+function getAvailableLanguages(): array
+{
+    return array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR) ?: []);
 }

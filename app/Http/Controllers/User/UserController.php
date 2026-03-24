@@ -36,16 +36,7 @@ class UserController extends Controller
         $adminGroups = User::ADMIN_GROUPS;
         $invite = Invite::query()->where('invite_user_id', $user->id)->first();
 
-        $fields = UserField::query()
-            ->select('uf.*', 'ud.value')
-            ->from('user_fields as uf')
-            ->leftJoin('user_data as ud', static function (JoinClause $join) use ($user) {
-                $join->on('uf.id', 'ud.field_id')
-                    ->where('ud.user_id', $user->id);
-            })
-            ->whereNotNull('ud.value')
-            ->orderBy('uf.sort')
-            ->get();
+        $fields = UserField::query()->withUserData($user->id)->whereNotNull('user_data.value')->get();
 
         return view('users/user', compact('user', 'invite', 'adminGroups', 'fields'));
     }
@@ -129,30 +120,17 @@ class UserController extends Controller
                     $validator->false($checkLogin, ['login' => __('users.login_already_exists')]);
 
                     // Проверка логина в черном списке
-                    $blackLogin = Blacklist::query()
-                        ->where('type', 'login')
-                        ->where('value', strtolower($login))
-                        ->exists();
-                    $validator->false($blackLogin, ['login' => __('users.login_is_blacklisted')]);
+                    $validator->false(BlackList::isBlacklisted('login', strtolower($login)), ['login' => __('users.login_is_blacklisted')]);
                 }
 
                 // Проверка email на существование
                 $checkMail = User::query()->where('email', $email)->exists();
                 $validator->false($checkMail, ['email' => __('users.email_already_exists')]);
 
-                // Проверка домена от email в черном списке
-                $blackDomain = Blacklist::query()
-                    ->where('type', 'domain')
-                    ->where('value', $domain)
-                    ->exists();
-                $validator->false($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
-
-                // Проверка email в черном списке
-                $blackMail = Blacklist::query()
-                    ->where('type', 'email')
-                    ->where('value', $email)
-                    ->exists();
-                $validator->false($blackMail, ['email' => __('users.email_is_blacklisted')]);
+                // Проверка домена от email и email в черном списке
+                $validator
+                    ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')])
+                    ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
 
                 // Проверка пригласительного ключа
                 if (setting('invite')) {
@@ -406,14 +384,10 @@ class UserController extends Controller
                 ->true(captchaVerify(), ['protect' => __('validator.captcha')])
                 ->email($email, ['email' => __('validator.email')]);
 
-            $regMail = User::query()->where('login', '<>', $user->login)->where('email', $email)->count();
-            $validator->empty($regMail, ['email' => __('users.email_already_exists')]);
-
-            $blackMail = BlackList::query()->where('type', 'email')->where('value', $email)->count();
-            $validator->empty($blackMail, ['email' => __('users.email_is_blacklisted')]);
-
-            $blackDomain = Blacklist::query()->where('type', 'domain')->where('value', $domain)->count();
-            $validator->empty($blackDomain, ['email' => __('users.domain_is_blacklisted')]);
+            $validator
+                ->false(User::query()->where('login', '<>', $user->login)->where('email', $email)->exists(), ['email' => __('users.email_already_exists')])
+                ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')])
+                ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')]);
 
             if ($validator->isValid()) {
                 $token = Str::random(32);
@@ -474,8 +448,8 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $setting['themes'] = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR));
-        $setting['languages'] = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR));
+        $setting['themes'] = getAvailableThemes();
+        $setting['languages'] = getAvailableLanguages();
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {
@@ -533,14 +507,9 @@ class UserController extends Controller
                 ->where('login', $login)
                 ->exists();
 
-            $blackLogin = Blacklist::query()
-                ->where('type', 'login')
-                ->where('value', strtolower($login))
-                ->exists();
-
             $validator
                 ->false($existLogin, __('users.login_already_exists'))
-                ->false($blackLogin, __('users.login_is_blacklisted'));
+                ->false(BlackList::isBlacklisted('login', strtolower($login)), __('users.login_is_blacklisted'));
         }
 
         if ($validator->isValid()) {
