@@ -50,7 +50,7 @@ use Illuminate\Support\ViewErrorBag;
 use Intervention\Image\ImageManager;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '12.8.0';
+const ROTOR_VERSION = '13.0.0';
 define('SITETIME', time());
 
 /**
@@ -183,7 +183,7 @@ function formatTime(int $time, int $crumbs = 2): string
     $return = [];
 
     foreach ($units as $unit => $seconds) {
-        $format = floor($time / $seconds);
+        $format = (int) ($time / $seconds);
         $time %= $seconds;
 
         if ($format >= 1) {
@@ -218,18 +218,15 @@ function getCalendar(int $time = SITETIME): HtmlString
 function statsOnline(): array
 {
     return Cache::remember('online', 60, static function () {
-        $users = Online::query()
-            ->select('user_id')
-            ->distinct('user_id')
-            ->whereNotNull('user_id')
-            ->get();
+        $rows = Online::query()->select('user_id')->get();
 
+        $users = $rows->whereNotNull('user_id')->unique('user_id');
         $usersCount = $users->count();
-        $guestsCount = Online::query()->whereNull('user_id')->count();
+        $guestsCount = $rows->whereNull('user_id')->count();
         $total = $usersCount + $guestsCount;
 
         $metrika = new Metrika();
-        $metrika->getCounter($usersCount + $guestsCount);
+        $metrika->getCounter($total);
 
         return [$usersCount, $guestsCount, $total, $users];
     });
@@ -453,17 +450,8 @@ function photoNavigation(int $id): ?array
         return null;
     }
 
-    $next = Photo::query()
-        ->where('id', '>', $id)
-        ->orderBy('id')
-        ->pluck('id')
-        ->first();
-
-    $prev = Photo::query()
-        ->where('id', '<', $id)
-        ->orderByDesc('id')
-        ->pluck('id')
-        ->first();
+    $next = Photo::query()->where('id', '>', $id)->orderBy('id')->value('id');
+    $prev = Photo::query()->where('id', '<', $id)->orderByDesc('id')->value('id');
 
     return compact('next', 'prev');
 }
@@ -607,11 +595,7 @@ function statVotes(): string
             ->where('closed', 0)
             ->first();
 
-        if (! $votes) {
-            $votes->cnt = $votes->sum = 0;
-        }
-
-        return $votes->cnt . '/' . $votes->sum;
+        return ($votes->cnt ?? 0) . '/' . ($votes->sum ?? 0);
     });
 }
 
@@ -1395,25 +1379,30 @@ function bbCode(?string $text, bool $parse = true): HtmlString
  */
 function getIp(): string
 {
-    return (new CloudFlare(request()))->ip();
+    static $ip = null;
+
+    return $ip ??= (new CloudFlare(request()))->ip();
 }
 
 /**
  * Определяет браузер
  */
-function getBrowser(?string $userAgent = null): string
+function getBrowser(): string
 {
-    $browser = new Browser();
-    if ($userAgent) {
-        $browser->setUserAgent($userAgent);
+    static $userAgent = null;
+
+    if ($userAgent !== null) {
+        return $userAgent;
     }
 
-    $brow = $browser->getBrowser();
-    $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
+    $browser = new Browser();
+    $name = $browser->getBrowser();
+    $parts = explode('.', $browser->getVersion(), 3);
+    $version = implode('.', array_slice($parts, 0, 2));
 
-    $browser = $version === Browser::VERSION_UNKNOWN ? $brow : $brow . ' ' . $version;
+    $result = $version === Browser::VERSION_UNKNOWN ? $name : $name . ' ' . $version;
 
-    return mb_substr($browser, 0, 25, 'utf-8');
+    return $userAgent = mb_substr($result, 0, 25, 'utf-8');
 }
 
 /**

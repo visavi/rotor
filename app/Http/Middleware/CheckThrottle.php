@@ -31,13 +31,18 @@ class CheckThrottle
 
         /* Автоматическая блокировка */
         if ($requests > $limit) {
-            if (! Ban::query()->where('ip', $ip)->exists()) {
-                Ban::query()->insertOrIgnore([
+            $bannedIps = Cache::get('ipBan', []);
+
+            if (! isset($bannedIps[$ip])) {
+                $inserted = Ban::query()->insertOrIgnore([
                     'ip'         => $ip,
                     'created_at' => SITETIME,
                 ]);
 
-                clearCache('ipBan');
+                if ($inserted) {
+                    $bannedIps[$ip] = true;
+                    Cache::forever('ipBan', $bannedIps);
+                }
             }
 
             clearCache($key);
@@ -58,7 +63,7 @@ class CheckThrottle
             return false;
         }
 
-        $bannedIps = Cache::rememberForever('ipBan', function () {
+        $bannedIps = Cache::rememberForever('ipBan', static function () {
             return Ban::query()->pluck('id', 'ip')->toArray();
         });
 

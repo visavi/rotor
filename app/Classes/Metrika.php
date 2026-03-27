@@ -21,43 +21,53 @@ class Metrika
      */
     public function getCounter(int $online): void
     {
-        $counter = $this->getResultCounter();
+        $lockPath = public_path('uploads/counters/counter.lock');
+        $lock = fopen($lockPath, 'cb');
 
-        if (! $counter) {
-            $counter = (object) ['dayhosts' => 0, 'dayhits' => 0];
+        if (! $lock || ! flock($lock, LOCK_EX | LOCK_NB)) {
+            if ($lock) {
+                fclose($lock);
+            }
+
+            return;
         }
-
-        // ----------------------------------------------------------------------//
-        $img = imagecreatefrompng(public_path('assets/img/images/counter.png'));
-        $color = imagecolorallocate($img, 62, 62, 62);
-
-        $pos = 66;
-        if ($online >= 10 && $online < 100) {
-            $pos = 54;
-        }
-        if ($online >= 100 && $online < 1000) {
-            $pos = 42;
-        }
-
-        if ($online > 1000) {
-            $pos = 40;
-            $online = round($online / 1000, 1) . 'K';
-        }
-
-        imagettftext($img, 6, 0, 14, 7, $color, public_path('assets/fonts/font.ttf'), (string) formatShortNum($counter->dayhosts));
-        imagettftext($img, 6, 0, 14, 13, $color, public_path('assets/fonts/font.ttf'), (string) formatShortNum($counter->dayhits));
-        imagettftext($img, 12, 0, $pos, 13, $color, public_path('assets/fonts/font.ttf'), (string) $online);
-
-        imagepng($img, public_path('uploads/counters/counter_new.png'));
-        imagedestroy($img);
 
         try {
-            rename(
-                public_path('uploads/counters/counter_new.png'),
-                public_path('uploads/counters/counter.png')
-            );
-        } catch (Exception) {
-            // nothing
+            $counter = $this->getResultCounter();
+
+            if (! $counter) {
+                $counter = (object) ['dayhosts' => 0, 'dayhits' => 0];
+            }
+
+            $img = imagecreatefrompng(public_path('assets/img/images/counter.png'));
+            $color = imagecolorallocate($img, 62, 62, 62);
+            $font = public_path('assets/fonts/font.ttf');
+
+            $onlineStr = $online >= 1000
+                ? round($online / 1000, 1) . 'K'
+                : (string) $online;
+
+            $bbox = imagettfbbox(12, 0, $font, $onlineStr);
+            $pos = 78 - abs($bbox[2] - $bbox[0]);
+
+            imagettftext($img, 6, 0, 14, 7, $color, $font, (string) formatShortNum($counter->dayhosts));
+            imagettftext($img, 6, 0, 14, 13, $color, $font, (string) formatShortNum($counter->dayhits));
+            imagettftext($img, 12, 0, $pos, 13, $color, $font, $onlineStr);
+
+            imagepng($img, public_path('uploads/counters/counter_new.png'));
+            imagedestroy($img);
+
+            try {
+                rename(
+                    public_path('uploads/counters/counter_new.png'),
+                    public_path('uploads/counters/counter.png')
+                );
+            } catch (Exception) {
+                // nothing
+            }
+        } finally {
+            flock($lock, LOCK_UN);
+            fclose($lock);
         }
     }
 
