@@ -14,8 +14,6 @@ use PDOException;
 
 class Metrika
 {
-    private ?Counter $counterCache = null;
-
     /**
      * Генерирует счетчик
      */
@@ -163,6 +161,7 @@ class Metrika
         ];
 
         $counter->update(array_merge($hostsUpdate, $hitsUpdate));
+        $counter->refresh();
 
         session(['hits' => 0]);
         session(['online' => strtotime('+30 seconds', SITETIME)]);
@@ -173,6 +172,8 @@ class Metrika
      */
     private function getResultCounter(): ?Counter
     {
-        return $this->counterCache ??= Counter::query()->first();
+        static $instance = null;
+
+        return $instance ??= Counter::query()->first();
     }
 }
