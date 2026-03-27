@@ -26,12 +26,13 @@ use App\Classes\Hook;
     return $content;
 });*/
 
-// Пример вставки ссылки в sidebar (левое меню) сайта с приоритетом 10
+// Пример вставки ссылки в меню сайта с приоритетом 10
 /*Hook::add('sidebarMenuEnd', function ($content) {
     return $content . '<li>
-        <a class="app-menu__item' . (request()->is('page*') ? ' active' : '') . '" href="/">
-            <i class="app-menu__icon fa-solid fa-home"></i>
-            <span class="app-menu__label">Текст в меню</span>
+        <a class="menu-item' . (request()->is('page*') ? ' active' : '') . '" href="/">
+            <i class="menu-icon fa-solid fa-home"></i>
+            <span class="menu-label">Текст в меню</span>
+            <span class="badge menu-badge">5</span>
         </a>
     </li>' . PHP_EOL;
 }, 10);*/

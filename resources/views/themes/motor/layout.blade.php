@@ -30,12 +30,12 @@
         <div class="backgr_top">
             <div class="content">
                 <div class="logo">
-                    <!-- <a href="/"><span class="logotype">{{ setting('title') }}</span></a> -->
-                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ setting('title') }}"></a>
+                    <!-- <a href="{{ route('home') }}"><span class="logotype">{{ setting('title') }}</span></a> -->
+                    <a href="{{ route('home') }}"><img src="/assets/img/images/logo.png" alt="{{ setting('title') }}"></a>
 
                     <div class="float-end m-3">
-                        <a href="/language/ru{{ returnUrl() }}">RU</a> /
-                        <a href="/language/en{{ returnUrl() }}">EN</a>
+                        <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
+                        <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
                     {{ setting('copy') }}
                 </div>
                 <div class="footer-image">
-                    <a href="/"><img src="/assets/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>
+                    <a href="{{ route('home') }}"><img src="/assets/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>
                 </div>
             </div>
             <img src="/assets/themes/motor/img/panel_bot.gif" alt="">

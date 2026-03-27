@@ -4,11 +4,11 @@
     <ul class="app-menu user-menu">
         <li class="treeview">
         @if ($user = getUser())
-            <div class="app-menu__item" data-bs-toggle="treeview">
+            <div class="menu-item" data-bs-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
                     {{ $user->getAvatarImage() }}
                 </div>
-                <div class="app-menu__label">
+                <div class="menu-label">
                     <p class="app-sidebar__user-name">{{ $user->getName() }}</p>
                     <p class="app-sidebar__user-designation">{{ $user->getStatus() }}</p>
                 </div>
@@ -26,7 +26,7 @@
                     </li>
                 @endif
                 <li>
-                    <a class="treeview-item" href="/menu" rel="nofollow">
+                    <a class="treeview-item" href="{{ route('menu') }}" rel="nofollow">
                         <i class="icon fas fa-user-cog"></i>
                         {{ __('index.menu') }}
                     </a>
@@ -34,11 +34,11 @@
                 @hook('sidebarTreeviewEnd')
             </ul>
         @else
-            <div class="app-menu__item" data-bs-toggle="treeview">
+            <div class="menu-item" data-bs-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
                     <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
                 </div>
-                <div class="app-menu__label">
+                <div class="menu-label">
                     <p class="app-sidebar__user-name">{{ __('users.enter') }}</p>
                 </div>
                 <i class="treeview-indicator fa fa-angle-down"></i>
@@ -47,13 +47,13 @@
             <ul class="treeview-menu">
                 @hook('sidebarTreeviewGuestStart')
                 <li>
-                    <a class="treeview-item" href="/login{{ returnUrl() }}" rel="nofollow">
+                    <a class="treeview-item" href="{{ route('login') }}{{ returnUrl() }}" rel="nofollow">
                         <i class="icon fas fa-sign-in-alt"></i>
                         {{ __('index.login') }}
                     </a>
                 </li>
                 <li>
-                    <a class="treeview-item" href="/register" rel="nofollow">
+                    <a class="treeview-item" href="{{ route('register') }}" rel="nofollow">
                         <i class="icon far fa-user"></i>
                         {{ __('index.register') }}
                     </a>
@@ -66,33 +66,33 @@
     <ul class="app-menu">
         @hook('sidebarMenuStart')
         <li>
-            <a class="app-menu__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">
-                <i class="app-menu__icon far fa-comment-alt"></i>
-                <span class="app-menu__label">{{ __('index.forums') }}</span>
-                <span class="badge bg-sidebar">{{ statsForum() }}</span>
+            <a class="menu-item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">
+                <i class="menu-icon far fa-comment-alt"></i>
+                <span class="menu-label">{{ __('index.forums') }}</span>
+                <span class="badge menu-badge">{{ statsForum() }}</span>
             </a>
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">
-                <i class="app-menu__icon far fa-comment"></i>
-                <span class="app-menu__label">{{ __('index.guestbook') }}</span>
-                <span class="badge bg-sidebar">{{ statsGuestbook() }}</span>
+            <a class="menu-item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">
+                <i class="menu-icon far fa-comment"></i>
+                <span class="menu-label">{{ __('index.guestbook') }}</span>
+                <span class="badge menu-badge">{{ statsGuestbook() }}</span>
             </a>
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
-                <i class="app-menu__icon far fa-newspaper"></i>
-                <span class="app-menu__label">{{ __('index.news') }}</span>
-                <span class="badge bg-sidebar">{{ statsNews() }}</span>
+            <a class="menu-item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
+                <i class="menu-icon far fa-newspaper"></i>
+                <span class="menu-label">{{ __('index.news') }}</span>
+                <span class="badge menu-badge">{{ statsNews() }}</span>
             </a>
         </li>
 
         <li class="treeview{{ request()->is('blogs*', 'articles*') ? ' is-expanded' : '' }}">
-            <a class="app-menu__item" href="#" data-bs-toggle="treeview">
-                <i class="app-menu__icon far fa-sticky-note"></i>
-                <span class="app-menu__label">{{ __('index.blogs') }}</span>
+            <a class="menu-item" href="#" data-bs-toggle="treeview">
+                <i class="menu-icon far fa-sticky-note"></i>
+                <span class="menu-label">{{ __('index.blogs') }}</span>
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
@@ -104,9 +104,9 @@
         </li>
 
         <li class="treeview{{ request()->is('loads*', 'downs*') ? ' is-expanded' : '' }}">
-            <a class="app-menu__item" href="#" data-bs-toggle="treeview">
-                <i class="app-menu__icon fas fa-download"></i>
-                <span class="app-menu__label">{{ __('index.loads') }}</span>
+            <a class="menu-item" href="#" data-bs-toggle="treeview">
+                <i class="menu-icon fas fa-download"></i>
+                <span class="menu-label">{{ __('index.loads') }}</span>
                 <i class="treeview-indicator fa fa-angle-down"></i>
             </a>
             <ul class="treeview-menu">
@@ -117,26 +117,26 @@
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">
-                <i class="app-menu__icon far fa-image"></i>
-                <span class="app-menu__label">{{ __('index.photos') }}</span>
-                <span class="badge bg-sidebar">{{ statsPhotos() }}</span>
+            <a class="menu-item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">
+                <i class="menu-icon far fa-image"></i>
+                <span class="menu-label">{{ __('index.photos') }}</span>
+                <span class="badge menu-badge">{{ statsPhotos() }}</span>
             </a>
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">
-                <i class="app-menu__icon far fa-rectangle-list"></i>
-                <span class="app-menu__label">{{ __('index.boards') }}</span>
-                <span class="badge bg-sidebar">{{ statsBoard() }}</span>
+            <a class="menu-item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">
+                <i class="menu-icon far fa-rectangle-list"></i>
+                <span class="menu-label">{{ __('index.boards') }}</span>
+                <span class="badge menu-badge">{{ statsBoard() }}</span>
             </a>
         </li>
 
         <li>
-            <a class="app-menu__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
-                <i class="app-menu__icon fas fa-square-poll-horizontal"></i>
-                <span class="app-menu__label">{{ __('index.votes') }}</span>
-                <span class="badge bg-sidebar">{{ statVotes() }}</span>
+            <a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
+                <i class="menu-icon fas fa-square-poll-horizontal"></i>
+                <span class="menu-label">{{ __('index.votes') }}</span>
+                <span class="badge menu-badge">{{ statVotes() }}</span>
             </a>
         </li>
         @hook('sidebarMenuEnd')
@@ -157,8 +157,8 @@
             </span>
 
             <i class="fas fa-globe-americas"></i>
-            <a href="/language/ru{{ returnUrl() }}">RU</a> /
-            <a href="/language/en{{ returnUrl() }}">EN</a>
+            <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
+            <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
         </li>
         @hook('sidebarFooterEnd')
     </ul>

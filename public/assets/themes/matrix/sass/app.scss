@@ -1,0 +1,470 @@
+// Fontawesome fonts path
+@use 'fa/scss/variables' with (
+  $font-path: "fa/webfonts",
+);
+
+// Bootstrap variables overrides — убираем всё округлённое и цветастое
+$font-family-sans-serif: 'Courier New', Courier, monospace;
+$font-size-base: 0.82rem;
+$body-bg: #0d0d0d;
+$body-color: #b8c8b0;
+$link-color: #39d353;
+$link-decoration: none;
+$link-hover-decoration: underline;
+$primary: #39d353;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+$border-radius-xl: 0;
+$border-radius-xxl: 0;
+$border-radius-pill: 0;
+$btn-border-radius: 0;
+$btn-border-radius-sm: 0;
+$btn-border-radius-lg: 0;
+$input-border-radius: 0;
+$input-border-radius-sm: 0;
+$input-border-radius-lg: 0;
+$dropdown-border-radius: 0;
+$card-border-radius: 0;
+$modal-border-radius: 0;
+$headings-font-weight: bold;
+$headings-color: #5af078;
+$table-border-color: #1f3320;
+$table-color: #b8c8b0;
+$input-bg: #0d0d0d;
+$input-color: #b8c8b0;
+$input-border-color: #2a4a2a;
+$input-focus-border-color: #39d353;
+$input-focus-box-shadow: none;
+$input-btn-focus-box-shadow: none;
+$dropdown-bg: #0d0d0d;
+$dropdown-border-color: #2a4a2a;
+$dropdown-link-color: #39d353;
+$dropdown-link-hover-bg: #111f11;
+$dropdown-link-hover-color: #5af078;
+$btn-font-weight: normal;
+
+@import 'bootstrap/scss/bootstrap';
+
+// ===== ОБЩИЙ СБРОС =====
+
+* { border-radius: 0 !important; }
+
+body {
+  background: #0d0d0d;
+  color: #b8c8b0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #39d353;
+  text-decoration: none;
+  &:hover { color: #5af078; text-decoration: underline; }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #5af078;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+h2 { font-size: 1rem; }
+h3 { font-size: 0.9rem; }
+
+// ===== ОБЁРТКА =====
+
+#content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 8px 10px;
+}
+
+// ===== ШАПКА =====
+
+#header {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 5px 10px 0;
+}
+
+#header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+#logo a {
+  color: #5af078;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  &:hover { text-decoration: none; color: #7fffaa; }
+}
+
+#header-user {
+  font-size: 0.78rem;
+  color: #6a8a6a;
+  a { color: #39d353; }
+}
+
+#menu {
+  padding: 4px 0;
+  font-size: 0.8rem;
+  line-height: 1.8;
+
+  a {
+    color: #39d353;
+    &:hover { color: #7fffaa; }
+    &.active { color: #7fffaa; text-decoration: underline; }
+  }
+
+  .sep { color: #2a5c2a; margin: 0 3px; }
+
+  // Universal hook menu items
+  li {
+    display: inline;
+    list-style: none;
+    &::before { content: ' | '; color: #2a5c2a; }
+  }
+  .menu-icon { display: none; }
+  .menu-badge {
+    &::before { content: '('; }
+    &::after { content: ')'; }
+    background: none;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    padding: 0;
+  }
+}
+
+#header-search {
+  padding: 4px 0 6px;
+  font-size: 0.8rem;
+
+  input[type="search"] {
+    background: #0d0d0d;
+    border: 1px solid #2a4a2a;
+    color: #b8c8b0;
+    padding: 1px 5px;
+    font-family: inherit;
+    font-size: inherit;
+    width: 160px;
+    &:focus { outline: none; border-color: #39d353; }
+  }
+
+  button {
+    background: none;
+    border: 1px solid #2a4a2a;
+    color: #39d353;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 1px 6px;
+    &:hover { border-color: #39d353; color: #7fffaa; }
+  }
+}
+
+// ===== РАЗДЕЛИТЕЛЬ =====
+
+.wap-hr {
+  max-width: 860px;
+  margin: 0 auto;
+  border-top: 1px solid #1a3a1a;
+  padding: 0 10px;
+}
+
+// ===== ПОДВАЛ =====
+
+#footer {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  color: #4a6a4a;
+
+  a { color: #39d353; }
+  .sep { color: #2a5c2a; margin: 0 3px; }
+
+  > li {
+    display: inline;
+    list-style: none;
+    padding: 0;
+    &::before { content: ' | '; color: #2a5c2a; }
+  }
+}
+
+#copy {
+  margin-top: 4px;
+  color: #2a4a2a;
+  font-size: 0.72rem;
+}
+
+// ===== КНОПКИ =====
+
+.btn {
+  border-radius: 0 !important;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.btn-primary {
+  background: none;
+  border: 1px solid #39d353;
+  color: #39d353;
+  &:hover, &:focus { background: #0f2010; border-color: #5af078; color: #5af078; box-shadow: none; }
+  &:active { background: #0f2010; }
+}
+
+.btn-secondary, .btn-outline-secondary {
+  background: none;
+  border: 1px solid #2a4a2a;
+  color: #6a8a6a;
+  &:hover { background: #0a1a0a; border-color: #39d353; color: #39d353; box-shadow: none; }
+}
+
+.btn-danger {
+  background: none;
+  border: 1px solid #8b0000;
+  color: #cc3333;
+  &:hover { background: #1a0000; color: #ff4444; box-shadow: none; }
+}
+
+.btn-link {
+  color: #39d353;
+  text-decoration: none;
+  padding: 0;
+  &:hover { color: #5af078; text-decoration: underline; }
+}
+
+.wap-btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #39d353;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  &:hover { color: #5af078; text-decoration: underline; }
+}
+
+// ===== ФОРМЫ =====
+
+.form-control, .form-select {
+  background: #0d0d0d;
+  border: 1px solid #2a4a2a;
+  color: #b8c8b0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  border-radius: 0;
+
+  &:focus {
+    background: #0d0d0d;
+    border-color: #39d353;
+    color: #b8c8b0;
+    box-shadow: none;
+  }
+
+  &::placeholder { color: #3a5a3a; }
+
+  option { background: #0d0d0d; }
+}
+
+// ===== ТАБЛИЦЫ =====
+
+.table {
+  color: #b8c8b0;
+  border-color: #1a3a1a;
+  font-size: 0.82rem;
+
+  th { color: #5af078; border-color: #1a3a1a; background: #0a150a; }
+  td { border-color: #1a3a1a; }
+  &-striped > tbody > tr:nth-of-type(odd) > * { background: #0a140a; }
+  &-hover > tbody > tr:hover > * { background: #0f1f0f; }
+}
+
+// ===== КАРТОЧКИ / БЛОКИ =====
+
+.card {
+  background: #0a140a;
+  border: 1px solid #1a3a1a;
+  color: #b8c8b0;
+}
+
+.card-header {
+  background: #0f1f0f;
+  border-bottom: 1px solid #1a3a1a;
+  color: #5af078;
+  font-weight: bold;
+}
+
+// ===== ПАГИНАЦИЯ =====
+
+.pagination {
+  gap: 2px;
+  font-size: 0.8rem;
+}
+
+.page-link {
+  background: #0d0d0d;
+  border: 1px solid #2a4a2a;
+  color: #39d353;
+  padding: 2px 8px;
+
+  &:hover { background: #0f2010; border-color: #39d353; color: #5af078; }
+}
+
+.page-item.active .page-link {
+  background: #0f2010;
+  border-color: #39d353;
+  color: #7fffaa;
+}
+
+.page-item.disabled .page-link {
+  background: #0d0d0d;
+  border-color: #1a2a1a;
+  color: #2a4a2a;
+}
+
+// ===== АЛЕРТЫ/ФЛЕШ =====
+
+.alert {
+  border-radius: 0;
+  font-size: 0.82rem;
+  border-width: 1px;
+  padding: 6px 10px;
+}
+
+.alert-success { background: #061206; border-color: #1a4a1a; color: #39d353; }
+.alert-danger  { background: #120606; border-color: #4a1a1a; color: #cc3333; }
+.alert-warning { background: #121006; border-color: #4a3a1a; color: #aaaa33; }
+.alert-info    { background: #060c12; border-color: #1a2a4a; color: #336699; }
+
+// ===== БЕЙДЖИ =====
+
+.badge {
+  border-radius: 0 !important;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: normal;
+  font-size: 0.72rem;
+}
+
+.badge.bg-primary   { background: #0f2010 !important; color: #39d353; border: 1px solid #2a4a2a; }
+.badge.bg-secondary { background: #0a140a !important; color: #6a8a6a; border: 1px solid #1a3a1a; }
+.badge.bg-adaptive  { background: #0a140a !important; color: #6a8a6a; border: 1px solid #1a3a1a; }
+.badge.bg-success   { background: #0f2010 !important; color: #39d353; border: 1px solid #2a4a2a; }
+.badge.bg-danger    { background: #1a0505 !important; color: #cc3333; border: 1px solid #4a1a1a; }
+
+// ===== ЗАГОЛОВОК СТРАНИЦЫ =====
+
+.app-title {
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed #1a3a1a;
+
+  h1 { font-size: 0.95rem; color: #5af078; margin: 0; }
+}
+
+.breadcrumb {
+  font-size: 0.75rem;
+  background: none;
+  padding: 0;
+  margin: 2px 0 0;
+
+  .breadcrumb-item { color: #4a6a4a; }
+  .breadcrumb-item + .breadcrumb-item::before { color: #2a4a2a; }
+  a { color: #39d353; }
+}
+
+// ===== ДРОПДАУНЫ =====
+
+.dropdown-menu {
+  background: #0a140a;
+  border: 1px solid #2a4a2a;
+  border-radius: 0;
+  padding: 0;
+  min-width: 140px;
+  box-shadow: 2px 2px 0 #0f200f;
+}
+
+.dropdown-item {
+  color: #39d353;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  padding: 5px 12px;
+
+  &:hover, &:focus { background: #0f2010; color: #7fffaa; }
+  &.active { background: #0f2010; color: #7fffaa; }
+}
+
+.dropdown-divider { border-color: #1a3a1a; }
+
+// ===== МОДАЛКИ =====
+
+.modal-content {
+  background: #0a140a;
+  border: 1px solid #2a4a2a;
+  color: #b8c8b0;
+}
+
+.modal-header {
+  border-bottom: 1px solid #1a3a1a;
+  .modal-title { color: #5af078; }
+  .btn-close { filter: invert(1) brightness(0.4) sepia(1) hue-rotate(85deg); }
+}
+
+.modal-footer { border-top: 1px solid #1a3a1a; }
+
+// ===== НАВИГАЦИЯ ВКЛАДОК =====
+
+.nav-tabs {
+  border-color: #1a3a1a;
+  .nav-link { color: #39d353; border-color: transparent; border-radius: 0; font-size: 0.82rem; }
+  .nav-link:hover { border-color: #1a3a1a; background: #0a140a; }
+  .nav-link.active { background: #0a140a; border-color: #1a3a1a #1a3a1a #0a140a; color: #7fffaa; }
+}
+
+// ===== РАЗНОЕ =====
+
+hr { border-color: #1a3a1a; }
+
+code, pre {
+  background: #080e08;
+  border: 1px solid #1a3a1a;
+  color: #7fffaa;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem;
+  border-radius: 0;
+}
+
+blockquote, .blockquote {
+  border-left: 2px solid #2a4a2a;
+  padding-left: 8px;
+  color: #6a8a6a;
+  font-style: italic;
+}
+
+.text-muted { color: #4a6a4a !important; }
+.text-primary { color: #39d353 !important; }
+.text-success { color: #39d353 !important; }
+.text-danger  { color: #cc3333 !important; }
+
+// ===== ИКОНКИ =====
+
+@import 'fa/scss/brands';
+@import 'fa/scss/regular';
+@import 'fa/scss/solid';
+@import 'fa/scss/fontawesome';
+
+@import 'bootstrap5-tags/tags';
+@import "@fancyapps/ui/dist/fancybox/fancybox.css";
+@import 'css/markitup';
+@import 'css/toastr';
+@import 'css/prettify';
+@import 'css/main';

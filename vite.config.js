@@ -2,6 +2,14 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import path from 'path';
 
+for (const stream of [process.stdout, process.stderr]) {
+    const write = stream.write.bind(stream);
+    stream.write = (chunk, ...args) => {
+        if (typeof chunk === 'string' && chunk.includes("didn't resolve at build time")) return true;
+        return write(chunk, ...args);
+    };
+}
+
 export default defineConfig({
     optimizeDeps: {
         include: ['jquery', 'bootstrap'],
@@ -17,6 +25,12 @@ export default defineConfig({
                 'public/assets/themes/mobile/sass/app.scss',
                 'public/assets/themes/motor/js/app.js',
                 'public/assets/themes/motor/sass/app.scss',
+                'public/assets/themes/fresh/js/app.js',
+                'public/assets/themes/fresh/sass/app.scss',
+                'public/assets/themes/matrix/js/app.js',
+                'public/assets/themes/matrix/sass/app.scss',
+                'public/assets/themes/waphack/js/app.js',
+                'public/assets/themes/waphack/sass/app.scss',
                 'public/assets/css/chartist.css',
                 'public/assets/js/chartist.js',
             ],

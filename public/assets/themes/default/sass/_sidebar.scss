@@ -68,7 +68,7 @@
   margin-bottom: 0;
 }
 
-.app-menu__item {
+.menu-item {
   position: relative;
   display: flex;
   align-items: center;
@@ -89,12 +89,12 @@
   }
 }
 
-.app-menu__icon {
+.menu-icon {
   flex: 0 0 auto;
   margin-right: 8px;
 }
 
-.app-menu__label {
+.menu-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

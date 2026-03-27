@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// Theme essentials
+@import 'themes/fresh/sass/variables';
+@import 'bootstrap/scss/bootstrap';
+
+// Layout
+@import 'themes/fresh/sass/main';
+@import 'themes/fresh/sass/header';
+@import 'themes/fresh/sass/footer';
+
+// Components
+@import 'themes/fresh/sass/component/badge';
+@import 'themes/fresh/sass/component/dropdown';
+@import 'themes/fresh/sass/component/app-title';
+
+// Icons & libraries
+@import 'fa/scss/brands';
+@import 'fa/scss/regular';
+@import 'fa/scss/solid';
+@import 'fa/scss/fontawesome';
+
+@import 'bootstrap5-tags/tags';
+@import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
+@import 'css/markitup';
+@import 'css/toastr';
+@import 'css/prettify';
+@import 'css/main';

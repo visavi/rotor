@@ -22,8 +22,8 @@
 <body>
 
 <div class="cs" id="up">
-    {{--<a href="/"><span class="logotype">{{ setting('title') }}</span></a><br>--}}
-    <a href="/"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a><br>
+    {{--<a href="{{ route('home') }}"><span class="logotype">{{ setting('title') }}</span></a><br>--}}
+    <a href="{{ route('home') }}"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a><br>
     {{ setting('logos') }}
 </div>
 
@@ -31,8 +31,8 @@
     @include('themes/mobile/menu')
 
     <div class="float-end">
-        <a href="/language/ru{{ returnUrl() }}">RU</a> /
-        <a href="/language/en{{ returnUrl() }}">EN</a>
+        <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
+        <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
     </div>
 </div>
 
@@ -58,7 +58,7 @@
 </div>
 
 <div class="lol" id="down">
-    <a href="/">{{ setting('copy') }}</a><br>
+    <a href="{{ route('home') }}">{{ setting('copy') }}</a><br>
     @yield('online')
     @yield('counter')
 </div>
