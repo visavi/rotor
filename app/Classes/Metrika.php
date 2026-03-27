@@ -14,6 +14,8 @@ use PDOException;
 
 class Metrika
 {
+    private ?Counter $counterCache = null;
+
     /**
      * Генерирует счетчик
      */
@@ -159,8 +161,8 @@ class Metrika
     /**
      * Returns counter result
      */
-    private function getResultCounter(): ?object
+    private function getResultCounter(): ?Counter
     {
-        return Counter::query()->first();
+        return $this->counterCache ??= Counter::query()->first();
     }
 }
