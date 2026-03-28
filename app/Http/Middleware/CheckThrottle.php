@@ -18,7 +18,9 @@ class CheckThrottle
 
         // Проверка на бан
         if ($this->isBanned($request, $ip)) {
-            return redirect()->route('ipban')->setStatusCode(403);
+            return redirect()->route('ipban')
+                ->setStatusCode(429)
+                ->withHeaders(['Retry-After' => 3600]);
         }
 
         $limit = setting('doslimit');
@@ -48,7 +50,9 @@ class CheckThrottle
             clearCache($key);
             saveErrorLog(666);
 
-            return redirect()->route('ipban')->setStatusCode(403);
+            return redirect()->route('ipban')
+                ->setStatusCode(429)
+                ->withHeaders(['Retry-After' => 60]);
         }
 
         return $next($request);
