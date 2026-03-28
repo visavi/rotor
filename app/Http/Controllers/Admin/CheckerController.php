@@ -19,10 +19,10 @@ class CheckerController extends AdminController
     public function index(): View
     {
         $diff = [];
-        if (Storage::disk('private')->exists($this->filename)) {
+        if (Storage::disk('local')->exists($this->filename)) {
             $files = $this->scanFiles(base_path());
 
-            $filesScan = json_decode(Storage::disk('private')->get($this->filename));
+            $filesScan = json_decode(Storage::disk('local')->get($this->filename));
 
             $diff['left'] = array_diff($files, $filesScan);
             $diff['right'] = array_diff($filesScan, $files);
@@ -38,7 +38,7 @@ class CheckerController extends AdminController
     {
         $files = $this->scanFiles(base_path());
 
-        Storage::disk('private')->put($this->filename, json_encode($files));
+        Storage::disk('local')->put($this->filename, json_encode($files));
 
         setFlash('success', __('admin.checkers.success_crawled'));
 

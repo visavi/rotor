@@ -128,7 +128,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug((string) env('APP_NAME', 'rotor'), '_') . '_session'
+        Str::snake((string) env('APP_NAME', 'rotor')) . '_session'
     ),
 
     /*
