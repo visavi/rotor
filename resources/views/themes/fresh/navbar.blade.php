@@ -11,20 +11,6 @@
         </li>
         @hook('navbarStart')
 
-        @if (($user = getUser()) && $user->isActive())
-            @if (strtotime(date('d.m.Y')) <= strtotime(date('03.01.Y', strtotime('+3 days', SITETIME))))
-                <li>
-                    <div class="surprise-container" title="{{ __('pages.surprise') }}">
-                        <img alt="" src="/assets/img/images/snow.png" class="surprise-background">
-                        <a href="{{ route('surprise') }}">
-                            <img src="/assets/img/images/ded.png" class="surprise-ded" alt="">
-                        </a>
-                        <img alt="" src="/assets/img/images/glass.png" class="surprise-glasses">
-                    </div>
-                </li>
-            @endif
-        @endif
-
         <li class="dropdown">
             <a href="#" class="app-nav__item" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                 <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
@@ -89,6 +75,14 @@
                         <li class="app-notification__footer"><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }}</a></li>
                     </ul>
                 </li>
+
+                @if (strtotime(date('d.m.Y')) <= strtotime(date('03.01.Y', strtotime('+3 days', SITETIME))))
+                    <li>
+                        <a class="app-nav__item" href="{{ route('surprise') }}" aria-label="{{ __('pages.surprise') }}">
+                            <i class="fa-solid fa-gift fa-lg text-danger"></i>
+                        </a>
+                    </li>
+                @endif
             @endif
 
             <!-- User Menu -->

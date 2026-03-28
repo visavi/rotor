@@ -18,7 +18,7 @@
         @foreach ($messages as $data)
             <div class="section mb-3 shadow">
                 <div class="user-avatar">
-                    <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_system.png" alt="">
+                    <span class="avatar-default avatar-guest rounded-circle"><i class="fas fa-headset"></i></span>
                     <div class="user-status bg-success" title="Online"></div>
                 </div>
 

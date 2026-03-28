@@ -69,6 +69,17 @@
     font-size: 14px;
 }
 
+.avatar-guest {
+    background-color: #6aaab6;
+    line-height: 64px;
+}
+
+@media (max-width: 768px) {
+    .avatar-guest {
+        line-height: 48px;
+    }
+}
+
 .user-avatar {
     width: 64px;
     height: 64px;
@@ -341,53 +352,24 @@ textarea.form-control {
     color: red;
 }
 
-/* Surprise */
-.surprise-container {
-    width: 50px;
-    height: 50px;
-    position: relative;
-    cursor: pointer;
-    -webkit-flex: none;
-    flex: none;
-    margin-right: 5px;
+/* Calendar grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 35px);
+    gap: 2px;
+    width: fit-content;
 }
 
-.surprise-ded {
-    position: absolute;
-    top: -3px;
-    left: 0;
-    z-index: 2;
+.calendar-head {
+    font-weight: 600;
+    padding: 3px 0;
+    font-size: 0.85em;
 }
 
-.surprise-glasses {
-    position: absolute;
-    top: 24px;
-    left: 9px;
-    z-index: 3;
-    -webkit-transform: translate(0, 0) rotate(
-        5deg);
-    transform: translate(0, 0) rotate(
-        5deg);
-    transition: 0.3s transform ease-out, 0.3s -webkit-transform ease-out;
-}
-
-.surprise-background {
-    position: absolute;
-    top: -15px;
-    left: -15px;
-    opacity: 0;
-    transition: 0.3s opacity ease-out;
-}
-
-.surprise-container:hover .surprise-background {
-    opacity: 1;
-}
-
-.surprise-container:hover .surprise-glasses {
-    -webkit-transform: translate(-2px, -5px) rotate(
-        -10deg);
-    transform: translate(-2px, -5px) rotate(
-        -10deg);
+.calendar-cell {
+    padding: 3px 2px;
+    font-size: 0.9em;
+    min-height: 24px;
 }
 
 /* Fix input width in form-group */

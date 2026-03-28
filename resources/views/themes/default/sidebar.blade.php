@@ -36,7 +36,7 @@
         @else
             <div class="menu-item" data-bs-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
-                    <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
+                    <span class="avatar-default avatar-guest rounded-circle"><i class="fas fa-user"></i></span>
                 </div>
                 <div class="menu-label">
                     <p class="app-sidebar__user-name">{{ __('users.enter') }}</p>

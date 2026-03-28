@@ -421,7 +421,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getAvatarGuest(): HtmlString
     {
-        return new HtmlString('<img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt=""> ');
+        return new HtmlString('<span class="avatar-default avatar-guest rounded-circle"><i class="fas fa-user"></i></span> ');
     }
 
     /**

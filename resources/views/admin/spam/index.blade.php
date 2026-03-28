@@ -29,7 +29,7 @@
                         {{ $user->getAvatar() }}
                         {{ $user->getOnline() }}
                     @else
-                        <img class="avatar-default rounded-circle" src="/assets/img/images/avatar_guest.png" alt="">
+                        <span class="avatar-default avatar-guest rounded-circle"><i class="fas fa-user"></i></span>
                     @endif
                 </div>
                 <div class="section-user d-flex align-items-start">

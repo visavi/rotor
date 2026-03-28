@@ -2,14 +2,6 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import path from 'path';
 
-for (const stream of [process.stdout, process.stderr]) {
-    const write = stream.write.bind(stream);
-    stream.write = (chunk, ...args) => {
-        if (typeof chunk === 'string' && chunk.includes("didn't resolve at build time")) return true;
-        return write(chunk, ...args);
-    };
-}
-
 export default defineConfig({
     optimizeDeps: {
         include: ['jquery', 'bootstrap'],

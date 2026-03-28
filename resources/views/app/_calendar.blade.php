@@ -1,38 +1,31 @@
 <div class="fw-bold">{{ dateFixed($time, 'j F Y') }}</div>
-<table>
-    <thead>
-        <tr>
-            <th class="text-center">{{ __('main.mo') }}</th>
-            <th class="text-center">{{ __('main.tu') }}</th>
-            <th class="text-center">{{ __('main.we') }}</th>
-            <th class="text-center">{{ __('main.th') }}</th>
-            <th class="text-center">{{ __('main.fr') }}</th>
-            <th class="text-center text-danger">{{ __('main.sa') }}</th>
-            <th class="text-center text-danger">{{ __('main.su') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($calendar as $week)
-            <tr>
-                @foreach ($week as $keyDay => $valDay)
-                    @if ($date['day'] === $valDay)
-                        <td class="text-center"><span class="text-white bg-danger px-1 fw-bold">{{ $valDay }}</span></td>
-                        @continue
-                    @endif
+<div class="calendar-grid">
+    <div class="calendar-head text-center">{{ __('main.mo') }}</div>
+    <div class="calendar-head text-center">{{ __('main.tu') }}</div>
+    <div class="calendar-head text-center">{{ __('main.we') }}</div>
+    <div class="calendar-head text-center">{{ __('main.th') }}</div>
+    <div class="calendar-head text-center">{{ __('main.fr') }}</div>
+    <div class="calendar-head text-center text-danger">{{ __('main.sa') }}</div>
+    <div class="calendar-head text-center text-danger">{{ __('main.su') }}</div>
 
-                    @if (isset($newsIds[$valDay]))
-                        <td class="text-center"><a href="{{ route('news.view', ['id' => $newsIds[$valDay]]) }}"><span class="text-white bg-success px-1 fw-bold">{{ $valDay }}</span></a></td>
-                        @continue
-                    @endif
+    @foreach ($calendar as $week)
+        @foreach ($week as $keyDay => $valDay)
+            @if ($date['day'] === $valDay)
+                <div class="calendar-cell text-center"><span class="text-white bg-danger px-1 fw-bold">{{ $valDay }}</span></div>
+                @continue
+            @endif
 
-                    @if ($keyDay === 5 || $keyDay === 6)
-                        <td class="text-center text-danger">{{ $valDay }}</td>
-                        @continue
-                    @endif
+            @if (isset($newsIds[$valDay]))
+                <div class="calendar-cell text-center"><a href="{{ route('news.view', ['id' => $newsIds[$valDay]]) }}"><span class="text-white bg-success px-1 fw-bold">{{ $valDay }}</span></a></div>
+                @continue
+            @endif
 
-                    <td class="text-center">{{ $valDay }}</td>
-                @endforeach
-            </tr>
+            @if ($keyDay === 5 || $keyDay === 6)
+                <div class="calendar-cell text-center text-danger">{{ $valDay ?: '' }}</div>
+                @continue
+            @endif
+
+            <div class="calendar-cell text-center">{{ $valDay ?: '' }}</div>
         @endforeach
-    </tbody>
-</table>
+    @endforeach
+</div>
