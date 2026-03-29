@@ -11,7 +11,7 @@ body {
     max-width: 768px;
     text-align: left;
     border: 1px solid #ccc;
-    margin: 5px auto;
+    margin: 0 auto;
 }
 
 h1 {
@@ -212,4 +212,20 @@ img {
 .avatar a {
     border: none;
     color: #fff;
+}
+
+.post-rating-up.active {
+    color: #fff !important;
+    background-color: #78c062;
+    padding: 0 1px;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+.post-rating-down.active {
+    color: #fff !important;
+    background-color: #f75c48;
+    padding: 0 1px;
+    display: inline-block;
+    border-radius: 3px;
 }
