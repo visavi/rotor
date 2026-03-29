@@ -11,14 +11,12 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
-     * Call protected/private method of a class.
-     *
      * @throws ReflectionException
      */
-    public function callMethod(object $object, string $methodName, array $parameters = []): mixed
+    protected function callMethod(object $object, string $methodName, array $parameters = []): mixed
     {
-        $reflection = new ReflectionClass(get_class($object));
-
-        return $reflection->getMethod($methodName)->invokeArgs($object, $parameters);
+        return (new ReflectionClass($object))
+            ->getMethod($methodName)
+            ->invokeArgs($object, $parameters);
     }
 }

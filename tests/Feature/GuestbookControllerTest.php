@@ -1,12 +1,18 @@
 <?php
 
-namespace Tests\Unit\Controllers;
+namespace Tests\Feature;
 
 use App\Models\Guestbook;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\TestCase;
 
-class GuestbookControllerTest extends \Tests\TestCase
+#[CoversClass(Guestbook::class)]
+class GuestbookControllerTest extends TestCase
 {
-    public function testGuest(): void
+    use RefreshDatabase;
+
+    public function testGuestbook(): void
     {
         Guestbook::unsetEventDispatcher();
 
@@ -19,12 +25,12 @@ class GuestbookControllerTest extends \Tests\TestCase
         ]);
 
         $getGuest = Guestbook::query()->find($guest->id);
-        self::assertEquals('Test text message', $getGuest->text);
+        self::assertSame('Test text message', $getGuest->text);
 
         $guest->update(['text' => 'Test simple message']);
 
         $getGuest = Guestbook::query()->find($guest->id);
-        self::assertEquals('Test simple message', $getGuest->text);
+        self::assertSame('Test simple message', $getGuest->text);
 
         $guest->delete();
 
