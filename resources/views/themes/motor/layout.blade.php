@@ -28,12 +28,12 @@
         <div class="backgr_top">
             <div class="content">
                 <div class="logo">
-                    <div class="float-end me-4">
+                    <a href="{{ route('home') }}"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a>
+
+                    <div class="ms-auto me-4 align-self-end">
                         <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
                         <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
                     </div>
-                    <!-- <a href="{{ route('home') }}"><span class="logotype">{{ setting('title') }}</span></a> -->
-                    <a href="{{ route('home') }}"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a>
                 </div>
 
                 <div class="menu">

@@ -1,5 +1,8 @@
 // This files are essential for the theme
 @import 'themes/default/sass/variables';
+
+$dropdown-border-width: 1px;
+
 @import 'bootstrap/scss/bootstrap';
 
 @import 'themes/default/sass/component/badge';
