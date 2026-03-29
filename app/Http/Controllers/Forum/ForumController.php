@@ -128,17 +128,12 @@ class ForumController extends Controller
                 $title = antimat($title);
                 $msg = antimat($msg);
 
-                $user->increment('allforum');
-                $user->increment('point', setting('forum_point'));
-                $user->increment('money', setting('forum_money'));
-
                 $topic = Topic::query()->create([
-                    'forum_id'    => $forum->id,
-                    'title'       => $title,
-                    'user_id'     => getUser('id'),
-                    'count_posts' => 1,
-                    'created_at'  => SITETIME,
-                    'updated_at'  => SITETIME,
+                    'forum_id'   => $forum->id,
+                    'title'      => $title,
+                    'user_id'    => getUser('id'),
+                    'created_at' => SITETIME,
+                    'updated_at' => SITETIME,
                 ]);
 
                 $post = Post::query()->create([
