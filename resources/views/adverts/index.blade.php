@@ -9,7 +9,7 @@
         @endif
 
         @if (isAdmin())
-            <a class="btn btn-light" href="/admin/adverts"><i class="fas fa-wrench"></i></a>
+            <a class="btn btn-adaptive" href="/admin/adverts"><i class="fas fa-wrench"></i></a>
         @endif
     </div>
 

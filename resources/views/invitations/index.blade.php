@@ -15,11 +15,11 @@
 @section('content')
     <div class="mb-3">
         @if ($used)
-            <a class="btn btn-light btn-sm" href="/invitations">{{ __('invitations.unused') }}</a>
+            <a class="btn btn-adaptive btn-sm" href="/invitations">{{ __('invitations.unused') }}</a>
             <a class="btn btn-primary btn-sm" href="/invitations?used=1">{{ __('invitations.used') }}</a>
         @else
             <a class="btn btn-primary btn-sm" href="/invitations">{{ __('invitations.unused') }}</a>
-            <a class="btn btn-light btn-sm" href="/invitations?used=1">{{ __('invitations.used') }}</a>
+            <a class="btn btn-adaptive btn-sm" href="/invitations?used=1">{{ __('invitations.used') }}</a>
         @endif
     </div>
 

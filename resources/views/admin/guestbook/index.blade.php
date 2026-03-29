@@ -14,7 +14,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="{{ route('guestbook.index', ['page' => $posts->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('guestbook.index', ['page' => $posts->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.guestbook') }}</h1>

@@ -8,7 +8,7 @@
             <a class="btn btn-success" href="{{ route('forums.create') }}">{{ __('forums.create_topic') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="{{ route('admin.forums.index') }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-adaptive" href="{{ route('admin.forums.index') }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>

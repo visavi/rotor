@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-end">
         <a class="btn btn-success" href="{{ route('forums.create', ['fid' => $forum->id]) }}">{{ __('forums.create_topic') }}</a>
-        <a class="btn btn-light" href="{{ route('forums.forum', ['id' => $forum->id, 'page' => $topics->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('forums.forum', ['id' => $forum->id, 'page' => $topics->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ $forum->title }}</h1>

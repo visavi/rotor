@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="{{ route('downs.view', ['id' => $down->id]) }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('downs.view', ['id' => $down->id]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('loads.edit_down') . ' ' . $down->title }}</h1>

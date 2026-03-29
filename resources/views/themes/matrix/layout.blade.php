@@ -19,6 +19,10 @@
 @include('themes/matrix/navbar')
 
 <div id="content">
+    <div class="app-title">
+        @yield('header')
+        @hook('header')
+    </div>
     @yield('flash')
     @yield('advertTop')
     @yield('advertAdmin')

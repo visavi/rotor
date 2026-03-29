@@ -7,7 +7,7 @@
 @section('header')
     @if (isAdmin('admin'))
         <div class="float-end">
-            <a class="btn btn-light" href="{{ route('admin.downs.edit', ['id' => $down->id]) }}"><i class="fas fa-wrench"></i></a>
+            <a class="btn btn-adaptive" href="{{ route('admin.downs.edit', ['id' => $down->id]) }}"><i class="fas fa-wrench"></i></a>
         </div>
     @endif
 

@@ -70,6 +70,7 @@ $border-color: #800000;
 // ===== СБРОС =====
 
 * { border-radius: 0 !important; }
+.rounded-circle { border-radius: 0 !important; }
 
 body {
   background: #000000;
@@ -95,8 +96,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
-h2 { font-size: 1rem; }
-h3 { font-size: 0.9rem; }
+h1 { font-size: 1.05rem; &::before { content: '[*] '; color: #800000; } }
+h2 { font-size: 0.95rem; &::before { content: '[+] '; color: #800000; } }
+h3 { font-size: 0.88rem; &::before { content: '[-] '; color: #800000; } }
 
 // ===== СКРОЛЛБАР =====
 
@@ -191,31 +193,6 @@ h3 { font-size: 0.9rem; }
   box-shadow: 0 3px 8px 1px rgba(128, 0, 0, 0.5);
 
   form { display: flex; gap: 4px; }
-
-  input[type="search"] {
-    background: #1a0000;
-    border: 1px solid #500000;
-    color: #d9d9d9;
-    padding: 4px 8px;
-    font-family: inherit;
-    font-size: 0.82rem;
-    flex: 1;
-    min-width: 0;
-
-    &:focus { outline: none; border-color: #800000; }
-    &::placeholder { color: #666666; }
-  }
-
-  button {
-    background: #2a0000;
-    border: 1px solid #500000;
-    color: #d9d9d9;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.82rem;
-    padding: 1px 8px;
-    &:hover { background: #400000; border-color: #800000; color: #FF6600; }
-  }
 }
 
 // ===== БЛОКИ .a, .b, .c, .d (классический WAP стиль) =====
@@ -317,7 +294,7 @@ hr { border-color: #800000; border-width: 3px; }
   font-family: 'Comic Sans MS', 'Comic Sans', Verdana, Tahoma, sans-serif;
 }
 
-.btn-primary {
+.btn-primary, .btn-success {
   background: #800000;
   border: 3px solid #a00000;
   color: #ffffff;
@@ -325,7 +302,7 @@ hr { border-color: #800000; border-width: 3px; }
   &:active { background: #600000; }
 }
 
-.btn-secondary, .btn-outline-secondary {
+.btn-secondary, .btn-outline-secondary, .btn-adaptive {
   background: #101010;
   border: 3px solid #800000;
   color: #d9d9d9;
@@ -475,6 +452,7 @@ select.form-select {
 // ===== ЗАГОЛОВОК СТРАНИЦЫ =====
 
 .app-title {
+  display: flow-root;
   margin-bottom: 8px;
   padding-bottom: 4px;
   border-bottom: 3px solid #800000;
@@ -572,6 +550,18 @@ blockquote, .blockquote {
 .shadow { box-shadow: 0 0 8px 1px rgba(128, 0, 0, 0.5) !important; }
 .shadow-sm { box-shadow: 0 0 5px 1px rgba(128, 0, 0, 0.4) !important; }
 .shadow-lg { box-shadow: 0 0 12px 2px rgba(128, 0, 0, 0.55) !important; }
+
+// ===== ТУЛТИПЫ =====
+
+.tooltip-inner {
+  background: #150000;
+  color: #FF6600;
+  border: 1px solid #800000;
+  font-family: 'Comic Sans MS', 'Comic Sans', Verdana, Tahoma, sans-serif;
+  font-size: 0.78rem;
+}
+
+.tooltip .tooltip-arrow::before { border-top-color: #800000; }
 
 // ===== ИКОНКИ =====
 

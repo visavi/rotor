@@ -10,7 +10,7 @@
             @endif
 
             @if (isAdmin())
-                <a class="btn btn-light" href="{{ route('admin.forums.forum', ['id' => $forum->id, 'page' => $topics->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-adaptive" href="{{ route('admin.forums.forum', ['id' => $forum->id, 'page' => $topics->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>

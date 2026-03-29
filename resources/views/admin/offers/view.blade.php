@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="{{ route('offers.view', ['id' => $offer->id]) }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('offers.view', ['id' => $offer->id]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ $offer->title }}</h1>

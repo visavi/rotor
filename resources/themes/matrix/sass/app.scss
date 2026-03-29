@@ -74,8 +74,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
-h2 { font-size: 1rem; }
-h3 { font-size: 0.9rem; }
+h1 { font-size: 1.2rem; &::before { content: '> '; color: #2a5c2a; } }
+h2 { font-size: 1.05rem; &::before { content: '>> '; color: #2a5c2a; } }
+h3 { font-size: 0.95rem; &::before { content: '>>> '; color: #2a5c2a; } }
 
 // ===== ОБЁРТКА =====
 
@@ -151,26 +152,19 @@ h3 { font-size: 0.9rem; }
   padding: 4px 0 6px;
   font-size: 0.8rem;
 
-  input[type="search"] {
-    background: #0d0d0d;
-    border: 1px solid #2a4a2a;
-    color: #b8c8b0;
-    padding: 1px 5px;
-    font-family: inherit;
-    font-size: inherit;
+  form { display: flex; align-items: center; gap: 4px; }
+
+  .form-control {
     width: 160px;
-    &:focus { outline: none; border-color: #39d353; }
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
   }
 
-  button {
-    background: none;
-    border: 1px solid #2a4a2a;
-    color: #39d353;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: inherit;
-    padding: 1px 6px;
-    &:hover { border-color: #39d353; color: #7fffaa; }
+  .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
   }
 }
 
@@ -216,7 +210,7 @@ h3 { font-size: 0.9rem; }
   font-family: 'Courier New', Courier, monospace;
 }
 
-.btn-primary {
+.btn-primary, .btn-success {
   background: none;
   border: 1px solid #39d353;
   color: #39d353;
@@ -224,7 +218,7 @@ h3 { font-size: 0.9rem; }
   &:active { background: #0f2010; }
 }
 
-.btn-secondary, .btn-outline-secondary {
+.btn-secondary, .btn-outline-secondary, .btn-adaptive {
   background: none;
   border: 1px solid #2a4a2a;
   color: #6a8a6a;
@@ -366,11 +360,12 @@ h3 { font-size: 0.9rem; }
 // ===== ЗАГОЛОВОК СТРАНИЦЫ =====
 
 .app-title {
+  display: flow-root;
   margin-bottom: 10px;
   padding-bottom: 4px;
   border-bottom: 1px dashed #1a3a1a;
 
-  h1 { font-size: 0.95rem; color: #5af078; margin: 0; }
+  h1 { font-size: 1.2rem; color: #5af078; margin: 0; }
 }
 
 .breadcrumb {
@@ -456,6 +451,18 @@ blockquote, .blockquote {
 .text-primary { color: #39d353 !important; }
 .text-success { color: #39d353 !important; }
 .text-danger  { color: #cc3333 !important; }
+
+// ===== ТУЛТИПЫ =====
+
+.tooltip-inner {
+  background: #111d11;
+  color: #5af078;
+  border: 1px solid #2a4a2a;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.78rem;
+}
+
+.tooltip .tooltip-arrow::before { border-top-color: #2a4a2a; }
 
 // ===== ИКОНКИ =====
 

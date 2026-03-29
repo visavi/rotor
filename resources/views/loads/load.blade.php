@@ -10,7 +10,7 @@
             @endif
 
             @if (isAdmin())
-                <a class="btn btn-light" href="{{ route('admin.loads.load', ['id' => $category->id, 'page' => $downs->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-adaptive" href="{{ route('admin.loads.load', ['id' => $category->id, 'page' => $downs->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>

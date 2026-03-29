@@ -14,7 +14,7 @@
                 |
                 <form action="{{ route('logout') }}" method="post" class="d-inline" onsubmit="return confirmAction(this)" data-confirm="{{ __('users.confirm_logout') }}">
                     @csrf
-                    <button type="submit" class="wap-btn-link">{{ __('index.logout') }}</button>
+                    <button class="wap-btn-link">{{ __('index.logout') }}</button>
                 </form>
             @else
                 <a href="{{ route('login') }}{{ returnUrl() }}">{{ __('index.login') }}</a> | <a href="{{ route('register') }}">{{ __('index.register') }}</a>
@@ -44,8 +44,8 @@
 
     <div id="header-search">
         <form action="{{ route('search') }}" method="get">
-            &gt; <input name="query" type="search" placeholder="{{ __('main.search') }}..." minlength="3" maxlength="64" required>
-            <button type="submit">[go]</button>
+            &gt; <input name="query" type="search" class="form-control" placeholder="{{ __('main.search') }}..." minlength="3" maxlength="64" required>
+            <button class="btn btn-secondary">[go]</button>
         </form>
     </div>
 </header>

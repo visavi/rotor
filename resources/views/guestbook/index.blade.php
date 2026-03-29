@@ -8,7 +8,7 @@
             <a class="btn btn-success" href="#" onclick="return postJump()">{{ __('main.write') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="{{ route('admin.guestbook.index', ['page' => $posts->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-adaptive" href="{{ route('admin.guestbook.index', ['page' => $posts->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         </div>
     @endif

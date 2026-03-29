@@ -9,7 +9,7 @@
         @endif
 
         @if (isAdmin('moder'))
-            <a class="btn btn-light" href="{{ route('admin.votes.index', ['page' => $votes->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+            <a class="btn btn-adaptive" href="{{ route('admin.votes.index', ['page' => $votes->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
         @endif
     </div>
 

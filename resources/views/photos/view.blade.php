@@ -17,7 +17,7 @@
     @if (getUser())
         @if (isAdmin())
             <div class="btn-group float-end">
-                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-adaptive dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -31,7 +31,7 @@
             </div>
         @elseif (getUser('id') === $photo->user->id)
             <div class="btn-group float-end">
-                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-adaptive dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-wrench"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">

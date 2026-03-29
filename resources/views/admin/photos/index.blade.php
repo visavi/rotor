@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-end">
         <a class="btn btn-success" href="{{ route('photos.create') }}">{{ __('main.add') }}</a>
-        <a class="btn btn-light" href="{{ route('photos.index', ['page' => $photos->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('photos.index', ['page' => $photos->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.photos') }}</h1>

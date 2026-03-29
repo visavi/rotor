@@ -8,7 +8,7 @@
             <a class="btn btn-success" href="{{ route('photos.create') }}">{{ __('main.add') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="{{ route('admin.photos.index', ['page' => $photos->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-adaptive" href="{{ route('admin.photos.index', ['page' => $photos->currentPage()]) }}"><i class="fas fa-wrench"></i></a>
             @endif
         @endif
     </div>

@@ -26,9 +26,9 @@
     <div class="mb-3">
         @if ($type === 'active')
             <a class="btn btn-primary btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $items->total() }}</span></a>
-            <a class="btn btn-light btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
+            <a class="btn btn-adaptive btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
         @else
-            <a class="btn btn-light btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
+            <a class="btn btn-adaptive btn-sm" href="{{ route('boards.active', ['type' => 'active', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.active') }} <span class="badge bg-adaptive">{{ $otherCount }}</span></a>
             <a class="btn btn-primary btn-sm" href="{{ route('boards.active', ['type' => 'archive', 'sort' => $sort, 'order' => $order]) }}">{{ __('boards.archive') }} <span class="badge bg-adaptive">{{ $items->total() }}</span></a>
         @endif
     </div>

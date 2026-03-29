@@ -27,6 +27,10 @@ class ApplySettings
             $language = setting('language');
         }
 
+        if (now()->month === 4 && now()->day === 1) {
+            $theme = $request->session()->get('april_fools_theme', 'waphack');
+        }
+
         if (! file_exists(resource_path('views/themes/' . $theme))) {
             $theme = setting('themes');
         }

@@ -5,7 +5,7 @@
 @section('header')
     <div class="float-end">
         <a class="btn btn-success" href="{{ route('admin.news.create') }}">{{ __('main.create') }}</a>
-        <a class="btn btn-light" href="{{ route('news.index') }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('news.index') }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.news') }}</h1>

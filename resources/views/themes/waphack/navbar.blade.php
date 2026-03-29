@@ -37,7 +37,7 @@
 
 <div class="wh-search">
     <form action="{{ route('search') }}" method="get">
-        <input name="query" type="search" placeholder="{{ __('main.search') }}..." minlength="3" maxlength="64" required>
-        <button type="submit">&gt;&gt;</button>
+        <input name="query" type="search" class="form-control" placeholder="{{ __('main.search') }}..." minlength="3" maxlength="64" required>
+        <button type="submit" class="btn btn-secondary">&gt;&gt;</button>
     </form>
 </div>

@@ -8,7 +8,7 @@
             <a class="btn btn-success" href="{{ route('blogs.create') }}">{{ __('blogs.add') }}</a>
 
             @if (isAdmin())
-                <a class="btn btn-light" href="{{ route('admin.blogs.index') }}"><i class="fas fa-wrench"></i></a>
+                <a class="btn btn-adaptive" href="{{ route('admin.blogs.index') }}"><i class="fas fa-wrench"></i></a>
             @endif
         </div>
     @endif

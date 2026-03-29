@@ -14,7 +14,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-light" href="{{ route('forums.index') }}"><i class="fas fa-wrench"></i></a>
+        <a class="btn btn-adaptive" href="{{ route('forums.index') }}"><i class="fas fa-wrench"></i></a>
     </div>
 
     <h1>{{ __('index.forums') }}</h1>

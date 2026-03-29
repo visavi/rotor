@@ -475,6 +475,10 @@ class UserController extends Controller
                     'language'  => $language,
                 ]);
 
+                if (now()->month === 4 && now()->day === 1 && ! empty($themes)) {
+                    $request->session()->put('april_fools_theme', $themes);
+                }
+
                 setFlash('success', __('users.settings_success_changed'));
 
                 return redirect('settings');
