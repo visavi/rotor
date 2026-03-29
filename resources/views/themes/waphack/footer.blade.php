@@ -1,7 +1,6 @@
-<div class="wh-hr"></div>
 <footer id="footer">
     @hook('footerStart')
-    <div class="c">
+    <div class="c shadow">
         @yield('online')
         <a href="{{ route('users.index') }}">{{ __('index.users') }}</a>(<small>{{ statsUsers() }}</small>)
         &nbsp;|&nbsp;

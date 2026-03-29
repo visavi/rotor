@@ -16,7 +16,7 @@
         @if (!empty($user->picture) && file_exists(public_path($user->picture)))
             {{ resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'img-fluid rounded']) }}
         @else
-            <img class="img-fluid rounded" src="/assets/img/images/photo.png" alt="Photo">
+            <img class="img-fluid rounded" src="/assets/img/images/photo.svg" alt="Photo">
         @endif
 
         <form action="/pictures" method="post" enctype="multipart/form-data">

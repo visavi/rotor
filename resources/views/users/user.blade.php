@@ -124,7 +124,7 @@
                     <a href="{{ $user->picture }}" data-fancybox="gallery">
                         {{ resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'float-end img-fluid rounded']) }}</a>
                 @else
-                    <img src="/assets/img/images/photo.png" alt="Photo" class="float-end img-fluid rounded">
+                    <img src="/assets/img/images/photo.svg" alt="Photo" class="float-end img-fluid rounded">
                 @endif
             </div>
             <div class="col-md-12 mt-3">

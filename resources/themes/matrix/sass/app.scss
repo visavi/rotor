@@ -43,12 +43,14 @@ $dropdown-link-color: #39d353;
 $dropdown-link-hover-bg: #111f11;
 $dropdown-link-hover-color: #5af078;
 $btn-font-weight: normal;
+$border-color: #1a3a1a;
 
 @import 'bootstrap/scss/bootstrap';
 
 // ===== ОБЩИЙ СБРОС =====
 
 * { border-radius: 0 !important; }
+.rounded-circle { border-radius: 0 !important; }
 
 body {
   background: #0d0d0d;
@@ -283,7 +285,7 @@ h3 { font-size: 0.9rem; }
   border-color: #1a3a1a;
   font-size: 0.82rem;
 
-  th { color: #5af078; border-color: #1a3a1a; background: #0a150a; }
+  th { color: #5af078; border-color: #1a3a1a; background: #111d11; }
   td { border-color: #1a3a1a; }
   &-striped > tbody > tr:nth-of-type(odd) > * { background: #0a140a; }
   &-hover > tbody > tr:hover > * { background: #0f1f0f; }
@@ -292,13 +294,13 @@ h3 { font-size: 0.9rem; }
 // ===== КАРТОЧКИ / БЛОКИ =====
 
 .card {
-  background: #0a140a;
+  background: #111d11;
   border: 1px solid #1a3a1a;
   color: #b8c8b0;
 }
 
 .card-header {
-  background: #0f1f0f;
+  background: #172817;
   border-bottom: 1px solid #1a3a1a;
   color: #5af078;
   font-weight: bold;
@@ -385,7 +387,7 @@ h3 { font-size: 0.9rem; }
 // ===== ДРОПДАУНЫ =====
 
 .dropdown-menu {
-  background: #0a140a;
+  background: #111d11;
   border: 1px solid #2a4a2a;
   border-radius: 0;
   padding: 0;
@@ -408,7 +410,7 @@ h3 { font-size: 0.9rem; }
 // ===== МОДАЛКИ =====
 
 .modal-content {
-  background: #0a140a;
+  background: #111d11;
   border: 1px solid #2a4a2a;
   color: #b8c8b0;
 }
@@ -426,8 +428,8 @@ h3 { font-size: 0.9rem; }
 .nav-tabs {
   border-color: #1a3a1a;
   .nav-link { color: #39d353; border-color: transparent; border-radius: 0; font-size: 0.82rem; }
-  .nav-link:hover { border-color: #1a3a1a; background: #0a140a; }
-  .nav-link.active { background: #0a140a; border-color: #1a3a1a #1a3a1a #0a140a; color: #7fffaa; }
+  .nav-link:hover { border-color: #1a3a1a; background: #111d11; }
+  .nav-link.active { background: #111d11; border-color: #1a3a1a #1a3a1a #111d11; color: #7fffaa; }
 }
 
 // ===== РАЗНОЕ =====

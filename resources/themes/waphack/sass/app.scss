@@ -43,6 +43,7 @@ $dropdown-link-color: #00FF00;
 $dropdown-link-hover-bg: #1a0000;
 $dropdown-link-hover-color: #FF6600;
 $btn-font-weight: normal;
+$border-color: #800000;
 
 @import 'bootstrap/scss/bootstrap';
 
@@ -110,6 +111,7 @@ h3 { font-size: 0.9rem; }
   max-width: 1100px;
   margin: 0 auto;
   padding: 8px 6px;
+  background: #0a0000;
 }
 
 // ===== ШАПКА =====
@@ -118,7 +120,7 @@ h3 { font-size: 0.9rem; }
   max-width: 1100px;
   margin: 0 auto;
   padding: 4px 6px;
-  border-bottom: 3px solid #800000;
+  box-shadow: 0 3px 8px 1px rgba(128, 0, 0, 0.5);
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -146,7 +148,7 @@ h3 { font-size: 0.9rem; }
   max-width: 1100px;
   margin: 0 auto;
   padding: 3px 6px;
-  border-bottom: 3px solid #800000;
+  box-shadow: 0 3px 8px 1px rgba(128, 0, 0, 0.5);
   font-size: 0.82rem;
   line-height: 1.9;
 
@@ -185,34 +187,34 @@ h3 { font-size: 0.9rem; }
 .wh-search {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 3px 6px 4px;
-  border-bottom: 3px solid #800000;
+  padding: 8px 6px;
+  box-shadow: 0 3px 8px 1px rgba(128, 0, 0, 0.5);
 
   form { display: flex; gap: 4px; }
 
   input[type="search"] {
-    background: #800000;
-    border: 3px solid #a00000;
-    color: #ffffff;
-    padding: 1px 5px;
+    background: #1a0000;
+    border: 1px solid #500000;
+    color: #d9d9d9;
+    padding: 4px 8px;
     font-family: inherit;
     font-size: 0.82rem;
     flex: 1;
     min-width: 0;
 
-    &:focus { outline: none; border-color: #FF6600; }
-    &::placeholder { color: #cc9999; }
+    &:focus { outline: none; border-color: #800000; }
+    &::placeholder { color: #666666; }
   }
 
   button {
-    background: #800000;
-    border: 3px solid #a00000;
-    color: #ffffff;
+    background: #2a0000;
+    border: 1px solid #500000;
+    color: #d9d9d9;
     cursor: pointer;
     font-family: inherit;
     font-size: 0.82rem;
     padding: 1px 8px;
-    &:hover { background: #a00000; border-color: #FF6600; color: #FF6600; }
+    &:hover { background: #400000; border-color: #800000; color: #FF6600; }
   }
 }
 
@@ -220,27 +222,28 @@ h3 { font-size: 0.9rem; }
 
 // Главный блок — центрированный, оранжевый текст, малиновая рамка
 .a {
-  background: #000000;
+  background: #0d0000;
   border: 3px solid #800000;
   color: #FF6600;
   text-align: center;
   padding: 4px 6px;
   margin: 4px 0;
+  box-shadow: 0 0 8px 1px rgba(128, 0, 0, 0.45);
 }
 
 // Вторичный блок — тёмный фон
 .b {
-  background: #101010;
+  background: #0d0000;
   border: 3px solid #800000;
   color: #FF6600;
   padding: 4px 6px;
   margin: 4px 0;
+  box-shadow: 0 0 8px 1px rgba(128, 0, 0, 0.45);
 }
 
 // Информационный блок — "Users Online", футер-блок
 .c {
   background: #0a0000;
-  border: 3px solid #800000;
   color: #999999;
   padding: 3px 6px;
   margin: 4px 0;
@@ -285,12 +288,6 @@ small {
 }
 
 // ===== РАЗДЕЛИТЕЛЬ =====
-
-.wh-hr {
-  max-width: 1100px;
-  margin: 0 auto;
-  border-top: 3px solid #800000;
-}
 
 hr { border-color: #800000; border-width: 3px; }
 
@@ -395,22 +392,23 @@ select.form-select {
   border-color: #800000;
   font-size: 0.82rem;
 
-  th { color: #FF6600; border-color: #800000; background: #0d0000; }
+  th { color: #FF6600; border-color: #800000; background: #180000; }
   td { border-color: #500000; }
-  &-striped > tbody > tr:nth-of-type(odd) > * { background: #080000; }
+  &-striped > tbody > tr:nth-of-type(odd) > * { background: #0d0000; }
   &-hover > tbody > tr:hover > * { background: #0d0000; }
 }
 
 // ===== КАРТОЧКИ =====
 
 .card {
-  background: #101010;
+  background: #0d0000;
   border: 3px solid #800000;
   color: #d9d9d9;
+  box-shadow: 0 0 8px 1px rgba(128, 0, 0, 0.45);
 }
 
 .card-header {
-  background: #0d0000;
+  background: #150000;
   border-bottom: 3px solid #800000;
   color: #FF6600;
   font-weight: bold;
@@ -427,6 +425,7 @@ select.form-select {
   background: #101010;
   border: 3px solid #800000;
   color: #00FF00;
+  box-shadow: 0 0 8px 1px rgba(128, 0, 0, 0.45);
   padding: 2px 8px;
 
   &:hover { background: #1a0000; border-color: #a00000; color: #FF6600; }
@@ -567,6 +566,12 @@ blockquote, .blockquote {
 .text-primary { color: #FF6600 !important; }
 .text-success { color: #00FF00 !important; }
 .text-danger  { color: #FF4444 !important; }
+
+.border-top { border-top: none !important; box-shadow: 0 -4px 8px rgba(128, 0, 0, 0.55) !important; clip-path: inset(-20px 0 0 0) !important; }
+
+.shadow { box-shadow: 0 0 8px 1px rgba(128, 0, 0, 0.5) !important; }
+.shadow-sm { box-shadow: 0 0 5px 1px rgba(128, 0, 0, 0.4) !important; }
+.shadow-lg { box-shadow: 0 0 12px 2px rgba(128, 0, 0, 0.55) !important; }
 
 // ===== ИКОНКИ =====
 

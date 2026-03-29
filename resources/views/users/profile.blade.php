@@ -80,7 +80,7 @@
                                 <a href="/pictures">{{ __('main.change') }}</a> /
                                 <button class="btn btn-link p-0" form="delete-picture-form">{{ __('main.delete') }}</button>
                             @else
-                                <img class="img-fluid rounded" src="/assets/img/images/photo.png" alt="Photo"><br>
+                                <img class="img-fluid rounded" src="/assets/img/images/photo.svg" alt="Photo"><br>
                                 <a href="/pictures">{{ __('main.upload') }}</a>
                             @endif
                         </div>
