@@ -10,7 +10,7 @@
     <link rel="canonical" href="@yield('canonical', request()->url())">
     <link rel="icon" href="/favicon.ico">
     <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
-    @vite('public/assets/themes/matrix/sass/app.scss')
+    @vite('resources/themes/matrix/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
@@ -30,7 +30,7 @@
 </div>
 
 @include('themes/matrix/footer')
-@vite('public/assets/themes/matrix/js/app.js')
+@vite('resources/themes/matrix/js/app.js')
 @stack('scripts')
 @hook('footer')
 </body>

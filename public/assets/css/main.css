@@ -49,9 +49,10 @@
 .avatar-default {
     height: 64px;
     width: 64px;
-    text-align: center;
     font-size: 42px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
     text-decoration: none;
     color: #fff;

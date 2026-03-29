@@ -14,7 +14,7 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
-    @vite('public/assets/themes/motor/sass/app.scss')
+    @vite('resources/themes/motor/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
@@ -24,9 +24,7 @@
 <div id="wrapper">
     <div class="main" id="up">
 
-        <div class="panelTop">
-            <img src="/assets/themes/motor/img/panel_top.gif" alt="">
-        </div>
+        <div class="panelTop"></div>
         <div class="backgr_top">
             <div class="content">
                 <div class="logo">
@@ -40,15 +38,14 @@
                 </div>
 
                 <div class="menu">
+                    <span class="mright">
+                        @include('themes/motor/menu')
+                    </span>
                     <a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a> &bull;
                     <a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a> &bull;
                     <a href="{{ route('news.index') }}">{{ __('index.news') }}</a> &bull;
                     <a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a> &bull;
                     <a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a>
-
-                    <span class="mright">
-                        @include('themes/motor/menu')
-                    </span>
                 </div>
             </div>
         </div>
@@ -86,15 +83,12 @@
                 <div class="footer-text">
                     {{ setting('copy') }}
                 </div>
-                <div class="footer-image">
-                    <a href="{{ route('home') }}"><img src="/assets/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>
-                </div>
             </div>
-            <img src="/assets/themes/motor/img/panel_bot.gif" alt="">
+            <div class="panelBot"></div>
         </div>
     </div>
 </div>
-@vite('public/assets/themes/motor/js/app.js')
+@vite('resources/themes/motor/js/app.js')
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>

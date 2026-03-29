@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
-    @vite('public/assets/themes/default/sass/app.scss')
+    @vite('resources/themes/default/sass/app.scss')
     @stack('styles')
     @hook('head')
 </head>
@@ -47,7 +47,7 @@
 </main>
 
 @include('themes/default/footer')
-@vite('public/assets/themes/default/js/app.js')
+@vite('resources/themes/default/js/app.js')
 @stack('scripts')
 @hook('footer')
 <div class="scrollup"></div>
