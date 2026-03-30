@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Intervention\Image\Format;
 use Intervention\Image\ImageManager;
 
 class PictureController extends Controller
@@ -60,9 +61,9 @@ class PictureController extends Controller
                 }
 
                 // -------- Генерируем аватар -------//
-                $image = $imageManager->read($photo);
+                $image = $imageManager->decode($photo);
                 $image->coverDown(64, 64);
-                $image->toPng();
+                $image->encodeUsingFormat(Format::PNG);
 
                 $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
                 $image->save(public_path($avatar));

@@ -987,7 +987,7 @@ function resizeProcess(?string $path, array $params = []): array
 
     if (! file_exists(public_path('uploads/thumbnails/' . $thumb))) {
         $imageManager = app(ImageManager::class);
-        $image = $imageManager->read(public_path($path));
+        $image = $imageManager->decode(public_path($path));
         $image->scaleDown(setting('previewsize'), setting('previewsize'));
         $image->save(public_path('uploads/thumbnails/' . $thumb));
     }

@@ -30,7 +30,7 @@
                 <div class="logo">
                     <a href="{{ route('home') }}"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a>
 
-                    <div class="ms-auto me-4 align-self-end">
+                    <div class="ms-auto">
                         <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
                         <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
                     </div>

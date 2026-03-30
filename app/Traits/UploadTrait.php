@@ -7,6 +7,7 @@ namespace App\Traits;
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Intervention\Image\Alignment;
 use Intervention\Image\ImageManager;
 
 trait UploadTrait
@@ -29,7 +30,7 @@ trait UploadTrait
 
         if ($isImage) {
             $imageManager = app(ImageManager::class);
-            $image = $imageManager->read($file);
+            $image = $imageManager->decode($file);
 
             if ($image->width() <= 100 && $image->height() <= 100) {
                 $file->move(public_path($this->uploadPath), $filename);
@@ -39,11 +40,11 @@ trait UploadTrait
                 $image->scaleDown(setting('screensize'), setting('screensize'));
 
                 if (setting('copyfoto')) {
-                    $image->place(
+                    $image->insert(
                         public_path('assets/img/images/watermark.png'),
-                        'bottom-right',
                         10,
-                        10
+                        10,
+                        Alignment::BOTTOM_RIGHT,
                     );
                 }
 

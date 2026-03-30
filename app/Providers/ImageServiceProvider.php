@@ -13,7 +13,13 @@ class ImageServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(ImageManager::class, static function () {
-            return new ImageManager(config('image.driver'));
+            return new ImageManager(
+                driver: config('image.driver'),
+                autoOrientation: config('image.options.autoOrientation', true),
+                decodeAnimation: config('image.options.decodeAnimation', true),
+                backgroundColor: config('image.options.backgroundColor', 'ffffff'),
+                strip: config('image.options.strip', false)
+            );
         });
     }
 
