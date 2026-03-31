@@ -27,7 +27,7 @@
 
             @if ($latestRelease['body'])
                 <div class="post-message">
-                    {{ $latestRelease['body'] }}
+                    {{ bbCode($latestRelease['body']) }}
                 </div>
             @endif
 
