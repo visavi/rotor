@@ -1,0 +1,201 @@
+// Newspaper Masthead + Navigation
+
+.app-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  max-width: inherit;
+  z-index: 1030;
+  background-color: #fff;
+  border-bottom: 3px double $ink-black;
+  @media print { display: none; }
+}
+
+// Masthead
+.paper-masthead {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 6px;
+  border-bottom: 1px solid $paper-border;
+  gap: 16px;
+  background-color: #fff;
+}
+
+.paper-date {
+  font-family: $ui-font;
+  font-size: 0.75rem;
+  color: $ink-gray;
+  flex: 0 0 auto;
+  display: flex;
+  gap: 12px;
+  @media(max-width: 767px) { display: none; }
+}
+
+.paper-issue {
+  a { color: $ink-gray; &:hover { color: $ink-red; } }
+}
+
+.paper-title {
+  flex: 1 1 auto;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: $ink-black;
+  text-align: center;
+  letter-spacing: -0.02em;
+  text-decoration: none !important;
+  line-height: 1;
+
+  &:hover { color: $ink-red; }
+
+  @media(max-width: 767px) {
+    font-size: 22px;
+    text-align: left;
+  }
+}
+
+.paper-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.paper-search {
+  display: flex;
+  border: 1px solid $paper-border;
+  @media(max-width: 768px) { display: none; }
+}
+
+.paper-search__input {
+  border: 0;
+  background: transparent;
+  font-family: $ui-font;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  width: 140px;
+  color: $ink-black;
+  &::placeholder { color: $ink-gray; }
+  &:focus { outline: none; }
+}
+
+.paper-search__btn {
+  border: 0;
+  border-left: 1px solid $paper-border;
+  background: $paper-cream;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: $ink-gray;
+  &:hover { color: $ink-red; }
+}
+
+.paper-user {
+  position: relative;
+}
+
+.paper-user__link {
+  font-family: $ui-font;
+  font-size: 0.8rem;
+  color: $ink-dark;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  &:hover { border-color: $paper-border; color: $ink-red; }
+}
+
+.paper-dropdown {
+  border: 1px solid $paper-border;
+  border-radius: 2px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  background-color: $paper-cream;
+  .dropdown-item {
+    font-family: $ui-font;
+    font-size: 0.8rem;
+    color: $ink-dark;
+    &:hover { background-color: #ede8de; color: $ink-black; }
+  }
+}
+
+.paper-login-btn {
+  font-family: $ui-font;
+  font-size: 0.8rem;
+  color: $ink-dark;
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid $paper-border;
+  &:hover { background-color: $paper-cream; color: $ink-red; }
+}
+
+.paper-sidebar-toggle {
+  font-size: 16px;
+  color: $ink-gray;
+  padding: 4px 8px;
+  text-decoration: none;
+  &:hover { color: $ink-black; }
+  @media(min-width: 768px) { display: none; }
+}
+
+// Section navigation bar
+.paper-nav {
+  background-color: $ink-black;
+  padding: 0 16px;
+  overflow-x: auto;
+  &::-webkit-scrollbar { height: 0; }
+}
+
+.paper-nav__list {
+  @extend .list-unstyled;
+  display: flex;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.paper-nav__item {
+  display: inline-block;
+  padding: 7px 14px;
+  font-family: $ui-font;
+  font-size: 0.78rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #d0c8ba;
+  text-decoration: none !important;
+
+  &:hover, &.active {
+    color: #fff;
+    background-color: $ink-red;
+  }
+}
+
+// Notification styles (reuse for paper context)
+.app-notification {
+  min-width: 260px;
+  border: 1px solid $paper-border;
+  border-radius: 2px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  background-color: $paper-cream;
+  &.dropdown-menu { margin-top: 2px !important; }
+}
+.app-notification__title {
+  padding: 8px 16px;
+  background-color: $ink-black;
+  color: #fff;
+  font-family: $ui-font;
+  font-size: 0.8rem;
+}
+.app-notification__footer { text-align: center; font-family: $ui-font; }
+.app-notification__content { max-height: 200px; overflow-y: auto; }
+.app-notification__item {
+  display: flex;
+  padding: 8px 10px;
+  color: $ink-dark;
+  border-bottom: 1px solid $paper-border;
+  &:hover { background-color: #ede8de; text-decoration: none; color: $ink-black; }
+}
+.app-notification__author { margin-bottom: 0; line-height: 1.2; font-family: $ui-font; }
+.app-notification__meta { @extend .small; margin-bottom: 0; color: $ink-gray; }
+.app-notification__icon { padding-right: 10px; }
+.app-notification__cnt { padding: 5px; margin-left: auto; }

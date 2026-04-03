@@ -36,3 +36,8 @@ use App\Classes\Hook;
         </a>
     </li>' . PHP_EOL;
 }, 10);*/
+
+// Пример вставки ссылки в футер сайта
+/*Hook::add('footerColumnMiddle', function ($content) {
+    return $content . '<li><a class="footer-item" href="/page">Текст ссылки</a></li>' . PHP_EOL;
+});*/

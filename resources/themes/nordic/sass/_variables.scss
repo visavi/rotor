@@ -1,0 +1,105 @@
+// Fontawesome fonts path
+@use 'fa/scss/variables' with (
+  $font-path: "fa/webfonts",
+);
+
+:root,
+[data-bs-theme=light] {
+    --base-bg: #f1f5f9;
+    --base-color: #000;
+    --base-tag: #4338ca;
+    --base-emphasis: #a8a8a2;
+    --base-number: #7c3aed;
+    --base-code: #059669;
+    --base-attr: #4338ca;
+    --base-symbol: #0891b2;
+    --base-class: #be123c;
+    --base-str: #b45309;
+    --base-comment: #6b7280;
+    --base-doc: #6b7280;
+    --base-fun: #dc2626;
+    --base-atv: #dc2626;
+    --base-dec: #7c3aed;
+}
+[data-bs-theme=dark] {
+    --base-bg: #1e1b4b;
+    --base-color: #e0e7ff;
+    --base-tag: #818cf8;
+    --base-emphasis: #a8a8a2;
+    --base-number: #a78bfa;
+    --base-code: #34d399;
+    --base-attr: #f87171;
+    --base-symbol: #67e8f9;
+    --base-class: #f0abfc;
+    --base-str: #fbbf24;
+    --base-comment: #6b7280;
+    --base-doc: #6b7280;
+    --base-fun: #f87171;
+    --base-atv: #f87171;
+    --base-dec: #a78bfa;
+}
+
+// Primary font
+$body-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+// Backgrounds
+$body-bg: #ffffff;
+$body-bg-dark: #111827;
+$app-bg: #f1f5f9;
+
+// Indigo primary
+$primary-color: #4338ca;
+
+// App width
+$app-width: 1280px;
+
+// Sidebar
+$sidebar-width: 260px;
+$navbar-height: 56px;
+
+// Navbar — deep indigo
+$navbar-color: #1e1b4b;
+
+// Sidebar — clean white/light
+$sidebar-color: #f8fafc;
+$sidebar-accent: light;
+$sidebar-light-color: #1e1b4b;
+$sidebar-light-link-color: #374151;
+
+// Bootstrap overrides
+$primary: $primary-color;
+
+$font-size-base: 0.9rem;
+$small-font-size: 0.8em;
+$font-family-sans-serif: $body-font;
+$link-color: $primary-color;
+$link-decoration: none;
+$link-hover-decoration: underline;
+$headings-font-weight: 600;
+
+$dropdown-padding-y: 0;
+$dropdown-spacer: 0;
+$dropdown-border-width: 0;
+$dropdown-item-padding-y: 9px;
+$dropdown-item-padding-x: 20px;
+
+$btn-border-radius: 6px;
+$btn-border-radius-lg: 6px;
+$btn-border-radius-sm: 4px;
+$btn-font-weight: 600;
+$btn-transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+$input-border-radius: 6px;
+$input-border-radius-lg: 6px;
+$input-border-radius-sm: 4px;
+$input-focus-border-color: $primary-color;
+$input-btn-border-width: 1px;
+$input-btn-focus-box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+$input-btn-focus-width: 0;
+
+$border-radius: 8px;
+$border-radius-lg: 10px;
+$border-radius-sm: 4px;
+
+$card-border-radius: 10px;
+$card-border-color: #e2e8f0;

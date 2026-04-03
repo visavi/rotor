@@ -1,0 +1,76 @@
+// Newspaper Right Sidebar — sticky, in document flow
+
+.app-sidebar {
+  flex: 0 0 $sidebar-width;
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  position: sticky;
+  top: $header-height;
+  max-height: calc(100vh - #{$header-height});
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: $sidebar-color;
+  border-left: 2px solid $paper-border;
+  border-right: 1px solid $paper-border;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.04);
+  transition: width 0.3s ease, min-width 0.3s ease;
+  padding-bottom: 20px;
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: $paper-border; }
+  @media print { display: none; }
+}
+
+.app-sidebar__overlay {
+  @media(max-width: 767px) {
+    position: fixed;
+    top: $header-height; left: 0; bottom: 0; right: 0;
+    z-index: 99;
+    background: rgba(26,26,26,0.6);
+  }
+}
+
+.paper-sidebar-section { padding: 14px 16px; }
+
+.paper-sidebar-title { font-family: 'Playfair Display', Georgia, serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: $ink-black; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid $ink-red; }
+
+.paper-sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-family: $ui-font; font-size: 0.82rem; color: $ink-dark; strong { color: $ink-black; } }
+
+.paper-sidebar-links {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  a { font-family: $ui-font; font-size: 0.8rem; color: $ink-red; text-decoration: none; &:hover { text-decoration: underline; } }
+}
+
+.paper-sidebar-logout { font-family: $ui-font; font-size: 0.8rem; color: $ink-gray !important; padding: 0 !important; &:hover { color: $ink-red !important; } }
+
+.paper-btn { display: inline-block; padding: 5px 12px; background-color: $ink-black; color: #fff !important; font-family: $ui-font; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em; text-decoration: none !important; margin-right: 6px; &:hover { background-color: $ink-red; } }
+.paper-btn-outline { background-color: transparent; color: $ink-black !important; border: 1px solid $paper-border; &:hover { background-color: #ede8de; color: $ink-black !important; } }
+
+.paper-divider { margin: 0; border: 0; border-top: 1px solid $paper-border; }
+
+.paper-sidebar-menu {
+  @extend .list-unstyled;
+  margin: 0;
+  li:last-child .menu-item { border-bottom: none; }
+}
+
+.paper-count,
+.menu-badge { font-family: $ui-font; font-size: 0.72rem !important; color: #fff !important; background-color: $ink-red !important; padding: 1px 5px !important; border-radius: 10px !important; border: none !important; line-height: inherit !important; flex-shrink: 0; }
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px dotted $paper-border;
+  font-family: $ui-font;
+  font-size: 0.82rem;
+  color: $ink-dark;
+  text-decoration: none;
+  &:hover, &.active { color: $ink-red; text-decoration: none; }
+  &:hover .menu-icon, &.active .menu-icon { color: $ink-red; }
+}
+.menu-icon { margin-right: 7px; color: $ink-gray; width: 14px; text-align: center; flex-shrink: 0; }
+.menu-label { flex: 1 1 auto; }
+
+.paper-sidebar-search { display: flex; position: relative; }
+.paper-sidebar-search__input { flex: 1; border: 1px solid $paper-border; padding: 5px 30px 5px 8px; font-family: $ui-font; font-size: 0.8rem; background-color: #fff; color: $ink-black; &::placeholder { color: $ink-gray; } &:focus { outline: none; border-color: $ink-red; } }
+.paper-sidebar-search__btn { position: absolute; right: 0; top: 0; bottom: 0; padding: 0 8px; border: 0; background: transparent; color: $ink-gray; cursor: pointer; &:hover { color: $ink-red; } }

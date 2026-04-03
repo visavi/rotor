@@ -5,7 +5,7 @@
         <div class="col-sm">
             <h5>{{ __('index.pages') }}</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="{{ route('pages') }}">{{ __('index.pages') }}</a></li>
+                <li><a class="footer-item" href="{{ route('pages') }}">{{ __('index.pages') }}</a></li>
                 @hook('footerColumnStart')
             </ul>
         </div>
@@ -13,8 +13,8 @@
         <div class="col-sm">
             <h5>{{ __('index.users') }}</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="{{ route('users.index') }}">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span></li>
-                <li class="nav-item mb-2"><a href="{{ route('offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span></li>
+                <li><a class="footer-item" href="{{ route('users.index') }}">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span></li>
+                <li><a class="footer-item" href="{{ route('offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span></li>
                 @hook('footerColumnMiddle')
             </ul>
         </div>
@@ -22,8 +22,8 @@
         <div class="col-sm">
             <h5>{{ __('index.mails') }}</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="{{ route('mails.index') }}">{{ __('index.mails') }}</a></li>
-                <li class="nav-item mb-2"><a href="{{ route('search') }}">{{ __('index.search') }}</a></li>
+                <li><a class="footer-item" href="{{ route('mails.index') }}">{{ __('index.mails') }}</a></li>
+                <li><a class="footer-item" href="{{ route('search') }}">{{ __('index.search') }}</a></li>
                 @hook('footerColumnEnd')
             </ul>
         </div>

@@ -1,0 +1,103 @@
+// Newspaper theme — print aesthetic, right sidebar
+
+// Theme essentials
+@import 'themes/newspaper/sass/variables';
+@import 'bootstrap/scss/bootstrap';
+
+// Layout
+@import 'themes/newspaper/sass/main';
+@import 'themes/newspaper/sass/header';
+@import 'themes/newspaper/sass/sidebar';
+@import 'themes/newspaper/sass/footer';
+
+// Components (adapted with newspaper's serif/ink variables)
+@import 'themes/default/sass/component/badge';
+@import 'themes/default/sass/component/dropdown';
+@import 'themes/default/sass/component/button';
+
+// Icons & libraries
+@import 'fa/scss/brands';
+@import 'fa/scss/regular';
+@import 'fa/scss/solid';
+@import 'fa/scss/fontawesome';
+
+@import 'bootstrap5-tags/tags';
+@import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
+@import 'css/markitup';
+@import 'css/toastr';
+@import 'css/prettify';
+@import 'css/main';
+
+// App title — editorial section header
+.app-title {
+  background-color: #fff;
+  border-bottom: 2px solid $paper-border;
+  margin: -24px -28px 20px -28px;
+  padding: 14px 28px;
+
+  @media(max-width: 768px) {
+    margin: -12px -14px 16px -14px;
+    padding: 20px 14px 10px;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: $ink-black;
+  }
+  p { margin-bottom: 0; color: $ink-gray; font-style: italic; font-family: $ui-font; font-size: 0.82rem; }
+}
+
+.breadcrumb {
+  margin-bottom: 0;
+  font-family: $ui-font;
+  font-size: 0.8rem;
+  background-color: transparent;
+  padding: 0;
+  margin-top: 4px;
+  a { color: $ink-red; }
+}
+
+// Buttons — newspaper style
+.btn {
+  font-family: $ui-font;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  border-radius: 2px !important;
+}
+
+.btn-primary {
+  background-color: $ink-black !important;
+  border-color: $ink-black !important;
+  color: #fff !important;
+  &:hover { background-color: $ink-red !important; border-color: $ink-red !important; }
+}
+
+// Pagination
+.page-link { font-family: $ui-font; color: $ink-red; border-color: $paper-border; }
+.page-item.active .page-link { background-color: $ink-red; border-color: $ink-red; color: #fff; }
+.page-item.disabled .page-link { color: $ink-gray; background-color: $paper-cream; border-color: $paper-border; }
+
+// Badges
+.badge { font-family: $ui-font; font-weight: bold; }
+
+// Form controls
+.form-control, .form-select {
+  font-family: $ui-font;
+  border-color: $paper-border;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  &:focus { border-color: $ink-red; box-shadow: none; }
+}
+
+
+// Sidebar search — desktop hidden, mobile visible
+.paper-sidebar-search-section { @media(min-width: 768px) { display: none; } }
+
+// Scrollup — позиция с учётом sidebar
+.scrollup { right: calc(#{$sidebar-width} + 10px); }

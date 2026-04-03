@@ -1,0 +1,108 @@
+// Nordic — flex layout with RIGHT sidebar (sticky, in-flow)
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+::selection { color: #fff; background-color: $primary-color; }
+
+html, body { height: 100%; }
+
+h2 { font-size: 20px; font-weight: 600; }
+h3 { font-size: 17px; font-weight: 600; }
+
+.post-title { color: inherit; }
+.post-title:hover, .post-title:focus { text-decoration: none; color: inherit; }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: $app-width;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--base-bg);
+  overflow-x: hidden;
+
+  @media(min-width: 768px) {
+    &.sidenav-toggled .app-sidebar {
+      width: 0;
+      overflow: hidden;
+      border: none;
+      padding: 0;
+    }
+  }
+  @media(max-width: 767px) {
+    overflow-x: hidden;
+    .app-sidebar {
+      position: fixed !important;
+      right: -$sidebar-width;
+      top: $navbar-height;
+      height: calc(100% - #{$navbar-height});
+      z-index: 100;
+      transition: right 0.25s ease;
+    }
+    .app-sidebar__overlay { visibility: hidden; }
+    &.sidenav-toggled {
+      .app-sidebar { right: 0; }
+      .app-sidebar__overlay { visibility: visible; }
+    }
+  }
+}
+
+.app-body {
+  display: flex;
+  flex: 1 0 auto;
+  margin-top: $navbar-height;
+  align-items: stretch;
+  background-color: $sidebar-color;
+}
+[data-bs-theme=dark] .app-body { background-color: #1a1a2e; }
+
+.app-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 32px;
+  background-color: var(--bs-body-bg);
+  @media(max-width: 767px) { padding: 12px 16px; }
+  @media print { padding: 0; background-color: #fff; }
+}
+
+.bg-notify {
+  position: relative;
+  top: -10px;
+  right: 10px;
+  margin-right: -20px;
+  background-color: #ef4444;
+  padding: 3px 5px;
+}
+
+.line-head { padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; }
+
+.card { border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+[data-bs-theme=dark] .card { border-color: #374151; }
+
+.table { border-color: #e2e8f0; thead th { border-bottom: 2px solid $primary-color; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; } }
+[data-bs-theme=dark] .table { border-color: #374151; }
+
+:focus-visible { outline: 2px solid $primary-color; outline-offset: 2px; box-shadow: none; }
+
+// Scrollup button
+.scrollup {
+  position: fixed;
+  bottom: 20px;
+  right: calc(#{$sidebar-width} + 12px);
+  width: 36px;
+  height: 36px;
+  background: $primary-color;
+  border-radius: 50%;
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(67,56,202,0.35);
+  opacity: 1;
+  &:hover { background: darken($primary-color, 10%); opacity: 1; }
+  &.show { display: flex; }
+  &:before { font-size: 20px; }
+}

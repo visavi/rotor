@@ -1,0 +1,94 @@
+// Cyberpunk Right Sidebar — sticky, in document flow
+
+.app-sidebar {
+  flex: 0 0 $sidebar-width;
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  position: sticky;
+  top: $navbar-height;
+  max-height: calc(100vh - #{$navbar-height});
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: $sidebar-color;
+  border-left: 1px solid $primary-color;
+  box-shadow: -4px 0 20px rgba(0, 240, 255, 0.08);
+  transition: width 0.3s ease, min-width 0.3s ease;
+  padding-bottom: 20px;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); }
+  @media print { display: none; }
+}
+
+.app-sidebar__overlay {
+  @media(max-width: 767px) {
+    position: fixed;
+    top: $navbar-height; left: 0; bottom: 0; right: 0;
+    z-index: 99;
+    background: rgba(0, 0, 20, 0.7);
+  }
+}
+
+.app-sidebar__user-avatar { flex: 0 0 auto; margin-right: 10px; }
+.app-sidebar__user-name { margin-bottom: 0; color: $primary-color; font-family: $heading-font; font-size: 0.85rem; text-shadow: 0 0 6px rgba(0,240,255,0.4); }
+.app-sidebar__user-designation { margin-bottom: 0; color: rgba(0,240,255,0.5); font-size: 0.75rem; }
+
+.app-sidebar__footer {
+  margin: 0 10px;
+  padding: 10px 5px;
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  a { color: rgba(0,240,255,0.6); &:hover { color: $primary-color; } }
+}
+
+.app-menu { @extend .list-unstyled; margin-bottom: 0; }
+
+.menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-right: 3px solid transparent;
+  transition: border-right-color 0.2s, background-color 0.2s;
+  color: $sidebar-dark-link-color;
+  text-decoration: none;
+
+  &.active, &:hover, &:focus {
+    background: rgba(0, 240, 255, 0.06);
+    border-right-color: $primary-color;
+    color: $primary-color;
+    text-decoration: none;
+  }
+}
+
+.menu-icon { flex: 0 0 auto; margin-right: 8px; color: rgba(0,240,255,0.5); width: 16px; text-align: center; .menu-item.active &, .menu-item:hover & { color: $primary-color; } }
+.menu-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; margin-right: 4px; font-size: 0.85rem; }
+
+.menu-badge {
+  background-color: rgba(0,240,255,0.15) !important;
+  color: $primary-color !important;
+  border: 1px solid rgba(0,240,255,0.3) !important;
+  font-size: 0.7rem;
+}
+
+.treeview {
+  &.is-expanded {
+    [data-bs-toggle='treeview'] { border-right-color: $primary-color; background: rgba(0, 240, 255, 0.06); }
+    .treeview-menu { max-height: 100vh; }
+    .treeview-indicator { transform: rotate(180deg); }
+  }
+}
+
+.treeview-menu { @extend .list-unstyled; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: rgba(0, 240, 255, 0.03); }
+
+.treeview-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 5px 5px 30px;
+  font-size: 0.82rem;
+  color: rgba(0,240,255,0.6);
+  text-decoration: none;
+  &.active, &:hover, &:focus { background: rgba(0, 240, 255, 0.06); color: $primary-color; text-decoration: none; }
+  .icon { margin-right: 5px; font-size: 0.5rem; }
+}
+
+.treeview-indicator { transform-origin: center; transition: transform 0.3s ease; color: rgba(0,240,255,0.4); }
+.user-menu { .menu-item { cursor: pointer; } .treeview-menu a { color: $accent-color; &:hover { color: lighten($accent-color, 15%); } } }

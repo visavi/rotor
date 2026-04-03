@@ -1,0 +1,107 @@
+// Fontawesome fonts path
+@use 'fa/scss/variables' with (
+  $font-path: "fa/webfonts",
+);
+
+// Newspaper — print-inspired, no dark mode
+:root {
+    --base-bg: #f5f0e8;
+    --base-color: #1a1a1a;
+    --base-tag: #8B0000;
+    --base-emphasis: #666;
+    --base-number: #8B0000;
+    --base-code: #2d5016;
+    --base-attr: #8B0000;
+    --base-symbol: #1a5276;
+    --base-class: #8B0000;
+    --base-str: #7d6608;
+    --base-comment: #777;
+    --base-doc: #777;
+    --base-fun: #8B0000;
+    --base-atv: #8B0000;
+    --base-dec: #6c3483;
+}
+
+// Serif for newspaper feel
+$body-font: Georgia, 'Times New Roman', 'Palatino Linotype', Times, serif;
+$ui-font: 'Arial', Helvetica, sans-serif;
+
+// Paper backgrounds
+$body-bg: #faf8f4;
+$app-bg: #f5f0e8;
+$paper-cream: #f5f0e8;
+$ink-black: #1a1a1a;
+$ink-dark: #333333;
+$ink-red: #8B0000;
+$ink-gray: #666666;
+$paper-border: #c8b89a;
+
+// Primary = dark red ink
+$primary-color: #8B0000;
+
+// App width — classic broadsheet width
+$app-width: 1200px;
+
+// Sidebar
+$sidebar-width: 260px;
+$header-height: 85px;   // masthead + nav
+$navbar-height: $header-height;
+
+// Navbar masthead
+$navbar-color: #1a1a1a;
+
+// Sidebar — paper color
+$sidebar-color: $paper-cream;
+$sidebar-accent: light;
+$sidebar-light-color: $ink-black;
+$sidebar-light-link-color: $ink-dark;
+
+// Bootstrap overrides — serif, classic feel
+$primary: $primary-color;
+
+$font-size-base: 0.9rem;
+$small-font-size: 0.8em;
+$font-family-sans-serif: $body-font;
+$link-color: $ink-red;
+$link-decoration: none;
+$link-hover-decoration: underline;
+$headings-font-weight: bold;
+
+$dropdown-padding-y: 0;
+$dropdown-spacer: 0;
+$dropdown-border-width: 1px;
+$dropdown-border-color: $paper-border;
+$dropdown-item-padding-y: 7px;
+$dropdown-item-padding-x: 16px;
+$dropdown-bg: $paper-cream;
+$dropdown-link-color: $ink-dark;
+$dropdown-link-hover-bg: #ede8de;
+$dropdown-link-hover-color: $ink-black;
+
+$btn-border-radius: 2px;
+$btn-border-radius-lg: 2px;
+$btn-border-radius-sm: 2px;
+$btn-font-weight: bold;
+$font-family-sans-serif: $body-font;
+
+$input-border-radius: 2px;
+$input-border-radius-lg: 2px;
+$input-border-radius-sm: 2px;
+$input-bg: #fff;
+$input-color: $ink-black;
+$input-border-color: $paper-border;
+$input-focus-border-color: $ink-red;
+$input-btn-border-width: 1px;
+$input-btn-focus-box-shadow: none;
+$input-btn-focus-width: 0;
+
+$border-radius: 2px;
+$border-radius-lg: 2px;
+$border-radius-sm: 1px;
+
+$card-bg: #fff;
+$card-border-color: $paper-border;
+$card-border-radius: 2px;
+
+$table-bg: #fff;
+$table-border-color: $paper-border;

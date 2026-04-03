@@ -1,0 +1,88 @@
+// Newspaper — flex layout with RIGHT sidebar (sticky, in-flow)
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap');
+
+::selection { color: #fff; background-color: $ink-red; }
+
+html, body { height: 100%; }
+
+body { background-color: $body-bg; color: $ink-black; }
+
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; color: $ink-black; }
+h2 { font-size: 22px; font-weight: 700; border-bottom: 2px solid $ink-red; padding-bottom: 4px; margin-bottom: 12px; }
+h3 { font-size: 18px; font-weight: 700; }
+
+a { color: $ink-red; }
+a:hover { color: darken($ink-red, 15%); }
+
+.post-title { color: $ink-black; font-family: 'Playfair Display', Georgia, serif; font-weight: 700; }
+.post-title:hover { color: $ink-red; text-decoration: none; }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: $app-width;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: $app-bg;
+  overflow-x: hidden;
+
+  @media(min-width: 768px) {
+    &.sidenav-toggled .app-sidebar {
+      width: 0;
+      overflow: hidden;
+      border: none;
+      padding: 0;
+    }
+  }
+  @media(max-width: 767px) {
+    overflow-x: hidden;
+    .app-sidebar {
+      position: fixed !important;
+      right: -$sidebar-width;
+      top: $header-height;
+      height: calc(100% - #{$header-height});
+      z-index: 100;
+      transition: right 0.3s ease;
+    }
+    .app-sidebar__overlay { visibility: hidden; }
+    &.sidenav-toggled {
+      .app-sidebar { right: 0; }
+      .app-sidebar__overlay { visibility: visible; }
+    }
+  }
+}
+
+.app-body {
+  display: flex;
+  flex: 1 0 auto;
+  margin-top: $header-height;
+  align-items: stretch;
+  background-color: $sidebar-color;
+  @media(max-width: 767px) { margin-top: 80px; }
+}
+
+.app-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 24px 28px;
+  background-color: #fff;
+  @media(max-width: 767px) { padding: 12px 14px; }
+  @media print { padding: 0; }
+}
+
+.bg-notify {
+  position: relative;
+  top: -10px;
+  right: 10px;
+  margin-right: -20px;
+  background-color: $ink-red;
+  padding: 3px 5px;
+}
+
+.card { border: 1px solid $paper-border; border-radius: 2px; background-color: #fff; }
+.table { border-color: $paper-border; font-size: 0.85rem; thead th { background-color: $ink-black; color: #fff; font-family: $ui-font; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 0; } td, th { border-color: $paper-border; } }
+blockquote { border-left: 4px solid $ink-red; padding-left: 16px; font-style: italic; color: $ink-gray; font-size: 1.1em; }
+hr { border-color: $paper-border; opacity: 1; margin: 16px 0; }
+:focus-visible { outline: 2px solid $ink-red; outline-offset: 1px; box-shadow: none; }

@@ -1,0 +1,19 @@
+// Nordic Footer
+
+.app-footer {
+  flex: 0 0 auto;
+  background-color: var(--bs-body-bg);
+  padding: 16px 32px;
+  border-top: 1px solid #e2e8f0;
+
+  @media(max-width: 767px) { padding: 12px 16px; }
+
+  h5 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #374151; margin-bottom: 10px; }
+  a { font-size: 0.85rem; color: #6b7280; &:hover { color: $primary-color; } }
+}
+
+[data-bs-theme=dark] .app-footer {
+  border-top-color: #2d2d4e;
+  h5 { color: #c7d2fe; }
+  a { color: #9ca3af; &:hover { color: #818cf8; } }
+}
