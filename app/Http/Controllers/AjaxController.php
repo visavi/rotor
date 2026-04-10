@@ -383,6 +383,7 @@ class AjaxController extends Controller
             ->orderBy(DB::raw('CHAR_LENGTH(code)'))
             ->orderBy('name')
             ->get(['code', 'name'])
+            ->map(fn ($s) => ['code' => $s->code, 'name' => url($s->name)])
             ->toArray();
 
         return response()->json($stickers);

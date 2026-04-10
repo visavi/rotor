@@ -759,37 +759,3 @@ window.checkLogin = function (el) {
     return false;
 };
 
-/* Анимация спойлера */
-document.addEventListener('click', e => {
-    const summary = e.target.closest('.block-spoiler > summary')
-    if (!summary) return
-    e.preventDefault()
-
-    const details = summary.parentElement
-    const content = summary.nextElementSibling
-    if (!content) return
-
-    if (!details.open) {
-        details.open = true
-        content.style.overflow = 'hidden'
-        content.style.height = '0'
-        content.style.transition = 'height 0.25s ease'
-        requestAnimationFrame(() => {
-            content.style.height = content.scrollHeight + 'px'
-            content.addEventListener('transitionend', () => {
-                content.style.cssText = ''
-            }, { once: true })
-        })
-    } else {
-        content.style.overflow = 'hidden'
-        content.style.height = content.scrollHeight + 'px'
-        content.style.transition = 'height 0.25s ease'
-        requestAnimationFrame(() => {
-            content.style.height = '0'
-            content.addEventListener('transitionend', () => {
-                content.style.cssText = ''
-                details.open = false
-            }, { once: true })
-        })
-    }
-})

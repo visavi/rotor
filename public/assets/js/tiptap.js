@@ -174,6 +174,32 @@ const AudioEmbed = Node.create({
     },
 })
 
+// ─── Sticker ──────────────────────────────────────────────────────────────────
+
+const Sticker = Node.create({
+    name: 'sticker',
+    group: 'inline',
+    inline: true,
+    atom: true,
+    addAttributes() {
+        return {
+            src: { default: null },
+            alt: { default: null },
+        }
+    },
+    parseHTML() {
+        return [{ tag: 'img.sticker', priority: 100 }]
+    },
+    renderHTML({ node }) {
+        return ['img', { class: 'sticker', src: node.attrs.src, alt: node.attrs.alt }]
+    },
+    addCommands() {
+        return {
+            insertSticker: attrs => ({ commands }) => commands.insertContent({ type: this.name, attrs }),
+        }
+    },
+})
+
 // ─── Spoiler ──────────────────────────────────────────────────────────────────
 
 const Spoiler = Node.create({
@@ -225,6 +251,25 @@ function rgbToHex(html) {
     )
 }
 
+function validateUrl(url) {
+    if (!url) return false
+    if (!/^https?:\/\//i.test(url)) {
+        alert('Введите корректный URL (должен начинаться с http:// или https://)')
+        return false
+    }
+    return true
+}
+
+function positionDropdown(btn, menu) {
+    const rect = btn.getBoundingClientRect()
+    menu.style.top  = (rect.bottom + 4) + 'px'
+    menu.style.left = rect.left + 'px'
+    requestAnimationFrame(() => {
+        const overflow = menu.getBoundingClientRect().right - window.innerWidth + 8
+        if (overflow > 0) menu.style.left = Math.max(8, parseFloat(menu.style.left) - overflow) + 'px'
+    })
+}
+
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 
 const COLORS = [
@@ -237,6 +282,18 @@ const COLORS = [
     { color: '#00cc00', title: 'Зелёный'   },
     { color: '#ff00ff', title: 'Пурпурный' },
     { color: '#00ffff', title: 'Голубой'   },
+]
+
+const BG_COLORS = [
+    { color: '#2f2f2f', title: 'Серый'      },
+    { color: '#6b6524', title: 'Жёлтый'    },
+    { color: '#5c3b23', title: 'Оранжевый' },
+    { color: '#743e42', title: 'Красный'   },
+    { color: '#6e92aa', title: 'Синий'     },
+    { color: '#583e74', title: 'Фиолетовый'},
+    { color: '#509568', title: 'Зелёный'   },
+    { color: '#4e2c3c', title: 'Розовый'   },
+    { color: '#4a3228', title: 'Коричневый'},
 ]
 
 const SIZES = [
@@ -299,7 +356,7 @@ function makeStickerPicker(editor) {
                 img.addEventListener('mousedown', e => {
                     e.preventDefault()
                     e.stopPropagation()
-                    editor.chain().focus().setImage({ src: name, alt: code }).run()
+                    editor.chain().focus().insertSticker({ src: name, alt: code }).run()
                     panel.classList.remove('is-open')
                 })
                 panel.appendChild(img)
@@ -321,11 +378,7 @@ function makeStickerPicker(editor) {
             panel.style.top    = (rect.bottom + 4) + 'px'
             panel.style.bottom = 'auto'
         }
-        panel.style.left = rect.left + 'px'
-        requestAnimationFrame(() => {
-            const overflow = panel.getBoundingClientRect().right - window.innerWidth + 8
-            if (overflow > 0) panel.style.left = Math.max(8, parseFloat(panel.style.left) - overflow) + 'px'
-        })
+        positionDropdown(btn, panel)
     }
 
     btn.addEventListener('mousedown', e => e.preventDefault())
@@ -356,15 +409,7 @@ function makeDropdown(icon, title, items, extraClass = '') {
     items.forEach(item => menu.appendChild(item))
     document.body.appendChild(menu)
 
-    function positionMenu() {
-        const rect = btn.getBoundingClientRect()
-        menu.style.top  = (rect.bottom + 4) + 'px'
-        menu.style.left = rect.left + 'px'
-        requestAnimationFrame(() => {
-            const overflow = menu.getBoundingClientRect().right - window.innerWidth + 8
-            if (overflow > 0) menu.style.left = Math.max(8, parseFloat(menu.style.left) - overflow) + 'px'
-        })
-    }
+    function positionMenu() { positionDropdown(btn, menu) }
 
     btn.addEventListener('mousedown', e => e.preventDefault())
     btn.addEventListener('click', e => {
@@ -451,7 +496,7 @@ function buildToolbar(editor) {
         editor.chain().focus().setHighlight({ color: customBgInput.value }).run()
     })
 
-    const bgSwatches = [...COLORS.map(({ color, title }) => {
+    const bgSwatches = [...BG_COLORS.map(({ color, title }) => {
         const el = document.createElement('button')
         el.type = 'button'
         el.className = 'tiptap-color-swatch'
@@ -522,43 +567,38 @@ function buildToolbar(editor) {
         const { from, to } = editor.state.selection
         const selected = editor.state.doc.textBetween(from, to, '')
         const url = prompt('URL ссылки:', existing || selected)
-        if (url) editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: '_blank' }).run()
+        if (!validateUrl(url)) return
+        if (selected || existing) {
+            editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: '_blank' }).run()
+        } else {
+            const placeholder = 'Текст ссылки...'
+            editor.chain().focus()
+                .insertContent(`<a href="${url}" target="_blank">${placeholder}</a>`)
+                .run()
+            // Выделяем вставленный текст
+            const { from } = editor.state.selection
+            editor.commands.setTextSelection({ from: from - placeholder.length, to: from })
+        }
     }, () => editor.isActive('link'))
 
     btn('fa-image', 'Изображение', () => {
         const url = prompt('URL изображения:')
-        if (url) editor.chain().focus().setImage({ src: url }).run()
+        if (!validateUrl(url)) return
+        editor.chain().focus().setImage({ src: url }).run()
     })
 
     btn('fa-play-circle', 'Видео (YouTube, VK, Rutube, Vimeo, Coub, Ok)', () => {
         const url = prompt('URL видео:')
-        if (!url) return
-        if (!/^https?:\/\//i.test(url)) {
-            alert('Введите корректный URL (должен начинаться с http:// или https://)')
-            return
-        }
+        if (!validateUrl(url)) return
         editor.chain().focus().insertVideo(url).run()
     })
 
     btn('fa-music', 'Аудио (mp3, ogg, wav)', () => {
         const url = prompt('URL аудио:')
-        if (url) editor.chain().focus().insertAudio(url).run()
+        if (!validateUrl(url)) return
+        editor.chain().focus().insertAudio(url).run()
     })
     sep()
-
-    btn('fa-quote-right', 'Цитата', () => {
-        if (editor.isActive('blockquote')) {
-            editor.chain().focus().toggleBlockquote().run()
-        } else {
-            const author = prompt('Автор цитаты (необязательно):')
-            if (author !== null) editor.chain().focus().toggleBlockquote(author || null).run()
-        }
-    }, () => editor.isActive('blockquote'))
-    btn('fa-code', 'Блок кода',
-        () => editor.chain().focus().toggleCodeBlock().run(),
-        () => editor.isActive('codeBlock'))
-    sep()
-
 
     btn('fa-plus-square', 'Спойлер', () => {
         if (editor.isActive('spoiler')) {
@@ -573,6 +613,17 @@ function buildToolbar(editor) {
             ? editor.chain().focus().lift('hide').run()
             : editor.chain().focus().insertHide().run(),
         () => editor.isActive('hide'))
+    btn('fa-quote-right', 'Цитата', () => {
+        if (editor.isActive('blockquote')) {
+            editor.chain().focus().toggleBlockquote().run()
+        } else {
+            const author = prompt('Автор цитаты (необязательно):')
+            if (author !== null) editor.chain().focus().toggleBlockquote(author || null).run()
+        }
+    }, () => editor.isActive('blockquote'))
+    btn('fa-code', 'Блок кода',
+        () => editor.chain().focus().toggleCodeBlock().run(),
+        () => editor.isActive('codeBlock'))
     sep()
 
     dropdown(makeStickerPicker(editor))
@@ -654,6 +705,7 @@ function initEditor(textarea) {
             AudioEmbed,
             Spoiler,
             Hide,
+            Sticker,
         ],
         content: textarea.value || '',
         onUpdate({ editor }) {
@@ -737,6 +789,4 @@ function initEditor(textarea) {
 
 export function initEditors(textareas) {
     textareas.forEach(initEditor)
-
-
 }

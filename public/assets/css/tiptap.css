@@ -16,6 +16,10 @@
     border-color: var(--bs-danger);
 }
 
+.tiptap-editor-content a {
+    pointer-events: none;
+}
+
 /* ── Toolbar ─────────────────────────────────────────────────────────────── */
 
 .tiptap-toolbar {
@@ -160,42 +164,32 @@
     background: none;
 }
 
-/* Generic menu item (icon + label) */
+/* Generic menu item */
+.tiptap-menu-item,
+.tiptap-size-item {
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    background: transparent;
+    color: var(--bs-body-color);
+    font-size: 0.82rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
 .tiptap-menu-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 100%;
-    padding: 5px 10px;
-    border: none;
-    background: transparent;
-    color: var(--bs-body-color);
-    font-size: 0.82rem;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 4px;
-    white-space: nowrap;
 }
 
-.tiptap-menu-item:hover {
-    background-color: var(--bs-secondary-bg);
-}
-
-/* Size menu */
 .tiptap-size-item {
     display: block;
-    width: 100%;
-    padding: 5px 10px;
-    border: none;
-    background: transparent;
-    color: var(--bs-body-color);
-    font-size: 0.82rem;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 4px;
-    white-space: nowrap;
 }
 
+.tiptap-menu-item:hover,
 .tiptap-size-item:hover {
     background-color: var(--bs-secondary-bg);
 }
@@ -278,6 +272,11 @@
     height: 0;
 }
 
+.tiptap-editor-content p:empty,
+.ProseMirror p:empty {
+    min-height: 1em;
+}
+
 /* ── Custom nodes ────────────────────────────────────────────────────────── */
 
 /* Blockquote */
@@ -288,7 +287,7 @@ blockquote {
     border-left: 5px solid;
     border-color: rgba(var(--bs-primary-rgb), 0.5);
     font-style: italic;
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 !important;
 }
 
 blockquote p,
@@ -317,8 +316,9 @@ blockquote::before {
     color: #c73401;
 }
 
-/* Spoiler */
-.block-spoiler {
+/* Spoiler & Hide */
+.block-spoiler,
+.block-hidden {
     border: 1px dashed rgba(var(--bs-secondary-rgb), 0.5);
     padding: 8px 15px;
     margin: 0.5rem 0;
@@ -333,13 +333,10 @@ blockquote::before {
     cursor: pointer;
     user-select: none;
     list-style: none;
+    margin-bottom: 0;
 }
 
 .block-spoiler > summary::-webkit-details-marker { display: none; }
-
-.block-spoiler > summary {
-    margin-bottom: 0;
-}
 
 .block-spoiler > summary::before {
     content: "\f054";
@@ -364,12 +361,6 @@ blockquote::before {
 }
 
 /* Hide block */
-.block-hidden {
-    border: 1px dashed rgba(var(--bs-secondary-rgb), 0.5);
-    padding: 8px 15px;
-    margin: 0.5rem 0;
-    background: var(--base-bg);
-}
 
 .block-hidden::before {
     content: '🔒 Скрытый контент';
@@ -430,5 +421,3 @@ blockquote::before {
     background: transparent !important;
     color: var(--bs-body-color) !important;
 }
-
-/* ── Mobile ──────────────────────────────────────────────────────────────── */

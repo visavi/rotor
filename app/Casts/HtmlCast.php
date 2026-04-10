@@ -2,6 +2,7 @@
 
 namespace App\Casts;
 
+use App\Classes\HtmlSanitizer;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,8 +13,8 @@ class HtmlCast implements CastsAttributes
         return $value;
     }
 
-    public function set(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function set(Model $model, string $key, mixed $value, array $attributes): ?string
     {
-        return $value !== null ? (string) sanitizeHtml($value) : null;
+        return $value !== null ? HtmlSanitizer::sanitize($value) : null;
     }
 }
