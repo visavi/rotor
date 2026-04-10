@@ -29,6 +29,10 @@
     margin-bottom: 1rem;
 }
 
+.section-message p {
+    margin-bottom: 0.1rem;
+}
+
 .section-title {
     font-size: 1.1rem;
     font-weight: 600;
@@ -162,28 +166,6 @@ textarea.form-control {
     margin: 10px;
 }
 
-.blockquote:before {
-    content: "\f10e";
-    font: var(--fa-font-solid);
-    font-size: 1.4em;
-    float: left;
-    margin-right: 10px;
-    color: #c73401;
-}
-
-.blockquote {
-    padding: 8px 15px;
-    font-size: 90%;
-    background: var(--base-bg);
-    border-left: 5px solid;
-    border-color: rgba(var(--bs-primary-rgb), 0.5);
-    font-style: italic;
-    margin: 0.5rem 0;
-}
-
-.blockquote-footer {
-    margin: 0;
-}
 
 .is-invalid .form-control,
 .is-invalid .form-select,
@@ -211,39 +193,6 @@ textarea.form-control {
 .is-valid .form-select:focus {
     border-color: var(--bs-form-valid-border-color);
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-}
-
-.spoiler {
-    margin-bottom: 5px;
-}
-
-.spoiler:before {
-    content: "\f0da";
-    font: var(--fa-font-solid);
-    font-size: 13px;
-    color: #bbb;
-    margin: 0 5px 0 2px;
-}
-
-.spoiler.spoiler-open:before {
-    content: "\f0d7";
-    font: var(--fa-font-solid);
-    font-size: 13px;
-    color: #bbb;
-    margin: 0 5px 0 2px;
-}
-
-.spoiler-title {
-    border-bottom: 1px dashed;
-    color: #6da3bd;
-    cursor: pointer;
-    font-weight: normal;
-}
-
-.spoiler-text {
-    padding: 10px 15px;
-    margin: 0.5rem 0;
-    background-color: var(--base-bg);
 }
 
 .hidden-text {

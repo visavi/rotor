@@ -25,7 +25,7 @@
 
     @if ($content)
         <div class="mb-3">
-            <pre class="prettyprint linenums">{{ $content }}</pre>
+            <pre class="block-code linenums">{{ $content }}</pre>
         </div>
     @else
         {{ showError(__('loads.empty_file')) }}

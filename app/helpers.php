@@ -49,6 +49,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use Intervention\Image\ImageManager;
 use ReCaptcha\ReCaptcha;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 const ROTOR_VERSION = '13.0.0';
 define('SITETIME', time());
@@ -1354,6 +1356,82 @@ function plural(int $num, mixed $forms): string
     }
 
     return $num . ' ' . $forms[2];
+}
+
+/**
+ * Возвращает экземпляр HTML санитайзера
+ */
+function getHtmlSanitizer(): HtmlSanitizer
+{
+    static $sanitizer = null;
+
+    if ($sanitizer === null) {
+        $sanitizer = new HtmlSanitizer(
+            (new HtmlSanitizerConfig())
+                //->allowRelativeLinks()
+                //->allowRelativeMedias()
+                // Текст
+                ->allowElement('p', ['style'])
+                ->allowElement('span', ['style'])
+                ->allowElement('strong')
+                ->allowElement('em')
+                ->allowElement('u')
+                ->allowElement('s')
+                ->allowElement('br')
+                ->allowElement('mark', ['style'])
+                // Заголовки
+                ->allowElement('h1')
+                ->allowElement('h2')
+                ->allowElement('h3')
+                ->allowElement('h4')
+                ->allowElement('h5')
+                ->allowElement('h6')
+                // Списки
+                ->allowElement('ul')
+                ->allowElement('ol')
+                ->allowElement('li')
+                // Цитата
+                ->allowElement('blockquote')
+                ->allowElement('footer')
+                // Код
+                ->allowElement('pre', ['class'])
+                ->allowElement('code')
+                // Ссылки и медиа
+                ->allowElement('a', ['href', 'target', 'rel'])
+                ->allowElement('img', ['src', 'alt', 'title'])
+                ->allowElement('audio', ['src', 'controls'])
+                ->allowElement('iframe', ['src', 'allowfullscreen', 'frameborder', 'loading'])
+                // Блоки
+                ->allowElement('div', ['class'])
+                ->allowElement('details', ['class'])
+                ->allowElement('summary')
+                ->allowAttribute('style', ['span', 'p', 'mark'])
+                ->allowAttribute('target', ['a'])
+                ->forceHttpsUrls(false)
+        );
+    }
+
+    return $sanitizer;
+}
+
+function sanitizeHtml(?string $text): string
+{
+    return getHtmlSanitizer()->sanitize((string) $text);
+}
+
+function renderHtml(?string $text): HtmlString
+{
+    $html = sanitizeHtml($text);
+
+    if (! auth()->check() && str_contains($html, 'block-hidden')) {
+        $html = preg_replace(
+            '/<div class="block-hidden">.*?<\/div>/s',
+            '<div class="block-hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
+            $html
+        );
+    }
+
+    return new HtmlString($html);
 }
 
 /**

@@ -3,23 +3,21 @@
 <aside class="app-sidebar">
     @if ($user = getUser())
         <div class="paper-sidebar-section">
-            <h4 class="paper-sidebar-title">{{ __('index.my_profile') }}</h4>
             <div class="paper-sidebar-user">
                 {{ $user->getAvatarImage() }}
                 <div>
-                    <strong>{{ $user->getName() }}</strong><br>
+                    <a href="{{ route('users.user', ['login' => $user->login]) }}"><strong>{{ $user->getName() }}</strong></a><br>
                     <small>{{ $user->getStatus() }}</small>
                 </div>
             </div>
             <div class="paper-sidebar-links">
-                <a href="{{ route('profile') }}">{{ __('index.my_profile') }}</a>
+                <a href="{{ route('menu') }}" rel="nofollow">{{ __('index.menu') }}</a>
                 @if (isAdmin())<a href="{{ route('admin.index') }}" rel="nofollow">{{ __('index.panel') }}</a>@endif
             </div>
         </div>
         <hr class="paper-divider">
     @else
         <div class="paper-sidebar-section">
-            <h4 class="paper-sidebar-title">{{ __('users.enter') }}</h4>
             <a href="{{ route('login') }}{{ returnUrl() }}" class="paper-btn">{{ __('index.login') }}</a>
             <a href="{{ route('register') }}" class="paper-btn paper-btn-outline">{{ __('index.register') }}</a>
         </div>
@@ -27,7 +25,6 @@
     @endif
 
     <div class="paper-sidebar-section">
-        <h4 class="paper-sidebar-title">{{ __('index.activity') }}</h4>
         <ul class="paper-sidebar-menu">
             @hook('sidebarMenuStart')
             <li><a class="menu-item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}"><i class="menu-icon far fa-comment-alt"></i><span class="menu-label">{{ __('index.forums') }}</span><span class="badge menu-badge">{{ statsForum() }}</span></a></li>
@@ -42,13 +39,19 @@
         </ul>
     </div>
 
-    <hr class="paper-divider">
-
     <div class="paper-sidebar-section paper-sidebar-search-section">
-        <h4 class="paper-sidebar-title">{{ __('main.search') }}</h4>
         <form action="{{ route('search') }}" method="get" class="paper-sidebar-search">
             <input name="query" class="paper-sidebar-search__input" type="search" placeholder="{{ __('main.search') }}..." minlength="3" maxlength="64" required>
             <button class="paper-sidebar-search__btn"><i class="fa fa-search"></i></button>
         </form>
+    </div>
+
+    <div class="app-sidebar__footer">
+        @hook('sidebarFooterStart')
+        <i class="fas fa-globe-americas"></i>
+        <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
+        <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+        <span class="online-counter">@yield('online')</span>
+        @hook('sidebarFooterEnd')
     </div>
 </aside>

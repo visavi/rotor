@@ -375,22 +375,17 @@ class AjaxController extends Controller
     }
 
     /**
-     * Вставляет стикер
+     * Возвращает список стикеров
      */
     public function getStickers(): JsonResponse
     {
         $stickers = Sticker::query()
-            // ->where('category_id', $id)
             ->orderBy(DB::raw('CHAR_LENGTH(code)'))
             ->orderBy('name')
-            ->get();
+            ->get(['code', 'name'])
+            ->toArray();
 
-        $view = view('pages/_stickers_modal', compact('stickers'))->render();
-
-        return response()->json([
-            'success'  => true,
-            'stickers' => $view,
-        ]);
+        return response()->json($stickers);
     }
 
     /**

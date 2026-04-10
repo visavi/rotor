@@ -1,17 +1,17 @@
-.prettyprint .com { color: var(--base-comment); }
-.prettyprint .lit { color: var(--base-number); }
-.prettyprint .pun, .prettyprint .opn, .prettyprint .clo { color: var(--base-emphasis); }
-.prettyprint .fun { color: var(--base-fun); }
-.prettyprint .str { color: var(--base-str); }
-.prettyprint .atv { color: var(--base-atv); }
-.prettyprint .kwd { color: var(--base-attr); }
-.prettyprint .tag { color: var(--base-tag); }
-.prettyprint .typ, .prettyprint .var { color: var(--base-class); }
-.prettyprint .dec { color: var(--base-dec); }
-.prettyprint .atn { color: var(--base-symbol); }
-.prettyprint .pln { color: var(--base-code); }
+.block-code .com { color: var(--base-comment); }
+.block-code .lit { color: var(--base-number); }
+.block-code .pun, .block-code .opn, .block-code .clo { color: var(--base-emphasis); }
+.block-code .fun { color: var(--base-fun); }
+.block-code .str { color: var(--base-str); }
+.block-code .atv { color: var(--base-atv); }
+.block-code .kwd { color: var(--base-attr); }
+.block-code .tag { color: var(--base-tag); }
+.block-code .typ, .block-code .var { color: var(--base-class); }
+.block-code .dec { color: var(--base-dec); }
+.block-code .atn { color: var(--base-symbol); }
+.block-code .pln { color: var(--base-code); }
 
-.prettyprint {
+.block-code {
   background: var(--base-bg);
   color: var(--base-color);
   display: block;
@@ -20,10 +20,11 @@
   word-wrap: normal;
   tab-size: 2;
   padding: 5px;
-  font-size: 90%;
+  font-size: 13px;
   margin: 0.5rem 0;
 }
 
-.prettyprint ol {
+.block-code ol {
     margin-bottom: 0;
+    padding-left: 3em;
 }

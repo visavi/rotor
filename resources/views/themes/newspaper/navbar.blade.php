@@ -1,13 +1,7 @@
 <!-- Newspaper Header -->
 <header class="app-header">
     <div class="paper-masthead">
-        <div class="paper-date">
-            @yield('online')
-            <span class="paper-issue"><i class="fas fa-globe-americas"></i>
-                <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-                <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
-            </span>
-        </div>
+        <div class="paper-date">{{ dateFixed(now(), 'd F Y') }}</div>
         <a class="paper-title" href="{{ route('home') }}">{{ setting('title') }}</a>
         <div class="paper-actions">
             <form action="{{ route('search') }}" method="get" class="paper-search">
@@ -22,10 +16,13 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end paper-dropdown">
                         @hook('navbarMenuStart')
+                        @if ($user->isActive())
+                            <li><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }}@if ($user->newprivat) <span class="badge bg-danger">{{ $user->newprivat }}</span>@endif</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        @endif
                         <li><a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a></li>
                         <li><a class="dropdown-item" href="{{ route('profile') }}">{{ __('index.my_profile') }}</a></li>
                         <li><a class="dropdown-item" href="{{ route('settings') }}">{{ __('index.my_settings') }}</a></li>
-                        @if (isAdmin())<li><a class="dropdown-item" href="{{ route('admin.index') }}" rel="nofollow">{{ __('index.panel') }}</a></li>@endif
                         @hook('navbarMenuEnd')
                         <li><hr class="dropdown-divider"></li>
                         <li>

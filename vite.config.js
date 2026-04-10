@@ -1,34 +1,24 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import path from 'path';
+import { compression } from 'vite-plugin-compression2';
 
 export default defineConfig({
-    optimizeDeps: {
-        include: ['jquery', 'bootstrap'],
-    },
     plugins: [
+        ...(process.env.BROTLI ? [compression({ algorithm: 'brotliCompress' })] : []),
         laravel({
             input: [
                 'public/assets/js/jquery.js',
+                'resources/themes/vendor.scss',
                 'resources/themes/default/js/app.js',
-                'resources/themes/default/js/messages.js',
-                'resources/themes/default/sass/app.scss',
                 'resources/themes/mobile/js/app.js',
-                'resources/themes/mobile/sass/app.scss',
                 'resources/themes/motor/js/app.js',
-                'resources/themes/motor/sass/app.scss',
                 'resources/themes/fresh/js/app.js',
-                'resources/themes/fresh/sass/app.scss',
                 'resources/themes/matrix/js/app.js',
-                'resources/themes/matrix/sass/app.scss',
                 'resources/themes/waphack/js/app.js',
-                'resources/themes/waphack/sass/app.scss',
                 'resources/themes/cyberpunk/js/app.js',
-                'resources/themes/cyberpunk/sass/app.scss',
                 'resources/themes/nordic/js/app.js',
-                'resources/themes/nordic/sass/app.scss',
                 'resources/themes/newspaper/js/app.js',
-                'resources/themes/newspaper/sass/app.scss',
                 'public/assets/css/chartist.css',
                 'public/assets/js/chartist.js',
             ],
@@ -52,10 +42,14 @@ export default defineConfig({
         },
     },
     build: {
+        emptyOutDir: true,
         rollupOptions: {
+            checks: {
+                pluginTimings: false,
+            },
             output: {
                 assetFileNames: (assetInfo) => {
-                    if (assetInfo.name.match(/\.(woff|woff2|ttf)$/)) {
+                    if (assetInfo.name?.match(/\.(woff|woff2|ttf)$/)) {
                         return 'fonts/[name][extname]';
                     }
                     return 'assets/[name]-[hash][extname]';

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
@@ -83,6 +84,8 @@ class Guestbook extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
+            'reply'   => HtmlCast::class,
         ];
     }
 

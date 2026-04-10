@@ -30,7 +30,7 @@ class Validator
             return $this;
         }
 
-        $input = (string) $input;
+        $input = strip_tags((string) $input);
 
         if (mb_strlen($input, 'utf-8') < $min) {
             $this->addError($label, __('validator.length_min', ['length' => $min]));

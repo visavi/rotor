@@ -43,25 +43,6 @@ $(function () {
         // Your custom options
     });
 
-    $('.markItUp').markItUp(mySettings)
-        .on('input', function() {
-            const $this = $(this);
-            const maxlength = $this.attr('maxlength');
-            const text = $this.val().replace(/(\r\n|\n|\r)/g, "\r\n");
-            const currentLength = text.length;
-            const $counter = $('.js-textarea-counter');
-
-            $counter.toggleClass('text-danger', currentLength > maxlength);
-
-            const remaining = maxlength - currentLength;
-            $counter.text(currentLength === 0 ? '' : __('characters_left') + ': ' + remaining);
-        })
-        .on('markitup:previewUpdated', function() {
-            prettyPrint();
-        });
-
-    $('.markItUpHtml').markItUp(myHtmlSettings);
-
     $('[data-bs-toggle="tooltip"]').tooltip();
     $('[data-bs-toggle="popover"]').popover();
 
@@ -109,23 +90,6 @@ $(function () {
             scrollTop: 0
         }, 100);
         return false;
-    });
-
-    /* Уход со страницы */
-    let isChanged = false;
-    $('.markItUpEditor').on('input change', function() {
-        isChanged = true;
-    });
-
-    $(window).on('beforeunload', function(e) {
-        if (isChanged && $('.markItUpEditor').val().trim().length > 0) {
-            e.preventDefault();
-            return e.returnValue = '';
-        }
-    });
-
-    $('form').on('submit', function() {
-        $(window).off('beforeunload');
     });
 
     $('.js-messages-block').on('show.bs.dropdown', function () {
@@ -206,14 +170,11 @@ window.postJump = function () {
 window.postReply = function (el) {
     postJump();
 
-    var field  = $('.markItUpEditor');
-    var post   = $(el).closest('.section');
-    var author = post.find('.section-author').data('login');
+    var editor = window._tiptapActiveEditor;
+    if (!editor) return false;
 
-    var $lastSymbol = field.val().slice(field.val().length - 1);
-    var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
-
-    field.focus().val(field.val() + separ + author + ', ');
+    var author = $(el).closest('.section').find('.section-author').data('login');
+    editor.chain().focus().insertContent(author + ', ').run();
 
     return false;
 };
@@ -222,23 +183,25 @@ window.postReply = function (el) {
 window.postQuote = function (el) {
     postJump();
 
-    let field   = $('.markItUpEditor');
-    let post    = $(el).closest('.section');
-    let author  = post.find('.section-author').data('login');
-    let date    = post.find('.section-date').text();
-    let text    = post.find('.section-message').clone();
-    let message = text.find('blockquote').remove().end().text().trim();
+    var editor = window._tiptapActiveEditor;
+    if (!editor) return false;
 
-    let $lastSymbol = field.val().slice(field.val().length - 1);
-    let separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
+    var post    = $(el).closest('.section');
+    var author  = post.find('.section-author').data('login');
+    var date    = post.find('.section-date').text().trim();
+    var text    = post.find('.section-message').clone();
+    var message = text.find('blockquote').remove().end().text().trim();
 
-    if (! message) {
-        field.focus().val(field.val() + separ + author + ', ');
-
+    if (!message) {
+        editor.chain().focus().insertContent(author + ', ').run();
         return false;
     }
 
-    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
+    editor.chain().focus().insertContent({
+        type: 'blockquote',
+        content: [{ type: 'paragraph', content: [{ type: 'text', text: author + (date ? ' ' + date : '') + ':' }] },
+                  { type: 'paragraph', content: [{ type: 'text', text: message }] }],
+    }).run();
 
     return false;
 };
@@ -598,21 +561,34 @@ window.submitImage = function (el, paste) {
 
 /* Вставка изображения в форму */
 window.pasteImage = function (el) {
-    let field = $('.markItUpEditor');
-    let paste = '[img]' + $(el).find('img').data('source') + '[/img]';
-
-    field.focus().caret(paste);
+    var editor = window._tiptapActiveEditor;
+    var src = $(el).find('img').data('source');
+    if (editor && src) {
+        editor.chain().focus().setImage({ src: src }).run();
+    }
 };
 
 /* Удаление изображения из формы */
 window.cutImage = function (path) {
-    let field = $('.markItUpEditor');
+    var editor = window._tiptapActiveEditor;
+    if (!editor || !path) return;
 
-    if (field.length && field.val()) {
-        let text = field.val();
-        let cut = '[img]' + path + '[/img]';
-        field.val(text.replace(cut, ''));
-    }
+    var { state, dispatch } = editor.view;
+    var tr = state.tr;
+    var positions = [];
+
+    state.doc.descendants(function(node, pos) {
+        if (node.type.name === 'image' && node.attrs.src === path) {
+            positions.push({ pos: pos, size: node.nodeSize });
+        }
+    });
+
+    // Удаляем с конца чтобы позиции не съезжали
+    positions.reverse().forEach(function({ pos, size }) {
+        tr.delete(pos, pos + size);
+    });
+
+    if (tr.docChanged) dispatch(tr);
 };
 
 
@@ -782,3 +758,38 @@ window.checkLogin = function (el) {
 
     return false;
 };
+
+/* Анимация спойлера */
+document.addEventListener('click', e => {
+    const summary = e.target.closest('.block-spoiler > summary')
+    if (!summary) return
+    e.preventDefault()
+
+    const details = summary.parentElement
+    const content = summary.nextElementSibling
+    if (!content) return
+
+    if (!details.open) {
+        details.open = true
+        content.style.overflow = 'hidden'
+        content.style.height = '0'
+        content.style.transition = 'height 0.25s ease'
+        requestAnimationFrame(() => {
+            content.style.height = content.scrollHeight + 'px'
+            content.addEventListener('transitionend', () => {
+                content.style.cssText = ''
+            }, { once: true })
+        })
+    } else {
+        content.style.overflow = 'hidden'
+        content.style.height = content.scrollHeight + 'px'
+        content.style.transition = 'height 0.25s ease'
+        requestAnimationFrame(() => {
+            content.style.height = '0'
+            content.addEventListener('transitionend', () => {
+                content.style.cssText = ''
+                details.open = false
+            }, { once: true })
+        })
+    }
+})

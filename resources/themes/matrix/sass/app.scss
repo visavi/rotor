@@ -1,8 +1,3 @@
-// Fontawesome fonts path
-@use 'fa/scss/variables' with (
-  $font-path: "fa/webfonts",
-);
-
 // Bootstrap variables overrides — убираем всё округлённое и цветастое
 $font-family-sans-serif: 'Courier New', Courier, monospace;
 $font-size-base: 0.82rem;
@@ -466,14 +461,5 @@ blockquote, .blockquote {
 
 // ===== ИКОНКИ =====
 
-@import 'fa/scss/brands';
-@import 'fa/scss/regular';
-@import 'fa/scss/solid';
-@import 'fa/scss/fontawesome';
 
 @import 'bootstrap5-tags/tags';
-@import "@fancyapps/ui/dist/fancybox/fancybox.css";
-@import 'css/markitup';
-@import 'css/toastr';
-@import 'css/prettify';
-@import 'css/main';

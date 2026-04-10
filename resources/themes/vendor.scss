@@ -1,0 +1,19 @@
+// Shared vendor CSS — included in every theme
+// These libraries do not depend on Bootstrap SCSS variables
+
+// FontAwesome — configure font path via alias so Vite can resolve the files
+@use 'fa/scss/variables' with (
+  $font-path: "fa/webfonts",
+);
+
+@import 'fa/scss/brands';
+@import 'fa/scss/regular';
+@import 'fa/scss/solid';
+@import 'fa/scss/fontawesome';
+
+// UI libraries
+@import "@fancyapps/ui/dist/fancybox/fancybox.css";
+@import 'css/tiptap';
+@import 'css/toastr';
+@import 'css/prettify';
+@import 'css/main';

@@ -79,7 +79,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ bbCode($post->text) }}
+                        {{ renderHtml($post->text) }}
                     </div>
 
                     @include('app/_media_viewer', ['model' => $post])

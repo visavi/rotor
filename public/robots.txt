@@ -81,3 +81,6 @@ Disallow: /
 
 User-agent: GenomeCrawlerd
 Disallow: /
+
+User-agent: serpstatbot
+Disallow: /

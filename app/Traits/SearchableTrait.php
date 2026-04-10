@@ -96,6 +96,20 @@ trait SearchableTrait
             }
         }
 
+        /**
+         * TODO После перехода не теги
+         *
+         * $searchText = strip_tags($content);
+         * $searchText = html_entity_decode($searchText, ENT_QUOTES, 'UTF-8');
+         *
+         * // убираем символы которые мешают fulltext
+         * $searchText = preg_replace('/[<>{}\[\]|\\\\^~*?+\-()":;!@#$%\/=\'`]/u', ' ', $searchText);
+         *
+         * // схлопываем множественные пробелы
+         * $searchText = preg_replace('/\s+/u', ' ', $searchText);
+         * $searchText = trim($searchText);
+         */
+
         return preg_replace('/\[(.*?)]/', '', implode(' ', $values));
     }
 }

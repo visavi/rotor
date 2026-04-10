@@ -280,11 +280,10 @@ Route::controller(OfferController::class)
 
 /* Ajax */
 Route::controller(AjaxController::class)
-    ->middleware(['check.user', 'check.ajax'])
+    ->middleware(['check.user'])
     ->prefix('ajax')
     ->group(function () {
         Route::get('/getstickers', 'getStickers');
-        Route::post('/bbcode', 'bbCode');
         Route::post('/delcomment', 'delComment');
         Route::post('/rating', 'rating');
         Route::post('/vote', 'vote');

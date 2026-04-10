@@ -10,7 +10,8 @@
     <link rel="canonical" href="@yield('canonical', request()->url())">
     <link rel="icon" href="/favicon.ico">
     <link href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml" rel="alternate">
-    @vite('resources/themes/waphack/sass/app.scss')
+    @vite('resources/themes/vendor.scss')
+    @vite('resources/themes/waphack/js/app.js')
     @stack('styles')
     @hook('head')
 </head>
@@ -34,7 +35,6 @@
 </div>
 
 @include('themes/waphack/footer')
-@vite('resources/themes/waphack/js/app.js')
 @stack('scripts')
 @hook('footer')
 </body>
