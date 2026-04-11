@@ -303,8 +303,12 @@ blockquote > footer {
     margin: 0;
     padding: 0;
     font-size: 85%;
-    font-style: normal;
+    font-style: italic;
     opacity: 0.7;
+}
+
+blockquote > footer::before {
+    content: "— ";
 }
 
 blockquote::before {
@@ -410,6 +414,51 @@ blockquote::before {
 .ProseMirror-selectednode {
     outline: 2px solid var(--bs-primary);
     border-radius: 4px;
+}
+
+.ProseMirror-selectednode .block-video,
+.ProseMirror-selectednode .block-image {
+    outline: 2px solid var(--bs-primary);
+    border-radius: 4px;
+}
+
+.ProseMirror-selectednode:has(.block-video),
+.ProseMirror-selectednode:has(.block-image) {
+    outline: none;
+}
+
+/* ── Mention ──────────────────────────────────────────────────────────────── */
+
+a.mention {
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+
+a.mention:hover {
+    text-decoration: underline;
+}
+
+.mention-dropdown {
+    z-index: 1000;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+    min-width: 160px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.mention-item {
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: .9em;
+}
+
+.mention-item:hover,
+.mention-item-selected {
+    background: var(--bs-primary);
+    color: #fff;
 }
 
 /* Fix: при node selection браузер делает текст белым через ::selection */

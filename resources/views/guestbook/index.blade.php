@@ -48,7 +48,7 @@
                     <div class="flex-grow-1">
                         @if ($post->user_id)
                             {{ $post->user->getProfile() }}
-                            <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                            <small class="section-date text-muted fst-italic" data-date="{{ dateFixed($post->created_at, original: true) }}">{{ dateFixed($post->created_at) }}</small><br>
                             <small class="fst-italic">{{ $post->user->getStatus() }}</small>
                         @else
                             @if ($post->guest_name)
@@ -56,7 +56,7 @@
                             @else
                                 <span class="section-author fw-bold" data-login="{{ setting('guestsuser') }}">{{ setting('guestsuser') }}</span>
                             @endif
-                            <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                            <small class="section-date text-muted fst-italic" data-date="{{ dateFixed($post->created_at, original: true) }}">{{ dateFixed($post->created_at) }}</small><br>
                             <small class="fst-italic">{{ setting('guestsuser') }}</small>
                         @endif
                     </div>
@@ -109,6 +109,5 @@
     @include('guestbook/_form')
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /
-    <a href="/tags">{{ __('main.tags') }}</a>  /
     <a href="/rules">{{ __('main.rules') }}</a>
 @stop

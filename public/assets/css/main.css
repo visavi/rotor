@@ -33,6 +33,10 @@
     margin-bottom: 0.1rem;
 }
 
+.section-message p:empty {
+    min-height: 1em;
+}
+
 .section-title {
     font-size: 1.1rem;
     font-weight: 600;

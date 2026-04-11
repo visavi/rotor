@@ -5,6 +5,8 @@ import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import { Image } from '@tiptap/extension-image'
 import { Placeholder } from '@tiptap/extension-placeholder'
+import { Mention } from '@tiptap/extension-mention'
+import { suggestion } from './tiptap-mention-suggestion.js'
 
 const BackgroundColor = Extension.create({
     name: 'backgroundColor',
@@ -357,6 +359,7 @@ function makeStickerPicker(editor) {
                     e.preventDefault()
                     e.stopPropagation()
                     editor.chain().focus().insertSticker({ src: name, alt: code }).run()
+                    editor.commands.insertContent(' ')
                     panel.classList.remove('is-open')
                 })
                 panel.appendChild(img)
@@ -581,10 +584,23 @@ function buildToolbar(editor) {
         }
     }, () => editor.isActive('link'))
 
-    btn('fa-image', 'Изображение', () => {
+    btn('fa-image', 'Изображение', async () => {
         const url = prompt('URL изображения:')
         if (!validateUrl(url)) return
-        editor.chain().focus().setImage({ src: url }).run()
+
+        const imagePattern = /\.(jpe?g|png|gif|webp|bmp|svg)(\?.*)?$/i
+        if (imagePattern.test(url)) {
+            editor.chain().focus().setImage({ src: url }).run()
+            return
+        }
+
+        const data = await fetch('/ajax/resolve-image?url=' + encodeURIComponent(url)).then(r => r.json())
+        if (data.image) {
+            editor.chain().focus().setImage({ src: data.image }).run()
+        } else {
+            editor.chain().focus().setImage({ src: url }).run()
+            toastr.warning('Прямая ссылка на картинку не найдена')
+        }
     })
 
     btn('fa-play-circle', 'Видео (YouTube, VK, Rutube, Vimeo, Coub, Ok)', () => {
@@ -706,6 +722,13 @@ function initEditor(textarea) {
             Spoiler,
             Hide,
             Sticker,
+            Mention.configure({
+                HTMLAttributes: { class: 'mention' },
+                renderHTML({ options, node }) {
+                    return ['a', mergeAttributes(options.HTMLAttributes, { href: '/users/' + node.attrs.id }), '@' + node.attrs.id]
+                },
+                suggestion,
+            }),
         ],
         content: textarea.value || '',
         onUpdate({ editor }) {
@@ -752,6 +775,8 @@ function initEditor(textarea) {
         if (e.target === editorEl) editor.commands.focus('end')
     })
 
+
+    window._tiptapActiveEditor = editor
     editor.on('focus', () => { window._tiptapActiveEditor = editor })
 
     const toolbar = buildToolbar(editor)
@@ -760,8 +785,8 @@ function initEditor(textarea) {
     const counterEl = textarea.parentNode.querySelector('.js-textarea-counter')
     function updateCounter() {
         if (!counterEl) return
-        // Считаем видимые символы, а не HTML
-        const len = editor.isEmpty ? 0 : editor.getText({ blockSeparator: '\n' }).length
+        // Считаем как PHP strip_tags — без разделителей между блоками
+        const len = editor.isEmpty ? 0 : editor.state.doc.textContent.length
         counterEl.textContent = maxLength ? `${len} / ${maxLength}` : (len || '')
         if (maxLength) counterEl.classList.toggle('text-danger', len > maxLength)
     }

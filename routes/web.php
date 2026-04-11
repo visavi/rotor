@@ -284,6 +284,7 @@ Route::controller(AjaxController::class)
     ->prefix('ajax')
     ->group(function () {
         Route::get('/getstickers', 'getStickers');
+        Route::get('/resolve-image', 'resolveImage');
         Route::post('/delcomment', 'delComment');
         Route::post('/rating', 'rating');
         Route::post('/vote', 'vote');
@@ -464,6 +465,7 @@ Route::controller(UserController::class)
         Route::match(['get', 'post'], '/profile', 'profile')->name('profile');
         Route::match(['get', 'post'], '/settings', 'setting')->name('settings');
         Route::post('/check-login', 'checkLogin')->name('check-login');
+        Route::get('/search-users', 'searchUsers')->name('search-users');
     });
 
 Route::controller(RecoveryController::class)

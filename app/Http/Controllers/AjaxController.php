@@ -382,11 +382,35 @@ class AjaxController extends Controller
         $stickers = Sticker::query()
             ->orderBy(DB::raw('CHAR_LENGTH(code)'))
             ->orderBy('name')
-            ->get(['code', 'name'])
-            ->map(fn ($s) => ['code' => $s->code, 'name' => url($s->name)])
-            ->toArray();
+            ->get(['code', 'name']);
 
         return response()->json($stickers);
+    }
+
+    /**
+     * Резолв прямой ссылки на картинку через og:image
+     */
+    public function resolveImage(Request $request): JsonResponse
+    {
+        $url = filter_var((string) $request->input('url'), FILTER_VALIDATE_URL);
+
+        if (! $url) {
+            return response()->json(['image' => null]);
+        }
+
+        $ctx = stream_context_create(['http' => [
+            'timeout'         => 5,
+            'follow_location' => true,
+            'user_agent'      => 'Mozilla/5.0',
+        ]]);
+
+        $html = @file_get_contents($url, false, $ctx);
+
+        if ($html && preg_match('/<meta[^>]+property=["\']og:image["\'][^>]+content=["\'](https?:[^"\']+)["\']/i', $html, $m)) {
+            return response()->json(['image' => $m[1]]);
+        }
+
+        return response()->json(['image' => null]);
     }
 
     /**

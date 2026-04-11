@@ -1,0 +1,188 @@
+/* -------------------------------------------------------------------
+// markItUp! Universal MarkUp Engine, JQuery plugin
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.markItUp * {
+    margin:0; padding:0;
+    outline:none;
+}
+
+.markItUp a:link,
+.markItUp a:visited {
+    text-decoration:none;
+    border: none;
+}
+
+.markItUpEditor {
+    padding:5px;
+    clear:both;
+    display:block;
+    overflow:auto;
+}
+
+.markItUpPreview {
+    overflow: auto;
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px;
+    height: 150px;
+    color: var(--bs-body-color);
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: 2px solid var(--bs-border-color);
+    border-radius: 4px;
+}
+
+/***************************************************************************************/
+/* first row of buttons */
+.markItUpHeader ul li {
+    list-style:none;
+    float:left;
+    position:relative;
+}
+.markItUpHeader ul li:hover > ul {
+    display:block;
+    background-color: var(--base-bg);
+    z-index: 1;
+}
+
+.markItUpHeader ul .markItUpDropMenu:after {
+    content: "\f0d7";
+    font: var(--fa-font-solid);
+    font-size: 10px;
+}
+
+.markItUpHeader ul .markItUpDropMenu li {
+    margin-right:0;
+}
+/* next rows of buttons */
+.markItUpHeader ul ul {
+    display:none;
+    position:absolute;
+    top:22px; left:0;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 5px;
+}
+.markItUpHeader ul ul li {
+    float:none;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.markItUpHeader ul ul .markItUpDropMenu:after {
+    content: "\f0da";
+    font: var(--fa-font-solid);
+}
+.markItUpHeader ul .markItUpSeparator {
+    margin: 5px;
+    width: 1px;
+    height: 20px;
+    overflow: hidden;
+    background-color: #CCC;
+    text-indent: -10000px;
+}
+.markItUpHeader ul ul .markItUpSeparator {
+    width:auto; height:1px;
+    margin:0;
+}
+/* next rows of buttons */
+.markItUpHeader ul ul ul {
+    position:absolute;
+    top:-1px; left:150px;
+}
+.markItUpHeader ul ul ul li {
+    float:none;
+}
+.markItUpHeader ul a {
+    display:inline-block;
+    background-repeat:no-repeat;
+    padding:3px;
+}
+.markItUpHeader ul ul a {
+    display:block;
+    text-indent:0;
+    width:100px;
+    padding: 2px 5px;
+    background-position:2px 50%;
+}
+.markItUpHeader ul ul a:hover  {
+    background-color: var(--bs-tertiary-bg);
+}
+
+/* ------------------------------------------------------------------- */
+.markItUp .markItUpButton a {
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--bs-body-color);
+}
+
+.markItUp .bb-color ul {
+    width: 80px;
+    padding: 1px;
+}
+.markItUp .bb-color  li {
+    border: 1px solid var(--bs-border-color);
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+.markItUp .bb-color ul a {
+    width: 25px;
+    height: 25px;
+    text-indent: -10000px;
+}
+
+.markItUp .bb-color .col1-1 a {
+    background: #ffd700;
+}
+.markItUp .bb-color .col1-2 a {
+    background: #ffa500;
+}
+.markItUp .bb-color .col1-3 a {
+    background: #ff0000;
+}
+
+.markItUp .bb-color .col2-1 a {
+    background: #0000ff;
+}
+.markItUp .bb-color .col2-2 a {
+    background: #800080;
+}
+.markItUp .bb-color .col2-3 a {
+    background: #00cc00;
+}
+
+.markItUp .bb-color .col3-1 a {
+    background: #ff00ff;
+}
+.markItUp .bb-color .col3-2 a {
+    background: #808080;
+}
+.markItUp .bb-color .col3-3 a {
+    background: #00ffff;
+}
+
+.markItUp .bb-sticker a:after {
+    content: "\f0d7";
+    font: var(--fa-font-solid);
+    font-size: 10px;
+    margin-left: 3px;
+}
+
+@media (max-width: 768px) {
+    .markItUpHeader ul {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-bottom: 3px;
+    }
+
+    .markItUpDropMenu ul {
+        display: none !important;
+    }
+}

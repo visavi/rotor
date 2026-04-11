@@ -1363,7 +1363,7 @@ function renderHtml(?string $text): HtmlString
 {
     $html = (string) $text;
 
-    if (! auth()->check() && str_contains($html, 'block-hidden')) {
+    if (str_contains($html, 'block-hidden') && ! auth()->check()) {
         $html = preg_replace(
             '/<div class="block-hidden">.*?<\/div>/s',
             '<div class="block-hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',

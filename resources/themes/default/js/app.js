@@ -4,6 +4,8 @@ import 'jquery-mask-plugin';
 import 'bootstrap';
 import 'js/globals.js';
 import 'js/translate.js';
+import 'js/markitup.js';
+import 'js/markitup-set.js';
 import 'js/tiptap-editor.js';
 import 'js/prettify.js';
 import 'js/main.js';

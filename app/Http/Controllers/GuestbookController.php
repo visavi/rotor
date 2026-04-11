@@ -95,7 +95,7 @@ class GuestbookController extends Controller
             clearCache('statGuestbook');
             $flood->saveState();
 
-            sendNotify($msg, route('guestbook.index', absolute: false), __('index.guestbook'));
+            sendNotify(strip_tags($msg), route('guestbook.index', absolute: false), __('index.guestbook'));
 
             return redirect()
                 ->route('guestbook.index')

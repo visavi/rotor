@@ -4,7 +4,7 @@
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('guestbook_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                <textarea class="form-control tiptap" maxlength="{{ setting('guestbook_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>

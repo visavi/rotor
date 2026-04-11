@@ -525,4 +525,28 @@ class UserController extends Controller
             'message' => current($validator->getErrors()),
         ]);
     }
+
+    /**
+     * Поиск пользователей для упоминаний
+     */
+    public function searchUsers(Request $request): JsonResponse
+    {
+        $query = (string) $request->input('query', '');
+
+        if (mb_strlen($query) < 2) {
+            return response()->json();
+        }
+
+        $users = User::query()
+            ->where('login', 'like', $query . '%')
+            ->where('point', '>', 0)
+            ->orderBy('login')
+            ->limit(10)
+            ->get(['login', 'name']);
+
+        return response()->json($users->map(fn ($u) => [
+            'login' => $u->login,
+            'name'  => $u->name,
+        ]));
+    }
 }
