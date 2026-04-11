@@ -207,16 +207,20 @@ window.postReply = function (el) {
     postJump();
 
     var $authorEl = $(el).closest('.section').find('.section-author');
-    if (!$authorEl.is('a')) return false;
+    var author    = $authorEl.data('login') || $authorEl.text().trim();
+    if (!author) return false;
 
-    var author = $authorEl.data('login');
     var editor = window._tiptapActiveEditor;
 
     if (editor) {
-        editor.chain().focus().insertContent([
-            { type: 'mention', attrs: { id: author, label: author } },
-            { type: 'text', text: ' ' },
-        ]).run();
+        if ($authorEl.is('a')) {
+            editor.chain().focus().insertContent([
+                { type: 'mention', attrs: { id: author, label: author } },
+                { type: 'text', text: ' ' },
+            ]).run();
+        } else {
+            editor.chain().focus().insertContent({ type: 'text', text: author + ', ' }).run();
+        }
     } else {
         var field = $('.markItUpEditor');
         var $lastSymbol = field.val().slice(field.val().length - 1);
@@ -233,7 +237,7 @@ window.postQuote = function (el) {
 
     var post      = $(el).closest('.section');
     var $authorEl = post.find('.section-author');
-    var author    = $authorEl.is('a') ? $authorEl.data('login') : null;
+    var author    = $authorEl.data('login') || $authorEl.text().trim() || null;
     var $dateEl   = post.find('.section-date').first();
     var date      = ($dateEl.data('date') || $dateEl.text()).trim();
     var text      = post.find('.section-message').clone();
@@ -253,7 +257,7 @@ window.postQuote = function (el) {
         const quoteContent = [
             {
                 type: 'blockquote',
-                attrs: { author: author ? '@' + author + (date ? ' ' + date : '') : (date || null) },
+                attrs: { author: author ? ($authorEl.is('a') ? '@' : '') + author + (date ? ' ' + date : '') : (date || null) },
                 content: [{ type: 'paragraph', content: [{ type: 'text', text: message }] }],
             },
             { type: 'paragraph' },

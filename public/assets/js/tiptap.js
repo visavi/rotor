@@ -7,6 +7,7 @@ import { Image } from '@tiptap/extension-image'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Mention } from '@tiptap/extension-mention'
 import { suggestion } from './tiptap-mention-suggestion.js'
+import { trans as __ } from './translate.js'
 
 const BackgroundColor = Extension.create({
     name: 'backgroundColor',
@@ -256,7 +257,7 @@ function rgbToHex(html) {
 function validateUrl(url) {
     if (!url) return false
     if (!/^https?:\/\//i.test(url)) {
-        alert('Введите корректный URL (должен начинаться с http:// или https://)')
+        alert(__('editor2.invalid_url'))
         return false
     }
     return true
@@ -275,35 +276,35 @@ function positionDropdown(btn, menu) {
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 
 const COLORS = [
-    { color: '#6b7280', title: 'Серый'      },
-    { color: '#f59e0b', title: 'Жёлтый'    },
-    { color: '#f97316', title: 'Оранжевый' },
-    { color: '#ef4444', title: 'Красный'   },
-    { color: '#3b82f6', title: 'Синий'     },
-    { color: '#8b5cf6', title: 'Фиолетовый'},
-    { color: '#22c55e', title: 'Зелёный'   },
-    { color: '#ec4899', title: 'Розовый'   },
-    { color: '#06b6d4', title: 'Голубой'   },
+    { color: '#6b7280' },
+    { color: '#f59e0b' },
+    { color: '#f97316' },
+    { color: '#ef4444' },
+    { color: '#3b82f6' },
+    { color: '#8b5cf6' },
+    { color: '#22c55e' },
+    { color: '#ec4899' },
+    { color: '#06b6d4' },
 ]
 
 const BG_COLORS = [
-    { color: '#6b7280', title: 'Серый'      },
-    { color: '#ca8a04', title: 'Жёлтый'    },
-    { color: '#ea580c', title: 'Оранжевый' },
-    { color: '#dc2626', title: 'Красный'   },
-    { color: '#2563eb', title: 'Синий'     },
-    { color: '#7c3aed', title: 'Фиолетовый'},
-    { color: '#16a34a', title: 'Зелёный'   },
-    { color: '#db2777', title: 'Розовый'   },
-    { color: '#0891b2', title: 'Голубой'   },
+    { color: '#6b7280' },
+    { color: '#ca8a04' },
+    { color: '#ea580c' },
+    { color: '#dc2626' },
+    { color: '#2563eb' },
+    { color: '#7c3aed' },
+    { color: '#16a34a' },
+    { color: '#db2777' },
+    { color: '#0891b2' },
 ]
 
 const SIZES = [
-    { label: 'Очень мелкий',  value: '0.7em'  },
-    { label: 'Мелкий',        value: '0.85em' },
-    { label: 'Нормальный',    value: null      },
-    { label: 'Крупный',       value: '1.3em'  },
-    { label: 'Очень крупный', value: '1.6em'  },
+    { get label() { return __('editor2.size_xs') }, value: '0.7em'  },
+    { get label() { return __('editor2.size_sm') }, value: '0.85em' },
+    { get label() { return __('editor2.size_md') }, value: null      },
+    { get label() { return __('editor2.size_lg') }, value: '1.3em'  },
+    { get label() { return __('editor2.size_xl') }, value: '1.6em'  },
 ]
 
 document.addEventListener('click', () => {
@@ -339,7 +340,7 @@ function makeStickerPicker(editor) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'tiptap-btn'
-    btn.title = 'Стикер'
+    btn.title = __('editor2.sticker')
     btn.innerHTML = '<i class="fas fa-smile"></i>'
 
     const panel = document.createElement('div')
@@ -489,63 +490,63 @@ function buildToolbar(editor) {
 
     function dropdown(el) { bar.appendChild(el) }
 
-    btn('fa-bold',          'Жирный (Ctrl+B)',  () => editor.chain().focus().toggleBold().run(),      () => editor.isActive('bold'))
-    btn('fa-italic',        'Курсив (Ctrl+I)',   () => editor.chain().focus().toggleItalic().run(),    () => editor.isActive('italic'))
-    btn('fa-underline',     'Подчёркнутый',      () => editor.chain().focus().toggleUnderline().run(), () => editor.isActive('underline'))
-    btn('fa-strikethrough', 'Зачёркнутый',       () => editor.chain().focus().toggleStrike().run(),   () => editor.isActive('strike'))
+    btn('fa-bold',          __('editor2.bold'),      () => editor.chain().focus().toggleBold().run(),      () => editor.isActive('bold'))
+    btn('fa-italic',        __('editor2.italic'),    () => editor.chain().focus().toggleItalic().run(),    () => editor.isActive('italic'))
+    btn('fa-underline',     __('editor2.underline'), () => editor.chain().focus().toggleUnderline().run(), () => editor.isActive('underline'))
+    btn('fa-strikethrough', __('editor2.strike'),    () => editor.chain().focus().toggleStrike().run(),   () => editor.isActive('strike'))
     sep()
 
     const resetSwatch = document.createElement('button')
     resetSwatch.type = 'button'
     resetSwatch.className = 'tiptap-color-swatch tiptap-color-reset'
-    resetSwatch.title = 'Сбросить цвет'
+    resetSwatch.title = __('editor2.reset_color')
     resetSwatch.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().unsetColor().run() })
 
     const customColorInput = document.createElement('input')
     customColorInput.type = 'color'
-    customColorInput.title = 'Свой цвет'
+    customColorInput.title = __('editor2.custom_color')
     customColorInput.className = 'tiptap-color-custom'
     customColorInput.addEventListener('input', () => {
         editor.chain().focus().setColor(customColorInput.value).run()
     })
 
-    const colorSwatches = [...COLORS.map(({ color, title }) => {
+    const colorSwatches = [...COLORS.map(({ color }) => {
         const el = document.createElement('button')
         el.type = 'button'
         el.className = 'tiptap-color-swatch'
-        el.title = title
+        el.title = color
         el.style.background = color
         el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setColor(color).run() })
         return el
     }), customColorInput, resetSwatch]
-    const colorDd = makeDropdown('fa-palette', 'Цвет текста', colorSwatches, 'tiptap-colors-menu')
+    const colorDd = makeDropdown('fa-palette', __('editor2.color'), colorSwatches, 'tiptap-colors-menu')
     dropdown(colorDd)
     activeButtons.push({ el: colorDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').color })
 
     const resetBgSwatch = document.createElement('button')
     resetBgSwatch.type = 'button'
     resetBgSwatch.className = 'tiptap-color-swatch tiptap-color-reset'
-    resetBgSwatch.title = 'Сбросить фон'
+    resetBgSwatch.title = __('editor2.reset_bg')
     resetBgSwatch.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().unsetHighlight().run() })
 
     const customBgInput = document.createElement('input')
     customBgInput.type = 'color'
-    customBgInput.title = 'Свой цвет фона'
+    customBgInput.title = __('editor2.custom_bg')
     customBgInput.className = 'tiptap-color-custom'
     customBgInput.addEventListener('input', () => {
         editor.chain().focus().setHighlight({ color: customBgInput.value }).run()
     })
 
-    const bgSwatches = [...BG_COLORS.map(({ color, title }) => {
+    const bgSwatches = [...BG_COLORS.map(({ color }) => {
         const el = document.createElement('button')
         el.type = 'button'
         el.className = 'tiptap-color-swatch'
-        el.title = title
+        el.title = color
         el.style.background = color
         el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setHighlight({ color }).run() })
         return el
     }), customBgInput, resetBgSwatch]
-    const bgDd = makeDropdown('fa-fill-drip', 'Цвет фона', bgSwatches, 'tiptap-colors-menu')
+    const bgDd = makeDropdown('fa-fill-drip', __('editor2.bg_color'), bgSwatches, 'tiptap-colors-menu')
     dropdown(bgDd)
     activeButtons.push({ el: bgDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').backgroundColor })
 
@@ -561,15 +562,15 @@ function buildToolbar(editor) {
         })
         return el
     })
-    const sizeDd = makeDropdown('fa-font', 'Размер шрифта', sizeItems)
+    const sizeDd = makeDropdown('fa-font', __('editor2.font_size'), sizeItems)
     dropdown(sizeDd)
     activeButtons.push({ el: sizeDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').fontSize })
     sep()
 
     const alignItems = [
-        { icon: 'fa-align-left',   title: 'По левому краю',  align: 'left'   },
-        { icon: 'fa-align-center', title: 'По центру',        align: 'center' },
-        { icon: 'fa-align-right',  title: 'По правому краю', align: 'right'  },
+        { icon: 'fa-align-left',   title: __('editor2.align_left'),   align: 'left'   },
+        { icon: 'fa-align-center', title: __('editor2.align_center'), align: 'center' },
+        { icon: 'fa-align-right',  title: __('editor2.align_right'),  align: 'right'  },
     ].map(({ icon, title, align }) => {
         const el = document.createElement('button')
         el.type = 'button'
@@ -578,15 +579,15 @@ function buildToolbar(editor) {
         el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setTextAlign(align).run() })
         return el
     })
-    const alignDd = makeDropdown('fa-align-left', 'Выравнивание', alignItems)
+    const alignDd = makeDropdown('fa-align-left', __('editor2.alignment'), alignItems)
     dropdown(alignDd)
     activeButtons.push({ el: alignDd._dropdownBtn, getActive: () =>
         editor.isActive({ textAlign: 'center' }) || editor.isActive({ textAlign: 'right' })
     })
 
     const listItems = [
-        { icon: 'fa-list-ul', title: 'Маркированный список', action: () => editor.chain().focus().toggleBulletList().run()  },
-        { icon: 'fa-list-ol', title: 'Нумерованный список',  action: () => editor.chain().focus().toggleOrderedList().run() },
+        { icon: 'fa-list-ul', title: __('editor2.bullet_list'),  action: () => editor.chain().focus().toggleBulletList().run()  },
+        { icon: 'fa-list-ol', title: __('editor2.ordered_list'), action: () => editor.chain().focus().toggleOrderedList().run() },
     ].map(({ icon, title, action }) => {
         const el = document.createElement('button')
         el.type = 'button'
@@ -595,23 +596,23 @@ function buildToolbar(editor) {
         el.addEventListener('mousedown', e => { e.preventDefault(); action() })
         return el
     })
-    const listDd = makeDropdown('fa-list-ul', 'Списки', listItems)
+    const listDd = makeDropdown('fa-list-ul', __('editor2.lists'), listItems)
     dropdown(listDd)
     activeButtons.push({ el: listDd._dropdownBtn, getActive: () =>
         editor.isActive('bulletList') || editor.isActive('orderedList')
     })
     sep()
 
-    btn('fa-link', 'Ссылка', () => {
+    btn('fa-link', __('editor2.link'), () => {
         const existing = editor.getAttributes('link').href || ''
         const { from, to } = editor.state.selection
         const selected = editor.state.doc.textBetween(from, to, '')
-        const url = prompt('URL ссылки:', existing || selected)
+        const url = prompt(__('editor2.url_link') + ':', existing || selected)
         if (!validateUrl(url)) return
         if (selected || existing) {
             editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: '_blank' }).run()
         } else {
-            const placeholder = 'Текст ссылки...'
+            const placeholder = __('editor2.link_text')
             editor.chain().focus()
                 .insertContent(`<a href="${url}" target="_blank">${placeholder}</a>`)
                 .run()
@@ -621,8 +622,8 @@ function buildToolbar(editor) {
         }
     }, () => editor.isActive('link'))
 
-    btn('fa-image', 'Изображение', async () => {
-        const url = prompt('URL изображения:')
+    btn('fa-image', __('editor2.image'), async () => {
+        const url = prompt(__('editor2.url_image') + ':')
         if (!validateUrl(url)) return
 
         const imagePattern = /\.(jpe?g|png|gif|webp|bmp|svg)(\?.*)?$/i
@@ -636,45 +637,45 @@ function buildToolbar(editor) {
             editor.chain().focus().setImage({ src: data.image }).run()
         } else {
             editor.chain().focus().setImage({ src: url }).run()
-            toastr.warning('Прямая ссылка на картинку не найдена')
+            toastr.warning(__('editor2.image_not_found'))
         }
     })
 
-    btn('fa-play-circle', 'Видео (YouTube, VK, Rutube, Vimeo, Coub, Ok)', () => {
-        const url = prompt('URL видео:')
+    btn('fa-play-circle', __('editor2.video'), () => {
+        const url = prompt(__('editor2.url_video') + ':')
         if (!validateUrl(url)) return
         editor.chain().focus().insertVideo(url).run()
     })
 
-    btn('fa-music', 'Аудио (mp3, ogg, wav)', () => {
-        const url = prompt('URL аудио:')
+    btn('fa-music', __('editor2.audio'), () => {
+        const url = prompt(__('editor2.url_audio') + ':')
         if (!validateUrl(url)) return
         editor.chain().focus().insertAudio(url).run()
     })
     sep()
 
-    btn('fa-plus-square', 'Спойлер', () => {
+    btn('fa-plus-square', __('editor2.spoiler'), () => {
         if (editor.isActive('spoiler')) {
             editor.chain().focus().lift('spoiler').run()
         } else {
-            const title = prompt('Название спойлера:', 'Спойлер')
-            if (title !== null) editor.chain().focus().insertSpoiler(title || 'Спойлер').run()
+            const title = prompt(__('editor2.spoiler_title') + ':', __('editor2.spoiler'))
+            if (title !== null) editor.chain().focus().insertSpoiler(title || __('editor2.spoiler')).run()
         }
     }, () => editor.isActive('spoiler'))
-    btn('fa-eye-slash', 'Скрытый текст (только для авторизованных)',
+    btn('fa-eye-slash', __('editor2.hide'),
         () => editor.isActive('hide')
             ? editor.chain().focus().lift('hide').run()
             : editor.chain().focus().insertHide().run(),
         () => editor.isActive('hide'))
-    btn('fa-quote-right', 'Цитата', () => {
+    btn('fa-quote-right', __('editor2.quote'), () => {
         if (editor.isActive('blockquote')) {
             editor.chain().focus().toggleBlockquote().run()
         } else {
-            const author = prompt('Автор цитаты (необязательно):')
+            const author = prompt(__('editor2.quote_author') + ':')
             if (author !== null) editor.chain().focus().toggleBlockquote(author || null).run()
         }
     }, () => editor.isActive('blockquote'))
-    btn('fa-code', 'Блок кода',
+    btn('fa-code', __('editor2.code_block'),
         () => editor.chain().focus().toggleCodeBlock().run(),
         () => editor.isActive('codeBlock'))
     sep()
@@ -682,7 +683,7 @@ function buildToolbar(editor) {
     dropdown(makeStickerPicker(editor))
     sep()
 
-    btn('fa-eraser', 'Очистить форматирование',
+    btn('fa-eraser', __('editor2.clear_format'),
         () => editor.chain().focus().unsetAllMarks().clearNodes().run())
 
     function updateActive() {
@@ -822,8 +823,7 @@ function initEditor(textarea) {
     const counterEl = textarea.parentNode.querySelector('.js-textarea-counter')
     function updateCounter() {
         if (!counterEl) return
-        // Считаем как PHP strip_tags — без разделителей между блоками
-        const len = editor.isEmpty ? 0 : editor.state.doc.textContent.length
+        const len = editor.isEmpty ? 0 : editor.state.doc.textBetween(0, editor.state.doc.content.size, '', () => ' ').length
         counterEl.textContent = maxLength ? `${len} / ${maxLength}` : (len || '')
         if (maxLength) counterEl.classList.toggle('text-danger', len > maxLength)
     }
