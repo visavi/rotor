@@ -202,24 +202,64 @@
 
 /* ── Sticker picker ──────────────────────────────────────────────────────── */
 
-.tiptap-dropdown-menu:has(> img),
-.tiptap-dropdown-menu:has(> .tiptap-sticker-loading) {
+.tiptap-sticker-panel {
     width: 360px;
-    max-height: 360px;
+    padding: 0;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+
+.tiptap-sticker-panel.is-open {
+    display: flex;
+}
+
+.tiptap-sticker-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 2px;
+    padding: 6px;
+    border-bottom: 1px solid var(--bs-border-color);
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.tiptap-sticker-tab {
+    padding: 3px 10px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--bs-body-color);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.1s, color 0.1s;
+}
+
+.tiptap-sticker-tab:hover {
+    background-color: var(--bs-secondary-bg);
+}
+
+.tiptap-sticker-tab.is-active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+.tiptap-sticker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+    max-height: 300px;
     overflow-y: auto;
     scrollbar-width: thin;
 }
 
-.tiptap-dropdown-menu.is-open:has(> img),
-.tiptap-dropdown-menu.is-open:has(> .tiptap-sticker-loading) {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 58px);
-    gap: 4px;
-}
-
-.tiptap-dropdown-menu img {
+.tiptap-sticker-grid img {
     max-width: 50px;
     max-height: 50px;
+    width: auto;
+    height: auto;
     object-fit: contain;
     cursor: pointer;
     border-radius: 4px;
@@ -227,12 +267,11 @@
     transition: background-color 0.1s;
 }
 
-.tiptap-dropdown-menu img:hover {
+.tiptap-sticker-grid img:hover {
     background-color: var(--bs-secondary-bg);
 }
 
 .tiptap-sticker-loading {
-    grid-column: 1 / -1;
     padding: 12px;
     text-align: center;
     opacity: 0.5;

@@ -275,27 +275,27 @@ function positionDropdown(btn, menu) {
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 
 const COLORS = [
-    { color: '#808080', title: 'Серый'      },
-    { color: '#ffd700', title: 'Жёлтый'    },
-    { color: '#ffa500', title: 'Оранжевый' },
-    { color: '#ff0000', title: 'Красный'   },
-    { color: '#0000ff', title: 'Синий'     },
-    { color: '#800080', title: 'Фиолетовый'},
-    { color: '#00cc00', title: 'Зелёный'   },
-    { color: '#ff00ff', title: 'Пурпурный' },
-    { color: '#00ffff', title: 'Голубой'   },
+    { color: '#6b7280', title: 'Серый'      },
+    { color: '#f59e0b', title: 'Жёлтый'    },
+    { color: '#f97316', title: 'Оранжевый' },
+    { color: '#ef4444', title: 'Красный'   },
+    { color: '#3b82f6', title: 'Синий'     },
+    { color: '#8b5cf6', title: 'Фиолетовый'},
+    { color: '#22c55e', title: 'Зелёный'   },
+    { color: '#ec4899', title: 'Розовый'   },
+    { color: '#06b6d4', title: 'Голубой'   },
 ]
 
 const BG_COLORS = [
-    { color: '#2f2f2f', title: 'Серый'      },
-    { color: '#6b6524', title: 'Жёлтый'    },
-    { color: '#5c3b23', title: 'Оранжевый' },
-    { color: '#743e42', title: 'Красный'   },
-    { color: '#6e92aa', title: 'Синий'     },
-    { color: '#583e74', title: 'Фиолетовый'},
-    { color: '#509568', title: 'Зелёный'   },
-    { color: '#4e2c3c', title: 'Розовый'   },
-    { color: '#4a3228', title: 'Коричневый'},
+    { color: '#6b7280', title: 'Серый'      },
+    { color: '#ca8a04', title: 'Жёлтый'    },
+    { color: '#ea580c', title: 'Оранжевый' },
+    { color: '#dc2626', title: 'Красный'   },
+    { color: '#2563eb', title: 'Синий'     },
+    { color: '#7c3aed', title: 'Фиолетовый'},
+    { color: '#16a34a', title: 'Зелёный'   },
+    { color: '#db2777', title: 'Розовый'   },
+    { color: '#0891b2', title: 'Голубой'   },
 ]
 
 const SIZES = [
@@ -310,6 +310,12 @@ document.addEventListener('click', () => {
     document.querySelectorAll('.tiptap-dropdown-menu.is-open')
         .forEach(m => m.classList.remove('is-open'))
 })
+
+document.addEventListener('scroll', () => {
+    document.querySelectorAll('.tiptap-dropdown-menu.is-open').forEach(m => {
+        if (m._anchorBtn) positionDropdown(m._anchorBtn, m)
+    })
+}, true)
 
 // ─── Sticker picker ───────────────────────────────────────────────────────────
 
@@ -337,10 +343,28 @@ function makeStickerPicker(editor) {
     btn.innerHTML = '<i class="fas fa-smile"></i>'
 
     const panel = document.createElement('div')
-    panel.className = 'tiptap-dropdown-menu'
+    panel.className = 'tiptap-dropdown-menu tiptap-sticker-panel'
     document.body.appendChild(panel)
 
     let loaded = false
+
+    function renderStickers(stickers, grid) {
+        grid.innerHTML = ''
+        stickers.forEach(({ name, code }) => {
+            const img = document.createElement('img')
+            img.src = name
+            img.alt = code
+            img.title = code
+            img.addEventListener('mousedown', e => {
+                e.preventDefault()
+                e.stopPropagation()
+                editor.chain().focus().insertSticker({ src: name, alt: code }).run()
+                editor.commands.insertContent(' ')
+                panel.classList.remove('is-open')
+            })
+            grid.appendChild(img)
+        })
+    }
 
     async function openPanel() {
         if (!loaded) {
@@ -348,22 +372,35 @@ function makeStickerPicker(editor) {
             panel.classList.add('is-open')
             positionPanel()
 
-            const stickers = await getStickerData()
+            const categories = await getStickerData()
             panel.innerHTML = ''
-            stickers.forEach(({ name, code }) => {
-                const img = document.createElement('img')
-                img.src = name
-                img.alt = code
-                img.title = code
-                img.addEventListener('mousedown', e => {
-                    e.preventDefault()
+
+            if (!categories.length) return
+
+            const tabs = document.createElement('div')
+            tabs.className = 'tiptap-sticker-tabs'
+
+            const grid = document.createElement('div')
+            grid.className = 'tiptap-sticker-grid'
+
+            categories.forEach((cat, i) => {
+                const tab = document.createElement('button')
+                tab.type = 'button'
+                tab.className = 'tiptap-sticker-tab' + (i === 0 ? ' is-active' : '')
+                tab.textContent = cat.name
+                tab.addEventListener('mousedown', e => e.preventDefault())
+                tab.addEventListener('click', e => {
                     e.stopPropagation()
-                    editor.chain().focus().insertSticker({ src: name, alt: code }).run()
-                    editor.commands.insertContent(' ')
-                    panel.classList.remove('is-open')
+                    tabs.querySelectorAll('.tiptap-sticker-tab').forEach(t => t.classList.remove('is-active'))
+                    tab.classList.add('is-active')
+                    renderStickers(cat.stickers, grid)
                 })
-                panel.appendChild(img)
+                tabs.appendChild(tab)
             })
+
+            panel.appendChild(tabs)
+            panel.appendChild(grid)
+            renderStickers(categories[0].stickers, grid)
             loaded = true
         } else {
             positionPanel()
@@ -374,7 +411,7 @@ function makeStickerPicker(editor) {
     function positionPanel() {
         const rect = btn.getBoundingClientRect()
         const spaceBelow = window.innerHeight - rect.bottom
-        if (spaceBelow < 260 && rect.top > 260) {
+        if (spaceBelow < 300 && rect.top > 300) {
             panel.style.top    = 'auto'
             panel.style.bottom = (window.innerHeight - rect.top + 4) + 'px'
         } else {
@@ -390,7 +427,7 @@ function makeStickerPicker(editor) {
         const wasOpen = panel.classList.contains('is-open')
         document.querySelectorAll('.tiptap-dropdown-menu.is-open')
             .forEach(m => m.classList.remove('is-open'))
-        if (!wasOpen) openPanel()
+        if (!wasOpen) { panel._anchorBtn = btn; openPanel() }
     })
 
     wrap.appendChild(btn)
@@ -419,7 +456,7 @@ function makeDropdown(icon, title, items, extraClass = '') {
         e.stopPropagation()
         const wasOpen = menu.classList.contains('is-open')
         document.querySelectorAll('.tiptap-dropdown-menu.is-open').forEach(m => m.classList.remove('is-open'))
-        if (!wasOpen) { positionMenu(); menu.classList.add('is-open') }
+        if (!wasOpen) { positionMenu(); menu._anchorBtn = btn; menu.classList.add('is-open') }
     })
 
     wrap.appendChild(btn)

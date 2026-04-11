@@ -380,11 +380,21 @@ class AjaxController extends Controller
     public function getStickers(): JsonResponse
     {
         $stickers = Sticker::query()
+            ->with('category:id,name')
             ->orderBy(DB::raw('CHAR_LENGTH(code)'))
             ->orderBy('name')
-            ->get(['code', 'name']);
+            ->get(['id', 'category_id', 'code', 'name']);
 
-        return response()->json($stickers);
+        $grouped = $stickers
+            ->groupBy('category_id')
+            ->map(fn ($items, $categoryId) => [
+                'id'       => $categoryId,
+                'name'     => $items->first()->category->name,
+                'stickers' => $items->map(fn ($s) => ['code' => $s->code, 'name' => $s->name])->values(),
+            ])
+            ->values();
+
+        return response()->json($grouped);
     }
 
     /**

@@ -544,9 +544,6 @@ class UserController extends Controller
             ->limit(10)
             ->get(['login', 'name']);
 
-        return response()->json($users->map(fn ($u) => [
-            'login' => $u->login,
-            'name'  => $u->name,
-        ]));
+        return response()->json($users);
     }
 }
