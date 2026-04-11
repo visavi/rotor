@@ -254,6 +254,15 @@ function rgbToHex(html) {
     )
 }
 
+// Когда clearNodes() конвертирует code block в параграф, переносы строк
+// становятся буквальными \n внутри <p>, которые браузер схлопывает в пробел.
+// Нормализуем их в <br>.
+function fixNewlines(html) {
+    return html.replace(/(<p\b[^>]*>)([\s\S]*?)(<\/p>)/g, (_, open, content, close) =>
+        open + content.replace(/\n/g, '<br>') + close
+    )
+}
+
 function validateUrl(url) {
     if (!url) return false
     if (!/^https?:\/\//i.test(url)) {
@@ -770,12 +779,12 @@ function initEditor(textarea) {
         ],
         content: textarea.value || '',
         onUpdate({ editor }) {
-            textarea.value = rgbToHex(editor.getHTML())
+            textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
             isChanged = true
             updateCounter()
         },
         onCreate({ editor }) {
-            textarea.value = rgbToHex(editor.getHTML())
+            textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
             // Если документ начинается или заканчивается атомарным узлом —
             // добавляем пустые параграфы, иначе некуда поставить курсор
             const { state } = editor
