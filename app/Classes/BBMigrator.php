@@ -207,7 +207,7 @@ class BBMigrator
      */
     private function codeBlock(array $match): string
     {
-        $content = htmlspecialchars($match[1], ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $content = htmlspecialchars($match[1], ENT_QUOTES, 'UTF-8');
         $content = strtr($content, ['[' => '&#91;', '@' => '&#64;']);
 
         return '<pre class="block-code"><code>' . $content . '</code></pre>';

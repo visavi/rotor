@@ -72,6 +72,9 @@ class GuestbookController extends Controller
                 $user->increment('allguest');
                 $user->increment('point', setting('guestbook_point'));
                 $user->increment('money', setting('guestbook_money'));
+            } else {
+                // Гость пишет без tiptap — оборачиваем plain text в HTML
+                $msg = '<p>' . nl2br(check($msg), false) . '</p>';
             }
 
             $guestbook = Guestbook::query()->create([

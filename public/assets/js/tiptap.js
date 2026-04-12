@@ -475,9 +475,12 @@ function makeStickerPicker(editor) {
     }
 
     function positionPanel() {
+        const vw   = window.innerWidth
         const rect = btn.getBoundingClientRect()
-        // Горизонталь: выравниваем по кнопке, корректируем если вылезает за правый край
-        panel.style.left = rect.left + 'px'
+        // Горизонталь: ограничиваем ширину экраном и прижимаем влево если вылезает
+        const panelWidth = Math.min(360, vw - 16)
+        panel.style.width = panelWidth + 'px'
+        panel.style.left  = Math.max(8, Math.min(rect.left, vw - panelWidth - 8)) + 'px'
         // Вертикаль: вниз или вверх в зависимости от места
         const spaceBelow = window.innerHeight - rect.bottom
         if (spaceBelow < 300 && rect.top > 300) {
@@ -487,11 +490,6 @@ function makeStickerPicker(editor) {
             panel.style.top    = (rect.bottom + 4) + 'px'
             panel.style.bottom = 'auto'
         }
-        // Проверка overflow после отрисовки
-        requestAnimationFrame(() => {
-            const overflow = panel.getBoundingClientRect().right - window.innerWidth + 8
-            if (overflow > 0) panel.style.left = Math.max(8, parseFloat(panel.style.left) - overflow) + 'px'
-        })
     }
 
     btn.addEventListener('mousedown', e => e.preventDefault())

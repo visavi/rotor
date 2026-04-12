@@ -226,6 +226,7 @@
 
 .tiptap-sticker-panel {
     width: 360px;
+    max-width: calc(100vw - 16px);
     padding: 0;
     overflow: hidden;
     display: none;
