@@ -128,12 +128,15 @@ class BBMigrator
         }
 
         $migrator = new self();
-        $html     = $migrator->parse($text);
-        $html     = HtmlSanitizer::sanitize($html);
+        $html = $migrator->parse($text);
+        $html = HtmlSanitizer::sanitize($html);
 
         // DOMDocument внутри HtmlSanitizer кодирует @ как &#64; в текстовых нодах.
         // @ безопасен в HTML, декодируем обратно для читаемости.
-        return str_replace('&#64;', '@', $html);
+        $html = str_replace('&#64;', '@', $html);
+
+        // Убираем пустые <p></p> в начале и конце после санитайзера
+        return preg_replace('/^(<p><\/p>)+|(<p><\/p>)+$/', '', $html);
     }
 
     /**
@@ -150,7 +153,10 @@ class BBMigrator
         $html = $this->parse($text);
         $html = HtmlSanitizer::sanitize($html);
 
-        return str_replace('&#64;', '@', $html);
+        $html = str_replace('&#64;', '@', $html);
+
+        // Убираем пустые <p></p> в начале и конце после санитайзера
+        return preg_replace('/^(<p><\/p>)+|(<p><\/p>)+$/', '', $html);
     }
 
     public function parse(string $source): string
@@ -188,7 +194,7 @@ class BBMigrator
             $replacements[':' . $code] = '<img class="sticker" src="' . $src . '" alt="' . $code . '">';
         }
 
-        uksort($replacements, static fn($a, $b) => strlen($b) - strlen($a));
+        uksort($replacements, static fn ($a, $b) => strlen($b) - strlen($a));
 
         return strtr($source, $replacements);
     }
@@ -230,7 +236,7 @@ class BBMigrator
         }
 
         $tag = str_contains($match[0], '[list]') ? 'ul' : 'ol';
-        $li  = '';
+        $li = '';
         foreach ($items as $item) {
             $li .= '<li><p>' . trim($item) . '</p></li>';
         }
@@ -245,7 +251,7 @@ class BBMigrator
     private function fontSize(array $match): string
     {
         $sizes = [1 => '0.7em', 2 => '0.85em', 3 => null, 4 => '1.3em', 5 => '1.6em'];
-        $size  = $sizes[(int) $match[1]] ?? null;
+        $size = $sizes[(int) $match[1]] ?? null;
 
         if ($size === null) {
             return $match[2];
@@ -260,7 +266,7 @@ class BBMigrator
      */
     private function videoReplace(array $match): string
     {
-        $url   = $match[1];
+        $url = $match[1];
         $embed = null;
 
         if (preg_match('/youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=|embed\/|watch\?v=))([\w-]{11})/i', $url, $m)) {
@@ -328,7 +334,7 @@ class BBMigrator
     private function spoilerText(array $match): string
     {
         $title = empty($match[2]) ? 'Spoiler' : $match[1];
-        $text  = empty($match[2]) ? $match[1] : $match[2];
+        $text = empty($match[2]) ? $match[1] : $match[2];
 
         return '<details class="block-spoiler" open="true"><summary>' . $title . '</summary><div>' . $text . '</div></details>';
     }
@@ -341,18 +347,20 @@ class BBMigrator
      */
     private function wrapParagraphs(string $html): string
     {
+        $html = ltrim($html);
+
         $containerTags = ['p', 'details', 'div', 'blockquote', 'pre', 'ul', 'ol'];
 
-        $anyOpen  = '/<(' . implode('|', $containerTags) . ')[\s>]/i';
+        $anyOpen = '/<(' . implode('|', $containerTags) . ')[\s>]/i';
         $anyClose = '/<\/(' . implode('|', $containerTags) . ')>/i';
         // <audio> и <img class="block-image"> — блочные; <img class="sticker"> — инлайн, не матчим
         $startsWithBlock = '/^(?:<(?:' . implode('|', $containerTags) . ')[\s>\/]|<audio[\s>\/]|<img\s[^>]*class="block-image")/i';
 
-        $lines       = explode("\n", $html);
-        $result      = '';
+        $lines = explode("\n", $html);
+        $result = '';
         $blockBuffer = [];
-        $paraLines   = [];
-        $depth       = 0;
+        $paraLines = [];
+        $depth = 0;
 
         foreach ($lines as $line) {
             $trimmed = trim($line);
@@ -365,17 +373,17 @@ class BBMigrator
 
                 if ($depth <= 0) {
                     if (! empty($paraLines)) {
-                        $result   .= '<p>' . implode('<br>', $paraLines) . '</p>';
+                        $result .= '<p>' . implode('<br>', $paraLines) . '</p>';
                         $paraLines = [];
                     }
-                    $result      .= implode("\n", $blockBuffer);
-                    $blockBuffer  = [];
-                    $depth        = 0;
+                    $result .= implode("\n", $blockBuffer);
+                    $blockBuffer = [];
+                    $depth = 0;
                 }
             } elseif (preg_match($startsWithBlock, $trimmed)) {
                 // Строка начинается с блочного тега — сбрасываем текущий абзац
                 if (! empty($paraLines)) {
-                    $result   .= '<p>' . implode('<br>', $paraLines) . '</p>';
+                    $result .= '<p>' . implode('<br>', $paraLines) . '</p>';
                     $paraLines = [];
                 }
                 $blockBuffer[] = $line;
@@ -383,14 +391,14 @@ class BBMigrator
                 $depth -= preg_match_all($anyClose, $trimmed, $m);
 
                 if ($depth <= 0) {
-                    $result      .= implode("\n", $blockBuffer);
-                    $blockBuffer  = [];
-                    $depth        = 0;
+                    $result .= implode("\n", $blockBuffer);
+                    $blockBuffer = [];
+                    $depth = 0;
                 }
             } elseif ($trimmed === '') {
                 // Пустая строка — сбрасываем абзац и добавляем пустой <p>
                 if (! empty($paraLines)) {
-                    $result   .= '<p>' . implode('<br>', $paraLines) . '</p>';
+                    $result .= '<p>' . implode('<br>', $paraLines) . '</p>';
                     $paraLines = [];
                 }
                 $result .= '<p></p>';

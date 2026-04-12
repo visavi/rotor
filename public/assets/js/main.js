@@ -1,3 +1,5 @@
+import { trans as __ } from './translate.js'
+
 $(function () {
     let body = $('body');
 

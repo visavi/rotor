@@ -344,6 +344,7 @@ class BBCode
                         // Код в БД хранится без двоеточия (ban), в тексте пишут :ban
                         $key = ':' . $sticker->code;
                         $val = '<img src="' . $sticker->name . '" alt="' . getBodyName($sticker->name) . '">';
+
                         return [$key => $val];
                     })
                     ->toArray();

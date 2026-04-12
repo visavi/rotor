@@ -211,19 +211,72 @@ const Spoiler = Node.create({
     group: 'block',
     content: 'block+',
     defining: true,
-    addAttributes() { return { title: { default: 'Spoiler' } } },
+    addAttributes() {
+        return {
+            title: { default: 'Spoiler' },
+            open:  { default: true },
+        }
+    },
     parseHTML() {
-        return [{ tag: 'details.block-spoiler', getAttrs: el => ({ title: el.querySelector('summary')?.textContent?.trim() || 'Spoiler' }) }]
+        return [{
+            tag: 'details.block-spoiler',
+            getAttrs: el => ({
+                title: el.querySelector(':scope > summary')?.textContent?.trim() || 'Spoiler',
+                open: true,
+            }),
+            contentElement: el => el.querySelector(':scope > div') || el,
+        }]
     },
     renderHTML({ node }) {
-        return ['details', { class: 'block-spoiler', open: true },
+        // open не сохраняем в HTML — для читателей спойлер закрыт по умолчанию
+        return ['details', { class: 'block-spoiler' },
             ['summary', {}, node.attrs.title],
             ['div', {}, 0]]
+    },
+    addNodeView() {
+        return ({ node: initNode, getPos, editor }) => {
+            let attrs = { ...initNode.attrs }
+
+            const dom = document.createElement('details')
+            dom.className = 'block-spoiler'
+            dom.open = attrs.open
+
+            const summary = document.createElement('summary')
+            summary.setAttribute('contenteditable', 'false')
+            summary.textContent = attrs.title || 'Spoiler'
+
+            summary.addEventListener('mousedown', e => {
+                e.preventDefault()
+                e.stopPropagation()
+                const pos = typeof getPos === 'function' ? getPos() : null
+                if (pos !== null) {
+                    editor.view.dispatch(
+                        editor.view.state.tr.setNodeMarkup(pos, null, { ...attrs, open: !attrs.open })
+                    )
+                }
+            })
+
+            const contentDOM = document.createElement('div')
+            dom.appendChild(summary)
+            dom.appendChild(contentDOM)
+
+            return {
+                dom,
+                contentDOM,
+                update(updatedNode) {
+                    if (updatedNode.type !== initNode.type) return false
+                    attrs = { ...updatedNode.attrs }
+                    summary.textContent = attrs.title || 'Spoiler'
+                    dom.open = attrs.open
+                    return true
+                },
+            }
+        }
     },
     addCommands() {
         return {
             insertSpoiler: title => ({ commands }) => commands.insertContent({
-                type: this.name, attrs: { title }, content: [{ type: 'paragraph' }],
+                type: this.name, attrs: { title, open: true }, content: [{ type: 'paragraph' }],
             }),
         }
     },
