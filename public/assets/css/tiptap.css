@@ -50,14 +50,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 27px;
+    height: 27px;
     padding: 0;
     border: 1px solid transparent;
     border-radius: 4px;
     background: transparent;
     color: var(--bs-body-color);
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.1s, color 0.1s;
     line-height: 1;
@@ -98,7 +98,7 @@
 }
 
 .tiptap-dropdown .tiptap-btn {
-    width: 36px;
+    width: 34px;
 }
 
 
@@ -151,6 +151,28 @@
 .tiptap-color-reset {
     background: var(--bs-body-bg) !important;
     border-color: var(--bs-border-color) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.tiptap-color-reset::before,
+.tiptap-color-reset::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2px;
+    background: var(--bs-danger);
+    border-radius: 1px;
+}
+
+.tiptap-color-reset::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.tiptap-color-reset::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .tiptap-color-custom {

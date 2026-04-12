@@ -375,9 +375,11 @@ document.addEventListener('click', () => {
         .forEach(m => m.classList.remove('is-open'))
 })
 
-document.addEventListener('scroll', () => {
+document.addEventListener('scroll', (e) => {
     document.querySelectorAll('.tiptap-dropdown-menu.is-open').forEach(m => {
-        if (m._anchorBtn) positionDropdown(m._anchorBtn, m)
+        if (m.contains(e.target)) return  // скролл внутри самого меню — не трогаем позицию
+        if (m._reposition) m._reposition()
+        else if (m._anchorBtn) positionDropdown(m._anchorBtn, m)
     })
 }, true)
 
@@ -404,7 +406,7 @@ function makeStickerPicker(editor) {
     btn.type = 'button'
     btn.className = 'tiptap-btn'
     btn.title = __('editor2.sticker')
-    btn.innerHTML = '<i class="fas fa-smile"></i>'
+    btn.innerHTML = '<i class="fas fa-smile"></i><i class="fas fa-chevron-down tiptap-dd-arrow"></i>'
 
     const panel = document.createElement('div')
     panel.className = 'tiptap-dropdown-menu tiptap-sticker-panel'
@@ -466,6 +468,7 @@ function makeStickerPicker(editor) {
             panel.appendChild(grid)
             renderStickers(categories[0].stickers, grid)
             loaded = true
+            positionPanel()
         } else {
             positionPanel()
             panel.classList.add('is-open')
@@ -474,6 +477,9 @@ function makeStickerPicker(editor) {
 
     function positionPanel() {
         const rect = btn.getBoundingClientRect()
+        // Горизонталь: выравниваем по кнопке, корректируем если вылезает за правый край
+        panel.style.left = rect.left + 'px'
+        // Вертикаль: вниз или вверх в зависимости от места
         const spaceBelow = window.innerHeight - rect.bottom
         if (spaceBelow < 300 && rect.top > 300) {
             panel.style.top    = 'auto'
@@ -482,7 +488,11 @@ function makeStickerPicker(editor) {
             panel.style.top    = (rect.bottom + 4) + 'px'
             panel.style.bottom = 'auto'
         }
-        positionDropdown(btn, panel)
+        // Проверка overflow после отрисовки
+        requestAnimationFrame(() => {
+            const overflow = panel.getBoundingClientRect().right - window.innerWidth + 8
+            if (overflow > 0) panel.style.left = Math.max(8, parseFloat(panel.style.left) - overflow) + 'px'
+        })
     }
 
     btn.addEventListener('mousedown', e => e.preventDefault())
@@ -491,7 +501,7 @@ function makeStickerPicker(editor) {
         const wasOpen = panel.classList.contains('is-open')
         document.querySelectorAll('.tiptap-dropdown-menu.is-open')
             .forEach(m => m.classList.remove('is-open'))
-        if (!wasOpen) { panel._anchorBtn = btn; openPanel() }
+        if (!wasOpen) { panel._anchorBtn = btn; panel._reposition = positionPanel; openPanel() }
     })
 
     wrap.appendChild(btn)
