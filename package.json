@@ -15,6 +15,7 @@
         "@fortawesome/fontawesome-free": "^7.2",
         "@popperjs/core": "^2.11.8",
         "@tiptap/core": "^3.22.1",
+        "@tiptap/extension-character-count": "^3.22.3",
         "@tiptap/extension-color": "^3.22.1",
         "@tiptap/extension-highlight": "^3.22.2",
         "@tiptap/extension-image": "^3.22.1",

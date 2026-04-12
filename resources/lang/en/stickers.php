@@ -9,8 +9,8 @@ return [
     'confirm_delete_sticker'   => 'Are you sure you want to remove this sticker?',
     'create_sticker'           => 'Adding a sticker',
     'category'                 => 'Category',
-    'sticker_code'             => 'Sticker Code',
-    'valid_sticker_code'       => 'Sticker code must begin with a colon',
+    'sticker_code'             => 'Sticker code',
+    'valid_sticker_code'       => 'Letters, numbers, underscores and hyphens are allowed!',
     'edit_category'            => 'Editing a category',
     'edit_sticker'             => 'Editing a sticker',
     'category_not_exist'       => 'This category does not exist!',
@@ -22,7 +22,6 @@ return [
     'sticker_length'           => 'Too long or short sticker code!',
     'sticker_exists'           => 'A sticker with this code is already in the list!',
     'sticker_success_created'  => 'Sticker loaded successfully!',
-    'sticker_requirements'     => 'Sticker code must begin with a colon. Letters, numbers and hyphens are allowed! ',
     'sticker_success_changed'  => 'Sticker successfully edited!',
     'sticker_success_deleted'  => 'Sticker deleted successfully!',
 ];

@@ -23,7 +23,7 @@
         @endif
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
-        <div>{{ __('main.message') }}: {{ bbCode($post->text) }}</div>
+        <div>{{ __('main.message') }}: {{ renderHtml($post->text) }}</div>
     </div>
 
     <div class="section-form mb-3 shadow">
@@ -31,7 +31,7 @@
             @csrf
             <div class="mb-3{{ hasError('reply') }}">
                 <label for="reply" class="form-label">{{ __('main.message') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('guestbook_text_max') }}" id="reply" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
+                <textarea class="form-control tiptap" maxlength="{{ setting('guestbook_text_max') }}" id="reply" rows="5" name="reply" required>{{ getInput('reply', $post->reply) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reply') }}</div>
             </div>
 

@@ -5,6 +5,7 @@ import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import { Image } from '@tiptap/extension-image'
 import { Placeholder } from '@tiptap/extension-placeholder'
+import { CharacterCount } from '@tiptap/extension-character-count'
 import { Mention } from '@tiptap/extension-mention'
 import { suggestion } from './tiptap-mention-suggestion.js'
 import { trans as __ } from './translate.js'
@@ -769,6 +770,7 @@ function initEditor(textarea) {
             Spoiler,
             Hide,
             Sticker,
+            CharacterCount,
             Mention.configure({
                 HTMLAttributes: { class: 'mention' },
                 renderHTML({ options, node }) {
@@ -832,9 +834,14 @@ function initEditor(textarea) {
     const counterEl = textarea.parentNode.querySelector('.js-textarea-counter')
     function updateCounter() {
         if (!counterEl) return
-        const len = editor.isEmpty ? 0 : editor.state.doc.textBetween(0, editor.state.doc.content.size, '', () => ' ').length
-        counterEl.textContent = maxLength ? `${len} / ${maxLength}` : (len || '')
-        if (maxLength) counterEl.classList.toggle('text-danger', len > maxLength)
+        const len = editor.storage.characterCount.characters()
+        if (maxLength) {
+            const remaining = maxLength - len
+            counterEl.textContent = len === 0 ? '' : __('characters_left') + ': ' + remaining
+            counterEl.classList.toggle('text-danger', remaining < 0)
+        } else {
+            counterEl.textContent = len || ''
+        }
     }
     updateCounter()
 

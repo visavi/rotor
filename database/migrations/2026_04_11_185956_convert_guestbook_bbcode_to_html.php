@@ -16,16 +16,25 @@ return new class extends Migration
             $table->text('text2')->nullable()->after('text');
         });
 
+        // Один экземпляр на всю миграцию: парсеры и кэш стикеров создаются один раз
+        $migrator = new BBMigrator();
+
         DB::table('guestbook')
             ->orderBy('id')
-            ->chunk(200, static function ($records) {
+            ->chunk(500, static function ($records) use ($migrator) {
+                $updates = [];
+
                 foreach ($records as $record) {
-                    DB::table('guestbook')
-                        ->where('id', $record->id)
-                        ->update([
-                            'text2' => BBMigrator::convert($record->text),
-                        ]);
+                    $updates[] = [
+                        'id'    => $record->id,
+                        'text2' => $migrator->convertText($record->text),
+                    ];
                 }
+
+                // Один запрос на чанк вместо N отдельных UPDATE
+                DB::transaction(static function () use ($updates) {
+                    DB::table('guestbook')->upsert($updates, ['id'], ['text2']);
+                });
             });
     }
 

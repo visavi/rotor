@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use App\Models\Sticker;
+use Illuminate\Support\Facades\Cache;
+
 /**
  * Конвертирует BB-код в HTML, совместимый с tiptap-редактором.
  *
@@ -133,6 +136,23 @@ class BBMigrator
         return str_replace('&#64;', '@', $html);
     }
 
+    /**
+     * Конвертирует текст без создания нового экземпляра класса.
+     * Используется в миграциях: один экземпляр на весь чанк,
+     * кэш стикеров загружается один раз.
+     */
+    public function convertText(?string $text): ?string
+    {
+        if ($text === null) {
+            return null;
+        }
+
+        $html = $this->parse($text);
+        $html = HtmlSanitizer::sanitize($html);
+
+        return str_replace('&#64;', '@', $html);
+    }
+
     public function parse(string $source): string
     {
         foreach ($this->parsers as $parser) {
@@ -146,7 +166,31 @@ class BBMigrator
             }
         }
 
+        $source = $this->parseStickers($source);
+
         return $this->wrapParagraphs($source);
+    }
+
+    /**
+     * Заменяет коды стикеров (:ban) на <img class="sticker"> для tiptap.
+     * Коды берутся из БД (без двоеточия), в тексте ищутся с двоеточием.
+     */
+    private function parseStickers(string $source): string
+    {
+        $map = Cache::rememberForever('stickers_map', static function (): array {
+            return Sticker::query()->pluck('name', 'code')->toArray();
+        });
+
+        // Строим карту замен: ':ban' → '<img class="sticker" src="..." alt="ban">'
+        // Сортируем по убыванию длины кода, чтобы ':ban2' не срабатывало раньше ':ban'
+        $replacements = [];
+        foreach ($map as $code => $src) {
+            $replacements[':' . $code] = '<img class="sticker" src="' . $src . '" alt="' . $code . '">';
+        }
+
+        uksort($replacements, static fn($a, $b) => strlen($b) - strlen($a));
+
+        return strtr($source, $replacements);
     }
 
     /**
@@ -298,12 +342,11 @@ class BBMigrator
     private function wrapParagraphs(string $html): string
     {
         $containerTags = ['p', 'details', 'div', 'blockquote', 'pre', 'ul', 'ol'];
-        $selfBlockTags = ['img', 'audio'];
-        $allBlockStart = array_merge($containerTags, $selfBlockTags);
 
-        $anyOpen         = '/<(' . implode('|', $containerTags) . ')[\s>]/i';
-        $anyClose        = '/<\/(' . implode('|', $containerTags) . ')>/i';
-        $startsWithBlock = '/^<(?:' . implode('|', $allBlockStart) . ')[\s>\/]/i';
+        $anyOpen  = '/<(' . implode('|', $containerTags) . ')[\s>]/i';
+        $anyClose = '/<\/(' . implode('|', $containerTags) . ')>/i';
+        // <audio> и <img class="block-image"> — блочные; <img class="sticker"> — инлайн, не матчим
+        $startsWithBlock = '/^(?:<(?:' . implode('|', $containerTags) . ')[\s>\/]|<audio[\s>\/]|<img\s[^>]*class="block-image")/i';
 
         $lines       = explode("\n", $html);
         $result      = '';

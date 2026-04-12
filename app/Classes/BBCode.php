@@ -340,9 +340,11 @@ class BBCode
                     ->select('code', 'name')
                     ->orderByDesc(DB::raw('CHAR_LENGTH(code)'))
                     ->get()
-                    ->pluck('name', 'code')
-                    ->map(function ($item) {
-                        return '<img src="' . $item . '" alt="' . getBodyName($item) . '">';
+                    ->mapWithKeys(function ($sticker) {
+                        // Код в БД хранится без двоеточия (ban), в тексте пишут :ban
+                        $key = ':' . $sticker->code;
+                        $val = '<img src="' . $sticker->name . '" alt="' . getBodyName($sticker->name) . '">';
+                        return [$key => $val];
                     })
                     ->toArray();
             });

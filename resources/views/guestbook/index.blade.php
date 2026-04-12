@@ -89,7 +89,7 @@
                     @endif
 
                     @if ($post->reply)
-                        <div class="text-danger">{{ __('guestbook.answer') }}: {{ bbCode($post->reply) }}</div>
+                        <div class="text-danger">{{ __('guestbook.answer') }}: {{ renderHtml($post->reply) }}</div>
                     @endif
 
                     @if (isAdmin())

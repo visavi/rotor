@@ -162,7 +162,7 @@ class StickerController extends AdminController
 
             $validator
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
-                ->regex($code, '|^:[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.sticker_requirements')]);
+                ->regex($code, '|^[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.valid_sticker_code')]);
 
             $category = StickersCategory::query()->where('id', $cid)->first();
             $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
@@ -190,7 +190,7 @@ class StickerController extends AdminController
                     'code'        => $code,
                 ]);
 
-                clearCache('stickers');
+                clearCache(['stickers', 'stickers_map']);
                 setFlash('success', __('stickers.sticker_success_created'));
 
                 return redirect('admin/stickers/' . $cid);
@@ -222,7 +222,7 @@ class StickerController extends AdminController
 
             $validator
                 ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
-                ->regex($code, '|^:[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.sticker_requirements')]);
+                ->regex($code, '|^[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.valid_sticker_code')]);
 
             $duplicate = Sticker::query()->where('code', $code)->where('id', '<>', $sticker->id)->first();
             $validator->empty($duplicate, ['code' => __('stickers.sticker_exists')]);
@@ -236,7 +236,7 @@ class StickerController extends AdminController
                     'category_id' => $cid,
                 ]);
 
-                clearCache('stickers');
+                clearCache(['stickers', 'stickers_map']);
                 setFlash('success', __('stickers.sticker_success_changed'));
 
                 return redirect('admin/stickers/' . $cid . '?page=' . $page);
@@ -272,7 +272,7 @@ class StickerController extends AdminController
         deleteFile(public_path($sticker->name));
         $sticker->delete();
 
-        clearCache('stickers');
+        clearCache(['stickers', 'stickers_map']);
         setFlash('success', __('stickers.sticker_success_deleted'));
 
         return redirect('admin/stickers/' . $category . '?page=' . $page);
