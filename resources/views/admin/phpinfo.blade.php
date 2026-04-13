@@ -51,7 +51,7 @@
                 @foreach ($iniInfo as $inikey => $inivalue)
                     <tr>
                         <td>{{ $inikey }}</td>
-                        <td>{{ truncateString(trim(var_export($inivalue['local_value'], true), "'"), 50) }}</td>
+                        <td>{{ mb_strimwidth(trim(var_export($inivalue['local_value'], true), "'"), 0, 50, '...') }}</td>
                     </tr>
                 @endforeach
             </table>

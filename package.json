@@ -44,7 +44,7 @@
         "url": "git+ssh://git@github.com/visavi/rotor.git"
     },
     "author": "Alexander Grigorev",
-    "license": "MIT",
+    "license": "GPL-3.0-only",
     "bugs": {
         "url": "https://github.com/visavi/rotor/issues"
     },

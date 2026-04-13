@@ -14,7 +14,15 @@ class HtmlSanitizer
 
     public static function sanitize(?string $text, bool $extended = false): string
     {
-        return self::getInstance($extended)->sanitize((string) $text);
+        $html = self::getInstance($extended)->sanitize((string) $text);
+
+        // Symfony HtmlSanitizer (через DOMDocument) кодирует безопасные символы как числовые
+        // HTML-сущности. Декодируем все кроме &(38), <(60), >(62), "(34) — они нужны в HTML.
+        return preg_replace_callback('/&#(\d+);/', static function ($m) {
+            $code = (int) $m[1];
+
+            return in_array($code, [34, 38, 60, 62], true) ? $m[0] : mb_chr($code);
+        }, $html);
     }
 
     private static function getInstance(bool $extended = false): SymfonyHtmlSanitizer

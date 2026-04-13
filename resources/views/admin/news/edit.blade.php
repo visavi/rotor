@@ -26,7 +26,7 @@
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('main.text') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('news_text_max') }}" id="text" rows="10" name="text" placeholder="{{ __('main.text') }}" required>{{ getInput('text', $news->text) }}</textarea>
+                <textarea class="form-control tiptap" maxlength="{{ setting('news_text_max') }}" id="text" rows="10" name="text" placeholder="{{ __('main.text') }}" required>{{ getInput('text', $news->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>

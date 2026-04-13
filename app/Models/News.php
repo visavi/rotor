@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
 
 /**
  * Class News
@@ -72,6 +72,7 @@ class News extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
     }
 
@@ -131,18 +132,10 @@ class News extends Model
     /**
      * Возвращает связь с голосованием
      */
-    public function poll(): morphOne
+    public function poll(): MorphOne
     {
         return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
-    }
-
-    /**
-     * Get text
-     */
-    public function getText(): HtmlString
-    {
-        return new HtmlString(bbCode($this->text));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 @section('title', $news->title)
 
-@section('description', truncateDescription(bbCode($news->text, false)))
+@section('description', truncateDescription($news->text))
 
 @section('breadcrumb')
     <nav>
@@ -44,7 +44,7 @@
             @endif
 
             <div class="section-message">
-                {{ bbCode($news->text) }}
+                {{ renderHtml($news->text, 'news-' . $news->id) }}
             </div>
 
             @if ($news->getFiles()->isNotEmpty())

@@ -33,7 +33,7 @@
         @endif
 
         <div class="section-message">
-            {{ $post->getText() }}
+            {{ renderHtml($post->text, 'news-' . $post->id) }}
         </div>
 
         @if ($post->getFiles()->isNotEmpty())

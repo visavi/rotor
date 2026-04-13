@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Classes;
 
 use App\Models\Sticker;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -17,9 +18,19 @@ use Illuminate\Support\Facades\Cache;
 class BBMigrator
 {
     private array $parsers;
+    private array $userLogins;
+    private array $stickersMap;
 
     public function __construct()
     {
+        $this->userLogins = Cache::remember('migration_user_logins', 3600, static function (): array {
+            return array_flip(User::query()->pluck('login')->map(fn($login) => mb_strtolower($login))->all());
+        });
+
+        $this->stickersMap = Cache::remember('migration_stickers_map', 3600, static function (): array {
+            return Sticker::query()->pluck('name', 'code')->toArray();
+        });
+
         $this->parsers = [
             // [code] парсим первым, чтобы внутри не срабатывали другие bb-теги
             'code' => [
@@ -131,10 +142,6 @@ class BBMigrator
         $html = $migrator->parse($text);
         $html = HtmlSanitizer::sanitize($html);
 
-        // DOMDocument внутри HtmlSanitizer кодирует @ как &#64; в текстовых нодах.
-        // @ безопасен в HTML, декодируем обратно для читаемости.
-        $html = str_replace('&#64;', '@', $html);
-
         // Убираем пустые <p></p> в начале и конце после санитайзера
         return preg_replace('/^(<p><\/p>)+|(<p><\/p>)+$/', '', $html);
     }
@@ -183,14 +190,8 @@ class BBMigrator
      */
     private function parseStickers(string $source): string
     {
-        $map = Cache::rememberForever('stickers_map', static function (): array {
-            return Sticker::query()->pluck('name', 'code')->toArray();
-        });
-
-        // Строим карту замен: ':ban' → '<img class="sticker" src="..." alt="ban">'
-        // Сортируем по убыванию длины кода, чтобы ':ban2' не срабатывало раньше ':ban'
         $replacements = [];
-        foreach ($map as $code => $src) {
+        foreach ($this->stickersMap as $code => $src) {
             $replacements[':' . $code] = '<img class="sticker" src="' . $src . '" alt="' . $code . '">';
         }
 
@@ -218,9 +219,11 @@ class BBMigrator
      */
     private function urlReplace(array $match): string
     {
-        $name = $match[3] ?? $match[1];
+        $url = $match[1];
+        $name = $match[3] ?? $url;
+        $attrs = str_starts_with($url, '/') ? '' : ' target="_blank"';
 
-        return '<a href="' . $match[1] . '" target="_blank">' . $name . '</a>';
+        return '<a href="' . $url . '"' . $attrs . '>' . $name . '</a>';
     }
 
     /**
@@ -296,6 +299,10 @@ class BBMigrator
      */
     private function userReplace(array $match): string
     {
+        if (! isset($this->userLogins[mb_strtolower($match[1])])) {
+            return $match[0];
+        }
+
         return '<a class="mention" href="/users/' . $match[1] . '">@' . $match[1] . '</a>';
     }
 

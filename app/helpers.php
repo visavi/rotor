@@ -686,24 +686,13 @@ function bbCodeTruncate(?string $text, int $words = 20, string $end = '...'): Ht
 }
 
 /**
- * Возвращает обрезанную до заданного количества букв строке
+ * Возвращает обрезанную до заданного количества слов строку
  */
-function truncateString(HtmlString|string $value, int $limit = 100, string $end = '...'): string
+function truncateHtml(?string $html, int $words = 20, string $end = '...'): HtmlString
 {
-    $value = strip_tags($value);
+    $text = strip_tags((string) $html);
 
-    if (mb_strlen($value, 'utf-8') <= $limit) {
-        return $value;
-    }
-
-    $string = mb_substr($value, 0, $limit + 1);
-    if ($lastSpace = mb_strrpos($string, ' ', 0, 'utf-8')) {
-        $string = mb_substr($string, 0, $lastSpace, 'utf-8');
-    } else {
-        $string = mb_substr($string, 0, $limit, 'utf-8');
-    }
-
-    return trim($string) . $end;
+    return new HtmlString(Str::words($text, $words, $end));
 }
 
 /**
@@ -714,14 +703,6 @@ function truncateDescription(HtmlString|string $value, int $words = 20, string $
     $value = strip_tags(preg_replace('/[\s\n\r]+/', ' ', $value));
 
     return Str::words(trim($value), $words, $end);
-}
-
-/**
- * Get the number of words a string contains.
- */
-function wordCount(string $string): int
-{
-    return count(preg_split('/[^\s*+]+/u', $string));
 }
 
 /**
@@ -1359,7 +1340,7 @@ function plural(int $num, mixed $forms): string
 /**
  * RenderHtml
  */
-function renderHtml(?string $text): HtmlString
+function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 {
     $html = (string) $text;
 
@@ -1367,6 +1348,14 @@ function renderHtml(?string $text): HtmlString
         $html = preg_replace(
             '/<div class="block-hidden">.*?<\/div>/s',
             '<div class="block-hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
+            $html
+        );
+    }
+
+    if (str_contains($html, 'block-image')) {
+        $html = preg_replace(
+            '/<img\s([^>]*)class="block-image"([^>]*)>/i',
+            '<img $1class="block-image" data-fancybox="' . $group . '"$2>',
             $html
         );
     }

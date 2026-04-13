@@ -149,7 +149,7 @@ class Item extends Model
     {
         $text = $this->text;
 
-        if ($words && wordCount($text) > $words) {
+        if ($words && count(preg_split('/[^\s*+]+/u', $text)) > $words) {
             $text = bbCodeTruncate($text, $words);
         } else {
             $text = bbCode($text);

@@ -307,7 +307,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px 12px;
-    min-height: 120px;
+    min-height: 140px;
     color: var(--bs-body-color);
     resize: vertical;
     overflow: auto;

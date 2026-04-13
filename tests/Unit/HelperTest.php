@@ -155,17 +155,7 @@ class HelperTest extends TestCase
         self::assertStringContainsString($expectedClass, icons($ext)->toHtml());
     }
 
-    public function testTruncateString(): void
-    {
-        self::assertSame('Hi', truncateString('Hi'));
-        self::assertSame('Hello World', truncateString('Hello World', 100));
-        self::assertSame('Hello...', truncateString('Hello World', 5));
-        self::assertSame('Hel...', truncateString('Hello', 3));
-        self::assertSame('Hello...', truncateString('<b>Hello</b> World', 5));
-        self::assertSame('Hello---', truncateString('Hello World', 5, '---'));
-    }
-
-    public function testTruncateDescription(): void
+public function testTruncateDescription(): void
     {
         self::assertSame('Hello World', truncateDescription('Hello World', 5));
         self::assertSame('Hello', truncateDescription('Hello World', 1, ''));
@@ -173,23 +163,7 @@ class HelperTest extends TestCase
         self::assertSame('Hello World', truncateDescription("<b>Hello</b>\nWorld", 5));
     }
 
-    public static function wordCountProvider(): array
-    {
-        return [
-            'two words'   => ['Hello World', 3],
-            'three words' => ['Hello World Test', 4],
-            'one word'    => ['Hello', 2],
-            'empty'       => ['', 1],
-        ];
-    }
-
-    #[DataProvider('wordCountProvider')]
-    public function testWordCount(string $input, int $expected): void
-    {
-        self::assertSame($expected, wordCount($input));
-    }
-
-    public function testFormatNum(): void
+public function testFormatNum(): void
     {
         self::assertSame('<span style="color:#00aa00">+5</span>', formatNum(5)->toHtml());
         self::assertSame('<span style="color:#ff0000">-3</span>', formatNum(-3)->toHtml());

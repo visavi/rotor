@@ -772,12 +772,14 @@ function buildToolbar(editor) {
         const selected = editor.state.doc.textBetween(from, to, '')
         const url = prompt(__('editor2.url_link') + ':', existing || selected)
         if (!validateUrl(url)) return
+        const target = url.startsWith('/') ? null : '_blank'
         if (selected || existing) {
-            editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: '_blank' }).run()
+            editor.chain().focus().extendMarkRange('link').setLink({ href: url, target }).run()
         } else {
             const placeholder = __('editor2.link_text')
+            const targetAttr = target ? ` target="${target}"` : ''
             editor.chain().focus()
-                .insertContent(`<a href="${url}" target="_blank">${placeholder}</a>`)
+                .insertContent(`<a href="${url}"${targetAttr}>${placeholder}</a>`)
                 .run()
             // Выделяем вставленный текст
             const { from } = editor.state.selection
@@ -871,6 +873,10 @@ function initEditor(textarea) {
 
     const editorEl = document.createElement('div')
     editorEl.className = 'tiptap-editor-content'
+    const rows = parseInt(textarea.getAttribute('rows'))
+    if (rows) {
+        editorEl.style.minHeight = (rows * 24 + 22) + 'px'
+    }
     wrapper.appendChild(editorEl)
 
     textarea.style.display = 'none'
