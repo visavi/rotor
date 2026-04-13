@@ -155,7 +155,7 @@ class HelperTest extends TestCase
         self::assertStringContainsString($expectedClass, icons($ext)->toHtml());
     }
 
-public function testTruncateDescription(): void
+    public function testTruncateDescription(): void
     {
         self::assertSame('Hello World', truncateDescription('Hello World', 5));
         self::assertSame('Hello', truncateDescription('Hello World', 1, ''));
@@ -163,7 +163,7 @@ public function testTruncateDescription(): void
         self::assertSame('Hello World', truncateDescription("<b>Hello</b>\nWorld", 5));
     }
 
-public function testFormatNum(): void
+    public function testFormatNum(): void
     {
         self::assertSame('<span style="color:#00aa00">+5</span>', formatNum(5)->toHtml());
         self::assertSame('<span style="color:#ff0000">-3</span>', formatNum(-3)->toHtml());

@@ -87,6 +87,7 @@
             "style": "post"
         },
         "phpdoc_no_package": true,
-        "php_unit_method_casing": false
+        "php_unit_method_casing": false,
+        "single_line_empty_body": false
     }
 }

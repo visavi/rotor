@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_DATABASE: test
+          MYSQL_DATABASE: rotor_test
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
@@ -27,7 +27,7 @@ jobs:
       DB_CONNECTION: mysql
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
-      DB_DATABASE: test
+      DB_DATABASE: rotor_test
       DB_USERNAME: root
       DB_PASSWORD: root
 
@@ -53,7 +53,7 @@ jobs:
 
       - name: Set up MySQL
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'CREATE DATABASE IF NOT EXISTS test;'
+          mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'CREATE DATABASE IF NOT EXISTS rotor_test;'
           mysql -h 127.0.0.1 -P 3306 -u root -proot -e 'SHOW DATABASES;'
 
       - name: Migrations

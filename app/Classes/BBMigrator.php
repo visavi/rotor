@@ -24,7 +24,9 @@ class BBMigrator
     public function __construct()
     {
         $this->userLogins = Cache::remember('migration_user_logins', 3600, static function (): array {
-            return array_flip(User::query()->pluck('login')->map(fn($login) => mb_strtolower($login))->all());
+            return User::query()->pluck('login')
+                ->mapWithKeys(fn ($login) => [mb_strtolower($login) => true])
+                ->all();
         });
 
         $this->stickersMap = Cache::remember('migration_stickers_map', 3600, static function (): array {
