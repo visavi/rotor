@@ -55,7 +55,10 @@
         "size_sm": "Small",
         "size_md": "Normal",
         "size_lg": "Large",
-        "size_xl": "Extra large"
+        "size_xl": "Extra large",
+        "upload_failed": "Image upload failed",
+        "upload_error": "Failed to upload image",
+        "upload_image": "Upload image"
     },
 
     "editor": {

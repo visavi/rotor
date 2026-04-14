@@ -413,3 +413,14 @@ textarea.form-control {
 .section-content.short-view.expanded {
     max-height: none;
 }
+
+
+/* Notyf */
+.notyf__toast {
+    max-width: 50em;
+}
+
+.notyf__toast .notyf__ripple {
+    height: 60em;
+    width: 60em;
+}

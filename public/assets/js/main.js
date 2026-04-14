@@ -35,12 +35,6 @@ $(function () {
         backdrop: true,
     });
 
-    toastr.options = {
-        'toastClass' : 'toastr',
-        'progressBar': true,
-        'positionClass': 'toast-top-full-width'
-    };
-
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {
         // Your custom options
     });
@@ -331,9 +325,9 @@ window.sendComplaint = function (el) {
                 $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
                 if (data.success) {
-                    toastr.success(__('complain_submitted'));
+                    notyf.success(__('complain_submitted'));
                 } else {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                 }
             }
         });
@@ -352,18 +346,18 @@ window.bookmark = function (el) {
         success: function (data) {
 
             if (! data.success) {
-                toastr.error(data.message);
+                notyf.error(data.message);
                 return false;
             }
 
             if (data.success) {
                 if (data.type === 'added') {
-                    toastr.success(data.message);
+                    notyf.success(data.message);
                     $(el).text($(el).data('from'));
                 }
 
                 if (data.type === 'deleted') {
-                    toastr.success(data.message);
+                    notyf.success(data.message);
                     $(el).text($(el).data('to'));
                 }
             }
@@ -387,10 +381,10 @@ window.deletePost = function (el) {
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    toastr.success(data.message);
+                    notyf.success(data.message);
                     $el.closest('.section').hide('slow');
                 } else {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                 }
             }
         });
@@ -413,10 +407,10 @@ window.deleteComment = function (el) {
             dataType: 'json', type: 'post', url: '/ajax/delcomment',
             success: function (data) {
                 if (data.success) {
-                    toastr.success(__('message_deleted'));
+                    notyf.success(__('message_deleted'));
                     $(el).closest('.section').hide('slow');
                 } else {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                 }
             }
         });
@@ -449,7 +443,7 @@ window.changeRating = function (el) {
                 rating.html($(data.rating));
             } else {
                 if (data.message) {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                 }
             }
         }
@@ -472,10 +466,10 @@ window.deleteRating = function (el) {
             dataType: 'json', type: 'post', url: '/ratings/delete',
             success: (data)=> {
                 if (data.success) {
-                    toastr.success(__('record_deleted'));
+                    notyf.success(__('record_deleted'));
                     $(el).closest('.section').hide('slow');
                 } else {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                 }
             }
         });
@@ -493,10 +487,10 @@ window.deleteSpam = function (el) {
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
             if (data.success) {
-                toastr.success(__('record_deleted'));
+                notyf.success(__('record_deleted'));
                 $(el).closest('.section').hide('slow');
             } else {
-                toastr.error(data.message);
+                notyf.error(data.message);
             }
         }
     });
@@ -516,10 +510,10 @@ window.deleteWall = function (el) {
             dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
             success: function (data) {
                 if (data.success) {
-                    toastr.success(__('record_deleted'));
+                    notyf.success(__('record_deleted'));
                     $(el).closest('.section').hide('slow');
                 } else {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                 }
             }
         });
@@ -565,7 +559,7 @@ window.submitFile = function (el) {
         },
         success: function (data) {
             if (!data.success) {
-                toastr.error(data.message);
+                notyf.error(data.message);
                 return;
             }
 
@@ -585,7 +579,7 @@ window.submitFile = function (el) {
             $('.js-files').append(template.html());
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            toastr.error('Ошибка загрузки файла: ' + textStatus);
+            notyf.error('Ошибка загрузки файла: ' + textStatus);
         }
     });
 
@@ -616,7 +610,7 @@ window.submitImage = function (el, paste) {
         },
         success: function (data) {
             if (!data.success) {
-                toastr.error(data.message);
+                notyf.error(data.message);
                 return;
             }
 
@@ -633,7 +627,7 @@ window.submitImage = function (el, paste) {
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            toastr.error('Ошибка загрузки файла: ' + textStatus);
+            notyf.error('Ошибка загрузки файла: ' + textStatus);
         }
     });
 
@@ -703,7 +697,7 @@ window.deleteFile = function (el) {
             data: { id, type},
             success: function (data) {
                 if (!data.success) {
-                    toastr.error(data.message);
+                    notyf.error(data.message);
                     return;
                 }
 
@@ -714,7 +708,7 @@ window.deleteFile = function (el) {
                 $el.closest('.js-file').hide('fast');
             },
             error: function (jqXHR, textStatus) {
-                toastr.error('Ошибка удаления файла: ' + textStatus);
+                notyf.error('Ошибка удаления файла: ' + textStatus);
             }
         });
     });
@@ -853,4 +847,3 @@ window.checkLogin = function (el) {
 
     return false;
 };
-

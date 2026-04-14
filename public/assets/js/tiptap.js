@@ -7,6 +7,7 @@ import { Image } from '@tiptap/extension-image'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { CharacterCount } from '@tiptap/extension-character-count'
 import { Mention } from '@tiptap/extension-mention'
+import FileHandler from '@tiptap/extension-file-handler'
 import { trans as __ } from './translate.js'
 
 const BackgroundColor = Extension.create({
@@ -628,7 +629,7 @@ const suggestion = {
     },
 }
 
-function buildToolbar(editor) {
+function buildToolbar(editor, textarea, uploadImageFn) {
     const bar = document.createElement('div')
     bar.className = 'tiptap-toolbar'
 
@@ -802,9 +803,24 @@ function buildToolbar(editor) {
             editor.chain().focus().setImage({ src: data.image }).run()
         } else {
             editor.chain().focus().setImage({ src: url }).run()
-            toastr.warning(__('editor2.image_not_found'))
+            notyf.warning(__('editor2.image_not_found'))
         }
     })
+
+    // Кнопка загрузки файла (только если есть data-relate-type)
+    if (textarea.dataset.relateType) {
+        btn('fa-cloud-arrow-up', __('editor2.upload_image'), () => {
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.accept = 'image/*'
+            input.onchange = async () => {
+                const file = input.files[0]
+                if (!file) return
+                await uploadImageFn(editor, file)
+            }
+            input.click()
+        })
+    }
 
     btn('fa-play-circle', __('editor2.video'), () => {
         const url = prompt(__('editor2.url_video') + ':')
@@ -887,6 +903,54 @@ function initEditor(textarea) {
 
     let isChanged = false
 
+    // === Image Upload Helper ===
+    async function uploadImage(editor, file, pos = null) {
+        // Проверка размера файла (10MB максимум)
+        const maxSize = 10 * 1024 * 1024
+        if (file.size > maxSize) {
+            notyf.error(__('editor2.upload_failed') + ': файл слишком большой')
+            return
+        }
+
+        // Проверка типа файла
+        if (!file.type.startsWith('image/')) {
+            notyf.error(__('editor2.upload_failed') + ': неподдерживаемый формат')
+            return
+        }
+
+        const formData = new FormData()
+        formData.append('file', file)
+
+        const type = textarea.dataset.relateType || null
+        const id = textarea.dataset.relateId || 0
+        if (type) formData.append('type', type)
+        if (id) formData.append('id', id)
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+
+        try {
+            const response = await fetch('/ajax/file/upload', {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-CSRF-TOKEN': csrfToken }
+            })
+
+            const data = await response.json()
+
+            if (data.success && data.path) {
+                editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
+                    type: 'image',
+                    attrs: { src: data.path },
+                }).run()
+            } else {
+                notyf.error(data.message || __('editor2.upload_failed'))
+            }
+        } catch (error) {
+            notyf.error(__('editor2.upload_error'))
+        }
+    }
+    // ============================
+
     const editor = new Editor({
         element: editorEl,
         editorProps: {
@@ -924,7 +988,20 @@ function initEditor(textarea) {
             BackgroundColor,
             FontSize,
             TextAlign.configure({ types: ['heading', 'paragraph'] }),
-            Image.configure({ inline: false, HTMLAttributes: { class: 'block-image' } }),
+            Image.configure({ inline: false, HTMLAttributes: { class: 'block-image' }, allowBase64: false }),
+            FileHandler.configure({
+                allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg+xml'],
+                onDrop: async (editor, files, pos) => {
+                    for (const file of files) {
+                        await uploadImage(editor, file, pos)
+                    }
+                },
+                onPaste: async (editor, files, htmlContent) => {
+                    for (const file of files) {
+                        await uploadImage(editor, file)
+                    }
+                },
+            }),
             Placeholder.configure({ placeholder }),
             VideoEmbed,
             AudioEmbed,
@@ -989,7 +1066,7 @@ function initEditor(textarea) {
     window._tiptapActiveEditor = editor
     editor.on('focus', () => { window._tiptapActiveEditor = editor })
 
-    const toolbar = buildToolbar(editor)
+    const toolbar = buildToolbar(editor, textarea, uploadImage)
     wrapper.insertBefore(toolbar, editorEl)
 
     const counterEl = textarea.parentNode.querySelector('.js-textarea-counter')
