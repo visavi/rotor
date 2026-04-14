@@ -1069,10 +1069,18 @@ function initEditor(textarea) {
     const toolbar = buildToolbar(editor, textarea, uploadImage)
     wrapper.insertBefore(toolbar, editorEl)
 
+    function getCharCount() {
+        let count = editor.storage.characterCount.characters()
+        editor.state.doc.descendants(node => {
+            if (node.type.name === 'spoiler') count += (node.attrs.title || '').length
+        })
+        return count
+    }
+
     const counterEl = textarea.parentNode.querySelector('.js-textarea-counter')
     function updateCounter() {
         if (!counterEl) return
-        const len = editor.storage.characterCount.characters()
+        const len = getCharCount()
         if (maxLength) {
             const remaining = maxLength - len
             counterEl.textContent = len === 0 ? '' : __('characters_left') + ': ' + remaining
@@ -1087,7 +1095,7 @@ function initEditor(textarea) {
         const form = textarea.closest('form')
         if (form) {
             form.addEventListener('submit', e => {
-                if (editor.isEmpty) {
+                if (getCharCount() === 0) {
                     e.preventDefault()
                     editorEl.classList.add('is-invalid')
                     editorEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
