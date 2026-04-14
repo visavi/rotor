@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
@@ -88,6 +89,7 @@ class Down extends Model
             'active'  => 'bool',
             'links'   => 'array',
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
     }
 
@@ -209,7 +211,7 @@ class Down extends Model
      */
     public function getText(): HtmlString
     {
-        return new HtmlString(bbCode($this->text));
+        return renderHtml($this->text, 'down-' . $this->id);
     }
 
     /**

@@ -67,7 +67,7 @@
             <div class="row">
                 <div class="col-md-10">
                     <div class="section-message">
-                        {{ bbCode($item->text) }}
+                        {{ $item->getText() }}
                     </div>
                     <div>
                         @if ($item->phone)

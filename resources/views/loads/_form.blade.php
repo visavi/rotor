@@ -21,7 +21,7 @@
 
     <div class="mb-3{{ hasError('text') }}">
         <label for="text" class="form-label">{{ __('loads.down_text') }}:</label>
-        <textarea class="form-control markItUp" id="text" name="text" rows="5" maxlength="{{ setting('down_text_max') }}">{{ getInput('text', $down->text) }}</textarea>
+        <textarea class="form-control tiptap" data-relate-type="{{ $down->getMorphClass() }}" data-relate-id="{{ $down->id ?? 0 }}" id="text" name="text" rows="5" maxlength="{{ setting('down_text_max') }}">{{ getInput('text', $down->text) }}</textarea>
         <div class="invalid-feedback">{{ textError('text') }}</div>
         <span class="js-textarea-counter"></span>
     </div>

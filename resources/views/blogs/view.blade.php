@@ -2,7 +2,7 @@
 
 @section('title', $article->title)
 
-@section('description', truncateDescription(bbCode($article->text, false)))
+@section('description', truncateDescription($article->getText(false)))
 @section('canonical', route('articles.view', ['slug' => $article->slug]))
 
 @section('header')
@@ -73,7 +73,7 @@
 
     <div class="mb-3">
         <div class="section-message">
-            {{ bbCode($article->text) }}
+            {{ $article->getText() }}
         </div>
 
         {{ __('main.added') }}: {{ $article->user->getProfile() }}

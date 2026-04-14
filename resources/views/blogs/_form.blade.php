@@ -22,7 +22,7 @@
 
     <div class="mb-3{{ hasError('text') }}">
         <label for="text" class="form-label">{{ __('blogs.article') }}:</label>
-        <textarea class="form-control markItUp" maxlength="{{ setting('blog_text_max') }}" id="text" rows="5" name="text" required>{{ getInput('text', $article->text) }}</textarea>
+        <textarea class="form-control tiptap" data-relate-type="{{ $article->getMorphClass() }}" data-relate-id="{{ $article->id ?? 0 }}" maxlength="{{ setting('blog_text_max') }}" id="text" rows="5" name="text" required>{{ getInput('text', $article->text) }}</textarea>
         <div class="invalid-feedback">{{ textError('text') }}</div>
         <span class="js-textarea-counter"></span>
     </div>

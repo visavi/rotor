@@ -32,7 +32,7 @@
     <div class="mb-3">
         <div class="section-content">
             <div class="section-message">
-                {{ bbCode($offer->text) }}
+                {{ $offer->getText() }}
             </div>
         </div>
 
@@ -61,7 +61,7 @@
         <div class="section mb-3 shadow">
             <h5>{{ __('offers.official_response') }}</h5>
             <div class="section-message">
-                {{ bbCode($offer->reply) }}<br>
+                {{ $offer->getReply() }}<br>
                 {{ $offer->replyUser->getProfile() }}
                 <small class="section-date text-muted fst-italic">{{ dateFixed($offer->updated_at) }}</small>
             </div>

@@ -88,7 +88,7 @@
                     <div class="col-md-12">
                         <div class="mb-3{{ hasError('info') }}">
                             <label for="info" class="form-label">{{ __('users.about') }}:</label>
-                            <textarea class="form-control markItUp" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
+                            <textarea class="form-control tiptap" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                             <div class="invalid-feedback">{{ textError('info') }}</div>
                         </div>
 

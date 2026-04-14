@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\HtmlString;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,11 +49,29 @@ class Vote extends Model
     public static string $morphName = 'votes';
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'description' => HtmlCast::class,
+        ];
+    }
+
+    /**
      * Возвращает поля участвующие в поиске
      */
     public function searchableFields(): array
     {
         return ['title', 'description'];
+    }
+
+    /**
+     * Get description
+     */
+    public function getDescription(): HtmlString
+    {
+        return renderHtml($this->description, 'vote-' . $this->id);
     }
 
     /**

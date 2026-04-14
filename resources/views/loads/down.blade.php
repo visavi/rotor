@@ -2,7 +2,7 @@
 
 @section('title', $down->title)
 
-@section('description', truncateDescription(bbCode($down->text, false)))
+@section('description', truncateDescription($down->getText()))
 
 @section('header')
     @if (isAdmin('admin'))
@@ -52,7 +52,7 @@
         @endif
 
         <div class="section-message">
-            {{ bbCode($down->text) }}
+            {{ $down->getText() }}
         </div>
 
         @if ($down->links || $down->files->isNotEmpty())

@@ -131,7 +131,7 @@
                 @if (!empty($user->info))
                     <div class="alert alert-warning">
                         <b>{{ __('users.about') }}:</b><br>
-                        {{ bbCode($user->info) }}
+                        {{ $user->getInfo() }}
                     </div>
                 @endif
 

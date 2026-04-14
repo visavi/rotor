@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
@@ -84,6 +85,7 @@ class Article extends Model
             'active'       => 'bool',
             'published_at' => 'datetime',
             'user_id'      => 'int',
+            'text'         => HtmlCast::class,
         ];
     }
 
@@ -244,13 +246,13 @@ class Article extends Model
     /**
      * Get text
      */
-    public function getText($withImages = true): HtmlString
+    public function getText(bool $withImages = true): HtmlString
     {
         $text = $withImages
             ? $this->text
-            : preg_replace('/\[img].*?\[\/img]/', '', $this->text);
+            : preg_replace('/<img[^>]*>/', '', $this->text);
 
-        return new HtmlString(bbCode($text));
+        return renderHtml($text, 'article-' . $this->id);
     }
 
     /**

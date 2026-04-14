@@ -23,7 +23,7 @@
         @endif
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
-        <div>{{ __('main.message') }}: {{ renderHtml($post->text) }}</div>
+        <div>{{ __('main.message') }}: {{ $post->getText() }}</div>
     </div>
 
     <div class="section-form mb-3 shadow">

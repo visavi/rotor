@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use Illuminate\Database\Eloquent\Collection;
@@ -111,6 +112,8 @@ class Offer extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
+            'reply'   => HtmlCast::class,
         ];
     }
 
@@ -173,7 +176,15 @@ class Offer extends Model
      */
     public function getText(): HtmlString
     {
-        return new HtmlString(bbCode($this->text));
+        return renderHtml($this->text, 'offer-' . $this->id);
+    }
+
+    /**
+     * Get reply
+     */
+    public function getReply(): HtmlString
+    {
+        return renderHtml($this->reply, 'offer-reply-' . $this->id);
     }
 
     /**

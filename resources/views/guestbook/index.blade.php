@@ -79,7 +79,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ renderHtml($post->text) }}
+                        {{ $post->getText() }}
                     </div>
 
                     @include('app/_media_viewer', ['model' => $post])
@@ -89,7 +89,7 @@
                     @endif
 
                     @if ($post->reply)
-                        <div class="text-danger">{{ __('guestbook.answer') }}: {{ renderHtml($post->reply) }}</div>
+                        <div class="text-danger">{{ __('guestbook.answer') }}: {{ $post->getReply() }}</div>
                     @endif
 
                     @if (isAdmin())

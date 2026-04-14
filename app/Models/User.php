@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
@@ -168,11 +169,29 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public static string $morphName = 'users';
 
     /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'info' => HtmlCast::class,
+        ];
+    }
+
+    /**
      * Возвращает поля участвующие в поиске
      */
     public function searchableFields(): array
     {
         return ['login', 'name', 'info', 'site', 'status'];
+    }
+
+    /**
+     * Get info
+     */
+    public function getInfo(): HtmlString
+    {
+        return renderHtml($this->info, 'user-' . $this->id);
     }
 
     /**

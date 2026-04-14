@@ -4,7 +4,7 @@
 
 @section('content')
     @foreach ($downs as $down)
-        <?php $down->text = bbCode($down->text); ?>
+        <?php $down->text = $down->getText(); ?>
         <?php $down->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $down->text); ?>
 
         <item>

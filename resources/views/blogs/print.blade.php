@@ -2,12 +2,12 @@
 
 @section('title', $article->title)
 
-@section('description', truncateDescription(bbCode($article->text, false)))
+@section('description', truncateDescription($article->getText(false)))
 
 @section('content')
     <h1>{{ $article->title }}</h1>
 
-    {{ bbCode($article->text) }}
+    {{ $article->getText() }}
 
     <br><br>
 

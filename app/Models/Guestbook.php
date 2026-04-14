@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Guestbook
@@ -132,6 +133,22 @@ class Guestbook extends Model
         return $this->files->filter(static function (File $value, $key) {
             return $value->isImage();
         });
+    }
+
+    /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return renderHtml($this->text, 'guestbook-' . $this->id);
+    }
+
+    /**
+     * Get reply
+     */
+    public function getReply(): HtmlString
+    {
+        return renderHtml($this->reply, 'guestbook-reply-' . $this->id);
     }
 
     /**

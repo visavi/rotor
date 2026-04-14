@@ -68,7 +68,7 @@
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('boards.text') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('board_text_max') }}" id="text" rows="5" name="text" required>{{ getInput('text', $item->text) }}</textarea>
+                <textarea class="form-control tiptap" data-relate-type="{{ $item->getMorphClass() }}" data-relate-id="{{ $item->id }}" maxlength="{{ setting('board_text_max') }}" id="text" rows="5" name="text" required>{{ getInput('text', $item->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 

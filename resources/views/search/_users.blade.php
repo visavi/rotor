@@ -26,7 +26,7 @@
                     <small class="fst-italic">{{ $post->getStatus() }}</small>
 
                     @if ($post->info)
-                        <div>{{ bbCodeTruncate($post->info, 100) }}</div>
+                        <div>{{ truncateHtml($post->info, 100) }}</div>
                     @endif
 
                     @if ($post->site)

@@ -18,7 +18,7 @@
 
         @if ($post->text)
             <div class="section-message">
-                {{ bbCodeTruncate($post->text, 100) }}
+                {{ truncateHtml($post->text, 100) }}
             </div>
         @endif
 

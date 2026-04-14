@@ -36,7 +36,7 @@
 
                 @if ($vote->description)
                     <div class="section-body mb-3">
-                        {{ bbCode($vote->description) }}
+                        {{ $vote->getDescription() }}
                     </div>
                 @endif
 

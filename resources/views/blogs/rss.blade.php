@@ -5,7 +5,7 @@
 @section('content')
     @foreach ($articles as $article)
         @php
-            $article->text = bbCode($article->text);
+            $article->text = $article->getText();
             $article->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $article->text);
             $article->text = str_replace('/uploads/articles', asset('/uploads/articles'), $article->text);
         @endphp

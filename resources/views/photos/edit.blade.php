@@ -25,7 +25,7 @@
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('photos.description') }}:</label>
-                <textarea class="form-control markItUp" maxlength="{{ setting('photo_text_max') }}" id="text" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
+                <textarea class="form-control tiptap" maxlength="{{ setting('photo_text_max') }}" id="text" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
@@ -73,6 +74,7 @@ class Item extends Model
         return [
             'active'  => 'bool',
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
     }
 
@@ -145,17 +147,13 @@ class Item extends Model
     /**
      * Get text
      */
-    public function getText($words = null): HtmlString
+    public function getText(?int $words = null): HtmlString
     {
-        $text = $this->text;
-
-        if ($words && count(preg_split('/[^\s*+]+/u', $text)) > $words) {
-            $text = bbCodeTruncate($text, $words);
-        } else {
-            $text = bbCode($text);
+        if ($words) {
+            return truncateHtml($this->text, $words);
         }
 
-        return new HtmlString($text);
+        return renderHtml($this->text, 'item-' . $this->id);
     }
 
     /**

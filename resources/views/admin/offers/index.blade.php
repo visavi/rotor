@@ -58,7 +58,7 @@
 
                     <div class="section-body">
                         {{ $data->getStatus() }}<br>
-                        {{ bbCode($data->text) }}<br>
+                        {{ $data->getText() }}<br>
                         {{ __('main.added') }}: {{ $data->user->getProfile() }}
                         <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>
                         <a href="{{ route('offers.comments', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>

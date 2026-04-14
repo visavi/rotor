@@ -9,7 +9,7 @@
 
         <div class="mb-3{{ hasError('description') }}">
             <label for="text" class="form-label">{{ __('main.description') }}:</label>
-            <textarea class="form-control markItUp" id="text" rows="5" name="description">{{ getInput('description', $vote->description ?? null) }}</textarea>
+            <textarea class="form-control tiptap" id="text" rows="5" name="description">{{ getInput('description', $vote->description ?? null) }}</textarea>
             <div class="invalid-feedback">{{ textError('description') }}</div>
         </div>
 

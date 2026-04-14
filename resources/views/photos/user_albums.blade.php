@@ -43,7 +43,7 @@
 
                     @if ($photo->text)
                         <div class="section-message">
-                            {{ bbCode($photo->text) }}
+                            {{ $photo->getText() }}
                         </div>
                     @endif
 
