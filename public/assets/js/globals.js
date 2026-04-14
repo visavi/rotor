@@ -1,4 +1,3 @@
-import bootbox from 'bootbox';
 import { Fancybox } from '@fancyapps/ui';
 import Tags from 'bootstrap5-tags';
 import { Notyf } from 'notyf';
@@ -16,7 +15,6 @@ const notyf = new Notyf({
     ],
 });
 
-window.bootbox = bootbox;
 window.fancybox = Fancybox;
 window.tags = Tags;
 window.notyf = notyf;

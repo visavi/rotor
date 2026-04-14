@@ -1,4 +1,24 @@
+import * as bootstrap from 'bootstrap'
 import { trans as __ } from './translate.js'
+
+const confirmDialogEl = document.createElement('dialog')
+confirmDialogEl.className = 'confirm-dialog'
+confirmDialogEl.innerHTML = `
+<p class="confirm-message"></p>
+<div class="confirm-footer">
+    <button type="button" class="btn btn-secondary btn-sm js-confirm-cancel"></button>
+    <button type="button" class="btn btn-primary btn-sm js-confirm-ok"></button>
+</div>`
+document.body.appendChild(confirmDialogEl)
+
+function confirm(message, callback) {
+    confirmDialogEl.querySelector('.confirm-message').textContent = message
+    confirmDialogEl.querySelector('.js-confirm-ok').textContent = __('buttons.ok')
+    confirmDialogEl.querySelector('.js-confirm-cancel').textContent = __('buttons.cancel')
+    confirmDialogEl.querySelector('.js-confirm-ok').onclick = () => { confirmDialogEl.close(); callback(true) }
+    confirmDialogEl.querySelector('.js-confirm-cancel').onclick = () => { confirmDialogEl.close(); callback(false) }
+    confirmDialogEl.showModal()
+}
 
 $(function () {
     let body = $('body');
@@ -21,18 +41,6 @@ $(function () {
         max: 10,
         separator: [','],
         addOnBlur: true,
-    });
-
-    bootbox.addLocale('my', {
-        OK : __('buttons.ok'),
-        CANCEL : __('buttons.cancel'),
-        CONFIRM : __('buttons.ok'),
-    });
-
-    bootbox.setDefaults({
-        locale: 'my',
-        closeButton: false,
-        backdrop: true,
     });
 
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {
@@ -293,7 +301,7 @@ window.confirmAction = function (el) {
         return true;
     }
 
-    bootbox.confirm(message, function (result) {
+    confirm(message, function (result) {
         if (result) {
             if ($el.is('form') || $el.closest('form').length) {
                 const $form = $el.is('form') ? $el : $el.closest('form');
@@ -311,7 +319,7 @@ window.confirmAction = function (el) {
 
 /* Отправка жалобы на спам */
 window.sendComplaint = function (el) {
-    bootbox.confirm(__('confirm_complain_submit'), function (result) {
+    confirm(__('confirm_complain_submit'), function (result) {
         if (!result) return;
 
         $.ajax({
@@ -369,7 +377,7 @@ window.bookmark = function (el) {
 
 /* Удаление записей */
 window.deletePost = function (el) {
-    bootbox.confirm(__('confirm_message_delete'), function (result) {
+    confirm(__('confirm_message_delete'), function (result) {
         if (! result) return;
 
         const $el = $(el);
@@ -395,7 +403,7 @@ window.deletePost = function (el) {
 
 /* Удаление комментариев */
 window.deleteComment = function (el) {
-    bootbox.confirm(__('confirm_message_delete'), function (result) {
+    confirm(__('confirm_message_delete'), function (result) {
         if (! result) return;
 
         $.ajax({
@@ -456,7 +464,7 @@ window.changeRating = function (el) {
  * Удаляет запись из истории рейтинга
  */
 window.deleteRating = function (el) {
-    bootbox.confirm(__('confirm_message_delete'), function (result) {
+    confirm(__('confirm_message_delete'), function (result) {
         if (! result) return;
 
         $.ajax({
@@ -502,7 +510,7 @@ window.deleteSpam = function (el) {
  * Удаляет запись со стены сообщений
  */
 window.deleteWall = function (el) {
-    bootbox.confirm(__('confirm_message_delete'), function (result) {
+    confirm(__('confirm_message_delete'), function (result) {
         if (!result) return;
 
         $.ajax({
@@ -683,7 +691,7 @@ window.cutImage = function (path) {
 
 /* Удаление файла */
 window.deleteFile = function (el) {
-    bootbox.confirm(__('confirm_file_delete'), function (result) {
+    confirm(__('confirm_file_delete'), function (result) {
         if (!result) return;
 
         const $el = $(el);
