@@ -32,7 +32,7 @@
 
                 <div class="section-content">
                     <div class="section-message">
-                        {{ bbCode($comment->text) }}
+                        {{ $comment->getText() }}
                     </div>
 
                     {{ __('main.posted') }}: {{ $comment->user->getProfile() }}

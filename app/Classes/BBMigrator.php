@@ -162,8 +162,6 @@ class BBMigrator
         $html = $this->parse($text);
         $html = HtmlSanitizer::sanitize($html);
 
-        $html = str_replace('&#64;', '@', $html);
-
         // Убираем пустые <p></p> в начале и конце после санитайзера
         return preg_replace('/^(<p><\/p>)+|(<p><\/p>)+$/', '', $html);
     }

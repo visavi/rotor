@@ -103,7 +103,7 @@ class Comment extends Model
      */
     public function getText(): HtmlString
     {
-        return new HtmlString(bbCode($this->text));
+        return renderHtml($this->text, 'comment-' . $this->id);
     }
 
     /**

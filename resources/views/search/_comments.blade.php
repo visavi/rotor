@@ -21,7 +21,7 @@
 
     <div class="section-content">
         <div class="section-message">
-            {{ bbCodeTruncate($post->text) }}
+            {{ truncateHtml($post->text) }}
         </div>
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>

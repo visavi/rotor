@@ -52,7 +52,7 @@
                     @endif
 
                     <div class="section-message">
-                        {{ renderHtml($data->text, 'news-' . $data->id) }}
+                        {{ $data->getText() }}
                     </div>
 
                     @if ($data->getFiles()->isNotEmpty())

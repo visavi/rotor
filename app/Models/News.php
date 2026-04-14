@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class News
@@ -136,6 +137,14 @@ class News extends Model
     {
         return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
+    }
+
+    /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return renderHtml($this->text, 'news-' . $this->id);
     }
 
     /**

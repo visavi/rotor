@@ -33,7 +33,7 @@
 
                 <div class="section-content">
                     <div class="section-message">
-                        {{ bbCode($comment->text) }}
+                        {{ $comment->getText() }}
                     </div>
 
                     {{ __('main.posted') }}: {{ $comment->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>

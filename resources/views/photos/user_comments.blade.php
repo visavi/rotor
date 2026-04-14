@@ -28,7 +28,7 @@
 
                 <div class="section-body">
                     <div class="section-message">
-                        {{ bbCode($comment->text) }}
+                        {{ $comment->getText() }}
                     </div>
 
                     {{ __('main.posted') }}: {{ $comment->user->getProfile() }}

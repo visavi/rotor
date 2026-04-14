@@ -5,7 +5,7 @@
 @section('content')
     @foreach ($down->lastComments as $data)
         @php
-            $data->text = bbCode($data->text);
+            $data->text = $data->getText();
             $data->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $data->text);
         @endphp
 

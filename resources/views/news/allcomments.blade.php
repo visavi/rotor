@@ -26,7 +26,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ bbCode($data->text) }}
+                        {{ $data->getText() }}
                     </div>
 
                     {{ __('main.posted') }}: {{ $data->user->getProfile() }}
