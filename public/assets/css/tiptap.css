@@ -306,17 +306,18 @@
 .tiptap-editor-content {
     display: flex;
     flex-direction: column;
-    padding: 10px 12px;
     min-height: 140px;
     color: var(--bs-body-color);
     resize: vertical;
     overflow: auto;
+    scrollbar-width: thin;
     cursor: text;
 }
 
 .tiptap-editor-content .ProseMirror {
     flex: 1;
     outline: none;
+    padding: 10px 12px;
     min-height: 100px;
     word-break: break-word;
     cursor: text;
@@ -440,7 +441,7 @@ blockquote::before {
 
 /* Images */
 .block-image {
-    max-width: 600px;
+    max-width: min(600px, 100%);
     max-height: 450px;
     height: auto;
     border-radius: 4px;

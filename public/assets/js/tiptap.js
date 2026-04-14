@@ -875,7 +875,9 @@ function initEditor(textarea) {
     editorEl.className = 'tiptap-editor-content'
     const rows = parseInt(textarea.getAttribute('rows'))
     if (rows) {
-        editorEl.style.minHeight = (rows * 24 + 22) + 'px'
+        const height = rows * 24 + 22
+        editorEl.style.minHeight = height + 'px'
+        editorEl.style.height = height + 'px'
     }
     wrapper.appendChild(editorEl)
 
