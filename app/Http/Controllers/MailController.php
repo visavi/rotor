@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\HtmlSanitizer;
 use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -38,7 +39,7 @@ class MailController extends Controller
                 $message = str_replace(
                     '/uploads/stickers',
                     config('app.url') . '/uploads/stickers',
-                    bbCode($message)->toHtml()
+                    HtmlSanitizer::sanitize($message)
                 );
 
                 $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');

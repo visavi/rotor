@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
@@ -44,7 +45,16 @@ class Banhist extends Model
     {
         return [
             'user_id' => 'int',
+            'reason'  => HtmlCast::class,
         ];
+    }
+
+    /**
+     * Get reason
+     */
+    public function getReason(): HtmlString
+    {
+        return renderHtml($this->reason);
     }
 
     /**

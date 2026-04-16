@@ -36,7 +36,7 @@
                 @endif
 
                 <div class="section-message">
-                    {{ bbCode($data->text) }}<br>
+                    {{ $data->getText() }}<br>
 
                     @if (isAdmin())
                         <div class="small text-muted fst-italic mt-2">({{ $data->brow }}, {{ $data->ip }})</div>

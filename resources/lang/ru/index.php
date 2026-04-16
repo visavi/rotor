@@ -48,7 +48,6 @@ return [
 
     'information'   => 'Информация',
     'site_rules'    => 'Правила сайта',
-    'tag_help'      => 'Справка по тегам',
     'stickers_help' => 'Справка по стикерам',
     'faq'           => 'FAQ',
     'api_interface' => 'API интерфейс',

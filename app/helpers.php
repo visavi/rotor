@@ -1,6 +1,5 @@
 <?php
 
-use App\Classes\BBCode;
 use App\Classes\Calendar;
 use App\Classes\CloudFlare;
 use App\Classes\Metrika;
@@ -673,19 +672,6 @@ function icons(string $ext): HtmlString
 }
 
 /**
- * Возвращает обрезанный текст с закрытием тегов
- */
-function bbCodeTruncate(?string $text, int $words = 20, string $end = '...'): HtmlString
-{
-    $bbCode = new BBCode();
-
-    $text = Str::words((string) $text, $words, $end);
-    $bbText = bbCode($bbCode->closeTags($text));
-
-    return new HtmlString(preg_replace('/\[(.*?)]/', '', $bbText));
-}
-
-/**
  * Возвращает обрезанную до заданного количества слов строку
  */
 function truncateHtml(?string $html, int $words = 20, string $end = '...'): HtmlString
@@ -1038,11 +1024,13 @@ function deleteFile(string $path): bool
  */
 function sendNotify(string $text, string $url, string $title): void
 {
-    /* $parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $text); */
-    preg_match_all('/(?<=^|\s|=)@([\w\-]+)/', $text, $matches);
+    if (! $login = getUser('login')) {
+        return;
+    }
+
+    preg_match_all('/<a[^>]+class="mention"[^>]*href="\/users\/([\w\-]+)"/', $text, $matches);
 
     if (! empty($matches[1])) {
-        $login = getUser('login') ?? setting('guestsuser');
         $usersAnswer = array_unique(array_diff($matches[1], [$login]));
 
         foreach ($usersAnswer as $user) {
@@ -1068,6 +1056,10 @@ function textNotice(string $type, array $replace = []): string
     }
 
     foreach ($replace as $key => $val) {
+        if ($key === 'login') {
+            $val = '<a class="mention" href="/users/' . $val . '">@' . $val . '</a>';
+        }
+
         $message->text = str_replace('%' . $key . '%', $val, $message->text);
     }
 
@@ -1365,20 +1357,12 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 
 /**
  * Обрабатывает BB-код
+ *
+ * @deprecated - используется renderHtml
  */
 function bbCode(?string $text, bool $parse = true): HtmlString
 {
-    $bbCode = new BBCode();
-    $checkText = check($text);
-
-    if (! $parse) {
-        return new HtmlString($bbCode->clear($checkText));
-    }
-
-    $parseText = $bbCode->parse($checkText);
-    $parseText = $bbCode->parseStickers($parseText);
-
-    return new HtmlString($parseText);
+    return new HtmlString($text);
 }
 
 /**

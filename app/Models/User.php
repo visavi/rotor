@@ -191,7 +191,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getInfo(): HtmlString
     {
-        return renderHtml($this->info, 'user-' . $this->id);
+        return renderHtml($this->info);
     }
 
     /**

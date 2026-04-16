@@ -31,7 +31,7 @@
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('main.text') }}:</label>
-                <textarea class="form-control markItUp" id="text" rows="15" name="text" required>{{ getInput('text') }}</textarea>
+                <textarea class="form-control tiptap" id="text" rows="15" name="text" required>{{ getInput('text') }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 

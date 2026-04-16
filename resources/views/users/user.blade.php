@@ -38,7 +38,7 @@
             {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
 
             @if ($user->lastBan->id)
-                {{ __('users.reason_ban') }}: {{ bbCode($user->lastBan->reason) }}<br>
+                {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>
             @endif
         </div>
     @endif
@@ -148,7 +148,7 @@
         <i class="fa fa-thumbtack"></i> <b>{{ __('main.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ __('main.change') }}</a>)<br>
 
         @if (! empty($user->note->text))
-            {{ bbCode($user->note->text) }}<br>
+            {{ $user->note->getText() }}<br>
             {{ __('main.changed') }}: {{ $user->note->editUser->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($user->note->updated_at) }}</small><br>
         @else
             {{ __('users.empty_note') }}<br>

@@ -40,7 +40,7 @@
 
                     @if ($user->lastBan->id)
                         {{ __('users.banned') }}: {{ $user->lastBan->sendUser->getProfile() }}<br>
-                        {{ __('users.reason_ban') }}: {{ bbCode($user->lastBan->reason) }}<br>
+                        {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>
                     @endif
                 </div>
             </div>

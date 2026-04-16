@@ -44,14 +44,6 @@ class PageController extends Controller
     }
 
     /**
-     * Теги
-     */
-    public function tags(): View
-    {
-        return view('pages/tags');
-    }
-
-    /**
      * Правила
      */
     public function rules(): View

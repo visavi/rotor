@@ -453,3 +453,28 @@ textarea.form-control {
     justify-content: flex-end;
     gap: 8px;
 }
+
+/* Print styles */
+@media print {
+    *,
+    *::before,
+    *::after {
+        color: #000 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:visited {
+        text-decoration: underline;
+        color: #000 !important;
+    }
+}

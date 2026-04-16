@@ -20,7 +20,7 @@
     @if ($note->text)
         <div class="mb-3">
             {{ __('notebooks.subtitle') }}:<br>
-            {{ bbCode($note->text) }}
+            {{ $note->getText() }}
         </div>
 
         <p class="text-muted fst-italic">

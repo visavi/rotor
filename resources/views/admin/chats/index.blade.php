@@ -13,8 +13,7 @@
 @stop
 
 @section('content')
-    <a href="/stickers">{{ __('main.stickers') }}</a> /
-    <a href="/tags">{{ __('main.tags') }}</a><hr>
+    <a href="/stickers">{{ __('main.stickers') }}</a><hr>
 
     @if ($posts->isNotEmpty())
         @foreach ($posts as $post)
@@ -47,7 +46,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ bbCode($post->text) }}
+                        {{ $post->getText() }}
                     </div>
 
                     @if ($post->edit_user_id)
@@ -71,7 +70,7 @@
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                <textarea class="form-control markItUp" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                <textarea class="form-control tiptap" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
             </div>
 

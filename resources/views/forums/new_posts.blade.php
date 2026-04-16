@@ -50,7 +50,7 @@
                 <span class="badge bg-adaptive">{{ $data->rating }}</span>
 
                 <div class="section-message">
-                    {{ bbCode($data->text) }}<br>
+                    {{ $data->getText() }}<br>
 
                     {{ __('main.posted') }}: {{ $data->user->getName() }}
                     <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small>

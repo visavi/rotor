@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Message
@@ -61,7 +63,16 @@ class Message extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
+    }
+
+    /**
+     * Get text
+     */
+    public function getText(): HtmlString
+    {
+        return renderHtml($this->text, 'message-' . $this->id);
     }
 
     /**

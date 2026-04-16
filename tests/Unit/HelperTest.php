@@ -109,18 +109,6 @@ class HelperTest extends TestCase
         self::assertSame('тест***тест***', antimat('тестxxxтестxxx'));
     }
 
-    public function testBbCode(): void
-    {
-        self::assertSame(
-            '<strong>Hello</strong> &lt;br&gt; <u>world</u>',
-            bbCode('[b]Hello[/b] <br> [u]world[/u]')->toHtml()
-        );
-        self::assertSame(
-            'Hello world',
-            bbCode('[b]Hello[/b] [u]world[/u]', false)->toHtml()
-        );
-    }
-
     public static function hideMailProvider(): array
     {
         return [

@@ -79,7 +79,7 @@ class WallController extends Controller
                 ]);
 
                 $flood->saveState();
-                sendNotify($msg, '/walls/' . $user->login, __('index.wall_posts_login', ['login' => $user->getName()]));
+                sendNotify($msg, route('walls.index', ['login' => $user->login], absolute: false), __('index.wall_posts_login', ['login' => $user->getName()]));
 
                 setFlash('success', __('main.record_added_success'));
             } else {

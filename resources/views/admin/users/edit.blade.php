@@ -171,7 +171,7 @@
 
             <div class="mb-3{{ hasError('info') }}">
                 <label for="info" class="form-label">{{ __('users.about') }}:</label>
-                <textarea class="form-control markItUp" id="info" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
+                <textarea class="form-control tiptap" id="info" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
                 <div class="invalid-feedback">{{ textError('info') }}</div>
             </div>
 
@@ -217,7 +217,7 @@
 
             @if ($banhist)
                 {{ __('users.term') }}: {{ formatTime($banhist->term) }}<br>
-                {{ __('users.reason_ban') }}: {{ bbCode($banhist->reason) }}<br>
+                {{ __('users.reason_ban') }}: {{ $banhist->getReason() }}<br>
                 {{ __('users.banned') }}: {{ $banhist->sendUser->getProfile() }}<br>
             @endif
         </div>

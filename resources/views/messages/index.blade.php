@@ -53,7 +53,7 @@
                 <div class="section-body border-top">
                     <div class="section-message">
                         {{ $data->type === $data::OUT ? __('messages.you') . ': ' : '' }}
-                        {{ bbCodeTruncate($data->text) }}
+                        {{ truncateHtml($data->text) }}
                     </div>
                 </div>
             </div>

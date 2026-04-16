@@ -17,7 +17,7 @@ class DialogueResource extends JsonResource
             'id'             => $this->id,
             'login'          => $this->author->exists ? $this->author->login : (string) $this->author_id,
             'name'           => $this->author_id ? $this->author->getName() : __('messages.system'),
-            'text'           => bbCode($this->text)->toHtml(),
+            'text'           => $this->text,
             'type'           => $this->getAttribute('type'),
             'all_reading'    => (bool) $this->getAttribute('all_reading'),
             'recipient_read' => (bool) $this->getAttribute('recipient_read'),

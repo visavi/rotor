@@ -30,74 +30,51 @@ return [
 
     'notices' => [
         'register_name' => 'Greetings at registration in private',
-        'register_text' => 'Welcome %username%!
-Now you are a full user of the site, save your username and password in a safe place, they will come in handy for you to enter our site.
-Before visiting the site, we recommend that you read the [url=/rules]site rules[/url], this will help you avoid unpleasant situations.
-Have a nice time.
-Regards, Site Administration!',
+        'register_text' => '<p>Welcome %username%!</p><p>Now you are a full user of the site, save your username and password in a safe place, they will come in handy for you to enter our site.</p><p>Before visiting the site, we recommend that you read the <a href="/rules">site rules</a>, this will help you avoid unpleasant situations.</p><p>Have a nice time.</p><p>Regards, Site Administration!</p>',
 
         'down_upload_name' => 'File download notification',
-        'down_upload_text' => 'File download notification
-The new file [b][url=%url%]%title%[/url][/b] requires confirmation of publication!',
+        'down_upload_text' => '<p>File download notification.</p><p>The new file <strong><a href="%url%">%title%</a></strong> requires confirmation of publication!</p>',
 
         'down_publish_name' => 'File publishing notification',
-        'down_publish_text' => 'File publishing notification.
-Your file [b][url=%url%]%title%[/url][/b] successfully passed the test and was added to the downloads',
+        'down_publish_text' => '<p>File publishing notification.</p><p>Your file <strong><a href="%url%">%title%</a></strong> successfully passed the test and was added to the downloads</p>',
 
-        'down_unpublish_name' => 'Notice of withdrawal from publication.',
-        'down_unpublish_text' => 'Notice of withdrawal from publication.
-Your file [b][url=%url%]%title%[/url][/b] has been unpublished',
+        'down_unpublish_name' => 'Notice of withdrawal from publication',
+        'down_unpublish_text' => '<p>Notice of withdrawal from publication.</p><p>Your file <strong><a href="%url%">%title%</a></strong> has been unpublished</p>',
 
         'down_change_name' => 'File change notification',
-        'down_change_text' => 'File change notification.
-Your file [b][url=%url%]%title%[/url][/b] has been edited by the moderator, you may need additional corrections!',
+        'down_change_text' => '<p>File change notification.</p><p>Your file <strong><a href="%url%">%title%</a></strong> has been edited by the moderator, you may need additional corrections!</p>',
 
         'notify_name' => 'User mention',
-        'notify_text' => 'User @%login% mentioned you on the page [b][url=%url%]%title%[/url][/b]
-Message text: %text%',
+        'notify_text' => '<p>User %login% mentioned you on the page <strong><a href="%url%">%title%</a></strong></p><blockquote>%text%</blockquote>',
 
         'invite_name' => 'Sending invitation keys',
-        'invite_text' => 'Congratulations! You have received invitation keys
-Your keys: %key%
-With these keys you can invite your friends to our site!',
+        'invite_text' => '<p>Congratulations! You have received invitation keys</p><p>Your keys: %key%</p><p>With these keys you can invite your friends to our site!</p>',
 
         'contact_name' => 'Add to contact list',
-        'contact_text' => 'User @%login% added you to his contact list!',
+        'contact_text' => '<p>User %login% added you to his contact list!</p>',
 
         'ignore_name' => 'Adding to ignore list',
-        'ignore_text' => 'User @%login% added you to his ignore list!',
+        'ignore_text' => '<p>User %login% added you to his ignore list!</p>',
 
         'transfer_name' => 'Money transfer',
-        'transfer_text' => 'User @%login% transferred %money% to you
-Comment: %comment%',
+        'transfer_text' => '<p>User %login% transferred %money% to you</p><p>Comment: %comment%</p>',
 
         'rating_name' => 'Reputation change',
-        'rating_text' => 'User @%login% gave you %vote%! (Your rating: %rating%)
-Comment: %comment%',
+        'rating_text' => '<p>User %login% gave you %vote%! (Your rating: %rating%)</p><p>Comment: %comment%</p>',
 
         'surprise_name' => 'New years surprise',
-        'surprise_text' => 'Happy New %year% Year!
-As a surprise, you get:
-%point%
-%money%
-%rating% reputation
-Cool!!!',
+        'surprise_text' => '<p>Happy New %year% Year!</p><p>As a surprise, you get:</p><p>%point%</p><p>%money%</p><p>%rating% reputation</p><p>Cool!!!</p>',
 
         'explain_name' => 'Explanation of violation',
-        'explain_text' => 'Explanation of violation: %message%',
+        'explain_text' => '<p>Explanation of violation: %message%</p>',
 
         'offer_reply_name' => 'Answer to problem / suggestion',
-        'offer_reply_text' => <<<'INFO'
-Notification of the answer to your problem / proposal
-Your problem or suggestion [b][url=%url%]%title%[/url][/b] has been answered
-Reply text: %text%
-Entry status: %status%
-INFO,
+        'offer_reply_text' => '<p>Notification of the answer to your problem / proposal</p><p>Your problem or suggestion <strong><a href="%url%">%title%</a></strong> has been answered</p><p>Reply text: %text%</p><p>Entry status: %status%</p>',
 
         'article_publish_name' => 'Notification of article publication',
-        'article_publish_text' => 'Your article [b][url=%url%]%title%[/url][/b] has been published',
+        'article_publish_text' => '<p>Your article <strong><a href="%url%">%title%</a></strong> has been published</p>',
 
         'article_unpublish_name' => 'Notice of removal from publication',
-        'article_unpublish_text' => 'Your article [b][url=%url%]%title%[/url][/b] has been removed from publication',
+        'article_unpublish_text' => '<p>Your article <strong><a href="%url%">%title%</a></strong> has been removed from publication</p>',
     ],
 ];

@@ -148,7 +148,7 @@ class Guestbook extends Model
      */
     public function getReply(): HtmlString
     {
-        return renderHtml($this->reply, 'guestbook-reply-' . $this->id);
+        return renderHtml($this->reply);
     }
 
     /**

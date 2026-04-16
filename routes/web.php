@@ -496,7 +496,6 @@ Route::controller(PageController::class)
         Route::get('/surprise', 'surprise')->name('surprise');
         Route::get('/pages/{page?}', 'index')->where('page', '[\w\-]+')->name('pages');
         Route::get('/menu', 'menu')->name('menu');
-        Route::get('/tags', 'tags')->name('tags');
         Route::get('/rules', 'rules')->name('rules');
         Route::get('/stickers', 'stickers');
         Route::get('/stickers/{id}', 'stickersCategory');

@@ -184,7 +184,7 @@ class Offer extends Model
      */
     public function getReply(): HtmlString
     {
-        return renderHtml($this->reply, 'offer-reply-' . $this->id);
+        return renderHtml($this->reply);
     }
 
     /**

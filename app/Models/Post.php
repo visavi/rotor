@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
@@ -89,6 +90,7 @@ class Post extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
     }
 
@@ -167,7 +169,7 @@ class Post extends Model
      */
     public function getText(): HtmlString
     {
-        return new HtmlString(bbCode($this->text));
+        return renderHtml($this->text, 'post-' . $this->id);
     }
 
     /**

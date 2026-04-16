@@ -47,25 +47,6 @@ $(function () {
         // Your custom options
     });
 
-    $('.markItUp').markItUp(mySettings)
-        .on('input', function() {
-            const $this = $(this);
-            const maxlength = $this.attr('maxlength');
-            const text = $this.val().replace(/(\r\n|\n|\r)/g, "\r\n");
-            const currentLength = text.length;
-            const $counter = $('.js-textarea-counter');
-
-            $counter.toggleClass('text-danger', currentLength > maxlength);
-
-            const remaining = maxlength - currentLength;
-            $counter.text(currentLength === 0 ? '' : __('characters_left') + ': ' + remaining);
-        })
-        .on('markitup:previewUpdated', function() {
-            prettyPrint();
-        });
-
-    $('.markItUpHtml').markItUp(myHtmlSettings);
-
     $('[data-bs-toggle="tooltip"]').tooltip();
     $('[data-bs-toggle="popover"]').popover();
 
@@ -113,23 +94,6 @@ $(function () {
             scrollTop: 0
         }, 100);
         return false;
-    });
-
-    /* Уход со страницы */
-    let isChanged = false;
-    $('.markItUpEditor').on('input change', function() {
-        isChanged = true;
-    });
-
-    $(window).on('beforeunload', function(e) {
-        if (isChanged && $('.markItUpEditor').val().trim().length > 0) {
-            e.preventDefault();
-            return e.returnValue = '';
-        }
-    });
-
-    $('form').on('submit', function() {
-        $(window).off('beforeunload');
     });
 
     $('.js-messages-block').on('show.bs.dropdown', function () {
@@ -215,21 +179,15 @@ window.postReply = function (el) {
     if (!author) return false;
 
     var editor = window._tiptapActiveEditor;
+    if (!editor) return false;
 
-    if (editor) {
-        if ($authorEl.is('a')) {
-            editor.chain().focus().insertContent([
-                { type: 'mention', attrs: { id: author, label: author } },
-                { type: 'text', text: ' ' },
-            ]).run();
-        } else {
-            editor.chain().focus().insertContent({ type: 'text', text: author + ', ' }).run();
-        }
+    if ($authorEl.is('a')) {
+        editor.chain().focus().insertContent([
+            { type: 'mention', attrs: { id: author, label: author } },
+            { type: 'text', text: ' ' },
+        ]).run();
     } else {
-        var field = $('.markItUpEditor');
-        var $lastSymbol = field.val().slice(field.val().length - 1);
-        var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
-        field.focus().val(field.val() + separ + '@' + author + ', ');
+        editor.chain().focus().insertContent({ type: 'text', text: author + ', ' }).run();
     }
 
     return false;
@@ -248,44 +206,36 @@ window.postQuote = function (el) {
     var message   = text.find('blockquote').remove().end().text().trim();
     var editor    = window._tiptapActiveEditor;
 
-    if (editor) {
-        if (!message) {
-            if (author) {
-                editor.chain().focus().insertContent([
-                    { type: 'mention', attrs: { id: author, label: author } },
-                    { type: 'text', text: ' ' },
-                ]).run();
-            }
-            return false;
+    if (!editor) return false;
+
+    if (!message) {
+        if (author) {
+            editor.chain().focus().insertContent([
+                { type: 'mention', attrs: { id: author, label: author } },
+                { type: 'text', text: ' ' },
+            ]).run();
         }
-        const quoteContent = [
-            {
-                type: 'blockquote',
-                attrs: { author: author ? ($authorEl.is('a') ? '@' : '') + author + (date ? ' ' + date : '') : (date || null) },
-                content: [{ type: 'paragraph', content: [{ type: 'text', text: message }] }],
-            },
-            { type: 'paragraph' },
-        ];
-        if (editor.isEmpty) {
-            editor.chain().focus().setContent({ type: 'doc', content: quoteContent }).run();
-        } else {
-            const doc = editor.state.doc;
-            const lastChild = doc.lastChild;
-            const insertPos = (lastChild && lastChild.type.name === 'paragraph' && lastChild.childCount === 0)
-                ? doc.content.size - lastChild.nodeSize
-                : doc.content.size;
-            editor.chain().focus().insertContentAt(insertPos, quoteContent).run();
-        }
+        return false;
+    }
+
+    const quoteContent = [
+        {
+            type: 'blockquote',
+            attrs: { author: author ? ($authorEl.is('a') ? '@' : '') + author + (date ? ' ' + date : '') : (date || null) },
+            content: [{ type: 'paragraph', content: [{ type: 'text', text: message }] }],
+        },
+        { type: 'paragraph' },
+    ];
+
+    if (editor.isEmpty) {
+        editor.chain().focus().setContent({ type: 'doc', content: quoteContent }).run();
     } else {
-        var field = $('.markItUpEditor');
-        var $lastSymbol = field.val().slice(field.val().length - 1);
-        var separ = $.inArray($lastSymbol, ['', '\n']) !== -1 ? '' : '\n';
-        if (!message) {
-            if (author) field.focus().val(field.val() + separ + '@' + author + ', ');
-        } else {
-            var quoteAttr = author ? '@' + author + (date ? ' ' + date : '') : date;
-            field.focus().val(field.val() + separ + '[quote=' + quoteAttr + ']' + message + '[/quote]\n');
-        }
+        const doc = editor.state.doc;
+        const lastChild = doc.lastChild;
+        const insertPos = (lastChild && lastChild.type.name === 'paragraph' && lastChild.childCount === 0)
+            ? doc.content.size - lastChild.nodeSize
+            : doc.content.size;
+        editor.chain().focus().insertContentAt(insertPos, quoteContent).run();
     }
 
     return false;
@@ -650,9 +600,6 @@ window.pasteImage = function (el) {
     var src = $(el).find('img').data('source');
     if (editor && src) {
         editor.chain().focus().setImage({ src: src }).run();
-    } else if (src) {
-        var field = $('.markItUpEditor');
-        field.focus().caret('[img]' + src + '[/img]');
     }
 };
 
@@ -662,30 +609,24 @@ window.cutImage = function (path) {
 
     var editor = window._tiptapActiveEditor;
 
-    if (editor) {
-        var { state, dispatch } = editor.view;
-        var tr = state.tr;
-        var positions = [];
+    if (!editor) return;
 
-        state.doc.descendants(function(node, pos) {
-            if (node.type.name === 'image' && node.attrs.src === path) {
-                positions.push({ pos: pos, size: node.nodeSize });
-            }
-        });
+    var { state, dispatch } = editor.view;
+    var tr = state.tr;
+    var positions = [];
 
-        // Удаляем с конца чтобы позиции не съезжали
-        positions.reverse().forEach(function({ pos, size }) {
-            tr.delete(pos, pos + size);
-        });
-
-        if (tr.docChanged) dispatch(tr);
-    } else {
-        var field = $('.markItUpEditor');
-        if (field.length && field.val()) {
-            var cut = '[img]' + path + '[/img]';
-            field.val(field.val().replace(cut, ''));
+    state.doc.descendants(function(node, pos) {
+        if (node.type.name === 'image' && node.attrs.src === path) {
+            positions.push({ pos: pos, size: node.nodeSize });
         }
-    }
+    });
+
+    // Удаляем с конца чтобы позиции не съезжали
+    positions.reverse().forEach(function({ pos, size }) {
+        tr.delete(pos, pos + size);
+    });
+
+    if (tr.docChanged) dispatch(tr);
 };
 
 

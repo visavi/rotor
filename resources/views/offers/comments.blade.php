@@ -99,8 +99,7 @@
             </div>
 
             <a href="/rules">{{ __('main.rules') }}</a> /
-            <a href="/stickers">{{ __('main.stickers') }}</a> /
-            <a href="/tags">{{ __('main.tags') }}</a><br><br>
+            <a href="/stickers">{{ __('main.stickers') }}</a><br><br>
 
         @else
             {{ showError(__('main.closed_comments')) }}

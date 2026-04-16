@@ -160,7 +160,7 @@
                     </div>
                     <div class="section-body border-top">
                         <div class="section-message">
-                            {{ bbCode($data->text) }}
+                            {{ $data->getText() }}
                         </div>
 
                         @include('app/_media_viewer', ['model' => $data])
@@ -194,7 +194,7 @@
                 @csrf
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('forums.post') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('forum_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('forums.post') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control tiptap" maxlength="{{ setting('forum_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Post::$morphName }}" data-relate-id="0" placeholder="{{ __('forums.post') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
                 </div>
@@ -213,6 +213,5 @@
     @endif
 
     <a href="/stickers">{{ __('main.stickers') }}</a>  /
-    <a href="/tags">{{ __('main.tags') }}</a>  /
     <a href="/rules">{{ __('main.rules') }}</a><br>
 @stop

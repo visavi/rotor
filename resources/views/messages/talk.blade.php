@@ -52,7 +52,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ bbCode($data->text) }}
+                        {{ $data->getText() }}
                     </div>
 
                     @include('app/_media_viewer', ['model' => $data])
@@ -71,7 +71,7 @@
                 @csrf
                 <div class="mb-3{{ hasError('msg') }}">
                     <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                    <textarea class="form-control markItUp" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
+                    <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Message::$morphName }}" data-relate-id="0" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
                     <div class="invalid-feedback">{{ textError('msg') }}</div>
                     <span class="js-textarea-counter"></span>
                 </div>

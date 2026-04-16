@@ -9,7 +9,7 @@
 
     @foreach ($posts as $key => $data)
         {{ $key + 1 }}. <b>{{ $data->user->getName() }}</b> <small class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</small><br>
-        {{ bbCode($data->text) }}
+        {{ $data->getText() }}
         <br><br>
     @endforeach
 

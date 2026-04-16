@@ -23,20 +23,9 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
 
 class AjaxController extends Controller
 {
-    /**
-     * Возвращает bbCode для предпросмотра
-     */
-    public function bbCode(Request $request): HtmlString
-    {
-        $message = (string) $request->input('data');
-
-        return bbCode($message);
-    }
-
     /**
      * Отправляет жалобу на сообщение
      */

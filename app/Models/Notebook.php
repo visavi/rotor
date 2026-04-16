@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Notebook
@@ -34,7 +36,13 @@ class Notebook extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
+    }
+
+    public function getText(): HtmlString
+    {
+        return renderHtml($this->text, 'notebook-' . $this->id);
     }
 
     /**

@@ -5,7 +5,6 @@ return [
     'rules'             => 'Rules',
     'site_rules'        => 'Site rules',
     'stickers'          => 'Stickers',
-    'tags'              => 'Tags',
     'search'            => 'Search',
     'rss'               => 'RSS',
     'print'             => 'Print',

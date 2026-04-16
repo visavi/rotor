@@ -38,7 +38,7 @@
 
                     <div class="section-body border-top">
                         @if ($data->type !== 'unban')
-                            {{ __('users.reason_ban') }}: {{ bbCode($data->reason) }}<br>
+                            {{ __('users.reason_ban') }}: {{ $data->getReason() }}<br>
                             {{ __('users.term') }}: {{ formatTime($data->term) }}<br>
                         @endif
 

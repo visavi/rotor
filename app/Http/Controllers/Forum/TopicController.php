@@ -116,7 +116,7 @@ class TopicController extends Controller
         }
 
         $files = [];
-        $description = $firstPost ? truncateDescription(bbCode($firstPost->text, false)) : $topic->title;
+        $description = $firstPost ? truncateDescription($firstPost->getText()) : $topic->title;
 
         if ($user) {
             $files = File::query()
@@ -571,7 +571,8 @@ class TopicController extends Controller
             ->orderBy('created_at')
             ->get();
 
-        $description = $posts->first() ? truncateDescription(bbCode($posts->first()->text, false)) : $topic->title;
+        $firstPost = $posts->first();
+        $description = $firstPost ? truncateDescription($firstPost->getText()) : $topic->title;
 
         return view('forums/print', compact('topic', 'posts', 'description'));
     }

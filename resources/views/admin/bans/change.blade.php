@@ -20,7 +20,7 @@
         {{ __('users.last_ban') }}: {{ dateFixed($user->lastBan->created_at) }}<br>
         {{ __('users.banned') }}: {{ $user->lastBan->sendUser->getProfile() }}<br>
         {{ __('users.term') }}: {{ formatTime($user->lastBan->term) }}<br>
-        {{ __('users.reason_ban') }}: {{ bbCode($user->lastBan->reason) }}<br>
+        {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>
     @endif
 
     {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
@@ -36,7 +36,7 @@
 
             <div class="mb-3{{ hasError('reason') }}">
                 <label for="reason" class="form-label">{{ __('users.reason_ban') }}:</label>
-                <textarea class="form-control markItUp" id="reason" rows="5" name="reason" required>{{ getInput('reason', $user->lastBan->reason) }}</textarea>
+                <textarea class="form-control tiptap" id="reason" rows="5" name="reason" required>{{ getInput('reason', $user->lastBan->reason) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reason') }}</div>
             </div>
 

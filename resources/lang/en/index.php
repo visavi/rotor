@@ -48,7 +48,6 @@ return [
 
     'information'   => 'Information',
     'site_rules'    => 'Site rules',
-    'tag_help'      => 'Tag help',
     'stickers_help' => 'Stickers help',
     'faq'           => 'FAQ',
     'api_interface' => 'Api interface',

@@ -5,7 +5,6 @@ return [
     'rules'             => 'Правила',
     'site_rules'        => 'Правила сайту',
     'stickers'          => 'Стікери',
-    'tags'              => 'Теги',
     'search'            => 'Пошук',
     'rss'               => 'RSS',
     'print'             => 'Друк',

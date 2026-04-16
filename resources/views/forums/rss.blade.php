@@ -6,8 +6,7 @@
     @foreach ($topics as $topic)
         @if ($topic->lastPost->text)
             @php
-                $postText = bbCode($topic->lastPost->text);
-                $postText = str_replace('/uploads/stickers', asset('/uploads/stickers'), $postText);
+                $postText = $topic->lastPost->getText();
             @endphp
 
             <item>

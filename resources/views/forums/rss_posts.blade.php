@@ -5,10 +5,7 @@
 @section('content')
     @foreach ($posts as $data)
         @php
-            $data->text = bbCode($data->text);
-            $data->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $data->text);
-            $topic->title = bbCode($topic->title);
-            $topic->title = str_replace('/uploads/stickers', asset('/uploads/stickers'), $topic->title);
+            $data->text = $data->getText();
         @endphp
 
         <item>
