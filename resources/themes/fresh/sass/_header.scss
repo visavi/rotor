@@ -134,7 +134,7 @@
 }
 .app-notification__content {
   max-height: 220px;
-  overflow-y: auto;
+  overflow-y: scroll;
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
 }

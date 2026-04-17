@@ -11,7 +11,10 @@ function ajax({ url, type = 'GET', data = null, dataType = 'json', beforeSend, c
 
     const options = {
         method: type.toUpperCase(),
-        headers: { 'X-CSRF-TOKEN': csrfToken }
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+        }
     }
 
     if (data) {
@@ -468,7 +471,7 @@ window.submitFile = function (el) {
 }
 
 /* Загрузка изображения */
-window.submitImage = function (el, paste) {
+window.submitImage = function (el) {
     const form = new FormData()
     form.append('file', el.files[0])
     form.append('id', el.dataset.id)
@@ -490,21 +493,12 @@ window.submitImage = function (el, paste) {
             img?.setAttribute('data-source', data.source)
             template?.querySelector('a')?.setAttribute('data-id', data.id)
             if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
-
-            if (paste) pasteImage(template)
         },
         error: (_, textStatus) => notyf.error('Ошибка загрузки файла: ' + textStatus)
     })
 
     el.value = ''
     return false
-}
-
-/* Вставка изображения в форму */
-window.pasteImage = function (el) {
-    const editor = window._tiptapActiveEditor
-    const src = el?.querySelector('img')?.dataset.source
-    if (editor && src) editor.chain().focus().setImage({ src }).run()
 }
 
 /* Удаление изображения из формы */
@@ -514,12 +508,15 @@ window.cutImage = function (path) {
     const editor = window._tiptapActiveEditor
     if (!editor) return
 
+    const normalize = (src) => { try { return new URL(src).pathname } catch { return src } }
+    const normalizedPath = normalize(path)
+
     const { state, dispatch } = editor.view
     const tr = state.tr
     const positions = []
 
     state.doc.descendants(function (node, pos) {
-        if (node.type.name === 'image' && node.attrs.src === path) {
+        if (node.type.name === 'image' && normalize(node.attrs.src) === normalizedPath) {
             positions.push({ pos, size: node.nodeSize })
         }
     })

@@ -34,7 +34,6 @@ return new class extends Migration {
                 });
             });
 
-
         // @%login% → %login% (ссылка генерируется в textNotice)
         DB::table('notices')
             ->update(['text' => DB::raw("REPLACE(text, '@%login%', '%login%')")]);

@@ -7,13 +7,13 @@ namespace App\Models;
 use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\HtmlString;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 /**
  * Class Vote

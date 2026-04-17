@@ -260,7 +260,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function getName(): string
     {
-        if ($this->id) {
+        if ($this->exists) {
             return $this->name ?: $this->login;
         }
 

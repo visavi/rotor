@@ -970,8 +970,20 @@ function initEditor(textarea) {
             if (data.success && data.path) {
                 editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
                     type: 'image',
-                    attrs: { src: data.path },
+                    attrs: { src: data.source || data.path },
                 }).run()
+
+                const templateEl = document.querySelector('.js-image-template')
+                const template = templateEl?.cloneNode(true)
+                if (template) {
+                    const img = template.querySelector('img')
+                    if (img) {
+                        img.setAttribute('src', data.path)
+                        img.setAttribute('data-source', data.source || data.path)
+                    }
+                    template.querySelector('a')?.setAttribute('data-id', data.id)
+                    document.querySelector('.js-files')?.insertAdjacentHTML('beforeend', template.innerHTML)
+                }
             } else {
                 notyf.error(data.message || __('editor.upload_failed'))
             }

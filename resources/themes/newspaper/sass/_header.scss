@@ -187,7 +187,7 @@
   font-size: 0.8rem;
 }
 .app-notification__footer { text-align: center; font-family: $ui-font; }
-.app-notification__content { max-height: 200px; overflow-y: auto; }
+.app-notification__content { max-height: 200px; overflow-y: scroll; }
 .app-notification__item {
   display: flex;
   padding: 8px 10px;
