@@ -17,11 +17,10 @@ return new class extends Migration {
                 $updates = [];
 
                 foreach ($records as $record) {
-                    $text = $migrator->convertText($record->text);
+                    // [url=%placeholder%]...[/url] → %page% до общей конвертации
+                    $text = preg_replace('~\[url=%[^%]+%\].+?\[/url\]~s', '%page%', $record->text);
 
-                    // BBMigrator не конвертирует [url=%placeholder%] — обрабатываем вручную
-                    $text = preg_replace('~\[url=(%[^%]+%)\](.+?)\[/url\]~s', '<a href="$1">$2</a>', $text);
-                    $text = preg_replace('~\[b\](.+?)\[/b\]~s', '<strong>$1</strong>', $text);
+                    $text = $migrator->convertText($text);
 
                     $updates[] = [
                         'id'   => $record->id,
@@ -40,7 +39,7 @@ return new class extends Migration {
 
         DB::table('notices')
             ->where('type', 'notify')
-            ->update(['text' => '<p>Пользователь %login% упомянул вас на странице <strong><a href="%url%">%title%</a></strong></p><blockquote>%text%</blockquote>']);
+            ->update(['text' => '<p>Пользователь %login% упомянул вас на странице <strong>%page%</strong></p><blockquote>%text%</blockquote>']);
     }
 
     public function down(): void

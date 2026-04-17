@@ -1055,6 +1055,11 @@ function textNotice(string $type, array $replace = []): string
         return __('main.text_missing');
     }
 
+    if (isset($replace['url'], $replace['title'])) {
+        $replace['page'] = '<strong><a href="' . $replace['url'] . '">' . $replace['title'] . '</a></strong>';
+        unset($replace['url'], $replace['title']);
+    }
+
     foreach ($replace as $key => $val) {
         if ($key === 'login') {
             $val = '<a class="user" href="/users/' . $val . '">@' . $val . '</a>';
