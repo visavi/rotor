@@ -65,10 +65,6 @@
 
 @push('scripts')
     <script type="module">
-        $(document).ready(function () {
-            const newCount = {{ $countMessages }};
-
-            updateMessageCount(newCount);
-        });
+        updateMessageCount({{ $countMessages }});
     </script>
 @endpush

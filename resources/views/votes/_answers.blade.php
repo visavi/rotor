@@ -29,27 +29,28 @@
 
 @push('scripts')
     <script type="module">
-        $(".js-answer-add").click(function () {
-            if ($(".js-answer-list input").length >= 10) {
+        const answerList = document.querySelector('.js-answer-list');
+
+        document.querySelector('.js-answer-add')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (answerList.querySelectorAll('input').length >= 10) {
                 notyf.error("{{ __('votes.hint_answers') }}");
-
-                return false;
+                return;
             }
-
-            $('.js-answer-list').append('<div class="input-group mt-1 js-answer-append">' +
-                '<input class="form-control" id="name" name="answers[]" type="text" value="" maxlength="50" placeholder="<?= __('votes.answer') ?>">' +
+            answerList.insertAdjacentHTML('beforeend',
+                '<div class="input-group mt-1 js-answer-append">' +
+                '<input class="form-control" name="answers[]" type="text" value="" maxlength="50" placeholder="<?= __('votes.answer') ?>">' +
                 '<span class="input-group-text">' +
                 '<a class="js-answer-remove" href="#"><i class="fa fa-times"></i></a>' +
                 '</span>' +
                 '</div>');
-
-            return false;
         });
 
-        $(document).on('click', '.js-answer-remove', function () {
-            $(this).closest('.js-answer-append').remove();
-
-            return false;
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-answer-remove');
+            if (!btn) return;
+            e.preventDefault();
+            btn.closest('.js-answer-append').remove();
         });
     </script>
 @endpush

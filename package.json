@@ -18,7 +18,6 @@
         "@tiptap/extension-character-count": "^3.22.3",
         "@tiptap/extension-color": "^3.22.1",
         "@tiptap/extension-file-handler": "^3.22.3",
-        "@tiptap/extension-highlight": "^3.22.2",
         "@tiptap/extension-image": "^3.22.1",
         "@tiptap/extension-mention": "^3.22.3",
         "@tiptap/extension-placeholder": "^3.22.1",
@@ -30,8 +29,6 @@
         "bootstrap": "^5.3.8",
         "bootstrap5-tags": "^1.7.16",
         "chartist": "^1.5.0",
-        "jquery": "^4.0.0",
-        "jquery-mask-plugin": "^1.14.16",
         "notyf": "^3.10.0"
     },
     "devDependencies": {

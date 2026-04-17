@@ -1,20 +1,129 @@
 import * as bootstrap from 'bootstrap'
 import { trans as __ } from './translate.js'
+import './globals.js'
+import './tiptap-editor.js'
+import './prettify.js'
 
-$(function () {
-    let body = $('body');
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+function ajax({ url, type = 'GET', data = null, dataType = 'json', beforeSend, complete, success, error }) {
+    if (beforeSend) beforeSend()
+
+    const options = {
+        method: type.toUpperCase(),
+        headers: { 'X-CSRF-TOKEN': csrfToken }
+    }
+
+    if (data) {
+        if (data instanceof FormData) {
+            options.body = data
+        } else {
+            options.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            options.body = new URLSearchParams(data)
         }
-    });
+    }
 
-    prettyPrint();
+    fetch(url, options)
+        .then(res => dataType === 'json' ? res.json() : res.text())
+        .then(responseData => { if (success) success(responseData) })
+        .catch(err => { if (error) error(null, err.message, err) })
+        .finally(() => { if (complete) complete() })
+}
 
-    tags.init(".input-tag", {
+function applyMask(el, mask) {
+    el.addEventListener('input', function () {
+        const digits = el.value.replace(/\D/g, '')
+        let result = ''
+        let di = 0
+        for (let i = 0; i < mask.length && di < digits.length; i++) {
+            result += mask[i] === '0' ? digits[di++] : mask[i]
+        }
+        el.value = result
+    })
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el))
+
+    const popovers = document.querySelectorAll('[data-bs-toggle="popover"]')
+    popovers.forEach(el => new bootstrap.Popover(el))
+
+    document.body.addEventListener('click', function (e) {
+        if (!e.target.closest('[data-bs-toggle="popover"]') && !e.target.closest('.popover')) {
+            popovers.forEach(el => bootstrap.Popover.getInstance(el)?.hide())
+        }
+    })
+
+    const colorpicker = document.querySelector('.colorpicker')
+    const colorpickerAddon = document.querySelector('.colorpicker-addon')
+    if (colorpicker && colorpickerAddon) {
+        colorpicker.addEventListener('input', () => colorpickerAddon.value = colorpicker.value)
+        colorpickerAddon.addEventListener('input', () => colorpicker.value = colorpickerAddon.value)
+    }
+
+    document.querySelectorAll('.phone').forEach(el => applyMask(el, '+0 000 000-00-00-00'))
+    document.querySelectorAll('.birthday').forEach(el => applyMask(el, '00.00.0000'))
+
+    const scrollupBtn = document.querySelector('.scrollup')
+    if (scrollupBtn) {
+        window.addEventListener('scroll', function () {
+            scrollupBtn.style.opacity = window.scrollY > 200 ? '1' : '0'
+        })
+        scrollupBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            return false
+        })
+    }
+
+    document.querySelector('.js-messages-block')?.addEventListener('show.bs.dropdown', function () {
+        getNewMessages()
+    })
+
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-bs-theme', theme)
+        const icon = theme === 'dark' ? 'fa-moon' : 'fa-sun'
+        const themeIcon = document.getElementById('theme-icon-active')
+        if (themeIcon) themeIcon.className = `fa-regular ${icon} fa-lg`
+        ajax({ type: 'POST', url: '/ajax/set-theme', data: { theme } })
+    }
+
+    document.querySelectorAll('[data-bs-theme-value]').forEach(el => {
+        el.addEventListener('click', () => setTheme(el.dataset.bsThemeValue))
+    })
+
+    if (window.location.hash) {
+        setTimeout(function () {
+            const target = document.querySelector(window.location.hash)
+            if (target) window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 100)
+        }, 100)
+    }
+
+    setTimeout(function () {
+        document.querySelectorAll('.section-content.short-view').forEach(function (el) {
+            const hiddenPixels = el.scrollHeight - el.clientHeight
+
+            if (hiddenPixels > 100) {
+                el.classList.add('clamped')
+                const btn = document.createElement('button')
+                btn.className = 'btn btn-sm btn-adaptive mt-2'
+                btn.textContent = 'Показать полностью'
+                btn.addEventListener('click', function () {
+                    el.classList.add('expanded')
+                    el.classList.remove('clamped')
+                    btn.remove()
+                })
+                el.after(btn)
+            } else if (hiddenPixels > 0) {
+                el.classList.remove('short-view')
+            }
+        })
+    }, 300)
+
+    prettyPrint()
+
+    tags.init('.input-tag', {
         allowNew: true,
-        server: "/blogs/tags-search",
+        server: '/blogs/tags-search',
         liveServer: true,
         clearEnd: true,
         allowClear: true,
@@ -22,746 +131,555 @@ $(function () {
         max: 10,
         separator: [','],
         addOnBlur: true,
-    });
-
-    fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {
-        // Your custom options
-    });
-
-    $('[data-bs-toggle="tooltip"]').tooltip();
-    $('[data-bs-toggle="popover"]').popover();
-
-    /* Hide popover poppers anywhere */
-    body.on('click', function (e) {
-        //did not click a popover toggle or popover
-        if ($(e.target).data('bs-toggle') !== 'popover'
-            && $(e.target).parents('.popover.in').length === 0) {
-            $('[data-bs-toggle="popover"]').popover('hide');
-        }
-    });
-
-    $('.colorpicker').on('input', function () {
-        $('.colorpicker-addon').val(this.value);
-    });
-    $('.colorpicker-addon').on('input', function () {
-        $('.colorpicker').val(this.value);
-    });
-
-    $('.phone').mask('+0 000 000-00-00-00');
-    $('.birthday').mask('00.00.0000');
-
-    /* Scroll up */
-    $(window).on('scroll', function() {
-        $('.scrollup').stop().fadeTo(200, $(this).scrollTop() > 200 ? 1 : 0);
-    });
-
-    $('.scrollup').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 100);
-        return false;
-    });
-
-    $('.js-messages-block').on('show.bs.dropdown', function () {
-        getNewMessages();
     })
 
-    /* Set theme */
-    function setTheme(theme) {
-        $('html').attr('data-bs-theme', theme);
-
-        const icon = theme === 'dark' ? 'fa-moon' : 'fa-sun';
-        $('#theme-icon-active').attr('class', `fa-regular ${icon} fa-lg`);
-
-        $.ajax({
-            type: 'POST',
-            url: '/ajax/set-theme',
-            data: { theme: theme }
-        });
-    }
-
-    $('[data-bs-theme-value]').on('click', function() {
-        setTheme($(this).data('bs-theme-value'));
-    });
-
-    /* Offset при переходе по якорю */
-    if (window.location.hash) {
-        setTimeout(function() {
-            const hash = $(window.location.hash);
-            if (hash.length) {
-                window.scrollTo(0, hash.offset().top - 100);
-            }
-        }, 100);
-    }
-
-    setTimeout(function() {
-        $('.section-content.short-view').each(function() {
-            const $el = $(this);
-            const el = this;
-
-            // Вычисляем сколько пикселей скрыто
-            const hiddenPixels = el.scrollHeight - el.clientHeight;
-
-            if (hiddenPixels > 100) {
-                $el.addClass('clamped');
-
-                const $btn = $('<button>')
-                    .addClass('btn btn-sm btn-adaptive mt-2')
-                    .text('Показать полностью')
-                    .on('click', function() {
-                        $el.addClass('expanded').removeClass('clamped');
-                        $btn.remove();
-                    });
-
-                $el.after($btn);
-            } else if (hiddenPixels > 0) {
-                $el.removeClass('short-view');
-            }
-        });
-    }, 300);
-});
+    fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {})
+})
 
 /* Показ формы загрузки файла */
 window.showAttachForm = function () {
-    $('.js-attach-button').hide();
-    $('.js-attach-form').slideDown();
-
-    return false;
-};
+    const btn = document.querySelector('.js-attach-button')
+    const form = document.querySelector('.js-attach-form')
+    if (btn) btn.style.display = 'none'
+    if (form) form.style.display = 'block'
+    return false
+}
 
 /* Переход к форме ввода */
 window.postJump = function () {
-    $('html, body').animate({
-        scrollTop: ($('.section-form').offset().top - 50)
-    }, 100);
-};
+    const form = document.querySelector('.section-form')
+    if (form) window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 50, behavior: 'smooth' })
+}
 
 /* Ответ на сообщение */
 window.postReply = function (el) {
-    postJump();
+    postJump()
 
-    var $authorEl = $(el).closest('.section').find('.section-author');
-    var author    = $authorEl.data('login') || $authorEl.text().trim();
-    if (!author) return false;
+    const authorEl = el.closest('.section')?.querySelector('.section-author')
+    const author = authorEl?.dataset.login || authorEl?.textContent.trim()
+    if (!author) return false
 
-    var editor = window._tiptapActiveEditor;
-    if (!editor) return false;
+    const editor = window._tiptapActiveEditor
+    if (!editor) return false
 
-    if ($authorEl.is('a')) {
+    if (authorEl.matches('a')) {
         editor.chain().focus().insertContent([
             { type: 'mention', attrs: { id: author, label: author } },
             { type: 'text', text: ' ' },
-        ]).run();
+        ]).run()
     } else {
-        editor.chain().focus().insertContent({ type: 'text', text: author + ', ' }).run();
+        editor.chain().focus().insertContent({ type: 'text', text: author + ', ' }).run()
     }
 
-    return false;
-};
+    return false
+}
 
 /* Цитирование сообщения */
 window.postQuote = function (el) {
-    postJump();
+    postJump()
 
-    var post      = $(el).closest('.section');
-    var $authorEl = post.find('.section-author');
-    var author    = $authorEl.data('login') || $authorEl.text().trim() || null;
-    var $dateEl   = post.find('.section-date').first();
-    var date      = ($dateEl.data('date') || $dateEl.text()).trim();
-    var text      = post.find('.section-message').clone();
-    var message   = text.find('blockquote').remove().end().text().trim();
-    var editor    = window._tiptapActiveEditor;
+    const post     = el.closest('.section')
+    const authorEl = post?.querySelector('.section-author')
+    const author   = authorEl?.dataset.login || authorEl?.textContent.trim() || null
+    const dateEl   = post?.querySelector('.section-date')
+    const date     = (dateEl?.dataset.date || dateEl?.textContent || '').trim()
+    const clone    = post?.querySelector('.section-message')?.cloneNode(true)
+    const editor   = window._tiptapActiveEditor
 
-    if (!editor) return false;
+    if (!editor) return false
+
+    clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
+    const message = clone?.textContent.trim() || ''
 
     if (!message) {
         if (author) {
             editor.chain().focus().insertContent([
                 { type: 'mention', attrs: { id: author, label: author } },
                 { type: 'text', text: ' ' },
-            ]).run();
+            ]).run()
         }
-        return false;
+        return false
     }
 
     const quoteContent = [
         {
             type: 'blockquote',
-            attrs: { author: author ? ($authorEl.is('a') ? '@' : '') + author + (date ? ' ' + date : '') : (date || null) },
+            attrs: { author: author ? (authorEl.matches('a') ? '@' : '') + author + (date ? ' ' + date : '') : (date || null) },
             content: [{ type: 'paragraph', content: [{ type: 'text', text: message }] }],
         },
         { type: 'paragraph' },
-    ];
+    ]
 
     if (editor.isEmpty) {
-        editor.chain().focus().setContent({ type: 'doc', content: quoteContent }).run();
+        editor.chain().focus().setContent({ type: 'doc', content: quoteContent }).run()
     } else {
-        const doc = editor.state.doc;
-        const lastChild = doc.lastChild;
+        const doc = editor.state.doc
+        const lastChild = doc.lastChild
         const insertPos = (lastChild && lastChild.type.name === 'paragraph' && lastChild.childCount === 0)
             ? doc.content.size - lastChild.nodeSize
-            : doc.content.size;
-        editor.chain().focus().insertContentAt(insertPos, quoteContent).run();
+            : doc.content.size
+        editor.chain().focus().insertContentAt(insertPos, quoteContent).run()
     }
 
-    return false;
-};
+    return false
+}
 
 /* Подтверждение действия */
-window.confirmAction = function (el) {
-    const $el = $(el);
-    const message = $el.data('confirm') || 'Вы уверены?';
+const confirmedElements = new WeakSet()
 
-    if ($el.data('confirmed')) {
-        $el.removeData('confirmed');
-        return true;
+window.confirmAction = function (el) {
+    const message = el.dataset.confirm || 'Вы уверены?'
+
+    if (confirmedElements.has(el)) {
+        confirmedElements.delete(el)
+        return true
     }
 
     confirm(message, function (result) {
-        if (result) {
-            if ($el.is('form') || $el.closest('form').length) {
-                const $form = $el.is('form') ? $el : $el.closest('form');
-                $form.data('confirmed', true);
-                $form[0].submit();
-            } else {
-                const href = $el.attr('href');
-                if (href) window.location.href = href;
-            }
+        if (!result) return
+        const form = el.matches('form') ? el : el.closest('form')
+        if (form) {
+            confirmedElements.add(form)
+            form.submit()
+        } else {
+            const href = el.getAttribute('href')
+            if (href) window.location.href = href
         }
-    });
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Отправка жалобы на спам */
 window.sendComplaint = function (el) {
     confirm(__('confirm_complain_submit'), function (result) {
-        if (!result) return;
+        if (!result) return
 
-        $.ajax({
-            data: {
-                id: $(el).data('id'),
-                type: $(el).data('type'),
-                page: $(el).data('page'),
-            },
+        ajax({
+            data: { id: el.dataset.id, type: el.dataset.type, page: el.dataset.page },
             dataType: 'json', type: 'post', url: '/ajax/complaint',
             success: function (data) {
-                $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
-
-                if (data.success) {
-                    notyf.success(__('complain_submitted'));
-                } else {
-                    notyf.error(data.message);
-                }
+                el.outerHTML = '<i class="fa fa-bell-slash text-muted"></i>'
+                data.success ? notyf.success(__('complain_submitted')) : notyf.error(data.message)
             }
-        });
-    });
+        })
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Добавление или удаление закладок */
 window.bookmark = function (el) {
-    $.ajax({
-        data: {
-            tid: $(el).data('tid'),
-        },
+    ajax({
+        data: { tid: el.dataset.tid },
         dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
         success: function (data) {
+            if (!data.success) { notyf.error(data.message); return }
 
-            if (! data.success) {
-                notyf.error(data.message);
-                return false;
-            }
-
-            if (data.success) {
-                if (data.type === 'added') {
-                    notyf.success(data.message);
-                    $(el).text($(el).data('from'));
-                }
-
-                if (data.type === 'deleted') {
-                    notyf.success(data.message);
-                    $(el).text($(el).data('to'));
-                }
-            }
+            notyf.success(data.message)
+            el.textContent = data.type === 'added' ? el.dataset.from : el.dataset.to
         }
-    });
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Удаление записей */
 window.deletePost = function (el) {
     confirm(__('confirm_message_delete'), function (result) {
-        if (! result) return;
+        if (!result) return
 
-        const $el = $(el);
-        const url = $el.attr('href');
-
-        $.ajax({
-            url: url,
-            type: 'delete',
-            dataType: 'json',
+        ajax({
+            url: el.getAttribute('href'), type: 'delete', dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    notyf.success(data.message);
-                    $el.closest('.section').hide('slow');
+                    notyf.success(data.message)
+                    el.closest('.section').style.display = 'none'
                 } else {
-                    notyf.error(data.message);
+                    notyf.error(data.message)
                 }
             }
-        });
-    });
+        })
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Удаление комментариев */
 window.deleteComment = function (el) {
     confirm(__('confirm_message_delete'), function (result) {
-        if (! result) return;
+        if (!result) return
 
-        $.ajax({
-            data: {
-                id: $(el).data('id'),
-                rid: $(el).data('rid'),
-                type: $(el).data('type'),
-            },
+        ajax({
+            data: { id: el.dataset.id, rid: el.dataset.rid, type: el.dataset.type },
             dataType: 'json', type: 'post', url: '/ajax/delcomment',
             success: function (data) {
                 if (data.success) {
-                    notyf.success(__('message_deleted'));
-                    $(el).closest('.section').hide('slow');
+                    notyf.success(__('message_deleted'))
+                    el.closest('.section').style.display = 'none'
                 } else {
-                    notyf.error(data.message);
+                    notyf.error(data.message)
                 }
             }
-        });
-    });
+        })
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Изменение рейтинга */
 window.changeRating = function (el) {
-    $.ajax({
-        data: {
-            id: $(el).data('id'),
-            type: $(el).data('type'),
-            vote: $(el).data('vote'),
-        },
-        dataType: 'json',
-        type: 'post',
-        url: '/ajax/rating',
+    ajax({
+        data: { id: el.dataset.id, type: el.dataset.type, vote: el.dataset.vote },
+        dataType: 'json', type: 'post', url: '/ajax/rating',
         success: function (data) {
             if (data.success) {
-                const rating = $(el).closest('.js-rating').find('b');
-
-                $(el).closest('.js-rating').find('a').removeClass('active');
-
-                if (! data.cancel) {
-                    $(el).addClass('active');
-                }
-
-                rating.html($(data.rating));
-            } else {
-                if (data.message) {
-                    notyf.error(data.message);
-                }
+                const ratingBlock = el.closest('.js-rating')
+                ratingBlock?.querySelectorAll('a').forEach(a => a.classList.remove('active'))
+                if (!data.cancel) el.classList.add('active')
+                const rating = ratingBlock?.querySelector('b')
+                if (rating) rating.innerHTML = data.rating
+            } else if (data.message) {
+                notyf.error(data.message)
             }
         }
-    });
+    })
 
-    return false;
-};
+    return false
+}
 
-/**
- * Удаляет запись из истории рейтинга
- */
+/* Удаляет запись из истории рейтинга */
 window.deleteRating = function (el) {
     confirm(__('confirm_message_delete'), function (result) {
-        if (! result) return;
+        if (!result) return
 
-        $.ajax({
-            data: {
-                id: $(el).data('id'),
-            },
+        ajax({
+            data: { id: el.dataset.id },
             dataType: 'json', type: 'post', url: '/ratings/delete',
-            success: (data)=> {
+            success: (data) => {
                 if (data.success) {
-                    notyf.success(__('record_deleted'));
-                    $(el).closest('.section').hide('slow');
+                    notyf.success(__('record_deleted'))
+                    el.closest('.section').style.display = 'none'
                 } else {
-                    notyf.error(data.message);
+                    notyf.error(data.message)
                 }
             }
-        });
-    });
+        })
+    })
 
-    return false;
-};
+    return false
+}
 
-/**
- * Удаляет запись из списка жалоб
- */
+/* Удаляет запись из списка жалоб */
 window.deleteSpam = function (el) {
-    $.ajax({
-        data: {id: $(el).data('id')},
+    ajax({
+        data: { id: el.dataset.id },
         dataType: 'json', type: 'post', url: '/admin/spam/delete',
         success: function (data) {
             if (data.success) {
-                notyf.success(__('record_deleted'));
-                $(el).closest('.section').hide('slow');
+                notyf.success(__('record_deleted'))
+                el.closest('.section').style.display = 'none'
             } else {
-                notyf.error(data.message);
+                notyf.error(data.message)
             }
         }
-    });
+    })
 
-    return false;
-};
+    return false
+}
 
-/**
- * Удаляет запись со стены сообщений
- */
+/* Удаляет запись со стены сообщений */
 window.deleteWall = function (el) {
     confirm(__('confirm_message_delete'), function (result) {
-        if (!result) return;
+        if (!result) return
 
-        $.ajax({
-            data: {id: $(el).data('id'), login: $(el).data('login')},
-            dataType: 'json', type: 'post', url: '/walls/' + $(el).data('login') + '/delete',
+        ajax({
+            data: { id: el.dataset.id, login: el.dataset.login },
+            dataType: 'json', type: 'post', url: '/walls/' + el.dataset.login + '/delete',
             success: function (data) {
                 if (data.success) {
-                    notyf.success(__('record_deleted'));
-                    $(el).closest('.section').hide('slow');
+                    notyf.success(__('record_deleted'))
+                    el.closest('.section').style.display = 'none'
                 } else {
-                    notyf.error(data.message);
+                    notyf.error(data.message)
                 }
             }
-        });
-    });
+        })
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Копирует текст в input */
 window.copyToClipboard = function (el) {
-    let form = $(el).closest('.input-group');
-    form.find('input').select();
+    const group = el.closest('.input-group')
+    const input = group?.querySelector('input')
+    if (input) { input.select(); document.execCommand('copy') }
 
-    form.find('.input-group-text')
-        .attr('data-bs-original-title', __('copied'))
-        .tooltip('update')
-        .tooltip('show');
+    const tooltipEl = group?.querySelector('.input-group-text')
+    if (tooltipEl) {
+        tooltipEl.setAttribute('data-bs-original-title', __('copied'))
+        const tip = bootstrap.Tooltip.getOrCreateInstance(tooltipEl)
+        tip.update()
+        tip.show()
+    }
 
-    document.execCommand("copy");
+    return false
+}
 
-    return false;
-};
-
-/* Загрузка изображения */
+/* Загрузка файла */
 window.submitFile = function (el) {
-    const form = new FormData();
-    form.append('file', el.files[0]);
-    form.append('id', $(el).data('id'));
-    form.append('type', $(el).data('type'));
+    const form = new FormData()
+    form.append('file', el.files[0])
+    form.append('id', el.dataset.id)
+    form.append('type', el.dataset.type)
 
-    $.ajax({
-        data: form,
-        type: 'post',
-        contentType: false,
-        processData: false,
-        dataType: 'json',
-        url: '/ajax/file/upload',
-        beforeSend: function () {
-            $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
-        },
-        complete: function () {
-            $('.fa-spinner').remove();
-        },
+    const filesContainer = document.querySelector('.js-files')
+
+    ajax({
+        data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
+        beforeSend: () => filesContainer?.insertAdjacentHTML('beforeend', '<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>'),
+        complete: () => filesContainer?.querySelectorAll('.fa-spinner').forEach(s => s.remove()),
         success: function (data) {
-            if (!data.success) {
-                notyf.error(data.message);
-                return;
-            }
+            if (!data.success) { notyf.error(data.message); return }
 
-            const template = $(data.type === 'image' ? '.js-image-template' : '.js-file-template').clone();
+            const templateEl = document.querySelector(data.type === 'image' ? '.js-image-template' : '.js-file-template')
+            const template = templateEl?.cloneNode(true)
 
             if (data.type === 'image') {
-                template.find('img').attr({
-                    'src': data.path,
-                    'data-source': data.source
-                });
+                const img = template?.querySelector('img')
+                img?.setAttribute('src', data.path)
+                img?.setAttribute('data-source', data.source)
             } else {
-                template.find('.js-file-link').attr('href', data.path).text(data.name);
-                template.find('.js-file-size').text(data.size);
+                const link = template?.querySelector('.js-file-link')
+                if (link) { link.href = data.path; link.textContent = data.name }
+                const sizeEl = template?.querySelector('.js-file-size')
+                if (sizeEl) sizeEl.textContent = data.size
             }
 
-            template.find('.js-file-delete').attr('data-id', data.id);
-            $('.js-files').append(template.html());
+            template?.querySelector('.js-file-delete')?.setAttribute('data-id', data.id)
+            if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            notyf.error('Ошибка загрузки файла: ' + textStatus);
-        }
-    });
+        error: (_, textStatus) => notyf.error('Ошибка загрузки файла: ' + textStatus)
+    })
 
-    el.value = '';
-
-    return false;
-};
+    el.value = ''
+    return false
+}
 
 /* Загрузка изображения */
 window.submitImage = function (el, paste) {
-    const form = new FormData();
-    form.append('file', el.files[0]);
-    form.append('id', $(el).data('id'));
-    form.append('type', $(el).data('type'));
+    const form = new FormData()
+    form.append('file', el.files[0])
+    form.append('id', el.dataset.id)
+    form.append('type', el.dataset.type)
 
-    $.ajax({
-        data: form,
-        type: 'post',
-        contentType: false,
-        processData: false,
-        dataType: 'json',
-        url: '/ajax/file/upload',
-        beforeSend: function () {
-            $('.js-files').append('<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>');
-        },
-        complete: function () {
-            $('.fa-spinner').remove();
-        },
+    const filesContainer = document.querySelector('.js-files')
+
+    ajax({
+        data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
+        beforeSend: () => filesContainer?.insertAdjacentHTML('beforeend', '<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>'),
+        complete: () => filesContainer?.querySelectorAll('.fa-spinner').forEach(s => s.remove()),
         success: function (data) {
-            if (!data.success) {
-                notyf.error(data.message);
-                return;
-            }
+            if (!data.success) { notyf.error(data.message); return }
 
-            const template = $('.js-image-template').clone();
-            template.find('img').attr({
-                'src': data.path,
-                'data-source': data.source
-            });
-            template.find('a').attr('data-id', data.id);
-            $('.js-files').append(template.html());
+            const templateEl = document.querySelector('.js-image-template')
+            const template = templateEl?.cloneNode(true)
+            const img = template?.querySelector('img')
+            img?.setAttribute('src', data.path)
+            img?.setAttribute('data-source', data.source)
+            template?.querySelector('a')?.setAttribute('data-id', data.id)
+            if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
 
-            if (paste) {
-                pasteImage(template);
-            }
+            if (paste) pasteImage(template)
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            notyf.error('Ошибка загрузки файла: ' + textStatus);
-        }
-    });
+        error: (_, textStatus) => notyf.error('Ошибка загрузки файла: ' + textStatus)
+    })
 
-    el.value = '';
-
-    return false;
-};
+    el.value = ''
+    return false
+}
 
 /* Вставка изображения в форму */
 window.pasteImage = function (el) {
-    var editor = window._tiptapActiveEditor;
-    var src = $(el).find('img').data('source');
-    if (editor && src) {
-        editor.chain().focus().setImage({ src: src }).run();
-    }
-};
+    const editor = window._tiptapActiveEditor
+    const src = el?.querySelector('img')?.dataset.source
+    if (editor && src) editor.chain().focus().setImage({ src }).run()
+}
 
 /* Удаление изображения из формы */
 window.cutImage = function (path) {
-    if (!path) return;
+    if (!path) return
 
-    var editor = window._tiptapActiveEditor;
+    const editor = window._tiptapActiveEditor
+    if (!editor) return
 
-    if (!editor) return;
+    const { state, dispatch } = editor.view
+    const tr = state.tr
+    const positions = []
 
-    var { state, dispatch } = editor.view;
-    var tr = state.tr;
-    var positions = [];
-
-    state.doc.descendants(function(node, pos) {
+    state.doc.descendants(function (node, pos) {
         if (node.type.name === 'image' && node.attrs.src === path) {
-            positions.push({ pos: pos, size: node.nodeSize });
+            positions.push({ pos, size: node.nodeSize })
         }
-    });
+    })
 
-    // Удаляем с конца чтобы позиции не съезжали
-    positions.reverse().forEach(function({ pos, size }) {
-        tr.delete(pos, pos + size);
-    });
+    positions.reverse().forEach(({ pos, size }) => tr.delete(pos, pos + size))
 
-    if (tr.docChanged) dispatch(tr);
-};
-
+    if (tr.docChanged) dispatch(tr)
+}
 
 /* Удаление файла */
 window.deleteFile = function (el) {
     confirm(__('confirm_file_delete'), function (result) {
-        if (!result) return;
+        if (!result) return
 
-        const $el = $(el);
-        const id = $el.data('id');
-        const type = $el.data('type');
-
-        $.ajax({
-            url: '/ajax/file/delete',
-            type: 'POST',
-            dataType: 'json',
-            data: { id, type},
+        ajax({
+            url: '/ajax/file/delete', type: 'POST', dataType: 'json',
+            data: { id: el.dataset.id, type: el.dataset.type },
             success: function (data) {
-                if (!data.success) {
-                    notyf.error(data.message);
-                    return;
-                }
-
-                if (data.path) {
-                    cutImage(data.path);
-                }
-
-                $el.closest('.js-file').hide('fast');
+                if (!data.success) { notyf.error(data.message); return }
+                if (data.path) cutImage(data.path)
+                el.closest('.js-file').style.display = 'none'
             },
-            error: function (jqXHR, textStatus) {
-                notyf.error('Ошибка удаления файла: ' + textStatus);
-            }
-        });
-    });
+            error: (_, textStatus) => notyf.error('Ошибка удаления файла: ' + textStatus)
+        })
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Показывает форму для повторной отправки кода подтверждения */
 window.resendingCode = function () {
-    $('.js-resending-link').hide();
-    $('.js-resending-form').show();
-
-    return false;
-};
+    const link = document.querySelector('.js-resending-link')
+    const form = document.querySelector('.js-resending-form')
+    if (link) link.style.display = 'none'
+    if (form) form.style.display = 'block'
+    return false
+}
 
 /* Показывает панель с запросами */
 window.showQueries = function () {
-    $('.js-queries').slideToggle();
-};
+    const el = document.querySelector('.js-queries')
+    if (!el) return
+    el.style.display = getComputedStyle(el).display === 'none' ? '' : 'none'
+}
 
 /* Update message count */
 window.updateMessageCount = function (newCount) {
-    const data = JSON.parse(localStorage.getItem('messageData') || '{}');
-    data.countMessages = parseInt(newCount) || 0;
-    localStorage.setItem('messageData', JSON.stringify(data));
-    localStorage.setItem('messageCount', newCount);
-
-    window.dispatchEvent(new Event('storage'));
+    const data = JSON.parse(localStorage.getItem('messageData') || '{}')
+    data.countMessages = parseInt(newCount) || 0
+    localStorage.setItem('messageData', JSON.stringify(data))
+    localStorage.setItem('messageCount', newCount)
+    window.dispatchEvent(new Event('storage'))
 }
 
 /* Get new messages */
 window.getNewMessages = function () {
-    const $notifyItem = $('.js-messages-block .app-nav__item');
-    const $badge = $notifyItem.find('.badge');
-    const $titleSpan = $('.app-notification__title span');
+    const notifyItem = document.querySelector('.js-messages-block .app-nav__item')
+    const badge = notifyItem?.querySelector('.badge')
+    const titleSpan = document.querySelector('.app-notification__title span')
+    const messagesList = document.querySelector('.js-messages-block .js-messages')
 
-    $.ajax({
-        dataType: 'json',
-        type: 'GET',
-        url: '/messages/new',
-        beforeSend() {
-            $('.js-messages').append('<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>');
-        },
-        complete() {
-            $('.js-message-spin').remove();
-        },
+    ajax({
+        dataType: 'json', type: 'GET', url: '/messages/new',
+        beforeSend: () => messagesList?.insertAdjacentHTML('beforeend', '<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>'),
+        complete: () => messagesList?.querySelectorAll('.js-message-spin').forEach(s => s.remove()),
         success(data) {
             if (!data?.success) {
-                $badge.remove();
-                $titleSpan.text(0);
-                return;
+                badge?.remove()
+                if (titleSpan) titleSpan.textContent = 0
+                return
             }
 
-            const count = data.countMessages;
-            const $newBadge = $('<span>', { class: 'badge bg-notify', text: count });
+            const count = data.countMessages
 
-            if ($badge.length) {
-                $badge.text(count);
-            } else {
-                $notifyItem.append($newBadge);
+            if (badge) {
+                badge.textContent = count
+            } else if (notifyItem) {
+                const newBadge = document.createElement('span')
+                newBadge.className = 'badge bg-notify'
+                newBadge.textContent = count
+                notifyItem.append(newBadge)
             }
 
-            updateMessageCount(count);
+            updateMessageCount(count)
 
-            $titleSpan.text(count);
-            $('.js-messages-block .js-messages').empty().append(data.dialogues);
+            if (titleSpan) titleSpan.textContent = count
+            if (messagesList) {
+                messagesList.innerHTML = ''
+                messagesList.insertAdjacentHTML('beforeend', data.dialogues)
+            }
         }
-    });
+    })
 
-    return false;
-};
+    return false
+}
 
 /* Инициализирует главное изображение слайдера */
 window.initSlideMainImage = function (el) {
-    const mainHref = $(el).attr('href');
-    const slider = $(el).closest('.media-file');
+    const mainHref = el.getAttribute('href')
+    const slider = el.closest('.media-file')
 
-    // Исключает дублирующуюся миниатюру
-    slider.find('.slide-thumb-link').removeClass('fancybox-exclude');
-    slider.find('.slide-thumb-link[href="' + mainHref + '"]').addClass('fancybox-exclude');
-};
+    slider?.querySelectorAll('.slide-thumb-link').forEach(l => l.classList.remove('fancybox-exclude'))
+    slider?.querySelectorAll(`.slide-thumb-link[href="${mainHref}"]`).forEach(l => l.classList.add('fancybox-exclude'))
+}
 
 /* Инициализирует миниатюру слайдера */
 window.initSlideThumbImage = function (e, el) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const newImg = $(el).find('img');
-    const imgSource = newImg.data('source');
-    const slider = $(el).closest('.media-file');
-    const mainLink = slider.find('.slide-main-link');
+    const newImg = el.querySelector('img')
+    const imgSource = newImg?.dataset.source
+    const slider = el.closest('.media-file')
+    const mainLink = slider?.querySelector('.slide-main-link')
 
-    // Обновляет главное изображение
-    mainLink.fadeOut(50, function() {
-        $(this).attr('href', imgSource);
-        $(this).find('img').attr('src', newImg.attr('src')).data('source', imgSource);
-        $(this).fadeIn(50);
-    });
-
-    // Подсветка активной миниатюры
-    slider.find('.slide-thumb-image').removeClass('active');
-    newImg.addClass('active');
-}
-
-let checkTimeout;
-/* Проверка логина */
-window.checkLogin = function (el) {
-    const block = $(el).closest('.mb-3');
-    const message = block.find('.invalid-feedback');
-    const login = $(el).val().trim();
-
-    if (login.length < 3) {
-        block.removeClass('is-valid is-invalid');
-        message.empty();
-
-        return;
+    if (mainLink) {
+        mainLink.setAttribute('href', imgSource)
+        const mainImg = mainLink.querySelector('img')
+        if (mainImg) {
+            mainImg.setAttribute('src', newImg.getAttribute('src'))
+            mainImg.dataset.source = imgSource
+        }
     }
 
-    clearTimeout(checkTimeout);
+    slider?.querySelectorAll('.slide-thumb-image').forEach(img => img.classList.remove('active'))
+    newImg?.classList.add('active')
+}
+
+let checkTimeout
+/* Проверка логина */
+window.checkLogin = function (el) {
+    const block = el.closest('.mb-3')
+    const message = block?.querySelector('.invalid-feedback')
+    const login = el.value.trim()
+
+    if (login.length < 3) {
+        block?.classList.remove('is-valid', 'is-invalid')
+        if (message) message.textContent = ''
+        return
+    }
+
+    clearTimeout(checkTimeout)
 
     checkTimeout = setTimeout(function () {
-        $.ajax({
-            url: '/check-login',
-            method: 'POST',
-            dataType: 'json',
-            data: {login: login},
+        ajax({
+            url: '/check-login', type: 'POST', dataType: 'json',
+            data: { login },
             success: (data) => {
-                block.toggleClass('is-valid', data.success);
-                block.toggleClass('is-invalid', !data.success);
-                message.text(data.success ? '' : data.message);
+                block?.classList.toggle('is-valid', data.success)
+                block?.classList.toggle('is-invalid', !data.success)
+                if (message) message.textContent = data.success ? '' : data.message
             },
             error: () => {
-                block.removeClass('is-valid').addClass('is-invalid');
+                block?.classList.remove('is-valid')
+                block?.classList.add('is-invalid')
             }
-        });
-    }, 1000);
+        })
+    }, 1000)
 
-    return false;
-};
+    return false
+}
 
 const confirmDialogEl = document.createElement('dialog')
 confirmDialogEl.className = 'confirm-dialog'

@@ -57,33 +57,32 @@
 
 @push('scripts')
     <script type="module">
-        $('.js-links-add').click(function () {
-            const listBlock = $('.js-links-list');
+        const maxLinks = <?= (setting('maxfiles') - $down->files->count()) ?>;
+        const linksAdd = document.querySelector('.js-links-add');
+        const linksList = document.querySelector('.js-links-list');
 
-            listBlock.append('<div class="input-group mt-1 js-links-append">' +
+        linksAdd?.addEventListener('click', function (e) {
+            e.preventDefault();
+            linksList.insertAdjacentHTML('beforeend', '<div class="input-group mt-1 js-links-append">' +
                 '<input class="form-control" name="links[]" type="text" value="" maxlength="<?= setting('down_category_max') ?>" placeholder="https://">' +
                 '<span class="input-group-text">' +
                 '<a class="js-links-remove" href="#"><i class="fa fa-times"></i></a>' +
                 '</span>' +
                 '</div>');
 
-            const inputs = listBlock.find('input');
-            if (inputs.length >= <?= (setting('maxfiles') - $down->files->count()) ?>) {
-                $('.js-links-add').hide();
+            if (linksList.querySelectorAll('input').length >= maxLinks) {
+                linksAdd.style.display = 'none';
             }
-
-            return false;
         });
 
-        $(document).on('click', '.js-links-remove', function () {
-            $(this).closest('.js-links-append').remove();
-
-            const remainingInputs = $('.js-links-list').find('input').length;
-            if (remainingInputs < <?= (setting('maxfiles') - $down->files->count()) ?>) {
-                $('.js-links-add').show();
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-links-remove');
+            if (!btn) return;
+            e.preventDefault();
+            btn.closest('.js-links-append').remove();
+            if (linksList.querySelectorAll('input').length < maxLinks) {
+                linksAdd.style.display = '';
             }
-
-            return false;
         });
     </script>
 @endpush

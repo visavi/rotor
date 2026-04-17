@@ -70,13 +70,11 @@
 
 @push('scripts')
     <script type="module">
-        $(document).ready(function() {
-            $(".message-block").click(function() {
-                window.location = $(this).data('href');
-                return false;
-            }).find('a').on('click', function (e) {
-                e.stopPropagation();
+        document.querySelectorAll('.message-block').forEach(function (block) {
+            block.addEventListener('click', function () {
+                window.location = block.dataset.href;
             });
+            block.querySelectorAll('a').forEach(a => a.addEventListener('click', e => e.stopPropagation()));
         });
     </script>
 @endpush

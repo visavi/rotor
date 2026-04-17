@@ -44,9 +44,7 @@
 
 @push('scripts')
     <script type="module">
-        $(document).ready(function() {
-            const currentTheme = $('html').data('bs-theme');
-            $('.g-recaptcha').attr("data-theme", currentTheme);
-        });
+        const currentTheme = document.documentElement.dataset.bsTheme;
+        document.querySelectorAll('.g-recaptcha').forEach(el => el.setAttribute('data-theme', currentTheme));
     </script>
 @endpush

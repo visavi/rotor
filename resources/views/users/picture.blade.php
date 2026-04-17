@@ -23,7 +23,7 @@
             @csrf
             <div class="mb-3{{ hasError('photo') }}">
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">
-                    <input id="inputPhoto" type="file" name="photo" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+                    <input id="inputPhoto" type="file" name="photo" onchange="document.getElementById('upload-file-info').textContent=this.files[0].name" hidden>
                     {{ __('main.attach_image') }}&hellip;
                 </label>
                 <span class="badge bg-info" id="upload-file-info"></span>

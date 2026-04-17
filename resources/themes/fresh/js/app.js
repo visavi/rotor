@@ -1,10 +1,3 @@
 import '../sass/app.scss';
-import 'js/jquery.js';
-import 'jquery-mask-plugin';
-import 'bootstrap';
-import 'js/globals.js';
-import 'js/translate.js';
-import 'js/tiptap-editor.js';
-import 'js/prettify.js';
-import 'js/main.js';
 import './topnav.js';
+import 'js/main.js';

@@ -8,7 +8,6 @@ export default defineConfig({
         ...(process.env.BROTLI ? [compression({ algorithm: 'brotliCompress' })] : []),
         laravel({
             input: [
-                'public/assets/js/jquery.js',
                 'resources/themes/vendor.scss',
                 'resources/themes/default/js/app.js',
                 'resources/themes/mobile/js/app.js',

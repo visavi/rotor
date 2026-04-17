@@ -1,20 +1,25 @@
-$(document).ready(function () {
-    var treeviewMenu = $('.app-menu');
+document.addEventListener('DOMContentLoaded', function () {
+    const treeviewMenu = document.querySelector('.app-menu')
 
-    // Toggle Sidebar
-    $('[data-bs-toggle="sidebar"]').click(function () {
-        $('.app').toggleClass('sidenav-toggled');
+    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach(el => {
+        el.addEventListener('click', function (e) {
+            e.preventDefault()
+            document.querySelector('.app')?.classList.toggle('sidenav-toggled')
+        })
+    })
 
-        return false;
-    });
+    document.querySelectorAll('[data-bs-toggle="treeview"]').forEach(el => {
+        el.addEventListener('click', function (e) {
+            e.preventDefault()
+            const parent = el.parentElement
 
-    // Activate sidebar treeview toggle
-    $('[data-bs-toggle="treeview"]').click(function () {
-        if (!$(this).parent().hasClass('is-expanded')) {
-            treeviewMenu.find('[data-bs-toggle="treeview"]').parent().removeClass('is-expanded');
-        }
-        $(this).parent().toggleClass('is-expanded');
+            if (!parent.classList.contains('is-expanded')) {
+                treeviewMenu?.querySelectorAll('[data-bs-toggle="treeview"]').forEach(item => {
+                    item.parentElement.classList.remove('is-expanded')
+                })
+            }
 
-        return false;
-    });
-});
+            parent.classList.toggle('is-expanded')
+        })
+    })
+})

@@ -83,7 +83,8 @@
 @push('scripts')
     <script type="module">
         window.showVoteForm = function() {
-            $('.js-vote-form').toggle();
+            const el = document.querySelector('.js-vote-form');
+            if (el) el.style.display = el.style.display === 'none' ? '' : 'none';
             return false;
         };
     </script>

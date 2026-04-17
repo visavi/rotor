@@ -78,7 +78,8 @@
 @push('scripts')
     <script type="module">
         window.showDelayForm = function(el) {
-            $('.js-published').toggle($(el).is(':checked'));
+            const published = document.querySelector('.js-published');
+            if (published) published.style.display = el.checked ? '' : 'none';
             return false;
         };
     </script>

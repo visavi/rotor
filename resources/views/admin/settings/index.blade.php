@@ -53,8 +53,6 @@
 
 @push('scripts')
     <script type="module">
-        $(function () {
-            $('#{{ $act }}').addClass('active');
-        })
+        document.getElementById('{{ $act }}')?.classList.add('active');
     </script>
 @endpush

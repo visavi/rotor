@@ -54,7 +54,6 @@
 }
 
 // Icons & libraries
-@import 'bootstrap5-tags/tags';
 
 // Scrollup — восстановить opacity после main.css
 .scrollup { opacity: 1 !important; }
@@ -66,3 +65,4 @@
 // Pagination disabled
 .page-item.disabled .page-link { color: #9ca3af; background-color: #f5f3ff; border-color: #e2e8f0; }
 [data-bs-theme=dark] .page-item.disabled .page-link { color: #4b5563; background-color: #1a1a2e; border-color: #2d2d4e; }
+@import 'bootstrap5-tags/tags';

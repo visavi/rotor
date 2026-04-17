@@ -1,16 +1,25 @@
-$(document).ready(function () {
-    var treeviewMenu = $('.app-menu');
+document.addEventListener('DOMContentLoaded', function () {
+    const treeviewMenu = document.querySelector('.app-menu')
 
-    $('[data-bs-toggle="sidebar"]').click(function () {
-        $('.app').toggleClass('sidenav-toggled');
-        return false;
-    });
+    document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach(el => {
+        el.addEventListener('click', function (e) {
+            e.preventDefault()
+            document.querySelector('.app')?.classList.toggle('sidenav-toggled')
+        })
+    })
 
-    $('[data-bs-toggle="treeview"]').click(function () {
-        if (!$(this).parent().hasClass('is-expanded')) {
-            treeviewMenu.find('[data-bs-toggle="treeview"]').parent().removeClass('is-expanded');
-        }
-        $(this).parent().toggleClass('is-expanded');
-        return false;
-    });
-});
+    document.querySelectorAll('[data-bs-toggle="treeview"]').forEach(el => {
+        el.addEventListener('click', function (e) {
+            e.preventDefault()
+            const parent = el.parentElement
+
+            if (!parent.classList.contains('is-expanded')) {
+                treeviewMenu?.querySelectorAll('[data-bs-toggle="treeview"]').forEach(item => {
+                    item.parentElement.classList.remove('is-expanded')
+                })
+            }
+
+            parent.classList.toggle('is-expanded')
+        })
+    })
+})

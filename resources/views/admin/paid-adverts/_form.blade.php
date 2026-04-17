@@ -74,21 +74,22 @@
 
 @push('scripts')
     <script type="module">
-        $(".js-advert-add").click(function () {
-            $('.js-advert-list').append('<div class="input-group mt-1 js-advert-append">' +
+        document.querySelector('.js-advert-add')?.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector('.js-advert-list').insertAdjacentHTML('beforeend',
+                '<div class="input-group mt-1 js-advert-append">' +
                 '<input class="form-control" name="names[]" type="text" value="" maxlength="35" placeholder="<?= __('admin.paid_adverts.name') ?>">' +
                 '<span class="input-group-text">' +
                     '<a class="js-advert-remove" href="#"><i class="fa fa-times"></i></a>' +
                 '</span>' +
-            '</div>');
-
-            return false;
+                '</div>');
         });
 
-        $(document).on('click', '.js-advert-remove', function () {
-            $(this).closest('.js-advert-append').remove();
-
-            return false;
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-advert-remove');
+            if (!btn) return;
+            e.preventDefault();
+            btn.closest('.js-advert-append').remove();
         });
     </script>
 @endpush

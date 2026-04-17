@@ -60,26 +60,24 @@
 
 @push('scripts')
     <script type="module">
-        $(document).ready(function() {
-            var rekuserprice    = <?= setting('rekuserprice'); ?>;
-            var rekuseroptprice = <?= setting('rekuseroptprice'); ?>;
-            var price           = $('.js-price');
-            var bold            = $('.js-bold');
-            var color           = $('.js-color');
-            var recount = function() {
-                var newprice = parseInt(rekuserprice);
+        const rekuserprice    = <?= setting('rekuserprice'); ?>;
+        const rekuseroptprice = <?= setting('rekuseroptprice'); ?>;
+        const price    = document.querySelector('.js-price');
+        const bold     = document.querySelector('.js-bold');
+        const colorText = document.querySelector('input[type="text"].js-color');
 
-                if (bold.is(':checked')) {
-                    newprice += parseInt(rekuseroptprice);
-                }
-                if (color.val().length) {
-                    newprice += parseInt(rekuseroptprice);
-                }
-                price.html(newprice);
-            };
-            recount();
-            bold.on('change', recount);
-            color.on('input change', recount);
+        const recount = function() {
+            let newprice = parseInt(rekuserprice);
+            if (bold?.checked) newprice += parseInt(rekuseroptprice);
+            if (colorText?.value.length) newprice += parseInt(rekuseroptprice);
+            if (price) price.innerHTML = newprice;
+        };
+
+        recount();
+        bold?.addEventListener('change', recount);
+        document.querySelectorAll('.js-color').forEach(el => {
+            el.addEventListener('input', recount);
+            el.addEventListener('change', recount);
         });
     </script>
 @endpush

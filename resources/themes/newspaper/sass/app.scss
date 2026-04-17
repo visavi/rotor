@@ -16,7 +16,6 @@
 @import 'themes/default/sass/component/button';
 
 // Icons & libraries
-@import 'bootstrap5-tags/tags';
 
 // App title — editorial section header
 .app-title {
@@ -90,3 +89,4 @@
 
 // Scrollup — позиция с учётом sidebar
 .scrollup { right: calc(#{$sidebar-width} + 10px); }
+@import 'bootstrap5-tags/tags';

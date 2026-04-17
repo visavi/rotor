@@ -69,27 +69,23 @@
 
 @push('scripts')
     <script type="module">
-        $(document).ready(function() {
-            const query = new URLSearchParams(window.location.search).get('query');
+        const query = new URLSearchParams(window.location.search).get('query');
 
-            if (query) {
-                const searchWords = query.split(' ')
-                    .filter(word => word.length >= 3)
-                    .filter((word, index, self) => self.indexOf(word) === index);
+        if (query) {
+            const searchWords = query.split(' ')
+                .filter(word => word.length >= 3)
+                .filter((word, index, self) => self.indexOf(word) === index);
 
-                if (searchWords.length > 0) {
-                    const regex = new RegExp('(' + searchWords.join('|') + ')', 'gi');
+            if (searchWords.length > 0) {
+                const regex = new RegExp('(' + searchWords.join('|') + ')', 'gi');
 
-                    $('.section').each(function() {
-                        const originalHtml = $(this).html();
-                        const highlightedHtml = originalHtml.replace(
-                            /(<[^>]+>)|([^<]+)/g,
-                            (m, tag, text) => tag || text.replace(regex, '<mark>$1</mark>')
-                        );
-                        $(this).html(highlightedHtml);
-                    });
-                }
+                document.querySelectorAll('.section').forEach(function (el) {
+                    el.innerHTML = el.innerHTML.replace(
+                        /(<[^>]+>)|([^<]+)/g,
+                        (m, tag, text) => tag || text.replace(regex, '<mark>$1</mark>')
+                    );
+                });
             }
-        });
+        }
     </script>
 @endpush
