@@ -38,11 +38,16 @@ class HtmlSanitizer
                 ->allowElement('u')
                 ->allowElement('s')
                 ->allowElement('br')
-                ->allowElement('mark', ['style'])
                 // Списки
                 ->allowElement('ul')
                 ->allowElement('ol')
                 ->allowElement('li')
+                // Таблицы
+                ->allowElement('table', ['class'])
+                ->allowElement('tbody')
+                ->allowElement('tr')
+                ->allowElement('th')
+                ->allowElement('td')
                 // Цитата
                 ->allowElement('blockquote')
                 ->allowElement('footer')
@@ -50,7 +55,7 @@ class HtmlSanitizer
                 ->allowElement('pre', ['class'])
                 ->allowElement('code')
                 // Ссылки и медиа
-                ->allowElement('a', ['href', 'target', 'class'])
+                ->allowElement('a', ['href', 'class'])
                 ->allowElement('img', ['src', 'alt', 'class'])
                 ->allowElement('audio', ['src', 'controls'])
                 ->allowElement('iframe', ['src', 'allowfullscreen', 'frameborder', 'loading'])

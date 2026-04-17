@@ -8,6 +8,7 @@ import { Placeholder } from '@tiptap/extension-placeholder'
 import { CharacterCount } from '@tiptap/extension-character-count'
 import { Mention } from '@tiptap/extension-mention'
 import FileHandler from '@tiptap/extension-file-handler'
+import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
 import { trans as __ } from './translate.js'
 
 const BackgroundColor = Extension.create({
@@ -116,11 +117,11 @@ const VideoEmbed = Node.create({
     group: 'block',
     atom: true,
     addAttributes() { return { src: { default: null } } },
-    parseHTML() { return [{ tag: 'div.block-video', getAttrs: el => ({ src: getOriginalUrl(el.querySelector('iframe')?.src || '') }) }] },
+    parseHTML() { return [{ tag: 'div.video', getAttrs: el => ({ src: getOriginalUrl(el.querySelector('iframe')?.src || '') }) }] },
     renderHTML({ node }) {
         const embedSrc = getEmbedUrl(node.attrs.src)
-        if (!embedSrc) return ['div', { class: 'block-video' }]
-        return ['div', { class: 'block-video' },
+        if (!embedSrc) return ['div', { class: 'video' }]
+        return ['div', { class: 'video' },
             ['iframe', { src: embedSrc, allowfullscreen: 'true', frameborder: '0', loading: 'lazy' }]]
     },
     addNodeView() {
@@ -129,7 +130,7 @@ const VideoEmbed = Node.create({
             dom.setAttribute('contenteditable', 'false')
 
             const inner = document.createElement('div')
-            inner.className = 'block-video'
+            inner.className = 'video'
 
             const embedSrc = getEmbedUrl(node.attrs.src)
 
@@ -219,7 +220,7 @@ const Spoiler = Node.create({
     },
     parseHTML() {
         return [{
-            tag: 'details.block-spoiler',
+            tag: 'details.spoiler',
             getAttrs: el => ({
                 title: el.querySelector(':scope > summary')?.textContent?.trim() || 'Spoiler',
                 open: true,
@@ -229,7 +230,7 @@ const Spoiler = Node.create({
     },
     renderHTML({ node }) {
         // open не сохраняем в HTML — для читателей спойлер закрыт по умолчанию
-        return ['details', { class: 'block-spoiler' },
+        return ['details', { class: 'spoiler' },
             ['summary', {}, node.attrs.title],
             ['div', {}, 0]]
     },
@@ -238,7 +239,7 @@ const Spoiler = Node.create({
             let attrs = { ...initNode.attrs }
 
             const dom = document.createElement('details')
-            dom.className = 'block-spoiler'
+            dom.className = 'spoiler'
             dom.open = attrs.open
 
             const summary = document.createElement('summary')
@@ -289,8 +290,8 @@ const Hide = Node.create({
     group: 'block',
     content: 'block+',
     defining: true,
-    parseHTML() { return [{ tag: 'div.block-hidden' }] },
-    renderHTML() { return ['div', { class: 'block-hidden' }, 0] },
+    parseHTML() { return [{ tag: 'div.hidden' }] },
+    renderHTML() { return ['div', { class: 'hidden' }, 0] },
     addCommands() {
         return {
             insertHide: () => ({ commands }) => commands.insertContent({
@@ -765,6 +766,38 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     activeButtons.push({ el: listDd._dropdownBtn, getActive: () =>
         editor.isActive('bulletList') || editor.isActive('orderedList')
     })
+
+    function makeMenuSep() {
+        const el = document.createElement('hr')
+        el.className = 'tiptap-menu-sep'
+        return el
+    }
+
+    function tableMenuItem(icon, title, action) {
+        const el = document.createElement('button')
+        el.type = 'button'
+        el.className = 'tiptap-menu-item'
+        el.innerHTML = `<i class="fas ${icon}"></i> ${title}`
+        el.addEventListener('mousedown', e => { e.preventDefault(); action() })
+        return el
+    }
+
+    const tableMenuItems = [
+        tableMenuItem('fa-table',          __('editor2.table_insert'),         () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()),
+        makeMenuSep(),
+        tableMenuItem('fa-arrow-up',       __('editor2.table_row_before'),     () => editor.chain().focus().addRowBefore().run()),
+        tableMenuItem('fa-arrow-down',     __('editor2.table_row_after'),      () => editor.chain().focus().addRowAfter().run()),
+        tableMenuItem('fa-trash-alt',      __('editor2.table_row_delete'),     () => editor.chain().focus().deleteRow().run()),
+        makeMenuSep(),
+        tableMenuItem('fa-arrow-left',     __('editor2.table_col_before'),     () => editor.chain().focus().addColumnBefore().run()),
+        tableMenuItem('fa-arrow-right',    __('editor2.table_col_after'),      () => editor.chain().focus().addColumnAfter().run()),
+        tableMenuItem('fa-trash-alt',      __('editor2.table_col_delete'),     () => editor.chain().focus().deleteColumn().run()),
+        makeMenuSep(),
+        tableMenuItem('fa-times-circle',   __('editor2.table_delete'),         () => editor.chain().focus().deleteTable().run()),
+    ]
+    const tableDd = makeDropdown('fa-table', __('editor2.table'), tableMenuItems)
+    dropdown(tableDd)
+    activeButtons.push({ el: tableDd._dropdownBtn, getActive: () => editor.isActive('table') })
     sep()
 
     btn('fa-link', __('editor2.link'), () => {
@@ -773,16 +806,13 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         const selected = editor.state.doc.textBetween(from, to, '')
         const url = prompt(__('editor2.url_link') + ':', existing || selected)
         if (!validateUrl(url)) return
-        const target = url.startsWith('/') ? null : '_blank'
         if (selected || existing) {
-            editor.chain().focus().extendMarkRange('link').setLink({ href: url, target }).run()
+            editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: null }).run()
         } else {
             const placeholder = __('editor2.link_text')
-            const targetAttr = target ? ` target="${target}"` : ''
             editor.chain().focus()
-                .insertContent(`<a href="${url}"${targetAttr}>${placeholder}</a>`)
+                .insertContent(`<a href="${url}">${placeholder}</a>`)
                 .run()
-            // Выделяем вставленный текст
             const { from } = editor.state.selection
             editor.commands.setTextSelection({ from: from - placeholder.length, to: from })
         }
@@ -980,7 +1010,7 @@ function initEditor(textarea) {
         extensions: [
             StarterKit.configure({
                 blockquote: false,
-                codeBlock: { HTMLAttributes: { class: 'block-code' } },
+                codeBlock: { HTMLAttributes: { class: 'code' } },
             }),
             Blockquote,
             TextStyle,
@@ -988,7 +1018,7 @@ function initEditor(textarea) {
             BackgroundColor,
             FontSize,
             TextAlign.configure({ types: ['heading', 'paragraph'] }),
-            Image.configure({ inline: false, HTMLAttributes: { class: 'block-image' }, allowBase64: false }),
+            Image.configure({ inline: false, HTMLAttributes: { class: 'image' }, allowBase64: false }),
             FileHandler.configure({
                 allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg+xml'],
                 onDrop: async (editor, files, pos) => {
@@ -1008,9 +1038,13 @@ function initEditor(textarea) {
             Spoiler,
             Hide,
             Sticker,
+            Table.configure({ resizable: false, HTMLAttributes: { class: 'table' } }),
+            TableRow,
+            TableHeader,
+            TableCell,
             CharacterCount,
             Mention.configure({
-                HTMLAttributes: { class: 'mention' },
+                HTMLAttributes: { class: 'user' },
                 renderHTML({ options, node }) {
                     return ['a', mergeAttributes(options.HTMLAttributes, { href: '/users/' + node.attrs.id }), '@' + node.attrs.id]
                 },

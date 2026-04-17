@@ -58,7 +58,16 @@
         "size_xl": "Дуже великий",
         "upload_failed": "Помилка завантаження зображення",
         "upload_error": "Не вдалося завантажити зображення",
-        "upload_image": "Завантажити зображення"
+        "upload_image": "Завантажити зображення",
+        "table": "Таблиця",
+        "table_insert": "Вставити таблицю (3×3)",
+        "table_row_before": "Рядок вище",
+        "table_row_after": "Рядок нижче",
+        "table_row_delete": "Видалити рядок",
+        "table_col_before": "Колонка зліва",
+        "table_col_after": "Колонка справа",
+        "table_col_delete": "Видалити колонку",
+        "table_delete": "Видалити таблицю"
     },
 
     "editor": {

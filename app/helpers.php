@@ -1028,7 +1028,7 @@ function sendNotify(string $text, string $url, string $title): void
         return;
     }
 
-    preg_match_all('/<a[^>]+class="mention"[^>]*href="\/users\/([\w\-]+)"/', $text, $matches);
+    preg_match_all('/<a[^>]+class="user"[^>]*href="\/users\/([\w\-]+)"/', $text, $matches);
 
     if (! empty($matches[1])) {
         $usersAnswer = array_unique(array_diff($matches[1], [$login]));
@@ -1057,7 +1057,7 @@ function textNotice(string $type, array $replace = []): string
 
     foreach ($replace as $key => $val) {
         if ($key === 'login') {
-            $val = '<a class="mention" href="/users/' . $val . '">@' . $val . '</a>';
+            $val = '<a class="user" href="/users/' . $val . '">@' . $val . '</a>';
         }
 
         $message->text = str_replace('%' . $key . '%', $val, $message->text);
@@ -1336,18 +1336,35 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 {
     $html = (string) $text;
 
-    if (str_contains($html, 'block-hidden') && ! auth()->check()) {
+    if (str_contains($html, 'hidden') && ! auth()->check()) {
         $html = preg_replace(
-            '/<div class="block-hidden">.*?<\/div>/s',
-            '<div class="block-hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
+            '/<div class="hidden">.*?<\/div>/s',
+            '<div class="hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
             $html
         );
     }
 
-    if (str_contains($html, 'block-image')) {
+    if (str_contains($html, 'image')) {
         $html = preg_replace(
-            '/<img\s([^>]*)class="block-image"([^>]*)>/i',
-            '<img $1class="block-image" data-fancybox="' . $group . '"$2>',
+            '/<img\s([^>]*)class="image"([^>]*)>/i',
+            '<img $1class="image" data-fancybox="' . $group . '"$2>',
+            $html
+        );
+    }
+
+    if (str_contains($html, '<a ')) {
+        $siteHost = parse_url(config('app.url'), PHP_URL_HOST);
+        $html = preg_replace_callback(
+            '/<a\b([^>]*)>/i',
+            static function ($m) use ($siteHost) {
+                preg_match('/href="([^"]*)"/i', $m[1], $hm);
+                $href = $hm[1] ?? '';
+                $isExternal = $href && ! str_starts_with($href, '/')
+                    && parse_url($href, PHP_URL_HOST) !== $siteHost;
+                return $isExternal
+                    ? '<a' . $m[1] . ' target="_blank" rel="noopener nofollow">'
+                    : '<a' . $m[1] . '>';
+            },
             $html
         );
     }

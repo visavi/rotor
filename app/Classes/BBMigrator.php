@@ -53,7 +53,7 @@ class BBMigrator
             ],
             'image' => [
                 'pattern' => '%\[img\]((\w+://|//|/)[^\s()<>\[\]]+\.(jpg|jpeg|png|gif|webp))\[/img\]%',
-                'replace' => '<img class="block-image" src="$1">',
+                'replace' => '<img class="image" src="$1">',
             ],
             'bold' => [
                 'pattern' => '/\[b\](.+?)\[\/b\]/s',
@@ -117,7 +117,7 @@ class BBMigrator
             ],
             'youtube' => [
                 'pattern' => '/\[youtube\](.*youtu(?:\.be\/|be\.com\/.*(?:vi?\/?=?|embed\/)))([\w-]{11}).*\[\/youtube\]/U',
-                'replace' => '<div class="block-video"><iframe src="https://www.youtube.com/embed/$2" allowfullscreen="true" frameborder="0" loading="lazy"></iframe></div>',
+                'replace' => '<div class="video"><iframe src="https://www.youtube.com/embed/$2" allowfullscreen="true" frameborder="0" loading="lazy"></iframe></div>',
             ],
             'video' => [
                 'pattern'  => '/\[video\](.+?)\[\/video\]/',
@@ -201,7 +201,7 @@ class BBMigrator
     }
 
     /**
-     * [code] → <pre class="block-code"><code>...</code></pre>
+     * [code] → <pre class="code"><code>...</code></pre>
      *
      * Содержимое экранируется, плюс [ и @ нейтрализуются, чтобы
      * последующие парсеры не сработали внутри блока кода.
@@ -211,7 +211,7 @@ class BBMigrator
         $content = htmlspecialchars($match[1], ENT_QUOTES, 'UTF-8');
         $content = strtr($content, ['[' => '&#91;', '@' => '&#64;']);
 
-        return '<pre class="block-code"><code>' . $content . '</code></pre>';
+        return '<pre class="code"><code>' . $content . '</code></pre>';
     }
 
     /**
@@ -264,7 +264,7 @@ class BBMigrator
     }
 
     /**
-     * [video] → <div class="block-video"><iframe ...></iframe></div>
+     * [video] → <div class="video"><iframe ...></iframe></div>
      * Набор хостингов совпадает с getEmbedUrl() в tiptap.js.
      */
     private function videoReplace(array $match): string
@@ -290,11 +290,11 @@ class BBMigrator
             return $match[0];
         }
 
-        return '<div class="block-video"><iframe src="' . $embed . '" allowfullscreen="true" frameborder="0" loading="lazy"></iframe></div>';
+        return '<div class="video"><iframe src="' . $embed . '" allowfullscreen="true" frameborder="0" loading="lazy"></iframe></div>';
     }
 
     /**
-     * @username → <a class="mention" href="/users/ID">@ID</a>
+     * @username → <a class="user" href="/users/ID">@ID</a>
      * (структура Mention-ноды tiptap).
      */
     private function userReplace(array $match): string
@@ -303,15 +303,15 @@ class BBMigrator
             return $match[0];
         }
 
-        return '<a class="mention" href="/users/' . $match[1] . '">@' . $match[1] . '</a>';
+        return '<a class="user" href="/users/' . $match[1] . '">@' . $match[1] . '</a>';
     }
 
     /**
-     * [hide] → <div class="block-hidden"> (класс Hide-ноды tiptap).
+     * [hide] → <div class="hidden"> (класс Hide-ноды tiptap).
      */
     private function hiddenText(array $match): string
     {
-        return '<div class="block-hidden">' . $match[1] . '</div>';
+        return '<div class="hidden">' . $match[1] . '</div>';
     }
 
     /**
@@ -335,7 +335,7 @@ class BBMigrator
     }
 
     /**
-     * [spoiler] / [spoiler=title] → <details class="block-spoiler">
+     * [spoiler] / [spoiler=title] → <details class="spoiler">
      * (структура Spoiler-ноды tiptap).
      */
     private function spoilerText(array $match): string
@@ -343,7 +343,7 @@ class BBMigrator
         $title = empty($match[2]) ? 'Spoiler' : $match[1];
         $text = empty($match[2]) ? $match[1] : $match[2];
 
-        return '<details class="block-spoiler"><summary>' . $title . '</summary><div>' . $text . '</div></details>';
+        return '<details class="spoiler"><summary>' . $title . '</summary><div>' . $text . '</div></details>';
     }
 
     /**
@@ -360,8 +360,8 @@ class BBMigrator
 
         $anyOpen = '/<(' . implode('|', $containerTags) . ')[\s>]/i';
         $anyClose = '/<\/(' . implode('|', $containerTags) . ')>/i';
-        // <audio> и <img class="block-image"> — блочные; <img class="sticker"> — инлайн, не матчим
-        $startsWithBlock = '/^(?:<(?:' . implode('|', $containerTags) . ')[\s>\/]|<audio[\s>\/]|<img\s[^>]*class="block-image")/i';
+        // <audio> и <img class="image"> — блочные; <img class="sticker"> — инлайн, не матчим
+        $startsWithBlock = '/^(?:<(?:' . implode('|', $containerTags) . ')[\s>\/]|<audio[\s>\/]|<img\s[^>]*class="image")/i';
 
         $lines = explode("\n", $html);
         $result = '';

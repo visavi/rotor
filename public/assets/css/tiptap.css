@@ -216,6 +216,12 @@
     background-color: var(--bs-secondary-bg);
 }
 
+.tiptap-menu-sep {
+    margin: 4px 0;
+    border: none;
+    border-top: 1px solid var(--bs-border-color);
+}
+
 .tiptap-size-item:nth-child(1) { font-size: 0.68rem; }
 .tiptap-size-item:nth-child(2) { font-size: 0.78rem; }
 .tiptap-size-item:nth-child(3) { font-size: 0.88rem; }
@@ -354,11 +360,11 @@ blockquote {
 }
 
 blockquote p,
-.block-hidden p {
+.hidden p {
     margin: 0;
 }
 
-blockquote .block-code {
+blockquote .code {
     font-size: inherit;
 }
 
@@ -384,15 +390,15 @@ blockquote::before {
 }
 
 /* Spoiler & Hide */
-.block-spoiler,
-.block-hidden {
+.spoiler,
+.hidden {
     border: 1px dashed rgba(var(--bs-secondary-rgb), 0.5);
     padding: 8px 15px;
     margin: 0.5rem 0;
     background: var(--base-bg);
 }
 
-.block-spoiler > summary {
+.spoiler > summary {
     font-size: 0.75rem;
     font-weight: 600;
     opacity: 0.6;
@@ -403,33 +409,33 @@ blockquote::before {
     margin-bottom: 0;
 }
 
-.block-spoiler > summary::-webkit-details-marker { display: none; }
+.spoiler > summary::-webkit-details-marker { display: none; }
 
-.block-spoiler > summary::before {
+.spoiler > summary::before {
     content: "\f054";
     font: var(--fa-font-solid);
     font-size: 0.75rem;
     margin-right: 5px;
 }
 
-.block-spoiler[open] > summary::before {
+.spoiler[open] > summary::before {
     content: "\f078";
     font: var(--fa-font-solid);
     font-size: 0.75rem;
     margin-right: 5px;
 }
 
-.block-spoiler[open] > summary {
+.spoiler[open] > summary {
     margin-bottom: 6px;
 }
 
-.block-spoiler p {
+.spoiler p {
     margin: 0;
 }
 
 /* Hide block */
 
-.block-hidden::before {
+.hidden::before {
     content: '🔒 Скрытый контент';
     display: block;
     font-size: 0.75rem;
@@ -440,7 +446,7 @@ blockquote::before {
 }
 
 /* Images */
-.block-image {
+.image {
     max-width: min(600px, 100%);
     max-height: 450px;
     height: auto;
@@ -448,7 +454,7 @@ blockquote::before {
 }
 
 /* Video embed */
-.block-video {
+.video {
     position: relative;
     padding-top: min(56.25%, calc(600px * 0.5625)); /* 16:9, max 600px wide */
     max-width: 600px;
@@ -458,7 +464,7 @@ blockquote::before {
     overflow: hidden;
 }
 
-.block-video iframe {
+.video iframe {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -479,25 +485,25 @@ blockquote::before {
     border-radius: 4px;
 }
 
-.ProseMirror-selectednode .block-video,
-.ProseMirror-selectednode .block-image {
+.ProseMirror-selectednode .video,
+.ProseMirror-selectednode .image {
     outline: 2px solid var(--bs-primary);
     border-radius: 4px;
 }
 
-.ProseMirror-selectednode:has(.block-video),
-.ProseMirror-selectednode:has(.block-image) {
+.ProseMirror-selectednode:has(.video),
+.ProseMirror-selectednode:has(.image) {
     outline: none;
 }
 
 /* ── Mention ──────────────────────────────────────────────────────────────── */
 
-a.mention {
+a.user {
     color: var(--bs-primary);
     text-decoration: none;
 }
 
-a.mention:hover {
+a.user:hover {
     text-decoration: underline;
 }
 
@@ -532,4 +538,46 @@ a.mention:hover {
 .tiptap-editor-content .ProseMirror-hideselection *::-moz-selection {
     background: transparent !important;
     color: var(--bs-body-color) !important;
+}
+
+/* ── Tables ───────────────────────────────────────────────────────────────── */
+
+.section-message .table,
+.ProseMirror .table {
+    table-layout: fixed;
+}
+
+.section-message .table td,
+.section-message .table th,
+.ProseMirror .table td,
+.ProseMirror .table th {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    padding: 0.25rem 0.5rem;
+    line-height: 1.4;
+}
+
+.section-message .table th,
+.ProseMirror .table th {
+    background-color: rgba(var(--bs-emphasis-color-rgb), 0.07);
+}
+
+.section-message .table td > p,
+.section-message .table th > p,
+.ProseMirror .table td > p,
+.ProseMirror .table th > p {
+    margin: 0;
+    min-height: unset;
+}
+
+
+.ProseMirror .table .selectedCell {
+    position: relative;
+}
+
+.ProseMirror .table .selectedCell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(var(--bs-primary-rgb), 0.12);
+    pointer-events: none;
 }

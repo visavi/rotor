@@ -102,41 +102,41 @@
 
     @if (isset($moduleConfig['config']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.config') }}</div>
-        <details class="block-spoiler">
+        <details class="spoiler">
             <summary>{{ __('main.expand_view') }}</summary>
-            <pre class="block-code"><code>{{ $moduleConfig['config'] }}</code></pre>
+            <pre class="code"><code>{{ $moduleConfig['config'] }}</code></pre>
         </details>
     @endif
 
     @if (isset($moduleConfig['settings']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.settings') }}</div>
-        <details class="block-spoiler">
+        <details class="spoiler">
             <summary>{{ __('main.expand_view') }}</summary>
-            <pre class="block-code"><code>{{ $moduleConfig['settings'] }}</code></pre>
+            <pre class="code"><code>{{ $moduleConfig['settings'] }}</code></pre>
         </details>
     @endif
 
     @if (isset($moduleConfig['routes']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.routes') }}</div>
-        <details class="block-spoiler">
+        <details class="spoiler">
             <summary>{{ __('main.expand_view') }}</summary>
-            <pre class="block-code"><code>{{ $moduleConfig['routes'] }}</code></pre>
+            <pre class="code"><code>{{ $moduleConfig['routes'] }}</code></pre>
         </details>
     @endif
 
     @if (isset($moduleConfig['hooks']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.hooks') }}</div>
-        <details class="block-spoiler">
+        <details class="spoiler">
             <summary>{{ __('main.expand_view') }}</summary>
-            <pre class="block-code"><code>{{ $moduleConfig['hooks'] }}</code></pre>
+            <pre class="code"><code>{{ $moduleConfig['hooks'] }}</code></pre>
         </details>
     @endif
 
     @if (isset($moduleConfig['middleware']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.middleware') }}</div>
-        <details class="block-spoiler">
+        <details class="spoiler">
             <summary>{{ __('main.expand_view') }}</summary>
-            <pre class="block-code"><code>{{ $moduleConfig['middleware'] }}</code></pre>
+            <pre class="code"><code>{{ $moduleConfig['middleware'] }}</code></pre>
         </details>
     @endif
 
