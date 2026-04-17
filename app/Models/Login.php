@@ -19,8 +19,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Login extends Model
 {
-    public const AUTH = 'auth';
-    public const SOCIAL = 'social';
+    public const string AUTH = 'auth';
+    public const string SOCIAL = 'social';
 
     /**
      * The table associated with the model.

@@ -23,8 +23,8 @@ use Illuminate\Support\Facades\DB;
  */
 class Dialogue extends Model
 {
-    public const IN = 'in';   // Принятые
-    public const OUT = 'out';  // Отправленные
+    public const string IN = 'in';   // Принятые
+    public const string OUT = 'out';  // Отправленные
 
     /**
      * Indicates if the model should be timestamped.

@@ -60,9 +60,9 @@ class Banhist extends Model
     /**
      * Типы банов
      */
-    public const BAN = 'ban';    // Бан
-    public const UNBAN = 'unban';  // Разбан
-    public const CHANGE = 'change'; // Изменение
+    public const string BAN = 'ban';    // Бан
+    public const string UNBAN = 'unban';  // Разбан
+    public const string CHANGE = 'change'; // Изменение
 
     /**
      * Возвращает связь пользователя

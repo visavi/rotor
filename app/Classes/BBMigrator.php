@@ -343,7 +343,7 @@ class BBMigrator
         $title = empty($match[2]) ? 'Spoiler' : $match[1];
         $text = empty($match[2]) ? $match[1] : $match[2];
 
-        return '<details class="block-spoiler" open="true"><summary>' . $title . '</summary><div>' . $text . '</div></details>';
+        return '<details class="block-spoiler"><summary>' . $title . '</summary><div>' . $text . '</div></details>';
     }
 
     /**

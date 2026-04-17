@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="section-body border-top">
-                        {{ bbCode($firstPost->text) }}
+                        {{ renderHtml($firstPost->text) }}
                     </div>
                 </div>
             @endif

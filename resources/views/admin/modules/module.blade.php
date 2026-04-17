@@ -43,18 +43,18 @@
 @stop
 
 @section('content')
-    <div class="mb-3">
-        {{ $moduleConfig['description'] }}
-    </div>
+    <h3>{{ $moduleConfig['description'] }}</h3>
 
     @if (isset($moduleConfig['info']))
         <div class="mb-3">
-            {{ bbCode($moduleConfig['info']) }}
+            {{ renderHtml($moduleConfig['info']) }}
         </div>
     @endif
 
-    {{ __('main.version') }}: {{ $module->version ?? $moduleConfig['version']  }}<br>
-    {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
+    <p>
+        {{ __('main.version') }}: {{ $module->version ?? $moduleConfig['version']  }}<br>
+        {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a>
+    </p>
 
     @if (isset($moduleConfig['screenshots']))
         <?php $countScreens = count($moduleConfig['screenshots']); ?>
@@ -102,27 +102,42 @@
 
     @if (isset($moduleConfig['config']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.config') }}</div>
-            <?= bbCode('[spoiler][code]' . $moduleConfig['config'] . '[/code][/spoiler]') ?>
+        <details class="block-spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            <pre class="block-code"><code>{{ $moduleConfig['config'] }}</code></pre>
+        </details>
     @endif
 
     @if (isset($moduleConfig['settings']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.settings') }}</div>
-            <?= bbCode('[spoiler][code]' . $moduleConfig['settings'] . '[/code][/spoiler]') ?>
+        <details class="block-spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            <pre class="block-code"><code>{{ $moduleConfig['settings'] }}</code></pre>
+        </details>
     @endif
 
     @if (isset($moduleConfig['routes']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.routes') }}</div>
-            <?= bbCode('[spoiler][code]' . $moduleConfig['routes'] . '[/code][/spoiler]') ?>
+        <details class="block-spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            <pre class="block-code"><code>{{ $moduleConfig['routes'] }}</code></pre>
+        </details>
     @endif
 
     @if (isset($moduleConfig['hooks']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.hooks') }}</div>
-        <?= bbCode('[spoiler][code]' . $moduleConfig['hooks'] . '[/code][/spoiler]') ?>
+        <details class="block-spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            <pre class="block-code"><code>{{ $moduleConfig['hooks'] }}</code></pre>
+        </details>
     @endif
 
     @if (isset($moduleConfig['middleware']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.middleware') }}</div>
-        <?= bbCode('[spoiler][code]' . $moduleConfig['middleware'] . '[/code][/spoiler]') ?>
+        <details class="block-spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            <pre class="block-code"><code>{{ $moduleConfig['middleware'] }}</code></pre>
+        </details>
     @endif
 
     <br>

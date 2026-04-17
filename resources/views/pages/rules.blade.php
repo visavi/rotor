@@ -13,7 +13,7 @@
 
 @section('content')
     @if ($rules)
-        {{ bbCode($rules['text']) }}<br>
+        {{ renderHtml($rules->text) }}
     @else
         {{ showError(__('pages.empty_rules')) }}
     @endif

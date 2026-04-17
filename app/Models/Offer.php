@@ -42,28 +42,28 @@ class Offer extends Model
     use SearchableTrait;
     use SortableTrait;
 
-    public const DONE = 'done';
-    public const WAIT = 'wait';
-    public const CANCEL = 'cancel';
-    public const PROCESS = 'process';
+    public const string DONE = 'done';
+    public const string WAIT = 'wait';
+    public const string CANCEL = 'cancel';
+    public const string PROCESS = 'process';
 
     /**
      * Статусы
      */
-    public const STATUSES = [
+    public const array STATUSES = [
         self::DONE,
         self::WAIT,
         self::CANCEL,
         self::PROCESS,
     ];
 
-    public const OFFER = 'offer';
-    public const ISSUE = 'issue';
+    public const string OFFER = 'offer';
+    public const string ISSUE = 'issue';
 
     /**
      * Типы
      */
-    public const TYPES = [
+    public const array TYPES = [
         self::OFFER,
         self::ISSUE,
     ];

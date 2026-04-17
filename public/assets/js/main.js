@@ -1,25 +1,6 @@
 import * as bootstrap from 'bootstrap'
 import { trans as __ } from './translate.js'
 
-const confirmDialogEl = document.createElement('dialog')
-confirmDialogEl.className = 'confirm-dialog'
-confirmDialogEl.innerHTML = `
-<p class="confirm-message"></p>
-<div class="confirm-footer">
-    <button type="button" class="btn btn-secondary btn-sm js-confirm-cancel"></button>
-    <button type="button" class="btn btn-primary btn-sm js-confirm-ok"></button>
-</div>`
-document.body.appendChild(confirmDialogEl)
-
-function confirm(message, callback) {
-    confirmDialogEl.querySelector('.confirm-message').textContent = message
-    confirmDialogEl.querySelector('.js-confirm-ok').textContent = __('buttons.ok')
-    confirmDialogEl.querySelector('.js-confirm-cancel').textContent = __('buttons.cancel')
-    confirmDialogEl.querySelector('.js-confirm-ok').onclick = () => { confirmDialogEl.close(); callback(true) }
-    confirmDialogEl.querySelector('.js-confirm-cancel').onclick = () => { confirmDialogEl.close(); callback(false) }
-    confirmDialogEl.showModal()
-}
-
 $(function () {
     let body = $('body');
 
@@ -57,21 +38,6 @@ $(function () {
             && $(e.target).parents('.popover.in').length === 0) {
             $('[data-bs-toggle="popover"]').popover('hide');
         }
-    });
-
-    /* Spoiler */
-    body.on('click', '.spoiler-title', function () {
-        const $spoiler = $(this).closest('.spoiler');
-        const $spoilerText = $spoiler.find('.spoiler-text:first');
-
-        $spoiler.toggleClass('spoiler-open');
-        $spoilerText.slideToggle();
-    });
-
-    /* Show news on the main */
-    body.on('click', '.news-title', function () {
-        $(this).toggleClass('fa-rotate-180');
-        $(this).nextAll(".news-text:first").slideToggle();
     });
 
     $('.colorpicker').on('input', function () {
@@ -796,3 +762,22 @@ window.checkLogin = function (el) {
 
     return false;
 };
+
+const confirmDialogEl = document.createElement('dialog')
+confirmDialogEl.className = 'confirm-dialog'
+confirmDialogEl.innerHTML = `
+<p class="confirm-message"></p>
+<div class="confirm-footer">
+    <button type="button" class="btn btn-secondary btn-sm js-confirm-cancel"></button>
+    <button type="button" class="btn btn-primary btn-sm js-confirm-ok"></button>
+</div>`
+document.body.appendChild(confirmDialogEl)
+
+function confirm(message, callback) {
+    confirmDialogEl.querySelector('.confirm-message').textContent = message
+    confirmDialogEl.querySelector('.js-confirm-ok').textContent = __('buttons.ok')
+    confirmDialogEl.querySelector('.js-confirm-cancel').textContent = __('buttons.cancel')
+    confirmDialogEl.querySelector('.js-confirm-ok').onclick = () => { confirmDialogEl.close(); callback(true) }
+    confirmDialogEl.querySelector('.js-confirm-cancel').onclick = () => { confirmDialogEl.close(); callback(false) }
+    confirmDialogEl.showModal()
+}

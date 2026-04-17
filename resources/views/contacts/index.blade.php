@@ -41,7 +41,7 @@
                     <div class="section-body border-top">
                         <div class="section-message">
                             @if ($contact->text)
-                                {{ __('main.note') }}: {{ bbCode($contact->text) }}
+                                {{ __('main.note') }}: {{ renderText($contact->text) }}
                             @else
                                 {{ __('main.empty_notes') }}
                             @endif

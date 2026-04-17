@@ -87,18 +87,18 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use SortableTrait;
     use UploadTrait;
 
-    public const BOSS = 'boss';   // Владелец
-    public const ADMIN = 'admin';  // Админ
-    public const MODER = 'moder';  // Модератор
-    public const EDITOR = 'editor'; // Редактор
-    public const USER = 'user';   // Пользователь
-    public const PENDED = 'pended'; // Ожидающий
-    public const BANNED = 'banned'; // Забаненный
+    public const string BOSS = 'boss';   // Владелец
+    public const string ADMIN = 'admin';  // Админ
+    public const string MODER = 'moder';  // Модератор
+    public const string EDITOR = 'editor'; // Редактор
+    public const string USER = 'user';   // Пользователь
+    public const string PENDED = 'pended'; // Ожидающий
+    public const string BANNED = 'banned'; // Забаненный
 
     /**
      * Администраторы
      */
-    public const ADMIN_GROUPS = [
+    public const array ADMIN_GROUPS = [
         self::EDITOR,
         self::MODER,
         self::ADMIN,
@@ -108,7 +108,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Участники
      */
-    public const USER_GROUPS = [
+    public const array USER_GROUPS = [
         self::USER,
         self::EDITOR,
         self::MODER,
@@ -119,7 +119,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Все пользователи
      */
-    public const ALL_GROUPS = [
+    public const array ALL_GROUPS = [
         self::BANNED,
         self::PENDED,
         self::USER,
@@ -132,8 +132,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Genders
      */
-    public const MALE = 'male';
-    public const FEMALE = 'female';
+    public const string MALE = 'male';
+    public const string FEMALE = 'female';
 
     /**
      * Indicates if the model should be timestamped.

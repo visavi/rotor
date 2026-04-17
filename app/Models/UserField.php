@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Classes\HtmlSanitizer;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -28,13 +29,13 @@ class UserField extends Model
     /**
      * Type fields
      */
-    public const INPUT = 'input';
-    public const TEXTAREA = 'textarea';
+    public const string INPUT = 'input';
+    public const string TEXTAREA = 'textarea';
 
     /**
      * All types
      */
-    public const TYPES = [
+    public const array TYPES = [
         self::INPUT,
         self::TEXTAREA,
     ];
@@ -78,6 +79,18 @@ class UserField extends Model
                     ->where('user_data.user_id', $userId);
             })
             ->orderBy('user_fields.sort');
+    }
+
+    /**
+     * Санитайзит значение в зависимости от типа поля
+     */
+    public function sanitizeValue(?string $value): ?string
+    {
+        if ($this->type === self::TEXTAREA) {
+            return HtmlSanitizer::sanitize($value);
+        }
+
+        return $value;
     }
 
     /**

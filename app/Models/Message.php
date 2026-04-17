@@ -33,8 +33,8 @@ class Message extends Model
     use ConvertVideoTrait;
     use UploadTrait;
 
-    public const IN = 'in'; // Принятые
-    public const OUT = 'out'; // Отправленные
+    public const string IN = 'in'; // Принятые
+    public const string OUT = 'out'; // Отправленные
 
     /**
      * Indicates if the model should be timestamped.

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -41,6 +42,7 @@ class Wall extends Model
         return [
             'author_id' => 'int',
             'user_id'   => 'int',
+            'text'      => HtmlCast::class,
         ];
     }
 

@@ -65,7 +65,7 @@
 
     <div class="mb-3{{ hasError('comment') }}">
         <label for="message" class="form-label">{{ __('main.comment') }}:</label>
-        <textarea class="form-control markItUp" id="comment" rows="5" name="comment">{{ getInput('comment', $advert->comment) }}</textarea>
+        <textarea class="form-control" id="comment" rows="5" name="comment">{{ getInput('comment', $advert->comment) }}</textarea>
         <div class="invalid-feedback">{{ textError('comment') }}</div>
     </div>
 

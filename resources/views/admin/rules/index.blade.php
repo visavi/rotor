@@ -23,7 +23,7 @@
 @section('content')
     @if ($rules)
         <div>
-            {{ bbCode($rules->text) }}
+            {{ renderHtml($rules->text) }}
             <hr>
 
             {{ __('main.date') }}: {{ dateFixed($rules->created_at) }}

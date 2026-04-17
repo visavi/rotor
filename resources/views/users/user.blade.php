@@ -100,7 +100,7 @@
                 @foreach($fields as $field)
                     {{ $field->name }}:
                     @if ($field->type === 'textarea')
-                        {{ bbCode($field->value) }}
+                        {{ renderHtml($field->value) }}
                     @else
                         {{ $field->value }}
                     @endif
@@ -148,7 +148,7 @@
         <i class="fa fa-thumbtack"></i> <b>{{ __('main.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ __('main.change') }}</a>)<br>
 
         @if (! empty($user->note->text))
-            {{ $user->note->getText() }}<br>
+            {{ $user->note->getText() }}
             {{ __('main.changed') }}: {{ $user->note->editUser->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($user->note->updated_at) }}</small><br>
         @else
             {{ __('users.empty_note') }}<br>

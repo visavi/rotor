@@ -78,7 +78,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="section-form my-1">{{ bbCode($topic->note) }}</div>
+        <div class="section-form my-1">{{ renderText($topic->note) }}</div>
     @endif
 
     @if ($vote)

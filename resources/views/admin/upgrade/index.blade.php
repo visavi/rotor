@@ -27,7 +27,7 @@
 
             @if ($latestRelease['body'])
                 <div class="post-message">
-                    {{ bbCode($latestRelease['body']) }}
+                    {{ renderHtml(nl2br($latestRelease['body'])) }}
                 </div>
             @endif
 
@@ -57,6 +57,6 @@
     </div>
 
     <div class="section mb-3 shadow">
-        {!! nl2br($migrateOutput) !!}
+        {{ renderHtml(nl2br($migrateOutput)) }}
     </div>
 @stop

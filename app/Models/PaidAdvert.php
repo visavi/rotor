@@ -23,16 +23,16 @@ use Illuminate\Support\Facades\Cache;
  */
 class PaidAdvert extends Model
 {
-    public const TOP_ALL = 'top_all';
-    public const TOP = 'top';
-    public const FORUM = 'forum';
-    public const BOTTOM_ALL = 'bottom_all';
-    public const BOTTOM = 'bottom';
+    public const string TOP_ALL = 'top_all';
+    public const string TOP = 'top';
+    public const string FORUM = 'forum';
+    public const string BOTTOM_ALL = 'bottom_all';
+    public const string BOTTOM = 'bottom';
 
     /**
      * Места размещения
      */
-    public const PLACES = [
+    public const array PLACES = [
         self::TOP_ALL,
         self::TOP,
         self::FORUM,

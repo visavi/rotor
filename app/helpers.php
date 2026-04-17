@@ -1356,11 +1356,19 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 }
 
 /**
+ * Render text
+ */
+function renderText(?string $text): HtmlString
+{
+    return new HtmlString(nl2br(e((string) $text)));
+}
+
+/**
  * Обрабатывает BB-код
  *
  * @deprecated - используется renderHtml
  */
-function bbCode(?string $text, bool $parse = true): HtmlString
+function bbCode(?string $text): HtmlString
 {
     return new HtmlString($text);
 }

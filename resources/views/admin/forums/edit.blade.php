@@ -42,7 +42,7 @@
 
             <div class="mb-3{{ hasError('description') }}">
                 <label for="description" class="form-label">{{ __('main.description') }}:</label>
-                <textarea class="form-control markItUp" id="description" maxlength="{{ setting('forum_description_max') }}" name="description" rows="3">{{ getInput('description', $forum->description) }}</textarea>
+                <textarea class="form-control" id="description" maxlength="{{ setting('forum_description_max') }}" name="description" rows="3">{{ getInput('description', $forum->description) }}</textarea>
                 <div class="invalid-feedback">{{ textError('description') }}</div>
             </div>
 

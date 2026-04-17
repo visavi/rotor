@@ -46,7 +46,7 @@
                 </div>
                 <div class="section-message">
                     {{ __('main.comment') }}:
-                    {{ bbCode($data->text) }}
+                    {{ renderHtml($data->text) }}
                 </div>
             </div>
         @endforeach

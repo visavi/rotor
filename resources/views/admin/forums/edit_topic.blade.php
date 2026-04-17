@@ -31,7 +31,7 @@
 
             <div class="mb-3{{ hasError('note') }}">
                 <label for="note" class="form-label">{{ __('forums.note') }}:</label>
-                <textarea class="form-control markItUp" id="note" maxlength="{{ setting('forum_note_max') }}" name="note" rows="3">{{ getInput('note', $topic->note) }}</textarea>
+                <textarea class="form-control" id="note" maxlength="{{ setting('forum_note_max') }}" name="note" rows="3">{{ getInput('note', $topic->note) }}</textarea>
                 <div class="invalid-feedback">{{ textError('note') }}</div>
             </div>
 

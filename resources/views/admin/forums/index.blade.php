@@ -41,7 +41,7 @@
                     @endif
 
                     @if ($forum->description)
-                        <div class="section-description text-muted fst-italic small">{{ bbCode($forum->description) }}</div>
+                        <div class="section-description text-muted fst-italic small">{{ renderText($forum->description) }}</div>
                     @endif
                 </div>
 

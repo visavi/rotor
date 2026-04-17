@@ -40,7 +40,7 @@
                     <div class="section-body border-top">
                         <div class="section-message">
                             @if ($ignore->text)
-                                {{ __('main.note') }}: {{ bbCode($ignore->text) }}
+                                {{ __('main.note') }}: {{ renderText($ignore->text) }}
                             @else
                                 {{ __('main.empty_notes') }}
                             @endif

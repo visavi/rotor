@@ -156,7 +156,7 @@ class UserController extends AdminController
                         ->updateOrCreate([
                             'field_id' => $field->id,
                         ], [
-                            'value' => $request->input('field' . $field->id),
+                            'value' => $field->sanitizeValue($request->input('field' . $field->id)),
                         ]);
                 }
 

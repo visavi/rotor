@@ -9,12 +9,11 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class HtmlSanitizer
 {
-    /** @var array<string, SymfonyHtmlSanitizer> */
-    private static array $instances = [];
+    private static ?SymfonyHtmlSanitizer $instance = null;
 
-    public static function sanitize(?string $text, bool $extended = false): string
+    public static function sanitize(?string $text): string
     {
-        $html = self::getInstance($extended)->sanitize((string) $text);
+        $html = self::getInstance()->sanitize((string) $text);
 
         // Symfony HtmlSanitizer (через DOMDocument) кодирует безопасные символы как числовые
         // HTML-сущности. Декодируем все кроме &(38), <(60), >(62), "(34) — они нужны в HTML.
@@ -25,11 +24,9 @@ class HtmlSanitizer
         }, $html);
     }
 
-    private static function getInstance(bool $extended = false): SymfonyHtmlSanitizer
+    private static function getInstance(): SymfonyHtmlSanitizer
     {
-        $key = $extended ? 'extended' : 'default';
-
-        if (! isset(self::$instances[$key])) {
+        if (self::$instance === null) {
             $config = (new HtmlSanitizerConfig())
                 ->allowRelativeLinks()
                 ->allowRelativeMedias()
@@ -63,20 +60,9 @@ class HtmlSanitizer
                 ->allowElement('summary')
                 ->forceHttpsUrls(false);
 
-            if ($extended) {
-                $config = $config
-                    // Заголовки (только для расширенного режима)
-                    ->allowElement('h1')
-                    ->allowElement('h2')
-                    ->allowElement('h3')
-                    ->allowElement('h4')
-                    ->allowElement('h5')
-                    ->allowElement('h6');
-            }
-
-            self::$instances[$key] = new SymfonyHtmlSanitizer($config);
+            self::$instance = new SymfonyHtmlSanitizer($config);
         }
 
-        return self::$instances[$key];
+        return self::$instance;
     }
 }

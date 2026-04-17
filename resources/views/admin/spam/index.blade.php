@@ -59,7 +59,7 @@
                 <div class="section-body border-top">
                     @if ($record->relate)
                         <div class="section-message">
-                            {{ bbCode($record->relate->text) }}
+                            {{ renderHtml($record->relate->text) }}
                         </div>
 
                         @if ($record->path)

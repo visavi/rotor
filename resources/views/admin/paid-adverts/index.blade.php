@@ -53,7 +53,7 @@
 
                 <div class="section-body border-top">
                     <div class="section-message">
-                        {{ bbCode($data->comment ?? __('main.empty_comment')) }}
+                        {{ renderText($data->comment ?? __('main.empty_comment')) }}
                     </div>
 
                     <i class="far fa-user"></i> {{ $data->user->getProfile() }}

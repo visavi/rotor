@@ -36,7 +36,7 @@
                 <div class="section-body border-top">
                     {{ __('transfers.transfer_for') }}: {{ $data->recipientUser->getProfile() }}<br>
                     {{ __('main.amount') }}: {{ plural($data->total, setting('moneyname')) }}<br>
-                    {{ __('main.comment') }}: {{ bbCode($data->text) }}<br>
+                    {{ __('main.comment') }}: {{ renderHtml($data->text) }}<br>
                 </div>
             </div>
         @endforeach

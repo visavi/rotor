@@ -26,9 +26,9 @@ use Illuminate\Support\Facades\DB;
  */
 class File extends Model
 {
-    public const VIDEO_EXTENSIONS = ['mp4', 'webm'];
-    public const AUDIO_EXTENSIONS = ['mp3', 'wav', 'ogg'];
-    public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
+    public const array VIDEO_EXTENSIONS = ['mp4', 'webm'];
+    public const array AUDIO_EXTENSIONS = ['mp3', 'wav', 'ogg'];
+    public const array IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
 
     /**
      * Indicates if the model should be timestamped.
