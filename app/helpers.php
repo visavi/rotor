@@ -1356,15 +1356,11 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
         $siteHost = parse_url(config('app.url'), PHP_URL_HOST);
         $html = preg_replace_callback(
             '/<a\b([^>]*)>/i',
-            static function ($m) use ($siteHost) {
-                preg_match('/href="([^"]*)"/i', $m[1], $hm);
-                $href = $hm[1] ?? '';
-                $isExternal = $href && ! str_starts_with($href, '/')
-                    && parse_url($href, PHP_URL_HOST) !== $siteHost;
-                return $isExternal
-                    ? '<a' . $m[1] . ' target="_blank" rel="noopener nofollow">'
-                    : '<a' . $m[1] . '>';
-            },
+            static fn ($m) => preg_match('/href="([^"]*)"/i', $m[1], $h)
+            && ($host = parse_url($h[1], PHP_URL_HOST))
+            && $host !== $siteHost
+                ? '<a' . $m[1] . ' target="_blank" rel="noopener nofollow">'
+                : $m[0],
             $html
         );
     }

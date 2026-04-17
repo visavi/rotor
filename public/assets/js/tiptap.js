@@ -321,7 +321,7 @@ function fixNewlines(html) {
 function validateUrl(url) {
     if (!url) return false
     if (!/^https?:\/\//i.test(url)) {
-        alert(__('editor2.invalid_url'))
+        alert(__('editor.invalid_url'))
         return false
     }
     return true
@@ -364,11 +364,11 @@ const BG_COLORS = [
 ]
 
 const SIZES = [
-    { get label() { return __('editor2.size_xs') }, value: '0.7em'  },
-    { get label() { return __('editor2.size_sm') }, value: '0.85em' },
-    { get label() { return __('editor2.size_md') }, value: null      },
-    { get label() { return __('editor2.size_lg') }, value: '1.3em'  },
-    { get label() { return __('editor2.size_xl') }, value: '1.6em'  },
+    { get label() { return __('editor.size_xs') }, value: '0.7em'  },
+    { get label() { return __('editor.size_sm') }, value: '0.85em' },
+    { get label() { return __('editor.size_md') }, value: null      },
+    { get label() { return __('editor.size_lg') }, value: '1.3em'  },
+    { get label() { return __('editor.size_xl') }, value: '1.6em'  },
 ]
 
 document.addEventListener('click', () => {
@@ -406,7 +406,7 @@ function makeStickerPicker(editor) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'tiptap-btn'
-    btn.title = __('editor2.sticker')
+    btn.title = __('editor.sticker')
     btn.innerHTML = '<i class="fas fa-smile"></i><i class="fas fa-chevron-down tiptap-dd-arrow"></i>'
 
     const panel = document.createElement('div')
@@ -655,21 +655,21 @@ function buildToolbar(editor, textarea, uploadImageFn) {
 
     function dropdown(el) { bar.appendChild(el) }
 
-    btn('fa-bold',          __('editor2.bold'),      () => editor.chain().focus().toggleBold().run(),      () => editor.isActive('bold'))
-    btn('fa-italic',        __('editor2.italic'),    () => editor.chain().focus().toggleItalic().run(),    () => editor.isActive('italic'))
-    btn('fa-underline',     __('editor2.underline'), () => editor.chain().focus().toggleUnderline().run(), () => editor.isActive('underline'))
-    btn('fa-strikethrough', __('editor2.strike'),    () => editor.chain().focus().toggleStrike().run(),   () => editor.isActive('strike'))
+    btn('fa-bold',          __('editor.bold'),      () => editor.chain().focus().toggleBold().run(),      () => editor.isActive('bold'))
+    btn('fa-italic',        __('editor.italic'),    () => editor.chain().focus().toggleItalic().run(),    () => editor.isActive('italic'))
+    btn('fa-underline',     __('editor.underline'), () => editor.chain().focus().toggleUnderline().run(), () => editor.isActive('underline'))
+    btn('fa-strikethrough', __('editor.strike'),    () => editor.chain().focus().toggleStrike().run(),   () => editor.isActive('strike'))
     sep()
 
     const resetSwatch = document.createElement('button')
     resetSwatch.type = 'button'
     resetSwatch.className = 'tiptap-color-swatch tiptap-color-reset'
-    resetSwatch.title = __('editor2.reset_color')
+    resetSwatch.title = __('editor.reset_color')
     resetSwatch.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().unsetColor().run() })
 
     const customColorInput = document.createElement('input')
     customColorInput.type = 'color'
-    customColorInput.title = __('editor2.custom_color')
+    customColorInput.title = __('editor.custom_color')
     customColorInput.className = 'tiptap-color-custom'
     customColorInput.addEventListener('input', () => {
         editor.chain().focus().setColor(customColorInput.value).run()
@@ -684,19 +684,19 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setColor(color).run() })
         return el
     }), customColorInput, resetSwatch]
-    const colorDd = makeDropdown('fa-palette', __('editor2.color'), colorSwatches, 'tiptap-colors-menu')
+    const colorDd = makeDropdown('fa-palette', __('editor.color'), colorSwatches, 'tiptap-colors-menu')
     dropdown(colorDd)
     activeButtons.push({ el: colorDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').color })
 
     const resetBgSwatch = document.createElement('button')
     resetBgSwatch.type = 'button'
     resetBgSwatch.className = 'tiptap-color-swatch tiptap-color-reset'
-    resetBgSwatch.title = __('editor2.reset_bg')
+    resetBgSwatch.title = __('editor.reset_bg')
     resetBgSwatch.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().unsetHighlight().run() })
 
     const customBgInput = document.createElement('input')
     customBgInput.type = 'color'
-    customBgInput.title = __('editor2.custom_bg')
+    customBgInput.title = __('editor.custom_bg')
     customBgInput.className = 'tiptap-color-custom'
     customBgInput.addEventListener('input', () => {
         editor.chain().focus().setHighlight({ color: customBgInput.value }).run()
@@ -711,7 +711,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setHighlight({ color }).run() })
         return el
     }), customBgInput, resetBgSwatch]
-    const bgDd = makeDropdown('fa-fill-drip', __('editor2.bg_color'), bgSwatches, 'tiptap-colors-menu')
+    const bgDd = makeDropdown('fa-fill-drip', __('editor.bg_color'), bgSwatches, 'tiptap-colors-menu')
     dropdown(bgDd)
     activeButtons.push({ el: bgDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').backgroundColor })
 
@@ -727,15 +727,15 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         })
         return el
     })
-    const sizeDd = makeDropdown('fa-font', __('editor2.font_size'), sizeItems)
+    const sizeDd = makeDropdown('fa-font', __('editor.font_size'), sizeItems)
     dropdown(sizeDd)
     activeButtons.push({ el: sizeDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').fontSize })
     sep()
 
     const alignItems = [
-        { icon: 'fa-align-left',   title: __('editor2.align_left'),   align: 'left'   },
-        { icon: 'fa-align-center', title: __('editor2.align_center'), align: 'center' },
-        { icon: 'fa-align-right',  title: __('editor2.align_right'),  align: 'right'  },
+        { icon: 'fa-align-left',   title: __('editor.align_left'),   align: 'left'   },
+        { icon: 'fa-align-center', title: __('editor.align_center'), align: 'center' },
+        { icon: 'fa-align-right',  title: __('editor.align_right'),  align: 'right'  },
     ].map(({ icon, title, align }) => {
         const el = document.createElement('button')
         el.type = 'button'
@@ -744,15 +744,15 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setTextAlign(align).run() })
         return el
     })
-    const alignDd = makeDropdown('fa-align-left', __('editor2.alignment'), alignItems)
+    const alignDd = makeDropdown('fa-align-left', __('editor.alignment'), alignItems)
     dropdown(alignDd)
     activeButtons.push({ el: alignDd._dropdownBtn, getActive: () =>
         editor.isActive({ textAlign: 'center' }) || editor.isActive({ textAlign: 'right' })
     })
 
     const listItems = [
-        { icon: 'fa-list-ul', title: __('editor2.bullet_list'),  action: () => editor.chain().focus().toggleBulletList().run()  },
-        { icon: 'fa-list-ol', title: __('editor2.ordered_list'), action: () => editor.chain().focus().toggleOrderedList().run() },
+        { icon: 'fa-list-ul', title: __('editor.bullet_list'),  action: () => editor.chain().focus().toggleBulletList().run()  },
+        { icon: 'fa-list-ol', title: __('editor.ordered_list'), action: () => editor.chain().focus().toggleOrderedList().run() },
     ].map(({ icon, title, action }) => {
         const el = document.createElement('button')
         el.type = 'button'
@@ -761,7 +761,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         el.addEventListener('mousedown', e => { e.preventDefault(); action() })
         return el
     })
-    const listDd = makeDropdown('fa-list-ul', __('editor2.lists'), listItems)
+    const listDd = makeDropdown('fa-list-ul', __('editor.lists'), listItems)
     dropdown(listDd)
     activeButtons.push({ el: listDd._dropdownBtn, getActive: () =>
         editor.isActive('bulletList') || editor.isActive('orderedList')
@@ -783,33 +783,33 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     }
 
     const tableMenuItems = [
-        tableMenuItem('fa-table',          __('editor2.table_insert'),         () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()),
+        tableMenuItem('fa-table',          __('editor.table_insert'),         () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()),
         makeMenuSep(),
-        tableMenuItem('fa-arrow-up',       __('editor2.table_row_before'),     () => editor.chain().focus().addRowBefore().run()),
-        tableMenuItem('fa-arrow-down',     __('editor2.table_row_after'),      () => editor.chain().focus().addRowAfter().run()),
-        tableMenuItem('fa-trash-alt',      __('editor2.table_row_delete'),     () => editor.chain().focus().deleteRow().run()),
+        tableMenuItem('fa-arrow-up',       __('editor.table_row_before'),     () => editor.chain().focus().addRowBefore().run()),
+        tableMenuItem('fa-arrow-down',     __('editor.table_row_after'),      () => editor.chain().focus().addRowAfter().run()),
+        tableMenuItem('fa-trash-alt',      __('editor.table_row_delete'),     () => editor.chain().focus().deleteRow().run()),
         makeMenuSep(),
-        tableMenuItem('fa-arrow-left',     __('editor2.table_col_before'),     () => editor.chain().focus().addColumnBefore().run()),
-        tableMenuItem('fa-arrow-right',    __('editor2.table_col_after'),      () => editor.chain().focus().addColumnAfter().run()),
-        tableMenuItem('fa-trash-alt',      __('editor2.table_col_delete'),     () => editor.chain().focus().deleteColumn().run()),
+        tableMenuItem('fa-arrow-left',     __('editor.table_col_before'),     () => editor.chain().focus().addColumnBefore().run()),
+        tableMenuItem('fa-arrow-right',    __('editor.table_col_after'),      () => editor.chain().focus().addColumnAfter().run()),
+        tableMenuItem('fa-trash-alt',      __('editor.table_col_delete'),     () => editor.chain().focus().deleteColumn().run()),
         makeMenuSep(),
-        tableMenuItem('fa-times-circle',   __('editor2.table_delete'),         () => editor.chain().focus().deleteTable().run()),
+        tableMenuItem('fa-times-circle',   __('editor.table_delete'),         () => editor.chain().focus().deleteTable().run()),
     ]
-    const tableDd = makeDropdown('fa-table', __('editor2.table'), tableMenuItems)
+    const tableDd = makeDropdown('fa-table', __('editor.table'), tableMenuItems)
     dropdown(tableDd)
     activeButtons.push({ el: tableDd._dropdownBtn, getActive: () => editor.isActive('table') })
     sep()
 
-    btn('fa-link', __('editor2.link'), () => {
+    btn('fa-link', __('editor.link'), () => {
         const existing = editor.getAttributes('link').href || ''
         const { from, to } = editor.state.selection
         const selected = editor.state.doc.textBetween(from, to, '')
-        const url = prompt(__('editor2.url_link') + ':', existing || selected)
+        const url = prompt(__('editor.url_link') + ':', existing || selected)
         if (!validateUrl(url)) return
         if (selected || existing) {
             editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: null }).run()
         } else {
-            const placeholder = __('editor2.link_text')
+            const placeholder = __('editor.link_text')
             editor.chain().focus()
                 .insertContent(`<a href="${url}">${placeholder}</a>`)
                 .run()
@@ -818,8 +818,8 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         }
     }, () => editor.isActive('link'))
 
-    btn('fa-image', __('editor2.image'), async () => {
-        const url = prompt(__('editor2.url_image') + ':')
+    btn('fa-image', __('editor.image'), async () => {
+        const url = prompt(__('editor.url_image') + ':')
         if (!validateUrl(url)) return
 
         const imagePattern = /\.(jpe?g|png|gif|webp|bmp|svg)(\?.*)?$/i
@@ -833,13 +833,13 @@ function buildToolbar(editor, textarea, uploadImageFn) {
             editor.chain().focus().setImage({ src: data.image }).run()
         } else {
             editor.chain().focus().setImage({ src: url }).run()
-            notyf.warning(__('editor2.image_not_found'))
+            notyf.warning(__('editor.image_not_found'))
         }
     })
 
     // Кнопка загрузки файла (только если есть data-relate-type)
     if (textarea.dataset.relateType) {
-        btn('fa-cloud-arrow-up', __('editor2.upload_image'), () => {
+        btn('fa-cloud-arrow-up', __('editor.upload_image'), () => {
             const input = document.createElement('input')
             input.type = 'file'
             input.accept = 'image/*'
@@ -852,41 +852,41 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         })
     }
 
-    btn('fa-play-circle', __('editor2.video'), () => {
-        const url = prompt(__('editor2.url_video') + ':')
+    btn('fa-play-circle', __('editor.video'), () => {
+        const url = prompt(__('editor.url_video') + ':')
         if (!validateUrl(url)) return
         editor.chain().focus().insertVideo(url).run()
     })
 
-    btn('fa-music', __('editor2.audio'), () => {
-        const url = prompt(__('editor2.url_audio') + ':')
+    btn('fa-music', __('editor.audio'), () => {
+        const url = prompt(__('editor.url_audio') + ':')
         if (!validateUrl(url)) return
         editor.chain().focus().insertAudio(url).run()
     })
     sep()
 
-    btn('fa-plus-square', __('editor2.spoiler'), () => {
+    btn('fa-plus-square', __('editor.spoiler'), () => {
         if (editor.isActive('spoiler')) {
             editor.chain().focus().lift('spoiler').run()
         } else {
-            const title = prompt(__('editor2.spoiler_title') + ':', __('editor2.spoiler'))
-            if (title !== null) editor.chain().focus().insertSpoiler(title || __('editor2.spoiler')).run()
+            const title = prompt(__('editor.spoiler_title') + ':', __('editor.spoiler'))
+            if (title !== null) editor.chain().focus().insertSpoiler(title || __('editor.spoiler')).run()
         }
     }, () => editor.isActive('spoiler'))
-    btn('fa-eye-slash', __('editor2.hide'),
+    btn('fa-eye-slash', __('editor.hide'),
         () => editor.isActive('hide')
             ? editor.chain().focus().lift('hide').run()
             : editor.chain().focus().insertHide().run(),
         () => editor.isActive('hide'))
-    btn('fa-quote-right', __('editor2.quote'), () => {
+    btn('fa-quote-right', __('editor.quote'), () => {
         if (editor.isActive('blockquote')) {
             editor.chain().focus().toggleBlockquote().run()
         } else {
-            const author = prompt(__('editor2.quote_author') + ':')
+            const author = prompt(__('editor.quote_author') + ':')
             if (author !== null) editor.chain().focus().toggleBlockquote(author || null).run()
         }
     }, () => editor.isActive('blockquote'))
-    btn('fa-code', __('editor2.code_block'),
+    btn('fa-code', __('editor.code_block'),
         () => editor.chain().focus().toggleCodeBlock().run(),
         () => editor.isActive('codeBlock'))
     sep()
@@ -894,7 +894,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     dropdown(makeStickerPicker(editor))
     sep()
 
-    btn('fa-eraser', __('editor2.clear_format'),
+    btn('fa-eraser', __('editor.clear_format'),
         () => editor.chain().focus().unsetAllMarks().clearNodes().run())
 
     function updateActive() {
@@ -938,13 +938,13 @@ function initEditor(textarea) {
         // Проверка размера файла (10MB максимум)
         const maxSize = 10 * 1024 * 1024
         if (file.size > maxSize) {
-            notyf.error(__('editor2.upload_failed') + ': файл слишком большой')
+            notyf.error(__('editor.upload_failed') + ': файл слишком большой')
             return
         }
 
         // Проверка типа файла
         if (!file.type.startsWith('image/')) {
-            notyf.error(__('editor2.upload_failed') + ': неподдерживаемый формат')
+            notyf.error(__('editor.upload_failed') + ': неподдерживаемый формат')
             return
         }
 
@@ -973,10 +973,10 @@ function initEditor(textarea) {
                     attrs: { src: data.path },
                 }).run()
             } else {
-                notyf.error(data.message || __('editor2.upload_failed'))
+                notyf.error(data.message || __('editor.upload_failed'))
             }
         } catch (error) {
-            notyf.error(__('editor2.upload_error'))
+            notyf.error(__('editor.upload_error'))
         }
     }
     // ============================
