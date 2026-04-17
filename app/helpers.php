@@ -1055,8 +1055,8 @@ function textNotice(string $type, array $replace = []): string
         return __('main.text_missing');
     }
 
-    if (isset($replace['url'], $replace['title'])) {
-        $replace['page'] = '<strong><a href="' . $replace['url'] . '">' . $replace['title'] . '</a></strong>';
+    if (isset($replace['url'])) {
+        $replace['page'] = '<a href="' . $replace['url'] . '">' . ($replace['title'] ?? $replace['url']) . '</a>';
         unset($replace['url'], $replace['title']);
     }
 

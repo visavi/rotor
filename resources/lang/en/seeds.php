@@ -33,19 +33,19 @@ return [
         'register_text' => '<p>Welcome %username%!</p><p>Now you are a full user of the site, save your username and password in a safe place, they will come in handy for you to enter our site.</p><p>Before visiting the site, we recommend that you read the <a href="/rules">site rules</a>, this will help you avoid unpleasant situations.</p><p>Have a nice time.</p><p>Regards, Site Administration!</p>',
 
         'down_upload_name' => 'File download notification',
-        'down_upload_text' => '<p>File download notification.</p><p>The new file %page% requires confirmation of publication!</p>',
+        'down_upload_text' => '<p>File download notification.</p><p>The new file <strong>%page%</strong> requires confirmation of publication!</p>',
 
         'down_publish_name' => 'File publishing notification',
-        'down_publish_text' => '<p>File publishing notification.</p><p>Your file %page% successfully passed the test and was added to the downloads</p>',
+        'down_publish_text' => '<p>File publishing notification.</p><p>Your file <strong>%page%</strong> successfully passed the test and was added to the downloads</p>',
 
         'down_unpublish_name' => 'Notice of withdrawal from publication',
-        'down_unpublish_text' => '<p>Notice of withdrawal from publication.</p><p>Your file %page% has been unpublished</p>',
+        'down_unpublish_text' => '<p>Notice of withdrawal from publication.</p><p>Your file <strong>%page%</strong> has been unpublished</p>',
 
         'down_change_name' => 'File change notification',
-        'down_change_text' => '<p>File change notification.</p><p>Your file %page% has been edited by the moderator, you may need additional corrections!</p>',
+        'down_change_text' => '<p>File change notification.</p><p>Your file <strong>%page%</strong> has been edited by the moderator, you may need additional corrections!</p>',
 
         'notify_name' => 'User mention',
-        'notify_text' => '<p>User %login% mentioned you on the page %page%</p><blockquote>%text%</blockquote>',
+        'notify_text' => '<p>User %login% mentioned you on the page <strong>%page%</strong></p><blockquote>%text%</blockquote>',
 
         'invite_name' => 'Sending invitation keys',
         'invite_text' => '<p>Congratulations! You have received invitation keys</p><p>Your keys: %key%</p><p>With these keys you can invite your friends to our site!</p>',
@@ -69,12 +69,12 @@ return [
         'explain_text' => '<p>Explanation of violation: %message%</p>',
 
         'offer_reply_name' => 'Answer to problem / suggestion',
-        'offer_reply_text' => '<p>Notification of the answer to your problem / proposal</p><p>Your problem or suggestion %page% has been answered</p><p>Reply text: %text%</p><p>Entry status: %status%</p>',
+        'offer_reply_text' => '<p>Notification of the answer to your problem / proposal</p><p>Your problem or suggestion <strong>%page%</strong> has been answered</p><p>Reply text: %text%</p><p>Entry status: %status%</p>',
 
         'article_publish_name' => 'Notification of article publication',
-        'article_publish_text' => '<p>Your article %page% has been published</p>',
+        'article_publish_text' => '<p>Your article <strong>%page%</strong> has been published</p>',
 
         'article_unpublish_name' => 'Notice of removal from publication',
-        'article_unpublish_text' => '<p>Your article %page% has been removed from publication</p>',
+        'article_unpublish_text' => '<p>Your article <strong>%page%</strong> has been removed from publication</p>',
     ],
 ];
