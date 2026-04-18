@@ -89,7 +89,7 @@
                 <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Open Profile Menu">
                     <i class="far fa-user fa-lg"></i>
                 </a>
-                <ul class="app-notification dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end">
                     @hook('navbarMenuStart')
                     <li><a class="dropdown-item" href="{{ route('users.user', ['login' => getUser('login')]) }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
                     <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>

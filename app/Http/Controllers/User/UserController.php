@@ -538,9 +538,11 @@ class UserController extends Controller
         }
 
         $users = User::query()
-            ->where('login', 'like', $query . '%')
-            ->where('point', '>', 0)
-            ->orderBy('login')
+            ->where(function ($q) use ($query) {
+                $q->where('login', 'like', $query . '%')
+                    ->orWhere('name', 'like', $query . '%');
+            })
+            ->orderByDesc('point')
             ->limit(10)
             ->get(['login', 'name']);
 
