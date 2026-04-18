@@ -257,12 +257,6 @@
   .menu-label {
     white-space: nowrap;
   }
-  .menu-badge {
-    color: rgba(255, 255, 255, 0.9);
-    background-color: rgba(255, 255, 255, 0.15);
-    font-size: 0.7em;
-    font-weight: 500;
-  }
 }
 
 .app-topnav__menu .badge {
@@ -406,9 +400,10 @@
     a { color: #2d6a4f; &:hover { color: #1b4332; } }
   }
 
-  .badge.bg-topnav {
-    color: #2d6a4f;
-    background-color: rgba($primary-color, 0.12);
+  .badge.menu-badge {
+    color: darken($primary-color, 10%);
+    background-color: rgba($primary-color, 0.15);
   }
+
 }
 

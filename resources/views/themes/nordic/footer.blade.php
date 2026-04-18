@@ -1,6 +1,6 @@
 <!-- Nordic Footer -->
 <div class="app-footer">
-    <footer class="row py-3 border-top">
+    <footer class="row py-3">
         @hook('footerStart')
         <div class="col-sm">
             <h5>{{ __('index.pages') }}</h5>

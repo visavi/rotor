@@ -70,7 +70,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const scrollupBtn = document.querySelector('.scrollup')
     if (scrollupBtn) {
         window.addEventListener('scroll', function () {
-            scrollupBtn.style.opacity = window.scrollY > 200 ? '1' : '0'
+            const visible = window.scrollY > 200
+            scrollupBtn.style.opacity = visible ? '1' : '0'
+            scrollupBtn.style.pointerEvents = visible ? 'auto' : 'none'
         })
         scrollupBtn.addEventListener('click', function () {
             window.scrollTo({ top: 0, behavior: 'smooth' })

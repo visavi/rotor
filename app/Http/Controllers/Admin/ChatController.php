@@ -54,7 +54,7 @@ class ChatController extends AdminController
                 }
 
                 clearCache('statChat');
-                sendNotify($msg, route('admin.chats.index', absolute: false), __('index.admin_chat'));
+                sendNotify($msg, route('admin.chats.index', absolute: false), __('index.admin_chat', locale: setting('language')));
 
                 setFlash('success', __('main.message_added_success'));
 

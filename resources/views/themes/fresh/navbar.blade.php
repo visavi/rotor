@@ -129,21 +129,21 @@
                 <a class="app-topnav__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">
                     <i class="far fa-comment-alt"></i>
                     <span>{{ __('index.forums') }}</span>
-                    <span class="badge bg-topnav">{{ statsForum() }}</span>
+                    <span class="badge menu-badge">{{ statsForum() }}</span>
                 </a>
             </li>
             <li>
                 <a class="app-topnav__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">
                     <i class="far fa-comment"></i>
                     <span>{{ __('index.guestbook') }}</span>
-                    <span class="badge bg-topnav">{{ statsGuestbook() }}</span>
+                    <span class="badge menu-badge">{{ statsGuestbook() }}</span>
                 </a>
             </li>
             <li>
                 <a class="app-topnav__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
                     <i class="far fa-newspaper"></i>
                     <span>{{ __('index.news') }}</span>
-                    <span class="badge bg-topnav">{{ statsNews() }}</span>
+                    <span class="badge menu-badge">{{ statsNews() }}</span>
                 </a>
             </li>
             <li class="dropdown">
@@ -175,21 +175,21 @@
                 <a class="app-topnav__item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">
                     <i class="far fa-image"></i>
                     <span>{{ __('index.photos') }}</span>
-                    <span class="badge bg-topnav">{{ statsPhotos() }}</span>
+                    <span class="badge menu-badge">{{ statsPhotos() }}</span>
                 </a>
             </li>
             <li>
                 <a class="app-topnav__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">
                     <i class="far fa-rectangle-list"></i>
                     <span>{{ __('index.boards') }}</span>
-                    <span class="badge bg-topnav">{{ statsBoard() }}</span>
+                    <span class="badge menu-badge">{{ statsBoard() }}</span>
                 </a>
             </li>
             <li>
                 <a class="app-topnav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                     <i class="fas fa-square-poll-horizontal"></i>
                     <span>{{ __('index.votes') }}</span>
-                    <span class="badge bg-topnav">{{ statVotes() }}</span>
+                    <span class="badge menu-badge">{{ statVotes() }}</span>
                 </a>
             </li>
             @hook('sidebarMenuEnd')

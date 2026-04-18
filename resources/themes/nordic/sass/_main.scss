@@ -85,24 +85,27 @@ h3 { font-size: 17px; font-weight: 600; }
 
 :focus-visible { outline: 2px solid $primary-color; outline-offset: 2px; box-shadow: none; }
 
+.page-item.disabled .page-link { border: var(--bs-pagination-border-width) solid var(--bs-pagination-border-color) !important; }
+
 // Scrollup button
 .scrollup {
   position: fixed;
   bottom: 20px;
-  right: calc(#{$sidebar-width} + 12px);
+  right: 20px;
   width: 36px;
   height: 36px;
   background: $primary-color;
   border-radius: 50%;
   color: #fff;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 100;
   box-shadow: 0 2px 8px rgba(67,56,202,0.35);
-  opacity: 1;
-  &:hover { background: darken($primary-color, 10%); opacity: 1; }
-  &.show { display: flex; }
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  &:hover { background: darken($primary-color, 10%); }
   &:before { font-size: 20px; }
 }

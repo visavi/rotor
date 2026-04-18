@@ -87,6 +87,7 @@ class SearchImport extends Command
 
                 foreach ($records as $record) {
                     if (! $record->shouldBeSearchable()) {
+                        $progressBar->advance();
                         continue;
                     }
 
@@ -102,7 +103,7 @@ class SearchImport extends Command
                 }
 
                 if ($searchData) {
-                    DB::table('search')->insert($searchData);
+                    DB::table('search')->insertOrIgnore($searchData);
                 }
             });
 

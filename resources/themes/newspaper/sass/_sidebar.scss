@@ -35,10 +35,7 @@
 
 .paper-sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-family: $ui-font; font-size: 0.82rem; color: $ink-dark; strong { color: $ink-black; } }
 
-.paper-sidebar-links {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
-  a { font-family: $ui-font; font-size: 0.8rem; color: $ink-red; text-decoration: none; &:hover { text-decoration: underline; } }
-}
+.paper-sidebar-links { margin-bottom: 4px; }
 
 .paper-sidebar-logout { font-family: $ui-font; font-size: 0.8rem; color: $ink-gray !important; padding: 0 !important; &:hover { color: $ink-red !important; } }
 

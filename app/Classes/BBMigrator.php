@@ -159,6 +159,10 @@ class BBMigrator
             return null;
         }
 
+        if (str_starts_with(ltrim($text), '<')) {
+            return $text;
+        }
+
         $html = $this->parse($text);
         $html = HtmlSanitizer::sanitize($html);
 

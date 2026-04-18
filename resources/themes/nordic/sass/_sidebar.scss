@@ -64,22 +64,23 @@
 
 [data-bs-theme=dark] .menu-item {
   color: #c7d2fe;
-  &.active { background-color: rgba(67,56,202,0.2); color: #818cf8; }
+  &.active { background-color: rgba(67,56,202,0.2); color: #818cf8; border-right-color: #818cf8; }
   &:hover { background-color: rgba(67,56,202,0.1); color: #818cf8; }
 }
 
 .menu-icon { flex: 0 0 auto; margin-right: 10px; color: #9ca3af; width: 16px; text-align: center; .menu-item.active &, .menu-item:hover & { color: $primary-color; } }
 .menu-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; margin-right: 4px; font-size: 0.875rem; font-weight: 500; }
 .menu-badge { background-color: #ede9fe !important; color: $primary-color !important; font-size: 0.7rem; font-weight: 600; }
+[data-bs-theme=dark] .menu-badge { background-color: rgba(67,56,202,0.2) !important; color: #818cf8 !important; }
 
 .treeview {
   &.is-expanded {
-    [data-bs-toggle='treeview'] { background-color: #f5f3ff; color: $primary-color; }
+    [data-bs-toggle='treeview'] { background-color: #ede9fe; color: $primary-color; border-right-color: $primary-color; }
     .treeview-menu { max-height: 100vh; }
     .treeview-indicator { transform: rotate(180deg); }
   }
 }
-[data-bs-theme=dark] .treeview.is-expanded [data-bs-toggle='treeview'] { background-color: rgba(67,56,202,0.2); color: #818cf8; }
+[data-bs-theme=dark] .treeview.is-expanded [data-bs-toggle='treeview'] { background-color: rgba(67,56,202,0.2); color: #818cf8; border-right-color: #818cf8; }
 
 .treeview-menu { @extend .list-unstyled; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background-color: #fafafa; }
 [data-bs-theme=dark] .treeview-menu { background-color: rgba(0,0,0,0.1); }
@@ -87,17 +88,27 @@
 .treeview-item {
   display: flex;
   align-items: center;
-  padding: 6px 8px 6px 36px;
-  font-size: 0.84rem;
-  color: #6b7280;
+  padding: 8px 8px 8px 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $sidebar-light-link-color;
   text-decoration: none;
   &.active, &:hover { color: $primary-color; background-color: #f5f3ff; text-decoration: none; }
-  .icon { margin-right: 5px; font-size: 0.45rem; }
+  .icon { margin-right: 8px; width: 16px; text-align: center; color: #9ca3af; }
+}
+[data-bs-theme=dark] .treeview-item {
+  color: #c7d2fe;
+  &.active, &:hover { color: #818cf8; background-color: rgba(67,56,202,0.1); }
 }
 
 .treeview-indicator { transform-origin: center; transition: transform 0.25s ease; color: #9ca3af; }
 .user-menu .menu-item { cursor: pointer; }
 
-.app-search { position: relative; align-self: stretch; padding: 8px; }
-.app-search__input { padding: 6px 30px 6px 10px; border-radius: 6px; font-size: 0.85rem; border: 1px solid #e2e8f0; width: 100%; &:focus { border-color: $primary-color; box-shadow: 0 0 0 3px rgba(67,56,202,0.1); } }
-.app-search__button { position: absolute; right: 8px; top: 8px; bottom: 8px; padding: 0 10px; border: 0; background: none; cursor: pointer; color: #9ca3af; &:hover { color: $primary-color; } }
+.app-sidebar .app-search {
+  position: relative;
+  align-self: stretch;
+  padding: 8px;
+  @media(max-width: 768px) { display: block; }
+}
+.app-sidebar .app-search__input { padding: 6px 30px 6px 10px; border-radius: 6px; font-size: 0.85rem; border: 1px solid var(--bs-border-color); width: 100%; &:focus { border-color: $primary-color; box-shadow: 0 0 0 3px rgba(67,56,202,0.1); } }
+.app-sidebar .app-search__button { position: absolute; right: 8px; top: 8px; bottom: 8px; padding: 0 10px; border: 0; background: none; cursor: pointer; color: #9ca3af; &:hover { color: $primary-color; } }

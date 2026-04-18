@@ -6,6 +6,7 @@ require 'recipe/laravel.php';
 
 set('default_stage', 'production');
 set('keep_releases', 5); // Max releases
+set('default_timeout', null);
 
 // Project repository
 set('repository', 'git@github.com:visavi/rotor.git');

@@ -88,5 +88,5 @@
 .paper-sidebar-search-section { @media(min-width: 768px) { display: none; } }
 
 // Scrollup — позиция с учётом sidebar
-.scrollup { right: calc(#{$sidebar-width} + 10px); }
+.scrollup { right: 20px; }
 @import 'bootstrap5-tags/tags';

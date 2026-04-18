@@ -105,12 +105,13 @@
   min-width: 280px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--bs-border-color);
   overflow: hidden;
   &.dropdown-menu { margin-top: 4px !important; }
 }
 .app-notification__title {
   padding: 12px 16px;
+  text-align: center;
   font-weight: 600;
   font-size: 0.85rem;
   background-color: $primary-color;
@@ -127,9 +128,9 @@
   display: flex;
   padding: 10px 12px;
   color: inherit;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--bs-border-color);
   transition: background-color 0.15s;
-  &:hover { background-color: #f8fafc; text-decoration: none; color: inherit; }
+  &:hover { background-color: var(--bs-tertiary-bg); text-decoration: none; color: inherit; }
 }
 .app-notification__author { margin-bottom: 0; line-height: 1.2; font-weight: 500; }
 .app-notification__meta { @extend .text-muted; @extend .small; margin-bottom: 0; }

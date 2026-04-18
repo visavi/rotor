@@ -23,8 +23,11 @@ footer { padding: 20px 28px; }
 }
 
 .paper-footer-bottom {
-  display: flex; align-items: center; justify-content: space-between; padding-top: 12px;
-  @media(max-width: 576px) { flex-direction: column; gap: 8px; }
+  display: flex; align-items: center; padding-top: 12px;
+  & > :first-child { flex: 1; }
+  .paper-footer-social { flex: 0 0 auto; }
+  .paper-footer-copy { flex: 1; text-align: right; }
+  @media(max-width: 576px) { flex-direction: column; gap: 8px; & > * { flex: none !important; text-align: center !important; } }
 }
 
 .paper-footer-social { a { color: $ink-gray; margin-left: 10px; font-size: 1.1rem; &:hover { color: $ink-red; } } }

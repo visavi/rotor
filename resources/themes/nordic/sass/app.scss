@@ -55,9 +55,6 @@
 
 // Icons & libraries
 
-// Scrollup — восстановить opacity после main.css
-.scrollup { opacity: 1 !important; }
-.scrollup:hover { opacity: 1 !important; }
 
 // Sidebar search — скрыть на десктопе
 .search-sidebar { @media(min-width: 768px) { display: none !important; } }

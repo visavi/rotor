@@ -65,6 +65,7 @@ $sidebar-light-link-color: #374151;
 // Bootstrap overrides
 $primary: $primary-color;
 
+
 $font-size-base: 0.9rem;
 $small-font-size: 0.8em;
 $font-family-sans-serif: $body-font;
@@ -75,7 +76,7 @@ $headings-font-weight: 600;
 
 $dropdown-padding-y: 0;
 $dropdown-spacer: 0;
-$dropdown-border-width: 0;
+$dropdown-border-width: 1px;
 $dropdown-item-padding-y: 9px;
 $dropdown-item-padding-x: 20px;
 

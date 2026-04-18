@@ -10,16 +10,18 @@
                     <small>{{ $user->getStatus() }}</small>
                 </div>
             </div>
-            <div class="paper-sidebar-links">
-                <a href="{{ route('menu') }}" rel="nofollow">{{ __('index.menu') }}</a>
-                @if (isAdmin())<a href="{{ route('admin.index') }}" rel="nofollow">{{ __('index.panel') }}</a>@endif
-            </div>
+            <ul class="paper-sidebar-menu paper-sidebar-links">
+                <li><a class="menu-item" href="{{ route('menu') }}" rel="nofollow"><i class="menu-icon fas fa-user-cog"></i><span class="menu-label">{{ __('index.menu') }}</span></a></li>
+                @if (isAdmin())<li><a class="menu-item" href="{{ route('admin.index') }}" rel="nofollow"><i class="menu-icon fas fa-wrench"></i><span class="menu-label">{{ __('index.panel') }}</span></a></li>@endif
+            </ul>
         </div>
         <hr class="paper-divider">
     @else
         <div class="paper-sidebar-section">
-            <a href="{{ route('login') }}{{ returnUrl() }}" class="paper-btn">{{ __('index.login') }}</a>
-            <a href="{{ route('register') }}" class="paper-btn paper-btn-outline">{{ __('index.register') }}</a>
+            <ul class="paper-sidebar-menu paper-sidebar-links">
+                <li><a class="menu-item" href="{{ route('login') }}{{ returnUrl() }}" rel="nofollow"><i class="menu-icon fas fa-sign-in-alt"></i><span class="menu-label">{{ __('index.login') }}</span></a></li>
+                <li><a class="menu-item" href="{{ route('register') }}" rel="nofollow"><i class="menu-icon far fa-user"></i><span class="menu-label">{{ __('index.register') }}</span></a></li>
+            </ul>
         </div>
         <hr class="paper-divider">
     @endif
