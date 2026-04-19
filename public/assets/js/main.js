@@ -712,11 +712,11 @@ const feedContainer = document.getElementById('feed-container')
 const feedSentinel  = document.getElementById('feed-sentinel')
 
 if (feedContainer && feedSentinel) {
-    const AUTO_PAGES = 5
-    let loading    = false
-    let autoLoaded = 0
+    let loading   = false
+    let autoCount = 0
+    const initialPage = parseInt(new URLSearchParams(location.search).get('page') || 1)
 
-    // Скрыть стандартную пагинацию — с JS она не нужна
+    // Скрыть стандартную пагинацию
     feedContainer.querySelectorAll('.feed-pagination').forEach(el => el.classList.add('d-none'))
 
     // Спиннер перед sentinel
@@ -725,30 +725,13 @@ if (feedContainer && feedSentinel) {
     loader.innerHTML = '<span></span><span></span><span></span><span></span><span></span>'
     feedSentinel.before(loader)
 
-    // URL следующей страницы берём из data-next последнего pagination
+    // URL следующей страницы из data-next последнего pagination
     const getNextUrl = () => {
         const items = feedContainer.querySelectorAll('.feed-pagination')
         return items[items.length - 1]?.dataset.next || ''
     }
 
-    // Обновляем URL при прокрутке вверх/вниз через маркеры страниц
-    const pageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const page = entry.target.dataset.feedPage
-                history.replaceState(null, '', page > 1 ? `/?page=${page}` : '/')
-            }
-        })
-    }, { rootMargin: '-40% 0px -40% 0px' })
-
-    const addPageMarker = (page) => {
-        const marker = document.createElement('div')
-        marker.dataset.feedPage = page
-        feedContainer.appendChild(marker)
-        pageObserver.observe(marker)
-    }
-
-    // Кнопка "Загрузить ещё" после AUTO_PAGES страниц
+    // Кнопка "Загрузить ещё" после AUTO_PAGES автозагрузок
     const showLoadMoreButton = () => {
         loadObserver.disconnect()
         const btn = document.createElement('button')
@@ -757,7 +740,7 @@ if (feedContainer && feedSentinel) {
         btn.textContent = __('buttons.load_more')
         btn.addEventListener('click', () => {
             btn.remove()
-            autoLoaded = 0
+            autoCount = 0
             loadObserver.observe(feedSentinel)
         })
         feedSentinel.before(btn)
@@ -766,8 +749,8 @@ if (feedContainer && feedSentinel) {
     // Загрузка следующей страницы
     const loadPage = async () => {
         const nextUrl = getNextUrl()
-        if (!nextUrl)  { loadObserver.disconnect(); return }
-        if (loading)   return
+        if (!nextUrl) { loadObserver.disconnect(); return }
+        if (loading)  return
 
         loading = true
         loader.classList.remove('d-none')
@@ -778,36 +761,27 @@ if (feedContainer && feedSentinel) {
             const temp     = document.createElement('div')
             temp.innerHTML = html
 
-            // Скрыть пагинации в новом контенте до вставки в DOM
             temp.querySelectorAll('.feed-pagination, .feed-pagination-top').forEach(el => el.classList.add('d-none'))
 
-            // Добавить контент в ленту
             feedContainer.append(...temp.children)
 
-            // Инициализировать short-view для новых элементов
+            const page = parseInt(new URL(nextUrl).searchParams.get('page'))
+
             setTimeout(initShortView, 100)
-
-            // Обновить URL и добавить маркер страницы
-            const page = new URL(nextUrl).searchParams.get('page')
             history.replaceState(null, '', page > 1 ? `/?page=${page}` : '/')
-            addPageMarker(page)
 
-            autoLoaded++
-            if (autoLoaded >= AUTO_PAGES) showLoadMoreButton()
+            autoCount++
+            if (page % 5 === 0) showLoadMoreButton()
         } finally {
             loading = false
             loader.classList.add('d-none')
         }
     }
 
-    // IntersectionObserver для подгрузки при приближении к sentinel
+    // Observer для подгрузки при приближении к sentinel
     const loadObserver = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) loadPage()
     }, { rootMargin: '200px' })
-
-    // Маркер для начальной страницы
-    const initialPage = parseInt(new URLSearchParams(location.search).get('page') || 1)
-    addPageMarker(initialPage)
 
     loadObserver.observe(feedSentinel)
 }
