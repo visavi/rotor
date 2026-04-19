@@ -19,9 +19,9 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         <div class="section-message">
-            {{ truncateHtml($post->text) }}
+            {{ renderHtml($post->text) }}
         </div>
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>

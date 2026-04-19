@@ -13,11 +13,9 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         <div class="section-message">
-            @if ($post->description)
-                {{ truncateHtml($post->description, 100) }}
-            @endif
+            {{ $post->description ? renderHtml($post->description) : __('main.deleted') }}
         </div>
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>

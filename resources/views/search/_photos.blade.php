@@ -13,14 +13,12 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         {{--@include('app/_image_viewer', ['model' => $post])--}}
 
-        @if ($post->text)
-            <div class="section-message">
-                {{ truncateHtml($post->text, 100) }}
-            </div>
-        @endif
+        <div class="section-message">
+            {{ $post->text ? renderHtml($post->text) : __('main.deleted') }}
+        </div>
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>

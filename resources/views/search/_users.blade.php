@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         <div class="section-message">
             <div class="user-avatar">
                 {{ $post->getAvatar() }}
@@ -26,7 +26,7 @@
                     <small class="fst-italic">{{ $post->getStatus() }}</small>
 
                     @if ($post->info)
-                        <div>{{ truncateHtml($post->info, 100) }}</div>
+                        <div>{{ renderHtml($post->info) }}</div>
                     @endif
 
                     @if ($post->site)

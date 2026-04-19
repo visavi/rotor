@@ -38,7 +38,7 @@
         @endif
 
         <div class="section-message">
-            {{ $post->lastPost->text ? $post->lastPost->getText() : 'Удалено' }}
+            {{ $post->lastPost->text ? $post->lastPost->getText() : __('main.deleted') }}
         </div>
 
         @if ($post->lastPost->getFiles()->isNotEmpty())

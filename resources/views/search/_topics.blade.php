@@ -17,9 +17,9 @@
         </div>
     </div>
 
-    <div class="section-content">
+    <div class="section-content short-view">
         <div class="section-message">
-            {{ $post->lastPost->text ? truncateHtml($post->lastPost->text, 100) : 'Удалено' }}
+            {{ $post->lastPost->text ? renderHtml($post->lastPost->text) : __('main.deleted') }}
         </div>
 
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>

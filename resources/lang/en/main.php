@@ -28,6 +28,7 @@ return [
     'lock'              => 'Lock',
     'move'              => 'Move',
     'delete'            => 'Delete',
+    'deleted'           => 'Deleted',
     'delete_selected'   => 'Delete selected',
     'clear'             => 'Clear',
     'sort'              => 'Sort',
