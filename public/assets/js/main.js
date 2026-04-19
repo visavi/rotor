@@ -99,7 +99,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (window.location.hash) {
         setTimeout(function () {
             const target = document.querySelector(window.location.hash)
-            if (target) window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - 100)
+            if (target) {
+                const navbarHeight = document.querySelector('.app-header')?.offsetHeight ?? 50
+                window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - navbarHeight)
+            }
         }, 100)
     }
 
@@ -153,7 +156,10 @@ window.showAttachForm = function () {
 /* Переход к форме ввода */
 window.postJump = function () {
     const form = document.querySelector('.section-form')
-    if (form) window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 50, behavior: 'smooth' })
+    if (form) {
+        const navbarHeight = document.querySelector('.app-header')?.offsetHeight ?? 50
+        window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'smooth' })
+    }
 }
 
 /* Ответ на сообщение */

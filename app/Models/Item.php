@@ -147,12 +147,8 @@ class Item extends Model
     /**
      * Get text
      */
-    public function getText(?int $words = null): HtmlString
+    public function getText(): HtmlString
     {
-        if ($words) {
-            return truncateHtml($this->text, $words);
-        }
-
         return renderHtml($this->text, 'item-' . $this->id);
     }
 

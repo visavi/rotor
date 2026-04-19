@@ -59,8 +59,10 @@
 
                                     <h5><a href="{{ route('items.view', ['id' => $item->id]) }}">{{ $item->title }}</a></h5>
                                     <small><i class="fas fa-angle-right"></i> <a href="{{ route('boards.index', ['id' => $item->category->id]) }}">{{ $item->category->name }}</a></small>
-                                    <div class="section-message">
-                                        {{ $item->getText(words: 100) }}
+                                    <div class="section-content short-view">
+                                        <div class="section-message">
+                                            {{ $item->getText() }}
+                                        </div>
                                     </div>
                                     <div>
                                         <i class="fa fa-user-circle"></i> {{ $item->user->getProfile() }}

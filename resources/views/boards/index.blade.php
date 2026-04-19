@@ -92,8 +92,10 @@
                                         <a href="{{ route('boards.index', ['id' => $item->category->id]) }}">{{ $item->category->name }}</a>
                                     </div>
 
-                                    <div class="section-message">
-                                        {{ $item->getText(words: 100) }}
+                                    <div class="section-content short-view">
+                                        <div class="section-message">
+                                            {{ $item->getText() }}
+                                        </div>
                                     </div>
 
                                     <p class="card-text">
