@@ -14,13 +14,57 @@ use App\Models\Photo;
 use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Topic;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 class Feed
 {
     private mixed $user;
+
+    private array $modelMap = [
+        'topics'   => Topic::class,
+        'news'     => News::class,
+        'photos'   => Photo::class,
+        'articles' => Article::class,
+        'downs'    => Down::class,
+        'items'    => Item::class,
+        'offers'   => Offer::class,
+        'comments' => Comment::class,
+    ];
+
+    private array $withsMap = [
+        'topics'   => ['lastPost.user', 'lastPost.files', 'forum.parent'],
+        'news'     => ['user', 'files'],
+        'photos'   => ['user', 'files'],
+        'articles' => ['user', 'files', 'category.parent'],
+        'downs'    => ['user', 'files', 'category.parent'],
+        'items'    => ['user', 'files', 'category.parent'],
+        'offers'   => ['user'],
+        'comments' => ['relate', 'user'],
+    ];
+
+    private array $settingMap = [
+        'topics'   => 'feed_topics_show',
+        'news'     => 'feed_news_show',
+        'photos'   => 'feed_photos_show',
+        'articles' => 'feed_articles_show',
+        'downs'    => 'feed_downs_show',
+        'items'    => 'feed_items_show',
+        'offers'   => 'feed_offers_show',
+        'comments' => 'feed_comments_show',
+    ];
+
+    private array $ratingMap = [
+        'topics'   => 'feed_topics_rating',
+        'news'     => 'feed_news_rating',
+        'photos'   => 'feed_photos_rating',
+        'articles' => 'feed_articles_rating',
+        'downs'    => 'feed_downs_rating',
+        'items'    => 'feed_items_rating',
+        'offers'   => 'feed_offers_rating',
+        'comments' => 'feed_comments_rating',
+    ];
 
     public function __construct()
     {
@@ -32,253 +76,107 @@ class Feed
      */
     public function getFeed(): HtmlString
     {
-        $polls = [];
-        $collect = new Collection();
+        $enabledTypes = array_keys(array_filter(
+            $this->settingMap,
+            static fn ($value) => setting($value)
+        ));
 
-        if (setting('feed_topics_show')) {
-            $topics = $this->getTopics();
-            $collect = $collect->merge($topics);
+        $perPage = setting('feed_per_page');
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
-            if ($this->user) {
-                $ids = $topics->pluck('last_post_id')->all();
-                $polls[Post::$morphName] = $this->getPolls($ids, Post::$morphName);
+        $query = DB::table('feeds')
+            ->whereIn('relate_type', $enabledTypes)
+            ->orderByDesc('created_at');
+
+        $version = cache()->get('feed_version', 1);
+        $cacheKey = "feed_{$version}_{$currentPage}_" . implode(',', $enabledTypes);
+
+        [$total, $items] = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage) {
+            $total = $query->count();
+            $rows = $query->forPage($currentPage, $perPage)->get();
+            $grouped = $rows->groupBy('relate_type');
+
+            $loadedModels = [];
+            foreach ($grouped as $type => $typeRows) {
+                $class = $this->modelMap[$type];
+                $withs = $this->withsMap[$type];
+                $ids = $typeRows->pluck('relate_id')->all();
+
+                $modelQuery = $class::with($withs)->whereIn('id', $ids);
+
+                if ($type === 'items') {
+                    $modelQuery->where('expires_at', '>', SITETIME);
+                }
+
+                $minRating = setting($this->ratingMap[$type]);
+                if ($minRating) {
+                    if ($type === 'topics') {
+                        $modelQuery->whereHas('lastPost', fn ($q) => $q->where('rating', '>', $minRating));
+                    } else {
+                        $modelQuery->where('rating', '>', $minRating);
+                    }
+                }
+
+                $loadedModels[$type] = $modelQuery->get()->keyBy('id');
             }
-        }
 
-        if (setting('feed_news_show')) {
-            $news = $this->getNews();
-            $collect = $collect->merge($news);
+            $items = $rows
+                ->map(fn ($row) => $loadedModels[$row->relate_type][$row->relate_id] ?? null)
+                ->filter()
+                ->values();
 
-            if ($this->user) {
-                $ids = $news->pluck('id')->all();
-                $polls[News::$morphName] = $this->getPolls($ids, News::$morphName);
-            }
-        }
+            return [$total, $items];
+        });
 
-        if (setting('feed_photos_show')) {
-            $photos = $this->getPhotos();
-            $collect = $collect->merge($photos);
+        $posts = new LengthAwarePaginator($items, $total, $perPage, $currentPage);
+        $posts->setPath(request()->url());
 
-            if ($this->user) {
-                $ids = $photos->pluck('id')->all();
-                $polls[Photo::$morphName] = $this->getPolls($ids, Photo::$morphName);
-            }
-        }
-
-        if (setting('feed_articles_show')) {
-            $articles = $this->getArticles();
-            $collect = $collect->merge($articles);
-
-            if ($this->user) {
-                $ids = $articles->pluck('id')->all();
-                $polls[Article::$morphName] = $this->getPolls($ids, Article::$morphName);
-            }
-        }
-
-        if (setting('feed_downs_show')) {
-            $downs = $this->getDowns();
-            $collect = $collect->merge($downs);
-
-            if ($this->user) {
-                $ids = $downs->pluck('id')->all();
-                $polls[Down::$morphName] = $this->getPolls($ids, Down::$morphName);
-            }
-        }
-
-        if (setting('feed_items_show')) {
-            $collect = $collect->merge($this->getItems());
-        }
-
-        if (setting('feed_offers_show')) {
-            $offers = $this->getOffers();
-            $collect = $collect->merge($offers);
-
-            if ($this->user) {
-                $ids = $offers->pluck('id')->all();
-                $polls[Offer::$morphName] = $this->getPolls($ids, Offer::$morphName);
-            }
-        }
-
-        if (setting('feed_comments_show')) {
-            $comments = $this->getComments();
-            $collect = $collect->merge($comments);
-
-            if ($this->user) {
-                $ids = $comments->pluck('id')->all();
-                $polls[Comment::$morphName] = $this->getPolls($ids, Comment::$morphName);
-            }
-        }
-
-        $posts = $collect
-            ->sortByDesc('created_at')
-            ->sortByDesc('top')
-            ->take(setting('feed_total'));
+        $polls = $this->loadPolls($items);
 
         $user = $this->user;
-        $posts = simplePaginate($posts, setting('feed_per_page'));
         $allowDownload = $user || setting('down_guest_download');
 
-        return new HtmlString(view('feeds/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
+        return new HtmlString((string) view('feeds/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
     }
 
     /**
-     * Get polls
+     * Load polls
      */
-    private function getPolls(array $ids, string $morphName): array
+    private function loadPolls($posts): array
     {
-        return Poll::query()
-            ->whereIn('polls.relate_id', $ids)
-            ->where('polls.relate_type', $morphName)
-            ->where('polls.user_id', $this->user->id)
-            ->pluck('vote', 'relate_id')
-            ->all();
-    }
+        if (! $this->user) {
+            return [];
+        }
 
-    /**
-     * Get topics
-     *
-     * @return Collection<Topic>
-     */
-    public function getTopics(): Collection
-    {
-        return Cache::remember('TopicFeed', 600, static function () {
-            return Topic::query()
-                ->select('topics.*', 'posts.created_at')
-                ->join('posts', function ($join) {
-                    $join->on('last_post_id', 'posts.id')
-                        ->where('posts.rating', '>', setting('feed_topics_rating'));
-                })
-                ->with('lastPost.user', 'lastPost.files', 'forum.parent')
-                ->orderByDesc('topics.updated_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
+        $pairs = [];
 
-    /**
-     * Get news
-     *
-     * @return Collection<News>
-     */
-    public function getNews(): Collection
-    {
-        return Cache::remember('NewsFeed', 600, static function () {
-            return News::query()
-                ->where('rating', '>', setting('feed_news_rating'))
-                ->with('user', 'files')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
+        foreach ($posts as $post) {
+            if ($post instanceof Topic) {
+                if ($post->last_post_id) {
+                    $pairs[Post::$morphName][] = $post->last_post_id;
+                }
+            } else {
+                $pairs[$post->getMorphClass()][] = $post->id;
+            }
+        }
 
-    /**
-     * Get photos
-     *
-     * @return Collection<Photo>
-     */
-    public function getPhotos(): Collection
-    {
-        return Cache::remember('PhotoFeed', 600, static function () {
-            return Photo::query()
-                ->where('rating', '>', setting('feed_photos_rating'))
-                ->with('user', 'files')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
+        if (empty($pairs)) {
+            return [];
+        }
 
-    /**
-     * Get articles
-     *
-     * @return Collection<Article>
-     */
-    public function getArticles(): Collection
-    {
-        return Cache::remember('ArticleFeed', 600, static function () {
-            return Article::query()
-                ->active()
-                ->where('rating', '>', setting('feed_downs_rating'))
-                ->with('user', 'files', 'category.parent')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
+        $query = Poll::query()
+            ->where('user_id', $this->user->id)
+            ->where(function ($q) use ($pairs) {
+                foreach ($pairs as $morphName => $ids) {
+                    $q->orWhere(fn ($inner) => $inner->where('relate_type', $morphName)->whereIn('relate_id', $ids));
+                }
+            });
 
-    /**
-     * Get downs
-     *
-     * @return Collection<Down>
-     */
-    public function getDowns(): Collection
-    {
-        return Cache::remember('DownFeed', 600, static function () {
-            return Down::query()
-                ->active()
-                ->where('rating', '>', setting('feed_downs_rating'))
-                ->with('user', 'files', 'category.parent')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
+        $polls = [];
+        foreach ($query->get(['relate_type', 'relate_id', 'vote']) as $poll) {
+            $polls[$poll->relate_type][$poll->relate_id] = $poll->vote;
+        }
 
-    /**
-     * Get items
-     *
-     * @return Collection<Item>
-     */
-    public function getItems(): Collection
-    {
-        return Cache::remember('ItemFeed', 600, static function () {
-            return Item::query()
-                ->active()
-                ->where('expires_at', '>', SITETIME)
-                ->with('user', 'files', 'category.parent')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
-
-    /**
-     * Get offers
-     *
-     * @return Collection<Offer>
-     */
-    public function getOffers(): Collection
-    {
-        return Cache::remember('OfferFeed', 600, static function () {
-            return Offer::query()
-                ->where('rating', '>', setting('feed_offers_rating'))
-                ->with('user')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
-    }
-
-    /**
-     * Get comments
-     *
-     * @return Collection<Comment>
-     */
-    public function getComments(): Collection
-    {
-        return Cache::remember('CommentFeed', 600, static function () {
-            return Comment::query()
-                ->where('rating', '>', setting('feed_comments_rating'))
-                ->whereIn('id', function ($query) {
-                    $query->selectRaw('MAX(id)')
-                        ->from('comments')
-                        ->groupBy('relate_id');
-                })
-                ->with('relate', 'user')
-                ->orderByDesc('created_at')
-                ->limit(setting('feed_last_record'))
-                ->get();
-        });
+        return $polls;
     }
 }

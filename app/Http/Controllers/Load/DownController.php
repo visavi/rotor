@@ -124,7 +124,7 @@ class DownController extends Controller
 
                 if (isAdmin(User::ADMIN)) {
                     $down->category->increment('count_downs');
-                    clearCache(['statLoads', 'recentDowns', 'DownFeed']);
+                    clearCache(['statLoads', 'recentDowns']);
                 } else {
                     $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
 
@@ -221,7 +221,7 @@ class DownController extends Controller
                     'links'       => $links,
                 ]);
 
-                clearCache(['statLoads', 'recentDowns', 'DownFeed']);
+                clearCache(['statLoads', 'recentDowns']);
                 setFlash('success', __('loads.down_edited_success'));
 
                 return redirect()->route('downs.view', ['id' => $down->id]);

@@ -38,7 +38,13 @@ class PostObserver
             ]);
         }
 
-        clearCache(['statForums', 'recentTopics', 'TopicFeed']);
+        DB::table('feeds')->updateOrInsert(
+            ['relate_type' => 'topics', 'relate_id' => $post->topic_id],
+            ['created_at' => $post->created_at]
+        );
+
+        cache()->increment('feed_version');
+        clearCache(['statForums', 'recentTopics']);
     }
 
     /**
@@ -51,6 +57,19 @@ class PostObserver
         $topic->decrement('count_posts');
         $topic->forum->decrement('count_posts');
 
-        clearCache(['statForums', 'recentTopics', 'TopicFeed']);
+        // Обновляем created_at в feeds на время нового последнего поста
+        $lastPost = $topic->fresh()->lastPost;
+        if ($lastPost) {
+            DB::table('feeds')->updateOrInsert(
+                ['relate_type' => 'topics', 'relate_id' => $topic->id],
+                ['created_at' => $lastPost->created_at]
+            );
+        } else {
+            DB::table('feeds')->where('relate_type', 'topics')->where('relate_id', $topic->id)->delete();
+        }
+
+        cache()->increment('feed_version');
+
+        clearCache(['statForums', 'recentTopics']);
     }
 }

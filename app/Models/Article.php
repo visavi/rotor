@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use App\Traits\FeedableTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
@@ -47,6 +48,7 @@ use Illuminate\Support\Str;
  */
 class Article extends Model
 {
+    use FeedableTrait;
     use SearchableTrait;
     use SortableTrait;
     use UploadTrait;

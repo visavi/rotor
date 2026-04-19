@@ -13,7 +13,7 @@ class ArticleObserver
     public function created(Article $article): void
     {
         $article->category->restatement();
-        clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
+        clearCache(['statArticles', 'recentArticles']);
     }
 
     /**
@@ -47,7 +47,7 @@ class ArticleObserver
             }
         }
 
-        clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
+        clearCache(['statArticles', 'recentArticles']);
     }
 
     /**
@@ -56,7 +56,7 @@ class ArticleObserver
     public function deleted(Article $article): void
     {
         $article->category->restatement();
-        clearCache(['statArticles', 'recentArticles', 'ArticleFeed']);
+        clearCache(['statArticles', 'recentArticles']);
     }
 
     /**

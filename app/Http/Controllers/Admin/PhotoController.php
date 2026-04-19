@@ -56,7 +56,7 @@ class PhotoController extends AdminController
                     'closed' => $closed,
                 ]);
 
-                clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);
+                clearCache(['statPhotos', 'recentPhotos']);
                 setFlash('success', __('photos.photo_success_edited'));
 
                 return redirect()->route('admin.photos.index', ['page' => $page]);
@@ -88,7 +88,7 @@ class PhotoController extends AdminController
 
         $photo->delete();
 
-        clearCache(['statPhotos', 'recentPhotos', 'PhotoFeed']);
+        clearCache(['statPhotos', 'recentPhotos']);
         setFlash('success', __('photos.photo_success_deleted'));
 
         return redirect()->route('admin.photos.index', ['page' => $page]);

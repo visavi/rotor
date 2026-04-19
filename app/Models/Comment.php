@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Traits\FeedableTrait;
 use App\Traits\SearchableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,7 @@ use Illuminate\Support\HtmlString;
  */
 class Comment extends Model
 {
+    use FeedableTrait;
     use SearchableTrait;
 
     /**

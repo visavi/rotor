@@ -30,16 +30,10 @@
         <div class="invalid-feedback">{{ textError('sets[feed_per_page]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[feed_last_record]') }}">
-        <label for="feed_last_record" class="form-label">{{ __('settings.feed_last_record') }}:</label>
-        <input type="number" class="form-control" id="feed_last_record" name="sets[feed_last_record]" maxlength="3" value="{{ getInput('sets.feed_last_record', $settings['feed_last_record']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[feed_last_record]') }}</div>
-    </div>
-
-    <div class="mb-3{{ hasError('sets[feed_total]') }}">
-        <label for="feed_total" class="form-label">{{ __('settings.feed_total') }}:</label>
-        <input type="number" class="form-control" id="feed_total" name="sets[feed_total]" maxlength="4" value="{{ getInput('sets.feed_total', $settings['feed_total']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[feed_total]') }}</div>
+    <div class="mb-3{{ hasError('sets[feed_cache_time]') }}">
+        <label for="feed_cache_time" class="form-label">{{ __('settings.feed_cache_time') }}:</label>
+        <input type="number" class="form-control" id="feed_cache_time" name="sets[feed_cache_time]" maxlength="5" value="{{ getInput('sets.feed_cache_time', $settings['feed_cache_time']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[feed_cache_time]') }}</div>
     </div>
 
     <div class="form-check mb-3">

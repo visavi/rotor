@@ -57,7 +57,7 @@ class NewsController extends AdminController
                     'top'    => $top,
                 ]);
 
-                clearCache(['statNews', 'pinnedNews', 'NewsFeed']);
+                clearCache(['statNews', 'pinnedNews']);
                 setFlash('success', __('news.news_success_edited'));
 
                 return redirect()->route('news.view', ['id' => $news->id]);
@@ -103,7 +103,7 @@ class NewsController extends AdminController
 
                 $files->update(['relate_id' => $news->id]);
 
-                clearCache(['statNews', 'pinnedNews', 'statNewsDate', 'NewsFeed']);
+                clearCache(['statNews', 'pinnedNews', 'statNewsDate']);
                 setFlash('success', __('news.news_success_added'));
 
                 return redirect()->route('news.view', ['id' => $news->id]);

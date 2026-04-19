@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\HtmlCast;
 use App\Traits\AddFileToArchiveTrait;
 use App\Traits\ConvertVideoTrait;
+use App\Traits\FeedableTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
@@ -46,6 +47,7 @@ class Down extends Model
 {
     use AddFileToArchiveTrait;
     use ConvertVideoTrait;
+    use FeedableTrait;
     use SearchableTrait;
     use SortableTrait;
     use UploadTrait;

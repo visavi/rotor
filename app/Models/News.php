@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
+use App\Traits\FeedableTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Support\HtmlString;
 class News extends Model
 {
     use ConvertVideoTrait;
+    use FeedableTrait;
     use SearchableTrait;
     use UploadTrait;
 

@@ -237,7 +237,7 @@ class ForumController extends AdminController
                     'close_user_id' => $closeUserId,
                 ]);
 
-                clearCache(['statForums', 'recentTopics', 'TopicFeed']);
+                clearCache(['statForums', 'recentTopics']);
                 setFlash('success', __('forums.topic_success_edited'));
 
                 return redirect()->route('admin.forums.forum', ['id' => $topic->forum_id]);
@@ -372,7 +372,7 @@ class ForumController extends AdminController
         $topic->delete();
         $topic->forum->restatement();
 
-        clearCache(['statForums', 'recentTopics', 'TopicFeed']);
+        clearCache(['statForums', 'recentTopics']);
         setFlash('success', __('forums.topic_success_deleted'));
 
         return redirect()->route('admin.forums.forum', ['id' => $topic->forum->id, 'page' => $page]);
