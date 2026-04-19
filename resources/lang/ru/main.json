@@ -10,7 +10,8 @@
 
     "buttons": {
         "ok": "OK",
-        "cancel": "Отмена"
+        "cancel": "Отмена",
+        "load_more": "Загрузить ещё"
     },
 
     "editor": {

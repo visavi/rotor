@@ -6,6 +6,27 @@ import './prettify.js'
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
 
+function initShortView(container = document) {
+    container.querySelectorAll('.section-content.short-view:not(.clamped):not(.expanded)').forEach(function (el) {
+        const hiddenPixels = el.scrollHeight - el.clientHeight
+        if (hiddenPixels > 100) {
+            el.classList.add('clamped')
+            const btn = document.createElement('button')
+            btn.type = 'button'
+            btn.className = 'btn btn-sm btn-adaptive mt-2'
+            btn.textContent = 'Показать полностью'
+            btn.addEventListener('click', function () {
+                el.classList.add('expanded')
+                el.classList.remove('clamped')
+                btn.remove()
+            })
+            el.after(btn)
+        } else if (hiddenPixels > 0) {
+            el.classList.remove('short-view')
+        }
+    })
+}
+
 function ajax({ url, type = 'GET', data = null, dataType = 'json', beforeSend, complete, success, error }) {
     if (beforeSend) beforeSend()
 
@@ -106,26 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100)
     }
 
-    setTimeout(function () {
-        document.querySelectorAll('.section-content.short-view').forEach(function (el) {
-            const hiddenPixels = el.scrollHeight - el.clientHeight
-
-            if (hiddenPixels > 100) {
-                el.classList.add('clamped')
-                const btn = document.createElement('button')
-                btn.className = 'btn btn-sm btn-adaptive mt-2'
-                btn.textContent = 'Показать полностью'
-                btn.addEventListener('click', function () {
-                    el.classList.add('expanded')
-                    el.classList.remove('clamped')
-                    btn.remove()
-                })
-                el.after(btn)
-            } else if (hiddenPixels > 0) {
-                el.classList.remove('short-view')
-            }
-        })
-    }, 300)
+    setTimeout(initShortView, 300)
 
     prettyPrint()
 
@@ -703,4 +705,109 @@ function confirm(message, callback) {
     confirmDialogEl.querySelector('.js-confirm-ok').onclick = () => { confirmDialogEl.close(); callback(true) }
     confirmDialogEl.querySelector('.js-confirm-cancel').onclick = () => { confirmDialogEl.close(); callback(false) }
     confirmDialogEl.showModal()
+}
+
+// Infinite scroll для ленты
+const feedContainer = document.getElementById('feed-container')
+const feedSentinel  = document.getElementById('feed-sentinel')
+
+if (feedContainer && feedSentinel) {
+    const AUTO_PAGES = 5
+    let loading    = false
+    let autoLoaded = 0
+
+    // Скрыть стандартную пагинацию — с JS она не нужна
+    feedContainer.querySelectorAll('.feed-pagination').forEach(el => el.classList.add('d-none'))
+
+    // Спиннер перед sentinel
+    const loader = document.createElement('div')
+    loader.className = 'feed-loader d-none'
+    loader.innerHTML = '<span></span><span></span><span></span><span></span><span></span>'
+    feedSentinel.before(loader)
+
+    // URL следующей страницы берём из data-next последнего pagination
+    const getNextUrl = () => {
+        const items = feedContainer.querySelectorAll('.feed-pagination')
+        return items[items.length - 1]?.dataset.next || ''
+    }
+
+    // Обновляем URL при прокрутке вверх/вниз через маркеры страниц
+    const pageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const page = entry.target.dataset.feedPage
+                history.replaceState(null, '', page > 1 ? `/?page=${page}` : '/')
+            }
+        })
+    }, { rootMargin: '-40% 0px -40% 0px' })
+
+    const addPageMarker = (page) => {
+        const marker = document.createElement('div')
+        marker.dataset.feedPage = page
+        feedContainer.appendChild(marker)
+        pageObserver.observe(marker)
+    }
+
+    // Кнопка "Загрузить ещё" после AUTO_PAGES страниц
+    const showLoadMoreButton = () => {
+        loadObserver.disconnect()
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'btn btn-primary d-block mx-auto my-3'
+        btn.textContent = __('buttons.load_more')
+        btn.addEventListener('click', () => {
+            btn.remove()
+            autoLoaded = 0
+            loadObserver.observe(feedSentinel)
+        })
+        feedSentinel.before(btn)
+    }
+
+    // Загрузка следующей страницы
+    const loadPage = async () => {
+        const nextUrl = getNextUrl()
+        if (!nextUrl)  { loadObserver.disconnect(); return }
+        if (loading)   return
+
+        loading = true
+        loader.classList.remove('d-none')
+
+        try {
+            const response = await fetch(nextUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            const html     = await response.text()
+            const temp     = document.createElement('div')
+            temp.innerHTML = html
+
+            // Скрыть пагинации в новом контенте до вставки в DOM
+            temp.querySelectorAll('.feed-pagination, .feed-pagination-top').forEach(el => el.classList.add('d-none'))
+
+            // Добавить контент в ленту
+            feedContainer.append(...temp.children)
+
+            // Инициализировать short-view для новых элементов
+            setTimeout(initShortView, 100)
+
+            // Обновить URL и добавить маркер страницы
+            const page = new URL(nextUrl).searchParams.get('page')
+            history.replaceState(null, '', page > 1 ? `/?page=${page}` : '/')
+            addPageMarker(page)
+
+            autoLoaded++
+            if (autoLoaded >= AUTO_PAGES) showLoadMoreButton()
+        } finally {
+            loading = false
+            loader.classList.add('d-none')
+        }
+    }
+
+    // IntersectionObserver для подгрузки при приближении к sentinel
+    const loadObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) loadPage()
+    }, { rootMargin: '200px' })
+
+    // Маркер для начальной страницы
+    const initialPage = parseInt(new URLSearchParams(location.search).get('page') || 1)
+    addPageMarker(initialPage)
+
+    loadObserver.observe(feedSentinel)
 }

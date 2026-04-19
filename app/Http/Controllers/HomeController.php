@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\Feed;
 use App\Classes\Validator;
 use App\Models\Article;
 use App\Models\Ban;
@@ -28,6 +29,18 @@ class HomeController extends Controller
     public function index(): View
     {
         return view('index');
+    }
+
+    /**
+     * Лента (AJAX)
+     */
+    public function feed(Request $request): string|RedirectResponse
+    {
+        if (! $request->ajax()) {
+            return redirect(url('/') . ($request->has('page') ? '?page=' . $request->input('page') : ''));
+        }
+
+        return (string) (new Feed())->getFeed();
     }
 
     /**

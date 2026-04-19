@@ -1,3 +1,9 @@
+@if ($posts->currentPage() > 1)
+<div class="d-flex justify-content-center feed-pagination-top feed-pagination-top--initial">
+    {{ $posts->links('feeds._paginator') }}
+</div>
+@endif
+
 @forelse ($posts as $post)
     {{-- Посты --}}
     @if ($post instanceof \App\Models\Topic)
@@ -42,6 +48,6 @@
     {{ showError(__('forums.empty_posts')) }}
 @endforelse
 
-<div class="d-flex justify-content-center">
-    {{ $posts->links() }}
+<div class="d-flex justify-content-center feed-pagination" data-next="{{ $posts->hasMorePages() ? route('feed', ['page' => $posts->currentPage() + 1]) : '' }}">
+    {{ $posts->links('feeds._paginator') }}
 </div>

@@ -73,6 +73,7 @@ require __DIR__ . '/redirects.php';
 Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('home');
+        Route::get('/feed', 'feed')->name('feed');
         Route::get('/closed', 'closed')->name('closed');
         Route::get('/search', 'search')->name('search');
         Route::get('/captcha', 'captcha')->name('captcha');

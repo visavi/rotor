@@ -12,7 +12,8 @@
     @include('ads/_top')
 
     @if (setting('homepage_view') === 'feed')
-        {{ (new Feed())->getFeed() }}
+        <div id="feed-container">{{ (new Feed())->getFeed() }}</div>
+        <div id="feed-sentinel"></div>
     @else
         @include('widgets/_classic')
     @endif

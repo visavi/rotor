@@ -22,48 +22,15 @@ class Feed
 {
     private mixed $user;
 
-    private array $modelMap = [
-        'topics'   => Topic::class,
-        'news'     => News::class,
-        'photos'   => Photo::class,
-        'articles' => Article::class,
-        'downs'    => Down::class,
-        'items'    => Item::class,
-        'offers'   => Offer::class,
-        'comments' => Comment::class,
-    ];
-
-    private array $withsMap = [
-        'topics'   => ['lastPost.user', 'lastPost.files', 'forum.parent'],
-        'news'     => ['user', 'files'],
-        'photos'   => ['user', 'files'],
-        'articles' => ['user', 'files', 'category.parent'],
-        'downs'    => ['user', 'files', 'category.parent'],
-        'items'    => ['user', 'files', 'category.parent'],
-        'offers'   => ['user'],
-        'comments' => ['relate', 'user'],
-    ];
-
-    private array $settingMap = [
-        'topics'   => 'feed_topics_show',
-        'news'     => 'feed_news_show',
-        'photos'   => 'feed_photos_show',
-        'articles' => 'feed_articles_show',
-        'downs'    => 'feed_downs_show',
-        'items'    => 'feed_items_show',
-        'offers'   => 'feed_offers_show',
-        'comments' => 'feed_comments_show',
-    ];
-
-    private array $ratingMap = [
-        'topics'   => 'feed_topics_rating',
-        'news'     => 'feed_news_rating',
-        'photos'   => 'feed_photos_rating',
-        'articles' => 'feed_articles_rating',
-        'downs'    => 'feed_downs_rating',
-        'items'    => 'feed_items_rating',
-        'offers'   => 'feed_offers_rating',
-        'comments' => 'feed_comments_rating',
+    private array $types = [
+        'topics'   => ['class' => Topic::class,   'withs' => ['lastPost.user', 'lastPost.files', 'forum.parent']],
+        'news'     => ['class' => News::class,     'withs' => ['user', 'files']],
+        'photos'   => ['class' => Photo::class,    'withs' => ['user', 'files']],
+        'articles' => ['class' => Article::class,  'withs' => ['user', 'files', 'category.parent']],
+        'downs'    => ['class' => Down::class,     'withs' => ['user', 'files', 'category.parent']],
+        'items'    => ['class' => Item::class,     'withs' => ['user', 'files', 'category.parent']],
+        'offers'   => ['class' => Offer::class,    'withs' => ['user']],
+        'comments' => ['class' => Comment::class,  'withs' => ['relate', 'user']],
     ];
 
     public function __construct()
@@ -77,8 +44,9 @@ class Feed
     public function getFeed(): HtmlString
     {
         $enabledTypes = array_keys(array_filter(
-            $this->settingMap,
-            static fn ($value) => setting($value)
+            $this->types,
+            static fn ($type, $key) => setting("feed_{$key}_show"),
+            ARRAY_FILTER_USE_BOTH
         ));
 
         $perPage = setting('feed_per_page');
@@ -98,8 +66,8 @@ class Feed
 
             $loadedModels = [];
             foreach ($grouped as $type => $typeRows) {
-                $class = $this->modelMap[$type];
-                $withs = $this->withsMap[$type];
+                $class = $this->types[$type]['class'];
+                $withs = $this->types[$type]['withs'];
                 $ids = $typeRows->pluck('relate_id')->all();
 
                 $modelQuery = $class::with($withs)->whereIn('id', $ids);
@@ -108,7 +76,7 @@ class Feed
                     $modelQuery->where('expires_at', '>', SITETIME);
                 }
 
-                $minRating = setting($this->ratingMap[$type]);
+                $minRating = setting("feed_{$type}_rating");
                 if ($minRating) {
                     if ($type === 'topics') {
                         $modelQuery->whereHas('lastPost', fn ($q) => $q->where('rating', '>', $minRating));
@@ -129,7 +97,7 @@ class Feed
         });
 
         $posts = new LengthAwarePaginator($items, $total, $perPage, $currentPage);
-        $posts->setPath(request()->url());
+        $posts->setPath(url('/'));
 
         $polls = $this->loadPolls($items);
 

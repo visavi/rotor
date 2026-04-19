@@ -10,7 +10,8 @@
 
     "buttons": {
         "ok": "OK",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "load_more": "Load more"
     },
 
     "editor": {
