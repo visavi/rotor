@@ -15,7 +15,7 @@ class TopicResource extends JsonResource
     {
         return [
             'id'                   => $this->id,
-            'title'                => $this->title,
+            'title'                => e($this->title),
             'login'                => $this->user->login,
             'name'                 => $this->user->getName(),
             'closed'               => $this->closed,
@@ -23,7 +23,7 @@ class TopicResource extends JsonResource
             'count_posts'          => $this->count_posts,
             'visits'               => $this->visits,
             'moderators'           => $this->moderators,
-            'note'                 => $this->note,
+            'note'                 => e($this->note),
             'last_post_id'         => $this->last_post_id,
             'last_post_user_login' => $this->lastPost->user->login,
             'last_post_user_name'  => $this->lastPost->user->getName(),

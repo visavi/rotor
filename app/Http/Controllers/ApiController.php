@@ -383,7 +383,7 @@ class ApiController extends Controller
         $dialogue?->setAttribute('all_reading', true);
 
         return MessageResource::collection($messages)
-            ->additional(['dialogue' => DialogueResource::make($dialogue)]);
+            ->additional(['dialogue' => $dialogue ? DialogueResource::make($dialogue) : null]);
     }
 
     /**
