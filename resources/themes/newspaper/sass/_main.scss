@@ -83,6 +83,7 @@ a:hover { color: darken($ink-red, 15%); }
 
 .card { border: 1px solid $paper-border; border-radius: 2px; background-color: #fff; }
 .table { border-color: $paper-border; font-size: 0.85rem; thead th { background-color: $ink-black; color: #fff; font-family: $ui-font; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 0; } td, th { border-color: $paper-border; } }
-blockquote { border-left: 4px solid $ink-red; padding-left: 16px; font-style: italic; color: $ink-gray; font-size: 1.1em; }
+blockquote { border-left: 4px solid $ink-red; padding-left: 16px; font-style: italic; color: $ink-gray; }
+.code { font-size: 12px; }
 hr { border-color: $paper-border; opacity: 1; margin: 16px 0; }
 :focus-visible { outline: 2px solid $ink-red; outline-offset: 1px; box-shadow: none; }

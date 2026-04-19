@@ -105,9 +105,8 @@
   min-width: 270px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  border: 1px solid var(--bs-border-color);
   overflow: hidden;
-  &.dropdown-menu { margin-top: 0 !important; }
+  &.dropdown-menu { margin-top: -2px !important; }
 }
 
 .app-notification__title {
