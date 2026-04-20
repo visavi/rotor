@@ -27,7 +27,7 @@ return new class extends Migration {
             "SELECT 'downs', id, created_at FROM downs WHERE active = 1 ORDER BY id DESC LIMIT 500",
             "SELECT 'items', id, created_at FROM items WHERE active = 1 AND expires_at > UNIX_TIMESTAMP() ORDER BY id DESC LIMIT 500",
             "SELECT 'offers', id, created_at FROM offers ORDER BY id DESC LIMIT 500",
-            "SELECT 'comments', id, created_at FROM comments WHERE id IN (SELECT MAX(id) FROM comments GROUP BY relate_id) ORDER BY id DESC LIMIT 500",
+            "SELECT 'comments', id, created_at FROM comments WHERE id IN (SELECT MAX(id) FROM comments GROUP BY relate_type, relate_id) ORDER BY id DESC LIMIT 500",
             "SELECT 'topics', t.id, p.created_at FROM topics t JOIN posts p ON t.last_post_id = p.id ORDER BY p.id DESC LIMIT 500",
         ];
 

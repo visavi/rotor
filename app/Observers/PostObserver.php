@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Models\Feed;
 use App\Models\Post;
-use Illuminate\Support\Facades\DB;
 
 class PostObserver
 {
@@ -38,7 +38,7 @@ class PostObserver
             ]);
         }
 
-        DB::table('feeds')->updateOrInsert(
+        Feed::query()->updateOrInsert(
             ['relate_type' => 'topics', 'relate_id' => $post->topic_id],
             ['created_at' => $post->created_at]
         );
@@ -58,14 +58,14 @@ class PostObserver
         $topic->forum->decrement('count_posts');
 
         // Обновляем created_at в feeds на время нового последнего поста
-        $lastPost = $topic->fresh()->lastPost;
-        if ($lastPost) {
-            DB::table('feeds')->updateOrInsert(
+        $freshTopic = $topic->fresh();
+        if ($freshTopic->last_post_id) {
+            Feed::query()->updateOrInsert(
                 ['relate_type' => 'topics', 'relate_id' => $topic->id],
-                ['created_at' => $lastPost->created_at]
+                ['created_at' => $freshTopic->lastPost->created_at]
             );
         } else {
-            DB::table('feeds')->where('relate_type', 'topics')->where('relate_id', $topic->id)->delete();
+            Feed::query()->where('relate_type', 'topics')->where('relate_id', $topic->id)->delete();
         }
 
         cache()->increment('feed_version');

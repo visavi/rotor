@@ -4,7 +4,7 @@
 
 ::selection { color: #fff; background-color: $ink-red; }
 
-html, body { height: 100%; overflow-x: hidden; }
+html { height: 100%; }
 
 body { background-color: $body-bg; color: $ink-black; }
 
@@ -26,7 +26,6 @@ a:hover { color: darken($ink-red, 15%); }
   margin-left: auto;
   margin-right: auto;
   background-color: $app-bg;
-  overflow-x: hidden;
 
   @media(min-width: 768px) {
     &.sidenav-toggled .app-sidebar {
@@ -37,7 +36,6 @@ a:hover { color: darken($ink-red, 15%); }
     }
   }
   @media(max-width: 767px) {
-    overflow-x: hidden;
     .app-sidebar {
       position: fixed !important;
       right: -$sidebar-width;
@@ -60,6 +58,7 @@ a:hover { color: darken($ink-red, 15%); }
   margin-top: $header-height;
   align-items: stretch;
   background-color: $sidebar-color;
+  border-right: 1px solid $paper-border;
   @media(max-width: 767px) { margin-top: 80px; }
 }
 
@@ -68,6 +67,7 @@ a:hover { color: darken($ink-red, 15%); }
   min-width: 0;
   padding: 24px 28px;
   background-color: #fff;
+  @media(min-width: 768px) { border-right: 2px solid $paper-border; box-shadow: 2px 0 6px rgba(0,0,0,0.04); }
   @media(max-width: 767px) { padding: 12px 14px; }
   @media print { padding: 0; }
 }

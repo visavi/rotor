@@ -6,6 +6,26 @@ import './prettify.js'
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
 
+function getNavbarHeight() {
+    let max = 0
+    document.querySelectorAll('.app-header, .app-topnav').forEach(el => {
+        max = Math.max(max, el.getBoundingClientRect().bottom)
+    })
+    if (!max) {
+        document.querySelectorAll('body > *, body > * > *').forEach(el => {
+            if (window.getComputedStyle(el).position === 'fixed') {
+                const rect = el.getBoundingClientRect()
+                if (rect.top >= 0 && rect.top < 5 && rect.bottom > 0
+                    && rect.bottom < window.innerHeight * 0.5
+                    && rect.width > window.innerWidth * 0.5) {
+                    max = Math.max(max, rect.bottom)
+                }
+            }
+        })
+    }
+    return max
+}
+
 function initShortView(container = document) {
     container.querySelectorAll('.section-content.short-view:not(.clamped):not(.expanded)').forEach(function (el) {
         const hiddenPixels = el.scrollHeight - el.clientHeight
@@ -121,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
             const target = document.querySelector(window.location.hash)
             if (target) {
-                const navbarHeight = document.querySelector('.app-header')?.offsetHeight ?? 50
+                const navbarHeight = getNavbarHeight()
                 window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - navbarHeight)
             }
         }, 100)
@@ -159,7 +179,7 @@ window.showAttachForm = function () {
 window.postJump = function () {
     const form = document.querySelector('.section-form')
     if (form) {
-        const navbarHeight = document.querySelector('.app-header')?.offsetHeight ?? 50
+        const navbarHeight = getNavbarHeight()
         window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'smooth' })
     }
 }

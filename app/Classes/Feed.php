@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Down;
+use App\Models\Feed as FeedModel;
 use App\Models\Item;
 use App\Models\News;
 use App\Models\Offer;
@@ -15,7 +16,6 @@ use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Topic;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
 class Feed
@@ -52,7 +52,7 @@ class Feed
         $perPage = setting('feed_per_page');
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
-        $query = DB::table('feeds')
+        $query = FeedModel::query()
             ->whereIn('relate_type', $enabledTypes)
             ->orderByDesc('created_at');
 

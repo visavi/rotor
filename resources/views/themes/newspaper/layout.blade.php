@@ -21,7 +21,8 @@
     @stack('styles')
     @hook('head')
 </head>
-<body class="app">
+<body>
+<div class="app">
 
 @include('themes/newspaper/navbar')
 
@@ -50,8 +51,10 @@
 </div>
 
 @include('themes/newspaper/footer')
+<div class="scrollup"></div>
+
+</div>
 @stack('scripts')
 @hook('footer')
-<div class="scrollup"></div>
 </body>
 </html>

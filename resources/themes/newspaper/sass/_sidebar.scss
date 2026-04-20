@@ -10,9 +10,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $sidebar-color;
-  border-left: 2px solid $paper-border;
-  border-right: 1px solid $paper-border;
-  box-shadow: -2px 0 6px rgba(0,0,0,0.04);
   transition: width 0.3s ease, min-width 0.3s ease;
   padding-bottom: 20px;
   &::-webkit-scrollbar { width: 6px; }
