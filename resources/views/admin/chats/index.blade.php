@@ -26,7 +26,7 @@
                 <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         {{ $post->user->getProfile() }}
-                        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small><br>
+                        <small class="section-date text-muted fst-italic" data-date="{{ dateFixed($post->created_at, original: true) }}">{{ dateFixed($post->created_at) }}</small><br>
                         <small class="fst-italic">{{ $post->user->getStatus() }}</small>
                     </div>
 

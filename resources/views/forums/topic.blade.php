@@ -154,7 +154,7 @@
                 <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         {{ $post->user->getProfile() }}
-                        <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
+                        <small class="section-date text-muted fst-italic" data-date="{{ dateFixed($post->created_at, original: true) }}">{{ dateFixed($post->created_at) }}</small>
                         @if ($topic->user->id === $post->user->id)
                             <span class="badge bg-info">{{ __('main.author') }}</span>
                         @endif

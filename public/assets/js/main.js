@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const target = document.querySelector(window.location.hash)
             if (target) {
                 const navbarHeight = getNavbarHeight()
-                window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - navbarHeight)
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'smooth' })
             }
         }, 100)
     }
@@ -196,12 +196,12 @@ window.postReply = function (el) {
     if (!editor) return false
 
     if (authorEl.matches('a')) {
-        editor.chain().focus().insertContent([
+        editor.chain().focus('end', { scrollIntoView: false }).insertContent([
             { type: 'mention', attrs: { id: author, label: author } },
             { type: 'text', text: ' ' },
         ]).run()
     } else {
-        editor.chain().focus().insertContent({ type: 'text', text: author + ', ' }).run()
+        editor.chain().focus('end', { scrollIntoView: false }).insertContent({ type: 'text', text: author + ', ' }).run()
     }
 
     return false
@@ -226,7 +226,7 @@ window.postQuote = function (el) {
 
     if (!message) {
         if (author) {
-            editor.chain().focus().insertContent([
+            editor.chain().focus('end', { scrollIntoView: false }).insertContent([
                 { type: 'mention', attrs: { id: author, label: author } },
                 { type: 'text', text: ' ' },
             ]).run()
@@ -244,14 +244,14 @@ window.postQuote = function (el) {
     ]
 
     if (editor.isEmpty) {
-        editor.chain().focus().setContent({ type: 'doc', content: quoteContent }).run()
+        editor.chain().focus('end', { scrollIntoView: false }).setContent({ type: 'doc', content: quoteContent }).run()
     } else {
         const doc = editor.state.doc
         const lastChild = doc.lastChild
         const insertPos = (lastChild && lastChild.type.name === 'paragraph' && lastChild.childCount === 0)
             ? doc.content.size - lastChild.nodeSize
             : doc.content.size
-        editor.chain().focus().insertContentAt(insertPos, quoteContent).run()
+        editor.chain().focus('end', { scrollIntoView: false }).insertContentAt(insertPos, quoteContent).run()
     }
 
     return false

@@ -25,7 +25,7 @@
                 <div class="section-user d-flex align-items-start">
                     <div class="flex-grow-1">
                         {{ $comment->user->getProfile() }}
-                        <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
+                        <small class="section-date text-muted fst-italic" data-date="{{ dateFixed($comment->created_at, original: true) }}">{{ dateFixed($comment->created_at) }}</small><br>
                         <small class="fst-italic">{{ $comment->user->getStatus() }}</small>
                     </div>
 
