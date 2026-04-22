@@ -152,6 +152,7 @@ return [
     'photo_not_exist'               => 'Цей фотографії не існує!',
     'photo_success_deleted'         => 'Фотографію успішно видалено!',
     'incorrect_login_or_password'   => 'Неправильний логін або пароль!',
+    'password_reset_required'       => 'Ваш пароль застарів і потребує скидання. Скористайтеся відновленням пароля.',
     'info_yourself_long'            => 'Занадто довга інформація про себе!',
     'name_short_or_long'            => 'Занадто коротке або довге ім’я!',
     'profile_success_changed'       => 'Ваш профіль успішно змінено!',

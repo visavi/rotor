@@ -152,6 +152,7 @@ return [
     'photo_not_exist'               => 'This photo does not exist!',
     'photo_success_deleted'         => 'Photo successfully deleted!',
     'incorrect_login_or_password'   => 'Incorrect login or password!',
+    'password_reset_required'       => 'Your password is outdated and needs to be reset. Please use the password recovery.',
     'info_yourself_long'            => 'Information about yourself is too long!',
     'name_short_or_long'            => 'Too short or long name!',
     'profile_success_changed'       => 'Your profile has been successfully changed!',

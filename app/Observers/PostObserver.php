@@ -6,6 +6,7 @@ namespace App\Observers;
 
 use App\Models\Feed;
 use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 
 class PostObserver
 {

@@ -56,6 +56,7 @@ class CheckerController extends AdminController
         $finder = new Finder();
         $files = $finder->in($dir)
             ->files()
+            ->ignoreUnreadableDirs()
             ->exclude(basename(storage_path()))
             ->notName($excludeFiles);
 
@@ -64,7 +65,11 @@ class CheckerController extends AdminController
         }
 
         foreach ($files as $file) {
-            $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i:s', true) . ' / ' . formatSize($file->getSize());
+            try {
+                $state[] = $file->getRelativePathname() . ' / ' . dateFixed($file->getMTime(), 'd.m.y H:i:s', true) . ' / ' . formatSize($file->getSize());
+            } catch (\RuntimeException) {
+                // пропускаем недоступные файлы (битые симлинки)
+            }
         }
 
         return $state;

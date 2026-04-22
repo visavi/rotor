@@ -238,7 +238,16 @@ class UserController extends Controller
                         'password' => $password,
                     ];
 
-                    if (Auth::attempt($credentials, $remember)) {
+                    try {
+                        $authorized = Auth::attempt($credentials, $remember);
+                    } catch (\RuntimeException) {
+                        setInput($request->all());
+                        setFlash('danger', __('users.password_reset_required'));
+
+                        return redirect('recovery');
+                    }
+
+                    if ($authorized) {
                         $request->session()->regenerate();
                         $user = Auth::user();
 
