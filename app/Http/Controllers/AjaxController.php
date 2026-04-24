@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
@@ -210,6 +211,7 @@ class AjaxController extends Controller
         ];
 
         $fileTypes = [
+            Comment::$morphName,
             Down::$morphName,
             Message::$morphName,
             News::$morphName,
@@ -250,8 +252,16 @@ class AjaxController extends Controller
             ->where('user_id', getUser('id'))
             ->count();
 
+        $duplicate = $file && File::query()
+            ->where('relate_type', $type)
+            ->where('relate_id', $id)
+            ->where('user_id', getUser('id'))
+            ->where('name', Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension()))
+            ->exists();
+
         $validator
-            ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]));
+            ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]))
+            ->false($duplicate, __('validator.file_duplicate'));
 
         if ($model->id) {
             $validator->true($model->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
@@ -315,6 +325,7 @@ class AjaxController extends Controller
     {
         $types = [
             Article::$morphName,
+            Comment::$morphName,
             Down::$morphName,
             Item::$morphName,
             News::$morphName,

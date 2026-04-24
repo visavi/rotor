@@ -39,8 +39,8 @@
 @section('content')
     <div class="mb-3">
         <div class="section-content">
-            @if ($news->getImages()->isNotEmpty())
-                @include('app/_image_viewer', ['model' => $news, 'files' => $news->getImages()])
+            @if ($news->getDetachedImages()->isNotEmpty())
+                @include('app/_image_viewer', ['model' => $news, 'files' => $news->getDetachedImages()])
             @endif
 
             <div class="section-message">

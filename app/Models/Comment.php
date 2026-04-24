@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Traits\SearchableTrait;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -31,6 +32,7 @@ use Illuminate\Support\HtmlString;
 class Comment extends Model
 {
     use SearchableTrait;
+    use UploadTrait;
 
     /**
      * Indicates if the model should be timestamped.
@@ -58,11 +60,49 @@ class Comment extends Model
     public static string $morphName = 'comments';
 
     /**
+     * Директория загрузки файлов
+     */
+    public string $uploadPath = '/uploads/comments';
+
+    /**
      * Возвращает поля участвующие в поиске
      */
     public function searchableFields(): array
     {
         return ['text'];
+    }
+
+    /**
+     * Возвращает загруженные файлы
+     */
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'relate')
+            ->orderBy('created_at');
+    }
+
+    /**
+     * Возвращает файлы
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files->filter(static fn (File $f) => ! $f->isImage());
+    }
+
+    /**
+     * Возвращает картинки
+     */
+    public function getImages(): Collection
+    {
+        return $this->files->filter(static fn (File $f) => $f->isImage());
+    }
+
+    /**
+     * Возвращает картинки, не вставленные в текст
+     */
+    public function getDetachedImages(): Collection
+    {
+        return $this->getImages()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
     }
 
     /**
@@ -101,9 +141,13 @@ class Comment extends Model
     /**
      * Get text
      */
-    public function getText(): HtmlString
+    public function getText(bool $withImages = true): HtmlString
     {
-        return renderHtml($this->text, 'comment-' . $this->id);
+        $text = $withImages
+            ? $this->text
+            : preg_replace('/<img[^>]*>/', '', $this->text);
+
+        return renderHtml($text, 'comment-' . $this->id);
     }
 
     /**
@@ -113,6 +157,10 @@ class Comment extends Model
     {
         return DB::transaction(function () {
             $this->polls()->delete();
+
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
 
             return parent::delete();
         });

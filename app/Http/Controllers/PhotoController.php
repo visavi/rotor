@@ -202,8 +202,17 @@ class PhotoController extends Controller
                 ->withFragment('comment_' . $cid);
         }
 
+        $user = getUser();
+
+        $files = $user
+            ? File::query()
+                ->where('relate_type', Comment::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+            : null;
+
         if ($request->isMethod('post')) {
-            $user = getUser();
             $msg = $request->input('msg');
 
             $validator
@@ -222,6 +231,8 @@ class PhotoController extends Controller
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
+
+                $files?->update(['relate_id' => $comment->id]);
 
                 $user->increment('allcomments');
                 $user->increment('point', setting('comment_point'));
@@ -255,7 +266,9 @@ class PhotoController extends Controller
             ->with('user')
             ->paginate(setting('comments_per_page'));
 
-        return view('photos/comments', compact('photo', 'comments'));
+        $files = $files?->get() ?? collect();
+
+        return view('photos/comments', compact('photo', 'comments', 'files'));
     }
 
     /**

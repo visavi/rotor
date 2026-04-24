@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Comment;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\Offer;
 use Illuminate\Database\Query\JoinClause;
@@ -187,11 +188,21 @@ class OfferController extends Controller
                 ->withFragment('comment_' . $cid);
         }
 
+        $user = getUser();
+
+        $files = $user
+            ? File::query()
+                ->where('relate_type', Comment::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+            : null;
+
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
             $validator
-                ->true(getUser(), __('main.not_authorized'))
+                ->true($user, __('main.not_authorized'))
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->empty($offer->closed, ['msg' => __('offers.offer_closed')]);
@@ -201,13 +212,14 @@ class OfferController extends Controller
 
                 $comment = $offer->comments()->create([
                     'text'       => $msg,
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $user->id,
                     'created_at' => SITETIME,
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
 
-                $user = getUser();
+                $files?->update(['relate_id' => $comment->id]);
+
                 $user->increment('allcomments');
                 $user->increment('point', setting('comment_point'));
                 $user->increment('money', setting('comment_money'));
@@ -239,7 +251,9 @@ class OfferController extends Controller
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));
 
-        return view('offers/comments', compact('offer', 'comments'));
+        $files = $files?->get() ?? collect();
+
+        return view('offers/comments', compact('offer', 'comments', 'files'));
     }
 
     /**

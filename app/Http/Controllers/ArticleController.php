@@ -319,8 +319,17 @@ class ArticleController extends Controller
                 ->withFragment('comment_' . $cid);
         }
 
+        $user = getUser();
+
+        $files = $user
+            ? File::query()
+                ->where('relate_type', Comment::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+            : null;
+
         if ($request->isMethod('post')) {
-            $user = getUser();
             $msg = $request->input('msg');
 
             $validator
@@ -336,6 +345,8 @@ class ArticleController extends Controller
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
+
+                $files?->update(['relate_id' => $comment->id]);
 
                 $user->increment('allcomments');
                 $user->increment('point', setting('comment_point'));
@@ -369,7 +380,9 @@ class ArticleController extends Controller
             ->orderBy('created_at')
             ->paginate(setting('comments_per_page'));
 
-        return view('blogs/comments', compact('article', 'comments'));
+        $files = $files?->get() ?? collect();
+
+        return view('blogs/comments', compact('article', 'comments', 'files'));
     }
 
     /**

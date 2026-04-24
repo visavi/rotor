@@ -326,24 +326,35 @@ class DownController extends Controller
                 ->withFragment('comment_' . $cid);
         }
 
+        $user = getUser();
+
+        $files = $user
+            ? File::query()
+                ->where('relate_type', Comment::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+            : null;
+
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
             $validator
-                ->true(getUser(), __('main.not_authorized'))
+                ->true($user, __('main.not_authorized'))
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
 
             if ($validator->isValid()) {
                 $comment = $down->comments()->create([
                     'text'       => antimat($msg),
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $user->id,
                     'created_at' => SITETIME,
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
 
-                $user = getUser();
+                $files?->update(['relate_id' => $comment->id]);
+
                 $user->increment('allcomments');
                 $user->increment('point', setting('comment_point'));
                 $user->increment('money', setting('comment_money'));
@@ -376,7 +387,9 @@ class DownController extends Controller
             ->with('user')
             ->paginate(setting('comments_per_page'));
 
-        return view('loads/comments', compact('down', 'comments'));
+        $files = $files?->get() ?? collect();
+
+        return view('loads/comments', compact('down', 'comments', 'files'));
     }
 
     /**

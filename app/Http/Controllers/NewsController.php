@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Comment;
+use App\Models\File;
 use App\Models\Flood;
 use App\Models\News;
 use Illuminate\Database\Query\JoinClause;
@@ -84,11 +85,21 @@ class NewsController extends Controller
                 ->withFragment('comment_' . $cid);
         }
 
+        $user = getUser();
+
+        $files = $user
+            ? File::query()
+                ->where('relate_type', Comment::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->orderBy('created_at')
+            : null;
+
         if ($request->isMethod('post')) {
             $msg = $request->input('msg');
 
             $validator
-                ->true(getUser(), __('main.not_authorized'))
+                ->true($user, __('main.not_authorized'))
                 ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
                 ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
                 ->empty($news->closed, ['msg' => __('news.closed_news')]);
@@ -98,13 +109,14 @@ class NewsController extends Controller
 
                 $comment = $news->comments()->create([
                     'text'       => $msg,
-                    'user_id'    => getUser('id'),
+                    'user_id'    => $user->id,
                     'created_at' => SITETIME,
                     'ip'         => getIp(),
                     'brow'       => getBrowser(),
                 ]);
 
-                $user = getUser();
+                $files?->update(['relate_id' => $comment->id]);
+
                 $user->increment('allcomments');
                 $user->increment('point', setting('comment_point'));
                 $user->increment('money', setting('comment_money'));
@@ -141,7 +153,9 @@ class NewsController extends Controller
             ->with('user')
             ->paginate(setting('comments_per_page'));
 
-        return view('news/comments', compact('news', 'comments'));
+        $files = $files?->get() ?? collect();
+
+        return view('news/comments', compact('news', 'comments', 'files'));
     }
 
     /**

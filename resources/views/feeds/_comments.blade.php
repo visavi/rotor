@@ -30,8 +30,12 @@
     </div>
 
     <div class="section-content short-view">
+        @if ($post->getImages()->isNotEmpty())
+            @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
+        @endif
+
         <div class="section-message">
-            {{ $post->getText() }}
+            {{ $post->getText(withImages: false) }}
         </div>
     </div>
 

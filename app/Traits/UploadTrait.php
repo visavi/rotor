@@ -21,8 +21,7 @@ trait UploadTrait
     {
         $mimeType = $file->getMimeType();
         $extension = strtolower($file->getClientOriginalExtension());
-        $basename = getBodyName($file->getClientOriginalName());
-        $basename = Str::substr($basename, 0, 50) . '.' . $extension;
+        $basename = Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . $extension;
         $filename = uniqueName($extension);
         $path = $this->uploadPath . '/' . $filename;
         $fullPath = public_path($path);

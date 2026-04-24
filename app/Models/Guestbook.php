@@ -120,9 +120,7 @@ class Guestbook extends Model
      */
     public function getFiles(): Collection
     {
-        return $this->files->filter(static function (File $value, $key) {
-            return ! $value->isImage();
-        });
+        return $this->files->filter(static fn (File $f) => ! $f->isImage());
     }
 
     /**
@@ -130,17 +128,27 @@ class Guestbook extends Model
      */
     public function getImages(): Collection
     {
-        return $this->files->filter(static function (File $value, $key) {
-            return $value->isImage();
-        });
+        return $this->files->filter(static fn (File $f) => $f->isImage());
+    }
+
+    /**
+     * Возвращает картинки, не вставленные в текст
+     */
+    public function getDetachedImages(): Collection
+    {
+        return $this->getImages()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
     }
 
     /**
      * Get text
      */
-    public function getText(): HtmlString
+    public function getText(bool $withImages = true): HtmlString
     {
-        return renderHtml($this->text, 'guestbook-' . $this->id);
+        $text = $withImages
+            ? $this->text
+            : preg_replace('/<img[^>]*>/', '', $this->text);
+
+        return renderHtml($text, 'guestbook-' . $this->id);
     }
 
     /**

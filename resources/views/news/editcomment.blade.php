@@ -23,10 +23,12 @@
             @csrf
             <div class="mb-3{{ hasError('msg') }}">
                 <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                <textarea class="form-control tiptap" id="msg" rows="5" maxlength="{{ setting('comment_text_max') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg', $comment->text) }}</textarea>
+                <textarea class="form-control tiptap" id="msg" rows="5" maxlength="{{ setting('comment_text_max') }}" name="msg" data-relate-type="{{ $comment->getMorphClass() }}" data-relate-id="{{ $comment->id }}" placeholder="{{ __('main.message') }}" required>{{ getInput('msg', $comment->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>
+
+            @include('app/_upload_file', ['model' => $comment])
 
             <button class="btn btn-primary">{{ __('main.edit') }}</button>
         </form>

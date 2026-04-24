@@ -1,5 +1,5 @@
-@if ($model->getImages()->isNotEmpty())
-    @include('app/_image_viewer', ['model' => $model, 'files' => $model->getImages()])
+@if ($model->getDetachedImages()->isNotEmpty())
+    @include('app/_image_viewer', ['model' => $model, 'files' => $model->getDetachedImages()])
 @endif
 
 @if ($model->getFiles()->isNotEmpty())
