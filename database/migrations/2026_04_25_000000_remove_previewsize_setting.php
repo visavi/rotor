@@ -1,17 +1,20 @@
 <?php
 
+use App\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
-        DB::table('settings')->where('name', 'previewsize')->delete();
+        Setting::query()->where('name', 'previewsize')->delete();
+
+        clearCache('settings');
     }
 
     public function down(): void
     {
-        DB::table('settings')->insert(['name' => 'previewsize', 'value' => 500]);
+        Setting::query()->where('name', 'previewsize')->updateOrCreate([], ['name' => 'previewsize', 'value' => 500]);
+
+        clearCache('settings');
     }
 };
