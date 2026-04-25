@@ -75,7 +75,6 @@ return [
 
     'caches' => [
         'files'           => 'Files',
-        'images'          => 'Images',
         'views'           => 'Views',
         'clear'           => 'Clear cache',
         'empty_files'     => 'No files yet!',

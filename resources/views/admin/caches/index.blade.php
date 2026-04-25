@@ -18,9 +18,6 @@
         <?php $active = ($type === 'files') ? 'primary' : 'adaptive'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/admin/caches?type=files">{{ __('admin.caches.files') }}</a>
 
-        <?php $active = ($type === 'images') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/caches?type=images">{{ __('admin.caches.images') }}</a>
-
         <?php $active = ($type === 'views') ? 'primary' : 'adaptive'; ?>
         <a class="btn btn-{{ $active }} btn-sm" href="/admin/caches?type=views">{{ __('admin.caches.views') }}</a>
     </div>

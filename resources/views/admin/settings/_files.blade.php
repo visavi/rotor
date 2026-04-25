@@ -37,12 +37,6 @@
         <div class="invalid-feedback">{{ textError('sets[screensize]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[previewsize]') }}">
-        <label for="previewsize" class="form-label">{{ __('settings.images_preview_size') }} (px):</label>
-        <input type="number" class="form-control" id="previewsize" name="sets[previewsize]" maxlength="3" value="{{ old('sets.previewsize', $settings['previewsize']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[previewsize]') }}</div>
-    </div>
-
     <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[copyfoto]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[copyfoto]" id="copyfoto"{{ old('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
@@ -51,9 +45,6 @@
 
     <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ config('app.url') }}/assets/img/images/watermark.png"><br>
 
-    <p class="text-muted fst-italic">
-        {{ __('settings.images_hint') }}
-    </p>
 
     <div class="mb-3{{ hasError('sets[archive_file_path]') }}">
         <label for="archive_file_path" class="form-label">{{ __('settings.archive_file_path') }}:</label>

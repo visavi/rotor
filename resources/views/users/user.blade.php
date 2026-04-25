@@ -122,7 +122,7 @@
             <div class="col-md-6">
                 @if (!empty($user->picture) && file_exists(public_path($user->picture)))
                     <a href="{{ $user->picture }}" data-fancybox="gallery">
-                        {{ resizeImage($user->picture, ['alt' => $user->getName(), 'class' => 'float-end img-fluid rounded']) }}</a>
+                        <img src="{{ $user->picture }}" alt="{{ $user->getName() }}" class="float-end img-fluid rounded"></a>
                 @else
                     <img src="/assets/img/images/photo.svg" alt="Photo" class="float-end img-fluid rounded">
                 @endif

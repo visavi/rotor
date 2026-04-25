@@ -919,69 +919,6 @@ function formatShortNum(int $num): int|string
     return $num;
 }
 
-/**
- * Обрабатывает и уменьшает изображение
- */
-function resizeProcess(?string $path, array $params = []): array
-{
-    if (empty($params['alt'])) {
-        $params['alt'] = basename($path);
-    }
-
-    if (empty($params['class'])) {
-        $params['class'] = 'img-fluid';
-    }
-
-    if (! file_exists(public_path($path)) || ! is_file(public_path($path))) {
-        return [
-            'path'   => '/assets/img/images/photo.svg',
-            'source' => false,
-            'params' => $params,
-        ];
-    }
-
-    [$width, $height] = getimagesize(public_path($path));
-
-    if ($width <= setting('previewsize') && $height <= setting('previewsize')) {
-        return [
-            'path'   => $path,
-            'source' => $path,
-            'params' => $params,
-        ];
-    }
-
-    $thumb = ltrim(str_replace('/', '_', $path), '_');
-
-    if (! file_exists(public_path('uploads/thumbnails/' . $thumb))) {
-        $imageManager = app(ImageManager::class);
-        $image = $imageManager->decode(public_path($path));
-        $image->scaleDown(setting('previewsize'), setting('previewsize'));
-        $image->save(public_path('uploads/thumbnails/' . $thumb));
-    }
-
-    return [
-        'path'   => '/uploads/thumbnails/' . $thumb,
-        'source' => $path,
-        'params' => $params,
-    ];
-}
-
-/**
- * Возвращает уменьшенное изображение
- */
-function resizeImage(?string $path, array $params = []): HtmlString
-{
-    $image = resizeProcess($path, $params);
-
-    $strParams = [];
-    foreach ($image['params'] as $key => $param) {
-        $strParams[] = $key . '="' . check($param) . '"';
-    }
-
-    $strParams = implode(' ', $strParams);
-
-    return new HtmlString('<img src="' . $image['path'] . '" data-source="' . $image['source'] . '" ' . $strParams . '>');
-}
 
 /**
  * Удаляет директорию рекурсивно
@@ -1005,15 +942,6 @@ function deleteFile(string $path): bool
 {
     if (file_exists($path) && is_file($path)) {
         unlink($path);
-    }
-
-    if (in_array(getExtension($path), explode(',', setting('image_extensions')), true)) {
-        $thumb = ltrim(str_replace([public_path(), '/'], ['', '_'], $path), '_');
-        $thumb = public_path('uploads/thumbnails/' . $thumb);
-
-        if (file_exists($thumb) && is_file($thumb)) {
-            unlink($thumb);
-        }
     }
 
     return true;

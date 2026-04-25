@@ -6,7 +6,7 @@ $files ??= $model->files;
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-file">
-                <span>{{ resizeImage($file->path, ['class' => 'thumbnail']) }}</span>
+                <span><img src="{{ $file->path }}" class="thumbnail" alt=""></span>
                 <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
             </span>
         @endforeach

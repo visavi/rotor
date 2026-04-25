@@ -19,9 +19,8 @@ class CacheController extends AdminController
         $type = $request->input('type', 'files');
 
         $files = match ($type) {
-            'images' => glob(public_path('uploads/thumbnails/*.{gif,png,jpg,jpeg,webp}'), GLOB_BRACE),
-            'views'  => glob(storage_path('framework/views/*.php'), GLOB_BRACE),
-            default  => glob(storage_path('framework/cache/data/*/*/*')),
+            'views' => glob(storage_path('framework/views/*.php'), GLOB_BRACE),
+            default => glob(storage_path('framework/cache/data/*/*/*')),
         };
 
         $files = paginate($files, 20, compact('type'));
@@ -36,17 +35,12 @@ class CacheController extends AdminController
     {
         $type = $request->input('type');
 
-        switch ($type) {
-            case 'images':
-                Artisan::call('image:clear');
-                break;
-            case 'views':
-                Artisan::call('view:clear');
-                break;
-            default:
-                Artisan::call('cache:clear');
-                Artisan::call('route:clear');
-                Artisan::call('config:clear');
+        if ($type === 'views') {
+            Artisan::call('view:clear');
+        } else {
+            Artisan::call('cache:clear');
+            Artisan::call('route:clear');
+            Artisan::call('config:clear');
         }
 
         setFlash('success', __('admin.caches.success_cleared'));

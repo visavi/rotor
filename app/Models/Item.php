@@ -143,7 +143,7 @@ class Item extends Model
 
         $path = $image->path ?? null;
 
-        return resizeImage($path, ['alt' => $this->title, 'class' => 'img-fluid']);
+        return $path ? new HtmlString('<img src="' . e($path) . '" alt="' . e($this->title) . '" class="img-fluid">') : null;
     }
 
     /**

@@ -282,12 +282,11 @@ class AjaxController extends Controller
         if ($validator->isValid()) {
             $fileData = $model->uploadFile($file);
             if ($isImageType) {
-                $imageData = resizeProcess($fileData['path'], ['size' => 100]);
                 $data = [
                     'success' => true,
                     'id'      => $fileData['id'],
-                    'path'    => $imageData['path'],
-                    'source'  => $imageData['source'],
+                    'path'    => $fileData['path'],
+                    'source'  => $fileData['path'],
                     'type'    => $fileData['type'],
                 ];
             } else {

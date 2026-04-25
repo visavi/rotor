@@ -76,9 +76,7 @@ return [
     'guestbook_money'        => 'Сумма начисляемых денег',
 
     'images_reduction_size'  => 'Уменьшение фото при загрузке',
-    'images_preview_size'    => 'Размер превью',
     'images_copyright'       => 'Наложение копирайта',
-    'images_hint'            => 'При изменении размера превью, необходимо очистить кеш изображений',
     'archive_file_path'      => 'Путь к файлу добавляемого в архив',
     'archive_file_path_hint' => 'Файл должен находиться в директории public (Пример: /test.txt)',
 

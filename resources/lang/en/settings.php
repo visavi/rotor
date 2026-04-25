@@ -76,9 +76,7 @@ return [
     'guestbook_money'        => 'Total moneys awarded',
 
     'images_reduction_size'  => 'Reducing photos when uploading',
-    'images_preview_size'    => 'Size preview',
     'images_copyright'       => 'Copyright overlay',
-    'images_hint'            => 'When resizing previews, you need to clear the image cache',
     'archive_file_path'      => 'The path to the file to add to the archive',
     'archive_file_path_hint' => 'The file must be in the public directory (Example: /test.txt)',
 

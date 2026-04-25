@@ -11,10 +11,9 @@
         <div class="carousel-inner">
             @foreach ($files as $file)
                 <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                    @php
-                        $image = resizeImage($file->path, ['alt' => $model->title]);
-                    @endphp
-                    <a href="{{ $file->path }}" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}">{{ $image }}</a>
+                    <a href="{{ $file->path }}" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}">
+                        <img src="{{ $file->path }}" alt="{{ $model->title }}" class="img-fluid">
+                    </a>
                 </div>
             @endforeach
         </div>

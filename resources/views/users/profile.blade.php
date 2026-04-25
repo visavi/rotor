@@ -75,7 +75,7 @@
                         <div class="float-end">
                             @if ($user->picture && file_exists(public_path($user->picture)))
                                 <a href="{{ getUser('picture') }}" data-fancybox="gallery">
-                                    {{ resizeImage(getUser('picture'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) }}
+                                    <img src="{{ getUser('picture') }}" alt="{{ $user->login }}" class="img-fluid rounded">
                                 </a><br>
                                 <a href="/pictures">{{ __('main.change') }}</a> /
                                 <button class="btn btn-link p-0" form="delete-picture-form">{{ __('main.delete') }}</button>
