@@ -25,6 +25,6 @@
     </div>
 
     <div class="section-form mb-3 shadow">
-        @include('loads/_form')
+        @include('downs/_form')
     </div>
 @stop

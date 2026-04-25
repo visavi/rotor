@@ -33,7 +33,7 @@ class ArticleController extends AdminController
             ->where('draft', false)
             ->count();
 
-        return view('admin/blogs/index', compact('categories', 'new'));
+        return view('admin/articles/index', compact('categories', 'new'));
     }
 
     /**
@@ -112,7 +112,7 @@ class ArticleController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('admin/blogs/edit', compact('categories', 'category'));
+        return view('admin/articles/edit', compact('categories', 'category'));
     }
 
     /**
@@ -182,7 +182,7 @@ class ArticleController extends AdminController
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('admin/blogs/blog', compact('articles', 'category'));
+        return view('admin/articles/blog', compact('articles', 'category'));
     }
 
     /**
@@ -262,7 +262,7 @@ class ArticleController extends AdminController
 
         $categories = $article->category->getChildren();
 
-        return view('admin/blogs/edit_article', compact('article', 'categories'));
+        return view('admin/articles/edit_article', compact('article', 'categories'));
     }
 
     /**
@@ -333,6 +333,6 @@ class ArticleController extends AdminController
             ->with('user', 'category')
             ->paginate(setting('blogpost'));
 
-        return view('admin/blogs/new', compact('articles'));
+        return view('admin/articles/new', compact('articles'));
     }
 }

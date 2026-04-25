@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Photo;
+use App\Traits\CommentableTrait;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,13 @@ use Illuminate\View\View;
 
 class PhotoController extends Controller
 {
+    use CommentableTrait;
+
+    protected function commentableModel(): string
+    {
+        return Photo::class;
+    }
+
     /**
      * Главная страница
      */
@@ -178,153 +186,6 @@ class PhotoController extends Controller
         $checked = $photo->closed ? ' checked' : '';
 
         return view('photos/edit', compact('photo', 'checked', 'page'));
-    }
-
-    /**
-     * Список комментариев
-     */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
-    {
-        $photo = Photo::query()->find($id);
-
-        if (! $photo) {
-            abort(404, __('photos.photo_not_exist'));
-        }
-
-        $cid = int($request->input('cid'));
-        if ($cid) {
-            $total = $photo->comments->where('id', '<=', $cid)->count();
-
-            $page = ceil($total / setting('comments_per_page'));
-            $page = $page > 1 ? $page : null;
-
-            return redirect()->route('photos.comments', ['id' => $photo->id, 'page' => $page])
-                ->withFragment('comment_' . $cid);
-        }
-
-        $user = getUser();
-
-        $files = $user
-            ? File::query()
-                ->where('relate_type', Comment::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
-                ->orderBy('created_at')
-            : null;
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator
-                ->true($user, __('main.not_authorized'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
-                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($photo->closed, ['msg' => __('main.closed_comments')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment = $photo->comments()->create([
-                    'text'       => $msg,
-                    'user_id'    => $user->id,
-                    'created_at' => SITETIME,
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
-                ]);
-
-                $files?->update(['relate_id' => $comment->id]);
-
-                $user->increment('allcomments');
-                $user->increment('point', setting('comment_point'));
-                $user->increment('money', setting('comment_money'));
-
-                $photo->increment('count_comments');
-
-                $flood->saveState();
-                sendNotify($msg, route('photos.comments', ['id' => $photo->id, 'cid' => $comment->id], false), $photo->title);
-
-                setFlash('success', __('main.comment_added_success'));
-
-                return redirect()->route('photos.comments', [
-                    'id'   => $photo->id,
-                    'page' => ceil($photo->comments->count() / setting('comments_per_page')),
-                ]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        $comments = $photo->comments()
-            ->select('comments.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('comments.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Comment::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
-            ->orderBy('created_at')
-            ->with('user')
-            ->paginate(setting('comments_per_page'));
-
-        $files = $files?->get() ?? collect();
-
-        return view('photos/comments', compact('photo', 'comments', 'files'));
-    }
-
-    /**
-     * Редактирование комментария
-     */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
-    {
-        $page = int($request->input('page', 1));
-
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $photo = Photo::query()->find($id);
-
-        if (! $photo) {
-            abort(404, __('photos.photo_not_exist'));
-        }
-
-        $comment = $photo->comments()
-            ->where('id', $cid)
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (! $comment) {
-            abort(200, __('main.comment_deleted'));
-        }
-
-        if ($comment->created_at + 600 < SITETIME) {
-            abort(200, __('main.editing_impossible'));
-        }
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
-                ->empty($photo->closed, __('main.closed_comments'));
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment->update([
-                    'text' => $msg,
-                ]);
-
-                setFlash('success', __('main.comment_edited_success'));
-
-                return redirect()->route('photos.comments', ['id' => $photo->id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return view('photos/editcomment', compact('photo', 'comment', 'page'));
     }
 
     /**

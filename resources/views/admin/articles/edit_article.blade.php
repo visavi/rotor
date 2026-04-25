@@ -61,6 +61,6 @@
     <hr>
 
     <div class="section-form mb-3 shadow">
-        @include('blogs/_form')
+        @include('articles/_form')
     </div>
 @stop

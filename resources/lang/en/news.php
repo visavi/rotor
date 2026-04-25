@@ -4,7 +4,6 @@ return [
     'empty_news'      => 'No news yet!',
     'confirm_delete'  => 'Do you really want to delete this news?',
     'all_comments'    => 'All comments',
-    'closed_news'     => 'Commenting on this news is closed!',
     'comments_title'  => 'Comments',
     'edit_title'      => 'Editing comment',
     'rss_title'       => 'RSS news',

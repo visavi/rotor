@@ -29,7 +29,7 @@ class NewController extends Controller
             ->paginate(setting('downlist'))
             ->appends(compact('sort', 'order'));
 
-        return view('loads/new_files', compact('downs', 'sorting'));
+        return view('downs/new_files', compact('downs', 'sorting'));
     }
 
     /**
@@ -45,6 +45,6 @@ class NewController extends Controller
             ->with('user')
             ->paginate(setting('comments_per_page'));
 
-        return view('loads/new_comments', compact('comments'));
+        return view('downs/new_comments', compact('comments'));
     }
 }

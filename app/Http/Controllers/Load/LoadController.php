@@ -27,7 +27,7 @@ class LoadController extends Controller
             abort(200, __('loads.empty_loads'));
         }
 
-        return view('loads/index', compact('categories'));
+        return view('downs/index', compact('categories'));
     }
 
     /**
@@ -54,7 +54,7 @@ class LoadController extends Controller
             ->paginate(setting('downlist'))
             ->appends(compact('sort', 'order'));
 
-        return view('loads/load', compact('category', 'downs', 'sorting'));
+        return view('downs/load', compact('category', 'downs', 'sorting'));
     }
 
     /**
@@ -71,6 +71,6 @@ class LoadController extends Controller
             abort(200, __('loads.downs_not_found'));
         }
 
-        return view('loads/rss', compact('downs'));
+        return view('downs/rss', compact('downs'));
     }
 }

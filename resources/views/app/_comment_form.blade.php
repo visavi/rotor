@@ -26,5 +26,5 @@
         {{ showError(__('main.not_authorized')) }}
     @endif
 @else
-    {{ showError($closedMessage ?? __('main.closed_comments')) }}
+    {{ showError(__('main.closed_comments')) }}
 @endif

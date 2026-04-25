@@ -6,13 +6,13 @@ namespace App\Http\Controllers\Load;
 
 use App\Classes\Validator;
 use App\Http\Controllers\Controller;
-use App\Models\Comment;
 use App\Models\Down;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Load;
 use App\Models\Reader;
 use App\Models\User;
+use App\Traits\CommentableTrait;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,6 +22,13 @@ use ZipArchive;
 
 class DownController extends Controller
 {
+    use CommentableTrait;
+
+    protected function commentableModel(): string
+    {
+        return Down::class;
+    }
+
     /**
      * Просмотр загрузки
      */
@@ -48,7 +55,7 @@ class DownController extends Controller
 
         $allowDownload = getUser() || setting('down_guest_download');
 
-        return view('loads/down', compact('down', 'allowDownload'));
+        return view('downs/down', compact('down', 'allowDownload'));
     }
 
     /**
@@ -150,7 +157,7 @@ class DownController extends Controller
         $down = new Down();
         $files = $files->get();
 
-        return view('loads/create', compact('categories', 'down', 'cid', 'files'));
+        return view('downs/create', compact('categories', 'down', 'cid', 'files'));
     }
 
     /**
@@ -233,7 +240,7 @@ class DownController extends Controller
 
         $categories = $down->category->getChildren();
 
-        return view('loads/edit', compact('categories', 'down', 'cid', 'files'));
+        return view('downs/edit', compact('categories', 'down', 'cid', 'files'));
     }
 
     /**
@@ -298,153 +305,6 @@ class DownController extends Controller
         setFlash('danger', $validator->getErrors());
 
         return redirect()->route('downs.view', ['id' => $down->id]);
-    }
-
-    /**
-     * Комментарии
-     */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
-    {
-        $down = Down::query()->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        if (! $down->active) {
-            abort(200, __('loads.down_not_verified'));
-        }
-
-        $cid = int($request->input('cid'));
-        if ($cid) {
-            $total = $down->comments->where('id', '<=', $cid)->count();
-
-            $page = ceil($total / setting('comments_per_page'));
-            $page = $page > 1 ? $page : null;
-
-            return redirect()->route('downs.comments', ['id' => $down->id, 'page' => $page])
-                ->withFragment('comment_' . $cid);
-        }
-
-        $user = getUser();
-
-        $files = $user
-            ? File::query()
-                ->where('relate_type', Comment::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
-                ->orderBy('created_at')
-            : null;
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator
-                ->true($user, __('main.not_authorized'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
-                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
-
-            if ($validator->isValid()) {
-                $comment = $down->comments()->create([
-                    'text'       => antimat($msg),
-                    'user_id'    => $user->id,
-                    'created_at' => SITETIME,
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
-                ]);
-
-                $files?->update(['relate_id' => $comment->id]);
-
-                $user->increment('allcomments');
-                $user->increment('point', setting('comment_point'));
-                $user->increment('money', setting('comment_money'));
-
-                $down->increment('count_comments');
-
-                $flood->saveState();
-                sendNotify($msg, route('downs.comments', ['id' => $down->id, 'cid' => $comment->id], false), $down->title);
-
-                setFlash('success', __('main.comment_added_success'));
-
-                $page = ceil($down->count_comments / setting('comments_per_page'));
-                $page = $page > 1 ? $page : null;
-
-                return redirect()->route('downs.comments', ['id' => $down->id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        $comments = $down->comments()
-            ->select('comments.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('comments.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Comment::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
-            ->orderBy('created_at')
-            ->with('user')
-            ->paginate(setting('comments_per_page'));
-
-        $files = $files?->get() ?? collect();
-
-        return view('loads/comments', compact('down', 'comments', 'files'));
-    }
-
-    /**
-     * Подготовка к редактированию комментария
-     */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
-    {
-        $down = Down::query()->find($id);
-
-        if (! $down) {
-            abort(404, __('loads.down_not_exist'));
-        }
-
-        $page = int($request->input('page', 1));
-
-        if (! getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $comment = $down->comments()
-            ->where('id', $cid)
-            ->where('user_id', getUser('id'))
-            ->first();
-
-        if (! $comment) {
-            abort(200, __('main.comment_deleted'));
-        }
-
-        if ($comment->created_at + 600 < SITETIME) {
-            abort(200, __('main.editing_impossible'));
-        }
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-            $page = int($request->input('page', 1));
-
-            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment->update([
-                    'text' => $msg,
-                ]);
-
-                setFlash('success', __('main.comment_edited_success'));
-
-                return redirect()->route('downs.comments', ['id' => $id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return view('loads/editcomment', compact('down', 'comment', 'page'));
     }
 
     /**
@@ -546,7 +406,7 @@ class DownController extends Controller
 
         $documents = paginate($documents, setting('ziplist'));
 
-        return view('loads/zip', compact('down', 'file', 'documents'));
+        return view('downs/zip', compact('down', 'file', 'documents'));
     }
 
     /**
@@ -607,7 +467,7 @@ class DownController extends Controller
             $content = mb_convert_encoding($content, 'utf-8', 'windows-1251');
         }
 
-        return view('loads/zip_view', compact('down', 'file', 'document', 'content'));
+        return view('downs/zip_view', compact('down', 'file', 'document', 'content'));
     }
 
     /**
@@ -621,6 +481,6 @@ class DownController extends Controller
             abort(404, __('loads.down_not_exist'));
         }
 
-        return view('loads/rss_comments', compact('down'));
+        return view('downs/rss_comments', compact('down'));
     }
 }

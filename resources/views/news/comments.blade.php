@@ -25,8 +25,7 @@
     {{ $comments->links() }}
 
     @include('app/_comment_form', [
-        'action'        => route('news.comments', ['id' => $news->id]),
-        'closed'        => $news->closed,
-        'closedMessage' => __('news.closed_news'),
+        'action'  => route('news.comments', ['id' => $news->id]),
+        'closed'  => $news->closed,
     ])
 @stop

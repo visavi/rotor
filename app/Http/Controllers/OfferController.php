@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Validator;
-use App\Models\Comment;
-use App\Models\File;
 use App\Models\Flood;
 use App\Models\Offer;
+use App\Traits\CommentableTrait;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,6 +15,13 @@ use Illuminate\View\View;
 
 class OfferController extends Controller
 {
+    use CommentableTrait;
+
+    protected function commentableModel(): string
+    {
+        return Offer::class;
+    }
+
     /**
      * Главная страница
      */
@@ -164,150 +170,5 @@ class OfferController extends Controller
         }
 
         return view('offers/edit', compact('offer'));
-    }
-
-    /**
-     * Комментарии
-     */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
-    {
-        $offer = Offer::query()->find($id);
-
-        if (! $offer) {
-            abort(404, __('main.record_not_found'));
-        }
-
-        $cid = int($request->input('cid'));
-        if ($cid) {
-            $total = $offer->comments->where('id', '<=', $cid)->count();
-
-            $page = ceil($total / setting('comments_per_page'));
-            $page = $page > 1 ? $page : null;
-
-            return redirect()->route('offers.comments', ['id' => $offer->id, 'page' => $page])
-                ->withFragment('comment_' . $cid);
-        }
-
-        $user = getUser();
-
-        $files = $user
-            ? File::query()
-                ->where('relate_type', Comment::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
-                ->orderBy('created_at')
-            : null;
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator
-                ->true($user, __('main.not_authorized'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
-                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->empty($offer->closed, ['msg' => __('offers.offer_closed')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment = $offer->comments()->create([
-                    'text'       => $msg,
-                    'user_id'    => $user->id,
-                    'created_at' => SITETIME,
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
-                ]);
-
-                $files?->update(['relate_id' => $comment->id]);
-
-                $user->increment('allcomments');
-                $user->increment('point', setting('comment_point'));
-                $user->increment('money', setting('comment_money'));
-
-                $offer->increment('count_comments');
-
-                $flood->saveState();
-                sendNotify($msg, route('offers.comments', ['id' => $offer->id, 'cid' => $comment->id], false), $offer->title);
-
-                setFlash('success', __('main.comment_added_success'));
-
-                $page = ceil($offer->count_comments / setting('comments_per_page'));
-                $page = $page > 1 ? $page : null;
-
-                return redirect()->route('offers.comments', ['id' => $offer->id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        $comments = $offer->comments()
-            ->select('comments.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('comments.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Comment::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
-            ->orderBy('created_at')
-            ->paginate(setting('comments_per_page'));
-
-        $files = $files?->get() ?? collect();
-
-        return view('offers/comments', compact('offer', 'comments', 'files'));
-    }
-
-    /**
-     * Подготовка к редактированию комментария
-     */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
-    {
-        $page = int($request->input('page', 1));
-
-        $offer = Offer::query()->find($id);
-
-        if (! $offer) {
-            abort(404, __('main.record_not_found'));
-        }
-
-        if (! getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $comment = $offer->comments()
-            ->where('id', $cid)
-            ->where('user_id', getUser('id'))
-            ->first();
-
-        if (! $comment) {
-            abort(200, __('main.comment_deleted'));
-        }
-
-        if ($comment->created_at + 600 < SITETIME) {
-            abort(200, __('main.editing_impossible'));
-        }
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-            $page = int($request->input('page', 1));
-
-            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment->update([
-                    'text' => $msg,
-                ]);
-
-                setFlash('success', __('main.comment_edited_success'));
-
-                return redirect()->route('offers.comments', ['id' => $offer->id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return view('offers/editcomment', compact('offer', 'comment', 'page'));
     }
 }

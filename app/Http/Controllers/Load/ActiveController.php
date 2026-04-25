@@ -65,7 +65,7 @@ class ActiveController extends Controller
             ->where('user_id', $user->id)
             ->count();
 
-        return view('loads/active_files', compact('downs', 'user', 'active', 'activeCount', 'pendingCount'));
+        return view('downs/active_files', compact('downs', 'user', 'active', 'activeCount', 'pendingCount'));
     }
 
     /**
@@ -85,6 +85,6 @@ class ActiveController extends Controller
             ->paginate(setting('comments_per_page'))
             ->appends(['user' => $user->login]);
 
-        return view('loads/active_comments', compact('comments', 'user'));
+        return view('downs/active_comments', compact('comments', 'user'));
     }
 }

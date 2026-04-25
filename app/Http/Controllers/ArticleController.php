@@ -12,7 +12,7 @@ use App\Models\File;
 use App\Models\Flood;
 use App\Models\Reader;
 use App\Models\Tag;
-use Illuminate\Database\Query\JoinClause;
+use App\Traits\CommentableTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,6 +23,13 @@ use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
+    use CommentableTrait;
+
+    protected function commentableModel(): string
+    {
+        return Article::class;
+    }
+
     /**
      * Главная страница
      */
@@ -38,7 +45,7 @@ class ArticleController extends Controller
             abort(200, __('blogs.categories_not_created'));
         }
 
-        return view('blogs/index', compact('categories'));
+        return view('articles/index', compact('categories'));
     }
 
     /**
@@ -65,7 +72,7 @@ class ArticleController extends Controller
             ->paginate(setting('blogpost'))
             ->appends(compact('sort', 'order'));
 
-        return view('blogs/blog', compact('articles', 'category', 'sorting'));
+        return view('articles/blog', compact('articles', 'category', 'sorting'));
     }
 
     /**
@@ -86,7 +93,7 @@ class ArticleController extends Controller
 
         Reader::countingStat($article);
 
-        return view('blogs/view', compact('article'));
+        return view('articles/view', compact('article'));
     }
 
     /**
@@ -187,7 +194,7 @@ class ArticleController extends Controller
         $article = new Article();
         $files = $files->get();
 
-        return view('blogs/create', compact('article', 'categories', 'cid', 'files'));
+        return view('articles/create', compact('article', 'categories', 'cid', 'files'));
     }
 
     /**
@@ -277,7 +284,7 @@ class ArticleController extends Controller
 
         $categories = $article->category->getChildren();
 
-        return view('blogs/edit', compact('article', 'categories'));
+        return view('articles/edit', compact('article', 'categories'));
     }
 
     /**
@@ -294,150 +301,7 @@ class ArticleController extends Controller
             ->orderByDesc('cnt')
             ->paginate(setting('bloggroup'));
 
-        return view('blogs/authors', compact('articles'));
-    }
-
-    /**
-     * Комментарии
-     */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
-    {
-        $article = Article::query()->find($id);
-
-        if (! $article) {
-            abort(404, __('blogs.article_not_exist'));
-        }
-
-        $cid = int($request->input('cid'));
-        if ($cid) {
-            $total = $article->comments->where('id', '<=', $cid)->count();
-
-            $page = ceil($total / setting('comments_per_page'));
-            $page = $page > 1 ? $page : null;
-
-            return redirect()->route('articles.comments', ['id' => $article->id, 'page' => $page])
-                ->withFragment('comment_' . $cid);
-        }
-
-        $user = getUser();
-
-        $files = $user
-            ? File::query()
-                ->where('relate_type', Comment::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
-                ->orderBy('created_at')
-            : null;
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator
-                ->true($user, __('main.not_authorized'))
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
-                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])]);
-
-            if ($validator->isValid()) {
-                $comment = $article->comments()->create([
-                    'text'       => antimat($msg),
-                    'user_id'    => $user->id,
-                    'created_at' => SITETIME,
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
-                ]);
-
-                $files?->update(['relate_id' => $comment->id]);
-
-                $user->increment('allcomments');
-                $user->increment('point', setting('comment_point'));
-                $user->increment('money', setting('comment_money'));
-
-                $article->increment('count_comments');
-
-                $flood->saveState();
-                sendNotify($msg, route('articles.comments', ['id' => $article->id, 'cid' => $comment->id], false), $article->title);
-
-                setFlash('success', __('main.comment_added_success'));
-
-                return redirect()->route('articles.comments', [
-                    'id'   => $article->id,
-                    'page' => ceil($article->comments->count() / setting('comments_per_page')),
-                ]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        $comments = $article->comments()
-            ->select('comments.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('comments.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Comment::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
-            ->with('user')
-            ->orderBy('created_at')
-            ->paginate(setting('comments_per_page'));
-
-        $files = $files?->get() ?? collect();
-
-        return view('blogs/comments', compact('article', 'comments', 'files'));
-    }
-
-    /**
-     * Подготовка к редактированию комментария
-     */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
-    {
-        $page = int($request->input('page', 1));
-
-        $article = Article::query()->find($id);
-
-        if (! $article) {
-            abort(404, __('blogs.article_not_exist'));
-        }
-
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $comment = $article->comments()
-            ->where('id', $cid)
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (! $comment) {
-            abort(200, __('main.comment_deleted'));
-        }
-
-        if ($comment->created_at + 600 < SITETIME) {
-            abort(200, __('main.editing_impossible'));
-        }
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-            $page = int($request->input('page', 1));
-
-            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment->update([
-                    'text' => $msg,
-                ]);
-
-                setFlash('success', __('main.comment_edited_success'));
-
-                return redirect()->route('articles.comments', ['id' => $article->id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return view('blogs/editcomment', compact('article', 'comment', 'page'));
+        return view('articles/authors', compact('articles'));
     }
 
     /**
@@ -451,7 +315,7 @@ class ArticleController extends Controller
             abort(404, __('blogs.article_not_exist'));
         }
 
-        return view('blogs/print', compact('article'));
+        return view('articles/print', compact('article'));
     }
 
     /**
@@ -470,7 +334,7 @@ class ArticleController extends Controller
             abort(200, __('blogs.article_not_exist'));
         }
 
-        return view('blogs/rss', compact('articles'));
+        return view('articles/rss', compact('articles'));
     }
 
     /**
@@ -484,7 +348,7 @@ class ArticleController extends Controller
             abort(404, __('blogs.article_not_exist'));
         }
 
-        return view('blogs/rss_comments', compact('article'));
+        return view('articles/rss_comments', compact('article'));
     }
 
     /**
@@ -511,7 +375,7 @@ class ArticleController extends Controller
         $max = $tags ? max($tags) : 0;
         $min = $tags ? min($tags) : 0;
 
-        return view('blogs/tags', compact('tags', 'max', 'min'));
+        return view('articles/tags', compact('tags', 'max', 'min'));
     }
 
     /**
@@ -541,7 +405,7 @@ class ArticleController extends Controller
             ->with('user')
             ->paginate(setting('blogpost'));
 
-        return view('blogs/tags_search', compact('articles', 'tag'));
+        return view('articles/tags_search', compact('articles', 'tag'));
     }
 
     /**
@@ -590,7 +454,7 @@ class ArticleController extends Controller
             ->paginate(setting('blogpost'))
             ->appends(compact('sort', 'order'));
 
-        return view('blogs/new_articles', compact('articles', 'sorting'));
+        return view('articles/new_articles', compact('articles', 'sorting'));
     }
 
     /**
@@ -606,7 +470,7 @@ class ArticleController extends Controller
             ->with('user', 'relate')
             ->paginate(setting('comments_per_page'));
 
-        return view('blogs/new_comments', compact('comments'));
+        return view('articles/new_comments', compact('comments'));
     }
 
     /**
@@ -634,7 +498,7 @@ class ArticleController extends Controller
         $delayCount = Article::query()->active(false)->where('user_id', $user->id)->count();
         $draftCount = Article::query()->active(false)->where('draft', true)->where('user_id', $user->id)->count();
 
-        return view('blogs/active_articles', compact('articles', 'user', 'activeCount', 'delayCount', 'active'));
+        return view('articles/active_articles', compact('articles', 'user', 'activeCount', 'delayCount', 'active'));
     }
 
     /**
@@ -659,7 +523,7 @@ class ArticleController extends Controller
             ->paginate(setting('comments_per_page'))
             ->appends(['user' => $user->login]);
 
-        return view('blogs/active_comments', compact('comments', 'user'));
+        return view('articles/active_comments', compact('comments', 'user'));
     }
 
     /**
@@ -673,6 +537,6 @@ class ArticleController extends Controller
             ->with('user', 'category.parent')
             ->paginate(setting('blogpost'));
 
-        return view('blogs/main', compact('articles'));
+        return view('articles/main', compact('articles'));
     }
 }

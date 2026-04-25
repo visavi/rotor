@@ -249,6 +249,7 @@ return [
     'records_cleared_success'    => 'Records successfully cleared!',
     'records_added_success'      => 'Records added successfully!',
     'record_not_found'           => 'Selected entry not found!',
+    'record_not_active'          => 'This entry has not been verified by a moderator yet!',
     'record_exists'              => 'Record already exists!',
     'editing_impossible'         => 'Editing is not possible, more than 10 minutes have passed!',
     'message_deleted'            => 'The message has been deleted or you are not the author of this message!',

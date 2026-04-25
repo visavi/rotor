@@ -30,7 +30,7 @@ class LoadController extends AdminController
             ->active(false)
             ->count();
 
-        return view('admin/loads/index', compact('categories', 'new'));
+        return view('admin/downs/index', compact('categories', 'new'));
     }
 
     /**
@@ -109,7 +109,7 @@ class LoadController extends AdminController
 
         $loads = $load->getChildren();
 
-        return view('admin/loads/edit', compact('loads', 'load'));
+        return view('admin/downs/edit', compact('loads', 'load'));
     }
 
     /**
@@ -185,7 +185,7 @@ class LoadController extends AdminController
             ->paginate(setting('downlist'))
             ->appends(compact('sort', 'order'));
 
-        return view('admin/loads/load', compact('category', 'downs', 'sorting'));
+        return view('admin/downs/load', compact('category', 'downs', 'sorting'));
     }
 
     /**
@@ -270,7 +270,7 @@ class LoadController extends AdminController
 
         $categories = $down->category->getChildren();
 
-        return view('admin/loads/edit_down', compact('categories', 'down', 'cid', 'files'));
+        return view('admin/downs/edit_down', compact('categories', 'down', 'cid', 'files'));
     }
 
     /**
@@ -311,7 +311,7 @@ class LoadController extends AdminController
             ->with('user', 'category', 'files')
             ->paginate(setting('downlist'));
 
-        return view('admin/loads/new', compact('downs'));
+        return view('admin/downs/new', compact('downs'));
     }
 
     /**

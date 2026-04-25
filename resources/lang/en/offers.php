@@ -23,7 +23,6 @@ return [
 
     'type_invalid'         => 'Wrong record type selected! (Need a suggestion or problem) ',
     'already_resolved'     => 'This offer or problem has already been resolved or closed!',
-    'offer_closed'         => 'Commenting on this entry is closed!',
     'status_invalid'       => 'Invalid offer or problem status!',
     'answer_success_added' => 'Answer successfully added!',
 ];

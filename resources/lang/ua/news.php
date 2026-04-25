@@ -4,7 +4,6 @@ return [
     'empty_news'      => 'Новин ще немає!',
     'confirm_delete'  => 'Ви дійсно хочете видалити цю новину?',
     'all_comments'    => 'Всі коментарі',
-    'closed_news'     => 'Коментування цієї новини закрите!',
     'comments_title'  => 'Коментарі',
     'edit_title'      => 'Редагування коментаря',
     'rss_title'       => 'RSS новин',

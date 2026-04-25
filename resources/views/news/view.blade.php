@@ -131,7 +131,7 @@
 
         @if (getUser())
             <div class="section-form mb-3 shadow">
-                <form action="{{ route('news.comments', ['id' => $news->id, 'read' => 1]) }}" method="post">
+                <form action="{{ route('news.comments', ['id' => $news->id]) }}" method="post">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('main.message') }}:</label>
@@ -150,6 +150,6 @@
             {{ showError(__('main.not_authorized')) }}
         @endif
     @else
-        {{ showError(__('news.closed_news')) }}
+        {{ showError(__('main.closed_comments')) }}
     @endif
 @stop

@@ -46,7 +46,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
-use Intervention\Image\ImageManager;
 use ReCaptcha\ReCaptcha;
 
 const ROTOR_VERSION = '13.0.0';
@@ -918,7 +917,6 @@ function formatShortNum(int $num): int|string
 
     return $num;
 }
-
 
 /**
  * Удаляет директорию рекурсивно
