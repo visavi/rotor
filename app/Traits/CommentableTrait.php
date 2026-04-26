@@ -19,7 +19,10 @@ trait CommentableTrait
     /**
      * Возвращает класс модели, с которой связан контроллер
      */
-    abstract protected function commentableModel(): string;
+    protected function commentableModel(): string
+    {
+        return 'App\\Models\\' . Str::before(class_basename(static::class), 'Controller');
+    }
 
     /**
      * Возвращает [routeName, params] для редиректа на страницу модели

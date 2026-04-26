@@ -26,14 +26,9 @@ class ArticleController extends Controller
 {
     use CommentableTrait;
 
-    protected function commentableModel(): string
-    {
-        return Article::class;
-    }
-
     protected function commentableViewRoute(Model $model): array
     {
-        return ['articles.view', ['slug' => $model->slug]];
+        return ['articles.view', ['slug' => $model->getAttribute('slug')]];
     }
 
     /**

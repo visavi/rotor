@@ -16,11 +16,6 @@ class NewsController extends Controller
 {
     use CommentableTrait;
 
-    protected function commentableModel(): string
-    {
-        return News::class;
-    }
-
     /**
      * Главная страница
      */

@@ -4,6 +4,7 @@
     "complain_submitted": "Жалоба успішно відправлена!",
     "confirm_message_delete": "Ви дійсно хочете видалити запис?",
     "confirm_file_delete": "Ви хочете видалити файл?",
+    "confirm_discard_changes": "Зміни не збережено. Закрити?",
     "message_deleted": "Повідомлення успішно видалено!",
     "record_deleted": "Запис успішно видалено!",
     "comment_edited": "Коментар успішно змінено!",

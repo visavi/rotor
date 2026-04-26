@@ -402,7 +402,10 @@ window.openEditModal = function (el) {
         }
 
         const editor = window._tiptapEditors?.['edit-comment-msg']
-        if (editor) editor.commands.setContent(text, true)
+        if (editor) {
+            editor.commands.setContent(text, true)
+            editor.resetChanged()
+        }
     }
 
     modalEl.addEventListener('shown.bs.modal', onShown)
@@ -410,6 +413,17 @@ window.openEditModal = function (el) {
 
     return false
 }
+
+document.getElementById('editCommentModal')?.addEventListener('hide.bs.modal', function (e) {
+    const editor = window._tiptapEditors?.['edit-comment-msg']
+    if (editor?.getIsChanged()) {
+        e.preventDefault()
+        if (window.confirm(__('confirm_discard_changes'))) {
+            editor.resetChanged()
+            bootstrap.Modal.getInstance(this)?.hide()
+        }
+    }
+})
 
 document.getElementById('editCommentForm')?.addEventListener('submit', function (e) {
     e.preventDefault()

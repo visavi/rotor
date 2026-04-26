@@ -19,11 +19,6 @@ class PhotoController extends Controller
 {
     use CommentableTrait;
 
-    protected function commentableModel(): string
-    {
-        return Photo::class;
-    }
-
     /**
      * Главная страница
      */

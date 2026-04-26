@@ -4,6 +4,7 @@
     "complain_submitted": "Complaint successfully sent!",
     "confirm_message_delete": "Are you sure you want to delete the record?",
     "confirm_file_delete": "Are you sure you want to delete the file?",
+    "confirm_discard_changes": "Changes are not saved. Close?",
     "message_deleted": "Message successfully deleted!",
     "record_deleted": "Record successfully deleted!",
     "comment_edited": "Comment successfully updated!",

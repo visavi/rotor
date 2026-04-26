@@ -1093,6 +1093,9 @@ function initEditor(textarea) {
         },
     })
 
+    editor.resetChanged  = () => { isChanged = false }
+    editor.getIsChanged  = () => isChanged
+
     window.addEventListener('beforeunload', e => {
         if (isChanged && !editor.isEmpty) { e.preventDefault(); return e.returnValue = '' }
     })

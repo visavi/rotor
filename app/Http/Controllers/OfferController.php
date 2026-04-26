@@ -17,11 +17,6 @@ class OfferController extends Controller
 {
     use CommentableTrait;
 
-    protected function commentableModel(): string
-    {
-        return Offer::class;
-    }
-
     /**
      * Главная страница
      */

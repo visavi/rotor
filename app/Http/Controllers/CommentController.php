@@ -42,7 +42,7 @@ class CommentController extends Controller
     /**
      * Редактирует комментарий
      */
-    public function update(Request $request, Validator $validator, int $id): JsonResponse
+    public function update(int $id, Request $request, Validator $validator): JsonResponse
     {
         if (! $user = getUser()) {
             return response()->json(['success' => false, 'message' => __('main.not_authorized')]);

@@ -24,11 +24,6 @@ class DownController extends Controller
 {
     use CommentableTrait;
 
-    protected function commentableModel(): string
-    {
-        return Down::class;
-    }
-
     /**
      * Просмотр загрузки
      */
