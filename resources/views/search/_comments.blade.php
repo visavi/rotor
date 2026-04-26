@@ -14,7 +14,7 @@
     <div class="section-header d-flex align-items-start">
         <div class="flex-grow-1">
             <div class="section-title">
-                <h3><a class="post-title" href="{{ route($post->relate_type . '.comments', ['id' => $post->relate_id, 'cid' => $post->id]) }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
+                <h3><a class="post-title" href="{{ $post->getViewUrl() }}">{{ __('main.comment') }} - {{ $post->relate->title }}</a></h3>
             </div>
         </div>
     </div>

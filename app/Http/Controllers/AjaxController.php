@@ -94,47 +94,6 @@ class AjaxController extends Controller
     }
 
     /**
-     * Удаляет комментарии
-     */
-    public function delComment(Request $request, Validator $validator): JsonResponse
-    {
-        if (! isAdmin()) {
-            return response()->json([
-                'success' => false,
-                'message' => __('main.not_authorized'),
-            ]);
-        }
-
-        $type = $request->input('type');
-        $rid = int($request->input('rid'));
-        $id = int($request->input('id'));
-
-        if ($validator->isValid()) {
-            $delComments = Comment::query()
-                ->where('relate_type', $type)
-                ->where('relate_id', $rid)
-                ->where('id', $id)
-                ->delete();
-
-            if ($delComments) {
-                $class = Relation::getMorphedModel($type);
-                $model = $class::query()->find($rid);
-
-                if ($model) {
-                    $model->decrement('count_comments');
-                }
-            }
-
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json([
-            'success' => 'false',
-            'message' => current($validator->getErrors()),
-        ]);
-    }
-
-    /**
      * Изменяет рейтинг
      */
     public function rating(Request $request): JsonResponse

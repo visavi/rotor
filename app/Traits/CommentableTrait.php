@@ -13,7 +13,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 trait CommentableTrait
 {
@@ -21,6 +20,16 @@ trait CommentableTrait
      * Возвращает класс модели, с которой связан контроллер
      */
     abstract protected function commentableModel(): string;
+
+    /**
+     * Возвращает [routeName, params] для редиректа на страницу модели
+     */
+    protected function commentableViewRoute(Model $model): array
+    {
+        $plural = Str::plural(Str::snake(class_basename($this->commentableModel())));
+
+        return [$plural . '.view', ['id' => $model->id]];
+    }
 
     /**
      * Находит родительскую модель по id или прерывает с 404
@@ -46,41 +55,29 @@ trait CommentableTrait
     }
 
     /**
-     * Редирект на последнюю страницу комментариев после добавления
+     * Редирект к конкретному комментарию (по cid), или null если cid не передан
      */
-    protected function redirectAfterCommentAdded(Model $model): RedirectResponse
+    protected function cidRedirect(Model $model, Request $request): ?RedirectResponse
     {
-        $plural = Str::plural(Str::snake(class_basename($this->commentableModel())));
-        $page = ceil($model->count_comments / setting('comments_per_page'));
+        $cid = int($request->input('cid'));
+        if (! $cid) {
+            return null;
+        }
 
-        return redirect()->route($plural . '.comments', [
-            'id'   => $model->id,
-            'page' => $page > 1 ? $page : null,
-        ]);
+        [$route, $params] = $this->commentableViewRoute($model);
+        $total = $model->comments()->where('id', '<=', $cid)->count();
+        $page = ceil($total / setting('comments_per_page'));
+
+        return redirect()
+            ->route($route, array_merge($params, ['page' => $page > 1 ? $page : null]))
+            ->withFragment('comment_' . $cid);
     }
 
     /**
-     * Список комментариев и добавление нового
+     * Возвращает пагинированные комментарии и файлы для передачи во вью
      */
-    public function comments(int $id, Request $request, Validator $validator, Flood $flood): View|RedirectResponse
+    protected function getCommentsData(Model $model): array
     {
-        $model = $this->findCommentParent($id);
-
-        $this->checkCommentableModel($model);
-
-        $name = Str::snake(class_basename($this->commentableModel()));
-        $plural = Str::plural($name);
-
-        $cid = int($request->input('cid'));
-        if ($cid) {
-            $total = $model->comments()->where('id', '<=', $cid)->count();
-            $page = ceil($total / setting('comments_per_page'));
-            $page = $page > 1 ? $page : null;
-
-            return redirect()->route($plural . '.comments', ['id' => $model->id, 'page' => $page])
-                ->withFragment('comment_' . $cid);
-        }
-
         $user = getUser();
 
         $files = $user
@@ -89,48 +86,8 @@ trait CommentableTrait
                 ->where('relate_id', 0)
                 ->where('user_id', $user->id)
                 ->orderBy('created_at')
-            : null;
-
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator
-                ->true($user, __('main.not_authorized'))
-                ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-                ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-
-            $validator->empty($model->closed, ['msg' => __('main.closed_comments')]);
-
-            if ($validator->isValid()) {
-                $msg = antimat($msg);
-
-                $comment = $model->comments()->create([
-                    'text'       => $msg,
-                    'user_id'    => $user->id,
-                    'created_at' => SITETIME,
-                    'ip'         => getIp(),
-                    'brow'       => getBrowser(),
-                ]);
-
-                $files?->update(['relate_id' => $comment->id]);
-
-                $user->increment('allcomments');
-                $user->increment('point', setting('comment_point'));
-                $user->increment('money', setting('comment_money'));
-
-                $model->increment('count_comments');
-
-                $flood->saveState();
-                sendNotify($msg, route($plural . '.comments', ['id' => $model->id, 'cid' => $comment->id], false), $model->title);
-
-                setFlash('success', __('main.comment_added_success'));
-
-                return $this->redirectAfterCommentAdded($model);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
+                ->get()
+            : collect();
 
         $comments = $model->comments()
             ->select('comments.*', 'polls.vote')
@@ -143,65 +100,75 @@ trait CommentableTrait
             ->with('user')
             ->paginate(setting('comments_per_page'));
 
-        $files = $files?->get() ?? collect();
-
-        return view($plural . '/comments', array_merge(
-            [$name => $model],
-            compact('comments', 'files')
-        ));
+        return compact('comments', 'files');
     }
 
     /**
-     * Редактирование комментария
+     * Редирект на последнюю страницу после добавления комментария
      */
-    public function editComment(int $id, int $cid, Request $request, Validator $validator): View|RedirectResponse
+    protected function redirectAfterCommentAdded(Model $model): RedirectResponse
     {
-        $page = int($request->input('page', 1));
+        [$route, $params] = $this->commentableViewRoute($model);
+        $page = ceil($model->count_comments / setting('comments_per_page'));
 
+        return redirect()
+            ->route($route, array_merge($params, ['page' => $page > 1 ? $page : null]))
+            ->withFragment('comments');
+    }
+
+    /**
+     * Добавление комментария (POST-обработчик)
+     */
+    public function storeComment(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse
+    {
         $model = $this->findCommentParent($id);
 
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
+        [$viewRoute, $viewParams] = $this->commentableViewRoute($model);
+
+        $user = getUser();
+        $msg = $request->input('msg');
+
+        $validator
+            ->true($user, __('main.not_authorized'))
+            ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
+            ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
+
+        $validator->empty($model->closed, ['msg' => __('main.closed_comments')]);
+
+        if ($validator->isValid()) {
+            $msg = antimat($msg);
+
+            $comment = $model->comments()->create([
+                'text'       => $msg,
+                'user_id'    => $user->id,
+                'created_at' => SITETIME,
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
+            ]);
+
+            File::query()
+                ->where('relate_type', Comment::$morphName)
+                ->where('relate_id', 0)
+                ->where('user_id', $user->id)
+                ->update(['relate_id' => $comment->id]);
+
+            $user->increment('allcomments');
+            $user->increment('point', setting('comment_point'));
+            $user->increment('money', setting('comment_money'));
+
+            $model->increment('count_comments');
+
+            $flood->saveState();
+            sendNotify($msg, route($viewRoute, array_merge($viewParams, ['cid' => $comment->id]), false), $model->title);
+
+            setFlash('success', __('main.comment_added_success'));
+
+            return $this->redirectAfterCommentAdded($model);
         }
 
-        $comment = $model->comments()
-            ->where('id', $cid)
-            ->where('user_id', $user->id)
-            ->first();
+        setInput($request->all());
+        setFlash('danger', $validator->getErrors());
 
-        if (! $comment) {
-            abort(200, __('main.comment_deleted'));
-        }
-
-        if ($comment->created_at + 600 < SITETIME) {
-            abort(200, __('main.editing_impossible'));
-        }
-
-        $name = Str::snake(class_basename($this->commentableModel()));
-        $plural = Str::plural($name);
-
-        if ($request->isMethod('post')) {
-            $page = int($request->input('page', 1));
-            $msg = $request->input('msg');
-
-            $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-            $validator->empty($model->closed, ['msg' => __('main.closed_comments')]);
-
-            if ($validator->isValid()) {
-                $comment->update(['text' => antimat($msg)]);
-
-                setFlash('success', __('main.comment_edited_success'));
-
-                return redirect()->route($plural . '.comments', ['id' => $model->id, 'page' => $page]);
-            }
-
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
-        }
-
-        return view($plural . '/editcomment', array_merge(
-            [$name => $model],
-            compact('comment', 'page')
-        ));
+        return redirect()->route($viewRoute, $viewParams);
     }
 }

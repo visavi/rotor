@@ -70,21 +70,21 @@
             </div>
 
                 {{ __('main.added') }}: {{ $photo->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($photo->created_at) }}</small><br>
-                <a href="{{ route('photos.comments', ['id' => $photo->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $photo->count_comments }}</span>
+                {{ __('main.comments') }}: <span class="badge bg-adaptive">{{ $photo->count_comments }}</span>
         </div>
     </div>
 
-    <?php $nav = photoNavigation($photo->id); ?>
+    <h5 id="comments"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
+    <hr>
 
-    @if (isset($nav['next']) || isset($nav['prev']))
-        <div class="section mb-3 shadow text-center fw-bold">
-            @if ($nav['next'])
-                <a href="{{ route('photos.view', ['id' => $nav['next']]) }}">&laquo; {{ __('main.previous') }}</a> &nbsp;
-            @endif
+    @foreach ($comments as $comment)
+        @include('app/_comment_item', ['editRoute' => 'photos.edit-comment', 'parentId' => $photo->id])
+    @endforeach
 
-            @if ($nav['prev'])
-                &nbsp; <a href="{{ route('photos.view', ['id' => $nav['prev']]) }}">{{ __('main.next') }} &raquo;</a>
-            @endif
-        </div>
-    @endif
+    {{ $comments->links() }}
+
+    @include('app/_comment_form', [
+        'action' => route('photos.add-comment', ['id' => $photo->id]),
+        'closed' => $photo->closed,
+    ])
 @stop

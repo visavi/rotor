@@ -8,6 +8,8 @@ use App\Models\Comment;
 use App\Models\News;
 use App\Traits\CommentableTrait;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class NewsController extends Controller
@@ -41,7 +43,7 @@ class NewsController extends Controller
     /**
      * Вывод новости
      */
-    public function view(int $id): View
+    public function view(int $id, Request $request): View|RedirectResponse
     {
         $news = News::query()
             ->select('news.*', 'polls.vote')
@@ -56,14 +58,13 @@ class NewsController extends Controller
             abort(404, __('news.news_not_exist'));
         }
 
-        $comments = $news->comments()
-            ->limit(5)
-            ->orderByDesc('created_at')
-            ->with('user')
-            ->get()
-            ->reverse();
+        if ($redirect = $this->cidRedirect($news, $request)) {
+            return $redirect;
+        }
 
-        return view('news/view', compact('news', 'comments'));
+        ['comments' => $comments, 'files' => $files] = $this->getCommentsData($news);
+
+        return view('news/view', compact('news', 'comments', 'files'));
     }
 
     /**

@@ -44,7 +44,7 @@
                     {{ __('main.author') }}: {{ $article->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($article->created_at) }}</small>
                     {{ __('main.views') }}: {{ $article->visits }}
                     <div class="float-end">
-                        <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
+                        <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
                     </div>
                 </div>
             </div>

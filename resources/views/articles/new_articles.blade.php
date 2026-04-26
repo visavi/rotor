@@ -44,7 +44,7 @@
                     </div>
                 </div>
 
-                <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
+                <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
             </div>
         @endforeach
     @else

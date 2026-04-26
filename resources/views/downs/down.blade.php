@@ -42,6 +42,7 @@
     <i class="fas fa-rss"></i> <a class="me-3" href="{{ route('downs.rss', ['id' => $down->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
+    <div class="section mb-3 shadow">
     <div class="section-content">
         @if ($down->getImages()->isNotEmpty())
             @foreach ($down->getImages() as $image)
@@ -104,8 +105,8 @@
         @endif
     </div>
 
-    <div class="my-3">
-        <i class="fa fa-comment"></i> <a href="{{ route('downs.comments', ['id' => $down->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $down->count_comments }}</span>
+    <div class="section-body">
+        <i class="fa fa-comment"></i> {{ __('main.comments') }}: <span class="badge bg-adaptive">{{ $down->count_comments }}</span>
 
         <div class="my-2 js-rating">{{ __('main.rating') }}:
             @if (getUser() && getUser('id') !== $down->user_id)
@@ -120,4 +121,19 @@
         {{ __('main.downloads') }}: <b>{{ $down->loads }}</b><br>
         {{ __('main.author') }}: {{ $down->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
     </div>
+    </div>
+
+    <h5 id="comments"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
+    <hr>
+
+    @foreach ($comments as $comment)
+        @include('app/_comment_item', ['editRoute' => 'downs.edit-comment', 'parentId' => $down->id])
+    @endforeach
+
+    {{ $comments->links() }}
+
+    @include('app/_comment_form', [
+        'action' => route('downs.add-comment', ['id' => $down->id]),
+        'closed' => $down->closed,
+    ])
 @stop

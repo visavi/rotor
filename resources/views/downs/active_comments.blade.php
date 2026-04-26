@@ -22,7 +22,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-comment"></i>
-                    <a href="{{ route('downs.comments', ['id' => $data->relate_id, 'cid' => $data->id]) }}">{{ $data->title }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
+                    <a href="{{ route('downs.view', ['id' => $data->relate_id, 'cid' => $data->id]) }}">{{ $data->title }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
 
                     @if (isAdmin())
                         <div class="float-end">

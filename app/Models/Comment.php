@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 /**
  * Class Comment
@@ -169,6 +170,16 @@ class Comment extends Model
     /**
      * Возвращает тип связанного объекта
      */
+    public function getViewUrl(bool $absolute = true): string
+    {
+        $plural = Str::plural($this->relate_type);
+        $params = $this->relate_type === Article::$morphName
+            ? ['slug' => $this->relate->slug, 'cid' => $this->id]
+            : ['id' => $this->relate_id, 'cid' => $this->id];
+
+        return route($plural . '.view', $params, $absolute);
+    }
+
     public function getRelateType(): string
     {
         return match ($this->relate_type) {

@@ -440,21 +440,6 @@ function statsInvite(): string
 }
 
 /**
- * Возвращает следующею и предыдущую фотографию в галерее
- */
-function photoNavigation(int $id): ?array
-{
-    if (! $id) {
-        return null;
-    }
-
-    $next = Photo::query()->where('id', '>', $id)->orderBy('id')->value('id');
-    $prev = Photo::query()->where('id', '<', $id)->orderByDesc('id')->value('id');
-
-    return compact('next', 'prev');
-}
-
-/**
  * Возвращает количество статей в блогах
  */
 function statsBlog(): string

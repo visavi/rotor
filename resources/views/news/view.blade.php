@@ -37,7 +37,7 @@
 @stop
 
 @section('content')
-    <div class="mb-3">
+    <div class="section mb-3 shadow">
         <div class="section-content">
             @if ($news->getDetachedImages()->isNotEmpty())
                 @include('app/_image_viewer', ['model' => $news, 'files' => $news->getDetachedImages()])
@@ -88,68 +88,17 @@
         </div>
     </div>
 
-    @if ($comments->isNotEmpty())
-        <h5><i class="fa fa-comment"></i> {{ __('main.last_comments') }}</h5>
+    <h5 id="comments"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
+    <hr>
 
-        @foreach ($comments as $comment)
-            <div class="section mb-3 shadow">
-                <div class="user-avatar">
-                    {{ $comment->user->getAvatar() }}
-                    {{ $comment->user->getOnline() }}
-                </div>
+    @foreach ($comments as $comment)
+        @include('app/_comment_item', ['editRoute' => 'news.edit-comment', 'parentId' => $news->id])
+    @endforeach
 
-                <div class="section-user d-flex align-items-start">
-                    <div class="flex-grow-1">
-                        {{ $comment->user->getProfile() }}
+    {{ $comments->links() }}
 
-                        <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="fst-italic">{{ $comment->user->getStatus() }}</small>
-                    </div>
-                </div>
-
-                <div class="section-body border-top">
-                    <div class="section-message">
-                        {{ $comment->getText() }}
-                    </div>
-
-                    @if (isAdmin())
-                        <div class="small text-muted fst-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
-                    @endif
-                </div>
-            </div>
-        @endforeach
-
-        <div class="p-3 mb-3 shadow">
-            <i class="fas fa-comments"></i> <b><a href="{{ route('news.comments', ['id' => $news->id]) }}">{{ __('news.all_comments') }}</a></b> <span class="badge bg-adaptive">{{ $news->count_comments }}</span>
-        </div>
-    @endif
-
-    @if (! $news->closed)
-        @if ($comments->isEmpty())
-            {{ showError(__('main.empty_comments')) }}
-        @endif
-
-        @if (getUser())
-            <div class="section-form mb-3 shadow">
-                <form action="{{ route('news.comments', ['id' => $news->id]) }}" method="post">
-                    @csrf
-                    <div class="mb-3{{ hasError('msg') }}">
-                        <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                        <textarea class="form-control tiptap" id="msg" rows="5" maxlength="{{ setting('comment_text_max') }}" name="msg" placeholder="{{ __('main.message') }}" required>{{ getInput('msg') }}</textarea>
-                        <div class="invalid-feedback">{{ textError('msg') }}</div>
-                        <span class="js-textarea-counter"></span>
-                    </div>
-
-                    <button class="btn btn-primary">{{ __('main.write') }}</button>
-                </form>
-            </div>
-
-            <a href="/rules">{{ __('main.rules') }}</a> /
-            <a href="/stickers">{{ __('main.stickers') }}</a><br><br>
-        @else
-            {{ showError(__('main.not_authorized')) }}
-        @endif
-    @else
-        {{ showError(__('main.closed_comments')) }}
-    @endif
+    @include('app/_comment_form', [
+        'action' => route('news.add-comment', ['id' => $news->id]),
+        'closed' => $news->closed,
+    ])
 @stop

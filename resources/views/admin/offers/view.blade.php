@@ -48,7 +48,7 @@
                 <b>{{ formatNum($offer->rating) }}</b><br>
             </div>
 
-            <a href="{{ route('offers.comments', ['id' => $offer->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $offer->count_comments }}</span>
+            <a href="{{ route('offers.view', ['id' => $offer->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $offer->count_comments }}</span>
 
             @if ($offer->closed)
                 <span class="text-danger">{{ __('main.closed_comments') }}</span>

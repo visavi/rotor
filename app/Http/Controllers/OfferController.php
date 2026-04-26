@@ -48,7 +48,7 @@ class OfferController extends Controller
     /**
      * Просмотр записи
      */
-    public function view(int $id): View
+    public function view(int $id, Request $request): View|RedirectResponse
     {
         $offer = Offer::query()
             ->select('offers.*', 'polls.vote')
@@ -64,7 +64,13 @@ class OfferController extends Controller
             abort(404, __('main.record_not_found'));
         }
 
-        return view('offers/view', compact('offer'));
+        if ($redirect = $this->cidRedirect($offer, $request)) {
+            return $redirect;
+        }
+
+        ['comments' => $comments, 'files' => $files] = $this->getCommentsData($offer);
+
+        return view('offers/view', compact('offer', 'comments', 'files'));
     }
 
     /**

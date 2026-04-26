@@ -123,7 +123,7 @@
                         </small>
                     </div>
 
-                    <a href="{{ route('downs.comments', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
+                    <a href="{{ route('downs.view', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
                 </div>
             </div>
         @endforeach

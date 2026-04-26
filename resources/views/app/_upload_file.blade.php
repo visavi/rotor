@@ -41,8 +41,8 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
 </div>
 
 <div class="mb-3 js-attach-form" style="display: {{ $display ? 'block' : 'none' }};">
-    <label class="btn btn-sm btn-secondary mb-1" for="file">
-        <input id="file" type="file" name="file" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+    <label class="btn btn-sm btn-secondary mb-1">
+        <input type="file" name="file" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_file') }}&hellip;
     </label>
 

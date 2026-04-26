@@ -116,7 +116,7 @@
                             {{ dateFixed($article->created_at) }}
                         </small>
                     </div>
-                    <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
+                    <a href="{{ route('articles.view', ['slug' => $article->slug]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
                 </div>
             </div>
         @endforeach

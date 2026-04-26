@@ -211,9 +211,13 @@ class Down extends Model
     /**
      * Get text
      */
-    public function getText(): HtmlString
+    public function getText(bool $withImages = true): HtmlString
     {
-        return renderHtml($this->text, 'down-' . $this->id);
+        $text = $withImages
+            ? $this->text
+            : preg_replace('/<img[^>]*>/', '', $this->text);
+
+        return renderHtml($text, 'down-' . $this->id);
     }
 
     /**

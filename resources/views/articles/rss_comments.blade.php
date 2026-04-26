@@ -11,12 +11,12 @@
 
         <item>
             <title>{{ $comment->text }}</title>
-            <link>{{ route('articles.comments', ['id' => $article->id]) }}</link>
+            <link>{{ route('articles.view', ['slug' => $article->slug]) }}</link>
             <description>{{ $article->title }}</description>
             <author>{{ $comment->user->getName() }}</author>
             <pubDate>{{ date('r', $comment->created_at) }}</pubDate>
             <category>{{ __('main.comments') }}</category>
-            <guid>{{ route('articles.comments', ['id' => $article->id, 'cid' => $comment->id]) }}</guid>
+            <guid>{{ route('articles.view', ['slug' => $article->slug, 'cid' => $comment->id]) }}</guid>
         </item>
     @endforeach
 @stop

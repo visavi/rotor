@@ -71,7 +71,7 @@
     <i class="fas fa-rss"></i> <a href="{{ route('articles.rss-comments', ['id' => $article->id]) }}">{{ __('main.rss') }}</a>
     <hr>
 
-    <div class="mb-3">
+    <div class="section mb-3 shadow">
         <div class="section-message">
             {{ $article->getText() }}
         </div>
@@ -97,6 +97,20 @@
         </div>
 
         <i class="fa fa-eye"></i> {{ __('main.views') }}: {{ $article->visits }}<br>
-        <i class="fa fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $article->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
+        <i class="fa fa-comment"></i> {{ __('main.comments') }}: <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
     </div>
+
+    <h5 id="comments"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
+    <hr>
+
+    @foreach ($comments as $comment)
+        @include('app/_comment_item', ['editRoute' => 'articles.edit-comment', 'parentId' => $article->id])
+    @endforeach
+
+    {{ $comments->links() }}
+
+    @include('app/_comment_form', [
+        'action' => route('articles.add-comment', ['id' => $article->id]),
+        'closed' => $article->closed,
+    ])
 @stop

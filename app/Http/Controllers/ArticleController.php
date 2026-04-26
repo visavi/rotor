@@ -13,6 +13,7 @@ use App\Models\Flood;
 use App\Models\Reader;
 use App\Models\Tag;
 use App\Traits\CommentableTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +29,11 @@ class ArticleController extends Controller
     protected function commentableModel(): string
     {
         return Article::class;
+    }
+
+    protected function commentableViewRoute(Model $model): array
+    {
+        return ['articles.view', ['slug' => $model->slug]];
     }
 
     /**
@@ -78,7 +84,7 @@ class ArticleController extends Controller
     /**
      * Просмотр статьи
      */
-    public function view(string $slug): View
+    public function view(string $slug, Request $request): View|RedirectResponse
     {
         $id = Str::before($slug, '-');
 
@@ -93,7 +99,13 @@ class ArticleController extends Controller
 
         Reader::countingStat($article);
 
-        return view('articles/view', compact('article'));
+        if ($redirect = $this->cidRedirect($article, $request)) {
+            return $redirect;
+        }
+
+        ['comments' => $comments, 'files' => $files] = $this->getCommentsData($article);
+
+        return view('articles/view', compact('article', 'comments', 'files'));
     }
 
     /**

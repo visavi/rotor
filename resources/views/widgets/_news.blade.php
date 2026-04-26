@@ -8,7 +8,7 @@
         <div class="news-text" style="display: none;">
             {{ $data->getText() }}
             <div>
-                <a href="{{ route('news.comments', ['id' => $data->id]) }}">Комментарии</a>
+                <a href="{{ route('news.view', ['id' => $data->id]) }}">Комментарии</a>
             </div>
         </div>
     @endforeach

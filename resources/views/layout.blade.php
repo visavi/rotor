@@ -35,3 +35,9 @@
 @section('performance')
     {{ performance() }}
 @stop
+
+@if (getUser())
+    @push('scripts')
+        @include('app/_comment_edit_modal')
+    @endpush
+@endif

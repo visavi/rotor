@@ -29,7 +29,7 @@
 @stop
 
 @section('content')
-    <div class="mb-3">
+    <div class="section mb-3 shadow">
         <div class="section-content">
             <div class="section-message">
                 {{ $offer->getText() }}
@@ -68,67 +68,17 @@
         </div>
     @endif
 
-    @if ($offer->lastComments->isNotEmpty())
-        <h5><i class="fa fa-comment"></i> {{ __('main.last_comments') }}</h5>
+    <h5 id="comments"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
+    <hr>
 
-        @foreach ($offer->lastComments(5)->get() as $comment)
-            <div class="section mb-3 shadow">
-                <div class="user-avatar">
-                    {{ $comment->user->getAvatar() }}
-                    {{ $comment->user->getOnline() }}
-                </div>
+    @foreach ($comments as $comment)
+        @include('app/_comment_item', ['editRoute' => 'offers.edit-comment', 'parentId' => $offer->id])
+    @endforeach
 
-                <div class="section-user d-flex align-items-start">
-                    <div class="flex-grow-1">
-                        {{ $comment->user->getProfile() }}
+    {{ $comments->links() }}
 
-                        <small class="section-date text-muted fst-italic">{{ dateFixed($comment->created_at) }}</small><br>
-                        <small class="fst-italic">{{ $comment->user->getStatus() }}</small>
-                    </div>
-                </div>
-
-                <div class="section-body border-top">
-                    <div class="section-message">
-                        {{ $comment->getText() }}<br>
-                        @if (isAdmin())
-                            <div class="small text-muted fst-italic mt-2">{{ $comment->brow }}, {{ $comment->ip }}</div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        @endforeach
-
-        <div class="p-3 mb-3 shadow">
-            <i class="fas fa-comments"></i> <b><a href="{{ route('offers.comments', ['id' => $offer->id]) }}">{{ __('main.all_comments') }}</a></b> <span class="badge bg-adaptive">{{ $offer->count_comments }}</span>
-        </div>
-    @endif
-
-    @if (! $offer->closed)
-        @if ($offer->lastComments->isEmpty())
-            {{ showError(__('main.empty_comments')) }}
-        @endif
-
-        @if (getUser())
-            <div class="section-form mb-3 shadow">
-                <form action="{{ route('offers.comments', ['id' => $offer->id]) }}" method="post">
-                    @csrf
-                    <div class="mb-3{{ hasError('msg') }}">
-                        <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                        <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
-                        <div class="invalid-feedback">{{ textError('msg') }}</div>
-                        <span class="js-textarea-counter"></span>
-                    </div>
-
-                    <button class="btn btn-primary">{{ __('main.write') }}</button>
-                </form>
-            </div>
-
-            <a href="/rules">{{ __('main.rules') }}</a> /
-            <a href="/stickers">{{ __('main.stickers') }}</a><br><br>
-        @else
-            {{ showError(__('main.closed_comments')) }}
-        @endif
-    @else
-        {{ showError(__('main.not_authorized')) }}
-    @endif
+    @include('app/_comment_form', [
+        'action' => route('offers.add-comment', ['id' => $offer->id]),
+        'closed' => $offer->closed,
+    ])
 @stop

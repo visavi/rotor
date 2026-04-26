@@ -80,7 +80,7 @@
                     <span class="avatar-micro">{{ $data->user->getAvatarImage() }}</span> {{ $data->user->getProfile() }}
                 </div>
 
-                <i class="fa-regular fa-comment"></i> <a href="{{ route('news.comments', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
+                <i class="fa-regular fa-comment"></i> <a href="{{ route('news.view', ['id' => $data->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $data->count_comments }}</span>
             </div>
         @endforeach
 

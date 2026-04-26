@@ -386,6 +386,15 @@ textarea.form-control {
     }
 }
 
+.comments-header {
+    padding: 0.6rem 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: var(--base-bg);
+    border-left: 3px solid var(--bs-primary);
+    border-radius: var(--bs-border-radius);
+}
+
 .section-content.short-view {
     overflow: hidden;
     position: relative;

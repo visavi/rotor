@@ -138,13 +138,26 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     if (window.location.hash) {
+        const initialHash = window.location.hash
+        if (initialHash === '#comments') {
+            history.replaceState(null, '', location.pathname + location.search)
+        }
         setTimeout(function () {
-            const target = document.querySelector(window.location.hash)
+            const target = document.querySelector(initialHash)
             if (target) {
                 const navbarHeight = getNavbarHeight()
-                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'smooth' })
+                const behavior = initialHash === '#comments' ? 'instant' : 'smooth'
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior })
             }
         }, 100)
+    } else if (new URLSearchParams(location.search).has('page')) {
+        const commentsEl = document.querySelector('#comments')
+        if (commentsEl) {
+            setTimeout(function () {
+                const navbarHeight = getNavbarHeight()
+                window.scrollTo({ top: commentsEl.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'instant' })
+            }, 100)
+        }
     }
 
     setTimeout(initShortView, 300)
@@ -338,14 +351,95 @@ window.deletePost = function (el) {
     return false
 }
 
+/* Редактирование комментария в модальном окне */
+window.openEditModal = function (el) {
+    const id      = el.dataset.id
+    const baseUrl = el.dataset.url
+    const modalEl = document.getElementById('editCommentModal')
+
+    document.getElementById('edit-comment-id').value = id
+    modalEl.dataset.editUrl = baseUrl + '/' + id
+
+    modalEl.querySelector('input[type="file"]')?.setAttribute('data-id', id)
+    const msgEl = document.getElementById('edit-comment-msg')
+    if (msgEl) msgEl.dataset.relateId = id
+
+    const filesContainer = modalEl.querySelector('.js-files')
+    if (filesContainer) filesContainer.innerHTML = ''
+
+    const dataPromise = fetch(baseUrl + '/' + id, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken }
+    }).then(r => r.json()).then(data => {
+        const scope = modalEl.querySelector('form')
+        data.files?.forEach(file => {
+            const templateEl = scope?.querySelector(file.isImage ? '.js-image-template' : '.js-file-template')
+            const template = templateEl?.cloneNode(true)
+            if (!template) return
+            if (file.isImage) {
+                template.querySelector('img')?.setAttribute('src', file.path)
+            } else {
+                const link = template.querySelector('.js-file-link')
+                if (link) { link.href = file.path; link.textContent = file.name }
+                const sizeEl = template.querySelector('.js-file-size')
+                if (sizeEl) sizeEl.textContent = file.size
+            }
+            template.querySelector('.js-file-delete')?.setAttribute('data-id', file.id)
+            filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
+        })
+        return data.text || ''
+    })
+
+    const onShown = async () => {
+        modalEl.removeEventListener('shown.bs.modal', onShown)
+
+        const text = await dataPromise
+
+        if (!window._tiptapEditors?.['edit-comment-msg'] && msgEl) {
+            msgEl.classList.add('tiptap')
+            const { initEditors } = await import('./tiptap.js')
+            initEditors([msgEl])
+            await new Promise(resolve => requestAnimationFrame(resolve))
+        }
+
+        const editor = window._tiptapEditors?.['edit-comment-msg']
+        if (editor) editor.commands.setContent(text, true)
+    }
+
+    modalEl.addEventListener('shown.bs.modal', onShown)
+    bootstrap.Modal.getOrCreateInstance(modalEl).show()
+
+    return false
+}
+
+document.getElementById('editCommentForm')?.addEventListener('submit', function (e) {
+    e.preventDefault()
+    const modalEl = document.getElementById('editCommentModal')
+    const id      = document.getElementById('edit-comment-id').value
+    const msg     = document.getElementById('edit-comment-msg').value
+    const url     = modalEl?.dataset.editUrl
+
+    ajax({
+        data: { msg },
+        dataType: 'json', type: 'patch', url,
+        success: function (data) {
+            if (data.success) {
+                bootstrap.Modal.getInstance(modalEl)?.hide()
+                window.location.hash = '#comment_' + id
+                window.location.reload()
+            } else {
+                notyf.error(data.message)
+            }
+        }
+    })
+})
+
 /* Удаление комментариев */
 window.deleteComment = function (el) {
     confirm(__('confirm_message_delete'), function (result) {
         if (!result) return
 
         ajax({
-            data: { id: el.dataset.id, rid: el.dataset.rid, type: el.dataset.type },
-            dataType: 'json', type: 'post', url: '/ajax/delcomment',
+            dataType: 'json', type: 'delete', url: '/comments/' + el.dataset.id,
             success: function (data) {
                 if (data.success) {
                     notyf.success(__('message_deleted'))
@@ -467,7 +561,8 @@ window.submitFile = function (el) {
     form.append('id', el.dataset.id)
     form.append('type', el.dataset.type)
 
-    const filesContainer = document.querySelector('.js-files')
+    const scope = el.closest('form') ?? document
+    const filesContainer = scope.querySelector('.js-files')
 
     ajax({
         data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
@@ -476,7 +571,7 @@ window.submitFile = function (el) {
         success: function (data) {
             if (!data.success) { notyf.error(data.message); return }
 
-            const templateEl = document.querySelector(data.type === 'image' ? '.js-image-template' : '.js-file-template')
+            const templateEl = scope.querySelector(data.type === 'image' ? '.js-image-template' : '.js-file-template')
             const template = templateEl?.cloneNode(true)
 
             if (data.type === 'image') {
@@ -507,7 +602,8 @@ window.submitImage = function (el) {
     form.append('id', el.dataset.id)
     form.append('type', el.dataset.type)
 
-    const filesContainer = document.querySelector('.js-files')
+    const scope = el.closest('form') ?? document
+    const filesContainer = scope.querySelector('.js-files')
 
     ajax({
         data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
@@ -516,7 +612,7 @@ window.submitImage = function (el) {
         success: function (data) {
             if (!data.success) { notyf.error(data.message); return }
 
-            const templateEl = document.querySelector('.js-image-template')
+            const templateEl = scope.querySelector('.js-image-template')
             const template = templateEl?.cloneNode(true)
             const img = template?.querySelector('img')
             img?.setAttribute('src', data.path)

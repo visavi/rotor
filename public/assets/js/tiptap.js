@@ -973,7 +973,8 @@ function initEditor(textarea) {
                     attrs: { src: data.source || data.path },
                 }).run()
 
-                const templateEl = document.querySelector('.js-image-template')
+                const scope = textarea.closest('form') ?? document
+                const templateEl = scope.querySelector('.js-image-template')
                 const template = templateEl?.cloneNode(true)
                 if (template) {
                     const img = template.querySelector('img')
@@ -982,7 +983,7 @@ function initEditor(textarea) {
                         img.setAttribute('data-source', data.source || data.path)
                     }
                     template.querySelector('a')?.setAttribute('data-id', data.id)
-                    document.querySelector('.js-files')?.insertAdjacentHTML('beforeend', template.innerHTML)
+                    scope.querySelector('.js-files')?.insertAdjacentHTML('beforeend', template.innerHTML)
                 }
             } else {
                 notyf.error(data.message || __('editor.upload_failed'))
@@ -1111,6 +1112,11 @@ function initEditor(textarea) {
 
     window._tiptapActiveEditor = editor
     editor.on('focus', () => { window._tiptapActiveEditor = editor })
+
+    if (textarea.id) {
+        window._tiptapEditors = window._tiptapEditors || {}
+        window._tiptapEditors[textarea.id] = editor
+    }
 
     const toolbar = buildToolbar(editor, textarea, uploadImage)
     wrapper.insertBefore(toolbar, editorEl)

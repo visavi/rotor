@@ -7,6 +7,7 @@ use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CounterController;
 use App\Http\Controllers\FileController;
@@ -146,14 +147,13 @@ Route::controller(ArticleController::class)
     ->group(function () {
         Route::get('/', 'newArticles')->name('index');
         Route::get('/{slug}', 'view')->name('view');
+        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
         Route::get('/{id}/print', 'print')->name('print');
         Route::get('/{id}/rss', 'rssComments')->name('rss-comments');
         Route::get('/new/comments', 'newComments')->name('new-comments');
         Route::get('/active/articles', 'userArticles')->name('user-articles');
         Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Новости */
@@ -163,10 +163,9 @@ Route::controller(NewsController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'view')->name('view');
+        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
         Route::get('/rss', 'rss')->name('rss');
         Route::get('/allcomments', 'allComments')->name('all-comments');
-        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Галерея */
@@ -176,15 +175,14 @@ Route::controller(PhotoController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'view')->name('view');
+        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
         Route::delete('/{id}/delete', 'delete')->name('delete');
         Route::get('/albums', 'albums')->name('albums');
         Route::get('/comments', 'allComments')->name('all-comments');
         Route::get('/active/albums', 'album')->name('user-albums');
         Route::get('/active/comments', 'userComments')->name('user-comments');
-        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Категория форума */
@@ -252,6 +250,7 @@ Route::prefix('downs')
         Route::get('/active/comments', [LoadActiveController::class, 'comments'])->name('active-comments');
 
         Route::get('/{id}', [DownController::class, 'view'])->name('view');
+        Route::post('/{id}/comments', [DownController::class, 'storeComment'])->name('add-comment');
         Route::get('/{id}/rss', [DownController::class, 'rss'])->name('rss');
 
         Route::get('/{id}/download/{fid}', [DownController::class, 'download'])->name('download');
@@ -262,8 +261,6 @@ Route::prefix('downs')
 
         Route::match(['get', 'post'], '/create', [DownController::class, 'create'])->name('create');
         Route::match(['get', 'post'], '/{id}/edit', [DownController::class, 'edit'])->name('edit');
-        Route::match(['get', 'post'], '/{id}/comments', [DownController::class, 'comments'])->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', [DownController::class, 'editComment'])->name('edit-comment');
     });
 
 /* Предложения и проблемы */
@@ -273,10 +270,9 @@ Route::controller(OfferController::class)
     ->group(function () {
         Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('index');
         Route::get('/{id}', 'view')->name('view');
+        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
         Route::match(['get', 'post'], '/create', 'create')->name('create');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-        Route::match(['get', 'post'], '/{id}/comments', 'comments')->name('comments');
-        Route::match(['get', 'post'], '/{id}/comments/{cid}', 'editComment')->name('edit-comment');
     });
 
 /* Ajax */
@@ -286,13 +282,21 @@ Route::controller(AjaxController::class)
     ->group(function () {
         Route::get('/getstickers', 'getStickers');
         Route::get('/resolve-image', 'resolveImage');
-        Route::post('/delcomment', 'delComment');
         Route::post('/rating', 'rating');
         Route::post('/vote', 'vote');
         Route::post('/complaint', 'complaint');
         Route::post('/file/upload', 'uploadFile');
         Route::post('/file/delete', 'deleteFile');
         Route::post('/set-theme', 'setTheme')->withoutMiddleware('check.user');
+    });
+
+Route::controller(CommentController::class)
+    ->middleware(['check.user'])
+    ->prefix('comments')
+    ->group(function () {
+        Route::get('/{id}', 'show');
+        Route::patch('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
     });
 
 /* Голосования */

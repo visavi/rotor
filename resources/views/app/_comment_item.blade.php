@@ -23,11 +23,11 @@
                     @endif
 
                     @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                        <a href="{{ route($editRoute, ['id' => $parentId, 'cid' => $comment->id, 'page' => $comments->currentPage()]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                        <a href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                     @endif
 
                     @if (isAdmin())
-                        <a href="#" onclick="return deleteComment(this)" data-rid="{{ $comment->relate_id }}" data-id="{{ $comment->id }}" data-type="{{ $comment->relate->getMorphClass() }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
+                        <a href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times text-muted"></i></a>
                     @endif
                 </div>
 

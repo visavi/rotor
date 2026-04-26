@@ -48,5 +48,5 @@
         <small class="section-date text-muted fst-italic">{{ dateFixed($post->created_at) }}</small>
     </div>
 
-    <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.comments', ['id' => $post->id]) }}">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $post->count_comments }}</span>
+    <i class="fa-regular fa-comment"></i> <a href="{{ route('articles.view', ['slug' => $post->slug]) }}#comments">{{ __('main.comments') }}</a> <span class="badge bg-adaptive">{{ $post->count_comments }}</span>
 </div>
