@@ -125,6 +125,7 @@ class Comment extends Model
         foreach ($this->children as $child) {
             $count += $child->countAllDescendants();
         }
+
         return $count;
     }
 

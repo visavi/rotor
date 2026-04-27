@@ -100,6 +100,7 @@ trait CommentableTrait
             ->where('parent_id', $parentId)
             ->map(function (Comment $comment) use ($all) {
                 $comment->setRelation('children', $this->buildCommentTree($all, $comment->id));
+
                 return $comment;
             })
             ->values();
