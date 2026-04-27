@@ -1,5 +1,5 @@
 @if (! ($closed ?? false))
-    @if ($comments->isEmpty())
+    @if (($comments ?? collect())->isEmpty())
         {{ showError(__('main.empty_comments')) }}
     @endif
 

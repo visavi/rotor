@@ -100,14 +100,16 @@
         <i class="fa fa-comment"></i> {{ __('main.comments') }}: <span class="badge bg-adaptive">{{ $article->count_comments }}</span>
     </div>
 
-    <h5 id="comments"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
-    <hr>
-
-    @foreach ($comments as $comment)
-        @include('app/_comment_item', ['editRoute' => 'articles.edit-comment', 'parentId' => $article->id])
-    @endforeach
-
-    {{ $comments->links() }}
+    <div class="section mb-3 shadow p-0 overflow-hidden" id="comments">
+        <div class="px-3 py-2">
+            <h5 class="mb-0"><i class="fa-regular fa-comment"></i> {{ __('main.comments') }}</h5>
+        </div>
+        <div class="px-3">
+            @foreach ($comments as $comment)
+                @include('app/_comment_item', ['action' => route('articles.add-comment', ['id' => $article->id]), 'closed' => $article->closed])
+            @endforeach
+        </div>
+    </div>
 
     @include('app/_comment_form', [
         'action' => route('articles.add-comment', ['id' => $article->id]),

@@ -27,7 +27,7 @@ class DownController extends Controller
     /**
      * Просмотр загрузки
      */
-    public function view(int $id, Request $request): View|RedirectResponse
+    public function view(int $id): View
     {
         $down = Down::query()
             ->select('downs.*', 'polls.vote')
@@ -49,10 +49,6 @@ class DownController extends Controller
         }
 
         $allowDownload = getUser() || setting('down_guest_download');
-
-        if ($redirect = $this->cidRedirect($down, $request)) {
-            return $redirect;
-        }
 
         ['comments' => $comments, 'files' => $files] = $this->getCommentsData($down);
 

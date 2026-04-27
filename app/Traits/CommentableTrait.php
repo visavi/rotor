@@ -10,8 +10,10 @@ use App\Models\File;
 use App\Models\Flood;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 trait CommentableTrait
@@ -58,26 +60,7 @@ trait CommentableTrait
     }
 
     /**
-     * Редирект к конкретному комментарию (по cid), или null если cid не передан
-     */
-    protected function cidRedirect(Model $model, Request $request): ?RedirectResponse
-    {
-        $cid = int($request->input('cid'));
-        if (! $cid) {
-            return null;
-        }
-
-        [$route, $params] = $this->commentableViewRoute($model);
-        $total = $model->comments()->where('id', '<=', $cid)->count();
-        $page = ceil($total / setting('comments_per_page'));
-
-        return redirect()
-            ->route($route, array_merge($params, ['page' => $page > 1 ? $page : null]))
-            ->withFragment('comment_' . $cid);
-    }
-
-    /**
-     * Возвращает пагинированные комментарии и файлы для передачи во вью
+     * Возвращает комментарии в виде дерева и файлы для передачи во вью
      */
     protected function getCommentsData(Model $model): array
     {
@@ -92,7 +75,7 @@ trait CommentableTrait
                 ->get()
             : collect();
 
-        $comments = $model->comments()
+        $allComments = $model->comments()
             ->select('comments.*', 'polls.vote')
             ->leftJoin('polls', static function (JoinClause $join) {
                 $join->on('comments.id', 'polls.relate_id')
@@ -100,29 +83,44 @@ trait CommentableTrait
                     ->where('polls.user_id', getUser('id'));
             })
             ->orderBy('created_at')
-            ->with('user')
-            ->paginate(setting('comments_per_page'));
+            ->with(['user', 'files'])
+            ->get();
+
+        $comments = $this->buildCommentTree($allComments);
 
         return compact('comments', 'files');
     }
 
     /**
-     * Редирект на последнюю страницу после добавления комментария
+     * Строит дерево комментариев из плоской коллекции
      */
-    protected function redirectAfterCommentAdded(Model $model): RedirectResponse
+    protected function buildCommentTree(Collection $all, ?int $parentId = null): Collection
+    {
+        return $all
+            ->where('parent_id', $parentId)
+            ->map(function (Comment $comment) use ($all) {
+                $comment->setRelation('children', $this->buildCommentTree($all, $comment->id));
+                return $comment;
+            })
+            ->values();
+    }
+
+    /**
+     * Редирект на страницу с якорем на добавленный комментарий
+     */
+    protected function redirectAfterCommentAdded(Model $model, int $commentId): RedirectResponse
     {
         [$route, $params] = $this->commentableViewRoute($model);
-        $page = ceil($model->count_comments / setting('comments_per_page'));
 
         return redirect()
-            ->route($route, array_merge($params, ['page' => $page > 1 ? $page : null]))
-            ->withFragment('comments');
+            ->route($route, $params)
+            ->withFragment('comment_' . $commentId);
     }
 
     /**
      * Добавление комментария (POST-обработчик)
      */
-    public function storeComment(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse
+    public function storeComment(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse|JsonResponse
     {
         $model = $this->findCommentParent($id);
 
@@ -141,9 +139,27 @@ trait CommentableTrait
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
+            $parentId = null;
+            $depth = 0;
+            $parentComment = $request->input('parent_id')
+                ? Comment::query()->find((int) $request->input('parent_id'))
+                : null;
+
+            if ($parentComment && $parentComment->relate_id === $model->id) {
+                if ($parentComment->depth >= Comment::MAX_DEPTH) {
+                    $parentId = $parentComment->parent_id;
+                    $depth = $parentComment->depth;
+                } else {
+                    $parentId = $parentComment->id;
+                    $depth = $parentComment->depth + 1;
+                }
+            }
+
             $comment = $model->comments()->create([
                 'text'       => $msg,
                 'user_id'    => $user->id,
+                'parent_id'  => $parentId,
+                'depth'      => $depth,
                 'created_at' => SITETIME,
                 'ip'         => getIp(),
                 'brow'       => getBrowser(),
@@ -162,11 +178,19 @@ trait CommentableTrait
             $model->increment('count_comments');
 
             $flood->saveState();
-            sendNotify($msg, route($viewRoute, array_merge($viewParams, ['cid' => $comment->id]), false), $model->title);
+            sendNotify($msg, route($viewRoute, $viewParams, false) . '#comment_' . $comment->id, $model->title);
+
+            if ($request->wantsJson()) {
+                return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
+            }
 
             setFlash('success', __('main.comment_added_success'));
 
-            return $this->redirectAfterCommentAdded($model);
+            return $this->redirectAfterCommentAdded($model, $comment->id);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json(['errors' => $validator->getErrors()], 422);
         }
 
         setInput($request->all());

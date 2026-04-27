@@ -581,3 +581,31 @@ a.user:hover {
     background: rgba(var(--bs-primary-rgb), 0.12);
     pointer-events: none;
 }
+
+/* ── Reply form editor wrap ───────────────────────────────────────────────── */
+
+.reply-editor-wrap .tiptap-wrapper {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.reply-editor-wrap .tiptap-wrapper:focus-within {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.reply-editor-wrap:focus-within {
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* ── Reply form toolbar (hidden by default, toggled via button) ───────────── */
+
+.reply-form .tiptap-toolbar {
+    display: none;
+}
+
+.reply-form.toolbar-visible .tiptap-toolbar {
+    display: flex;
+}

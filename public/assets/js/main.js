@@ -197,7 +197,113 @@ window.postJump = function () {
     }
 }
 
-/* Ответ на сообщение */
+/* Сворачивание/разворачивание */
+window.toggleComment = function (id) {
+    const body = document.getElementById('comment-body-' + id)
+    const expandLabel = document.getElementById('comment-expand-' + id)
+    const ctrl = document.getElementById('comment-ctrl-' + id)
+    if (!body) return
+
+    const isHidden = body.classList.toggle('d-none')
+
+    if (expandLabel) expandLabel.classList.toggle('d-none', !isHidden)
+
+    if (ctrl) {
+        const icon = ctrl.querySelector('i')
+        if (icon) icon.className = isHidden ? 'fa fa-plus' : 'fa fa-minus'
+        const line = ctrl.querySelector('.comment-thread-line')
+        if (line) line.classList.toggle('d-none', isHidden)
+    }
+}
+
+/* Открыть форму ответа под комментарием */
+window.openReplyForm = function (id, callback) {
+    document.querySelectorAll('.reply-form').forEach(function (f) {
+        f.classList.add('d-none')
+    })
+    const form = document.getElementById('reply-form-' + id)
+    if (!form) return false
+
+    form.classList.remove('d-none')
+
+    const textarea = form.querySelector('textarea')
+    const editorId = textarea?.id
+
+    if (textarea && editorId && !window._tiptapEditors?.[editorId]) {
+        textarea.classList.add('tiptap')
+        import('./tiptap.js').then(({ initEditors }) => {
+            initEditors([textarea])
+            const ed = window._tiptapEditors?.[editorId]
+            ed?.commands.focus()
+            callback?.(ed)
+        })
+    } else {
+        const ed = window._tiptapEditors?.[editorId]
+        ed?.commands.focus()
+        callback?.(ed)
+    }
+
+    return false
+}
+
+/* Закрыть форму ответа */
+window.closeReplyForm = function (id) {
+    document.getElementById('reply-form-' + id)?.classList.add('d-none')
+}
+
+/* Тогл панели форматирования в форме ответа */
+window.toggleReplyToolbar = function (btn) {
+    btn.closest('.reply-form').classList.toggle('toolbar-visible')
+}
+
+/* AJAX отправка формы ответа на комментарий */
+document.addEventListener('submit', function (e) {
+    const form = e.target.closest('.reply-form form')
+    if (!form) return
+
+    e.preventDefault()
+
+    const errorEl = form.querySelector('.reply-error')
+    if (errorEl) errorEl.textContent = ''
+
+    const submitBtn = form.querySelector('button[type="submit"], button:not([type="button"])')
+    if (submitBtn) submitBtn.disabled = true
+
+    fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: new FormData(form),
+    })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d } }) })
+        .then(function ({ ok, data }) {
+            if (ok) {
+                const hash = data.redirect.includes('#') ? data.redirect.split('#')[1] : ''
+                window.location.hash = hash
+                window.location.reload()
+            } else {
+                const msg = Object.values(data.errors || {}).flat().join(', ')
+                if (errorEl) errorEl.textContent = msg
+                if (submitBtn) submitBtn.disabled = false
+            }
+        })
+        .catch(function () {
+            if (submitBtn) submitBtn.disabled = false
+        })
+})
+
+/* Схлопывание/разворачивание ветки комментариев */
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.comment-collapse-btn')
+    if (!btn) return
+    const id = btn.dataset.id
+    const children = document.getElementById('comment-children-' + id)
+    if (!children) return
+    const icon = btn.querySelector('i')
+    const collapsed = children.classList.toggle('d-none')
+    icon.className = collapsed ? 'fa fa-plus text-muted' : 'fa fa-minus text-muted'
+})
+
+/* Ответ на сообщение (для форумов/стен без вложенных комментариев) */
 window.postReply = function (el) {
     postJump()
 
@@ -221,22 +327,7 @@ window.postReply = function (el) {
 }
 
 /* Цитирование сообщения */
-window.postQuote = function (el) {
-    postJump()
-
-    const post     = el.closest('.section')
-    const authorEl = post?.querySelector('.section-author')
-    const author   = authorEl?.dataset.login || authorEl?.textContent.trim() || null
-    const dateEl   = post?.querySelector('.section-date')
-    const date     = (dateEl?.dataset.date || dateEl?.textContent || '').trim()
-    const clone    = post?.querySelector('.section-message')?.cloneNode(true)
-    const editor   = window._tiptapActiveEditor
-
-    if (!editor) return false
-
-    clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
-    const message = clone?.textContent.trim() || ''
-
+function doInsertQuote (editor, authorEl, author, date, message) {
     if (!message) {
         if (author) {
             editor.chain().focus('end', { scrollIntoView: false }).insertContent([
@@ -244,7 +335,7 @@ window.postQuote = function (el) {
                 { type: 'text', text: ' ' },
             ]).run()
         }
-        return false
+        return
     }
 
     const quoteContent = [
@@ -266,7 +357,44 @@ window.postQuote = function (el) {
             : doc.content.size
         editor.chain().focus('end', { scrollIntoView: false }).insertContentAt(insertPos, quoteContent).run()
     }
+}
 
+window.postQuote = function (el) {
+    const commentItem = el.closest('.comment-item')
+
+    if (commentItem) {
+        const id       = commentItem.dataset.id
+        const rcRight  = el.closest('.comment-right')
+        const authorEl = rcRight?.querySelector('.section-author')
+        const author   = authorEl?.dataset.login || authorEl?.textContent.trim() || null
+        const dateEl   = rcRight?.querySelector('.section-date')
+        const date     = (dateEl?.dataset.date || dateEl?.textContent || '').trim()
+        const clone    = rcRight?.querySelector('.section-message')?.cloneNode(true)
+        clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
+        const message  = clone?.textContent.trim() || ''
+
+        openReplyForm(id, function (editor) {
+            if (editor) doInsertQuote(editor, authorEl, author, date, message)
+        })
+        return false
+    }
+
+    postJump()
+
+    const post     = el.closest('.section')
+    const authorEl = post?.querySelector('.section-author')
+    const author   = authorEl?.dataset.login || authorEl?.textContent.trim() || null
+    const dateEl   = post?.querySelector('.section-date')
+    const date     = (dateEl?.dataset.date || dateEl?.textContent || '').trim()
+    const clone    = post?.querySelector('.section-message')?.cloneNode(true)
+    const editor   = window._tiptapActiveEditor
+
+    if (!editor) return false
+
+    clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
+    const message = clone?.textContent.trim() || ''
+
+    doInsertQuote(editor, authorEl, author, date, message)
     return false
 }
 

@@ -64,7 +64,7 @@ class AjaxController extends Controller
             case Offer::$morphName:
             case Down::$morphName:
                 $model = Comment::query()->find($id);
-                $path = route($model->relate_type . '.comments', ['id' => $model->relate_id, 'cid' => $model->id], false);
+                $path = $model?->getViewUrl(false);
                 $type = 'comments';
                 break;
         }

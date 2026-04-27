@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Casts\HtmlCast;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -52,8 +54,11 @@ class Comment extends Model
     {
         return [
             'user_id' => 'int',
+            'text'    => HtmlCast::class,
         ];
     }
+
+    public const MAX_DEPTH = 5;
 
     /**
      * Morph name
@@ -104,6 +109,31 @@ class Comment extends Model
     public function getDetachedImages(): Collection
     {
         return $this->getImages()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
+    }
+
+    /**
+     * Возвращает дочерние комментарии
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->orderBy('created_at');
+    }
+
+    public function countAllDescendants(): int
+    {
+        $count = $this->children->count();
+        foreach ($this->children as $child) {
+            $count += $child->countAllDescendants();
+        }
+        return $count;
+    }
+
+    /**
+     * Возвращает родительский комментарий
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
     }
 
     /**
@@ -174,10 +204,10 @@ class Comment extends Model
     {
         $plural = Str::plural($this->relate_type);
         $params = $this->relate_type === Article::$morphName
-            ? ['slug' => $this->relate->slug, 'cid' => $this->id]
-            : ['id' => $this->relate_id, 'cid' => $this->id];
+            ? ['slug' => $this->relate->slug]
+            : ['id' => $this->relate_id];
 
-        return route($plural . '.view', $params, $absolute);
+        return route($plural . '.view', $params, $absolute) . '#comment_' . $this->id;
     }
 
     public function getRelateType(): string

@@ -79,7 +79,7 @@ class ArticleController extends Controller
     /**
      * Просмотр статьи
      */
-    public function view(string $slug, Request $request): View|RedirectResponse
+    public function view(string $slug): View
     {
         $id = Str::before($slug, '-');
 
@@ -93,10 +93,6 @@ class ArticleController extends Controller
         }
 
         Reader::countingStat($article);
-
-        if ($redirect = $this->cidRedirect($article, $request)) {
-            return $redirect;
-        }
 
         ['comments' => $comments, 'files' => $files] = $this->getCommentsData($article);
 

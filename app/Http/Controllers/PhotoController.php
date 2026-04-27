@@ -47,7 +47,7 @@ class PhotoController extends Controller
     /**
      * Просмотр полной фотографии
      */
-    public function view(int $id, Request $request): View|RedirectResponse
+    public function view(int $id): View
     {
         $photo = Photo::query()
             ->select('photos.*', 'polls.vote')
@@ -62,10 +62,6 @@ class PhotoController extends Controller
 
         if (! $photo) {
             abort(404, __('photos.photo_not_exist'));
-        }
-
-        if ($redirect = $this->cidRedirect($photo, $request)) {
-            return $redirect;
         }
 
         ['comments' => $comments, 'files' => $files] = $this->getCommentsData($photo);
