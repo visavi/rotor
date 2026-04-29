@@ -154,10 +154,12 @@ class Metrika
 
         $hits = session('hits', 1);
 
+        // Исправление SQL Injection: используем параметризованный подход через DB::raw с явным приведением типа
+        $hitsInt = (int) $hits;
         $hitsUpdate = [
-            'allhits' => DB::raw('allhits + ' . $hits),
-            'dayhits' => DB::raw('dayhits + ' . $hits),
-            'hits24'  => DB::raw('hits24 + ' . $hits),
+            'allhits' => DB::raw("allhits + {$hitsInt}"),
+            'dayhits' => DB::raw("dayhits + {$hitsInt}"),
+            'hits24'  => DB::raw("hits24 + {$hitsInt}"),
         ];
 
         $counter->update(array_merge($hostsUpdate, $hitsUpdate));

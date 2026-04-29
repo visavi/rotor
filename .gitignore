@@ -1,11 +1,57 @@
-/public/build
-/public/hot
-/public/storage
-/node_modules
-/storage/*.key
-/storage/debugbar
-/upgrade
-/vendor
-composer.phar
+```php
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.class
+*.exe
+*.dll
+*.so
+*.a
+*.out
+
+# Dependencies
+node_modules/
+vendor/
+composer.lock
 .env
+.env.local
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Editors
+.vscode/
 .idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Distribution / Build
+dist/
+build/
+target/
+*.tar*
+*.zip
+*.gz
+*.rar
+*.7z
+
+# Cache
+.mypy_cache/
+.pytest_cache/
+.gradle/
+```

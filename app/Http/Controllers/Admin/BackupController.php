@@ -53,7 +53,9 @@ class BackupController extends AdminController
                 ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
-                $selectTables = DB::select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
+                // Создаем плейсхолдеры для параметризованного запроса
+                $placeholders = implode(',', array_fill(0, count($sheets), '?'));
+                $selectTables = DB::select('SHOW TABLE STATUS where name IN (' . $placeholders . ')', $sheets);
 
                 $limit = 3000;
                 $filename = 'backup_' . $this->date . '.sql';
@@ -128,19 +130,27 @@ class BackupController extends AdminController
 
         $validator
             ->notEmpty($file, __('admin.backup.backup_not_indicated'))
-            ->regex($file, '|^[\w\.\-]+$|i', __('admin.backup.invalid_backup_name'))
+            ->regex($file, '|^[a-zA-Z0-9._-]+$|', __('admin.backup.invalid_backup_name'))
+            ->true(! str_contains($file, '..'), __('admin.backup.invalid_backup_name'))
+            ->true(! str_starts_with($file, '.'), __('admin.backup.invalid_backup_name'))
             ->true(file_exists(storage_path('backups/' . $file)), __('admin.backup.backup_not_exist'));
 
         if ($validator->isValid()) {
-            unlink(storage_path('backups/' . $file));
+            $filePath = realpath(storage_path('backups/' . $file));
+            $backupDir = realpath(storage_path('backups'));
+
+            // Дополнительная проверка что файл находится в директории бэкапов
+            if ($filePath === false || ! str_starts_with($filePath, $backupDir)) {
+                setFlash('danger', __('admin.backup.invalid_backup_name'));
+                return redirect('admin/backups');
+            }
+
+            unlink($filePath);
 
             setFlash('success', __('admin.backup.backup_success_deleted'));
         } else {
             setFlash('danger', $validator->getErrors());
         }
-
-        return redirect('admin/backups');
-    }
 
     /**
      * Открывает поток
