@@ -5,14 +5,20 @@
 @endif
 
 @if (setting('captcha_type') === 'recaptcha_v3')
-    <script src="//www.google.com/recaptcha/api.js?onload=recaptchaCallback&amp;hl={{ app()->getLocale() }}" async defer></script>
+    <script src="//www.google.com/recaptcha/api.js?render={{ setting('recaptcha_public') }}&onload=recaptchaCallback&hl={{ app()->getLocale() }}" async defer></script>
     <script>
         function recaptchaCallback() {
-            grecaptcha.ready(function () {
-                grecaptcha.execute('{{ setting('recaptcha_public') }}', { action: 'homepage' })
-                    .then(function (token) {
-                        document.getElementById('recaptchaResponse').value = token;
-                    });
+            const input = document.getElementById('recaptchaResponse');
+            const form = input?.closest('form');
+            if (!form) return;
+
+            form.addEventListener('submit', e => {
+                if (input.value) return;
+                e.preventDefault();
+                grecaptcha.ready(() => {
+                    grecaptcha.execute('{{ setting('recaptcha_public') }}', {action: 'submit'})
+                        .then(token => { input.value = token; form.requestSubmit(); });
+                });
             });
         }
     </script>

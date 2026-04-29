@@ -1076,7 +1076,7 @@ function captchaVerify(): bool
     if (setting('captcha_type') === 'recaptcha_v2') {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
 
-        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+        $response = $recaptcha->setExpectedHostname($request->getHost())
             ->verify($request->input('g-recaptcha-response'), getIp());
 
         return $response->isSuccess();
@@ -1085,7 +1085,8 @@ function captchaVerify(): bool
     if (setting('captcha_type') === 'recaptcha_v3') {
         $recaptcha = new ReCaptcha(setting('recaptcha_private'));
 
-        $response = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+        $response = $recaptcha->setExpectedHostname($request->getHost())
+            ->setExpectedAction('submit')
             ->setScoreThreshold(0.5)
             ->verify($request->input('protect'), getIp());
 
