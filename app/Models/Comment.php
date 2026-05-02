@@ -58,7 +58,10 @@ class Comment extends Model
         ];
     }
 
-    public const MAX_DEPTH = 5;
+    /**
+     * Максимальная глубина комментариев
+     */
+    public const int MAX_DEPTH = 3;
 
     /**
      * Morph name
@@ -116,9 +119,12 @@ class Comment extends Model
      */
     public function children(): HasMany
     {
-        return $this->hasMany(Comment::class, 'parent_id')->orderBy('created_at');
+        return $this->hasMany(self::class, 'parent_id')->orderBy('created_at');
     }
 
+    /**
+     * Возвращает количество всех дочерних комментариев
+     */
     public function countAllDescendants(): int
     {
         $count = $this->children->count();
@@ -134,7 +140,7 @@ class Comment extends Model
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Comment::class, 'parent_id');
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     /**
@@ -164,7 +170,7 @@ class Comment extends Model
     /**
      * Возвращает связь с голосованием пользователя
      */
-    public function poll(): morphOne
+    public function poll(): MorphOne
     {
         return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));
@@ -211,6 +217,9 @@ class Comment extends Model
         return route($plural . '.view', $params, $absolute) . '#comment_' . $this->id;
     }
 
+    /**
+     * Возвращает тип связанного объекта
+     */
     public function getRelateType(): string
     {
         return match ($this->relate_type) {

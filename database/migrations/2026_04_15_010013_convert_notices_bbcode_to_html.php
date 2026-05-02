@@ -39,7 +39,7 @@ return new class extends Migration {
 
         DB::table('notices')
             ->where('type', 'notify')
-            ->update(['text' => '<p>Пользователь %login% упомянул вас на странице <strong>%page%</strong></p><blockquote>%text%</blockquote>']);
+            ->update(['text' => '<p>Пользователь %login% упомянул вас на странице <strong>%page%</strong></p><p>%text%</p>']);
     }
 
     public function down(): void

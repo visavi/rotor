@@ -45,7 +45,10 @@ return [
         'down_change_text' => '<p>Сповіщення про зміну файлу.</p><p>Ваш файл <strong>%page%</strong> був змінений модератором, можливо від вас знадобляться додаткові виправлення!</p>',
 
         'notify_name' => 'Згадка користувача',
-        'notify_text' => '<p>Користувач %login% згадав вас на сторінці <strong>%page%</strong></p><blockquote>%text%</blockquote>',
+        'notify_text' => '<p>Користувач %login% згадав вас на сторінці <strong>%page%</strong></p><p>%text%</p>',
+
+        'comment_reply_name' => 'Відповідь на коментар',
+        'comment_reply_text' => '<p>Користувач %login% відповів на ваш коментар на сторінці <strong>%page%</strong></p><p>%text%</p>',
 
         'invite_name' => 'Надсилання запрошень',
         'invite_text' => '<p>Вітаємо! Ви отримали запрошення</p><p>Ваші ключі: %key%</p><p>За допомогою цих ключів ви можете запросити друзів на наш сайт!</p>',

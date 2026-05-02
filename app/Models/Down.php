@@ -161,7 +161,7 @@ class Down extends Model
     /**
      * Возвращает связь с голосованием
      */
-    public function poll(): morphOne
+    public function poll(): MorphOne
     {
         return $this->morphOne(Poll::class, 'relate')
             ->where('user_id', getUser('id'));

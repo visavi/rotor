@@ -933,21 +933,29 @@ function deleteFile(string $path): bool
 /**
  * Отправляет уведомление об упоминании в приват
  */
-function sendNotify(string $text, string $url, string $title): void
+function sendNotify(string $text, string $url, string $title, ?User $replyUser = null): void
 {
     if (! $login = getUser('login')) {
         return;
     }
 
+    $excludeLogins = [$login];
+
+    if ($replyUser?->notify && $replyUser->id !== getUser('id')) {
+        $notify = textNotice('comment_reply', compact('login', 'url', 'title', 'text'));
+        $replyUser->sendMessage(null, $notify);
+        $excludeLogins[] = $replyUser->login;
+    }
+
     preg_match_all('/<a[^>]+class="user"[^>]*href="\/users\/([\w\-]+)"/', $text, $matches);
 
     if (! empty($matches[1])) {
-        $usersAnswer = array_unique(array_diff($matches[1], [$login]));
+        $usersAnswer = array_unique(array_diff($matches[1], $excludeLogins));
 
         foreach ($usersAnswer as $user) {
             $user = getUserByLogin($user);
 
-            if ($user && $user->notify) {
+            if ($user?->notify) {
                 $notify = textNotice('notify', compact('login', 'url', 'title', 'text'));
                 $user->sendMessage(null, $notify);
             }
@@ -974,6 +982,10 @@ function textNotice(string $type, array $replace = []): string
     foreach ($replace as $key => $val) {
         if ($key === 'login') {
             $val = '<a class="user" href="/users/' . $val . '">@' . $val . '</a>';
+        }
+
+        if ($key === 'text') {
+            $message->text = str_replace('<p>%text%</p>', '%text%', $message->text);
         }
 
         $message->text = str_replace('%' . $key . '%', $val, $message->text);

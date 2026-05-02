@@ -121,6 +121,14 @@ class Message extends Model
     }
 
     /**
+     * Возвращает картинки, не вставленные в текст
+     */
+    public function getDetachedImages(): Collection
+    {
+        return $this->getImages()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
+    }
+
+    /**
      * Возвращает связь с диалогами
      */
     public function dialogues(): HasMany

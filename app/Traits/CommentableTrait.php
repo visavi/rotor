@@ -179,7 +179,9 @@ trait CommentableTrait
             $model->increment('count_comments');
 
             $flood->saveState();
-            sendNotify($msg, route($viewRoute, $viewParams, false) . '#comment_' . $comment->id, $model->title);
+
+            $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
+            sendNotify($msg, route($viewRoute, $viewParams, false) . '#comment_' . $comment->id, $model->title, $replyUser);
 
             if ($request->wantsJson()) {
                 return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);

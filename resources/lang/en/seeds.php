@@ -45,7 +45,10 @@ return [
         'down_change_text' => '<p>File change notification.</p><p>Your file <strong>%page%</strong> has been edited by the moderator, you may need additional corrections!</p>',
 
         'notify_name' => 'User mention',
-        'notify_text' => '<p>User %login% mentioned you on the page <strong>%page%</strong></p><blockquote>%text%</blockquote>',
+        'notify_text' => '<p>User %login% mentioned you on the page <strong>%page%</strong></p><p>%text%</p>',
+
+        'comment_reply_name' => 'Reply to comment',
+        'comment_reply_text' => '<p>User %login% replied to your comment on the page <strong>%page%</strong></p><p>%text%</p>',
 
         'invite_name' => 'Sending invitation keys',
         'invite_text' => '<p>Congratulations! You have received invitation keys</p><p>Your keys: %key%</p><p>With these keys you can invite your friends to our site!</p>',
