@@ -10,6 +10,8 @@ return new class extends Migration {
         if (! Schema::hasTable('comments')) {
             Schema::create('comments', function (Blueprint $table) {
                 $table->increments('id');
+                $table->unsignedInteger('parent_id')->nullable();
+                $table->unsignedTinyInteger('depth')->default(0);
                 $table->integer('user_id');
                 $table->string('relate_type', 10);
                 $table->integer('relate_id');
@@ -19,6 +21,7 @@ return new class extends Migration {
                 $table->string('brow', 25);
                 $table->integer('created_at');
 
+                $table->index('parent_id');
                 $table->index('created_at');
                 $table->index(['rating', 'created_at']);
                 $table->index(['relate_type', 'relate_id']);

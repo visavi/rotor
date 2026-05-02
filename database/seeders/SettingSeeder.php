@@ -174,7 +174,6 @@ class SettingSeeder extends Seeder
             ['name' => 'photo_text_max', 'value' => 1000],
             ['name' => 'postnews', 'value' => 10],
             ['name' => 'postoffers', 'value' => 10],
-            ['name' => 'previewsize', 'value' => 500],
             ['name' => 'privatpost', 'value' => 10],
             ['name' => 'privatprotect', 'value' => 50],
             ['name' => 'ratinglist', 'value' => 20],
