@@ -252,7 +252,7 @@ class Article extends Model
     {
         $text = $withImages
             ? $this->text
-            : preg_replace('/<img[^>]*>/', '', $this->text);
+            : preg_replace('/<img(?=[^>]+src=["\'](?!https?:\/\/))[^>]*>/i', '', $this->text);
 
         return renderHtml($text, 'article-' . $this->id);
     }

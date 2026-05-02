@@ -59,10 +59,6 @@ class Comment extends Model
     }
 
     /**
-     * Максимальная глубина комментариев
-     */
-    public const int MAX_DEPTH = 3;
-
     /**
      * Morph name
      */
@@ -183,7 +179,7 @@ class Comment extends Model
     {
         $text = $withImages
             ? $this->text
-            : preg_replace('/<img[^>]*>/', '', $this->text);
+            : preg_replace('/<img(?=[^>]+src=["\'](?!https?:\/\/))[^>]*>/i', '', $this->text);
 
         return renderHtml($text, 'comment-' . $this->id);
     }

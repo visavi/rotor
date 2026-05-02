@@ -56,6 +56,7 @@ class SettingSeeder extends Seeder
             ['name' => 'comments_per_page', 'value' => 10],
             ['name' => 'comment_text_min', 'value' => 5],
             ['name' => 'comment_text_max', 'value' => 1000],
+            ['name' => 'comment_depth', 'value' => 3],
             ['name' => 'comment_point', 'value' => 1],
             ['name' => 'comment_money', 'value' => 50],
             ['name' => 'contactlist', 'value' => 10],

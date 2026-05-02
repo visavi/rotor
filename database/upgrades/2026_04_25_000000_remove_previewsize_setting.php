@@ -13,7 +13,10 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Setting::query()->where('name', 'previewsize')->updateOrCreate([], ['name' => 'previewsize', 'value' => 500]);
+        Setting::query()->where('name', 'previewsize')->updateOrCreate([], [
+            'name'  => 'previewsize',
+            'value' => 500,
+        ]);
 
         clearCache('settings');
     }

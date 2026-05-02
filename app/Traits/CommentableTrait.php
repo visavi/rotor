@@ -147,7 +147,7 @@ trait CommentableTrait
                 : null;
 
             if ($parentComment && $parentComment->relate_id === $model->id) {
-                if ($parentComment->depth >= Comment::MAX_DEPTH) {
+                if ($parentComment->depth >= setting('comment_depth')) {
                     $parentId = $parentComment->parent_id;
                     $depth = $parentComment->depth;
                 } else {

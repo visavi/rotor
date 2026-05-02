@@ -16,6 +16,12 @@
         <div class="invalid-feedback">{{ textError('sets[chatpost]') }}</div>
     </div>
 
+    <div class="mb-3{{ hasError('sets[comment_depth]') }}">
+        <label for="comment_depth" class="form-label">{{ __('settings.comment_depth') }}:</label>
+        <input type="number" class="form-control" id="comment_depth" name="sets[comment_depth]" maxlength="2" value="{{ getInput('sets.comment_depth', $settings['comment_depth']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[comment_depth]') }}</div>
+    </div>
+
     <div class="mb-3{{ hasError('sets[comment_point]') }}">
         <label for="comment_point" class="form-label">{{ __('settings.comment_point') }}:</label>
         <input type="number" class="form-control" id="comment_point" name="sets[comment_point]" maxlength="2" value="{{ getInput('sets.comment_point', $settings['comment_point']) }}" required>

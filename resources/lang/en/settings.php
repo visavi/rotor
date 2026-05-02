@@ -49,6 +49,7 @@ return [
     'comments_symbols'  => 'Characters in the comments',
     'comments_per_page' => 'Comments per page',
     'chat_per_page'     => 'Posts in admin chat on page',
+    'comment_depth'     => 'Comment nesting depth',
     'comment_point'     => 'Total points awarded',
     'comment_money'     => 'Total moneys awarded',
 
