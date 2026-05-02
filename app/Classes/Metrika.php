@@ -152,7 +152,7 @@ class Metrika
             ];
         }
 
-        $hits = session('hits', 1);
+        $hits = (int) session('hits', 1);
 
         $hitsUpdate = [
             'allhits' => DB::raw('allhits + ' . $hits),

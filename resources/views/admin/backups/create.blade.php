@@ -29,7 +29,7 @@
                     <div class="form-check">
                         <label class="form-check-label">
                             <input name="sheets[]" class="form-check-input" type="checkbox" value="{{ $data->Name }}"{{ $checked }}>
-                            <i class="fa fa-database"></i> <b>{{ $data->Name }}</b> ({{ __('admin.backup.records') }}: {{ $data->Rows }} / {{ __('admin.backup.size') }}: {{ formatSize($data->Data_length) }})
+                            <i class="fa fa-database"></i> <b>{{ $data->Name }}</b> ({{ __('admin.backup.records') }}: {{ $data->Rows }} / {{ __('admin.backup.size') }}: {{ formatSize((int) $data->Data_length) }})
                         </label>
                     </div>
                 @endforeach

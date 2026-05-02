@@ -53,7 +53,8 @@ class BackupController extends AdminController
                 ->between($level, 0, 9, ['level' => __('admin.backup.wrong_compression_ratio')]);
 
             if ($validator->isValid()) {
-                $selectTables = DB::select('SHOW TABLE STATUS where name IN("' . implode('","', $sheets) . '")');
+                $placeholders = implode(',', array_fill(0, count($sheets), '?'));
+                $selectTables = DB::select('SHOW TABLE STATUS WHERE name IN(' . $placeholders . ')', (array) $sheets);
 
                 $limit = 3000;
                 $filename = 'backup_' . $this->date . '.sql';
@@ -66,7 +67,14 @@ class BackupController extends AdminController
                     $columns = '(' . implode(',', array_column($columnsFields, 'Field')) . ')';
 
                     $this->fwrite($fp, "--\n-- Structure table `{$table->Name}`\n--\n\n", $method);
-                    $this->fwrite($fp, "DROP TABLE IF EXISTS `{$table->Name}`;\n{$show->{'Create Table'}};\n\n", $method);
+                    $isView = $table->Engine === null;
+                    $createSql = $isView ? $show->{'Create View'} : $show->{'Create Table'};
+                    $dropSql = $isView ? "DROP VIEW IF EXISTS `{$table->Name}`" : "DROP TABLE IF EXISTS `{$table->Name}`";
+                    $this->fwrite($fp, "{$dropSql};\n{$createSql};\n\n", $method);
+
+                    if ($table->Engine === null) {
+                        continue;
+                    }
 
                     $total = DB::table($table->Name)->count();
 
@@ -126,13 +134,16 @@ class BackupController extends AdminController
     {
         $file = $request->input('file');
 
+        $backupDir = storage_path('backups');
+        $fullPath = realpath($backupDir . '/' . $file);
+
         $validator
             ->notEmpty($file, __('admin.backup.backup_not_indicated'))
-            ->regex($file, '|^[\w\.\-]+$|i', __('admin.backup.invalid_backup_name'))
-            ->true(file_exists(storage_path('backups/' . $file)), __('admin.backup.backup_not_exist'));
+            ->regex($file, '#^[\w\-]+\.(sql\.)?(gz|bz2|sql)$#i', __('admin.backup.invalid_backup_name'))
+            ->true($fullPath !== false && is_file($fullPath), __('admin.backup.backup_not_exist'));
 
         if ($validator->isValid()) {
-            unlink(storage_path('backups/' . $file));
+            unlink($fullPath);
 
             setFlash('success', __('admin.backup.backup_success_deleted'));
         } else {

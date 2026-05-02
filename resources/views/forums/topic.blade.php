@@ -108,7 +108,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="section-form my-1">{{ renderText($topic->note) }}</div>
+        <div class="alert alert-info my-1">{{ renderText($topic->note) }}</div>
     @endif
     <hr>
 
