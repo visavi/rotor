@@ -54,17 +54,32 @@
 
                     @if (getUser())
                         @if (getUser('id') !== $comment->user_id && ! ($closed ?? false))
-                            <a href="#" onclick="return openReplyForm({{ $comment->id }})">{{ __('main.reply') }}</a>
+                            <a href="#" onclick="return openReplyForm({{ $comment->id }})">
+                                <i class="fas fa-reply fa-sm text-muted"></i>
+                                <span>{{ __('main.reply') }}</span>
+                            </a>
                         @endif
                         @if (getUser('id') !== $comment->user_id)
-                            <a href="#" onclick="return postQuote(this)">{{ __('main.quote') }}</a>
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">{{ __('main.complain') }}</a>
+                            <a href="#" onclick="return postQuote(this)">
+                                <i class="fas fa-quote-left fa-sm text-muted"></i>
+                                <span>{{ __('main.quote') }}</span>
+                            </a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
+                                <i class="fas fa-flag fa-sm text-muted"></i>
+                                <span>{{ __('main.complain') }}</span>
+                            </a>
                         @endif
                         @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                            <a href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments">{{ __('main.edit') }}</a>
+                            <a href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments">
+                                <i class="fas fa-edit fa-sm text-muted"></i>
+                                <span>{{ __('main.edit') }}</span>
+                            </a>
                         @endif
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">{{ __('main.delete') }}</a>
+                            <a href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">
+                                <i class="fas fa-trash fa-sm text-muted"></i>
+                                <span>{{ __('main.delete') }}</span>
+                            </a>
                         @endif
                     @endif
                 </div>

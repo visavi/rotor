@@ -12,10 +12,14 @@ return new class extends Migration {
             'name'  => 'comment_depth',
             'value' => 3,
         ]);
+
+        clearCache('settings');
     }
 
     public function down(): void
     {
         Setting::query()->where('name', 'comment_depth')->delete();
+
+        clearCache('settings');
     }
 };
