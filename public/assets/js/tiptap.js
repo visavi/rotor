@@ -931,6 +931,10 @@ function initEditor(textarea) {
     textarea.removeAttribute('required')
     textarea.removeAttribute('maxlength') // maxlength по HTML бессмысленен — считаем текст
 
+    if (textarea.closest('.is-invalid')) {
+        wrapper.classList.add('is-invalid')
+    }
+
     let isChanged = false
 
     // === Image Upload Helper ===
@@ -1152,10 +1156,11 @@ function initEditor(textarea) {
             form.addEventListener('submit', e => {
                 if (getCharCount() === 0) {
                     e.preventDefault()
-                    editorEl.classList.add('is-invalid')
-                    editorEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    wrapper.classList.add('is-invalid')
+                    wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    notyf.error(__('validator.empty_field'))
                 } else {
-                    editorEl.classList.remove('is-invalid')
+                    wrapper.classList.remove('is-invalid')
                 }
             }, { capture: true })
         }

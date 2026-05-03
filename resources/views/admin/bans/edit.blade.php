@@ -26,7 +26,7 @@
     <i class="fa fa-history"></i> <b><a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a></b><br><br>
 
     @if ($user->level === 'banned' && $user->timeban > SITETIME)
-        <div class="section-form mb-3 shadow">
+        <div class="section shadow mb-3">
             <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
             {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
         </div>

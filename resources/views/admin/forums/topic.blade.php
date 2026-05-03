@@ -78,7 +78,7 @@
     @endif
 
     @if ($topic->note)
-        <div class="section-form my-1">{{ renderText($topic->note) }}</div>
+        <div class="alert alert-info my-1">{{ renderText($topic->note) }}</div>
     @endif
 
     @if ($vote)
@@ -112,7 +112,7 @@
     <form action="{{ route('admin.posts.delete', ['tid' => $topic->id, 'page' => $posts->currentPage()]) }}" method="post">
         @csrf
 
-        <div class="section-form py-1 my-2 text-end">
+        <div class="section shadow py-1 my-2 text-end">
             <label for="all" class="form-label">{{ __('main.select_all') }}</label>
             <input type="checkbox" class="form-check-input" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
         </div>
