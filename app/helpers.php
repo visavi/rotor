@@ -1227,7 +1227,9 @@ function getExtension(string $filename): string
  */
 function getBodyName(string $filename): string
 {
-    return pathinfo($filename, PATHINFO_FILENAME);
+    $name = pathinfo($filename, PATHINFO_FILENAME);
+
+    return preg_replace('/\xc2\xa0/', ' ', $name);
 }
 
 /**

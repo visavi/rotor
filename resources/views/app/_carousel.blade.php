@@ -12,7 +12,7 @@
             @foreach ($files as $file)
                 <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
                     <a href="{{ $file->path }}" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}">
-                        <img src="{{ $file->path }}" alt="{{ $model->title }}" class="img-fluid">
+                        <img src="{{ $file->path }}" alt="{{ $file->name }}" class="img-fluid">
                     </a>
                 </div>
             @endforeach

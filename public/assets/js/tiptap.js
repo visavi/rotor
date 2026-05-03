@@ -984,7 +984,6 @@ function initEditor(textarea) {
                     const img = template.querySelector('img')
                     if (img) {
                         img.setAttribute('src', data.path)
-                        img.setAttribute('data-source', data.source || data.path)
                     }
                     template.querySelector('a')?.setAttribute('data-id', data.id)
                     scope.querySelector('.js-files')?.insertAdjacentHTML('beforeend', template.innerHTML)

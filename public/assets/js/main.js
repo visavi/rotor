@@ -719,7 +719,6 @@ window.submitFile = function (el) {
             if (data.type === 'image') {
                 const img = template?.querySelector('img')
                 img?.setAttribute('src', data.path)
-                img?.setAttribute('data-source', data.source)
             } else {
                 const link = template?.querySelector('.js-file-link')
                 if (link) { link.href = data.path; link.textContent = data.name }
@@ -758,7 +757,6 @@ window.submitImage = function (el) {
             const template = templateEl?.cloneNode(true)
             const img = template?.querySelector('img')
             img?.setAttribute('src', data.path)
-            img?.setAttribute('data-source', data.source)
             template?.querySelector('a')?.setAttribute('data-id', data.id)
             if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
         },
@@ -891,11 +889,9 @@ window.initSlideMainImage = function (el) {
 }
 
 /* Инициализирует миниатюру слайдера */
-window.initSlideThumbImage = function (e, el) {
-    e.preventDefault()
-
+window.initSlideThumbImage = function (el) {
     const newImg = el.querySelector('img')
-    const imgSource = newImg?.dataset.source
+    const imgSource = el.getAttribute('href')
     const slider = el.closest('.media-file')
     const mainLink = slider?.querySelector('.slide-main-link')
 
@@ -904,12 +900,13 @@ window.initSlideThumbImage = function (e, el) {
         const mainImg = mainLink.querySelector('img')
         if (mainImg) {
             mainImg.setAttribute('src', newImg.getAttribute('src'))
-            mainImg.dataset.source = imgSource
         }
     }
 
     slider?.querySelectorAll('.slide-thumb-image').forEach(img => img.classList.remove('active'))
     newImg?.classList.add('active')
+
+    return false
 }
 
 let checkTimeout

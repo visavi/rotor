@@ -245,7 +245,6 @@ class AjaxController extends Controller
                     'success' => true,
                     'id'      => $fileData['id'],
                     'path'    => $fileData['path'],
-                    'source'  => $fileData['path'],
                     'type'    => $fileData['type'],
                 ];
             } else {

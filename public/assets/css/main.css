@@ -355,6 +355,7 @@ textarea.form-control {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    padding-left: 3px;
 }
 
 .slide-thumbnails img {
