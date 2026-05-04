@@ -5,15 +5,14 @@
 @section('content')
     @foreach ($article->lastComments as $comment)
         @php
-            $comment->text = $comment->getText();
-            $comment->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $comment->text);
+            $commentText = absolutizeUrls((string) $comment->getText());
         @endphp
 
         <item>
-            <title>{{ $comment->text }}</title>
+            <title>{{ $commentText }}</title>
             <link>{{ route('articles.view', ['slug' => $article->slug]) }}</link>
             <description>{{ $article->title }}</description>
-            <author>{{ $comment->user->getName() }}</author>
+            <dc:creator>{{ $comment->user->getName() }}</dc:creator>
             <pubDate>{{ date('r', $comment->created_at) }}</pubDate>
             <category>{{ __('main.comments') }}</category>
             <guid>{{ route('articles.view', ['slug' => $article->slug, 'cid' => $comment->id]) }}</guid>

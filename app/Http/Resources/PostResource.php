@@ -17,7 +17,7 @@ class PostResource extends JsonResource
             'id'         => $this->id,
             'login'      => $this->user->login,
             'name'       => $this->user->getName(),
-            'text'       => $this->text,
+            'text'       => absolutizeUrls($this->text),
             'rating'     => $this->rating,
             'files'      => FileResource::collection($this->files),
             'updated_at' => dateFixed($this->updated_at, 'c', true),

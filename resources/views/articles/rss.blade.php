@@ -5,16 +5,14 @@
 @section('content')
     @foreach ($articles as $article)
         @php
-            $article->text = $article->getText();
-            $article->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $article->text);
-            $article->text = str_replace('/uploads/articles', asset('/uploads/articles'), $article->text);
+            $articleText = absolutizeUrls((string) $article->getText());
         @endphp
 
         <item>
             <title>{{ $article->title }}</title>
             <link>{{ route('articles.view', ['slug' => $article->slug]) }}</link>
-            <description>{{ $article->text }}</description>
-            <author>{{ $article->user->getName() }}</author>
+            <description>{{ $articleText }}</description>
+            <dc:creator>{{ $article->user->getName() }}</dc:creator>
             <pubDate>{{ date('r', $article->created_at) }}</pubDate>
             <category>{{ __('index.blogs') }}</category>
             <guid>{{ route('articles.view', ['slug' => $article->slug]) }}</guid>

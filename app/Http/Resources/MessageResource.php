@@ -20,7 +20,7 @@ class MessageResource extends JsonResource
             'id'             => $this->id,
             'login'          => $sender->exists ? $sender->login : (string) $this->author_id,
             'name'           => $this->author_id ? $sender->getName() : __('messages.system'),
-            'text'           => $this->text,
+            'text'           => absolutizeUrls($this->text),
             'type'           => $type,
             'recipient_read' => (bool) $this->getAttribute('recipient_read'),
             'created_at'     => dateFixed($this->created_at, 'c', true),

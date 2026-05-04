@@ -1590,3 +1590,13 @@ function getAvailableLanguages(): array
 {
     return array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR) ?: []);
 }
+
+/**
+ * Заменяет относительные URL на абсолютные
+ */
+function absolutizeUrls(string $text): string
+{
+    $base = config('app.url');
+
+    return preg_replace('/(href|src)="(\/[^"]*)"/', '$1="' . $base . '$2"', $text);
+}

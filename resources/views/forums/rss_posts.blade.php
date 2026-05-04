@@ -5,14 +5,14 @@
 @section('content')
     @foreach ($posts as $data)
         @php
-            $data->text = $data->getText();
+            $dataText = absolutizeUrls((string) $data->getText());
         @endphp
 
         <item>
-            <title>{{ $data->text }}</title>
+            <title>{{ $dataText }}</title>
             <link>{{ route('topics.topic', ['id' => $topic->id, 'pid' => $data->id]) }}</link>
             <description>{{ $topic->title }} </description>
-            <author>{{ $data->user->getName() }}</author>
+            <dc:creator>{{ $data->user->getName() }}</dc:creator>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
             <category>{{ __('forums.posts') }}</category>
             <guid>{{ route('topics.topic', ['id' => $topic->id, 'pid' => $data->id]) }}</guid>

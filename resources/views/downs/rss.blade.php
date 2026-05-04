@@ -4,14 +4,13 @@
 
 @section('content')
     @foreach ($downs as $down)
-        <?php $down->text = $down->getText(); ?>
-        <?php $down->text = str_replace('/uploads/stickers', asset('/uploads/stickers'), $down->text); ?>
+        <?php $downText = absolutizeUrls((string) $down->getText()); ?>
 
         <item>
             <title>{{ $down->title }}</title>
             <link>{{ route('downs.view', ['id' => $down->id]) }}</link>
-            <description>{{ $down->text }}</description>
-            <author>{{ $down->user->getName() }}</author>
+            <description>{{ $downText }}</description>
+            <dc:creator>{{ $down->user->getName() }}</dc:creator>
             <pubDate>{{ date('r', $down->created_at) }}</pubDate>
             <category>{{ __('index.loads') }}</category>
             <guid>{{ route('downs.view', ['id' => $down->id]) }}</guid>

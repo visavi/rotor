@@ -5,14 +5,14 @@
 @section('content')
     @foreach ($newses as $news)
         @php
-            $newsText = str_replace('/uploads/stickers', asset('/uploads/stickers'), $news->text);
+            $newsText = absolutizeUrls((string) $news->getText());
         @endphp
 
         <item>
             <title>{{ $news->title }}</title>
             <link>{{ route('news.view', ['id' => $news->id]) }}</link>
             <description>{{ $newsText }}</description>
-            <author>{{ $news->user->getName() }}</author>
+            <dc:creator>{{ $news->user->getName() }}</dc:creator>
             <pubDate>{{ date('r', $news->created_at) }}</pubDate>
             <category>{{ __('index.news') }}</category>
             <guid>{{ route('news.view', ['id' => $news->id]) }}</guid>
