@@ -62,8 +62,8 @@ return [
     'article_delayed_text'        => 'Данная статья с отложенной публикацией!',
     'article_draft_text'          => 'Данная статья находится в черновике!',
     'article_pending_text'        => 'Внимание! Данная статья ожидает проверки модератором!',
-    'article_success_published'   => 'Статья успешно опубликована!',
-    'article_success_unpublished' => 'Статья успешно снята с публикации!',
+    'article_success_published'   => 'Статья опубликована!',
+    'article_success_unpublished' => 'Статья снята с публикации!',
     'article_moderation_text'     => 'Статья будет опубликована после модерации!',
     'article_delayed_time'        => 'Дата отложенной публикации должна быть больше текущего времени!',
 ];

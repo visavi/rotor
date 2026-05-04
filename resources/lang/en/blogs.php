@@ -62,8 +62,8 @@ return [
     'article_delayed_text'        => 'This article is delayed publication!',
     'article_draft_text'          => 'This article is in draft!',
     'article_pending_text'        => 'Attention! This article is awaiting moderator approval!',
-    'article_success_published'   => 'The article has been successfully published!',
-    'article_success_unpublished' => 'The article has been successfully removed from publication!',
+    'article_success_published'   => 'The article has been published!',
+    'article_success_unpublished' => 'The article has been unpublished!',
     'article_moderation_text'     => 'The article will be published after moderation!',
     'article_delayed_time'        => 'ДThe delayed publication date must be greater than the current time!',
 ];

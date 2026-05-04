@@ -65,7 +65,9 @@
         <button type="submit" class="btn btn-secondary" name="action" value="draft">
             {{ __('blogs.add_draft') }}
         </button>
-    @elseif ($article->draft)
+    @endif
+
+    @if ($article->exists && ! $article->active)
         <button type="submit" class="btn btn-success" name="action" value="publish">
             {{ __('main.publish') }}
         </button>

@@ -134,7 +134,7 @@ class ArticleController extends Controller
             $tags = array_unique(array_diff($tags, ['']));
             $published = $request->input('published');
 
-            $isDelay = (bool) $request->input('delay');
+            $isDelay = $request->boolean('delay');
             $isDraft = $request->input('action') === 'draft';
             $isModeration = setting('article_moderation') && ! isAdmin();
             $isActive = ! $isDraft && ! $isDelay && ! $isModeration;
@@ -228,8 +228,8 @@ class ArticleController extends Controller
             $tags = array_unique(array_diff($tags, ['']));
             $published = $request->input('published');
 
-            $isDelay = (bool) $request->input('delay');
             $isPublish = $request->input('action') === 'publish';
+            $isDelay = ! $isPublish && $request->boolean('delay');
 
             $category = Blog::query()->find($cid);
 
@@ -253,8 +253,9 @@ class ArticleController extends Controller
 
             if ($validator->isValid()) {
                 $isModeration = setting('article_moderation') && ! isAdmin();
-                $isDraft = $article->draft && ! $isPublish;
-                $isActive = ! $isDraft && ! $isDelay && ! $isModeration;
+                $wasDraft = $article->draft;
+                $isDraft = ! $isPublish && $article->draft;
+                $isActive = $isPublish || (! $isDraft && ! $isDelay && ! $isModeration && $article->active);
 
                 $article->update([
                     'category_id'  => $category->id,
@@ -275,7 +276,7 @@ class ArticleController extends Controller
                 clearCache('tagCloud');
 
                 $created = $isModeration ? __('blogs.article_moderation_text') : __('blogs.article_success_created');
-                $flash = $isDraft ? __('blogs.article_success_edited') : $created;
+                $flash = ($wasDraft && $isPublish) ? $created : __('blogs.article_success_edited');
 
                 return redirect()
                     ->route('articles.view', ['slug' => $article->slug])

@@ -62,8 +62,8 @@ return [
     'article_delayed_text'        => 'Ця стаття з відкладеною публікацією!',
     'article_draft_text'          => 'Ця стаття знаходиться в чернетці!',
     'article_pending_text'        => 'Увага! Ця стаття чекає на перевірку модератором!',
-    'article_success_published'   => 'Статтю успішно опубліковано!',
-    'article_success_unpublished' => 'Статтю успішно знято з публікації!',
+    'article_success_published'   => 'Статтю опубліковано!',
+    'article_success_unpublished' => 'Статтю знято з публікації!',
     'article_moderation_text'     => 'Статтю буде опубліковано після модерації!',
     'article_delayed_time'        => 'Дата відкладеної публікації має бути більшою за поточний час!',
 ];

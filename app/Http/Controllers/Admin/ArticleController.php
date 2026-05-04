@@ -204,8 +204,8 @@ class ArticleController extends AdminController
             $tags = array_unique(array_diff($tags, ['']));
             $published = $request->input('published');
 
-            $isDelay = (bool) $request->input('delay');
             $isPublish = $request->input('action') === 'publish';
+            $isDelay = ! $isPublish && $request->boolean('delay');
 
             $category = Blog::query()->find($cid);
 
@@ -228,8 +228,9 @@ class ArticleController extends AdminController
             }
 
             if ($validator->isValid()) {
-                $isDraft = $article->draft && ! $isPublish;
-                $isActive = ! $isDraft && ! $isDelay;
+                $wasDraft = $article->draft;
+                $isDraft = ! $isPublish && $article->draft;
+                $isActive = $isPublish || (! $isDraft && ! $isDelay && $article->active);
 
                 $article->update([
                     'category_id'  => $category->id,
@@ -249,7 +250,7 @@ class ArticleController extends AdminController
                 $article->tags()->sync($tagIds);
                 clearCache('tagCloud');
 
-                $flash = $isDraft ? __('blogs.article_success_edited') : __('blogs.article_success_created');
+                $flash = ($wasDraft && $isPublish) ? __('blogs.article_success_created') : __('blogs.article_success_edited');
 
                 return redirect()
                     ->route('articles.view', ['slug' => $article->slug])
