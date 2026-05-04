@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class ArticleController extends Controller
@@ -324,7 +325,7 @@ class ArticleController extends Controller
     /**
      * RSS всех блогов
      */
-    public function rss(): View
+    public function rss(): Response
     {
         $articles = Article::query()
             ->active()
@@ -337,13 +338,15 @@ class ArticleController extends Controller
             abort(200, __('blogs.article_not_exist'));
         }
 
-        return view('articles/rss', compact('articles'));
+        return response()
+            ->view('articles/rss', compact('articles'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 
     /**
      * RSS комментариев к блогу
      */
-    public function rssComments(int $id): View
+    public function rssComments(int $id): Response
     {
         $article = Article::query()->where('id', $id)->with('lastComments')->first();
 
@@ -351,7 +354,9 @@ class ArticleController extends Controller
             abort(404, __('blogs.article_not_exist'));
         }
 
-        return view('articles/rss_comments', compact('article'));
+        return response()
+            ->view('articles/rss_comments', compact('article'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 
     /**

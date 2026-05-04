@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\News;
 use App\Traits\CommentableTrait;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class NewsController extends Controller
@@ -59,7 +60,7 @@ class NewsController extends Controller
     /**
      * Rss новостей
      */
-    public function rss(): View
+    public function rss(): Response
     {
         $newses = News::query()
             ->orderByDesc('created_at')
@@ -71,7 +72,9 @@ class NewsController extends Controller
             abort(200, __('news.empty_news'));
         }
 
-        return view('news/rss', compact('newses'));
+        return response()
+            ->view('news/rss', compact('newses'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 
     /**

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -186,7 +187,7 @@ class ForumController extends Controller
     /**
      * RSS всех топиков
      */
-    public function rss(): View
+    public function rss(): Response
     {
         $topics = Topic::query()
             ->where('closed', 0)
@@ -199,13 +200,15 @@ class ForumController extends Controller
             abort(200, __('forums.topics_not_created'));
         }
 
-        return view('forums/rss', compact('topics'));
+        return response()
+            ->view('forums/rss', compact('topics'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 
     /**
      * RSS постов
      */
-    public function rssPosts(int $id): View
+    public function rssPosts(int $id): Response
     {
         $topic = Topic::query()->find($id);
 
@@ -220,6 +223,8 @@ class ForumController extends Controller
             ->limit(15)
             ->get();
 
-        return view('forums/rss_posts', compact('topic', 'posts'));
+        return response()
+            ->view('forums/rss_posts', compact('topic', 'posts'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 }

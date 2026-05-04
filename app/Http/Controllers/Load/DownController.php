@@ -16,6 +16,7 @@ use App\Traits\CommentableTrait;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
@@ -470,7 +471,7 @@ class DownController extends Controller
     /**
      * RSS комментариев
      */
-    public function rss(int $id): View
+    public function rss(int $id): Response
     {
         $down = Down::query()->where('id', $id)->with('lastComments')->first();
 
@@ -478,6 +479,8 @@ class DownController extends Controller
             abort(404, __('loads.down_not_exist'));
         }
 
-        return view('downs/rss_comments', compact('down'));
+        return response()
+            ->view('downs/rss_comments', compact('down'))
+            ->header('Content-Type', 'application/rss+xml; charset=utf-8');
     }
 }
