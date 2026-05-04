@@ -18,7 +18,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
 
 class DownController extends Controller

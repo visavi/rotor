@@ -13,9 +13,9 @@ use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {

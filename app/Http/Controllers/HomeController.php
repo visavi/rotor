@@ -15,9 +15,9 @@ use App\Models\Search;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Mobicms\Captcha\Image as MobicmsCaptcha;
-use Symfony\Component\HttpFoundation\Response;
 use Visavi\Captcha\CaptchaBuilder as AnimatedCaptchaBuilder;
 use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
 

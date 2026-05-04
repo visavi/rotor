@@ -15,8 +15,15 @@ if (! file_exists($directory)) {
 }
 
 exec('git pull');
-$command = shell_exec('git diff ' . $commit1 . ' ' . $commit2 . ' --name-only');
-$files = explode(PHP_EOL, $command);
+exec('git diff ' . escapeshellarg($commit1) . ' ' . escapeshellarg($commit2) . ' --name-only', $output, $exitCode);
+
+if ($exitCode !== 0) {
+    exit('Error: git diff failed. Check that tags exist.' . PHP_EOL);
+}
+
+$command = implode(PHP_EOL, $output);
+
+$files = explode(PHP_EOL, trim($command));
 
 foreach ($files as $file) {
     if ($file && file_exists($baseDir . '/' . $file)) {

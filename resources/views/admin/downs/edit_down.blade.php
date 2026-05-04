@@ -62,6 +62,6 @@
             {{ __('main.author') }}: {{ $down->user->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($down->created_at) }}</small>
         </div>
 
-        @include('loads/_form')
+        @include('downs/_form')
     </div>
 @stop
