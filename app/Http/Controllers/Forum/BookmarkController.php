@@ -10,8 +10,8 @@ use App\Models\Bookmark;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookmarkController extends Controller
 {
