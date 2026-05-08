@@ -1,12 +1,13 @@
+@php $collapsed = $comment->rating < 0 && $comment->children->isNotEmpty(); @endphp
 <div class="comment-item py-2" id="comment_{{ $comment->id }}" data-id="{{ $comment->id }}">
-    <div class="d-flex gap-1">
+    <div class="d-flex">
         {{-- Левая колонка: аватар + кнопка +/- + линия --}}
         <div class="comment-left">
             <span class="avatar-mini flex-shrink-0">{{ $comment->user->getAvatarImage() }}</span>
             @if ($comment->children->isNotEmpty())
                 <div class="comment-thread-ctrl" onclick="toggleComment({{ $comment->id }})" id="comment-ctrl-{{ $comment->id }}">
-                    <span class="comment-thread-btn"><i class="fa fa-minus" style="font-size:8px"></i></span>
-                    <div class="comment-thread-line"></div>
+                    <span class="comment-thread-btn"><i class="fa {{ $collapsed ? 'fa-plus' : 'fa-minus' }}" style="font-size:8px"></i></span>
+                    <div class="comment-thread-line{{ $collapsed ? ' d-none' : '' }}"></div>
                 </div>
             @endif
         </div>
@@ -21,11 +22,11 @@
 
             {{-- «Раскрыть ветку» — вне comment-body, появляется рядом с [+] при сворачивании --}}
             @if ($comment->children->isNotEmpty())
-                <span class="comment-expand-label d-none" id="comment-expand-{{ $comment->id }}" onclick="toggleComment({{ $comment->id }})">{{ __('main.expand_thread') }} ({{ $comment->countAllDescendants() }})</span>
+                <span class="comment-expand-label{{ $collapsed ? '' : ' d-none' }}" id="comment-expand-{{ $comment->id }}" onclick="toggleComment({{ $comment->id }})">{{ __('main.expand_thread') }} ({{ $comment->countAllDescendants() }})</span>
             @endif
 
             {{-- Тело (сворачивается) --}}
-            <div id="comment-body-{{ $comment->id }}" class="mt-1">
+            <div id="comment-body-{{ $comment->id }}" class="comment-body mt-1{{ $collapsed ? ' d-none' : '' }}">
                 <div class="section-message mb-2">
                     {{ $comment->getText() }}
                 </div>
@@ -104,7 +105,7 @@
 
                 {{-- Дочерние комментарии --}}
                 @if ($comment->children->isNotEmpty())
-                    <div class="mt-2" id="comment-children-{{ $comment->id }}">
+                    <div class="mt-2 comment-children" id="comment-children-{{ $comment->id }}">
                         @foreach ($comment->children as $child)
                             @include('app/_comment_item', ['comment' => $child, 'action' => $action, 'closed' => $closed])
                         @endforeach

@@ -517,12 +517,14 @@ textarea.form-control {
 
 /* Comment thread */
 .comment-left {
-    width: 32px;
+    width: 25px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
+
 .comment-thread-ctrl {
     display: flex;
     flex-direction: column;
@@ -532,12 +534,15 @@ textarea.form-control {
     cursor: pointer;
     color: var(--bs-secondary-color);
 }
+
 .comment-thread-ctrl:hover {
     color: var(--bs-primary);
 }
+
 .comment-thread-ctrl:hover .comment-thread-line {
     background: var(--bs-primary);
 }
+
 .comment-thread-btn {
     width: 14px;
     height: 14px;
@@ -550,19 +555,52 @@ textarea.form-control {
     flex-shrink: 0;
     line-height: 1;
 }
+
 .comment-thread-line {
-    width: 2px;
+    width: 1px;
     background: var(--bs-border-color);
     flex-grow: 1;
-    min-height: 12px;
+    min-height: 8px;
     border-radius: 1px;
     margin-top: 3px;
     transition: background .15s;
 }
+
+.comment-children .comment-left::before {
+    content: '';
+    position: absolute;
+    left: -19px;
+    top: 0;
+    width: 15px;
+    height: 15px;
+    border-left: 1px solid var(--bs-border-color);
+    border-bottom: 1px solid var(--bs-border-color);
+    border-bottom-left-radius: 12px;
+    z-index: 2;
+    transition: border-color .15s;
+}
+
+.comment-children .comment-item:last-child .comment-left::after {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: -8px;
+    width: 2px;
+    background: var(--bs-body-bg);
+    z-index: 1;
+}
+
+.comment-left:has(.comment-thread-ctrl:hover) + .comment-right > .comment-body > .comment-children > .comment-item > .d-flex > .comment-left::before {
+    border-color: var(--bs-primary);
+}
+
 .comment-right {
     flex-grow: 1;
     min-width: 0;
+    padding-left: 6px;
 }
+
 .comment-header {
     min-height: 32px;
     display: flex;
@@ -571,6 +609,7 @@ textarea.form-control {
     gap: .25rem;
     margin-bottom: 0;
 }
+
 .comment-actions a {
     text-decoration: none;
     color: var(--bs-secondary-color);
@@ -580,6 +619,7 @@ textarea.form-control {
 .comment-actions a:hover {
     color: var(--bs-body-color);
 }
+
 .comment-expand-label {
     display: block;
     margin-top: 4px;
@@ -588,6 +628,38 @@ textarea.form-control {
     cursor: pointer;
     color: var(--bs-primary);
 }
+
 .comment-expand-label:hover {
     text-decoration: underline;
+}
+
+.comment-left .avatar-mini {
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .comment-left {
+        width: 15px;
+    }
+
+    .comment-left .avatar-mini .avatar-default {
+        width: 20px;
+        height: 20px;
+        font-size: 13px;
+        min-width: 20px;
+    }
+
+    .comment-children .comment-left::before {
+        left: -14px;
+        width: 11px;
+        height: 13px;
+    }
+
+    .comment-children .comment-item:last-child .comment-left::after {
+        left: -15px;
+    }
+
+    .comment-header {
+        min-height: 20px;
+    }
 }
