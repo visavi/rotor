@@ -88,7 +88,7 @@ function getEmbedUrl(url) {
     if (m) return `https://rutube.ru/play/embed/${m[1]}/`
     m = url.match(/coub\.com\/view\/([a-zA-Z0-9]+)/)
     if (m) return `https://coub.com/embed/${m[1]}`
-    m = url.match(/vk\.com\/video(-?\d+_\d+)/)
+    m = url.match(/(?:vk\.com|vkvideo\.ru)\/video(-?\d+_\d+)/)
     if (m) { const [oid, id] = m[1].split('_'); return `https://vk.com/video_ext.php?oid=${oid}&id=${id}&hd=2` }
     m = url.match(/ok\.ru\/video\/(\d+)/)
     if (m) return `https://ok.ru/videoembed/${m[1]}`
@@ -117,10 +117,10 @@ const VideoEmbed = Node.create({
     group: 'block',
     atom: true,
     addAttributes() { return { src: { default: null } } },
-    parseHTML() { return [{ tag: 'div.video', getAttrs: el => ({ src: getOriginalUrl(el.querySelector('iframe')?.src || '') }) }] },
+    parseHTML() { return [{ tag: 'div.video', getAttrs: el => ({ src: getOriginalUrl(el.querySelector('iframe')?.src || '') || el.textContent.trim() || '' }) }] },
     renderHTML({ node }) {
         const embedSrc = getEmbedUrl(node.attrs.src)
-        if (!embedSrc) return ['div', { class: 'video' }]
+        if (!embedSrc) return ['div', { class: 'video' }, node.attrs.src || '']
         return ['div', { class: 'video' },
             ['iframe', { src: embedSrc, allowfullscreen: 'true', frameborder: '0', loading: 'lazy' }]]
     },
@@ -142,6 +142,8 @@ const VideoEmbed = Node.create({
                 iframe.setAttribute('frameborder', '0')
                 iframe.loading = 'lazy'
                 inner.appendChild(iframe)
+            } else if (node.attrs.src) {
+                inner.textContent = node.attrs.src
             }
             dom.appendChild(inner)
 

@@ -472,6 +472,18 @@ blockquote::before {
     border: 0;
 }
 
+.video:not(:has(iframe)) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    padding: 12px;
+    color: #ccc;
+    font-size: 13px;
+    word-break: break-all;
+    text-align: center;
+}
+
 /* Audio */
 .tiptap-editor-content audio {
     display: block;

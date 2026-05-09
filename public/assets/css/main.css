@@ -618,6 +618,10 @@ textarea.form-control {
     border-radius: 20px;
 }
 
+.comment-actions .post-rating-down {
+    margin-left: -.5rem;
+}
+
 .comment-actions .post-rating-up:hover {
     background-color: #78c062;
     color: #fff !important;
