@@ -580,7 +580,7 @@ textarea.form-control {
     transition: border-color .15s;
 }
 
-.comment-children > .comment-item:last-child > .d-flex > .comment-left::after {
+.comment-children > .comment-item:last-child > .comment-left::after {
     content: '';
     position: absolute;
     left: -20px;
@@ -591,7 +591,7 @@ textarea.form-control {
     z-index: 1;
 }
 
-.comment-left:has(.comment-thread-ctrl:hover) + .comment-right > .comment-body > .comment-children > .comment-item > .d-flex > .comment-left::before {
+.comment-left:has(.comment-thread-ctrl:hover) + .comment-right > .comment-body > .comment-children > .comment-item > .comment-left::before {
     border-color: var(--bs-primary);
 }
 
@@ -655,7 +655,7 @@ textarea.form-control {
         height: 13px;
     }
 
-    .comment-children > .comment-item:last-child > .d-flex > .comment-left::after {
+    .comment-children > .comment-item:last-child > .comment-left::after {
         left: -15px;
     }
 
