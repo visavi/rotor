@@ -100,6 +100,11 @@ class CommentController extends Controller
         $relateType = $comment->relate_type;
         $relateId = $comment->relate_id;
 
+        if ($comment->children()->exists()) {
+            $comment->softDelete();
+            return response()->json(['success' => true, 'soft_deleted' => true]);
+        }
+
         $comment->delete();
 
         $class = Relation::getMorphedModel($relateType);
@@ -108,6 +113,6 @@ class CommentController extends Controller
             $model->decrement('count_comments');
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'soft_deleted' => false]);
     }
 }

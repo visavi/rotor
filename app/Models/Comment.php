@@ -29,6 +29,7 @@ use Illuminate\Support\Str;
  * @property string $ip
  * @property string $brow
  * @property int    $created_at
+ * @property int    $deleted_at
  * @property-read Collection<Poll> $polls
  * @property-read Poll             $poll
  */
@@ -53,8 +54,9 @@ class Comment extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'int',
-            'text'    => HtmlCast::class,
+            'user_id'    => 'int',
+            'text'       => HtmlCast::class,
+            'deleted_at' => 'int',
         ];
     }
 
@@ -111,11 +113,21 @@ class Comment extends Model
     }
 
     /**
-     * Возвращает дочерние комментарии
+     * Исключает мягко удалённые комментарии из всех запросов по умолчанию
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope('active', static fn ($query) => $query->whereNull('deleted_at'));
+    }
+
+    /**
+     * Возвращает дочерние комментарии (включая мягко удалённые для отображения заглушки)
      */
     public function children(): HasMany
     {
-        return $this->hasMany(self::class, 'parent_id')->orderBy('created_at');
+        return $this->hasMany(self::class, 'parent_id')
+            ->withoutGlobalScope('active')
+            ->orderBy('created_at');
     }
 
     /**
@@ -197,6 +209,22 @@ class Comment extends Model
             });
 
             return parent::delete();
+        });
+    }
+
+    /**
+     * Мягкое удаление: очищает контент, но сохраняет запись для дочерних комментариев
+     */
+    public function softDelete(): void
+    {
+        DB::transaction(function () {
+            $this->polls()->delete();
+
+            $this->files->each(static function (File $file) {
+                $file->delete();
+            });
+
+            $this->update(['text' => null, 'deleted_at' => time()]);
         });
     }
 

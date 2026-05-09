@@ -256,6 +256,7 @@ return [
     'editing_impossible'         => 'Editing is not possible, more than 10 minutes have passed!',
     'message_deleted'            => 'The message has been deleted or you are not the author of this message!',
     'comment_deleted'            => 'Comment has been deleted or you are not the author of this comment!',
+    'comment_removed'            => '[Comment deleted]',
     'already_authorized'         => 'You are already logged in!',
     'not_authorized'             => 'You must be logged in to perform actions!',
     'page_only_owner'            => 'Only the owner has access to the page!',

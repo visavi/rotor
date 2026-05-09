@@ -29,55 +29,95 @@
 
         {{-- Тело (сворачивается) --}}
         <div id="comment-body-{{ $comment->id }}" class="comment-body mt-1{{ $collapsed ? ' d-none' : '' }}">
-            <div class="section-message mb-2">
-                {{ $comment->getText() }}
-            </div>
+            <div class="comment-content">
+            @if ($comment->deleted_at)
+                <div class="comment-removed text-muted fst-italic small mb-2">{{ __('main.comment_removed') }}</div>
+            @else
+                <div class="section-message mb-2">
+                    {{ $comment->getText() }}
+                </div>
 
-            @include('app/_media_viewer', ['model' => $comment])
+                @include('app/_media_viewer', ['model' => $comment])
 
-            @if (isAdmin())
-                <div class="small text-muted fst-italic mb-1">{{ $comment->brow }}, {{ $comment->ip }}</div>
+                @if (isAdmin())
+                    <div class="small text-muted fst-italic mb-1">{{ $comment->brow }}, {{ $comment->ip }}</div>
+                @endif
             @endif
 
             {{-- Действия --}}
-            <div class="comment-actions d-flex align-items-center gap-3 flex-wrap">
+            <div class="comment-actions d-flex align-items-center flex-wrap">
+                @if (! $comment->deleted_at)
                 <span class="d-flex align-items-center gap-1 js-rating">
                     @if (getUser() && getUser('id') !== $comment->user_id)
                         <a class="post-rating-down{{ $comment->vote === '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $comment->id }}" data-type="{{ $comment->getMorphClass() }}" data-vote="-"><i class="fas fa-arrow-down fa-sm"></i></a>
                     @else
-                        <i class="fas fa-arrow-down fa-sm text-muted opacity-25"></i>
+                        <i class="fas fa-arrow-down fa-sm text-muted opacity-25 pe-2"></i>
                     @endif
                     <b class="small">{{ formatNum($comment->rating) }}</b>
                     @if (getUser() && getUser('id') !== $comment->user_id)
                         <a class="post-rating-up{{ $comment->vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $comment->id }}" data-type="{{ $comment->getMorphClass() }}" data-vote="+"><i class="fas fa-arrow-up fa-sm"></i></a>
                     @else
-                        <i class="fas fa-arrow-up fa-sm text-muted opacity-25"></i>
+                        <i class="fas fa-arrow-up fa-sm text-muted opacity-25 ps-2"></i>
                     @endif
                 </span>
+                @endif
 
-                @if (getUser())
-                    @if (getUser('id') !== $comment->user_id && ! ($closed ?? false))
+                @if (getUser() && ! $comment->deleted_at)
+                    @php $ownComment = getUser('id') === $comment->user_id; @endphp
+
+                    @if (! $ownComment && ! ($closed ?? false))
                         <a href="#" onclick="return openReplyForm({{ $comment->id }})">
-                            <i class="fas fa-reply"></i> {{ __('main.reply') }}
+                            <i class="fa-regular fa-comment"></i> {{ __('main.reply') }}
                         </a>
                     @endif
-                    @if (getUser('id') !== $comment->user_id)
+                    @if (! $ownComment)
                         <a href="#" onclick="return postQuote(this)">
-                            <i class="fas fa-quote-left"></i> {{ __('main.quote') }}
+                            <i class="fa-solid fa-quote-left"></i> {{ __('main.quote') }}
                         </a>
-                        <a href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
+                    @endif
+
+                    {{-- Своё: редактировать/удалить всегда инлайн --}}
+                    @if ($ownComment)
+                        @if ($comment->created_at + 600 > SITETIME)
+                            <a href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments">
+                                <i class="fas fa-edit"></i> {{ __('main.edit') }}
+                            </a>
+                        @endif
+                        @if (isAdmin())
+                            <a href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">
+                                <i class="fas fa-trash"></i> {{ __('main.delete') }}
+                            </a>
+                        @endif
+
+                    {{-- Чужое: жалоба инлайн на десктопе, на мобильном в дропдауне --}}
+                    @else
+                        <a href="#" class="comment-action-secondary" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
                             <i class="fas fa-flag"></i> {{ __('main.complain') }}
                         </a>
-                    @endif
-                    @if ($comment->created_at + 600 > SITETIME && getUser('id') === $comment->user_id)
-                        <a href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments">
-                            <i class="fas fa-edit"></i> {{ __('main.edit') }}
-                        </a>
-                    @endif
-                    @if (isAdmin())
-                        <a href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">
-                            <i class="fas fa-trash"></i> {{ __('main.delete') }}
-                        </a>
+                        @if (isAdmin())
+                            <a href="#" class="comment-action-secondary" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">
+                                <i class="fas fa-trash"></i> {{ __('main.delete') }}
+                            </a>
+                        @endif
+                        <div class="dropdown d-md-none comment-more-dropdown">
+                            <button class="comment-more-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
+                                        <i class="fas fa-flag fa-fw me-1"></i> {{ __('main.complain') }}
+                                    </a>
+                                </li>
+                                @if (isAdmin())
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">
+                                            <i class="fas fa-trash fa-fw me-1"></i> {{ __('main.delete') }}
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
                     @endif
                 @endif
             </div>
@@ -104,6 +144,7 @@
                     </form>
                 </div>
             @endif
+            </div>{{-- /.comment-content --}}
 
             {{-- Дочерние комментарии --}}
             @if ($hasChildren)

@@ -76,6 +76,7 @@ trait CommentableTrait
             : collect();
 
         $allComments = $model->comments()
+            ->withoutGlobalScope('active')
             ->select('comments.*', 'polls.vote')
             ->leftJoin('polls', static function (JoinClause $join) {
                 $join->on('comments.id', 'polls.relate_id')

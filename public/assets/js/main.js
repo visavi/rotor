@@ -577,6 +577,8 @@ document.getElementById('editCommentForm')?.addEventListener('submit', function 
 
 /* Удаление комментариев */
 window.deleteComment = function (el) {
+    const item = el.closest('.comment-item, .section')
+
     confirm(__('confirm_message_delete'), function (result) {
         if (!result) return
 
@@ -585,7 +587,10 @@ window.deleteComment = function (el) {
             success: function (data) {
                 if (data.success) {
                     notyf.success(__('message_deleted'))
-                    el.closest('.section').style.display = 'none'
+                    if (item) {
+                        const content = item.querySelector('.comment-content')
+                        if (content) content.innerHTML = '<div class="comment-removed text-muted fst-italic small mb-2">' + __('comment_removed') + '</div>'
+                    }
                 } else {
                     notyf.error(data.message)
                 }
