@@ -102,6 +102,7 @@ class CommentController extends Controller
 
         if ($comment->children()->exists()) {
             $comment->softDelete();
+
             return response()->json(['success' => true, 'soft_deleted' => true]);
         }
 

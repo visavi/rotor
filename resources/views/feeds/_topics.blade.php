@@ -33,12 +33,12 @@
     </div>
 
     <div class="section-content short-view">
-        @if ($post->lastPost->getImages()->isNotEmpty())
-            @include('app/_image_viewer', ['model' => $post->lastPost, 'files' => $post->lastPost->getImages()])
+        @if ($post->lastPost->getDetachedImages()->isNotEmpty())
+            @include('app/_image_viewer', ['model' => $post->lastPost, 'files' => $post->lastPost->getDetachedImages()])
         @endif
 
         <div class="section-message">
-            {{ $post->lastPost->text ? $post->lastPost->getText(withImages: false) : __('main.deleted') }}
+            {{ $post->lastPost->text ? $post->lastPost->getText() : __('main.deleted') }}
         </div>
 
         @if ($post->lastPost->getFiles()->isNotEmpty())

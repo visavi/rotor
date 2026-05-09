@@ -44,14 +44,8 @@
 
     <div class="section mb-3 shadow">
     <div class="section-content">
-        @if ($down->getImages()->isNotEmpty())
-            @foreach ($down->getImages() as $image)
-                <div class="media-file mb-3">
-                    <a href="{{ $image->path }}" data-fancybox="{{ $down->getMorphClass() }}-{{ $down->id }}">
-                        <img src="{{ $image->path }}" alt="{{ $image->name }}" class="img-fluid">
-                    </a>
-                </div>
-            @endforeach
+        @if ($down->getDetachedImages()->isNotEmpty())
+            @include('app/_image_viewer', ['model' => $down, 'files' => $down->getDetachedImages()])
         @endif
 
         <div class="section-message">

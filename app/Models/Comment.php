@@ -187,13 +187,9 @@ class Comment extends Model
     /**
      * Get text
      */
-    public function getText(bool $withImages = true): HtmlString
+    public function getText(): HtmlString
     {
-        $text = $withImages
-            ? $this->text
-            : preg_replace('/<img(?=[^>]+src=["\'](?!https?:\/\/))[^>]*>/i', '', $this->text);
-
-        return renderHtml($text, 'comment-' . $this->id);
+        return renderHtml($this->text, 'comment-' . $this->id);
     }
 
     /**

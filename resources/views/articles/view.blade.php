@@ -2,7 +2,7 @@
 
 @section('title', $article->title)
 
-@section('description', truncateDescription($article->getText(false)))
+@section('description', truncateDescription($article->text))
 @section('canonical', route('articles.view', ['slug' => $article->slug]))
 
 @section('header')

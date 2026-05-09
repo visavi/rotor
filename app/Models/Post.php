@@ -171,13 +171,9 @@ class Post extends Model
     /**
      * Get text
      */
-    public function getText(bool $withImages = true): HtmlString
+    public function getText(): HtmlString
     {
-        $text = $withImages
-            ? $this->text
-            : preg_replace('/<img(?=[^>]+src=["\'](?!https?:\/\/))[^>]*>/i', '', $this->text);
-
-        return renderHtml($text, 'post-' . $this->id);
+        return renderHtml($this->text, 'post-' . $this->id);
     }
 
     /**

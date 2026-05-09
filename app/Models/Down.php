@@ -208,16 +208,17 @@ class Down extends Model
         });
     }
 
+    public function getDetachedImages(): Collection
+    {
+        return $this->getImages()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
+    }
+
     /**
      * Get text
      */
-    public function getText(bool $withImages = true): HtmlString
+    public function getText(): HtmlString
     {
-        $text = $withImages
-            ? $this->text
-            : preg_replace('/<img(?=[^>]+src=["\'](?!https?:\/\/))[^>]*>/i', '', $this->text);
-
-        return renderHtml($text, 'down-' . $this->id);
+        return renderHtml($this->text, 'down-' . $this->id);
     }
 
     /**

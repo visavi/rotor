@@ -28,12 +28,12 @@
     </div>
 
     <div class="section-content short-view">
-        @if ($post->getImages()->isNotEmpty())
-            @include('app/_image_viewer', ['model' => $post, 'files' => $post->getImages()])
+        @if ($post->getDetachedImages()->isNotEmpty())
+            @include('app/_image_viewer', ['model' => $post, 'files' => $post->getDetachedImages()])
         @endif
 
         <div class="section-message">
-            {{ $post->getText(withImages: false) }}
+            {{ $post->getText() }}
         </div>
 
         @if ($post->getFiles()->isNotEmpty())

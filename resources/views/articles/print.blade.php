@@ -2,7 +2,7 @@
 
 @section('title', $article->title)
 
-@section('description', truncateDescription($article->getText(false)))
+@section('description', truncateDescription($article->text))
 
 @section('content')
     <h1>{{ $article->title }}</h1>

@@ -148,13 +148,9 @@ class News extends Model
     /**
      * Get text
      */
-    public function getText(bool $withImages = true): HtmlString
+    public function getText(): HtmlString
     {
-        $text = $withImages
-            ? $this->text
-            : preg_replace('/<img(?=[^>]+src=["\'](?!https?:\/\/))[^>]*>/i', '', $this->text);
-
-        return renderHtml($text, 'news-' . $this->id);
+        return renderHtml($this->text, 'news-' . $this->id);
     }
 
     /**
