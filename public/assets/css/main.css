@@ -546,7 +546,7 @@ textarea.form-control {
 .comment-thread-btn {
     width: 14px;
     height: 14px;
-    border: 1.5px solid currentColor;
+    border: 1px solid currentColor;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -580,13 +580,13 @@ textarea.form-control {
     transition: border-color .15s;
 }
 
-.comment-children .comment-item:last-child .comment-left::after {
+.comment-children > .comment-item:last-child > .d-flex > .comment-left::after {
     content: '';
     position: absolute;
     left: -20px;
     top: 0;
-    bottom: -8px;
-    width: 2px;
+    bottom: -10px;
+    width: 5px;
     background: var(--bs-body-bg);
     z-index: 1;
 }
@@ -655,7 +655,7 @@ textarea.form-control {
         height: 13px;
     }
 
-    .comment-children .comment-item:last-child .comment-left::after {
+    .comment-children > .comment-item:last-child > .d-flex > .comment-left::after {
         left: -15px;
     }
 
