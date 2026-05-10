@@ -29,7 +29,7 @@
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            @include('app/_upload_image', ['model' => $photo])
+            @include('app/_upload_media', ['model' => $photo])
 
             <div class="form-check">
                 <input type="hidden" value="0" name="closed">

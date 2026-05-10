@@ -113,7 +113,7 @@ function getOriginalUrl(embedUrl) {
 }
 
 const VideoFile = Node.create({
-    name: 'videoFile',
+    name: 'video',
     group: 'block',
     atom: true,
     addAttributes() { return { src: { default: null } } },
@@ -1001,7 +1001,7 @@ function initEditor(textarea) {
 
                 if (isVideo) {
                     editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
-                        type: 'videoFile',
+                        type: 'video',
                         attrs: { src },
                     }).run()
                 } else {

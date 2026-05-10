@@ -21,7 +21,7 @@
         @if ($post->files->isNotEmpty())
             <div class="row">
                 <div class="col-md-12">
-                    @include('app/_image_viewer', ['model' => $post])
+                    @include('app/_media_slider', ['model' => $post])
                 </div>
             </div>
         @endif

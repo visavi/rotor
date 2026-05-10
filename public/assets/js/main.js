@@ -767,8 +767,8 @@ window.submitFile = function (el) {
     return false
 }
 
-/* Удаление изображения из формы */
-window.cutImage = function (path) {
+/* Удаление медиафайла (изображения или видео) из редактора */
+window.cutMedia = function (path) {
     if (!path) return
 
     const editor = window._tiptapActiveEditor
@@ -782,13 +782,15 @@ window.cutImage = function (path) {
     const positions = []
 
     state.doc.descendants(function (node, pos) {
-        if (node.type.name === 'image' && normalize(node.attrs.src) === normalizedPath) {
+        const src = node.attrs.src ?? node.attrs.href
+        if (['image', 'video'].includes(node.type.name) && normalize(src) === normalizedPath) {
             positions.push({ pos, size: node.nodeSize })
         }
     })
 
     positions.reverse().forEach(({ pos, size }) => tr.delete(pos, pos + size))
 
+    // noinspection JSUnresolvedReference
     if (tr.docChanged) dispatch(tr)
 }
 
@@ -802,7 +804,7 @@ window.deleteFile = function (el) {
             data: { id: el.dataset.id, type: el.dataset.type },
             success: function (data) {
                 if (!data.success) { notyf.error(data.message); return }
-                if (data.path) cutImage(data.path)
+                if (data.path) cutMedia(data.path)
                 el.closest('.js-file').style.display = 'none'
             },
             error: (_, textStatus) => notyf.error('Ошибка удаления файла: ' + textStatus)

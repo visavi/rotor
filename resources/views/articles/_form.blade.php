@@ -55,7 +55,7 @@
         </div>
     @endif
 
-    @include('app/_upload_image', ['model' => $article])
+    @include('app/_upload_media', ['model' => $article])
 
     <button class="btn btn-primary">
         {{ $article->exists ? __('main.change') : __('main.publish') }}

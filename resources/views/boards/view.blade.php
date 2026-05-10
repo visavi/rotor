@@ -59,7 +59,7 @@
                             <i class="far fa-eye"></i> {{ $item->visits }}
                         </div>
 
-                        @include('app/_image_viewer', ['model' => $item])
+                        @include('app/_media_slider', ['model' => $item])
                     </div>
                 </div>
             @endif

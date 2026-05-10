@@ -46,8 +46,8 @@
                 </div>
 
                 <div class="section-content short-view">
-                    @if ($data->getImages()->isNotEmpty())
-                        @include('app/_image_viewer', ['model' => $data, 'files' => $data->getImages()])
+                    @if ($data->getMedia()->isNotEmpty())
+                        @include('app/_media_slider', ['model' => $data, 'files' => $data->getMedia()])
                     @endif
 
                     <div class="section-message">

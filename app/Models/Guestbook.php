@@ -120,23 +120,23 @@ class Guestbook extends Model
      */
     public function getFiles(): Collection
     {
-        return $this->files->filter(static fn (File $f) => ! $f->isImage());
+        return $this->files->filter(static fn (File $f) => ! $f->isImage() && ! $f->isVideo());
     }
 
     /**
-     * Возвращает картинки
+     * Возвращает медиафайлы (картинки и видео)
      */
-    public function getImages(): Collection
+    public function getMedia(): Collection
     {
-        return $this->files->filter(static fn (File $f) => $f->isImage());
+        return $this->files->filter(static fn (File $f) => $f->isImage() || $f->isVideo());
     }
 
     /**
-     * Возвращает картинки, не вставленные в текст
+     * Возвращает медиафайлы, не вставленные в текст
      */
-    public function getDetachedImages(): Collection
+    public function getDetachedMedia(): Collection
     {
-        return $this->getImages()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
+        return $this->getMedia()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
     }
 
     /**

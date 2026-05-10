@@ -28,7 +28,7 @@
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            @include('app/_upload_image', [
+            @include('app/_upload_media', [
                 'model' => App\Models\Photo::getModel(),
                 'files' => $files,
             ])

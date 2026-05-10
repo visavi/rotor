@@ -14,7 +14,7 @@
     </div>
 
     <div class="section-content short-view">
-        {{--@include('app/_image_viewer', ['model' => $post])--}}
+        {{--@include('app/_media_slider', ['model' => $post])--}}
 
         <div class="section-message">
             {{ $post->text ? renderHtml($post->text) : __('main.deleted') }}

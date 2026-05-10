@@ -77,7 +77,11 @@ trait UploadTrait
             'size'      => formatSize($filesize),
             'mime_type' => $mimeType,
             'extension' => $extension,
-            'type'      => $isImage ? 'image' : ($isVideo ? 'video' : 'file'),
+            'type'      => match (true) {
+                $isImage => 'image',
+                $isVideo => 'video',
+                default  => 'file',
+            },
         ];
     }
 }

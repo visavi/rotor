@@ -50,7 +50,7 @@
 
 @section('content')
     <div class="section mb-3 shadow">
-        @include('app/_image_viewer', ['model' => $photo, 'files' => $photo->files])
+        @include('app/_media_slider', ['model' => $photo, 'files' => $photo->files])
 
         <div class="section-content">
             @if ($photo->text)

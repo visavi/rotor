@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="section-content">
-                    @include('app/_image_viewer', ['model' => $photo])
+                    @include('app/_media_slider', ['model' => $photo])
 
                     @if ($photo->text)
                         <div class="section-message">

@@ -24,7 +24,7 @@
     </div>
 
     <div class="section-content short-view">
-        @include('app/_image_viewer', ['model' => $post])
+        @include('app/_media_slider', ['model' => $post])
 
         @if ($post->text)
             <div class="section-message">

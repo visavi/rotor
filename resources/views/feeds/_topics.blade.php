@@ -33,8 +33,8 @@
     </div>
 
     <div class="section-content short-view">
-        @if ($post->lastPost->getDetachedImages()->isNotEmpty())
-            @include('app/_image_viewer', ['model' => $post->lastPost, 'files' => $post->lastPost->getDetachedImages()])
+        @if ($post->lastPost->getDetachedMedia()->isNotEmpty())
+            @include('app/_media_slider', ['model' => $post->lastPost, 'files' => $post->lastPost->getDetachedMedia()])
         @endif
 
         <div class="section-message">

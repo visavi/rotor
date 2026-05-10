@@ -39,8 +39,8 @@
 @section('content')
     <div class="section mb-3 shadow">
         <div class="section-content">
-            @if ($news->getDetachedImages()->isNotEmpty())
-                @include('app/_image_viewer', ['model' => $news, 'files' => $news->getDetachedImages()])
+            @if ($news->getDetachedMedia()->isNotEmpty())
+                @include('app/_media_slider', ['model' => $news, 'files' => $news->getDetachedMedia()])
             @endif
 
             <div class="section-message">
