@@ -761,7 +761,19 @@ window.submitImage = function (el) {
             const templateEl = scope.querySelector('.js-image-template')
             const template = templateEl?.cloneNode(true)
             const img = template?.querySelector('img')
-            img?.setAttribute('src', data.path)
+
+            if (data.type === 'image') {
+                img?.setAttribute('src', data.path)
+            } else {
+                const video = document.createElement('video')
+                video.src = data.path
+                video.className = img?.className ?? 'thumbnail'
+                video.preload = 'metadata'
+                const imgParent = img?.parentElement
+                img?.replaceWith(video)
+                imgParent?.insertAdjacentHTML('beforeend', '<span class="slide-play-icon">▶</span>')
+            }
+
             template?.querySelector('a')?.setAttribute('data-id', data.id)
             if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
         },
@@ -895,21 +907,31 @@ window.initSlideMainImage = function (el) {
 
 /* Инициализирует миниатюру слайдера */
 window.initSlideThumbImage = function (el) {
-    const newImg = el.querySelector('img')
-    const imgSource = el.getAttribute('href')
+    const href = el.getAttribute('href')
+    const isVideo = el.dataset.type === 'html5video'
+    const fancyboxGroup = el.dataset.fancybox ?? ''
     const slider = el.closest('.media-file')
-    const mainLink = slider?.querySelector('.slide-main-link')
+    const mainInner = slider?.querySelector('.slide-main-inner')
 
-    if (mainLink) {
-        mainLink.setAttribute('href', imgSource)
-        const mainImg = mainLink.querySelector('img')
-        if (mainImg) {
-            mainImg.setAttribute('src', newImg.getAttribute('src'))
-        }
+    if (!mainInner) return false
+
+    mainInner.querySelector('video')?.pause()
+
+    if (isVideo) {
+        mainInner.innerHTML = `<video src="${href}" class="img-fluid rounded" controls preload="metadata"></video>`
+    } else {
+        const alt = (el.querySelector('img')?.getAttribute('alt') ?? '').replace(/"/g, '&quot;')
+        mainInner.innerHTML =
+            `<a href="${href}" class="slide-main-link" data-fancybox="${fancyboxGroup}" onclick="return initSlideMainImage(this)">` +
+            `<img src="${href}" alt="${alt}" class="img-fluid rounded slide-main-img">` +
+            `</a>`
     }
 
     slider?.querySelectorAll('.slide-thumb-image').forEach(img => img.classList.remove('active'))
-    newImg?.classList.add('active')
+    slider?.querySelectorAll('.slide-thumb-video').forEach(v => v.classList.remove('active'))
+
+    const thumb = el.querySelector('.slide-thumb-image, .slide-thumb-video')
+    thumb?.classList.add('active')
 
     return false
 }

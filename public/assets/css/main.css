@@ -344,6 +344,13 @@ textarea.form-control {
     margin: 3px 0;
 }
 
+.thumbnail-wrap {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+}
+
 .slide-main img {
     width: auto;
     margin: 0 auto 5px;
@@ -374,6 +381,53 @@ textarea.form-control {
     border: 2px solid #0d6efd !important;
     border-radius: 3px;
     box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+}
+
+.slide-thumb-video {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.slide-thumb-video video {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: block;
+    transition: transform 0.2s;
+}
+
+.slide-thumb-video:hover video {
+    transform: scale(1.1);
+}
+
+.slide-thumb-video.active video {
+    border: 2px solid #0d6efd !important;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+}
+
+.slide-play-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    color: #fff;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    font-size: 16px;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.slide-main-inner {
+    position: relative;
+    display: inline-block;
 }
 
 :target {

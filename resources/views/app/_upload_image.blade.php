@@ -6,7 +6,14 @@ $files ??= $model->files;
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-file">
-                <span><img src="{{ $file->path }}" class="thumbnail" alt="{{ $file->name }}"></span>
+                <span class="thumbnail-wrap">
+                    @if ($file->isVideo())
+                        <video src="{{ $file->path }}" class="thumbnail" preload="metadata"></video>
+                        <span class="slide-play-icon">▶</span>
+                    @else
+                        <img src="{{ $file->path }}" class="thumbnail" alt="{{ $file->name }}">
+                    @endif
+                </span>
                 <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
             </span>
         @endforeach
@@ -15,7 +22,7 @@ $files ??= $model->files;
 
 <div class="js-image-template d-none">
     <span class="js-file">
-        <span><img src="" alt="" class="thumbnail"></span>
+        <span class="thumbnail-wrap"><img src="" alt="" class="thumbnail"></span>
         <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
     </span>
 </div>
