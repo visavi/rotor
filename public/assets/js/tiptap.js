@@ -889,7 +889,18 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         }
     }, () => editor.isActive('blockquote'))
     btn('fa-code', __('editor.code_block'),
-        () => editor.chain().focus().toggleCodeBlock().run(),
+        () => {
+            if (editor.isActive('codeBlock')) {
+                editor.chain().focus().toggleCodeBlock().run()
+            } else {
+                const { from, to } = editor.state.selection
+                const text = editor.state.doc.textBetween(from, to, '\n', '\n')
+                editor.chain().focus()
+                    .deleteSelection()
+                    .insertContentAt(editor.state.selection.from, { type: 'codeBlock', content: text ? [{ type: 'text', text }] : [] })
+                    .run()
+            }
+        },
         () => editor.isActive('codeBlock'))
     sep()
 
@@ -1029,6 +1040,7 @@ function initEditor(textarea) {
             StarterKit.configure({
                 blockquote: false,
                 codeBlock: { HTMLAttributes: { class: 'code' } },
+                link: { shouldAutoLink: (url) => !/[<>"'`]/.test(decodeURIComponent(url)) },
             }),
             Blockquote,
             TextStyle,
