@@ -44,7 +44,7 @@ class PictureController extends Controller
 
             $rules = [
                 'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', setting('image_extensions')),
+                'extensions' => explode(',', setting('media_extensions')),
                 'minweight'  => 100,
             ];
             $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);

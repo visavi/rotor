@@ -174,7 +174,7 @@ class StickerController extends AdminController
                 'maxsize'    => setting('stickermaxsize'),
                 'maxweight'  => setting('stickermaxweight'),
                 'minweight'  => setting('stickerminweight'),
-                'extensions' => explode(',', setting('image_extensions')),
+                'extensions' => explode(',', setting('media_extensions')),
             ];
 
             $validator->file($sticker, $rules, ['sticker' => __('validator.image_upload_failed')]);

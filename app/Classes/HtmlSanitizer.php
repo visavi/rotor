@@ -58,6 +58,7 @@ class HtmlSanitizer
                 ->allowElement('a', ['href', 'class'])
                 ->allowElement('img', ['src', 'alt', 'class'])
                 ->allowElement('audio', ['src', 'controls'])
+                ->allowElement('video', ['src', 'controls', 'preload', 'class'])
                 ->allowElement('iframe', ['src', 'allowfullscreen', 'frameborder', 'loading'])
                 // Блоки
                 ->allowElement('div', ['class'])

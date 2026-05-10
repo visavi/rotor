@@ -26,6 +26,7 @@ trait UploadTrait
         $path = $this->uploadPath . '/' . $filename;
         $fullPath = public_path($path);
         $isImage = str_starts_with($mimeType, 'image');
+        $isVideo = str_starts_with($mimeType, 'video');
 
         if ($isImage) {
             $imageManager = app(ImageManager::class);
@@ -76,7 +77,7 @@ trait UploadTrait
             'size'      => formatSize($filesize),
             'mime_type' => $mimeType,
             'extension' => $extension,
-            'type'      => $isImage ? 'image' : 'file',
+            'type'      => $isImage ? 'image' : ($isVideo ? 'video' : 'file'),
         ];
     }
 }

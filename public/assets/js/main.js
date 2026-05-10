@@ -177,6 +177,21 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {})
+
+    document.querySelectorAll('.slide-thumb-link[data-type="html5video"]').forEach(link => {
+        const video = link.querySelector('video')
+        if (!video) return
+
+        const setThumb = () => {
+            const canvas = document.createElement('canvas')
+            canvas.width = video.videoWidth || 160
+            canvas.height = video.videoHeight || 90
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height)
+            link.dataset.thumb = canvas.toDataURL('image/jpeg', 0.8)
+        }
+
+        video.readyState >= 2 ? setThumb() : video.addEventListener('loadeddata', setThumb, { once: true })
+    })
 })
 
 /* Показ формы загрузки файла */
@@ -718,60 +733,28 @@ window.submitFile = function (el) {
         success: function (data) {
             if (!data.success) { notyf.error(data.message); return }
 
-            const templateEl = scope.querySelector(data.type === 'image' ? '.js-image-template' : '.js-file-template')
+            const isMedia = data.type === 'image' || data.type === 'video'
+            const templateEl = scope.querySelector(isMedia ? '.js-image-template' : '.js-file-template')
             const template = templateEl?.cloneNode(true)
 
             if (data.type === 'image') {
+                template?.querySelector('img')?.setAttribute('src', data.path)
+            } else if (data.type === 'video') {
                 const img = template?.querySelector('img')
-                img?.setAttribute('src', data.path)
+                if (img) {
+                    const wrap = img.parentElement
+                    const video = document.createElement('video')
+                    video.src = data.path
+                    video.className = img.className
+                    video.preload = 'metadata'
+                    img.replaceWith(video)
+                    wrap?.insertAdjacentHTML('beforeend', '<span class="slide-play-icon">▶</span>')
+                }
             } else {
                 const link = template?.querySelector('.js-file-link')
                 if (link) { link.href = data.path; link.textContent = data.name }
                 const sizeEl = template?.querySelector('.js-file-size')
                 if (sizeEl) sizeEl.textContent = data.size
-            }
-
-            template?.querySelector('.js-file-delete')?.setAttribute('data-id', data.id)
-            if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
-        },
-        error: (_, textStatus) => notyf.error('Ошибка загрузки файла: ' + textStatus)
-    })
-
-    el.value = ''
-    return false
-}
-
-/* Загрузка изображения */
-window.submitImage = function (el) {
-    const form = new FormData()
-    form.append('file', el.files[0])
-    form.append('id', el.dataset.id)
-    form.append('type', el.dataset.type)
-
-    const scope = el.closest('form') ?? document
-    const filesContainer = scope.querySelector('.js-files')
-
-    ajax({
-        data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
-        beforeSend: () => filesContainer?.insertAdjacentHTML('beforeend', '<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>'),
-        complete: () => filesContainer?.querySelectorAll('.fa-spinner').forEach(s => s.remove()),
-        success: function (data) {
-            if (!data.success) { notyf.error(data.message); return }
-
-            const templateEl = scope.querySelector('.js-image-template')
-            const template = templateEl?.cloneNode(true)
-            const img = template?.querySelector('img')
-
-            if (data.type === 'image') {
-                img?.setAttribute('src', data.path)
-            } else {
-                const video = document.createElement('video')
-                video.src = data.path
-                video.className = img?.className ?? 'thumbnail'
-                video.preload = 'metadata'
-                const imgParent = img?.parentElement
-                img?.replaceWith(video)
-                imgParent?.insertAdjacentHTML('beforeend', '<span class="slide-play-icon">▶</span>')
             }
 
             template?.querySelector('a')?.setAttribute('data-id', data.id)
@@ -914,6 +897,8 @@ window.initSlideThumbImage = function (el) {
     const mainInner = slider?.querySelector('.slide-main-inner')
 
     if (!mainInner) return false
+
+    if (el.querySelector('.slide-thumb-image, .slide-thumb-video')?.classList.contains('active')) return false
 
     mainInner.querySelector('video')?.pause()
 

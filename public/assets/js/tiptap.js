@@ -112,6 +112,17 @@ function getOriginalUrl(embedUrl) {
     return embedUrl
 }
 
+const VideoFile = Node.create({
+    name: 'videoFile',
+    group: 'block',
+    atom: true,
+    addAttributes() { return { src: { default: null } } },
+    parseHTML() { return [{ tag: 'video.video[src]', getAttrs: el => ({ src: el.getAttribute('src') }) }] },
+    renderHTML({ node }) {
+        return ['video', { class: 'video', src: node.attrs.src, controls: 'true', preload: 'metadata' }]
+    },
+})
+
 const VideoEmbed = Node.create({
     name: 'videoEmbed',
     group: 'block',
@@ -844,7 +855,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         btn('fa-cloud-arrow-up', __('editor.upload_image'), () => {
             const input = document.createElement('input')
             input.type = 'file'
-            input.accept = 'image/*'
+            input.accept = 'image/*,video/*'
             input.onchange = async () => {
                 const file = input.files[0]
                 if (!file) return
@@ -960,7 +971,7 @@ function initEditor(textarea) {
         }
 
         // Проверка типа файла
-        if (!file.type.startsWith('image/')) {
+        if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
             notyf.error(__('editor.upload_failed') + ': неподдерживаемый формат')
             return
         }
@@ -985,18 +996,38 @@ function initEditor(textarea) {
             const data = await response.json()
 
             if (data.success && data.path) {
-                editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
-                    type: 'image',
-                    attrs: { src: data.source || data.path },
-                }).run()
+                const isVideo = data.type === 'video'
+                const src = data.source || data.path
+
+                if (isVideo) {
+                    editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
+                        type: 'videoFile',
+                        attrs: { src },
+                    }).run()
+                } else {
+                    editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
+                        type: 'image',
+                        attrs: { src },
+                    }).run()
+                }
 
                 const scope = textarea.closest('form') ?? document
                 const templateEl = scope.querySelector('.js-image-template')
                 const template = templateEl?.cloneNode(true)
                 if (template) {
-                    const img = template.querySelector('img')
-                    if (img) {
-                        img.setAttribute('src', data.path)
+                    if (isVideo) {
+                        const img = template.querySelector('img')
+                        if (img) {
+                            const video = document.createElement('video')
+                            video.src = data.path
+                            video.className = img.className
+                            video.preload = 'metadata'
+                            const imgParent = img.parentElement
+                            img.replaceWith(video)
+                            imgParent?.insertAdjacentHTML('beforeend', '<span class="slide-play-icon">▶</span>')
+                        }
+                    } else {
+                        template.querySelector('img')?.setAttribute('src', data.path)
                     }
                     template.querySelector('a')?.setAttribute('data-id', data.id)
                     scope.querySelector('.js-files')?.insertAdjacentHTML('beforeend', template.innerHTML)
@@ -1050,7 +1081,7 @@ function initEditor(textarea) {
             TextAlign.configure({ types: ['heading', 'paragraph'] }),
             Image.configure({ inline: false, HTMLAttributes: { class: 'image' }, allowBase64: false }),
             FileHandler.configure({
-                allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg+xml'],
+                allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg+xml', 'video/mp4', 'video/webm'],
                 onDrop: async (editor, files, pos) => {
                     for (const file of files) {
                         await uploadImage(editor, file, pos)
@@ -1063,6 +1094,7 @@ function initEditor(textarea) {
                 },
             }),
             Placeholder.configure({ placeholder }),
+            VideoFile,
             VideoEmbed,
             AudioEmbed,
             Spoiler,

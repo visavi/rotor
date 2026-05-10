@@ -29,7 +29,7 @@ $files ??= $model->files;
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" accept="image/*" onchange="return submitImage(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input id="file" type="file" name="file" accept="image/*,video/*" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>
@@ -37,6 +37,6 @@ $files ??= $model->files;
 <p class="text-muted fst-italic">
     {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
     {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-    {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('image_extensions')) }}<br>
+    {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('media_extensions')) }}<br>
     {{ __('main.min_image_size') }}: 100px
 </p>

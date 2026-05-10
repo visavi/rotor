@@ -13,7 +13,12 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
             <span class="js-file">
-                @if ($file->isImage())
+                @if ($file->isVideo())
+                    <span class="thumbnail-wrap">
+                        <video src="{{ $file->path }}" class="thumbnail" preload="metadata"></video>
+                        <span class="slide-play-icon">▶</span>
+                    </span>
+                @elseif ($file->isImage())
                     <img src="{{ $file->path }}" class="thumbnail" alt="{{ $file->name }}">
                 @else
                     <a class="me-1" href="{{ $file->path }}">{{ $file->name }}</a>
@@ -35,7 +40,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
 
 <div class="js-image-template d-none">
     <span class="js-file">
-        <img src="" alt="" class="thumbnail">
+        <span class="thumbnail-wrap"><img src="" alt="" class="thumbnail"></span>
         <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>

@@ -227,7 +227,7 @@ class AjaxController extends Controller
         }
 
         if ($validator->isValid()) {
-            $allowedExt = $isImageType ? setting('image_extensions') : setting('file_extensions');
+            $allowedExt = setting($isImageType ? 'media_extensions' : 'file_extensions');
 
             $rules = [
                 'minweight'  => 100,
@@ -240,6 +240,10 @@ class AjaxController extends Controller
 
         if ($validator->isValid()) {
             $fileData = $model->uploadFile($file);
+            if (method_exists($model, 'convertVideo')) {
+                $model->convertVideo($fileData);
+            }
+
             if ($isImageType) {
                 $data = [
                     'success' => true,
@@ -248,10 +252,6 @@ class AjaxController extends Controller
                     'type'    => $fileData['type'],
                 ];
             } else {
-                if (method_exists($model, 'convertVideo')) {
-                    $model->convertVideo($fileData);
-                }
-
                 if (method_exists($model, 'addFileToArchive')) {
                     $model->addFileToArchive($fileData);
                 }

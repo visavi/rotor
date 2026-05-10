@@ -25,10 +25,10 @@
         <div class="invalid-feedback">{{ textError('sets[file_extensions]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[image_extensions]') }}">
-        <label for="image_extensions" class="form-label">{{ __('main.valid_image_extensions') }}:</label>
-        <input type="text" class="form-control" id="image_extensions" name="sets[image_extensions]" value="{{ old('sets.image_extensions', $settings['image_extensions']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[image_extensions]') }}</div>
+    <div class="mb-3{{ hasError('sets[media_extensions]') }}">
+        <label for="media_extensions" class="form-label">{{ __('main.valid_media_extensions') }}:</label>
+        <input type="text" class="form-control" id="media_extensions" name="sets[media_extensions]" value="{{ old('sets.media_extensions', $settings['media_extensions']) }}" required>
+        <div class="invalid-feedback">{{ textError('sets[media_extensions]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[screensize]') }}">
