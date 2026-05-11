@@ -48,6 +48,7 @@ return [
 
     'information'   => 'Інформація',
     'site_rules'    => 'Правила сайту',
+    'css_js_editor' => 'Редактор CSS/JS',
     'stickers_help' => 'Довідка по стікерах',
     'faq'           => 'FAQ',
     'api_interface' => 'API інтерфейс',

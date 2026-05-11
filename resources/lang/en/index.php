@@ -48,6 +48,7 @@ return [
 
     'information'   => 'Information',
     'site_rules'    => 'Site rules',
+    'css_js_editor' => 'CSS/JS Editor',
     'stickers_help' => 'Stickers help',
     'faq'           => 'FAQ',
     'api_interface' => 'Api interface',

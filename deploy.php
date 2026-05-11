@@ -11,7 +11,10 @@ set('default_timeout', null);
 // Project repository
 set('repository', 'git@github.com:visavi/rotor.git');
 
-add('shared_files', []);
+add('shared_files', [
+    'public/assets/custom.css',
+    'public/assets/custom.js',
+]);
 add('shared_dirs', [
     'public/uploads',
 ]);

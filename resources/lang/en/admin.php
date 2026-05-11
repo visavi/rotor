@@ -247,6 +247,13 @@ return [
         'rules_success_saved' => 'Rules saved successfully!',
     ],
 
+    'editor' => [
+        'saved'        => 'CSS and JS saved successfully!',
+        'not_writable' => 'No write permission for public/assets directory. Set permissions to 777',
+        'css_hint'     => 'Styles are connected on all pages before the closing </head> tag.',
+        'js_hint'      => 'Scripts are connected on all pages before the closing </body> tag.',
+    ],
+
     'spam' => [
         'go_to_message' => 'Go to post',
         'empty_spam'    => 'There are no complaints yet!',

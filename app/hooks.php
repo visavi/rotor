@@ -7,6 +7,26 @@ use App\Classes\Hook;
  * Хуки имеют приоритет 0 по умолчанию, чем выше приоритет, тем раньше вызывается хук
  */
 
+// Подключение пользовательского CSS (редактор в /admin/editor)
+Hook::add('head', function ($content) {
+    $path = public_path('assets/custom.css');
+    if (file_exists($path) && filesize($path) > 0) {
+        return $content . '<link rel="stylesheet" href="/assets/custom.css?v=' . filemtime($path) . '">' . PHP_EOL;
+    }
+
+    return $content;
+}, -1);
+
+// Подключение пользовательского JS (редактор в /admin/editor)
+Hook::add('footer', function ($content) {
+    $path = public_path('assets/custom.js');
+    if (file_exists($path) && filesize($path) > 0) {
+        return $content . '<script src="/assets/custom.js?v=' . filemtime($path) . '"></script>' . PHP_EOL;
+    }
+
+    return $content;
+}, -1);
+
 // Пример css хука
 /* Hook::add('head', function ($content) {
     return $content . '<link rel="stylesheet" href="/assets/styles.css">' . PHP_EOL;

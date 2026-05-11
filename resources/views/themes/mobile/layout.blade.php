@@ -67,7 +67,7 @@
     @yield('performance')
 </div>
 @stack('scripts')
-@hook('footer')
 <div class="scrollup"></div>
+@hook('footer')
 </body>
 </html>
