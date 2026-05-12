@@ -50,6 +50,9 @@ return [
         'comment_reply_name' => 'Reply to comment',
         'comment_reply_text' => '<p>User %login% replied to your comment on the page <strong>%page%</strong></p><p>%text%</p>',
 
+        'comment_added_name' => 'New comment on your post',
+        'comment_added_text' => '<p>User %login% commented on your post <strong>%page%</strong></p><p>%text%</p>',
+
         'invite_name' => 'Sending invitation keys',
         'invite_text' => '<p>Congratulations! You have received invitation keys</p><p>Your keys: %key%</p><p>With these keys you can invite your friends to our site!</p>',
 

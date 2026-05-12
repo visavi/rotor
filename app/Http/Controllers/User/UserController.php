@@ -465,7 +465,9 @@ class UserController extends Controller
             $themes = $request->input('themes');
             $timezone = $request->input('timezone', 0);
             $language = $request->input('language');
-            $notify = $request->input('notify') ? 1 : 0;
+            $notifyMention = $request->input('notify_mention') ? 1 : 0;
+            $notifyReply = $request->input('notify_reply') ? 1 : 0;
+            $notifyComment = $request->input('notify_comment') ? 1 : 0;
             $subscribe = $request->input('subscribe') ? Str::random(32) : null;
 
             $validator
@@ -477,11 +479,13 @@ class UserController extends Controller
 
             if ($validator->isValid()) {
                 $user->update([
-                    'themes'    => $themes,
-                    'timezone'  => $timezone,
-                    'notify'    => $notify,
-                    'subscribe' => $subscribe,
-                    'language'  => $language,
+                    'themes'         => $themes,
+                    'timezone'       => $timezone,
+                    'notify_mention' => $notifyMention,
+                    'notify_reply'   => $notifyReply,
+                    'notify_comment' => $notifyComment,
+                    'subscribe'      => $subscribe,
+                    'language'       => $language,
                 ]);
 
                 if (now()->month === 4 && now()->day === 1 && ! empty($themes)) {

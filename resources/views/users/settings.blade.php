@@ -59,9 +59,21 @@
             </div>
 
             <div class="form-check">
-                <input type="hidden" value="0" name="notify">
-                <input type="checkbox" class="form-check-input" value="1" name="notify" id="notify"{{ getInput('notify', $user->notify) ? ' checked' : '' }}>
-                <label data-bs-toggle="tooltip" title="{{ __('users.notification_hint') }}" class="form-check-label" for="notify">{{ __('users.receive_notification') }}</label>
+                <input type="hidden" value="0" name="notify_comment">
+                <input type="checkbox" class="form-check-input" value="1" name="notify_comment" id="notify_comment"{{ getInput('notify_comment', $user->notify_comment) ? ' checked' : '' }}>
+                <label data-bs-toggle="tooltip" title="{{ __('users.notify_comment_hint') }}" class="form-check-label" for="notify_comment">{{ __('users.notify_comment') }}</label>
+            </div>
+
+            <div class="form-check">
+                <input type="hidden" value="0" name="notify_reply">
+                <input type="checkbox" class="form-check-input" value="1" name="notify_reply" id="notify_reply"{{ getInput('notify_reply', $user->notify_reply) ? ' checked' : '' }}>
+                <label data-bs-toggle="tooltip" title="{{ __('users.notify_reply_hint') }}" class="form-check-label" for="notify_reply">{{ __('users.notify_reply') }}</label>
+            </div>
+
+            <div class="form-check">
+                <input type="hidden" value="0" name="notify_mention">
+                <input type="checkbox" class="form-check-input" value="1" name="notify_mention" id="notify_mention"{{ getInput('notify_mention', $user->notify_mention) ? ' checked' : '' }}>
+                <label data-bs-toggle="tooltip" title="{{ __('users.notify_mention_hint') }}" class="form-check-label" for="notify_mention">{{ __('users.notify_mention') }}</label>
             </div>
 
             <div class="form-check">

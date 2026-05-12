@@ -50,6 +50,9 @@ return [
         'comment_reply_name' => 'Відповідь на коментар',
         'comment_reply_text' => '<p>Користувач %login% відповів на ваш коментар на сторінці <strong>%page%</strong></p><p>%text%</p>',
 
+        'comment_added_name' => 'Новий коментар до вашого запису',
+        'comment_added_text' => '<p>Користувач %login% прокоментував ваш запис <strong>%page%</strong></p><p>%text%</p>',
+
         'invite_name' => 'Надсилання запрошень',
         'invite_text' => '<p>Вітаємо! Ви отримали запрошення</p><p>Ваші ключі: %key%</p><p>За допомогою цих ключів ви можете запросити друзів на наш сайт!</p>',
 

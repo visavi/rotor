@@ -77,6 +77,15 @@ class NoticeSeeder extends Seeder
                 'protect'    => 1,
             ],
             [
+                'type'       => 'comment_added',
+                'name'       => __('seeds.notices.comment_added_name'),
+                'text'       => __('seeds.notices.comment_added_text'),
+                'user_id'    => 1,
+                'created_at' => SITETIME,
+                'updated_at' => SITETIME,
+                'protect'    => 1,
+            ],
+            [
                 'type'       => 'invite',
                 'name'       => __('seeds.notices.invite_name'),
                 'text'       => __('seeds.notices.invite_text'),

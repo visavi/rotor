@@ -8,6 +8,7 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
@@ -181,8 +182,7 @@ trait CommentableTrait
 
             $flood->saveState();
 
-            $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
-            sendNotify($msg, route($viewRoute, $viewParams, false) . '#comment_' . $comment->id, $model->title, $replyUser);
+            $this->notifyAfterComment($model, $comment, $msg, $viewRoute, $viewParams, $parentComment);
 
             if ($request->wantsJson()) {
                 return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
@@ -201,5 +201,32 @@ trait CommentableTrait
         setFlash('danger', $validator->getErrors());
 
         return redirect()->route($viewRoute, $viewParams);
+    }
+
+    /**
+     * Уведомление о добавлении комментария
+     */
+    private function notifyAfterComment(Model $model, Comment $comment, string $msg, string $viewRoute, array $viewParams, ?Comment $parentComment): void
+    {
+        $url = route($viewRoute, $viewParams, false) . '#comment_' . $comment->id;
+        $skip = [];
+
+        /** @var User|null $owner */
+        $owner = $model->user?->exists ? $model->user : null;
+        if ($owner && $owner->notify_comment && $owner->id !== getUser('id') && $parentComment === null) {
+            $login = getUser('login');
+            $owner->sendMessage(null, textNotice('comment_added', compact('login', 'url') + ['title' => $model->title, 'text' => $msg]));
+            $skip[] = $owner->login;
+        }
+
+        /** @var User|null $replyUser */
+        $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
+        if ($replyUser && ! in_array($replyUser->login, $skip, true) && $replyUser->notify_reply && $replyUser->id !== getUser('id')) {
+            $login = getUser('login');
+            $replyUser->sendMessage(null, textNotice('comment_reply', compact('login', 'url') + ['title' => $model->title, 'text' => $msg]));
+            $skip[] = $replyUser->login;
+        }
+
+        sendNotify($msg, $url, $model->title, $skip);
     }
 }

@@ -933,19 +933,13 @@ function deleteFile(string $path): bool
 /**
  * Отправляет уведомление об упоминании в приват
  */
-function sendNotify(string $text, string $url, string $title, ?User $replyUser = null): void
+function sendNotify(string $text, string $url, string $title, array $exclude = []): void
 {
     if (! $login = getUser('login')) {
         return;
     }
 
-    $excludeLogins = [$login];
-
-    if ($replyUser?->notify && $replyUser->id !== getUser('id')) {
-        $notify = textNotice('comment_reply', compact('login', 'url', 'title', 'text'));
-        $replyUser->sendMessage(null, $notify);
-        $excludeLogins[] = $replyUser->login;
-    }
+    $excludeLogins = array_merge([$login], $exclude);
 
     preg_match_all('/<a[^>]+class="user"[^>]*href="\/users\/([\w\-]+)"/', $text, $matches);
 
@@ -955,7 +949,7 @@ function sendNotify(string $text, string $url, string $title, ?User $replyUser =
         foreach ($usersAnswer as $user) {
             $user = getUserByLogin($user);
 
-            if ($user?->notify) {
+            if ($user?->notify_mention) {
                 $notify = textNotice('notify', compact('login', 'url', 'title', 'text'));
                 $user->sendMessage(null, $notify);
             }

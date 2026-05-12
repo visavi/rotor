@@ -66,7 +66,9 @@ use Illuminate\Support\Str;
  * @property int    $sendprivatmail
  * @property int    $timebonus
  * @property int    $newchat
- * @property int    $notify
+ * @property bool   $notify_mention
+ * @property bool   $notify_reply
+ * @property bool   $notify_comment
  * @property string $apikey
  * @property string $subscribe
  * @property string $remember_token
