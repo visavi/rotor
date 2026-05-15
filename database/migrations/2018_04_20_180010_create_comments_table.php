@@ -20,6 +20,7 @@ return new class extends Migration {
                 $table->ipAddress('ip');
                 $table->string('brow', 25);
                 $table->integer('created_at');
+                $table->unsignedInteger('deleted_at')->nullable();
 
                 $table->index('parent_id');
                 $table->index('created_at');

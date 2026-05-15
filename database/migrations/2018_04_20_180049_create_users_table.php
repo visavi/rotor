@@ -45,7 +45,9 @@ return new class extends Migration {
                 $table->boolean('sendprivatmail')->default(false);
                 $table->integer('timebonus')->default(0);
                 $table->integer('newchat')->nullable();
-                $table->boolean('notify')->default(true);
+                $table->boolean('notify_mention')->default(true);
+                $table->boolean('notify_reply')->default(true);
+                $table->boolean('notify_comment')->default(true);
                 $table->string('apikey', 32)->nullable();
                 $table->string('subscribe', 32)->nullable();
                 $table->string('confirm_token', 100)->nullable();
