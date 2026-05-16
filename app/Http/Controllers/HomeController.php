@@ -78,7 +78,7 @@ class HomeController extends Controller
         $type = isset($types[$type]) ? $type : null;
 
         if ($query) {
-            $validator->length($query, 3, 64, ['find' => __('main.request_length')]);
+            $validator->length($searchQuery, 3, 64, ['find' => __('main.request_length')]);
 
             if ($validator->isValid()) {
                 $posts = Search::query()

@@ -3,6 +3,7 @@
 use App\Classes\Calendar;
 use App\Classes\CloudFlare;
 use App\Classes\Metrika;
+use App\Classes\Restatement;
 use App\Models\AdminAdvert;
 use App\Models\Advert;
 use App\Models\Antimat;
@@ -808,17 +809,14 @@ function restatement(string $mode): void
             DB::update('update photos set count_comments = (select count(*) from comments where relate_type = "' . Photo::$morphName . '" and photos.id = comments.relate_id)');
             break;
 
-        case 'offers':
-            DB::update('update offers set count_comments = (select count(*) from comments where relate_type = "offers" and offers.id = comments.relate_id)');
-            break;
-
-        case 'boards':
-            DB::update('update boards set count_items = (select count(*) from items where boards.id = items.board_id and items.active = true and items.expires_at >= ?);', [SITETIME]);
-            break;
-
         case 'votes':
             DB::update('update votes set count = (select coalesce(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
             break;
+
+        default:
+            if (isset(Restatement::$handlers[$mode])) {
+                (Restatement::$handlers[$mode])();
+            }
     }
 }
 

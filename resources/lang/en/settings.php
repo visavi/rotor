@@ -128,12 +128,6 @@ return [
     'news_title_length' => 'Length of news title',
     'news_text_length'  => 'Length of news text',
 
-    'offers_per_page'    => 'Suggestions per page',
-    'offers_points'      => 'Asset to create a proposal or problem',
-    'offer_title_length' => 'Offer title length',
-    'offer_text_length'  => 'Offer text length',
-    'offer_reply_length' => 'Offer reply length',
-
     'log_enable'      => 'Enable logging',
     'description'     => 'Short description (description)',
     'unscannable_ext' => 'Unscannable extensions (separated by commas)',
@@ -212,8 +206,6 @@ return [
     'feed_photos_show'      => 'Show photos',
     'feed_articles_show'    => 'Show articles',
     'feed_downs_show'       => 'Show downloads',
-    'feed_items_show'       => 'Show boards',
-    'feed_offers_show'      => 'Show offers / issues',
     'feed_comments_show'    => 'Show comments',
     'feed_per_page'         => 'Number of posts per page',
     'feed_cache_time'       => 'Feed cache time (sec.)',
@@ -222,19 +214,11 @@ return [
     'feed_photos_rating'    => 'Hide photos with rating',
     'feed_articles_rating'  => 'Hide articles with rating',
     'feed_downs_rating'     => 'Hide downloads with rating',
-    'feed_offers_rating'    => 'Hide offers / issues with rating',
     'feed_comments_rating'  => 'Hide comments with rating',
 
     'invite_days'   => 'Number of days to receive new keys',
     'invite_rating' => 'Rating required to receive keys',
     'invite_count'  => 'Number of keys received by the user',
-
-    'boards_create'         => 'Allow users to post ads',
-    'boards_period'         => 'Advertisement placement period',
-    'boards_per_page'       => 'Number of ads per page',
-    'board_title_length'    => 'Board title length',
-    'board_text_length'     => 'Board text length',
-    'board_category_length' => 'Board category length',
 
     'votes_per_page'     => 'Number of votes on page',
     'vote_title_length'  => 'Vote title length',
