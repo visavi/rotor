@@ -3,7 +3,6 @@
 use App\Classes\Calendar;
 use App\Classes\CloudFlare;
 use App\Classes\Metrika;
-use App\Classes\Restatement;
 use App\Models\AdminAdvert;
 use App\Models\Advert;
 use App\Models\Antimat;
@@ -39,7 +38,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
@@ -241,16 +239,6 @@ function showOnline(): ?HtmlString
     }
 
     return null;
-}
-
-/**
- * Get online widget
- */
-function onlineWidget(): HtmlString
-{
-    $online = statsOnline();
-
-    return new HtmlString(view('widgets/_online', compact('online')));
 }
 
 /**
@@ -569,35 +557,6 @@ function statVotes(): string
 }
 
 /**
- * Возвращает дату последней новости из кеш-файла
- */
-function statsNewsDate(): string
-{
-    $newsDate = Cache::remember('statNewsDate', 900, static function () {
-        $news = News::query()->orderByDesc('created_at')->first();
-
-        return $news->created_at ?? 0;
-    });
-
-    return $newsDate ? dateFixed($newsDate, 'd.m.Y') : '0';
-}
-
-/**
- * Возвращает закрепленные новости
- */
-function pinnedNews(): HtmlString
-{
-    $news = Cache::remember('pinnedNews', 1800, static function () {
-        return News::query()
-            ->where('top', 1)
-            ->orderByDesc('created_at')
-            ->get();
-    });
-
-    return new HtmlString(view('widgets/_news', compact('news')));
-}
-
-/**
  * Возвращает иконку расширения
  */
 function icons(string $ext): HtmlString
@@ -714,110 +673,6 @@ function getAdvertUser(): ?HtmlString
     }
 
     return null;
-}
-
-/**
- * Выводит последние фотографии
- */
-function recentPhotos(int $show = 5): HtmlString
-{
-    $photos = Cache::remember('recentPhotos', 1800, static function () use ($show) {
-        return Photo::query()
-            ->orderByDesc('created_at')
-            ->limit($show)
-            ->with('files')
-            ->get();
-    });
-
-    return new HtmlString(view('widgets/_photos', compact('photos')));
-}
-
-/**
- * Выводит последние темы форума
- */
-function recentTopics(int $show = 5): HtmlString
-{
-    $topics = Cache::remember('recentTopics', 300, static function () use ($show) {
-        return Topic::query()
-            ->orderByDesc('updated_at')
-            ->limit($show)
-            ->get();
-    });
-
-    return new HtmlString(view('widgets/_topics', compact('topics')));
-}
-
-/**
- * Выводит последние файлы в загрузках
- */
-function recentDowns(int $show = 5): HtmlString
-{
-    $downs = Cache::remember('recentDowns', 600, static function () use ($show) {
-        return Down::query()
-            ->active()
-            ->orderByDesc('created_at')
-            ->limit($show)
-            ->with('category')
-            ->get();
-    });
-
-    return new HtmlString(view('widgets/_downs', compact('downs')));
-}
-
-/**
- * Выводит последние статьи в блогах
- */
-function recentArticles(int $show = 5): HtmlString
-{
-    $articles = Cache::remember('recentArticles', 600, static function () use ($show) {
-        return Article::query()
-            ->orderByDesc('created_at')
-            ->limit($show)
-            ->get();
-    });
-
-    return new HtmlString(view('widgets/_articles', compact('articles')));
-}
-
-/**
- * Пересчитывает счетчики
- */
-function restatement(string $mode): void
-{
-    switch ($mode) {
-        case 'forums':
-            DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
-            DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
-            DB::update('update forums set count_posts = (select coalesce(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
-            break;
-
-        case 'blogs':
-            DB::update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id and active = true)');
-            DB::update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
-            break;
-
-        case 'loads':
-            DB::update('update loads set count_downs = (select count(*) from downs where loads.id = downs.category_id and active = true)');
-            DB::update('update downs set count_comments = (select count(*) from comments where relate_type = "' . Down::$morphName . '" and downs.id = comments.relate_id)');
-            break;
-
-        case 'news':
-            DB::update('update news set count_comments = (select count(*) from comments where relate_type = "' . News::$morphName . '" and news.id = comments.relate_id)');
-            break;
-
-        case 'photos':
-            DB::update('update photos set count_comments = (select count(*) from comments where relate_type = "' . Photo::$morphName . '" and photos.id = comments.relate_id)');
-            break;
-
-        case 'votes':
-            DB::update('update votes set count = (select coalesce(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
-            break;
-
-        default:
-            if (isset(Restatement::$handlers[$mode])) {
-                (Restatement::$handlers[$mode])();
-            }
-    }
 }
 
 /**
@@ -1502,25 +1357,6 @@ function uniqueName(?string $extension = null): string
     }
 
     return str_replace('.', '', uniqid('', true)) . $extension;
-}
-
-/**
- * Возвращает курсы валют
- */
-function getCourses(): HtmlString
-{
-    $courses = Cache::remember('courses', 3600, static function () {
-        try {
-            $response = Http::timeout(3)
-                ->get('https://www.cbr-xml-daily.ru/daily_json.js');
-
-            return $response->json();
-        } catch (Exception) {
-            return null;
-        }
-    });
-
-    return new HtmlString(view('app/_courses', compact('courses')));
 }
 
 /**

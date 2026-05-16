@@ -1,4 +1,5 @@
 @use('App\Classes\Feed')
+@use('App\Classes\Hook')
 @extends('layout')
 
 @section('title', setting('logos'))
@@ -6,11 +7,11 @@
 @section('content')
     @include('ads/_top')
 
-    @if (setting('homepage_view') === 'feed')
+    @if(Hook::getHooks()['homepageView'] ?? false)
+        {!! Hook::call('homepageView') !!}
+    @else
         <div id="feed-container">{{ (new Feed())->getFeed() }}</div>
         <div id="feed-sentinel"></div>
-    @else
-        @include('widgets/_classic')
     @endif
 
     @include('ads/_bottom')

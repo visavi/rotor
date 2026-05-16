@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\Photo;
 use App\Models\User;
@@ -103,7 +104,7 @@ class PhotoController extends AdminController
             abort(200, __('main.page_only_owner'));
         }
 
-        restatement('photos');
+        Restatement::run('photos');
 
         return redirect()
             ->route('admin.photos.index')

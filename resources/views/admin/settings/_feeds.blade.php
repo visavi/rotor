@@ -5,25 +5,6 @@
 <form method="post">
     @csrf
 
-    <?php $views = [
-        'classic' => __('settings.homepage_view_classic'),
-        'feed' => __('settings.homepage_view_feed'),
-    ]; ?>
-    <?php $inputView = getInput('language', $settings['homepage_view']); ?>
-
-    <div class="mb-3{{ hasError('sets[homepage_view]') }}">
-        <label for="language" class="form-label">{{ __('settings.homepage_view') }}:</label>
-        <select class="form-select" id="language" name="sets[homepage_view]">
-
-            @foreach ($views as $view => $name)
-                <?php $selected = ($view === $inputView) ? ' selected' : ''; ?>
-                <option value="{{ $view }}"{{ $selected }}>{{ $name }}</option>
-            @endforeach
-        </select>
-
-        <div class="invalid-feedback">{{ textError('sets[homepage_view]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[feed_per_page]') }}">
         <label for="feed_per_page" class="form-label">{{ __('settings.feed_per_page') }}:</label>
         <input type="number" class="form-control" id="feed_per_page" name="sets[feed_per_page]" maxlength="3" value="{{ getInput('sets.feed_per_page', $settings['feed_per_page']) }}" required>

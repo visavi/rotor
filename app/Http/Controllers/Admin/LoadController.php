@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\Down;
 use App\Models\File;
@@ -154,7 +155,7 @@ class LoadController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        restatement('loads');
+        Restatement::run('loads');
 
         return redirect()
             ->route('admin.loads.index')

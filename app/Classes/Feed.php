@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Topic;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\HtmlString;
 
@@ -53,6 +55,10 @@ class Feed
                 $ids = $typeRows->pluck('relate_id')->all();
 
                 $modelQuery = $class::with($withs)->whereIn('id', $ids);
+
+                if ($class === Comment::class) {
+                    $modelQuery->whereIn('relate_type', array_keys(Relation::morphMap()));
+                }
 
                 if ($type === 'items') {
                     $modelQuery->where('expires_at', '>', SITETIME);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\File;
 use App\Models\Forum;
@@ -162,7 +163,7 @@ class ForumController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        restatement('forums');
+        Restatement::run('forums');
 
         return redirect()
             ->route('admin.forums.index')

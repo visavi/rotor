@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\BlackList;
@@ -224,7 +225,7 @@ class UserController extends AdminController
                     });
 
                     if ($topics->isNotEmpty()) {
-                        restatement('forums');
+                        Restatement::run('forums');
                     }
                 }
 
@@ -237,7 +238,7 @@ class UserController extends AdminController
                     });
 
                     if ($posts->isNotEmpty()) {
-                        restatement('forums');
+                        Restatement::run('forums');
                     }
                 }
 
@@ -252,11 +253,7 @@ class UserController extends AdminController
                     });
 
                     if ($comments->isNotEmpty()) {
-                        restatement('blogs');
-                        restatement('loads');
-                        restatement('news');
-                        restatement('photos');
-                        restatement('offers');
+                        Restatement::run(['blogs', 'loads', 'news', 'photos', 'offers']);
                     }
                 }
 

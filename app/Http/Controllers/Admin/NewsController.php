@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\File;
 use App\Models\News;
@@ -127,7 +128,7 @@ class NewsController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        restatement('news');
+        Restatement::run('news');
 
         return redirect()
             ->route('admin.news.index')

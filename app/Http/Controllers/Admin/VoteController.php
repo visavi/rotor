@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\User;
 use App\Models\Vote;
@@ -164,7 +165,7 @@ class VoteController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        restatement('votes');
+        Restatement::run('votes');
 
         return redirect()
             ->route('admin.votes.index')

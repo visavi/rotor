@@ -117,7 +117,6 @@ class SettingSeeder extends Seeder
             ['name' => 'guest_moderation', 'value' => 0],
             ['name' => 'guestbook_point', 'value' => 1],
             ['name' => 'guestbook_money', 'value' => 50],
-            ['name' => 'homepage_view', 'value' => 'feed'],
             ['name' => 'ignorlist', 'value' => 10],
             ['name' => 'incount', 'value' => 5],
             ['name' => 'invite', 'value' => 0],

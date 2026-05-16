@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\Article;
 use App\Models\Blog;
@@ -157,7 +158,7 @@ class ArticleController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        restatement('blogs');
+        Restatement::run('blogs');
 
         return redirect()
             ->route('admin.blogs.index')
