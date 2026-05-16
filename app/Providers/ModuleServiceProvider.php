@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 use App\Console\Commands\SearchImport;
+use App\Http\Controllers\AjaxController;
 use App\Models\Feed;
 use App\Models\Module;
 use App\Models\Search;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
@@ -91,35 +92,41 @@ class ModuleServiceProvider extends ServiceProvider
             if (file_exists($moduleFile)) {
                 $moduleConfig = include $moduleFile;
 
-                // Регистрация morph map
-                foreach ($moduleConfig['morphs'] ?? [] as $class) {
+                // Регистрация моделей
+                foreach ($moduleConfig['models'] ?? [] as $class => $config) {
                     /** @var class-string $class */
-                    Relation::morphMap([$class::$morphName => $class]);
+                    $morphName = $class::$morphName;
+                    Relation::morphMap([$morphName => $class]);
+
+                    if (isset($config['searchable'])) {
+                        Search::$types[$morphName] = $config['searchable'];
+                        SearchImport::$classes[] = $class;
+                    }
+
+                    if (isset($config['feedType'])) {
+                        Feed::$types[$morphName] = array_merge(['class' => $class], $config['feedType']);
+                    }
+
+                    if (isset($config['feedView'])) {
+                        Feed::$viewMap[$morphName] = $config['feedView'];
+                    }
+
+                    if (isset($config['searchView'])) {
+                        Search::$viewMap[$morphName] = $config['searchView'];
+                    }
+
+                    match($config['uploadType'] ?? null) {
+                        'media' => AjaxController::$extraMediaTypes[] = $morphName,
+                        'file'  => AjaxController::$extraFileTypes[] = $morphName,
+                        default => null,
+                    };
+
+                    if (isset($config['ratingType'])) {
+                        AjaxController::$extraRatingTypes[] = $morphName;
+                    }
                 }
 
-                // Регистрация searchable типов
-                foreach ($moduleConfig['searchable'] ?? [] as $class => $label) {
-                    /** @var class-string $class */
-                    Search::$types[$class::$morphName] = $label;
-                    SearchImport::$classes[] = $class;
-                }
-
-                // Регистрация feed типов
-                foreach ($moduleConfig['feedTypes'] ?? [] as $key => $config) {
-                    Feed::$types[$key] = $config;
-                }
-
-                // Регистрация feed вьюх
-                foreach ($moduleConfig['feedViews'] ?? [] as $morphClass => $view) {
-                    Feed::$viewMap[$morphClass] = $view;
-                }
-
-                // Регистрация search вьюх
-                foreach ($moduleConfig['searchViews'] ?? [] as $morphClass => $view) {
-                    Search::$viewMap[$morphClass] = $view;
-                }
-
-                // Регистрация расписания
+                // Регистрация консольных команд
                 if (isset($moduleConfig['schedule'])) {
                     $this->app->booted(function () use ($moduleConfig) {
                         $moduleConfig['schedule']($this->app->make(Schedule::class));

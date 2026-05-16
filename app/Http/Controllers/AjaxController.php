@@ -26,6 +26,9 @@ use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
+    public static array $extraMediaTypes = [];
+    public static array $extraFileTypes = [];
+    public static array $extraRatingTypes = [];
     /**
      * Отправляет жалобу на сообщение
      */
@@ -97,7 +100,7 @@ class AjaxController extends Controller
      */
     public function rating(Request $request): JsonResponse
     {
-        $validTypes = [
+        $validTypes = array_merge([
             Post::$morphName,
             Article::$morphName,
             Photo::$morphName,
@@ -105,7 +108,7 @@ class AjaxController extends Controller
             News::$morphName,
             Down::$morphName,
             Comment::$morphName,
-        ];
+        ], static::$extraRatingTypes);
 
         $type = $request->input('type');
         $vote = $request->input('vote');
@@ -162,20 +165,19 @@ class AjaxController extends Controller
      */
     public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
-        $imageTypes = [
+        $imageTypes = array_merge([
             Article::$morphName,
-            'items',
             Photo::$morphName,
-        ];
+        ], static::$extraMediaTypes);
 
-        $fileTypes = [
+        $fileTypes = array_merge([
             Comment::$morphName,
             Down::$morphName,
             Message::$morphName,
             News::$morphName,
             Post::$morphName,
             Guestbook::$morphName,
-        ];
+        ], static::$extraFileTypes);
 
         $id = int($request->input('id'));
         $file = $request->file('file');
@@ -279,17 +281,16 @@ class AjaxController extends Controller
      */
     public function deleteFile(Request $request, Validator $validator): JsonResponse
     {
-        $types = [
+        $types = array_merge([
             Article::$morphName,
             Comment::$morphName,
             Down::$morphName,
-            'items',
             News::$morphName,
             Message::$morphName,
             Photo::$morphName,
             Post::$morphName,
             Guestbook::$morphName,
-        ];
+        ], static::$extraMediaTypes, static::$extraFileTypes);
 
         $id = int($request->input('id'));
         $type = $request->input('type');
