@@ -14,7 +14,6 @@
             <h5>{{ __('index.users') }}</h5>
             <ul class="nav flex-column">
                 <li><a class="footer-item" href="{{ route('users.index') }}">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span></li>
-                <li><a class="footer-item" href="{{ route('offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span></li>
                 @hook('footerColumnMiddle')
             </ul>
         </div>

@@ -19,7 +19,6 @@ use App\Models\Invite;
 use App\Models\Load;
 use App\Models\News;
 use App\Models\Notice;
-use App\Models\Offer;
 use App\Models\Online;
 use App\Models\PaidAdvert;
 use App\Models\Photo;
@@ -780,19 +779,6 @@ function recentArticles(int $show = 5): HtmlString
 }
 
 /**
- * Возвращает количество предложений и проблем
- */
-function statsOffers(): string
-{
-    return Cache::remember('offers', 600, static function () {
-        $offers = Offer::query()->where('type', 'offer')->count();
-        $problems = Offer::query()->where('type', 'issue')->count();
-
-        return sprintf('%d/%d', $offers, $problems);
-    });
-}
-
-/**
  * Пересчитывает счетчики
  */
 function restatement(string $mode): void
@@ -823,7 +809,7 @@ function restatement(string $mode): void
             break;
 
         case 'offers':
-            DB::update('update offers set count_comments = (select count(*) from comments where relate_type = "' . Offer::$morphName . '" and offers.id = comments.relate_id)');
+            DB::update('update offers set count_comments = (select count(*) from comments where relate_type = "offers" and offers.id = comments.relate_id)');
             break;
 
         case 'boards':

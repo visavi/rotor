@@ -29,7 +29,6 @@ use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\NoticeController;
-use App\Http\Controllers\Admin\OfferController as AdminOfferController;
 use App\Http\Controllers\Admin\PaidAdvertController;
 use App\Http\Controllers\Admin\PhotoController as AdminPhotoController;
 use App\Http\Controllers\Admin\ReglistController;
@@ -329,19 +328,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::match(['get', 'post'], '/', 'index');
                     Route::post('/delete', 'delete');
-                });
-
-            /* Предложения / проблемы */
-            Route::controller(AdminOfferController::class)
-                ->prefix('offers')
-                ->name('offers.')
-                ->group(function () {
-                    Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('index');
-                    Route::get('/{id}', 'view')->name('view');
-                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::match(['get', 'post'], '/{id}/reply', 'reply')->name('reply');
-                    Route::match(['get', 'post'], '/delete', 'delete')->name('delete');
-                    Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
             /* Стикеры */

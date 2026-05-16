@@ -8,7 +8,6 @@ use App\Models\Down;
 use App\Models\Guestbook;
 use App\Models\Message;
 use App\Models\News;
-use App\Models\Offer;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Topic;
@@ -37,7 +36,6 @@ class MorphMapServiceProvider extends ServiceProvider
             Down::$morphName      => Down::class,
             Article::$morphName   => Article::class,
             Photo::$morphName     => Photo::class,
-            Offer::$morphName     => Offer::class,
             News::$morphName      => News::class,
             Topic::$morphName     => Topic::class,
             Post::$morphName      => Post::class,

@@ -22,7 +22,6 @@ class Feed extends Model
         'photos'   => ['class' => Photo::class,   'withs' => ['user', 'files']],
         'articles' => ['class' => Article::class, 'withs' => ['user', 'files', 'category.parent']],
         'downs'    => ['class' => Down::class,    'withs' => ['user', 'files', 'category.parent']],
-        'offers'   => ['class' => Offer::class,   'withs' => ['user']],
         'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
     ];
 

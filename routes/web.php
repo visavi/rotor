@@ -29,7 +29,6 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\NotebookController;
-use App\Http\Controllers\OfferController;
 use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PhotoController;
@@ -62,11 +61,6 @@ use Illuminate\Support\Facades\Route;
 /*Route::get('/', function () {
     return view('welcome');
 });*/
-Route::pattern('id', '\d+');
-Route::pattern('cid', '\d+');
-Route::pattern('fid', '\d+');
-Route::pattern('slug', '[a-z0-9-\.]+');
-Route::pattern('login', '[\w\-]+');
 
 require __DIR__ . '/redirects.php';
 
@@ -239,18 +233,6 @@ Route::prefix('downs')
 
         Route::match(['get', 'post'], '/create', [DownController::class, 'create'])->name('create');
         Route::match(['get', 'post'], '/{id}/edit', [DownController::class, 'edit'])->name('edit');
-    });
-
-/* Предложения и проблемы */
-Route::controller(OfferController::class)
-    ->prefix('offers')
-    ->name('offers.')
-    ->group(function () {
-        Route::get('/{type?}', 'index')->where('type', 'offer|issue')->name('index');
-        Route::get('/{id}', 'view')->name('view');
-        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
-        Route::match(['get', 'post'], '/create', 'create')->name('create');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 
 /* Ajax */

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +27,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::pattern('id', '\d+');
+        Route::pattern('cid', '\d+');
+        Route::pattern('fid', '\d+');
+        Route::pattern('slug', '[a-z0-9-\.]+');
+        Route::pattern('login', '[\w\-]+');
+
         DB::connection()->enableQueryLog();
 
         Paginator::$defaultView = 'app/_paginator';

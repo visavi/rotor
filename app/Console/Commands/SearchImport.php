@@ -7,7 +7,6 @@ use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Guestbook;
 use App\Models\News;
-use App\Models\Offer;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Topic;
@@ -35,7 +34,6 @@ class SearchImport extends Command
             Down::class,
             Guestbook::class,
             News::class,
-            Offer::class,
             Photo::class,
             Post::class,
             Topic::class,

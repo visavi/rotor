@@ -51,7 +51,6 @@ class Setting extends Model
             'adverts',
             'files',
             'stickers',
-            'offers',
             'feeds',
             'invitations',
             'votes',

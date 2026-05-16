@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Route;
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });*/
-Route::pattern('id', '\d+');
-Route::pattern('login', '[\w\-]+');
-
 Route::controller(ApiController::class)->group(function () {
     Route::post('/auth', 'auth');
     Route::get('/config', 'config');

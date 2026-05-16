@@ -69,7 +69,6 @@
                 <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.downs.new') }}">{{ __('index.new_loads') }}</a> <span class="badge bg-adaptive">{{ statsNewLoad() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/errors">{{ __('index.errors') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/blacklists">{{ __('index.blacklist') }}</a> <span class="badge bg-adaptive">{{ statsBlacklist() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.offers.index') }}">{{ __('index.offers') }}</a> <span class="badge bg-adaptive">{{ statsOffers() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/stickers">{{ __('index.stickers') }}</a> <span class="badge bg-adaptive">{{ statsStickers() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/status">{{ __('index.user_statuses') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/editor">{{ __('index.css_js_editor') }}</a><br>

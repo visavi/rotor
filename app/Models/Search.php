@@ -56,7 +56,6 @@ class Search extends Model
             Down::$morphName      => __('index.loads'),
             Guestbook::$morphName => __('index.guestbook'),
             News::$morphName      => __('index.news'),
-            Offer::$morphName     => __('index.offers'),
             Photo::$morphName     => __('index.photos'),
             Post::$morphName      => __('index.posts'),
             Topic::$morphName     => __('index.topics'),

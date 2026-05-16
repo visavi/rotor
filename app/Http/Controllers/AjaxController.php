@@ -12,7 +12,6 @@ use App\Models\File;
 use App\Models\Guestbook;
 use App\Models\Message;
 use App\Models\News;
-use App\Models\Offer;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Spam;
@@ -29,6 +28,7 @@ class AjaxController extends Controller
     public static array $extraMediaTypes = [];
     public static array $extraFileTypes = [];
     public static array $extraRatingTypes = [];
+
     /**
      * Отправляет жалобу на сообщение
      */
@@ -63,7 +63,7 @@ class AjaxController extends Controller
             case News::$morphName:
             case Article::$morphName:
             case Photo::$morphName:
-            case Offer::$morphName:
+            case 'offers':
             case Down::$morphName:
                 $model = Comment::query()->find($id);
                 $path = $model?->getViewUrl(false);
@@ -104,7 +104,6 @@ class AjaxController extends Controller
             Post::$morphName,
             Article::$morphName,
             Photo::$morphName,
-            Offer::$morphName,
             News::$morphName,
             Down::$morphName,
             Comment::$morphName,
