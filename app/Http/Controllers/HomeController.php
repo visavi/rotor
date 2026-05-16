@@ -63,6 +63,7 @@ class HomeController extends Controller
         $posts = paginate([], 10);
         $query = (string) $request->input('query', $request->input('q', ''));
         $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $query));
+        $searchQuery = implode(' ', array_filter(explode(' ', $query), static fn ($w) => mb_strlen($w) >= 3));
 
         $types = Search::getRelateTypes();
 
@@ -70,7 +71,7 @@ class HomeController extends Controller
         $order = match ($sort) {
             'date'     => ['created_at desc'],
             'date_asc' => ['created_at asc'],
-            default    => ['match(text) against(? in boolean mode) desc', [$query . '*']],
+            default    => ['match(text) against(? in boolean mode) desc', [$searchQuery . '*']],
         };
 
         $type = check($request->input('type'));
@@ -81,10 +82,11 @@ class HomeController extends Controller
 
             if ($validator->isValid()) {
                 $posts = Search::query()
+                    ->whereIn('relate_type', array_keys($types))
                     ->when($type, function ($query) use ($type) {
                         $query->where('relate_type', $type);
                     })
-                    ->whereFullText('text', $query . '*', ['mode' => 'boolean'])
+                    ->whereFullText('text', $searchQuery . '*', ['mode' => 'boolean'])
                     ->with('relate')
                     ->orderByRaw(...$order)
                     ->paginate(10)

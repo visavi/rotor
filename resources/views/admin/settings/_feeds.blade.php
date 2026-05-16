@@ -67,12 +67,6 @@
     </div>
 
     <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[feed_items_show]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[feed_items_show]" id="feed_items_show"{{ getInput('sets.feed_items_show', $settings['feed_items_show']) ? ' checked' : '' }}>
-        <label class="form-check-label" for="feed_items_show">{{ __('settings.feed_items_show') }}</label>
-    </div>
-
-    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[feed_offers_show]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[feed_offers_show]" id="feed_offers_show"{{ getInput('sets.feed_offers_show', $settings['feed_offers_show']) ? ' checked' : '' }}>
         <label class="form-check-label" for="feed_offers_show">{{ __('settings.feed_offers_show') }}</label>
@@ -83,6 +77,8 @@
         <input type="checkbox" class="form-check-input" value="1" name="sets[feed_comments_show]" id="feed_comments_show"{{ getInput('sets.feed_comments_show', $settings['feed_comments_show']) ? ' checked' : '' }}>
         <label class="form-check-label" for="feed_comments_show">{{ __('settings.feed_comments_show') }}</label>
     </div>
+
+    @hook('adminSettingsFeeds', $settings)
 
     <div class="mb-3{{ hasError('sets[feed_topics_rating]') }}">
         <label for="feed_topics_rating" class="form-label">{{ __('settings.feed_topics_rating') }}:</label>

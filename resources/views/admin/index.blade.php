@@ -28,7 +28,6 @@
             <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.photos.index') }}">{{ __('index.photos') }}</a> <span class="badge bg-adaptive">{{ statsPhotos() }}</span><br>
             <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.blogs.index') }}">{{ __('index.blogs') }}</a> <span class="badge bg-adaptive">{{ statsBlog() }}</span><br>
             <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.articles.new') }}">{{ __('index.new_articles') }}</a> <span class="badge bg-adaptive">{{ statsNewArticles() }}</span><br>
-            <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.boards.index') }}">{{ __('index.boards') }}</a> <span class="badge bg-adaptive">{{ statsBoard() }}</span><br>
             <i class="far fa-circle text-muted"></i> <a href="/admin/admin-adverts">{{ __('index.admin_advertising') }}</a><br>
             <i class="far fa-circle text-muted"></i> <a href="/admin/adverts">{{ __('index.advertising') }}</a><br>
             @hook('adminBlockEditor')

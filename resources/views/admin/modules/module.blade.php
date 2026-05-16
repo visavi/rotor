@@ -132,6 +132,14 @@
         </details>
     @endif
 
+    @if (isset($moduleConfig['helpers']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.helpers') }}</div>
+        <details class="spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            <pre class="code"><code>{{ $moduleConfig['helpers'] }}</code></pre>
+        </details>
+    @endif
+
     @if (isset($moduleConfig['middleware']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.middleware') }}</div>
         <details class="spoiler">

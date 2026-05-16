@@ -52,7 +52,6 @@
             <li><a class="paper-nav__item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('loads*', 'downs*') ? ' active' : '' }}" href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
-            <li><a class="paper-nav__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">{{ __('index.boards') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">{{ __('index.votes') }}</a></li>
             @hook('navbarEnd')
         </ul>

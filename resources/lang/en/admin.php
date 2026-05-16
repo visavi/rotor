@@ -201,6 +201,7 @@ return [
         'settings'                 => 'Advanced settings',
         'routes'                   => 'Routes',
         'hooks'                    => 'Hooks',
+        'helpers'                  => 'Helpers',
         'middleware'               => 'Middleware',
         'empty_modules'            => 'Modules not loaded yet!',
         'confirm_delete'           => 'Do you really want to remove the module?',

@@ -124,13 +124,6 @@
             </a>
         </li>
 
-        <li>
-            <a class="menu-item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">
-                <i class="menu-icon far fa-rectangle-list"></i>
-                <span class="menu-label">{{ __('index.boards') }}</span>
-                <span class="badge menu-badge">{{ statsBoard() }}</span>
-            </a>
-        </li>
 
         <li>
             <a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">

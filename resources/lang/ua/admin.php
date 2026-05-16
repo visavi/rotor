@@ -199,6 +199,7 @@ return [
         'settings'                 => 'Розширені налаштування',
         'routes'                   => 'Роути',
         'hooks'                    => 'Хукі',
+        'helpers'                  => 'Хелпери',
         'middleware'               => 'Middleware',
         'empty_modules'            => 'Модулі ще не завантажені!',
         'confirm_delete'           => 'Ви дійсно хочете видалити модуль?',

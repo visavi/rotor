@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use App\Console\Commands\SearchImport;
+use App\Models\Feed;
 use App\Models\Module;
+use App\Models\Search;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
@@ -27,6 +32,12 @@ class ModuleServiceProvider extends ServiceProvider
 
         foreach ($modules as $module => $settings) {
             $moduleKey = Str::snake($module);
+
+            // Загрузка helpers
+            $helpersFile = base_path('modules/' . $module . '/helpers.php');
+            if (file_exists($helpersFile)) {
+                include_once $helpersFile;
+            }
 
             // Загрузка hooks
             $hooksFile = base_path('modules/' . $module . '/hooks.php');
@@ -73,6 +84,56 @@ class ModuleServiceProvider extends ServiceProvider
                     $router->aliasMiddleware($alias, $class);
                     $router->pushMiddlewareToGroup('web', $class);
                 }
+            }
+
+            // Загрузка capabilities из module.php
+            $moduleFile = base_path('modules/' . $module . '/module.php');
+            if (file_exists($moduleFile)) {
+                $moduleConfig = include $moduleFile;
+
+                // Регистрация morph map
+                foreach ($moduleConfig['morphs'] ?? [] as $class) {
+                    /** @var class-string $class */
+                    Relation::morphMap([$class::$morphName => $class]);
+                }
+
+                // Регистрация searchable типов
+                foreach ($moduleConfig['searchable'] ?? [] as $class => $label) {
+                    /** @var class-string $class */
+                    Search::$types[$class::$morphName] = $label;
+                    SearchImport::$classes[] = $class;
+                }
+
+                // Регистрация feed типов
+                foreach ($moduleConfig['feedTypes'] ?? [] as $key => $config) {
+                    Feed::$types[$key] = $config;
+                }
+
+                // Регистрация feed вьюх
+                foreach ($moduleConfig['feedViews'] ?? [] as $morphClass => $view) {
+                    Feed::$viewMap[$morphClass] = $view;
+                }
+
+                // Регистрация search вьюх
+                foreach ($moduleConfig['searchViews'] ?? [] as $morphClass => $view) {
+                    Search::$viewMap[$morphClass] = $view;
+                }
+
+                // Регистрация расписания
+                if (isset($moduleConfig['schedule'])) {
+                    $this->app->booted(function () use ($moduleConfig) {
+                        $moduleConfig['schedule']($this->app->make(Schedule::class));
+                    });
+                }
+            }
+
+            // Регистрация консольных команд
+            if ($this->app->runningInConsole()) {
+                $commands = array_map(
+                    static fn ($file) => 'Modules\\' . $module . '\\Console\\' . basename($file, '.php'),
+                    glob(base_path('modules/' . $module . '/Console/*.php')) ?: []
+                );
+                $this->commands($commands);
             }
         }
     }

@@ -4,14 +4,7 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
-use App\Models\Article;
-use App\Models\Comment;
-use App\Models\Down;
 use App\Models\Feed as FeedModel;
-use App\Models\Item;
-use App\Models\News;
-use App\Models\Offer;
-use App\Models\Photo;
 use App\Models\Poll;
 use App\Models\Post;
 use App\Models\Topic;
@@ -21,17 +14,6 @@ use Illuminate\Support\HtmlString;
 class Feed
 {
     private mixed $user;
-
-    private array $types = [
-        'topics'   => ['class' => Topic::class,   'withs' => ['lastPost.user', 'lastPost.files', 'forum.parent']],
-        'news'     => ['class' => News::class,     'withs' => ['user', 'files']],
-        'photos'   => ['class' => Photo::class,    'withs' => ['user', 'files']],
-        'articles' => ['class' => Article::class,  'withs' => ['user', 'files', 'category.parent']],
-        'downs'    => ['class' => Down::class,     'withs' => ['user', 'files', 'category.parent']],
-        'items'    => ['class' => Item::class,     'withs' => ['user', 'files', 'category.parent']],
-        'offers'   => ['class' => Offer::class,    'withs' => ['user']],
-        'comments' => ['class' => Comment::class,  'withs' => ['relate', 'user']],
-    ];
 
     public function __construct()
     {
@@ -44,7 +26,7 @@ class Feed
     public function getFeed(): HtmlString
     {
         $enabledTypes = array_keys(array_filter(
-            $this->types,
+            FeedModel::$types,
             static fn ($type, $key) => setting("feed_{$key}_show"),
             ARRAY_FILTER_USE_BOTH
         ));
@@ -66,8 +48,8 @@ class Feed
 
             $loadedModels = [];
             foreach ($grouped as $type => $typeRows) {
-                $class = $this->types[$type]['class'];
-                $withs = $this->types[$type]['withs'];
+                $class = FeedModel::$types[$type]['class'];
+                $withs = FeedModel::$types[$type]['withs'];
                 $ids = $typeRows->pluck('relate_id')->all();
 
                 $modelQuery = $class::with($withs)->whereIn('id', $ids);

@@ -179,13 +179,6 @@
                 </a>
             </li>
             <li>
-                <a class="app-topnav__item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}">
-                    <i class="far fa-rectangle-list"></i>
-                    <span>{{ __('index.boards') }}</span>
-                    <span class="badge menu-badge">{{ statsBoard() }}</span>
-                </a>
-            </li>
-            <li>
                 <a class="app-topnav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                     <i class="fas fa-square-poll-horizontal"></i>
                     <span>{{ __('index.votes') }}</span>

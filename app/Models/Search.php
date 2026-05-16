@@ -18,6 +18,10 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Search extends Model
 {
+    public static array $types = [];
+
+    public static array $viewMap = [];
+
     /**
      * The table associated with the model.
      */
@@ -46,12 +50,11 @@ class Search extends Model
      */
     public static function getRelateTypes(): array
     {
-        return [
+        $base = [
             Article::$morphName   => __('index.blogs'),
             Comment::$morphName   => __('index.comments'),
             Down::$morphName      => __('index.loads'),
             Guestbook::$morphName => __('index.guestbook'),
-            Item::$morphName      => __('index.boards'),
             News::$morphName      => __('index.news'),
             Offer::$morphName     => __('index.offers'),
             Photo::$morphName     => __('index.photos'),
@@ -60,6 +63,8 @@ class Search extends Model
             User::$morphName      => __('index.users'),
             Vote::$morphName      => __('index.votes'),
         ];
+
+        return array_merge($base, static::$types);
     }
 
     /**

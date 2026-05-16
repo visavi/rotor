@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Guestbook;
-use App\Models\Item;
 use App\Models\Message;
 use App\Models\News;
 use App\Models\Offer;
@@ -47,7 +46,6 @@ class MorphMapServiceProvider extends ServiceProvider
             Wall::$morphName      => Wall::class,
             Comment::$morphName   => Comment::class,
             Vote::$morphName      => Vote::class,
-            Item::$morphName      => Item::class,
             User::$morphName      => User::class,
         ]);
     }

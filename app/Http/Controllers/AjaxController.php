@@ -10,7 +10,6 @@ use App\Models\Comment;
 use App\Models\Down;
 use App\Models\File;
 use App\Models\Guestbook;
-use App\Models\Item;
 use App\Models\Message;
 use App\Models\News;
 use App\Models\Offer;
@@ -165,7 +164,7 @@ class AjaxController extends Controller
     {
         $imageTypes = [
             Article::$morphName,
-            Item::$morphName,
+            'items',
             Photo::$morphName,
         ];
 
@@ -284,7 +283,7 @@ class AjaxController extends Controller
             Article::$morphName,
             Comment::$morphName,
             Down::$morphName,
-            Item::$morphName,
+            'items',
             News::$morphName,
             Message::$morphName,
             Photo::$morphName,

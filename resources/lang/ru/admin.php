@@ -201,6 +201,7 @@ return [
         'settings'                 => 'Расширенные настройки',
         'routes'                   => 'Роуты',
         'hooks'                    => 'Хуки',
+        'helpers'                  => 'Хелперы',
         'middleware'               => 'Middleware',
         'empty_modules'            => 'Модули еще не загружены!',
         'confirm_delete'           => 'Вы действительно хотите удалить модуль?',

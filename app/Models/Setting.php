@@ -54,7 +54,6 @@ class Setting extends Model
             'offers',
             'feeds',
             'invitations',
-            'boards',
             'votes',
             'seo',
         ];

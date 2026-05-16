@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\BanController as AdminBanController;
 use App\Http\Controllers\Admin\BanhistController;
 use App\Http\Controllers\Admin\BanlistController;
 use App\Http\Controllers\Admin\BlacklistController;
-use App\Http\Controllers\Admin\BoardController as AdminBoardController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\CheckerController;
@@ -156,28 +155,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::delete('/{id}/delete', 'deleteArticle')->name('delete');
                 Route::post('/{id}/publish', 'publish')->name('publish');
                 Route::get('/new', 'new')->name('new');
-            });
-
-        /* Доска объявлений */
-        Route::controller(AdminBoardController::class)
-            ->prefix('boards')
-            ->name('boards.')
-            ->group(function () {
-                Route::get('/{id?}', 'index')->name('index');
-                Route::get('/categories', 'categories')->name('categories');
-                Route::post('/create', 'create')->name('create');
-                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::delete('/{id}/delete', 'delete')->name('delete');
-                Route::post('/restatement', 'restatement')->name('restatement');
-            });
-
-        /* Объявления */
-        Route::controller(AdminBoardController::class)
-            ->prefix('items')
-            ->name('items.')
-            ->group(function () {
-                Route::match(['get', 'post'], '/{id}/edit', 'editItem')->name('edit');
-                Route::delete('/{id}/delete', 'deleteItem')->name('delete');
             });
 
         /* Админская реклама */

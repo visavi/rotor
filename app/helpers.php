@@ -16,7 +16,6 @@ use App\Models\Down;
 use App\Models\Error;
 use App\Models\Guestbook;
 use App\Models\Invite;
-use App\Models\Item;
 use App\Models\Load;
 use App\Models\News;
 use App\Models\Notice;
@@ -547,19 +546,6 @@ function statsNewLoad(): int
 }
 
 /**
- * Возвращает количество объявлений
- */
-function statsBoard(): string
-{
-    return Cache::remember('statBoards', 900, static function () {
-        $stat = formatShortNum(Item::query()->where('expires_at', '>', SITETIME)->count());
-        $totalNew = Item::query()->where('updated_at', '>', strtotime('-1 day', SITETIME))->count();
-
-        return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
-    });
-}
-
-/**
  * Частично скрывает email
  */
 function hideMail(string $email): string
@@ -791,22 +777,6 @@ function recentArticles(int $show = 5): HtmlString
     });
 
     return new HtmlString(view('widgets/_articles', compact('articles')));
-}
-
-/**
- * Выводит последние объявления
- */
-function recentBoards(int $show = 5): HtmlString
-{
-    $items = Cache::remember('recentBoards', 600, static function () use ($show) {
-        return Item::query()
-            ->where('expires_at', '>', SITETIME)
-            ->orderByDesc('created_at')
-            ->limit($show)
-            ->get();
-    });
-
-    return new HtmlString(view('widgets/_boards', compact('items')));
 }
 
 /**

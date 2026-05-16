@@ -35,7 +35,6 @@
             <li><a class="menu-item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="{{ route('blogs.index') }}"><i class="menu-icon far fa-sticky-note"></i><span class="menu-label">{{ __('index.blogs') }}</span></a></li>
             <li><a class="menu-item{{ request()->is('loads*', 'downs*') ? ' active' : '' }}" href="{{ route('loads.index') }}"><i class="menu-icon fas fa-download"></i><span class="menu-label">{{ __('index.loads') }}</span></a></li>
             <li><a class="menu-item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}"><i class="menu-icon far fa-image"></i><span class="menu-label">{{ __('index.photos') }}</span><span class="badge menu-badge">{{ statsPhotos() }}</span></a></li>
-            <li><a class="menu-item{{ request()->is('boards*', 'item*') ? ' active' : '' }}" href="{{ route('boards.index') }}"><i class="menu-icon far fa-rectangle-list"></i><span class="menu-label">{{ __('index.boards') }}</span><span class="badge menu-badge">{{ statsBoard() }}</span></a></li>
             <li><a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}"><i class="menu-icon fas fa-square-poll-horizontal"></i><span class="menu-label">{{ __('index.votes') }}</span><span class="badge menu-badge">{{ statVotes() }}</span></a></li>
             @hook('sidebarMenuEnd')
         </ul>

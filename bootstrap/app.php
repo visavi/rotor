@@ -1,12 +1,27 @@
 <?php
 
+use App\Http\Middleware\AdminLogger;
+use App\Http\Middleware\ApplySettings;
+use App\Http\Middleware\CheckAccessSite;
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckInstallSite;
+use App\Http\Middleware\CheckThrottle;
+use App\Http\Middleware\CheckToken;
+use App\Http\Middleware\CheckUser;
+use App\Http\Middleware\CheckUserState;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Exceptions\Handler;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,34 +33,33 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append([
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \App\Http\Middleware\ApplySettings::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            ApplySettings::class,
         ]);
 
         $middleware->group('web', [
-            \App\Http\Middleware\CheckInstallSite::class,
-            \App\Http\Middleware\CheckThrottle::class,
-            \App\Http\Middleware\CheckAccessSite::class,
-            \App\Http\Middleware\CheckUserState::class,
+            CheckInstallSite::class,
+            CheckThrottle::class,
+            CheckAccessSite::class,
+            CheckUserState::class,
 
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ShareErrorsFromSession::class,
+            PreventRequestForgery::class,
+            SubstituteBindings::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
         ]);
 
         $middleware->alias([
-            'check.admin'  => \App\Http\Middleware\CheckAdmin::class,
-            'check.user'   => \App\Http\Middleware\CheckUser::class,
-            'check.token'  => \App\Http\Middleware\CheckToken::class,
-            'admin.logger' => \App\Http\Middleware\AdminLogger::class,
+            'check.admin'  => CheckAdmin::class,
+            'check.user'   => CheckUser::class,
+            'check.token'  => CheckToken::class,
+            'admin.logger' => AdminLogger::class,
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('blog:activation')->everyMinute();
-        $schedule->command('board:deactivation')->hourly();
         $schedule->command('delete:files')->daily();
         $schedule->command('delete:logins')->daily();
         $schedule->command('delete:logs')->daily();

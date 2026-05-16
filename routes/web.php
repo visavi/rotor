@@ -6,7 +6,6 @@ use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\BoardController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CounterController;
@@ -91,27 +90,6 @@ Route::controller(SitemapController::class)
     ->group(function () {
         Route::get('/sitemap.xml', 'index');
         Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+');
-    });
-
-/* Категории объявления */
-Route::controller(BoardController::class)
-    ->prefix('boards')
-    ->name('boards.')
-    ->group(function () {
-        Route::get('/{id?}', 'index')->name('index');
-        Route::get('/active', 'active')->name('active');
-    });
-
-/* Объявления */
-Route::controller(BoardController::class)
-    ->prefix('items')
-    ->name('items.')
-    ->group(function () {
-        Route::get('/{id}', 'view')->name('view');
-        Route::post('/{id}/close', 'close')->name('close');
-        Route::delete('/{id}/delete', 'delete')->name('delete');
-        Route::match(['get', 'post'], '/create', 'create')->name('create');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 
 /* Гостевая книга */

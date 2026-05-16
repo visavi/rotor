@@ -6,7 +6,6 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Guestbook;
-use App\Models\Item;
 use App\Models\News;
 use App\Models\Offer;
 use App\Models\Photo;
@@ -23,17 +22,18 @@ class SearchImport extends Command
     protected $signature = 'search:import';
     protected $description = 'Sync existing records to search index';
 
+    public static array $classes = [];
+
     /**
      * Handle
      */
     public function handle(): int
     {
-        $models = [
+        $models = array_merge([
             Article::class,
             Comment::class,
             Down::class,
             Guestbook::class,
-            Item::class,
             News::class,
             Offer::class,
             Photo::class,
@@ -41,7 +41,7 @@ class SearchImport extends Command
             Topic::class,
             User::class,
             Vote::class,
-        ];
+        ], static::$classes);
 
         DB::disableQueryLog();
         DB::connection()->unsetEventDispatcher();
@@ -81,7 +81,6 @@ class SearchImport extends Command
             $progressBar = $this->output->createProgressBar($count);
             $progressBar->start();
 
-            // Используем chunkById для стабильной пакетной обработки
             $model->chunkById(1000, function ($records) use ($progressBar, &$total) {
                 $searchData = [];
 

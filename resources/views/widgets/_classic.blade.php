@@ -47,6 +47,7 @@
     {{ recentArticles() }}
 </div>
 
+@if(Route::has('boards.index'))
 <div class="section mb-3 shadow">
     <div class="section-title">
         <i class="fa fa-list-alt fa-lg text-muted"></i>
@@ -55,6 +56,7 @@
     </div>
     {{ recentBoards() }}
 </div>
+@endif
 
 <div class="section mb-3 shadow">
     <div class="section-title">
