@@ -95,6 +95,19 @@ a {
 .menu a:hover {
     text-decoration : underline;
 }
+.menu-nav {
+    display : inline;
+    list-style : none;
+    margin : 0;
+    padding : 0;
+    li {
+        display : inline;
+        &:not(:last-child)::after {
+            content : ' \2022';
+            color : #5c5c5c;
+        }
+    }
+}
 
 .mright {
     float : right;

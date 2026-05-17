@@ -20,7 +20,6 @@ class Feed extends Model
         'topics'   => ['class' => Topic::class,   'withs' => ['lastPost.user', 'lastPost.files', 'forum.parent']],
         'news'     => ['class' => News::class,    'withs' => ['user', 'files']],
         'photos'   => ['class' => Photo::class,   'withs' => ['user', 'files']],
-        'articles' => ['class' => Article::class, 'withs' => ['user', 'files', 'category.parent']],
         'downs'    => ['class' => Down::class,    'withs' => ['user', 'files', 'category.parent']],
         'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
     ];

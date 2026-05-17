@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CounterController;
@@ -92,38 +91,6 @@ Route::controller(GuestbookController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/create', 'add')->name('create');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-    });
-
-/* Категория блогов */
-Route::controller(ArticleController::class)
-    ->prefix('blogs')
-    ->name('blogs.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{id}', 'blog')->name('blog');
-        Route::get('/tags', 'tags')->name('tags');
-        Route::get('/tags-search', 'searchTags')->name('tags-search');
-        Route::get('/tags/{tag}', 'getTag')->where('tag', '.+')->name('tag');
-        Route::get('/authors', 'authors')->name('authors');
-        Route::get('/rss', 'rss')->name('rss');
-        Route::match(['get', 'post'], '/create', 'create')->name('create');
-        Route::get('/main', 'main')->name('main');
-    });
-
-/* Статьи блогов */
-Route::controller(ArticleController::class)
-    ->prefix('articles')
-    ->name('articles.')
-    ->group(function () {
-        Route::get('/', 'newArticles')->name('index');
-        Route::get('/{slug}', 'view')->name('view');
-        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
-        Route::get('/{id}/print', 'print')->name('print');
-        Route::get('/{id}/rss', 'rssComments')->name('rss-comments');
-        Route::get('/new/comments', 'newComments')->name('new-comments');
-        Route::get('/active/articles', 'userArticles')->name('user-articles');
-        Route::get('/active/comments', 'userComments')->name('user-comments');
         Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 

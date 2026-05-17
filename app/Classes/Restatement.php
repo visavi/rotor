@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
-use App\Models\Article;
 use App\Models\Down;
 use App\Models\News;
 use App\Models\Photo;
@@ -20,11 +19,6 @@ class Restatement
             DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
             DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
             DB::update('update forums set count_posts = (select coalesce(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
-        });
-
-        static::register('blogs', function () {
-            DB::update('update blogs set count_articles = (select count(*) from articles where blogs.id = articles.category_id and active = true)');
-            DB::update('update articles set count_comments = (select count(*) from comments where relate_type = "' . Article::$morphName . '" and articles.id = comments.relate_id)');
         });
 
         static::register('loads', function () {

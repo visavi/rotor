@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Tag
@@ -15,21 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Tag extends Model
 {
-    /**
-     * Indicates if the model should be timestamped.
-     */
     public $timestamps = false;
 
-    /**
-     * The attributes that aren't mass assignable.
-     */
     protected $guarded = [];
-
-    /**
-     * Articles
-     */
-    public function articles(): BelongsToMany
-    {
-        return $this->belongsToMany(Article::class, 'article_tags', 'tag_id', 'article_id');
-    }
 }

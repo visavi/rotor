@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
 use App\Models\Down;
 use App\Models\News;
 use App\Models\Topic;
@@ -13,12 +12,18 @@ use Illuminate\Support\Facades\Cache;
 
 class SitemapController extends Controller
 {
+    public static array $extraPages = [];
+
     private array $pages = [
         'news',
-        'articles',
         'topics',
         'downs',
     ];
+
+    private function getAllPages(): array
+    {
+        return array_merge($this->pages, array_keys(static::$extraPages));
+    }
 
     /**
      * Генерирует главную страницу
@@ -27,11 +32,12 @@ class SitemapController extends Controller
     {
         $locs = [];
 
-        foreach ($this->pages as $page) {
-            if ($this->$page()) {
+        foreach ($this->getAllPages() as $page) {
+            $data = $this->getPageData($page);
+            if ($data) {
                 $locs[] = [
                     'loc'     => config('app.url') . '/sitemap/' . $page . '.xml',
-                    'lastmod' => $this->$page()[0]['lastmod'],
+                    'lastmod' => $data[0]['lastmod'],
                 ];
             }
         }
@@ -46,13 +52,22 @@ class SitemapController extends Controller
      */
     public function page(string $page): Response
     {
-        if (! in_array($page, $this->pages, true)) {
+        if (! in_array($page, $this->getAllPages(), true)) {
             abort(404);
         }
 
         return response()
-            ->view('sitemap/url', ['locs' => $this->$page()])
+            ->view('sitemap/url', ['locs' => $this->getPageData($page)])
             ->header('Content-Type', 'application/xml; charset=utf-8');
+    }
+
+    private function getPageData(string $page): array
+    {
+        if (isset(static::$extraPages[$page])) {
+            return (static::$extraPages[$page])();
+        }
+
+        return $this->$page();
     }
 
     /**
@@ -71,30 +86,6 @@ class SitemapController extends Controller
                 $locs[] = [
                     'loc'     => route('news.view', ['id' => $news->id]),
                     'lastmod' => gmdate('c', $news->created_at),
-                ];
-            }
-
-            return $locs;
-        });
-    }
-
-    /**
-     * Генерирует статьи
-     */
-    private function articles(): array
-    {
-        return Cache::remember('ArticlesSitemap', 600, static function () {
-            $articles = Article::query()
-                ->active()
-                ->orderByDesc('created_at')
-                ->limit(10000)
-                ->get();
-
-            $locs = [];
-            foreach ($articles as $article) {
-                $locs[] = [
-                    'loc'     => route('articles.view', ['slug' => $article->slug]),
-                    'lastmod' => gmdate('c', $article->created_at),
                 ];
             }
 

@@ -6,12 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Classes\Feed;
 use App\Classes\Validator;
-use App\Models\Article;
 use App\Models\Ban;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Post;
 use App\Models\Search;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Models\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -91,13 +91,13 @@ class HomeController extends Controller
                     ->orderByRaw(...$order)
                     ->paginate(10)
                     ->appends(compact('query', 'sort', 'type'))
-                    ->loadMorph('relate', [
-                        Article::class => ['category'],
-                        Comment::class => ['relate'],
-                        Down::class    => ['category'],
-                        Post::class    => ['topic'],
-                        Topic::class   => ['forum', 'lastPost'],
-                    ]);
+                    ->loadMorph('relate', array_filter([
+                        Relation::getMorphedModel('articles') => ['category'],
+                        Comment::class                        => ['relate'],
+                        Down::class                           => ['category'],
+                        Post::class                           => ['topic'],
+                        Topic::class                          => ['forum', 'lastPost'],
+                    ]));
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

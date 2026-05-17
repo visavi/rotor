@@ -51,7 +51,6 @@ class Search extends Model
     public static function getRelateTypes(): array
     {
         $base = [
-            Article::$morphName   => __('index.blogs'),
             Comment::$morphName   => __('index.comments'),
             Down::$morphName      => __('index.loads'),
             Guestbook::$morphName => __('index.guestbook'),

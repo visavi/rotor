@@ -28,7 +28,6 @@
                     <a class="nav-link" href="/admin/settings?act=messages" id="messages">{{ __('settings.messages') }}</a>
                     <a class="nav-link" href="/admin/settings?act=contacts" id="contacts">{{ __('settings.contacts') }}</a>
                     <a class="nav-link" href="/admin/settings?act=loads" id="loads">{{ __('settings.loads') }}</a>
-                    <a class="nav-link" href="/admin/settings?act=blogs" id="blogs">{{ __('settings.blogs') }}</a>
                     <a class="nav-link" href="/admin/settings?act=pages" id="pages">{{ __('settings.pages') }}</a>
                     <a class="nav-link" href="/admin/settings?act=others" id="others">{{ __('settings.others') }}</a>
                     <a class="nav-link" href="/admin/settings?act=protects" id="protects">{{ __('settings.protects') }}</a>

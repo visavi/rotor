@@ -5,7 +5,6 @@ use App\Classes\Metrika;
 use App\Models\AdminAdvert;
 use App\Models\Advert;
 use App\Models\Antimat;
-use App\Models\Article;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\BlackList;
@@ -414,30 +413,6 @@ function statsInvite(): string
         ->pluck('cnt', 'used');
 
     return ($invites[0] ?? 0) . '/' . ($invites[1] ?? 0);
-}
-
-/**
- * Возвращает количество статей в блогах
- */
-function statsBlog(): string
-{
-    return Cache::remember('statArticles', 900, static function () {
-        $stat = Article::query()->active()->count();
-        $totalNew = Article::query()->active()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
-
-        return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
-    });
-}
-
-/**
- * Возвращает количество новых статей
- */
-function statsNewArticles(): int
-{
-    return Article::query()
-        ->active(false)
-        ->where('draft', false)
-        ->count();
 }
 
 /**

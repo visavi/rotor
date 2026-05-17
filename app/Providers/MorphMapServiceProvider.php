@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Guestbook;
@@ -34,7 +33,6 @@ class MorphMapServiceProvider extends ServiceProvider
     {
         Relation::enforceMorphMap([
             Down::$morphName      => Down::class,
-            Article::$morphName   => Article::class,
             Photo::$morphName     => Photo::class,
             News::$morphName      => News::class,
             Topic::$morphName     => Topic::class,

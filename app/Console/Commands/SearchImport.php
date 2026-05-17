@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Guestbook;
@@ -29,7 +28,6 @@ class SearchImport extends Command
     public function handle(): int
     {
         $models = array_merge([
-            Article::class,
             Comment::class,
             Down::class,
             Guestbook::class,

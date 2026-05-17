@@ -49,7 +49,7 @@
             <li><a class="paper-nav__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
-            <li><a class="paper-nav__item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>
+            @if(Route::has('blogs.index'))<li><a class="paper-nav__item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>@endif
             <li><a class="paper-nav__item{{ request()->is('loads*', 'downs*') ? ' active' : '' }}" href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">{{ __('index.photos') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">{{ __('index.votes') }}</a></li>

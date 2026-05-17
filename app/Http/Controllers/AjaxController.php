@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Validator;
-use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\File;
@@ -61,7 +60,7 @@ class AjaxController extends Controller
                 break;
 
             case News::$morphName:
-            case Article::$morphName:
+            case 'articles':
             case Photo::$morphName:
             case 'offers':
             case Down::$morphName:
@@ -102,7 +101,6 @@ class AjaxController extends Controller
     {
         $validTypes = array_merge([
             Post::$morphName,
-            Article::$morphName,
             Photo::$morphName,
             News::$morphName,
             Down::$morphName,
@@ -165,7 +163,6 @@ class AjaxController extends Controller
     public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
         $imageTypes = array_merge([
-            Article::$morphName,
             Photo::$morphName,
         ], static::$extraMediaTypes);
 
@@ -281,7 +278,6 @@ class AjaxController extends Controller
     public function deleteFile(Request $request, Validator $validator): JsonResponse
     {
         $types = array_merge([
-            Article::$morphName,
             Comment::$morphName,
             Down::$morphName,
             News::$morphName,

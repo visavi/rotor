@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\AdminAdvertController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdvertController as AdminUserAdvertController;
 use App\Http\Controllers\Admin\AntimatController;
-use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\BanController as AdminBanController;
 use App\Http\Controllers\Admin\BanhistController;
@@ -130,30 +129,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
                 Route::delete('/{id}/delete', 'delete')->name('delete');
                 Route::post('/restatement', 'restatement')->name('restatement');
-            });
-
-        /* Блоги */
-        Route::controller(AdminArticleController::class)
-            ->prefix('blogs')
-            ->name('blogs.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/{id}', 'blog')->name('blog');
-                Route::post('/create', 'create')->name('create');
-                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::delete('/{id}/delete', 'delete')->name('delete');
-                Route::post('/restatement', 'restatement')->name('restatement');
-            });
-
-        /* Статьи */
-        Route::controller(AdminArticleController::class)
-            ->prefix('articles')
-            ->name('articles.')
-            ->group(function () {
-                Route::match(['get', 'post'], '/{id}/edit', 'editArticle')->name('edit');
-                Route::delete('/{id}/delete', 'deleteArticle')->name('delete');
-                Route::post('/{id}/publish', 'publish')->name('publish');
-                Route::get('/new', 'new')->name('new');
             });
 
         /* Админская реклама */

@@ -230,7 +230,7 @@ class Comment extends Model
     public function getViewUrl(bool $absolute = true): string
     {
         $plural = Str::plural($this->relate_type);
-        $params = $this->relate_type === Article::$morphName
+        $params = $this->relate_type === 'articles'
             ? ['slug' => $this->relate->slug]
             : ['id' => $this->relate_id];
 
@@ -243,7 +243,7 @@ class Comment extends Model
     public function getRelateType(): string
     {
         return match ($this->relate_type) {
-            Article::$morphName => __('index.blogs'),
+            'articles'          => __('index.blogs'),
             Down::$morphName    => __('index.loads'),
             News::$morphName    => __('index.news'),
             'offers'            => __('index.offers'),

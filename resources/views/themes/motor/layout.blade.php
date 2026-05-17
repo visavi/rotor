@@ -41,11 +41,13 @@
                     <span class="mright">
                         @include('themes/motor/menu')
                     </span>
-                    <a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a> &bull;
-                    <a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a> &bull;
-                    <a href="{{ route('news.index') }}">{{ __('index.news') }}</a> &bull;
-                    <a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a> &bull;
-                    <a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a>
+                    <ul class="menu-nav">
+                        <li><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
+                        <li><a href="{{ route('guestbook.index') }}">{{ __('index.guestbook') }}</a></li>
+                        <li><a href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
+                        <li><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
+                        @if(Route::has('blogs.index'))<li><a href="{{ route('blogs.index') }}">{{ __('index.blogs') }}</a></li>@endif
+                    </ul>
                 </div>
             </div>
         </div>
