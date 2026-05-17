@@ -195,7 +195,6 @@ function antimat(?string $str): string
     return Antimat::replace((string) $str);
 }
 
-
 /**
  * Возвращает количество пользователей онлайн по типам
  */

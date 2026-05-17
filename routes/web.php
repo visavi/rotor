@@ -322,7 +322,6 @@ Route::controller(InvitationController::class)
         Route::post('/create', 'store')->name('store');
     });
 
-
 /* Реклама */
 Route::controller(AdvertController::class)
     ->prefix('adverts')

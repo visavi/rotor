@@ -243,11 +243,11 @@ class Comment extends Model
     public function getRelateType(): string
     {
         return match ($this->relate_type) {
-            'articles'          => __('index.blogs'),
-            Down::$morphName    => __('index.loads'),
-            News::$morphName    => __('index.news'),
-            'offers'            => __('index.offers'),
-            Photo::$morphName   => __('index.photos'),
+            'articles'        => __('index.blogs'),
+            Down::$morphName  => __('index.loads'),
+            News::$morphName  => __('index.news'),
+            'offers'          => __('index.offers'),
+            Photo::$morphName => __('index.photos'),
         };
     }
 }

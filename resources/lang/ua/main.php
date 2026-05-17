@@ -267,5 +267,5 @@ return [
     'directory_not_writable'     => 'Директорія недоступна для запису!',
     'closed_comments'            => 'Коментування закрите!',
 
-    'online'        => 'Онлайн',
+    'online' => 'Онлайн',
 ];
