@@ -16,9 +16,7 @@
 @section('header')
     @if ($module && $module->active && isset($moduleConfig['panel']))
         @php
-            $links = is_string($moduleConfig['panel'])
-                ? [$moduleConfig['panel'] => __('main.management')]
-                : $moduleConfig['panel'];
+            $links = $moduleConfig['panel'];
         @endphp
 
         @if (count($links) === 1)
