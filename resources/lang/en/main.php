@@ -268,6 +268,4 @@ return [
     'closed_comments'            => 'Commenting is closed!',
 
     'online'        => 'Online',
-    'who_online'    => 'Who is on the site',
-    'guests_online' => 'There are :count guests on the site',
 ];

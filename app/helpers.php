@@ -1,6 +1,5 @@
 <?php
 
-use App\Classes\Calendar;
 use App\Classes\CloudFlare;
 use App\Classes\Metrika;
 use App\Models\AdminAdvert;
@@ -197,15 +196,6 @@ function antimat(?string $str): string
     return Antimat::replace((string) $str);
 }
 
-/**
- * Возвращает календарь
- */
-function getCalendar(int $time = SITETIME): HtmlString
-{
-    $calendar = new Calendar();
-
-    return new HtmlString($calendar->getCalendar($time));
-}
 
 /**
  * Возвращает количество пользователей онлайн по типам

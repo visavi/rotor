@@ -268,6 +268,4 @@ return [
     'closed_comments'            => 'Комментирование закрыто!',
 
     'online'        => 'Онлайн',
-    'who_online'    => 'Кто на сайте',
-    'guests_online' => 'На сайте :count гостей',
 ];
