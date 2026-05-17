@@ -69,7 +69,6 @@ return [
     'social_networks'    => 'Social networks',
     'activity'           => 'Activity',
     'my_wall'            => 'My wall',
-    'notebook'           => 'Notebook',
     'admin_advertising'  => 'Admin advertising',
     'advertising'        => 'Advertising',
     'reputation_history' => 'Reputation history',

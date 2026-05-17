@@ -69,7 +69,6 @@ return [
     'social_networks'    => 'Социальные сети',
     'activity'           => 'Активность',
     'my_wall'            => 'Моя стена',
-    'notebook'           => 'Блокнот',
     'admin_advertising'  => 'Админская реклама',
     'advertising'        => 'Реклама',
     'reputation_history' => 'История репутации',

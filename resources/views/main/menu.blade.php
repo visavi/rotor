@@ -39,7 +39,6 @@
     </div>
     <div class="section-body">
         <i class="far fa-circle text-muted"></i> <a href="/walls/{{ getUser('login') }}">{{ __('index.my_wall') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountWall() }}</span><br>
-        <i class="far fa-circle text-muted"></i> <a href="/notebooks">{{ __('index.notebook') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/adverts">{{ __('index.advertising') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/ratings/{{ getUser('login') }}">{{ __('index.reputation_history') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/authlogs">{{ __('index.auth_history') }}</a><br>
@@ -48,6 +47,7 @@
         @if (setting('invite') && getUser('rating') >= setting('invite_rating'))
             <i class="far fa-circle text-muted"></i> <a href="/invitations">{{ __('index.invitations') }}</a><br>
         @endif
+        @hook('menuActivity')
     </div>
 </div>
 

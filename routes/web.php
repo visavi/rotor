@@ -28,7 +28,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\NotebookController;
 use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PhotoController;
@@ -356,13 +355,6 @@ Route::controller(InvitationController::class)
         Route::post('/create', 'store')->name('store');
     });
 
-/* Личные заметки */
-Route::controller(NotebookController::class)
-    ->prefix('notebooks')
-    ->group(function () {
-        Route::get('/', 'index');
-        Route::match(['get', 'post'], '/edit', 'edit');
-    });
 
 /* Реклама */
 Route::controller(AdvertController::class)
