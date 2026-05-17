@@ -66,7 +66,6 @@
                 <li><a class="treeview-item{{ request()->routeIs('downs.new-comments') ? ' active' : '' }}" href="{{ route('downs.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
             </ul>
         </li>
-        <li><a class="menu-item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}"><i class="menu-icon far fa-image"></i><span class="menu-label">{{ __('index.photos') }}</span><span class="badge menu-badge">{{ statsPhotos() }}</span></a></li>
         <li><a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}"><i class="menu-icon fas fa-square-poll-horizontal"></i><span class="menu-label">{{ __('index.votes') }}</span><span class="badge menu-badge">{{ statVotes() }}</span></a></li>
         @hook('sidebarMenuEnd')
     </ul>

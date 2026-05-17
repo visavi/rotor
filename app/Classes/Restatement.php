@@ -6,7 +6,6 @@ namespace App\Classes;
 
 use App\Models\Down;
 use App\Models\News;
-use App\Models\Photo;
 use Illuminate\Support\Facades\DB;
 
 class Restatement
@@ -28,10 +27,6 @@ class Restatement
 
         static::register('news', function () {
             DB::update('update news set count_comments = (select count(*) from comments where relate_type = "' . News::$morphName . '" and news.id = comments.relate_id)');
-        });
-
-        static::register('photos', function () {
-            DB::update('update photos set count_comments = (select count(*) from comments where relate_type = "' . Photo::$morphName . '" and photos.id = comments.relate_id)');
         });
 
         static::register('votes', function () {

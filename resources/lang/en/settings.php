@@ -8,7 +8,6 @@ return [
     'news'        => 'News',
     'comments'    => 'Comments',
     'forums'      => 'Forum',
-    'photos'      => 'Gallery',
     'messages'    => 'Messages',
     'contacts'    => 'Contacts and ignore',
     'loads'       => 'Download Center',
@@ -142,12 +141,6 @@ return [
     'transfers_per_page'     => 'Cash transactions',
     'ratinglist_per_page'    => 'Votes in ranking history',
 
-    'photos_per_page'    => 'Number of photos on page',
-    'photos_groups'      => 'Groups per page in the gallery',
-    'photos_create'      => 'Allow users to upload photos',
-    'photo_title_length' => 'Photo title length',
-    'photo_text_length'  => 'Photo text length',
-
     'points_transfer'     => 'Asset for money transfer',
     'points_rating_edit'  => 'Asset for changing reputation',
     'points_topics_edit'  => 'Asset to change forum topics',
@@ -188,14 +181,12 @@ return [
 
     'feed_topics_show'     => 'Show forum posts',
     'feed_news_show'       => 'Show news',
-    'feed_photos_show'     => 'Show photos',
     'feed_downs_show'      => 'Show downloads',
     'feed_comments_show'   => 'Show comments',
     'feed_per_page'        => 'Number of posts per page',
     'feed_cache_time'      => 'Feed cache time (sec.)',
     'feed_topics_rating'   => 'Hide posts with rating',
     'feed_news_rating'     => 'Hide news with rating',
-    'feed_photos_rating'   => 'Hide photos with rating',
     'feed_downs_rating'    => 'Hide downloads with rating',
     'feed_comments_rating' => 'Hide comments with rating',
 

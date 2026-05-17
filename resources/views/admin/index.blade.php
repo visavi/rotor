@@ -25,7 +25,6 @@
             <i class="far fa-circle text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> <span class="badge bg-adaptive">{{ statsChat() }}</span><br>
             <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.guestbook.index') }}">{{ __('index.guestbook') }}</a> <span class="badge bg-adaptive">{{ statsGuestbook() }}</span><br>
             <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.forums.index') }}">{{ __('index.forums') }}</a> <span class="badge bg-adaptive">{{ statsForum() }}</span><br>
-            <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.photos.index') }}">{{ __('index.photos') }}</a> <span class="badge bg-adaptive">{{ statsPhotos() }}</span><br>
             <i class="far fa-circle text-muted"></i> <a href="/admin/admin-adverts">{{ __('index.admin_advertising') }}</a><br>
             <i class="far fa-circle text-muted"></i> <a href="/admin/adverts">{{ __('index.advertising') }}</a><br>
             @hook('adminBlockEditor')

@@ -8,7 +8,6 @@ return [
     'news'        => 'Новости',
     'comments'    => 'Комментарии',
     'forums'      => 'Форум',
-    'photos'      => 'Галерея',
     'messages'    => 'Сообщения',
     'contacts'    => 'Контакты и игнор',
     'loads'       => 'Загруз-центр',
@@ -142,12 +141,6 @@ return [
     'transfers_per_page'     => 'Денежные операции',
     'ratinglist_per_page'    => 'Голосов в истории рейтинга',
 
-    'photos_per_page'    => 'Kол-во фото на стр.',
-    'photos_groups'      => 'Групп на страницу в галерее',
-    'photos_create'      => 'Разрешать пользователям загружать фотографии',
-    'photo_title_length' => 'Длина названия фотографии',
-    'photo_text_length'  => 'Длина текста фотографии',
-
     'points_transfer'     => 'Актива для перечисления денег',
     'points_rating_edit'  => 'Актива для изменения репутации',
     'points_topics_edit'  => 'Актива для изменения тем форума',
@@ -188,14 +181,12 @@ return [
 
     'feed_topics_show'     => 'Показывать сообщения форума',
     'feed_news_show'       => 'Показывать новости',
-    'feed_photos_show'     => 'Показывать фото',
     'feed_downs_show'      => 'Показывать загрузки',
     'feed_comments_show'   => 'Показывать комментарии',
     'feed_per_page'        => 'Количество постов на страницу',
     'feed_cache_time'      => 'Время кэширования ленты (сек.)',
     'feed_topics_rating'   => 'Скрывать сообщения с рейтингом',
     'feed_news_rating'     => 'Скрывать новости с рейтингом',
-    'feed_photos_rating'   => 'Скрывать фото с рейтингом',
     'feed_downs_rating'    => 'Скрывать загрузки с рейтингом',
     'feed_comments_rating' => 'Скрывать комментарии с рейтингом',
 

@@ -19,7 +19,6 @@ use App\Models\News;
 use App\Models\Notice;
 use App\Models\Online;
 use App\Models\PaidAdvert;
-use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Setting;
 use App\Models\Spam;
@@ -326,19 +325,6 @@ function statsRegList(): int
 function statsIpBanned(): int
 {
     return Ban::query()->count();
-}
-
-/**
- * Возвращает количество фотографий в галерее
- */
-function statsPhotos(): string
-{
-    return Cache::remember('statPhotos', 900, static function () {
-        $stat = Photo::query()->count();
-        $totalNew = Photo::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
-
-        return formatShortNum($stat) . ($totalNew ? '/+' . $totalNew : '');
-    });
 }
 
 /**

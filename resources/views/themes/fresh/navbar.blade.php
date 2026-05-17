@@ -174,13 +174,6 @@
                 </ul>
             </li>
             <li>
-                <a class="app-topnav__item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">
-                    <i class="far fa-image"></i>
-                    <span>{{ __('index.photos') }}</span>
-                    <span class="badge menu-badge">{{ statsPhotos() }}</span>
-                </a>
-            </li>
-            <li>
                 <a class="app-topnav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                     <i class="fas fa-square-poll-horizontal"></i>
                     <span>{{ __('index.votes') }}</span>

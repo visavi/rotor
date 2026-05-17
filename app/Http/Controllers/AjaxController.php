@@ -11,7 +11,6 @@ use App\Models\File;
 use App\Models\Guestbook;
 use App\Models\Message;
 use App\Models\News;
-use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Sticker;
@@ -61,7 +60,7 @@ class AjaxController extends Controller
 
             case News::$morphName:
             case 'articles':
-            case Photo::$morphName:
+            case 'photos':
             case 'offers':
             case Down::$morphName:
                 $model = Comment::query()->find($id);
@@ -101,7 +100,6 @@ class AjaxController extends Controller
     {
         $validTypes = array_merge([
             Post::$morphName,
-            Photo::$morphName,
             News::$morphName,
             Down::$morphName,
             Comment::$morphName,
@@ -162,9 +160,7 @@ class AjaxController extends Controller
      */
     public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
-        $imageTypes = array_merge([
-            Photo::$morphName,
-        ], static::$extraMediaTypes);
+        $imageTypes = array_merge(static::$extraMediaTypes);
 
         $fileTypes = array_merge([
             Comment::$morphName,
@@ -282,7 +278,6 @@ class AjaxController extends Controller
             Down::$morphName,
             News::$morphName,
             Message::$morphName,
-            Photo::$morphName,
             Post::$morphName,
             Guestbook::$morphName,
         ], static::$extraMediaTypes, static::$extraFileTypes);

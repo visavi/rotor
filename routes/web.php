@@ -29,7 +29,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SocialController;
@@ -104,23 +103,6 @@ Route::controller(NewsController::class)
         Route::post('/{id}/comments', 'storeComment')->name('add-comment');
         Route::get('/rss', 'rss')->name('rss');
         Route::get('/allcomments', 'allComments')->name('all-comments');
-    });
-
-/* Галерея */
-Route::controller(PhotoController::class)
-    ->prefix('photos')
-    ->name('photos.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{id}', 'view')->name('view');
-        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
-        Route::delete('/{id}/delete', 'delete')->name('delete');
-        Route::get('/albums', 'albums')->name('albums');
-        Route::get('/comments', 'allComments')->name('all-comments');
-        Route::get('/active/albums', 'album')->name('user-albums');
-        Route::get('/active/comments', 'userComments')->name('user-comments');
-        Route::match(['get', 'post'], '/create', 'create')->name('create');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 
 /* Категория форума */

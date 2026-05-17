@@ -39,7 +39,6 @@ class Setting extends Model
             'news',
             'comments',
             'forums',
-            'photos',
             'messages',
             'contacts',
             'loads',

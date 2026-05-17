@@ -29,7 +29,6 @@ use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Admin\PaidAdvertController;
-use App\Http\Controllers\Admin\PhotoController as AdminPhotoController;
 use App\Http\Controllers\Admin\ReglistController;
 use App\Http\Controllers\Admin\RuleController;
 use App\Http\Controllers\Admin\SearchController;
@@ -118,17 +117,6 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->group(function () {
                 Route::match(['get', 'post'], '/{id}/edit', 'editPost')->name('edit');
                 Route::post('/delete', 'deletePosts')->name('delete');
-            });
-
-        /* Галерея */
-        Route::controller(AdminPhotoController::class)
-            ->prefix('photos')
-            ->name('photos.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::delete('/{id}/delete', 'delete')->name('delete');
-                Route::post('/restatement', 'restatement')->name('restatement');
             });
 
         /* Админская реклама */

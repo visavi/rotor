@@ -247,7 +247,7 @@ class Comment extends Model
             Down::$morphName  => __('index.loads'),
             News::$morphName  => __('index.news'),
             'offers'          => __('index.offers'),
-            Photo::$morphName => __('index.photos'),
+            'photos'          => __('index.photos'),
         };
     }
 }

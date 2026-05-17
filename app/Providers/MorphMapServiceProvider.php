@@ -7,7 +7,6 @@ use App\Models\Down;
 use App\Models\Guestbook;
 use App\Models\Message;
 use App\Models\News;
-use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -33,7 +32,6 @@ class MorphMapServiceProvider extends ServiceProvider
     {
         Relation::enforceMorphMap([
             Down::$morphName      => Down::class,
-            Photo::$morphName     => Photo::class,
             News::$morphName      => News::class,
             Topic::$morphName     => Topic::class,
             Post::$morphName      => Post::class,

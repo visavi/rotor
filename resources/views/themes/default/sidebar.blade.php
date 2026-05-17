@@ -119,15 +119,6 @@
         </li>
 
         <li>
-            <a class="menu-item{{ request()->is('photos*') ? ' active' : '' }}" href="{{ route('photos.index') }}">
-                <i class="menu-icon far fa-image"></i>
-                <span class="menu-label">{{ __('index.photos') }}</span>
-                <span class="badge menu-badge">{{ statsPhotos() }}</span>
-            </a>
-        </li>
-
-
-        <li>
             <a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                 <i class="menu-icon fas fa-square-poll-horizontal"></i>
                 <span class="menu-label">{{ __('index.votes') }}</span>
