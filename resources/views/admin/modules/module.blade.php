@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', __('admin.modules.module') . ' ' . $moduleConfig['name'])
+@section('title', __('admin.modules.module') . ' ' . ($moduleConfig['name'] ?? $moduleName))
 
 @section('breadcrumb')
     <nav>
@@ -8,7 +8,7 @@
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item"><a href="/admin/modules">{{ __('index.modules') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}</li>
+            <li class="breadcrumb-item active">{{ __('admin.modules.module') }} {{ $moduleConfig['name'] ?? $moduleName }}</li>
         </ol>
     </nav>
 @stop
@@ -37,7 +37,7 @@
         @endif
     @endif
 
-    <h1>{{ __('admin.modules.module') }} {{ $moduleConfig['name'] }}</h1>
+    <h1>{{ __('admin.modules.module') }} {{ $moduleConfig['name'] ?? $moduleName }}</h1>
 @stop
 
 @section('content')

@@ -18,7 +18,7 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
 
-                    <i class="fas fa-plug"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] }}</a> ({{ $name }})
+                    <i class="fas fa-plug"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
                 </div>
 
                 <div class="section-content">
@@ -36,9 +36,9 @@
                     @else
                         <span class="badge bg-danger">{{ __('main.not_installed') }}</span><br>
                     @endif
-                    {{ $moduleConfig['description'] }}<br>
-                    {{ __('main.version') }}: {{ $moduleInstall[$name]->version ?? $moduleConfig['version'] }}<br>
-                    {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a>
+                    {{ $moduleConfig['description'] ?? '' }}<br>
+                    {{ __('main.version') }}: {{ $moduleInstall[$name]->version ?? ($moduleConfig['version'] ?? '') }}<br>
+                    {{ __('main.author') }}: {{ $moduleConfig['author'] ?? '' }} <a href="{{ $moduleConfig['homepage'] ?? '' }}">{{ $moduleConfig['homepage'] ?? '' }}</a>
                 </div>
             </div>
         @endforeach

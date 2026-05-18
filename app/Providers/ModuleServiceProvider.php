@@ -92,36 +92,31 @@ class ModuleServiceProvider extends ServiceProvider
             if (file_exists($moduleFile)) {
                 $moduleConfig = include $moduleFile;
 
-                // Регистрация моделей
-                foreach ($moduleConfig['models'] ?? [] as $class => $config) {
+                // Регистрация модели
+                $class = $moduleConfig['morph'] ?? null;
+                if ($class) {
                     /** @var class-string $class */
                     $morphName = $class::$morphName;
                     Relation::morphMap([$morphName => $class]);
 
-                    if (isset($config['searchable'])) {
-                        Search::$types[$morphName] = $config['searchable'];
+                    if ($search = $moduleConfig['search'] ?? null) {
+                        Search::$types[$morphName] = $search['label'];
+                        Search::$viewMap[$morphName] = $search['view'];
                         SearchImport::$classes[] = $class;
                     }
 
-                    if (isset($config['feedType'])) {
-                        Feed::$types[$morphName] = array_merge(['class' => $class], $config['feedType']);
+                    if ($feed = $moduleConfig['feed'] ?? null) {
+                        Feed::$types[$morphName] = ['class' => $class, 'withs' => $feed['withs']];
+                        Feed::$viewMap[$morphName] = $feed['view'];
                     }
 
-                    if (isset($config['feedView'])) {
-                        Feed::$viewMap[$morphName] = $config['feedView'];
-                    }
-
-                    if (isset($config['searchView'])) {
-                        Search::$viewMap[$morphName] = $config['searchView'];
-                    }
-
-                    match ($config['uploadType'] ?? null) {
+                    match ($moduleConfig['upload'] ?? null) {
                         'media' => AjaxController::$extraMediaTypes[] = $morphName,
                         'file'  => AjaxController::$extraFileTypes[] = $morphName,
                         default => null,
                     };
 
-                    if (isset($config['ratingType'])) {
+                    if (isset($moduleConfig['rating'])) {
                         AjaxController::$extraRatingTypes[] = $morphName;
                     }
                 }
