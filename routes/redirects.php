@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Load\DownController;
+use Modules\Load\Controllers\Load\DownController;
 use Illuminate\Support\Facades\Route;
 
 /* Временные редиректы на новые роуты */

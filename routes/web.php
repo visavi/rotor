@@ -19,10 +19,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IgnoreController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvitationController;
-use App\Http\Controllers\Load\ActiveController as LoadActiveController;
-use App\Http\Controllers\Load\DownController;
-use App\Http\Controllers\Load\LoadController;
-use App\Http\Controllers\Load\NewController as LoadNewController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
@@ -148,39 +144,6 @@ Route::prefix('posts')
     ->group(function () {
         Route::get('/', [NewController::class, 'posts'])->name('index');
         Route::match(['get', 'post'], '/{id}/edit', [TopicController::class, 'editPost'])->name('edit');
-    });
-
-/* Категории загрузок */
-Route::prefix('loads')
-    ->name('loads.')
-    ->group(function () {
-        Route::get('/', [LoadController::class, 'index'])->name('index');
-        Route::get('/{id}', [LoadController::class, 'load'])->name('load');
-        Route::get('/rss', [LoadController::class, 'rss'])->name('rss');
-    });
-
-/* Загрузки */
-Route::prefix('downs')
-    ->name('downs.')
-    ->group(function () {
-        Route::get('/', [LoadNewController::class, 'files'])->name('new-files');
-        Route::get('/comments', [LoadNewController::class, 'comments'])->name('new-comments');
-
-        Route::get('/active/files', [LoadActiveController::class, 'files'])->name('active-files');
-        Route::get('/active/comments', [LoadActiveController::class, 'comments'])->name('active-comments');
-
-        Route::get('/{id}', [DownController::class, 'view'])->name('view');
-        Route::post('/{id}/comments', [DownController::class, 'storeComment'])->name('add-comment');
-        Route::get('/{id}/rss', [DownController::class, 'rss'])->name('rss');
-
-        Route::get('/{id}/download/{fid}', [DownController::class, 'download'])->name('download');
-        Route::get('/{id}/link/{lid}', [DownController::class, 'downloadLink'])->whereNumber('lid')->name('download-link');
-
-        Route::get('/{id}/zip/{fid}', [DownController::class, 'zip'])->name('zip');
-        Route::get('/{id}/zip/{fid}/{zid}', [DownController::class, 'zipView'])->whereNumber('zid')->name('zip-view');
-
-        Route::match(['get', 'post'], '/create', [DownController::class, 'create'])->name('create');
-        Route::match(['get', 'post'], '/{id}/edit', [DownController::class, 'edit'])->name('edit');
     });
 
 /* Ajax */

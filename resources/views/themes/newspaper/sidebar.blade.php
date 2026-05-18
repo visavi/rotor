@@ -33,7 +33,6 @@
             <li><a class="menu-item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}"><i class="menu-icon far fa-comment"></i><span class="menu-label">{{ __('index.guestbook') }}</span><span class="badge menu-badge">{{ statsGuestbook() }}</span></a></li>
             <li><a class="menu-item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}"><i class="menu-icon far fa-newspaper"></i><span class="menu-label">{{ __('index.news') }}</span><span class="badge menu-badge">{{ statsNews() }}</span></a></li>
             @if(Route::has('blogs.index'))<li><a class="menu-item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="{{ route('blogs.index') }}"><i class="menu-icon far fa-sticky-note"></i><span class="menu-label">{{ __('index.blogs') }}</span></a></li>@endif
-            <li><a class="menu-item{{ request()->is('loads*', 'downs*') ? ' active' : '' }}" href="{{ route('loads.index') }}"><i class="menu-icon fas fa-download"></i><span class="menu-label">{{ __('index.loads') }}</span></a></li>
             <li><a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}"><i class="menu-icon fas fa-square-poll-horizontal"></i><span class="menu-label">{{ __('index.votes') }}</span><span class="badge menu-badge">{{ statVotes() }}</span></a></li>
             @hook('sidebarMenuEnd')
         </ul>

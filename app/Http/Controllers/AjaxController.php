@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Classes\Validator;
 use App\Models\Comment;
-use App\Models\Down;
 use App\Models\File;
 use App\Models\Guestbook;
 use App\Models\Message;
@@ -62,7 +61,7 @@ class AjaxController extends Controller
             case 'articles':
             case 'photos':
             case 'offers':
-            case Down::$morphName:
+            case 'downs':
                 $model = Comment::query()->find($id);
                 $path = $model?->getViewUrl(false);
                 $type = 'comments';
@@ -101,7 +100,6 @@ class AjaxController extends Controller
         $validTypes = array_merge([
             Post::$morphName,
             News::$morphName,
-            Down::$morphName,
             Comment::$morphName,
         ], static::$extraRatingTypes);
 
@@ -164,7 +162,6 @@ class AjaxController extends Controller
 
         $fileTypes = array_merge([
             Comment::$morphName,
-            Down::$morphName,
             Message::$morphName,
             News::$morphName,
             Post::$morphName,
@@ -275,7 +272,6 @@ class AjaxController extends Controller
     {
         $types = array_merge([
             Comment::$morphName,
-            Down::$morphName,
             News::$morphName,
             Message::$morphName,
             Post::$morphName,

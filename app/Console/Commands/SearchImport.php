@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Comment;
-use App\Models\Down;
 use App\Models\Guestbook;
 use App\Models\News;
 use App\Models\Post;
@@ -28,7 +27,6 @@ class SearchImport extends Command
     {
         $models = array_merge([
             Comment::class,
-            Down::class,
             Guestbook::class,
             News::class,
             Post::class,

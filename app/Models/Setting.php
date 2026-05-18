@@ -41,7 +41,6 @@ class Setting extends Model
             'forums',
             'messages',
             'contacts',
-            'loads',
             'blogs',
             'pages',
             'others',

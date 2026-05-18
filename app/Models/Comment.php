@@ -244,7 +244,7 @@ class Comment extends Model
     {
         return match ($this->relate_type) {
             'articles'        => __('index.blogs'),
-            Down::$morphName  => __('index.loads'),
+            'downs'           => __('index.loads'),
             News::$morphName  => __('index.news'),
             'offers'          => __('index.offers'),
             'photos'          => __('index.photos'),

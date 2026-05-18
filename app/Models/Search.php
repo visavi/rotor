@@ -52,7 +52,7 @@ class Search extends Model
     {
         $base = [
             Comment::$morphName   => __('index.comments'),
-            Down::$morphName      => __('index.loads'),
+            'downs'               => __('index.loads'),
             Guestbook::$morphName => __('index.guestbook'),
             News::$morphName      => __('index.news'),
 Post::$morphName      => __('index.posts'),

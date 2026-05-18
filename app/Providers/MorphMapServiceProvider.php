@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\Comment;
-use App\Models\Down;
 use App\Models\Guestbook;
 use App\Models\Message;
 use App\Models\News;
@@ -31,7 +30,6 @@ class MorphMapServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
-            Down::$morphName      => Down::class,
             News::$morphName      => News::class,
             Topic::$morphName     => Topic::class,
             Post::$morphName      => Post::class,

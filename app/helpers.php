@@ -10,11 +10,9 @@ use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Chat;
 use App\Models\Counter;
-use App\Models\Down;
 use App\Models\Error;
 use App\Models\Guestbook;
 use App\Models\Invite;
-use App\Models\Load;
 use App\Models\News;
 use App\Models\Notice;
 use App\Models\Online;
@@ -456,31 +454,6 @@ function statsChat(): string
 function statsNewChat(): int
 {
     return Chat::query()->max('created_at') ?? 0;
-}
-
-/**
- * Возвращает количество файлов в загруз-центре
- */
-function statsLoad(): string
-{
-    return Cache::remember('statLoads', 900, static function () {
-        $totalLoads = Load::query()->sum('count_downs');
-
-        $totalNew = Down::query()
-            ->active()
-            ->where('created_at', '>', strtotime('-1 day', SITETIME))
-            ->count();
-
-        return formatShortNum($totalLoads) . ($totalNew ? '/+' . $totalNew : '');
-    });
-}
-
-/**
- * Возвращает количество новых файлов
- */
-function statsNewLoad(): int
-{
-    return Down::query()->active(false)->count();
 }
 
 /**

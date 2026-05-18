@@ -105,19 +105,6 @@
         </li>
         @endif
 
-        <li class="treeview{{ request()->is('loads*', 'downs*') ? ' is-expanded' : '' }}">
-            <a class="menu-item" href="#" data-bs-toggle="treeview">
-                <i class="menu-icon fas fa-download"></i>
-                <span class="menu-label">{{ __('index.loads') }}</span>
-                <i class="treeview-indicator fa fa-angle-down"></i>
-            </a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->routeIs('loads.index') ? ' active' : '' }}" href="{{ route('loads.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.loads_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->routeIs('downs.new-files') ? ' active' : '' }}" href="{{ route('downs.new-files') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_downs') }}</a></li>
-                <li><a class="treeview-item{{ request()->routeIs('downs.new-comments') ? ' active' : '' }}" href="{{ route('downs.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('loads.new_comments') }}</a></li>
-            </ul>
-        </li>
-
         <li>
             <a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                 <i class="menu-icon fas fa-square-poll-horizontal"></i>

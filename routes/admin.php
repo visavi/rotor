@@ -23,7 +23,6 @@ use App\Http\Controllers\Admin\ForumController as AdminForumController;
 use App\Http\Controllers\Admin\GuestbookController as AdminGuestbookController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
-use App\Http\Controllers\Admin\LoadController as AdminLoadController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
@@ -252,29 +251,6 @@ Route::middleware(['check.admin', 'admin.logger'])
 
             /* PHP-info */
             Route::get('/phpinfo', [AdminController::class, 'phpinfo']);
-
-            /* Загрузки */
-            Route::controller(AdminLoadController::class)
-                ->prefix('loads')
-                ->name('loads.')
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/create', 'create')->name('create');
-                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::delete('/{id}/delete', 'delete')->name('delete');
-                    Route::get('/{id}', 'load')->name('load');
-                    Route::post('/restatement', 'restatement')->name('restatement');
-                });
-
-            Route::controller(AdminLoadController::class)
-                ->prefix('downs')
-                ->name('downs.')
-                ->group(function () {
-                    Route::match(['get', 'post'], '/{id}/edit', 'editDown')->name('edit');
-                    Route::get('/new', 'new')->name('new');
-                    Route::post('/{id}/publish', 'publish')->name('publish');
-                    Route::delete('/delete/{id}', 'deleteDown')->name('delete');
-                });
 
             /* Ошибки */
             Route::controller(ErrorController::class)

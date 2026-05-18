@@ -62,8 +62,6 @@
 
                 <i class="far fa-circle text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> <span class="badge bg-adaptive">{{ statsIpBanned() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> <span class="badge bg-adaptive">{{ parseVersion(PHP_VERSION) }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.loads.index') }}">{{ __('index.loads') }}</a> <span class="badge bg-adaptive">{{ statsLoad() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.downs.new') }}">{{ __('index.new_loads') }}</a> <span class="badge bg-adaptive">{{ statsNewLoad() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/errors">{{ __('index.errors') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/blacklists">{{ __('index.blacklist') }}</a> <span class="badge bg-adaptive">{{ statsBlacklist() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/stickers">{{ __('index.stickers') }}</a> <span class="badge bg-adaptive">{{ statsStickers() }}</span><br>

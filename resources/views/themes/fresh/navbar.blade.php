@@ -161,18 +161,6 @@
                 </ul>
             </li>
             @endif
-            <li class="dropdown">
-                <a class="app-topnav__item{{ request()->is('loads*', 'downs*') ? ' active' : '' }}" href="#" data-bs-toggle="dropdown">
-                    <i class="fas fa-download"></i>
-                    <span>{{ __('index.loads') }}</span>
-                    <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item{{ request()->routeIs('loads.index') ? ' active' : '' }}" href="{{ route('loads.index') }}">{{ __('loads.loads_list') }}</a></li>
-                    <li><a class="dropdown-item{{ request()->routeIs('downs.new-files') ? ' active' : '' }}" href="{{ route('downs.new-files') }}">{{ __('loads.new_downs') }}</a></li>
-                    <li><a class="dropdown-item{{ request()->routeIs('downs.new-comments') ? ' active' : '' }}" href="{{ route('downs.new-comments') }}">{{ __('loads.new_comments') }}</a></li>
-                </ul>
-            </li>
             <li>
                 <a class="app-topnav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                     <i class="fas fa-square-poll-horizontal"></i>
