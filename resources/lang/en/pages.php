@@ -93,10 +93,5 @@ return [
 
     'empty_rules' => 'Site rules have not yet been established!',
 
-    'surprise'                  => 'New years surprise',
-    'surprise_date_receipt'     => 'The deadline for receiving a surprise has not yet begun or is already over!',
-    'surprise_already_received' => 'This year a surprise has already been received!',
-    'surprise_success_received' => 'Surprise received successfully!',
-
     'ip_success_unbanned' => 'IP successfully unbanned!',
 ];

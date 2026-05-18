@@ -62,9 +62,6 @@ return [
         'rating_name' => 'Изменение репутации',
         'rating_text' => '<p>Пользователь %login% поставил вам %vote%! (Ваш рейтинг: %rating%)</p><p>Комментарий: %comment%</p>',
 
-        'surprise_name' => 'Новогодний сюрприз',
-        'surprise_text' => '<p>Поздравляем с новым %year% годом!</p><p>В качестве сюрприза вы получаете:</p><p>%point%</p><p>%money%</p><p>%rating% репутации</p><p>Ура!!!</p>',
-
         'explain_name' => 'Объяснение нарушения',
         'explain_text' => '<p>Объяснение нарушения: %message%</p>',
 

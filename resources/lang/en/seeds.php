@@ -62,9 +62,6 @@ return [
         'rating_name' => 'Reputation change',
         'rating_text' => '<p>User %login% gave you %vote%! (Your rating: %rating%)</p><p>Comment: %comment%</p>',
 
-        'surprise_name' => 'New years surprise',
-        'surprise_text' => '<p>Happy New %year% Year!</p><p>As a surprise, you get:</p><p>%point%</p><p>%money%</p><p>%rating% reputation</p><p>Cool!!!</p>',
-
         'explain_name' => 'Explanation of violation',
         'explain_text' => '<p>Explanation of violation: %message%</p>',
 

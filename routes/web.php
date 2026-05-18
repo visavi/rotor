@@ -316,7 +316,6 @@ Route::controller(PageController::class)
     ->group(function () {
         Route::get('/faq', 'faq')->name('faq');
         Route::get('/statusfaq', 'statusfaq')->name('statusfaq');
-        Route::get('/surprise', 'surprise')->name('surprise');
         Route::get('/pages/{page?}', 'index')->where('page', '[\w\-]+')->name('pages');
         Route::get('/rules', 'rules')->name('rules');
         Route::get('/stickers', 'stickers');

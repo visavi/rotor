@@ -113,15 +113,6 @@ class NoticeSeeder extends Seeder
                 'protect'    => 1,
             ],
             [
-                'type'       => 'surprise',
-                'name'       => __('seeds.notices.surprise_name'),
-                'text'       => __('seeds.notices.surprise_text'),
-                'user_id'    => 1,
-                'created_at' => SITETIME,
-                'updated_at' => SITETIME,
-                'protect'    => 1,
-            ],
-            [
                 'type'       => 'explain',
                 'name'       => __('seeds.notices.explain_name'),
                 'text'       => __('seeds.notices.explain_text'),

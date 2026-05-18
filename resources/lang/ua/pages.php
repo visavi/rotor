@@ -93,10 +93,5 @@ return [
 
     'empty_rules' => 'Правила сайту ще не встановлені!',
 
-    'surprise'                  => 'Новорічний сюрприз',
-    'surprise_date_receipt'     => 'Термін отримання сюрпризу ще не почався або вже закінчився!',
-    'surprise_already_received' => 'Цього року сюрприз вже отримано!',
-    'surprise_success_received' => 'Сюрприз успішно отримано!',
-
     'ip_success_unbanned' => 'IP успішно розбанений!',
 ];

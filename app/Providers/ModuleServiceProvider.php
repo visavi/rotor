@@ -115,7 +115,7 @@ class ModuleServiceProvider extends ServiceProvider
                         Search::$viewMap[$morphName] = $config['searchView'];
                     }
 
-                    match($config['uploadType'] ?? null) {
+                    match ($config['uploadType'] ?? null) {
                         'media' => AjaxController::$extraMediaTypes[] = $morphName,
                         'file'  => AjaxController::$extraFileTypes[] = $morphName,
                         default => null,

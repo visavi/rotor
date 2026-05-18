@@ -8,8 +8,6 @@ use App\Models\Rule;
 use App\Models\Status;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
-use App\Models\Surprise;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -79,62 +77,6 @@ class PageController extends Controller
             ->paginate(setting('stickerlist'));
 
         return view('pages/stickers_category', compact('category', 'stickers'));
-    }
-
-    /**
-     * Ежегодный сюрприз
-     */
-    public function surprise(): RedirectResponse
-    {
-        $money = mt_rand(10000, 50000);
-        $point = mt_rand(150, 250);
-        $rating = mt_rand(3, 10);
-        $year = date('Y', strtotime('+3 days', SITETIME));
-
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        if (strtotime(date('d.m.Y')) > strtotime('03.01' . '.' . $year)) {
-            abort(200, __('pages.surprise_date_receipt'));
-        }
-
-        $existSurprise = Surprise::query()
-            ->where('user_id', $user->id)
-            ->where('year', $year)
-            ->first();
-
-        if ($existSurprise) {
-            abort(200, __('pages.surprise_already_received'));
-        }
-
-        if ($user->point >= 50) {
-            $user->increment('point', $point);
-        } else {
-            $point = 0;
-        }
-
-        $user->increment('money', $money);
-        $user->increment('posrating', $rating);
-        $user->update(['rating' => $user->posrating - $user->negrating]);
-
-        $text = textNotice('surprise', [
-            'year'   => $year,
-            'point'  => plural($point, setting('scorename')),
-            'money'  => plural($money, setting('moneyname')),
-            'rating' => $rating,
-        ]);
-        $user->sendMessage(null, $text);
-
-        Surprise::query()->create([
-            'user_id'    => $user->id,
-            'year'       => $year,
-            'created_at' => SITETIME,
-        ]);
-
-        setFlash('success', __('pages.surprise_success_received'));
-
-        return redirect('/');
     }
 
     /**
