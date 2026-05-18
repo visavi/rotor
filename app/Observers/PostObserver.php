@@ -18,7 +18,6 @@ class PostObserver
         $topic = $post->topic;
         $forum = $topic->forum;
 
-        $post->user->increment('allforum');
         $post->user->increment('point', setting('forum_point'));
         $post->user->increment('money', setting('forum_money'));
 

@@ -4,10 +4,4 @@
             <a class="btn btn-danger btn-sm" href="{{ route('messages.index') }}"><i class="fa fa-envelope"></i> {{ __('index.private_message') }} <span class="badge bg-adaptive">{{ $user->newprivat }}</span></a>
         @endif
     @endif
-
-    @if ($user->newwall)
-        @if (!request()->is('bans', 'key', 'walls', 'rules', 'closed', 'login', 'register'))
-            <a class="btn btn-primary btn-sm" href="{{ route('walls.index', ['login' => $user->login]) }}"><i class="fa fa-sticky-note"></i> {{ __('index.wall_post') }} <span class="badge bg-adaptive">{{ $user->newwall }}</span></a>
-        @endif
-    @endif
 @endif

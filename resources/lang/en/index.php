@@ -33,7 +33,6 @@ return [
     'complains' => 'Complains',
 
     'private_message' => 'Private message!',
-    'wall_post'       => 'New writing on the wall!',
     'courses'         => 'Exchange rates',
     'courses_error'   => 'Failed to download the latest exchange rates!',
     'calendar'        => 'Calendar',
@@ -68,15 +67,12 @@ return [
     'my_settings'        => 'Settings',
     'social_networks'    => 'Social networks',
     'activity'           => 'Activity',
-    'my_wall'            => 'My wall',
     'admin_advertising'  => 'Admin advertising',
     'advertising'        => 'Advertising',
     'reputation_history' => 'Reputation history',
     'reputation_edit'    => 'Reputation changes',
     'auth_history'       => 'Authorization history',
     'money_transfer'     => 'Money transfer',
-    'wall_posts'         => 'Wall posts',
-    'wall_posts_login'   => 'Wall posts :login',
 
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',

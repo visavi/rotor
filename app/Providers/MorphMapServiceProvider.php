@@ -10,7 +10,6 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 use App\Models\Vote;
-use App\Models\Wall;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -35,7 +34,6 @@ class MorphMapServiceProvider extends ServiceProvider
             Post::$morphName      => Post::class,
             Guestbook::$morphName => Guestbook::class,
             Message::$morphName   => Message::class,
-            Wall::$morphName      => Wall::class,
             Comment::$morphName   => Comment::class,
             Vote::$morphName      => Vote::class,
             User::$morphName      => User::class,

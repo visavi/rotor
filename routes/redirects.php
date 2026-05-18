@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Modules\Load\Controllers\Load\DownController;
 use Illuminate\Support\Facades\Route;
+use Modules\Load\Controllers\Load\DownController;
 
 /* Временные редиректы на новые роуты */
 Route::redirect('/forums/search', '/search', 301);

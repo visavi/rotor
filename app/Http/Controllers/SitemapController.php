@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use Modules\Load\Models\Down;
 use App\Models\Topic;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Modules\Load\Models\Down;
 
 class SitemapController extends Controller
 {

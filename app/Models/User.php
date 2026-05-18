@@ -45,12 +45,7 @@ use Illuminate\Support\Str;
  * @property string $phone
  * @property string $gender
  * @property string $birthday
- * @property int    $visits
  * @property int    $newprivat
- * @property int    $newwall
- * @property int    $allforum
- * @property int    $allguest
- * @property int    $allcomments
  * @property string $themes
  * @property string $timezone
  * @property int    $point
@@ -556,14 +551,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Возвращает количество записей на стене сообщений
-     */
-    public function getCountWall(): int
-    {
-        return Wall::query()->where('user_id', $this->id)->count();
-    }
-
-    /**
      * Удаляет альбом пользователя
      */
     public function deleteAlbum(): void
@@ -591,7 +578,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             Contact::query()->where('user_id', $this->id)->delete();
             Ignore::query()->where('user_id', $this->id)->delete();
             Rating::query()->where('user_id', $this->id)->delete();
-            Wall::query()->where('user_id', $this->id)->delete();
             Note::query()->where('user_id', $this->id)->delete();
             Notebook::query()->where('user_id', $this->id)->delete();
             Banhist::query()->where('user_id', $this->id)->delete();
@@ -679,7 +665,5 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
                 'type'       => $type,
             ]);
         }
-
-        $this->increment('visits');
     }
 }

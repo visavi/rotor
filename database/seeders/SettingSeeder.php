@@ -76,7 +76,7 @@ class SettingSeeder extends Seeder
             ['name' => 'forum_point', 'value' => 1],
             ['name' => 'forum_money', 'value' => 50],
             ['name' => 'forum_merge_posts', 'value' => 1],
-['name' => 'guestsuser', 'value' => __('seeds.settings.guest_user')],
+            ['name' => 'guestsuser', 'value' => __('seeds.settings.guest_user')],
             ['name' => 'guestbook_text_min', 'value' => 5],
             ['name' => 'guestbook_text_max', 'value' => 1000],
             ['name' => 'guest_moderation', 'value' => 0],
@@ -111,7 +111,7 @@ class SettingSeeder extends Seeder
             ['name' => 'onlines', 'value' => 1],
             ['name' => 'openreg', 'value' => 1],
             ['name' => 'performance', 'value' => 1],
-['name' => 'postnews', 'value' => 10],
+            ['name' => 'postnews', 'value' => 10],
             ['name' => 'privatpost', 'value' => 10],
             ['name' => 'privatprotect', 'value' => 50],
             ['name' => 'ratinglist', 'value' => 20],
@@ -150,7 +150,6 @@ class SettingSeeder extends Seeder
             ['name' => 'vote_text_max', 'value' => 1000],
             ['name' => 'vote_answer_min', 'value' => 1],
             ['name' => 'vote_answer_max', 'value' => 50],
-            ['name' => 'wallpost', 'value' => 10],
         ];
 
         Setting::query()->truncate();

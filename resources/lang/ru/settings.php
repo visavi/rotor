@@ -136,7 +136,6 @@ return [
     'blacklist_per_page'     => 'Данных на страницу в черном списке',
     'reglist_per_page'       => 'Пользователей в списке ожидающих',
     'invites_per_page'       => 'Инвайтов в приглашениях',
-    'walls_per_page'         => 'Постов на стене сообщений',
     'history_login_per_page' => 'История авторизаций',
     'transfers_per_page'     => 'Денежные операции',
     'ratinglist_per_page'    => 'Голосов в истории рейтинга',

@@ -38,7 +38,6 @@
         <i class="fa fa-star fa-lg text-muted"></i> {{ __('index.activity') }}
     </div>
     <div class="section-body">
-        <i class="far fa-circle text-muted"></i> <a href="/walls/{{ getUser('login') }}">{{ __('index.my_wall') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountWall() }}</span><br>
         <i class="far fa-circle text-muted"></i> <a href="/adverts">{{ __('index.advertising') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/ratings/{{ getUser('login') }}">{{ __('index.reputation_history') }}</a><br>
         <i class="far fa-circle text-muted"></i> <a href="/authlogs">{{ __('index.auth_history') }}</a><br>

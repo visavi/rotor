@@ -55,7 +55,7 @@ class Search extends Model
             'downs'               => __('index.loads'),
             Guestbook::$morphName => __('index.guestbook'),
             News::$morphName      => __('index.news'),
-Post::$morphName      => __('index.posts'),
+            Post::$morphName      => __('index.posts'),
             Topic::$morphName     => __('index.topics'),
             User::$morphName      => __('index.users'),
             Vote::$morphName      => __('index.votes'),

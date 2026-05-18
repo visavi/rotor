@@ -174,7 +174,6 @@ trait CommentableTrait
                 ->where('user_id', $user->id)
                 ->update(['relate_id' => $comment->id]);
 
-            $user->increment('allcomments');
             $user->increment('point', setting('comment_point'));
             $user->increment('money', setting('comment_money'));
 

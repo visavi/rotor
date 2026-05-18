@@ -13,7 +13,6 @@ use App\Models\News;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Sticker;
-use App\Models\Wall;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,6 +24,7 @@ class AjaxController extends Controller
     public static array $extraMediaTypes = [];
     public static array $extraFileTypes = [];
     public static array $extraRatingTypes = [];
+    public static array $extraComplaintTypes = [];
 
     /**
      * Отправляет жалобу на сообщение
@@ -52,11 +52,6 @@ class AjaxController extends Controller
                 $model = Message::query()->find($id);
                 break;
 
-            case Wall::$morphName:
-                $model = Wall::query()->find($id);
-                $path = '/walls/' . $model->user->login . '?page=' . $page;
-                break;
-
             case News::$morphName:
             case 'articles':
             case 'photos':
@@ -65,6 +60,14 @@ class AjaxController extends Controller
                 $model = Comment::query()->find($id);
                 $path = $model?->getViewUrl(false);
                 $type = 'comments';
+                break;
+
+            default:
+                if (isset(static::$extraComplaintTypes[$type])) {
+                    $result = (static::$extraComplaintTypes[$type])($id, $page);
+                    $model = $result['model'] ?? null;
+                    $path = $result['path'] ?? null;
+                }
                 break;
         }
 

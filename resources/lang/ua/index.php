@@ -33,7 +33,6 @@ return [
     'complains' => 'Скарги',
 
     'private_message' => 'Приватне повідомлення!',
-    'wall_post'       => 'Запис на стіні!',
     'courses'         => 'Курси валют',
     'courses_error'   => 'Неможливо завантажити останні курси валют!',
     'calendar'        => 'Календар',
@@ -68,15 +67,12 @@ return [
     'my_settings'        => 'Мої налаштування',
     'social_networks'    => 'Соціальні мережі',
     'activity'           => 'Активність',
-    'my_wall'            => 'Моя стіна',
     'admin_advertising'  => 'Адмінська реклама',
     'advertising'        => 'Реклама',
     'reputation_history' => 'Історія репутації',
     'reputation_edit'    => 'Зміни репутації',
     'auth_history'       => 'Історія авторизацій',
     'money_transfer'     => 'Переказ грошей',
-    'wall_posts'         => 'Стіна повідомлень',
-    'wall_posts_login'   => 'Стіна повідомлень :login',
 
     'confirm_register' => 'Підтвердження реєстрації',
     'banned'           => 'Вас забанили',

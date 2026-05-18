@@ -57,15 +57,6 @@
                 @endif
             @endif
 
-            @if ($user->newwall && $user->isActive())
-                <li>
-                    <a class="app-nav__item" href="{{ route('walls.index', ['login' => $user->login]) }}" aria-label="{{ __('index.wall_post') }}">
-                        <i class="far fa-comments fa-lg"></i>
-                        <span class="badge bg-notify">{{ $user->newwall }}</span>
-                    </a>
-                </li>
-            @endif
-
             @if ($user->isActive())
                 <li class="dropdown js-messages-block">
                     <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">

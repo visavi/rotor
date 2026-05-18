@@ -12,6 +12,8 @@ use Illuminate\View\View;
 
 class SpamController extends AdminController
 {
+    public static array $extraTypes = [];
+
     private array $types;
     private string $type;
     private array $total = [];
@@ -21,13 +23,12 @@ class SpamController extends AdminController
      */
     public function __construct(Request $request)
     {
-        $this->types = [
+        $this->types = array_merge([
             'posts'     => __('index.forums'),
             'guestbook' => __('index.guestbook'),
             'messages'  => __('index.messages'),
-            'walls'     => __('index.wall_posts'),
             'comments'  => __('main.comments'),
-        ];
+        ], static::$extraTypes);
 
         $type = $request->input('type');
 

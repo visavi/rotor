@@ -69,7 +69,6 @@ class GuestbookController extends Controller
                 $active = true;
                 $guestName = null;
 
-                $user->increment('allguest');
                 $user->increment('point', setting('guestbook_point'));
                 $user->increment('money', setting('guestbook_money'));
             } else {

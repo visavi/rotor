@@ -17,7 +17,6 @@ class UserProfileResource extends UserResource
             'phone'     => $this->phone,
             'allprivat' => $this->getCountMessages(),
             'newprivat' => $this->newprivat,
-            'newwall'   => $this->newwall,
         ]);
     }
 }

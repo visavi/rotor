@@ -70,12 +70,6 @@
         <div class="invalid-feedback">{{ textError('sets[listinvite]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[wallpost]') }}">
-        <label for="wallpost" class="form-label">{{ __('settings.walls_per_page') }}:</label>
-        <input type="number" class="form-control" id="wallpost" name="sets[wallpost]" maxlength="2" value="{{ getInput('sets.wallpost', $settings['wallpost']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[wallpost]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[loginauthlist]') }}">
         <label for="loginauthlist" class="form-label">{{ __('settings.history_login_per_page') }}:</label>
         <input type="number" class="form-control" id="loginauthlist" name="sets[loginauthlist]" maxlength="2" value="{{ getInput('sets.loginauthlist', $settings['loginauthlist']) }}" required>

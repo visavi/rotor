@@ -79,10 +79,6 @@
                     {{ __('users.phone') }}: <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a><br>
                 @endif
 
-                {{ __('users.visits') }}: {{ $user->visits }}<br>
-                {{ __('users.forum_posts') }}: {{ $user->allforum }}<br>
-                {{ __('users.guest_posts') }}: {{ $user->allguest }}<br>
-                {{ __('main.comments') }}: {{ $user->allcomments }}<br>
                 {{ __('users.assets') }}: {{ plural($user->point, setting('scorename')) }}<br>
                 {{ __('users.moneys') }}: {{ plural($user->money, setting('moneyname')) }}<br>
 
@@ -159,7 +155,6 @@
 
     <div class="alert alert-info mb-3">
         @hook('userActionStart', $user)
-        <i class="fa fa-sticky-note"></i> <a href="/walls/{{ $user->login }}">{{ __('index.wall_posts') }}</a> ({{ $user->getCountWall() }})<br>
 
         @if (!empty($user->site))
             <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->getName() }}</a><br>

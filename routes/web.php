@@ -37,7 +37,6 @@ use App\Http\Controllers\User\RecoveryController;
 use App\Http\Controllers\User\SearchController as UserSearchController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\VoteController;
-use App\Http\Controllers\WallController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -208,16 +207,6 @@ Route::controller(SocialController::class)
     ->group(function () {
         Route::match(['get', 'post'], '/', 'index')->name('index');
         Route::delete('/delete/{id}', 'delete')->name('delete');
-    });
-
-/* Стена сообщений */
-Route::controller(WallController::class)
-    ->prefix('walls')
-    ->name('walls.')
-    ->group(function () {
-        Route::get('/{login}', 'index')->name('index');
-        Route::post('/{login}/create', 'create')->name('create');
-        Route::post('/{login}/delete', 'delete')->name('delete');
     });
 
 /* Личные сообщения */
