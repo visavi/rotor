@@ -15,8 +15,6 @@
     </div>
     <div class="section-body">
         <i class="far fa-circle text-muted"></i> <a href="/messages">{{ __('index.messages') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountMessages() }}</span><br>
-        <i class="far fa-circle text-muted"></i> <a href="/contacts">{{ __('index.contacts') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountContact() }}</span><br>
-        <i class="far fa-circle text-muted"></i> <a href="/ignores">{{ __('index.ignores') }}</a> <span class="badge bg-adaptive">{{ getUser()->getCountIgnore() }}</span><br>
     </div>
 </div>
 

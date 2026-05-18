@@ -14,12 +14,6 @@
 @stop
 
 @section('content')
-    @if (getUser()->isIgnore($user))
-        <div class="p-1 my-1 bg-danger text-white">
-            <i class="fas fa-exclamation-triangle"></i>
-            {{ __('messages.warning') }}
-        </div>
-    @endif
 
     @if ($messages->isNotEmpty())
         @foreach ($messages as $data)
@@ -104,7 +98,6 @@
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>
-    <i class="fa fa-address-book"></i> <a href="/contacts">{{ __('index.contacts') }}</a> / <a href="/ignores">{{ __('index.ignores') }}</a><br>
 @stop
 
 @push('scripts')

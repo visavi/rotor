@@ -415,8 +415,6 @@ class ApiController extends Controller
                         $fail(__('validator.user'));
                     } elseif ($recipient->id === $user->id) {
                         $fail(__('messages.send_yourself'));
-                    } elseif ($recipient->isIgnore($user)) {
-                        $fail(__('ignores.you_are_ignoring'));
                     } elseif ($flood->isFlood()) {
                         $fail(__('validator.flood', ['sec' => $flood->getPeriod()]));
                     }

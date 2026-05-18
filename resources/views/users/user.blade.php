@@ -170,9 +170,6 @@
                 @hook('userPersonalEnd')
             @else
                 @hook('userNotPersonalStart', $user)
-                <i class="fa fa-address-book"></i> {{ __('users.add_to') }}
-                <a href="/contacts?user={{ $user->login }}">{{ __('index.contacts') }}</a> /
-                <a href="/ignores?user={{ $user->login }}">{{ __('index.ignores') }}</a><br>
                 <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
                 <i class="fas fa-coins"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
 

@@ -56,8 +56,7 @@ class TransferController extends Controller
 
         if ($this->user) {
             $validator
-                ->notEqual($this->user->id, getUser('id'), ['user' => __('transfers.transfer_yourself')])
-                ->false($this->user->isIgnore(getUser()), ['user' => __('ignores.you_are_ignoring')]);
+                ->notEqual($this->user->id, getUser('id'), ['user' => __('transfers.transfer_yourself')]);
         }
 
         if ($validator->isValid()) {

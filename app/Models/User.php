@@ -497,28 +497,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Находится ли пользователь в контактах
-     */
-    public function isContact(self $user): bool
-    {
-        return Contact::query()
-            ->where('user_id', $this->id)
-            ->where('contact_id', $user->id)
-            ->exists();
-    }
-
-    /**
-     * Находится ли пользователь в игноре
-     */
-    public function isIgnore(self $user): bool
-    {
-        return Ignore::query()
-            ->where('user_id', $this->id)
-            ->where('ignore_id', $user->id)
-            ->exists();
-    }
-
-    /**
      * Отправляет приватное сообщение
      */
     public function sendMessage(?self $author, string $text, bool $withAuthor = true): Message
@@ -532,22 +510,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getCountMessages(): int
     {
         return Dialogue::query()->where('user_id', $this->id)->count();
-    }
-
-    /**
-     * Возвращает размер контакт-листа
-     */
-    public function getCountContact(): int
-    {
-        return Contact::query()->where('user_id', $this->id)->count();
-    }
-
-    /**
-     * Возвращает размер игнор-листа
-     */
-    public function getCountIgnore(): int
-    {
-        return Ignore::query()->where('user_id', $this->id)->count();
     }
 
     /**
@@ -575,8 +537,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
             Message::query()->where('user_id', $this->id)->delete();
             Dialogue::query()->where('user_id', $this->id)->delete();
-            Contact::query()->where('user_id', $this->id)->delete();
-            Ignore::query()->where('user_id', $this->id)->delete();
             Rating::query()->where('user_id', $this->id)->delete();
             Note::query()->where('user_id', $this->id)->delete();
             Notebook::query()->where('user_id', $this->id)->delete();

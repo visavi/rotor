@@ -9,7 +9,6 @@ return [
     'comments'    => 'Comments',
     'forums'      => 'Forum',
     'messages'    => 'Messages',
-    'contacts'    => 'Contacts and ignore',
     'loads'       => 'Download Center',
     'pages'       => 'Page navigation',
     'others'      => 'Other and other',
@@ -40,10 +39,6 @@ return [
     'comment_point'     => 'Total points awarded',
     'comment_money'     => 'Total moneys awarded',
 
-    'contacts_per_page'  => 'Listing in the contact list',
-    'ignores_per_page'   => 'Listing on the ignore list',
-    'contacts_max_users' => 'Max. in the contact list ',
-    'ignores_max_users'  => 'Max. on the ignore list ',
 
     'topics_per_page'          => 'Forum topics on page',
     'posts_per_page'           => 'Forum posts on page',

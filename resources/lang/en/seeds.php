@@ -56,12 +56,6 @@ return [
         'invite_name' => 'Sending invitation keys',
         'invite_text' => '<p>Congratulations! You have received invitation keys</p><p>Your keys: %key%</p><p>With these keys you can invite your friends to our site!</p>',
 
-        'contact_name' => 'Add to contact list',
-        'contact_text' => '<p>User %login% added you to his contact list!</p>',
-
-        'ignore_name' => 'Adding to ignore list',
-        'ignore_text' => '<p>User %login% added you to his ignore list!</p>',
-
         'transfer_name' => 'Money transfer',
         'transfer_text' => '<p>User %login% transferred %money% to you</p><p>Comment: %comment%</p>',
 

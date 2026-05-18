@@ -40,7 +40,6 @@ class Setting extends Model
             'comments',
             'forums',
             'messages',
-            'contacts',
             'blogs',
             'pages',
             'others',

@@ -15,8 +15,6 @@ return [
     'search'        => 'Site search',
     'mails'         => 'Feedback',
     'users'         => 'Users',
-    'contacts'      => 'Contact list',
-    'ignores'       => 'Ignore list',
     'messages'      => 'Messages',
     'chat'          => 'Chat',
     'user_search'   => 'User search',

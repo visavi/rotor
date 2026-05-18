@@ -6,7 +6,6 @@ use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CounterController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Forum\ActiveController;
@@ -16,7 +15,6 @@ use App\Http\Controllers\Forum\NewController;
 use App\Http\Controllers\Forum\TopicController;
 use App\Http\Controllers\GuestbookController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\IgnoreController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LoginController;
@@ -220,24 +218,6 @@ Route::controller(MessageController::class)
         Route::get('/talk/{login}', 'talk')->name('talk');
         Route::delete('/delete/{uid}', 'delete')->whereNumber('uid')->name('delete');
         Route::match(['get', 'post'], '/send', 'send')->name('send');
-    });
-
-/* Игнор-лист */
-Route::controller(IgnoreController::class)
-    ->prefix('ignores')
-    ->group(function () {
-        Route::post('/delete', 'delete');
-        Route::match(['get', 'post'], '/', 'index');
-        Route::match(['get', 'post'], '/note/{id}', 'note');
-    });
-
-/* Контакт-лист */
-Route::controller(ContactController::class)
-    ->prefix('contacts')
-    ->group(function () {
-        Route::post('/delete', 'delete');
-        Route::match(['get', 'post'], '/', 'index');
-        Route::match(['get', 'post'], '/note/{id}', 'note');
     });
 
 /* Перевод денег */

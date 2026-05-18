@@ -141,8 +141,6 @@ class MessageController extends Controller
             $validator->addError(['protect' => __('validator.captcha')]);
         }
 
-        $validator->false($user->isIgnore($this->user), ['user' => __('ignores.you_are_ignoring')]);
-
         if ($validator->isValid()) {
             $msg = antimat($msg);
             $message = $user->sendMessage($this->user, $msg);
