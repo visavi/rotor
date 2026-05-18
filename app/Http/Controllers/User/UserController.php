@@ -250,7 +250,6 @@ class UserController extends Controller
                         $request->session()->regenerate();
                         $user = Auth::user();
 
-
                         return redirect($request->input('return', '/'))
                             ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));
                     }

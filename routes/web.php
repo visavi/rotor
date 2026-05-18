@@ -13,7 +13,6 @@ use App\Http\Controllers\Forum\BookmarkController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\NewController;
 use App\Http\Controllers\Forum\TopicController;
-use App\Http\Controllers\GuestbookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvitationController;
@@ -72,16 +71,6 @@ Route::controller(SitemapController::class)
     ->group(function () {
         Route::get('/sitemap.xml', 'index');
         Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+');
-    });
-
-/* Гостевая книга */
-Route::controller(GuestbookController::class)
-    ->prefix('guestbook')
-    ->name('guestbook.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('/create', 'add')->name('create');
-        Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
     });
 
 /* Новости */

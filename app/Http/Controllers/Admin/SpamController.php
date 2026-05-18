@@ -24,10 +24,9 @@ class SpamController extends AdminController
     public function __construct(Request $request)
     {
         $this->types = array_merge([
-            'posts'     => __('index.forums'),
-            'guestbook' => __('index.guestbook'),
-            'messages'  => __('index.messages'),
-            'comments'  => __('main.comments'),
+            'posts'    => __('index.forums'),
+            'messages' => __('index.messages'),
+            'comments' => __('main.comments'),
         ], static::$extraTypes);
 
         $type = $request->input('type');

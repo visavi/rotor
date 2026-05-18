@@ -20,7 +20,6 @@ use App\Http\Controllers\Admin\EditorController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\FileController as AdminFileController;
 use App\Http\Controllers\Admin\ForumController as AdminForumController;
-use App\Http\Controllers\Admin\GuestbookController as AdminGuestbookController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LogController;
@@ -68,19 +67,6 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->group(function () {
                 Route::match(['get', 'post'], '/', 'index')->name('index');
                 Route::match(['get', 'post'], '/edit/{id}', 'edit')->name('edit');
-                Route::post('/clear', 'clear')->name('clear');
-            });
-
-        /* Гостевая */
-        Route::controller(AdminGuestbookController::class)
-            ->prefix('guestbook')
-            ->name('guestbook.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::match(['get', 'post'], '/{id}/reply', 'reply')->name('reply');
-                Route::post('/delete', 'delete')->name('delete');
-                Route::post('/publish', 'publish')->name('publish');
                 Route::post('/clear', 'clear')->name('clear');
             });
 

@@ -68,36 +68,12 @@
         </li>
 
         <li>
-            <a class="menu-item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">
-                <i class="menu-icon far fa-comment"></i>
-                <span class="menu-label">{{ __('index.guestbook') }}</span>
-                <span class="badge menu-badge">{{ statsGuestbook() }}</span>
-            </a>
-        </li>
-
-        <li>
             <a class="menu-item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
                 <i class="menu-icon far fa-newspaper"></i>
                 <span class="menu-label">{{ __('index.news') }}</span>
                 <span class="badge menu-badge">{{ statsNews() }}</span>
             </a>
         </li>
-
-        @if(Route::has('blogs.index'))
-        <li class="treeview{{ request()->is('blogs*', 'articles*') ? ' is-expanded' : '' }}">
-            <a class="menu-item" href="#" data-bs-toggle="treeview">
-                <i class="menu-icon far fa-sticky-note"></i>
-                <span class="menu-label">{{ __('index.blogs') }}</span>
-                <i class="treeview-indicator fa fa-angle-down"></i>
-            </a>
-            <ul class="treeview-menu">
-                <li><a class="treeview-item{{ request()->routeIs('blogs.index') ? ' active' : '' }}" href="{{ route('blogs.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blog::blogs.blogs_list') }}</a></li>
-                <li><a class="treeview-item{{ request()->routeIs('blogs.main') ? ' active' : '' }}" href="{{ route('blogs.main') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blog::blogs.articles_all') }}</a></li>
-                <li><a class="treeview-item{{ request()->routeIs('articles.index') ? ' active' : '' }}" href="{{ route('articles.index') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blog::blogs.new_articles') }}</a></li>
-                <li><a class="treeview-item{{ request()->routeIs('articles.new-comments') ? ' active' : '' }}" href="{{ route('articles.new-comments') }}"><i class="icon fas fa-circle fa-xs"></i> {{ __('blog::blogs.new_comments') }}</a></li>
-            </ul>
-        </li>
-        @endif
 
         <li>
             <a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">

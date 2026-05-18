@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
-use App\Models\Guestbook;
 use App\Models\Message;
 use App\Models\News;
 use App\Models\Post;
@@ -38,11 +37,6 @@ class AjaxController extends Controller
         $page = $request->input('page');
 
         switch ($type) {
-            case Guestbook::$morphName:
-                $model = Guestbook::query()->find($id);
-                $path = route('guestbook.index', ['page' => $page], false);
-                break;
-
             case Post::$morphName:
                 $model = Post::query()->find($id);
                 $path = route('topics.topic', ['id' => $model->topic_id, 'pid' => $model->id], false);
@@ -168,7 +162,6 @@ class AjaxController extends Controller
             Message::$morphName,
             News::$morphName,
             Post::$morphName,
-            Guestbook::$morphName,
         ], static::$extraFileTypes);
 
         $id = int($request->input('id'));
@@ -278,7 +271,6 @@ class AjaxController extends Controller
             News::$morphName,
             Message::$morphName,
             Post::$morphName,
-            Guestbook::$morphName,
         ], static::$extraMediaTypes, static::$extraFileTypes);
 
         $id = int($request->input('id'));

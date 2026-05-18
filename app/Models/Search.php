@@ -51,14 +51,12 @@ class Search extends Model
     public static function getRelateTypes(): array
     {
         $base = [
-            Comment::$morphName   => __('index.comments'),
-            'downs'               => __('index.loads'),
-            Guestbook::$morphName => __('index.guestbook'),
-            News::$morphName      => __('index.news'),
-            Post::$morphName      => __('index.posts'),
-            Topic::$morphName     => __('index.topics'),
-            User::$morphName      => __('index.users'),
-            Vote::$morphName      => __('index.votes'),
+            Comment::$morphName => __('index.comments'),
+            News::$morphName    => __('index.news'),
+            Post::$morphName    => __('index.posts'),
+            Topic::$morphName   => __('index.topics'),
+            User::$morphName    => __('index.users'),
+            Vote::$morphName    => __('index.votes'),
         ];
 
         return array_merge($base, static::$types);

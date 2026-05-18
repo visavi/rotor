@@ -35,7 +35,6 @@ class Setting extends Model
             'mains',
             'mails',
             'info',
-            'guestbook',
             'news',
             'comments',
             'forums',

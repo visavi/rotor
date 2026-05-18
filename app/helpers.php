@@ -11,7 +11,6 @@ use App\Models\BlackList;
 use App\Models\Chat;
 use App\Models\Counter;
 use App\Models\Error;
-use App\Models\Guestbook;
 use App\Models\Invite;
 use App\Models\News;
 use App\Models\Notice;
@@ -416,23 +415,6 @@ function statsForum(): string
 }
 
 /**
- * Возвращает количество сообщений в гостевой книге
- */
-function statsGuestbook(): string
-{
-    return Cache::remember('statGuestbook', 600, static function () {
-        $total = Guestbook::query()->count();
-
-        $totalNew = Guestbook::query()
-            ->active()
-            ->where('created_at', '>', strtotime('-1 day', SITETIME))
-            ->count();
-
-        return formatShortNum($total) . ($totalNew ? '/+' . $totalNew : '');
-    });
-}
-
-/**
  * Возвращает количество сообщений в админ-чате
  */
 function statsChat(): string
@@ -584,12 +566,12 @@ function getAdvertAdmin(): ?HtmlString
 function getAdvertUser(): ?HtmlString
 {
     $adverts = Advert::statAdverts();
-    $result  = '';
+    $result = '';
 
     if ($adverts) {
-        $total  = count($adverts);
-        $show   = setting('rekusershow') > $total ? $total : setting('rekusershow');
-        $links  = Arr::random($adverts, $show);
+        $total = count($adverts);
+        $show = setting('rekusershow') > $total ? $total : setting('rekusershow');
+        $links = Arr::random($adverts, $show);
         $result = implode('<br>', $links);
     }
 

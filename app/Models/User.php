@@ -604,5 +604,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             setFlash('success', __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]));
         }
     }
-
 }

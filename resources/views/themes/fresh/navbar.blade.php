@@ -118,34 +118,12 @@
                 </a>
             </li>
             <li>
-                <a class="app-topnav__item{{ request()->is('guestbook*') ? ' active' : '' }}" href="{{ route('guestbook.index') }}">
-                    <i class="far fa-comment"></i>
-                    <span>{{ __('index.guestbook') }}</span>
-                    <span class="badge menu-badge">{{ statsGuestbook() }}</span>
-                </a>
-            </li>
-            <li>
                 <a class="app-topnav__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
                     <i class="far fa-newspaper"></i>
                     <span>{{ __('index.news') }}</span>
                     <span class="badge menu-badge">{{ statsNews() }}</span>
                 </a>
             </li>
-            @if(Route::has('blogs.index'))
-            <li class="dropdown">
-                <a class="app-topnav__item{{ request()->is('blogs*', 'articles*') ? ' active' : '' }}" href="#" data-bs-toggle="dropdown">
-                    <i class="far fa-sticky-note"></i>
-                    <span>{{ __('index.blogs') }}</span>
-                    <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item{{ request()->routeIs('blogs.index') ? ' active' : '' }}" href="{{ route('blogs.index') }}">{{ __('blog::blogs.blogs_list') }}</a></li>
-                    <li><a class="dropdown-item{{ request()->routeIs('blogs.main') ? ' active' : '' }}" href="{{ route('blogs.main') }}">{{ __('blog::blogs.articles_all') }}</a></li>
-                    <li><a class="dropdown-item{{ request()->routeIs('articles.index') ? ' active' : '' }}" href="{{ route('articles.index') }}">{{ __('blog::blogs.new_articles') }}</a></li>
-                    <li><a class="dropdown-item{{ request()->routeIs('articles.new-comments') ? ' active' : '' }}" href="{{ route('articles.new-comments') }}">{{ __('blog::blogs.new_comments') }}</a></li>
-                </ul>
-            </li>
-            @endif
             <li>
                 <a class="app-topnav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
                     <i class="fas fa-square-poll-horizontal"></i>
