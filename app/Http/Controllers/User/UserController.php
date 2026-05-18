@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\Models\BlackList;
 use App\Models\Flood;
 use App\Models\Invite;
-use App\Models\Login;
 use App\Models\User;
 use App\Models\UserField;
 use Illuminate\Database\Query\JoinClause;
@@ -251,7 +250,6 @@ class UserController extends Controller
                         $request->session()->regenerate();
                         $user = Auth::user();
 
-                        $user->saveVisit(Login::AUTH);
 
                         return redirect($request->input('return', '/'))
                             ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));

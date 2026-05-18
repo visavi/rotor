@@ -17,7 +17,6 @@ use App\Http\Controllers\GuestbookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvitationController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsController;
@@ -25,7 +24,6 @@ use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\SocialController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BanController;
@@ -198,15 +196,6 @@ Route::controller(UserSearchController::class)
         Route::match(['get', 'post'], '/search', 'search');
     });
 
-/* Социальные сети */
-Route::controller(SocialController::class)
-    ->prefix('socials')
-    ->name('socials.')
-    ->group(function () {
-        Route::match(['get', 'post'], '/', 'index')->name('index');
-        Route::delete('/delete/{id}', 'delete')->name('delete');
-    });
-
 /* Личные сообщения */
 Route::controller(MessageController::class)
     ->prefix('messages')
@@ -258,9 +247,6 @@ Route::get('/api', [ApiController::class, 'index']);
 
 /* Бан */
 Route::match(['get', 'post'], '/ban', [BanController::class, 'ban'])->name('ban');
-
-/* Авторизации пользователя */
-Route::get('/authlogs', [LoginController::class, 'index']);
 
 /* Счетчики */
 Route::get('/counters', [CounterController::class, 'index']);
@@ -332,7 +318,6 @@ Route::controller(PageController::class)
         Route::get('/statusfaq', 'statusfaq')->name('statusfaq');
         Route::get('/surprise', 'surprise')->name('surprise');
         Route::get('/pages/{page?}', 'index')->where('page', '[\w\-]+')->name('pages');
-        Route::get('/menu', 'menu')->name('menu');
         Route::get('/rules', 'rules')->name('rules');
         Route::get('/stickers', 'stickers');
         Route::get('/stickers/{id}', 'stickersCategory');

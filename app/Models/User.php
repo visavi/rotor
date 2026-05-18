@@ -542,7 +542,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             Notebook::query()->where('user_id', $this->id)->delete();
             Banhist::query()->where('user_id', $this->id)->delete();
             Bookmark::query()->where('user_id', $this->id)->delete();
-            Login::query()->where('user_id', $this->id)->delete();
             Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
 
             return parent::delete();
@@ -606,24 +605,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
     }
 
-    /**
-     * Сохраняет посещения
-     */
-    public function saveVisit(string $type): void
-    {
-        $authorization = Login::query()
-            ->where('user_id', $this->id)
-            ->where('created_at', '>', SITETIME - 60)
-            ->first();
-
-        if (! $authorization) {
-            Login::query()->create([
-                'user_id'    => $this->id,
-                'ip'         => getIp(),
-                'brow'       => getBrowser(),
-                'created_at' => SITETIME,
-                'type'       => $type,
-            ]);
-        }
-    }
 }

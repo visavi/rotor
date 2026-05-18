@@ -131,7 +131,6 @@ return [
     'blacklist_per_page'     => 'Даних на сторінку в чорному списку',
     'reglist_per_page'       => 'Користувачів у списку тих, хто очікує',
     'invites_per_page'       => 'Інвайтів у запрошеннях',
-    'history_login_per_page' => 'Історія авторизацій',
     'transfers_per_page'     => 'Грошові операції',
     'ratinglist_per_page'    => 'Голосів в історії рейтингу',
 

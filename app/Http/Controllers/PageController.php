@@ -21,26 +21,13 @@ class PageController extends Controller
     public function index(string $page = 'index'): View
     {
         if (
-            $page === 'menu'
-            || ! preg_match('|^[a-z0-9_\-]+$|i', $page)
+            ! preg_match('|^[a-z0-9_\-]+$|i', $page)
             || ! file_exists(resource_path('views/main/' . $page . '.blade.php'))
         ) {
             abort(404);
         }
 
         return view('main/layout', compact('page'));
-    }
-
-    /**
-     * Меню
-     */
-    public function menu(): View
-    {
-        if (! getUser()) {
-            abort(404);
-        }
-
-        return view('main/layout', ['page' => 'menu']);
     }
 
     /**

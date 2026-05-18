@@ -40,7 +40,6 @@ return [
     'added_by'          => 'Добавлено',
     'sent'              => 'Отправил',
     'sent_out'          => 'Отправлено',
-    'menu'              => 'Мое меню',
     'verification_code' => 'Проверочный код',
     'pages'             => 'Страницы',
     'page_num'          => 'Стр. :page',

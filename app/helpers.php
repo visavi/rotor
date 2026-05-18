@@ -584,14 +584,16 @@ function getAdvertAdmin(): ?HtmlString
 function getAdvertUser(): ?HtmlString
 {
     $adverts = Advert::statAdverts();
+    $result  = '';
 
     if ($adverts) {
-        $total = count($adverts);
-        $show = setting('rekusershow') > $total ? $total : setting('rekusershow');
-
-        $links = Arr::random($adverts, $show);
+        $total  = count($adverts);
+        $show   = setting('rekusershow') > $total ? $total : setting('rekusershow');
+        $links  = Arr::random($adverts, $show);
         $result = implode('<br>', $links);
+    }
 
+    if ($result || getUser()) {
         return new HtmlString(view('adverts/_links', compact('result')));
     }
 

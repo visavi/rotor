@@ -131,7 +131,6 @@ return [
     'blacklist_per_page'     => 'Data per page blacklisted',
     'reglist_per_page'       => 'Users on the pending list',
     'invites_per_page'       => 'Invites to invitations',
-    'history_login_per_page' => 'Authorization History',
     'transfers_per_page'     => 'Cash transactions',
     'ratinglist_per_page'    => 'Votes in ranking history',
 

@@ -92,7 +92,6 @@ class SettingSeeder extends Seeder
             ['name' => 'listbanhist', 'value' => 10],
             ['name' => 'listinvite', 'value' => 20],
             ['name' => 'listtransfers', 'value' => 10],
-            ['name' => 'loginauthlist', 'value' => 10],
             ['name' => 'loglist', 'value' => 10],
             ['name' => 'logos', 'value' => __('seeds.settings.logos')],
             ['name' => 'logotip', 'value' => '/assets/img/images/logo.png'],

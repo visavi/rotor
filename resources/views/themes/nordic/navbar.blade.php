@@ -90,7 +90,6 @@
                     @if (isAdmin())
                         <li><a class="dropdown-item" href="{{ route('admin.index') }}" rel="nofollow"><i class="fas fa-wrench fa-lg"></i> {{ __('index.panel') }}</a></li>
                     @endif
-                    <li><a class="dropdown-item" href="{{ route('menu') }}" rel="nofollow"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.menu') }}</a></li>
                     @hook('navbarMenuEnd')
                     <li>
                         <form action="{{ route('logout') }}" method="post" class="d-inline" onsubmit="return confirmAction(this)" data-confirm="{{ __('users.confirm_logout') }}">

@@ -6,7 +6,6 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ __('main.menu') }}</a></li>
             <li class="breadcrumb-item"><a href="/messages">{{ __('index.messages') }}</a></li>
             <li class="breadcrumb-item active">{{ __('messages.notifications') }}</li>
         </ol>

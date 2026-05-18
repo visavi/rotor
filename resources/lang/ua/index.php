@@ -23,7 +23,6 @@ return [
     'topics'        => 'Теми форуму',
     'posts'         => 'Повідомлення форуму',
 
-    'menu'      => 'Меню',
     'login'     => 'Авторизація',
     'logout'    => 'Вихід',
     'register'  => 'Реєстрація',
@@ -63,13 +62,11 @@ return [
     'my_profile'         => 'Мій профіль',
     'my_details'         => 'Мої дані',
     'my_settings'        => 'Мої налаштування',
-    'social_networks'    => 'Соціальні мережі',
     'activity'           => 'Активність',
     'admin_advertising'  => 'Адмінська реклама',
     'advertising'        => 'Реклама',
     'reputation_history' => 'Історія репутації',
     'reputation_edit'    => 'Зміни репутації',
-    'auth_history'       => 'Історія авторизацій',
     'money_transfer'     => 'Переказ грошей',
 
     'confirm_register' => 'Підтвердження реєстрації',

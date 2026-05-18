@@ -25,12 +25,6 @@
                         </a>
                     </li>
                 @endif
-                <li>
-                    <a class="treeview-item" href="{{ route('menu') }}" rel="nofollow">
-                        <i class="icon fas fa-user-cog"></i>
-                        {{ __('index.menu') }}
-                    </a>
-                </li>
                 @hook('sidebarTreeviewEnd')
             </ul>
         @else

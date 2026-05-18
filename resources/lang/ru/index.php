@@ -23,7 +23,6 @@ return [
     'topics'        => 'Темы форума',
     'posts'         => 'Сообщения форума',
 
-    'menu'      => 'Меню',
     'login'     => 'Авторизация',
     'logout'    => 'Выход',
     'register'  => 'Регистрация',
@@ -63,13 +62,11 @@ return [
     'my_profile'         => 'Мой профиль',
     'my_details'         => 'Мои данные',
     'my_settings'        => 'Мои настройки',
-    'social_networks'    => 'Социальные сети',
     'activity'           => 'Активность',
     'admin_advertising'  => 'Админская реклама',
     'advertising'        => 'Реклама',
     'reputation_history' => 'История репутации',
     'reputation_edit'    => 'Изменения репутации',
-    'auth_history'       => 'История авторизаций',
     'money_transfer'     => 'Перевод денег',
 
     'confirm_register' => 'Подтверждение регистрации',

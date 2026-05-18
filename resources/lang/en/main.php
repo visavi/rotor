@@ -40,7 +40,6 @@ return [
     'added_by'          => 'Added by',
     'sent'              => 'Sent',
     'sent_out'          => 'Sent out',
-    'menu'              => 'My menu',
     'verification_code' => 'Verification code',
     'pages'             => 'Pages',
     'page_num'          => 'Page :page',

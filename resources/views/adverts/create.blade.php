@@ -6,7 +6,6 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/menu">{{ __('main.menu') }}</a></li>
             <li class="breadcrumb-item"><a href="/adverts">{{ __('index.advertising') }}</a></li>
             <li class="breadcrumb-item active">{{ __('adverts.create_advert') }}</li>
         </ol>

@@ -13,7 +13,6 @@
             @endif
         @endif
 
-        <li><a href="{{ route('menu') }}">{{ __('index.menu') }}</a></li>
     </ul>
 @else
     <ul class="menu-nav">

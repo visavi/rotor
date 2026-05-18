@@ -11,7 +11,6 @@
                 </div>
             </div>
             <ul class="paper-sidebar-menu paper-sidebar-links">
-                <li><a class="menu-item" href="{{ route('menu') }}" rel="nofollow"><i class="menu-icon fas fa-user-cog"></i><span class="menu-label">{{ __('index.menu') }}</span></a></li>
                 @if (isAdmin())<li><a class="menu-item" href="{{ route('admin.index') }}" rel="nofollow"><i class="menu-icon fas fa-wrench"></i><span class="menu-label">{{ __('index.panel') }}</span></a></li>@endif
             </ul>
         </div>

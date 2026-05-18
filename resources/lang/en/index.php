@@ -23,7 +23,6 @@ return [
     'topics'        => 'Forum topics',
     'posts'         => 'Forum posts',
 
-    'menu'      => 'Menu',
     'login'     => 'Login',
     'logout'    => 'Logout',
     'register'  => 'Register',
@@ -63,13 +62,11 @@ return [
     'my_profile'         => 'My profile',
     'my_details'         => 'My details',
     'my_settings'        => 'Settings',
-    'social_networks'    => 'Social networks',
     'activity'           => 'Activity',
     'admin_advertising'  => 'Admin advertising',
     'advertising'        => 'Advertising',
     'reputation_history' => 'Reputation history',
     'reputation_edit'    => 'Reputation changes',
-    'auth_history'       => 'Authorization history',
     'money_transfer'     => 'Money transfer',
 
     'confirm_register' => 'Confirmation of registration',
