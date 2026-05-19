@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
-use App\Models\News;
 use Illuminate\View\View;
 
 class Calendar
@@ -19,16 +18,18 @@ class Calendar
         $startMonth = mktime(0, 0, 0, $date['month'], 1, $date['year']);
         $endMonth = strtotime('+1 month', $startMonth);
 
-        $news = News::query()
-            ->where('created_at', '>=', $startMonth)
-            ->where('created_at', '<', $endMonth)
-            ->get();
-
         $newsIds = [];
-        if ($news->isNotEmpty()) {
-            foreach ($news as $data) {
-                $curDay = dateFixed($data->created_at, 'j');
-                $newsIds[$curDay] = $data->id;
+        if (class_exists(\Modules\News\Models\News::class)) {
+            $news = \Modules\News\Models\News::query()
+                ->where('created_at', '>=', $startMonth)
+                ->where('created_at', '<', $endMonth)
+                ->get();
+
+            if ($news->isNotEmpty()) {
+                foreach ($news as $data) {
+                    $curDay = dateFixed($data->created_at, 'j');
+                    $newsIds[$curDay] = $data->id;
+                }
             }
         }
 

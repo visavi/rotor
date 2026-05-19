@@ -52,7 +52,6 @@ class Search extends Model
     {
         $base = [
             Comment::$morphName => __('index.comments'),
-            News::$morphName    => __('index.news'),
             Post::$morphName    => __('index.posts'),
             Topic::$morphName   => __('index.topics'),
             User::$morphName    => __('index.users'),

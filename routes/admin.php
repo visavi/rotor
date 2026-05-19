@@ -24,7 +24,6 @@ use App\Http\Controllers\Admin\InvitationController as AdminInvitationController
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Admin\PaidAdvertController;
 use App\Http\Controllers\Admin\ReglistController;
@@ -197,18 +196,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index');
                     Route::match(['get', 'post'], '/edit', 'edit');
-                });
-
-            /* Новости */
-            Route::controller(AdminNewsController::class)
-                ->prefix('news')
-                ->name('news.')
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::match(['get', 'post'], '/create', 'create')->name('create');
-                    Route::delete('/{id}/delete', 'delete')->name('delete');
-                    Route::post('/restatement', 'restatement')->name('restatement');
                 });
 
             /* IP-бан */

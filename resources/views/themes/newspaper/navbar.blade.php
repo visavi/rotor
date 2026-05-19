@@ -47,7 +47,6 @@
         <ul class="paper-nav__list">
             @hook('navbarStart')
             <li><a class="paper-nav__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
-            <li><a class="paper-nav__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
 @hook('navbarEnd')
         </ul>
     </nav>

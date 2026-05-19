@@ -18,7 +18,6 @@ class Feed extends Model
 {
     public static array $types = [
         'topics'   => ['class' => Topic::class,   'withs' => ['lastPost.user', 'lastPost.files', 'forum.parent']],
-        'news'     => ['class' => News::class,    'withs' => ['user', 'files']],
         'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
     ];
 

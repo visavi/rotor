@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Validator;
-use App\Models\News;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -171,16 +170,18 @@ class InstallController extends Controller
                 $user->sendMessage(null, $text);
 
                 // -------------- Новость ---------------//
-                $textnews = __('install.text_news');
+                if (class_exists(\Modules\News\Models\News::class)) {
+                    $textnews = __('install.text_news');
 
-                News::query()->create([
-                    'title'      => __('install.welcome'),
-                    'text'       => $textnews,
-                    'user_id'    => $user->id,
-                    'created_at' => SITETIME,
-                ]);
+                    \Modules\News\Models\News::query()->create([
+                        'title'      => __('install.welcome'),
+                        'text'       => $textnews,
+                        'user_id'    => $user->id,
+                        'created_at' => SITETIME,
+                    ]);
 
-                clearCache(['statNews', 'pinnedNews', 'statNewsDate']);
+                    clearCache(['statNews', 'pinnedNews', 'statNewsDate']);
+                }
 
                 return redirect('/install/finish');
             }

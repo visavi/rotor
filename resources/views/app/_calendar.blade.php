@@ -15,7 +15,7 @@
                 @continue
             @endif
 
-            @if (isset($newsIds[$valDay]))
+            @if (isset($newsIds[$valDay]) && Route::has('news.view'))
                 <div class="calendar-cell text-center"><a href="{{ route('news.view', ['id' => $newsIds[$valDay]]) }}"><span class="text-white bg-success px-1 fw-bold">{{ $valDay }}</span></a></div>
                 @continue
             @endif

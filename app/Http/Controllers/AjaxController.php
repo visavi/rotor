@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Message;
-use App\Models\News;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Sticker;
@@ -46,7 +45,6 @@ class AjaxController extends Controller
                 $model = Message::query()->find($id);
                 break;
 
-            case News::$morphName:
             case 'articles':
             case 'photos':
             case 'offers':
@@ -96,7 +94,6 @@ class AjaxController extends Controller
     {
         $validTypes = array_merge([
             Post::$morphName,
-            News::$morphName,
             Comment::$morphName,
         ], static::$extraRatingTypes);
 
@@ -160,7 +157,6 @@ class AjaxController extends Controller
         $fileTypes = array_merge([
             Comment::$morphName,
             Message::$morphName,
-            News::$morphName,
             Post::$morphName,
         ], static::$extraFileTypes);
 
@@ -268,7 +264,6 @@ class AjaxController extends Controller
     {
         $types = array_merge([
             Comment::$morphName,
-            News::$morphName,
             Message::$morphName,
             Post::$morphName,
         ], static::$extraMediaTypes, static::$extraFileTypes);

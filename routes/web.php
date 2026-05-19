@@ -18,7 +18,6 @@ use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RatingController;
@@ -70,18 +69,6 @@ Route::controller(SitemapController::class)
     ->group(function () {
         Route::get('/sitemap.xml', 'index');
         Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+');
-    });
-
-/* Новости */
-Route::controller(NewsController::class)
-    ->prefix('news')
-    ->name('news.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{id}', 'view')->name('view');
-        Route::post('/{id}/comments', 'storeComment')->name('add-comment');
-        Route::get('/rss', 'rss')->name('rss');
-        Route::get('/allcomments', 'allComments')->name('all-comments');
     });
 
 /* Категория форума */

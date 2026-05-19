@@ -56,8 +56,6 @@
             </div>
             <div class="section-body">
                 <i class="far fa-circle text-muted"></i> <a href="/admin/rules">{{ __('index.site_rules') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="{{ route('admin.news.index') }}">{{ __('index.news') }}</a> <span class="badge bg-adaptive">{{ statsNews() }}</span><br>
-
                 <i class="far fa-circle text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> <span class="badge bg-adaptive">{{ statsIpBanned() }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> <span class="badge bg-adaptive">{{ parseVersion(PHP_VERSION) }}</span><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/errors">{{ __('index.errors') }}</a><br>

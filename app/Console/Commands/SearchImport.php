@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Comment;
-use App\Models\News;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -25,7 +24,6 @@ class SearchImport extends Command
     {
         $models = array_merge([
             Comment::class,
-            News::class,
             Post::class,
             Topic::class,
             User::class,

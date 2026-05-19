@@ -117,13 +117,6 @@
                     <span class="badge menu-badge">{{ statsForum() }}</span>
                 </a>
             </li>
-            <li>
-                <a class="app-topnav__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">
-                    <i class="far fa-newspaper"></i>
-                    <span>{{ __('index.news') }}</span>
-                    <span class="badge menu-badge">{{ statsNews() }}</span>
-                </a>
-            </li>
             @hook('sidebarMenuEnd')
         </ul>
 

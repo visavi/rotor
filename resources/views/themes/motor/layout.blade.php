@@ -13,7 +13,6 @@
     <link rel="icon" type="image/svg+xml" href="/assets/img/images/icon.svg">
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
-    <link rel="alternate" href="{{ route('news.rss') }}" title="RSS News" type="application/rss+xml">
     @vite('resources/themes/vendor.scss')
     @vite('resources/themes/motor/js/app.js')
     @stack('styles')
@@ -43,8 +42,12 @@
                     </span>
                     <ul class="menu-nav">
                         <li><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
-                        <li><a href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
-                        <li><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
+                        @if (Route::has('news.index'))
+                            <li><a href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
+                        @endif
+                        @if (Route::has('loads.index'))
+                            <li><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
+                        @endif
                     </ul>
                 </div>
             </div>

@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\Message;
-use App\Models\News;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -28,7 +27,6 @@ class MorphMapServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
-            News::$morphName    => News::class,
             Topic::$morphName   => Topic::class,
             Post::$morphName    => Post::class,
             Message::$morphName => Message::class,

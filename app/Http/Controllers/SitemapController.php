@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\News;
 use App\Models\Topic;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -15,7 +14,6 @@ class SitemapController extends Controller
     public static array $extraPages = [];
 
     private array $pages = [
-        'news',
         'topics',
         'downs',
     ];
@@ -68,29 +66,6 @@ class SitemapController extends Controller
         }
 
         return $this->$page();
-    }
-
-    /**
-     * Генерирует новости
-     */
-    private function news(): array
-    {
-        return Cache::remember('NewsSitemap', 600, static function () {
-            $newses = News::query()
-                ->orderByDesc('created_at')
-                ->limit(10000)
-                ->get();
-
-            $locs = [];
-            foreach ($newses as $news) {
-                $locs[] = [
-                    'loc'     => route('news.view', ['id' => $news->id]),
-                    'lastmod' => gmdate('c', $news->created_at),
-                ];
-            }
-
-            return $locs;
-        });
     }
 
     /**
