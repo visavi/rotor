@@ -31,7 +31,15 @@ class ModuleController extends AdminController
             }
         }
 
-        return view('admin/modules/index', compact('moduleInstall', 'moduleNames'));
+        $installed = array_intersect_key($moduleInstall, $moduleNames);
+        $counts = [
+            'all'           => count($moduleNames),
+            'installed'     => count(array_filter($installed, fn ($m) => $m->active)),
+            'disabled'      => count(array_filter($installed, fn ($m) => ! $m->active)),
+            'not-installed' => count($moduleNames) - count($installed),
+        ];
+
+        return view('admin/modules/index', compact('moduleInstall', 'moduleNames', 'counts'));
     }
 
     /**

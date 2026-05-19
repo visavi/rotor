@@ -59,11 +59,13 @@ class Module extends Model
         $migrationPath = base_path('modules/' . $this->name . '/migrations');
 
         if (file_exists($migrationPath)) {
-            Artisan::call('migrate', [
-                '--force'    => true,
-                '--realpath' => true,
-                '--path'     => $migrationPath,
-            ]);
+            DB::transaction(function () use ($migrationPath) {
+                Artisan::call('migrate', [
+                    '--force'    => true,
+                    '--realpath' => true,
+                    '--path'     => $migrationPath,
+                ]);
+            });
         }
     }
 
