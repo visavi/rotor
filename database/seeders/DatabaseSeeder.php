@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BlacklistSeeder::class,
             CounterSeeder::class,
+            ModuleRegistrySeeder::class,
             NoticeSeeder::class,
             RuleSeeder::class,
             SettingSeeder::class,

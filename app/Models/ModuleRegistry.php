@@ -74,8 +74,8 @@ class ModuleRegistry extends Model
             $data = $registry->fetch($force);
 
             foreach ($data['modules'] ?? [] as $module) {
-                if (isset($module['name'])) {
-                    $modules[$module['name']] = $module + ['registry' => $registry->name ?: $registry->url];
+                if (isset($module['module'])) {
+                    $modules[$module['module']] = $module + ['registry' => $registry->name ?: $registry->url];
                 }
             }
         }

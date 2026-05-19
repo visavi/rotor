@@ -17,6 +17,7 @@ return [
     'requirements'          => 'The minimum version of PHP necessary for the PHP :php and MySQL :mysql, MariaDB :maria or Postgres : pgsql engine to work',
     'check_requirements'    => 'Verification of requirements',
     'ffmpeg'                => 'For processing video, it is advisable to install the FFmpeg library',
+    'modules_required'      => 'required for module installation',
     'chmod_views'           => 'Additionally, you can set permissions on directories and files with templates inside resources / views - this is necessary for editing website templates',
     'chmod_rights'          => 'Chmod right',
     'chmod'                 => 'If any item is highlighted in red, you need to go over FTP and set the CHMOD permission record',

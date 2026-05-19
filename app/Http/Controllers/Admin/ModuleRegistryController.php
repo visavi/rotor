@@ -15,7 +15,7 @@ class ModuleRegistryController extends AdminController
     {
         $registries = ModuleRegistry::query()->orderByDesc('created_at')->get();
 
-        return view('admin/registries/index', compact('registries'));
+        return view('admin/modules/registries', compact('registries'));
     }
 
     public function store(Request $request): RedirectResponse

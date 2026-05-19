@@ -12,7 +12,9 @@
                     <p class="app-sidebar__user-name">{{ $user->getName() }}</p>
                     <p class="app-sidebar__user-designation">{{ $user->getStatus() }}</p>
                 </div>
-                <i class="treeview-indicator fa fa-angle-down"></i>
+                @if (isAdmin())
+                    <i class="treeview-indicator fa fa-angle-down"></i>
+                @endif
             </div>
 
             <ul class="treeview-menu">

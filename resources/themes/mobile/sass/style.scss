@@ -66,6 +66,20 @@ a:hover {
     color: #aeaeae;
 }
 
+.menu-nav {
+    display : inline;
+    list-style : none;
+    margin : 0;
+    padding : 0;
+    li {
+        display : inline;
+        &:not(:last-child)::after {
+            content : ' \2022';
+            color : #5c5c5c;
+        }
+    }
+}
+
 .menu {
     padding : 2px 6px;
     background: #f3f3f3 repeating-conic-gradient(#e0e0e0 0% 25%, #f3f3f3 0% 50%) 0 0 / 2px 2px;

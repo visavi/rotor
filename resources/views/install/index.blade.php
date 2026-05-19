@@ -107,6 +107,12 @@
                                     <?php $errors['simple']['curl'] = extension_loaded('curl') ?>
                                     <?php $version = \App\Http\Controllers\InstallController::getModuleSetting('curl', ['Curl Information', 'cURL Information']); ?>
                                     <span class="{{ $errors['simple']['curl'] ? 'text-success' : 'text-danger' }}">Curl: {{ $version }}</span><br>
+
+                                    <?php $errors['simple']['zip'] = extension_loaded('zip') ?>
+                                    <span class="{{ $errors['simple']['zip'] ? 'text-success' : 'text-warning' }}">Zip {{ $errors['simple']['zip'] ? '' : '(' . __('install.modules_required') . ')' }}</span><br>
+
+                                    <?php $errors['simple']['symlink'] = function_exists('symlink') ?>
+                                    <span class="{{ $errors['simple']['symlink'] ? 'text-success' : 'text-warning' }}">Symlink {{ $errors['simple']['symlink'] ? '' : '(' . __('install.modules_required') . ')' }}</span><br>
                                     <span class="fst-italic my-3">
                                 {{ __('install.ffmpeg') }}
                             </span>

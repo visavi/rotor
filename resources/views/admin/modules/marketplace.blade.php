@@ -76,8 +76,12 @@
                                     <i class="fas fa-arrow-up"></i> {{ __('main.update') }}
                                 </button>
                             </form>
-                        @else
+                        @elseif ($installed)
                             <span class="badge bg-success">{{ __('main.installed') }}</span>
+                        @else
+                            <a href="/admin/modules/module?module={{ $name }}" class="btn btn-sm btn-outline-success">
+                                {{ __('main.install') }}
+                            </a>
                         @endif
                     </div>
                 </div>

@@ -32,7 +32,7 @@
                 @endphp
                 <div class="section mb-3 shadow js-module-card" data-status="{{ $status }}">
                     <div class="section-title">
-                        <i class="fas fa-plug"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
+                        <i class="fas fa-plug {{ $isActive ? 'text-success' : 'text-muted' }}"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
                     </div>
 
                     <div class="section-content">

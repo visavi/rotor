@@ -224,7 +224,11 @@ class ModuleController extends AdminController
                 return redirect()->route('admin.modules.upload');
             }
 
-            $tempFile = tempnam(sys_get_temp_dir(), 'rotor_module_') . '.zip';
+            $tempDir = storage_path('app/temp');
+            if (! is_dir($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+            $tempFile = $tempDir . '/rotor_module_' . uniqid() . '.zip';
             file_put_contents($tempFile, $response->body());
 
             $moduleName = $this->extractZip($tempFile);
@@ -288,6 +292,8 @@ class ModuleController extends AdminController
         $zip->extractTo(base_path('modules/'));
         $zip->close();
 
+        $this->chmodRecursive($targetPath);
+
         if (! file_exists($targetPath . '/module.php')) {
             // Откат: удалить распакованное
             $this->deleteDirectory($targetPath);
@@ -295,6 +301,24 @@ class ModuleController extends AdminController
         }
 
         return $moduleName;
+    }
+
+    private function chmodRecursive(string $path): void
+    {
+        chmod($path, 0755);
+
+        foreach (scandir($path) as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $full = $path . '/' . $item;
+            if (is_dir($full)) {
+                $this->chmodRecursive($full);
+            } else {
+                chmod($full, 0644);
+            }
+        }
     }
 
     private function deleteDirectory(string $path): void

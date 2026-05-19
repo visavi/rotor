@@ -131,7 +131,7 @@ class FileController extends AdminController
             if ($validator->isValid()) {
                 if ($filename) {
                     file_put_contents(resource_path('views/' . $this->path . $fileName . '.blade.php'), '');
-                    chmod(resource_path('views/' . $this->path . $fileName . '.blade.php'), 0666);
+                    chmod(resource_path('views/' . $this->path . $fileName . '.blade.php'), 0644);
 
                     setFlash('success', __('admin.files.file_success_created'));
 
