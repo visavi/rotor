@@ -85,4 +85,15 @@ return [
     'topic_success_pinned'   => 'Тема успешно закреплена!',
     'topic_success_unpinned' => 'Тема успешно откреплена!',
     'topic_success_deleted'  => 'Тема успешно удалена!',
+
+    'vote_options'                   => 'Варианты',
+    'vote_hint_answers'              => 'Допустимо от 2 до 10 вариантов ответа',
+    'vote_answer_wrong_length'       => 'Слишком длинный или короткий вариант ответа!',
+    'vote_answer_not_enough'         => 'Недостаточное количество вариантов ответов!',
+    'vote_answer_changed_impossible' => 'Изменение вариантов ответа доступно только до голосований!',
+    'vote_not_found'                 => 'Голосование не найдено!',
+    'vote_passed'                    => 'Вы уже проголосовали в этом опросе!',
+    'vote_answer_not_chosen'         => 'Вы не выбрали вариант ответа!',
+    'vote_success'                   => 'Ваш голос успешно принят!',
+    'vote_answer_not_found'          => 'Ответ для голосования не найден!',
 ];

@@ -22,7 +22,6 @@ use App\Models\Spam;
 use App\Models\Sticker;
 use App\Models\Topic;
 use App\Models\User;
-use App\Models\Vote;
 use cbschuld\Browser;
 use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -444,21 +443,6 @@ function statsNewChat(): int
 function hideMail(string $email): string
 {
     return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
-}
-
-/**
- * Возвращает статистику текущих голосований из кеш-файла
- */
-function statVotes(): string
-{
-    return Cache::remember('statVotes', 900, static function () {
-        $votes = Vote::query()
-            ->selectRaw('count(*) AS cnt, coalesce(sum(count), 0) AS sum')
-            ->where('closed', 0)
-            ->first();
-
-        return ($votes->cnt ?? 0) . '/' . ($votes->sum ?? 0);
-    });
 }
 
 /**

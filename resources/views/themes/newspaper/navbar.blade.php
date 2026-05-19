@@ -48,8 +48,7 @@
             @hook('navbarStart')
             <li><a class="paper-nav__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
             <li><a class="paper-nav__item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
-            <li><a class="paper-nav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">{{ __('index.votes') }}</a></li>
-            @hook('navbarEnd')
+@hook('navbarEnd')
         </ul>
     </nav>
 </header>

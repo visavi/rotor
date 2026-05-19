@@ -271,11 +271,6 @@ class TopicController extends Controller
                 'close_user_id' => getUser('id'),
             ]);
 
-            if ($topic->vote->exists()) {
-                $topic->vote->update(['closed' => 1]);
-                $topic->vote->polls()->delete();
-            }
-
             setFlash('success', __('forums.topic_success_closed'));
         } else {
             setFlash('danger', $validator->getErrors());
@@ -306,10 +301,6 @@ class TopicController extends Controller
                 'closed'        => 0,
                 'close_user_id' => null,
             ]);
-
-            if ($topic->vote->exists()) {
-                $topic->vote->update(['closed' => 0]);
-            }
 
             setFlash('success', __('forums.topic_success_opened'));
         } else {
@@ -369,15 +360,15 @@ class TopicController extends Controller
                 $validator->length($question, 5, 100, ['question' => __('validator.text')]);
 
                 if ($answers) {
-                    $validator->empty($vote->count, ['question' => __('votes.answer_changed_impossible')]);
+                    $validator->empty($vote->count, ['question' => __('forums.vote_answer_changed_impossible')]);
 
                     $answers = array_unique(array_diff($answers, ['']));
 
                     foreach ($answers as $answer) {
-                        $validator->length($answer, setting('vote_answer_min'), setting('vote_answer_max'), ['answers' => __('votes.answer_wrong_length')]);
+                        $validator->length($answer, setting('vote_answer_min'), setting('vote_answer_max'), ['answers' => __('forums.vote_answer_wrong_length')]);
                     }
 
-                    $validator->between(count($answers), 2, 10, ['answers' => __('votes.answer_not_enough')]);
+                    $validator->between(count($answers), 2, 10, ['answers' => __('forums.vote_answer_not_enough')]);
                 }
             }
 
@@ -507,22 +498,23 @@ class TopicController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $vote = Vote::query()->where('topic_id', $id)->first();
+        $topic = Topic::query()->find($id);
+        $vote = $topic ? Vote::query()->where('topic_id', $id)->first() : null;
 
         if (! $vote) {
-            abort(404, __('votes.voting_not_found'));
+            abort(404, __('forums.vote_not_found'));
         }
 
         $poll = int($request->input('poll'));
         $page = int($request->input('page'));
 
         $validator
-            ->notEmpty($poll, __('votes.answer_not_chosen'))
-            ->empty($vote->closed, __('votes.voting_closed'));
+            ->notEmpty($poll, __('forums.vote_answer_not_chosen'))
+            ->empty($topic->closed, __('forums.topic_closed'));
 
         if ($validator->isValid()) {
             $votePoll = $vote->poll()->first();
-            $validator->empty($votePoll, __('votes.voting_passed'));
+            $validator->empty($votePoll, __('forums.vote_passed'));
         }
 
         if ($validator->isValid()) {
@@ -531,7 +523,7 @@ class TopicController extends Controller
                 ->where('vote_id', $vote->id)
                 ->first();
 
-            $validator->notEmpty($answer, __('votes.answer_not_found'));
+            $validator->notEmpty($answer, __('forums.vote_answer_not_found'));
         }
 
         if ($validator->isValid()) {
@@ -546,7 +538,7 @@ class TopicController extends Controller
                 'created_at'  => SITETIME,
             ]);
 
-            setFlash('success', __('votes.voting_success'));
+            setFlash('success', __('forums.vote_success'));
         } else {
             setFlash('danger', $validator->getErrors());
         }

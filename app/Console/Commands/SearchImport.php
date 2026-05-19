@@ -7,7 +7,6 @@ use App\Models\News;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
-use App\Models\Vote;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -30,7 +29,6 @@ class SearchImport extends Command
             Post::class,
             Topic::class,
             User::class,
-            Vote::class,
         ], static::$classes);
 
         DB::disableQueryLog();

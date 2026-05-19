@@ -38,7 +38,6 @@ use App\Http\Controllers\Admin\TransferController as AdminTransferController;
 use App\Http\Controllers\Admin\UpgradeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserFieldController;
-use App\Http\Controllers\Admin\VoteController as AdminVoteController;
 use Illuminate\Support\Facades\Route;
 
 /* Админ-панель */
@@ -141,19 +140,6 @@ Route::middleware(['check.admin', 'admin.logger'])
 
             /* Ожидающие */
             Route::match(['get', 'post'], '/reglists', [ReglistController::class, 'index']);
-
-            /* Голосования */
-            Route::controller(AdminVoteController::class)
-                ->prefix('votes')
-                ->name('votes.')
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/history', 'history')->name('history');
-                    Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                    Route::post('/close/{id}', 'close')->name('close');
-                    Route::delete('/delete/{id}', 'delete')->name('delete');
-                    Route::post('/restatement', 'restatement')->name('restatement');
-                });
 
             /* Антимат */
             Route::controller(AntimatController::class)

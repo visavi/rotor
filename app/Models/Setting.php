@@ -49,7 +49,6 @@ class Setting extends Model
             'stickers',
             'feeds',
             'invitations',
-            'votes',
             'seo',
         ];
     }

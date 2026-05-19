@@ -48,7 +48,7 @@
                 </div>
 
                 @if (! $vote->count)
-                    @include('votes/_answers')
+                    @include('forums/_vote_answers')
                 @endif
             @endif
 

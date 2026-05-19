@@ -75,13 +75,6 @@
             </a>
         </li>
 
-        <li>
-            <a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
-                <i class="menu-icon fas fa-square-poll-horizontal"></i>
-                <span class="menu-label">{{ __('index.votes') }}</span>
-                <span class="badge menu-badge">{{ statVotes() }}</span>
-            </a>
-        </li>
         @hook('sidebarMenuEnd')
     </ul>
 

@@ -66,7 +66,7 @@
                     <div class="invalid-feedback">{{ textError('question') }}</div>
                 </div>
 
-                @include('votes/_answers')
+                @include('forums/_vote_answers')
             </div>
 
             <button class="btn btn-primary">{{ __('forums.create_topic') }}</button>

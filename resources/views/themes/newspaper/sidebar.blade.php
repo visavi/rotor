@@ -30,8 +30,7 @@
             @hook('sidebarMenuStart')
             <li><a class="menu-item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}"><i class="menu-icon far fa-comment-alt"></i><span class="menu-label">{{ __('index.forums') }}</span><span class="badge menu-badge">{{ statsForum() }}</span></a></li>
             <li><a class="menu-item{{ request()->is('news*') ? ' active' : '' }}" href="{{ route('news.index') }}"><i class="menu-icon far fa-newspaper"></i><span class="menu-label">{{ __('index.news') }}</span><span class="badge menu-badge">{{ statsNews() }}</span></a></li>
-            <li><a class="menu-item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}"><i class="menu-icon fas fa-square-poll-horizontal"></i><span class="menu-label">{{ __('index.votes') }}</span><span class="badge menu-badge">{{ statVotes() }}</span></a></li>
-            @hook('sidebarMenuEnd')
+@hook('sidebarMenuEnd')
         </ul>
     </div>
 

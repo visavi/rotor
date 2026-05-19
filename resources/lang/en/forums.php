@@ -85,4 +85,15 @@ return [
     'topic_success_pinned'   => 'Theme has been successfully pinned!',
     'topic_success_unpinned' => 'Topic successfully unpinned!',
     'topic_success_deleted'  => 'Topic successfully deleted!',
+
+    'vote_options'                   => 'Options',
+    'vote_hint_answers'              => 'Between 2 and 10 answer options allowed',
+    'vote_answer_wrong_length'       => 'Answer option is too long or too short!',
+    'vote_answer_not_enough'         => 'Not enough answer options!',
+    'vote_answer_changed_impossible' => 'Changing answer options is only possible before any votes!',
+    'vote_not_found'                 => 'Poll not found!',
+    'vote_passed'                    => 'You have already voted in this poll!',
+    'vote_answer_not_chosen'         => 'You have not chosen an answer!',
+    'vote_success'                   => 'Your vote has been accepted!',
+    'vote_answer_not_found'          => 'Answer option not found!',
 ];

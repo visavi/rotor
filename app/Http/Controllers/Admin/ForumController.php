@@ -319,11 +319,6 @@ class ForumController extends AdminController
                     'close_user_id' => getUser('id'),
                 ]);
 
-                if ($topic->vote) {
-                    $topic->vote->update(['closed' => 1]);
-                    $topic->vote->polls()->delete();
-                }
-
                 setFlash('success', __('forums.topic_success_closed'));
                 break;
 
@@ -332,10 +327,6 @@ class ForumController extends AdminController
                     'closed'        => 0,
                     'close_user_id' => null,
                 ]);
-
-                if ($topic->vote) {
-                    $topic->vote->update(['closed' => 0]);
-                }
 
                 setFlash('success', __('forums.topic_success_opened'));
                 break;

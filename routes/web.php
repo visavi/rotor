@@ -31,7 +31,6 @@ use App\Http\Controllers\User\PictureController;
 use App\Http\Controllers\User\RecoveryController;
 use App\Http\Controllers\User\SearchController as UserSearchController;
 use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -152,19 +151,6 @@ Route::controller(CommentController::class)
         Route::get('/{id}', 'show');
         Route::patch('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
-    });
-
-/* Голосования */
-Route::controller(VoteController::class)
-    ->prefix('votes')
-    ->name('votes.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::match(['get', 'post'], '/{id}', 'view')->name('view');
-        Route::get('/{id}/voters', 'voters')->name('voters');
-        Route::get('/history', 'history')->name('history');
-        Route::get('/{id}/history', 'viewHistory')->name('view-history');
-        Route::match(['get', 'post'], '/create', 'create')->name('create');
     });
 
 /* Фото профиля */

@@ -124,13 +124,6 @@
                     <span class="badge menu-badge">{{ statsNews() }}</span>
                 </a>
             </li>
-            <li>
-                <a class="app-topnav__item{{ request()->is('votes*') ? ' active' : '' }}" href="{{ route('votes.index') }}">
-                    <i class="fas fa-square-poll-horizontal"></i>
-                    <span>{{ __('index.votes') }}</span>
-                    <span class="badge menu-badge">{{ statVotes() }}</span>
-                </a>
-            </li>
             @hook('sidebarMenuEnd')
         </ul>
 
