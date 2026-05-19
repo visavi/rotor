@@ -41,13 +41,9 @@
                         @include('themes/motor/menu')
                     </span>
                     <ul class="menu-nav">
+                        @hook('sidebarMenuStart')
                         <li><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
-                        @if (Route::has('news.index'))
-                            <li><a href="{{ route('news.index') }}">{{ __('index.news') }}</a></li>
-                        @endif
-                        @if (Route::has('loads.index'))
-                            <li><a href="{{ route('loads.index') }}">{{ __('index.loads') }}</a></li>
-                        @endif
+                        @hook('sidebarMenuEnd')
                     </ul>
                 </div>
             </div>

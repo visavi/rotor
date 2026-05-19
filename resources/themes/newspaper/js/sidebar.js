@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     })
 
-    document.querySelectorAll('[data-bs-toggle="treeview"]').forEach(el => {
+    document.querySelectorAll('.app-sidebar [data-bs-toggle="treeview"]').forEach(el => {
         el.addEventListener('click', function (e) {
             e.preventDefault()
             const parent = el.parentElement

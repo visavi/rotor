@@ -28,23 +28,16 @@
 
 .paper-sidebar-section { padding: 14px 16px; }
 
-.paper-sidebar-title { font-family: 'Playfair Display', Georgia, serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: $ink-black; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid $ink-red; }
-
 .paper-sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-family: $ui-font; font-size: 0.82rem; color: $ink-dark; strong { color: $ink-black; } }
 
 .paper-sidebar-links { margin-bottom: 4px; }
-
-.paper-sidebar-logout { font-family: $ui-font; font-size: 0.8rem; color: $ink-gray !important; padding: 0 !important; &:hover { color: $ink-red !important; } }
-
-.paper-btn { display: inline-block; padding: 5px 12px; background-color: $ink-black; color: #fff !important; font-family: $ui-font; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em; text-decoration: none !important; margin-right: 6px; &:hover { background-color: $ink-red; } }
-.paper-btn-outline { background-color: transparent; color: $ink-black !important; border: 1px solid $paper-border; &:hover { background-color: #ede8de; color: $ink-black !important; } }
 
 .paper-divider { margin: 0; border: 0; border-top: 1px solid $paper-border; }
 
 .paper-sidebar-menu {
   @extend .list-unstyled;
   margin: 0;
-  li:last-child .menu-item { border-bottom: none; }
+  li:last-child > .menu-item { border-bottom: none; }
 }
 
 .paper-count,
@@ -59,11 +52,49 @@
   font-size: 0.82rem;
   color: $ink-dark;
   text-decoration: none;
+  cursor: pointer;
   &:hover, &.active { color: $ink-red; text-decoration: none; }
   &:hover .menu-icon, &.active .menu-icon { color: $ink-red; }
 }
 .menu-icon { margin-right: 7px; color: $ink-gray; width: 14px; text-align: center; flex-shrink: 0; }
 .menu-label { flex: 1 1 auto; }
+
+.treeview {
+  &.is-expanded {
+    > .menu-item { color: $ink-red; .menu-icon { color: $ink-red; } }
+    .treeview-menu { max-height: 100vh; }
+    .treeview-indicator { transform: rotate(180deg); }
+  }
+}
+
+.treeview-menu {
+  @extend .list-unstyled;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin: 0;
+}
+
+.treeview-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 0 5px 5px;
+  font-family: $ui-font;
+  font-size: 0.8rem;
+  color: $ink-dark;
+  text-decoration: none;
+  border-bottom: 1px dotted lighten($paper-border, 8%);
+  &:last-child { border-bottom: none; }
+  &:hover, &.active { color: $ink-red; text-decoration: none; }
+  .icon { margin-right: 5px; color: $ink-gray; font-size: 0.6em; }
+}
+
+.treeview-indicator {
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  color: $ink-gray;
+  font-size: 0.75em;
+}
 
 .app-menu { @extend .list-unstyled; margin-bottom: 0; }
 

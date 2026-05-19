@@ -8,6 +8,7 @@
                 <input name="query" class="paper-search__input" type="search" placeholder="{{ __('main.search') }}" minlength="3" maxlength="64" required>
                 <button class="paper-search__btn"><i class="fa fa-search"></i></button>
             </form>
+            @hook('navbarStart')
             @if ($user = getUser())
                 <div class="dropdown paper-user">
                     <a href="#" class="paper-user__link" data-bs-toggle="dropdown">
@@ -22,6 +23,7 @@
                         @endif
                         <li><a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a></li>
                         <li><a class="dropdown-item" href="{{ route('profile') }}">{{ __('index.my_profile') }}</a></li>
+                        <li><a class="dropdown-item" href="{{ route('accounts.account') }}">{{ __('index.my_details') }}</a></li>
                         <li><a class="dropdown-item" href="{{ route('settings') }}">{{ __('index.my_settings') }}</a></li>
                         @hook('navbarMenuEnd')
                         <li><hr class="dropdown-divider"></li>
@@ -36,6 +38,7 @@
             @else
                 <a class="paper-login-btn" href="{{ route('login') }}">{{ __('index.login') }}</a>
             @endif
+            @hook('navbarEnd')
             <a class="paper-sidebar-toggle" href="#" data-bs-toggle="sidebar" aria-label="Toggle Sidebar">
                 <i class="fas fa-bars"></i>
             </a>
@@ -45,9 +48,9 @@
     <!-- Section Navigation -->
     <nav class="paper-nav">
         <ul class="paper-nav__list">
-            @hook('navbarStart')
-            <li><a class="paper-nav__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
-@hook('navbarEnd')
+            @hook('sidebarMenuStart')
+            <li><a class="menu-item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
+            @hook('sidebarMenuEnd')
         </ul>
     </nav>
 </header>

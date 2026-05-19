@@ -257,6 +257,8 @@
   .menu-label {
     white-space: nowrap;
   }
+  .treeview-menu, .treeview-indicator { display: none !important; }
+  li.is-expanded > .menu-item { background-color: rgba($primary-color, 0.2); color: #fff; border-bottom-color: $primary-color; }
 }
 
 .app-topnav__menu .badge {

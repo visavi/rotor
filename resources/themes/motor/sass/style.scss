@@ -107,6 +107,8 @@ a {
             color : #5c5c5c;
         }
     }
+    .menu-item { display: inline; padding: 0 3px; }
+    .menu-icon, .treeview-indicator, .treeview-menu, .menu-badge { display: none !important; }
 }
 
 .mright {

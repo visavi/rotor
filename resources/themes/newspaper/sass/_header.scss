@@ -153,21 +153,24 @@
   white-space: nowrap;
 }
 
-.paper-nav__item {
-  display: inline-block;
-  padding: 7px 14px;
-  font-family: $ui-font;
-  font-size: 0.78rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #d0c8ba;
-  text-decoration: none !important;
-
-  &:hover, &.active {
-    color: #fff;
-    background-color: $ink-red;
+// Sidebar hooks injected into paper-nav__list — flatten to nav items
+.paper-nav__list {
+  .menu-item {
+    display: inline-block;
+    padding: 7px 14px;
+    font-family: $ui-font;
+    font-size: 0.78rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #d0c8ba;
+    text-decoration: none !important;
+    border-bottom: none;
+    cursor: pointer;
+    &:hover, &.active { color: #fff !important; background-color: $ink-red; }
   }
+  li.is-expanded > .menu-item { color: #fff !important; background-color: $ink-red; }
+  .menu-icon, .treeview-indicator, .treeview-menu, .menu-badge { display: none !important; }
 }
 
 // Notification styles (reuse for paper context)
