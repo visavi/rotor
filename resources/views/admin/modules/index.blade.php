@@ -13,6 +13,8 @@
 @stop
 
 @section('content')
+    @include('admin/modules/_tabs')
+
     @if ($moduleNames)
         <div class="d-flex flex-wrap gap-2 mb-3">
             <button class="btn btn-sm btn-primary js-module-filter active" data-filter="all">{{ __('main.all') }} <span class="badge bg-white text-primary">{{ $counts['all'] }}</span></button>

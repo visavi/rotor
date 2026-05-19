@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\InvitationController as AdminInvitationController
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
+use App\Http\Controllers\Admin\ModuleRegistryController;
 use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Admin\PaidAdvertController;
 use App\Http\Controllers\Admin\ReglistController;
@@ -372,8 +373,24 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::get('/module', 'module')->name('module');
+                    Route::get('/marketplace', 'marketplace')->name('marketplace');
+                    Route::get('/upload', 'upload')->name('upload');
+                    Route::post('/upload', 'uploadZip')->name('upload.zip');
+                    Route::post('/download', 'download')->name('download');
                     Route::get('/install', 'install')->name('install');
                     Route::get('/uninstall', 'uninstall')->name('uninstall');
+                });
+
+            /* Реестры модулей */
+            Route::controller(ModuleRegistryController::class)
+                ->prefix('registries')
+                ->name('registries.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/', 'store')->name('store');
+                    Route::post('/{id}/refresh', 'refresh')->name('refresh');
+                    Route::post('/{id}/toggle', 'toggle')->name('toggle');
+                    Route::delete('/{id}', 'destroy')->name('destroy');
                 });
         });
     });

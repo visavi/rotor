@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Module;
+use App\Models\ModuleRegistry;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
+use ZipArchive;
 
 class ModuleController extends AdminController
 {
@@ -147,6 +150,169 @@ class ModuleController extends AdminController
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);
+    }
+
+    /**
+     * Каталог модулей из реестров
+     */
+    public function marketplace(Request $request): View
+    {
+        $force = (bool) $request->input('refresh');
+        $available = ModuleRegistry::getAvailableModules($force);
+
+        $modules = Module::query()->get()->keyBy('name');
+        $moduleNames = [];
+
+        $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR);
+        foreach ($modulesLoaded as $module) {
+            $moduleNames[] = basename($module);
+        }
+
+        return view('admin/modules/marketplace', compact('available', 'modules', 'moduleNames'));
+    }
+
+    /**
+     * Форма загрузки модуля
+     */
+    public function upload(): View
+    {
+        return view('admin/modules/upload');
+    }
+
+    /**
+     * Установка модуля из ZIP-файла
+     */
+    public function uploadZip(Request $request): RedirectResponse
+    {
+        if (! $request->hasFile('zip') || ! $request->file('zip')->isValid()) {
+            setFlash('danger', __('admin.modules.upload_invalid_file'));
+
+            return redirect()->route('admin.modules.upload');
+        }
+
+        try {
+            $moduleName = $this->extractZip($request->file('zip')->getPathname());
+        } catch (\Exception $e) {
+            setFlash('danger', $e->getMessage());
+
+            return redirect()->route('admin.modules.upload');
+        }
+
+        return redirect('/admin/modules/module?module=' . $moduleName)
+            ->with('success', __('admin.modules.upload_success_extracted'));
+    }
+
+    /**
+     * Установка модуля по URL
+     */
+    public function download(Request $request): RedirectResponse
+    {
+        $url = trim($request->input('url', ''));
+
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            setFlash('danger', __('admin.modules.download_invalid_url'));
+
+            return redirect()->route('admin.modules.upload');
+        }
+
+        try {
+            $response = Http::timeout(30)->get($url);
+
+            if (! $response->ok()) {
+                setFlash('danger', __('admin.modules.download_failed'));
+
+                return redirect()->route('admin.modules.upload');
+            }
+
+            $tempFile = tempnam(sys_get_temp_dir(), 'rotor_module_') . '.zip';
+            file_put_contents($tempFile, $response->body());
+
+            $moduleName = $this->extractZip($tempFile);
+            @unlink($tempFile);
+        } catch (\Exception $e) {
+            setFlash('danger', $e->getMessage());
+
+            return redirect()->route('admin.modules.upload');
+        }
+
+        return redirect('/admin/modules/module?module=' . $moduleName)
+            ->with('success', __('admin.modules.upload_success_extracted'));
+    }
+
+    /**
+     * Распаковка ZIP-архива модуля
+     */
+    private function extractZip(string $zipPath): string
+    {
+        $zip = new ZipArchive();
+
+        if ($zip->open($zipPath) !== true) {
+            throw new \RuntimeException(__('admin.modules.zip_open_failed'));
+        }
+
+        // Определяем корневую директорию модуля в архиве
+        $topDirs = [];
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $name = $zip->getNameIndex($i);
+
+            if (str_contains($name, '..')) {
+                $zip->close();
+                throw new \RuntimeException(__('admin.modules.zip_invalid_path'));
+            }
+
+            $parts = explode('/', $name);
+            if ($parts[0] !== '') {
+                $topDirs[$parts[0]] = true;
+            }
+        }
+
+        if (count($topDirs) !== 1) {
+            $zip->close();
+            throw new \RuntimeException(__('admin.modules.zip_invalid_structure'));
+        }
+
+        $moduleName = array_key_first($topDirs);
+
+        if (! preg_match('/^[A-Z][A-Za-z0-9]+$/', $moduleName)) {
+            $zip->close();
+            throw new \RuntimeException(__('admin.modules.zip_invalid_name'));
+        }
+
+        $targetPath = base_path('modules/' . $moduleName);
+
+        if (file_exists($targetPath) && ! is_link($targetPath)) {
+            $zip->close();
+            throw new \RuntimeException(__('admin.modules.module_dir_exists'));
+        }
+
+        $zip->extractTo(base_path('modules/'));
+        $zip->close();
+
+        if (! file_exists($targetPath . '/module.php')) {
+            // Откат: удалить распакованное
+            $this->deleteDirectory($targetPath);
+            throw new \RuntimeException(__('admin.modules.zip_no_module_file'));
+        }
+
+        return $moduleName;
+    }
+
+    private function deleteDirectory(string $path): void
+    {
+        if (! is_dir($path)) {
+            return;
+        }
+
+        foreach (scandir($path) as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $full = $path . '/' . $item;
+            is_dir($full) ? $this->deleteDirectory($full) : unlink($full);
+        }
+
+        rmdir($path);
     }
 
     /**
