@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
 /**
- * @property int    $id
- * @property string $url
- * @property string $name
- * @property bool   $active
- * @property array  $cached_data
+ * @property int                 $id
+ * @property string              $url
+ * @property string              $name
+ * @property bool                $active
+ * @property array               $cached_data
  * @property \Carbon\Carbon|null $cached_at
  * @property \Carbon\Carbon      $created_at
  * @property \Carbon\Carbon      $updated_at
  */
 class ModuleRegistry extends Model
 {
-
     protected $guarded = [];
 
     protected function casts(): array

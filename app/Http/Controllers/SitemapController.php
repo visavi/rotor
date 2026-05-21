@@ -88,5 +88,4 @@ class SitemapController extends Controller
             return $locs;
         });
     }
-
 }

@@ -56,7 +56,7 @@ class RouteAccessTest extends TestCase
             $this->assertNotEquals(
                 500,
                 $response->getStatusCode(),
-                "Route GET $uri returned 500 as $role\n" . $response->getContent()
+                "Route GET $uri returned 500 as $role\n" . substr(strip_tags($response->getContent()), 0, 500)
             );
         }
     }
