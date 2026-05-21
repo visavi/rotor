@@ -21,7 +21,7 @@ class SettingSeeder extends Seeder
             ['name' => 'banlist', 'value' => 10],
             ['name' => 'blacklist', 'value' => 10],
             ['name' => 'bonusmoney', 'value' => 500],
-['name' => 'captcha_maxlength', 'value' => 5],
+            ['name' => 'captcha_maxlength', 'value' => 5],
             ['name' => 'captcha_symbols', 'value' => '1234567890'],
             ['name' => 'captcha_type', 'value' => 'graphical'],
             ['name' => 'chatpost', 'value' => 10],

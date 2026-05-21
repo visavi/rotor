@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use App\Models\Module;
 use Illuminate\View\View;
 
 class Calendar
@@ -19,7 +20,7 @@ class Calendar
         $endMonth = strtotime('+1 month', $startMonth);
 
         $newsIds = [];
-        if (class_exists(\Modules\News\Models\News::class)) {
+        if (isset(Module::getEnabledModules()['News'])) {
             $news = \Modules\News\Models\News::query()
                 ->where('created_at', '>=', $startMonth)
                 ->where('created_at', '<', $endMonth)

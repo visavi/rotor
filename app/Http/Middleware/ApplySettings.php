@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
+use Illuminate\View\FileViewFinder;
 
 class ApplySettings
 {
@@ -27,16 +28,24 @@ class ApplySettings
             $language = setting('language');
         }
 
-        if (now()->month === 4 && now()->day === 1) {
-            $theme = $request->session()->get('april_fools_theme', 'waphack');
-        }
-
         if (! file_exists(resource_path('views/themes/' . $theme))) {
             $theme = setting('themes');
         }
 
         App::setLocale($language);
         View::addNamespace('theme', resource_path('views/themes/' . $theme));
+
+        // Позволяет переопределять страницы для определенной темы
+        $finder = app('view')->getFinder();
+        if ($finder instanceof FileViewFinder) {
+            foreach ($finder->getHints() as $namespace => $paths) {
+                $override = resource_path('views/themes/' . $theme . '/views/' . $namespace);
+
+                if (is_dir($override)) {
+                    app('view')->prependNamespace($namespace, $override);
+                }
+            }
+        }
 
         return $next($request);
     }

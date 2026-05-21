@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Modules\News\Models\News;
 
 class InstallController extends Controller
 {
@@ -105,6 +106,10 @@ class InstallController extends Controller
      */
     public function seed(): View
     {
+        if (setting('app_installed')) {
+            abort(403);
+        }
+
         Artisan::call('db:seed', ['--force' => true]);
         $output = Artisan::output();
 
@@ -120,8 +125,12 @@ class InstallController extends Controller
      */
     public function account(Request $request, Validator $validator): View|RedirectResponse
     {
+        if (setting('app_installed')) {
+            abort(403);
+        }
+
         $lang = $request->input('lang', 'ru');
-        $login = $request->input('login');
+        $login = (string) $request->input('login');
         $password = $request->input('password');
         $password2 = $request->input('password2');
         $email = strtolower((string) $request->input('email'));
@@ -170,10 +179,10 @@ class InstallController extends Controller
                 $user->sendMessage(null, $text);
 
                 // -------------- Новость ---------------//
-                if (class_exists(\Modules\News\Models\News::class)) {
+                if (class_exists(News::class)) {
                     $textnews = __('install.text_news');
 
-                    \Modules\News\Models\News::query()->create([
+                    News::query()->create([
                         'title'      => __('install.welcome'),
                         'text'       => $textnews,
                         'user_id'    => $user->id,

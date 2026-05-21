@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Models\Topic;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Modules\Load\Models\Down;
 
 class SitemapController extends Controller
 {
@@ -15,7 +14,6 @@ class SitemapController extends Controller
 
     private array $pages = [
         'topics',
-        'downs',
     ];
 
     private function getAllPages(): array
@@ -91,27 +89,4 @@ class SitemapController extends Controller
         });
     }
 
-    /**
-     * Генерирует загрузки
-     */
-    private function downs(): array
-    {
-        return Cache::remember('DownsSitemap', 600, static function () {
-            $downs = Down::query()
-                ->active()
-                ->orderByDesc('created_at')
-                ->limit(10000)
-                ->get();
-
-            $locs = [];
-            foreach ($downs as $down) {
-                $locs[] = [
-                    'loc'     => route('downs.view', ['id' => $down->id]),
-                    'lastmod' => gmdate('c', $down->created_at),
-                ];
-            }
-
-            return $locs;
-        });
-    }
 }

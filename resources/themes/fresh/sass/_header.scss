@@ -397,6 +397,8 @@
     &.active { color: darken($primary-color, 8%); background-color: rgba($primary-color, 0.12); border-bottom-color: $primary-color; }
   }
 
+  .app-topnav__menu li.is-expanded > .menu-item { color: darken($primary-color, 8%); background-color: rgba($primary-color, 0.12); border-bottom-color: $primary-color; }
+
   .app-topnav__right {
     color: #52796f;
     a { color: #2d6a4f; &:hover { color: #1b4332; } }
