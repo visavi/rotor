@@ -3,8 +3,7 @@
 use App\Models\Setting;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         $defaults = [
@@ -35,5 +34,7 @@ return new class extends Migration
         }
     }
 
-    public function down(): void {}
+    public function down(): void
+    {
+    }
 };

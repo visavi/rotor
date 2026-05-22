@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
@@ -18,11 +19,6 @@ use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
-    public static array $extraMediaTypes = [];
-    public static array $extraFileTypes = [];
-    public static array $extraRatingTypes = [];
-    public static array $extraComplaintTypes = [];
-
     /**
      * Отправляет жалобу на сообщение
      */
@@ -49,8 +45,8 @@ class AjaxController extends Controller
                 break;
 
             default:
-                if (isset(static::$extraComplaintTypes[$type])) {
-                    $result = (static::$extraComplaintTypes[$type])($id, $page);
+                if (isset(Registry::$complaintTypes[$type])) {
+                    $result = (Registry::$complaintTypes[$type])($id, $page);
                     $model = $result['model'] ?? null;
                     $path = $result['path'] ?? null;
                 }
@@ -88,7 +84,7 @@ class AjaxController extends Controller
     {
         $validTypes = array_merge([
             Comment::$morphName,
-        ], static::$extraRatingTypes);
+        ], Registry::$ratingTypes);
 
         $type = $request->input('type');
         $vote = $request->input('vote');
@@ -145,12 +141,12 @@ class AjaxController extends Controller
      */
     public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
-        $imageTypes = array_merge(static::$extraMediaTypes);
+        $imageTypes = array_merge(Registry::$mediaTypes);
 
         $fileTypes = array_merge([
             Comment::$morphName,
             Message::$morphName,
-        ], static::$extraFileTypes);
+        ], Registry::$fileTypes);
 
         $id = int($request->input('id'));
         $file = $request->file('file');
@@ -257,7 +253,7 @@ class AjaxController extends Controller
         $types = array_merge([
             Comment::$morphName,
             Message::$morphName,
-        ], static::$extraMediaTypes, static::$extraFileTypes);
+        ], Registry::$mediaTypes, Registry::$fileTypes);
 
         $id = int($request->input('id'));
         $type = $request->input('type');

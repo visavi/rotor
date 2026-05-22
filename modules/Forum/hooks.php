@@ -1,69 +1,33 @@
 <?php
 
-use App\Classes\Feed;
 use App\Classes\Hook;
+use App\Classes\Registry;
 use App\Classes\Restatement;
-use App\Console\Commands\SearchImport;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\AjaxController;
-use App\Http\Controllers\SitemapController;
-use App\Models\Search;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Modules\Forum\Models\Bookmark;
 use Modules\Forum\Models\Post;
 use Modules\Forum\Models\Topic;
-use Modules\Forum\Observers\PostObserver;
-use Modules\Forum\Observers\TopicObserver;
 
-Topic::observe(TopicObserver::class);
-Post::observe(PostObserver::class);
-
-// Жалобы на посты
-AjaxController::$extraComplaintTypes[Post::$morphName] = function (int $id, mixed $page): array {
+Registry::complaint(Post::$morphName, function (int $id, mixed $page): array {
     $model = Post::query()->find($id);
     $path = $model ? route('topics.topic', ['id' => $model->topic_id, 'pid' => $model->id], false) : null;
 
     return ['model' => $model, 'path' => $path];
-};
-
-// Загрузка файлов и рейтинг постов
-AjaxController::$extraFileTypes[] = Post::$morphName;
-AjaxController::$extraRatingTypes[] = Post::$morphName;
-
-// Пересчет форума
-Restatement::register('forums', function () {
-    DB::update('update topics set count_posts = (select count(*) from posts where topics.id = posts.topic_id)');
-    DB::update('update forums set count_topics = (select count(*) from topics where forums.id = topics.forum_id)');
-    DB::update('update forums set count_posts = (select coalesce(sum(count_posts), 0) from topics where forums.id = topics.forum_id)');
 });
 
-Restatement::register('votes', function () {
-    DB::update('update votes set count = (select coalesce(sum(result), 0) from voteanswer where votes.id = voteanswer.vote_id)');
-});
+Registry::fileType(Post::$morphName);
+Registry::ratingType(Post::$morphName);
 
-// Удаление данных при удалении пользователя
-User::$extraDeleteCallbacks[] = function (User $user): void {
+Registry::onDeleteUser(function (User $user): void {
     Bookmark::query()->where('user_id', $user->id)->delete();
-};
+});
 
-// Регистрация eager loading для поиска
-Search::$morphWith[Post::class] = ['topic'];
-Search::$morphWith[Topic::class] = ['forum', 'lastPost'];
+Registry::search(Post::class, __('index.posts'), 'forum::search/_posts', ['topic']);
 
-// Регистрация поиска по постам (дополнительный morph помимо topics)
-Search::$types[Post::$morphName] = __('index.posts');
-Search::$viewMap[Post::$morphName] = 'forum::search/_posts';
-
-// Регистрация моделей для поиска через SearchImport
-SearchImport::$classes[] = Post::class;
-SearchImport::$classes[] = Topic::class;
-
-// Регистрация страницы sitemap для тем форума
-SitemapController::$extraPages['topics'] = function (): array {
+Registry::sitemap('topics', function (): array {
     return Cache::remember('TopicsSitemap', 600, static function () {
         $topics = Topic::query()
             ->orderByDesc('created_at')
@@ -80,19 +44,17 @@ SitemapController::$extraPages['topics'] = function (): array {
 
         return $locs;
     });
-};
+});
 
-// Резолвер для опросов в ленте (тема -> последний пост)
-Feed::$extraPollResolvers[Topic::class] = function (Topic $topic): ?array {
+Registry::pollResolver(Topic::class, function (Topic $topic): ?array {
     if (! $topic->last_post_id) {
         return null;
     }
 
     return [Post::$morphName, $topic->last_post_id];
-};
+});
 
-// Удаление тем и постов при удалении пользователя из админки
-AdminUserController::$extraDeleteHandlers[] = function (User $user, Request $request): void {
+Registry::onAdminDeleteUser(function (User $user, Request $request): void {
     if ($request->input('deltopics')) {
         $topics = Topic::query()->where('user_id', $user->id)->get();
         $topics->each(static fn (Topic $topic) => $topic->delete());
@@ -108,7 +70,7 @@ AdminUserController::$extraDeleteHandlers[] = function (User $user, Request $req
             Restatement::run('forums');
         }
     }
-};
+});
 
 // Добавление чекбоксов удаления на страницу удаления пользователя
 Hook::add('adminUserDeleteFields', function (string $content, $user): string {

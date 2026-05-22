@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\Registry;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
 {
-    public static array $extraPages = [];
-
     private function getAllPages(): array
     {
-        return array_keys(static::$extraPages);
+        return array_keys(Registry::$sitemapPages);
     }
 
     /**
@@ -53,6 +52,6 @@ class SitemapController extends Controller
 
     private function getPageData(string $page): array
     {
-        return (static::$extraPages[$page])();
+        return (Registry::$sitemapPages[$page])();
     }
 }

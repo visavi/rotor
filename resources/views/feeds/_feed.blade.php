@@ -5,7 +5,7 @@
 @endif
 
 @forelse ($posts as $post)
-    @includeIf(\App\Models\Feed::$viewMap[$post->getMorphClass()] ?? 'feeds._' . $post->getMorphClass())
+    @includeIf(\App\Classes\Registry::$feedViewMap[$post->getMorphClass()] ?? 'feeds._' . $post->getMorphClass())
 @empty
     @if ($posts->currentPage() === 1)
         @include('feeds._welcome')

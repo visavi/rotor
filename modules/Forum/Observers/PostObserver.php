@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Modules\Forum\Observers;
 
 use App\Models\Feed;
-use Modules\Forum\Models\Post;
 use Illuminate\Support\Facades\DB;
+use Modules\Forum\Models\Post;
 
 class PostObserver
 {

@@ -13,7 +13,9 @@ use Illuminate\Support\HtmlString;
 
 class Feed
 {
-    public static array $extraPollResolvers = [];
+    private static array $baseTypes = [
+        'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
+    ];
 
     private mixed $user;
 
@@ -25,10 +27,17 @@ class Feed
     /**
      * Get feed
      */
+    private static function allTypes(): array
+    {
+        return array_merge(self::$baseTypes, Registry::$feedTypes);
+    }
+
     public function getFeed(): HtmlString
     {
+        $allTypes = self::allTypes();
+
         $enabledTypes = array_keys(array_filter(
-            FeedModel::$types,
+            $allTypes,
             static fn ($type, $key) => setting("feed_{$key}_show"),
             ARRAY_FILTER_USE_BOTH
         ));
@@ -43,15 +52,15 @@ class Feed
         $version = cache()->get('feed_version', 1);
         $cacheKey = "feed_{$version}_{$currentPage}_" . implode(',', $enabledTypes);
 
-        [$total, $items] = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage) {
+        [$total, $items] = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage, $allTypes) {
             $total = $query->count();
             $rows = $query->forPage($currentPage, $perPage)->get();
             $grouped = $rows->groupBy('relate_type');
 
             $loadedModels = [];
             foreach ($grouped as $type => $typeRows) {
-                $class = FeedModel::$types[$type]['class'];
-                $withs = FeedModel::$types[$type]['withs'];
+                $class = $allTypes[$type]['class'];
+                $withs = $allTypes[$type]['withs'];
                 $ids = $typeRows->pluck('relate_id')->all();
 
                 $modelQuery = $class::with($withs)->whereIn('id', $ids);
@@ -108,7 +117,7 @@ class Feed
 
         foreach ($posts as $post) {
             $resolved = false;
-            foreach (static::$extraPollResolvers as $class => $resolver) {
+            foreach (Registry::$pollResolvers as $class => $resolver) {
                 if ($post instanceof $class) {
                     $result = $resolver($post);
                     if ($result) {

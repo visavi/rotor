@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use Modules\Forum\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Forum\Models\Topic;
 
 /** @mixin Topic */
 class TopicResource extends JsonResource

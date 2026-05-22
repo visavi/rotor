@@ -95,7 +95,7 @@ class HomeController extends Controller
                     ->paginate(10)
                     ->appends(compact('query', 'sort', 'type'));
 
-                $posts->loadMorph('relate', [Comment::class => ['relate'], ...Search::$morphWith]);
+                $posts->loadMorph('relate', [Comment::class => ['relate'], ...\App\Classes\Registry::$searchMorphWith]);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Models\Spam;
 use Illuminate\Http\JsonResponse;
@@ -12,8 +13,6 @@ use Illuminate\View\View;
 
 class SpamController extends AdminController
 {
-    public static array $extraTypes = [];
-
     private array $types;
     private string $type;
     private array $total = [];
@@ -27,7 +26,7 @@ class SpamController extends AdminController
             'posts'    => __('index.forums'),
             'messages' => __('index.messages'),
             'comments' => __('main.comments'),
-        ], static::$extraTypes);
+        ], Registry::$spamTypes);
 
         $type = $request->input('type');
 

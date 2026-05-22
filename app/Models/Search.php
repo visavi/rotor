@@ -18,12 +18,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Search extends Model
 {
-    public static array $types = [];
-
-    public static array $viewMap = [];
-
-    public static array $morphWith = [];
-
     /**
      * The table associated with the model.
      */
@@ -57,7 +51,7 @@ class Search extends Model
             User::$morphName    => __('index.users'),
         ];
 
-        return array_merge($base, static::$types);
+        return array_merge($base, \App\Classes\Registry::$searchTypes);
     }
 
     /**

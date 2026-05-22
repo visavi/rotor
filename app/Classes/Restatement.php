@@ -8,7 +8,9 @@ class Restatement
 {
     public static array $handlers = [];
 
-    public static function boot(): void {}
+    public static function boot(): void
+    {
+    }
 
     public static function register(string $mode, callable $callback): void
     {

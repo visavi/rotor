@@ -16,12 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Feed extends Model
 {
-    public static array $types = [
-        'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
-    ];
-
-    public static array $viewMap = [];
-
     public $timestamps = false;
 
     protected $guarded = [];

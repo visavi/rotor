@@ -2,11 +2,9 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\SearchImport;
-use App\Http\Controllers\AjaxController;
-use App\Models\Feed;
+use App\Classes\Registry;
+use App\Classes\Restatement;
 use App\Models\Module;
-use App\Models\Search;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
@@ -92,40 +90,45 @@ class ModuleServiceProvider extends ServiceProvider
             if (file_exists($moduleFile)) {
                 $moduleConfig = include $moduleFile;
 
-                // Регистрация модели
-                $class = $moduleConfig['morph'] ?? null;
+                // Регистрация моделей
+                $morphs = $moduleConfig['morphs'] ?? [];
+                $class = $morphs[0] ?? null;
+
+                foreach ($morphs as $morphClass) {
+                    /** @var class-string $morphClass */
+                    Relation::morphMap([$morphClass::$morphName => $morphClass]);
+                }
+
                 if ($class) {
                     /** @var class-string $class */
                     $morphName = $class::$morphName;
-                    Relation::morphMap([$morphName => $class]);
 
                     if ($search = $moduleConfig['search'] ?? null) {
-                        Search::$types[$morphName] = $search['label'];
-                        Search::$viewMap[$morphName] = $search['view'];
-                        SearchImport::$classes[] = $class;
+                        Registry::search($class, $search['label'], $search['view'], $search['with'] ?? []);
                     }
 
                     if ($feed = $moduleConfig['feed'] ?? null) {
-                        Feed::$types[$morphName] = ['class' => $class, 'withs' => $feed['withs']];
-                        Feed::$viewMap[$morphName] = $feed['view'];
+                        Registry::feed($class, $feed['withs'], $feed['view']);
                     }
 
                     match ($moduleConfig['upload'] ?? null) {
-                        'media' => AjaxController::$extraMediaTypes[] = $morphName,
-                        'file'  => AjaxController::$extraFileTypes[] = $morphName,
+                        'media' => Registry::mediaType($morphName),
+                        'file'  => Registry::fileType($morphName),
                         default => null,
                     };
 
                     if (isset($moduleConfig['rating'])) {
-                        AjaxController::$extraRatingTypes[] = $morphName;
+                        Registry::ratingType($morphName);
+                    }
+
+                    if (isset($moduleConfig['spam'])) {
+                        Registry::spam($morphName, $moduleConfig['spam']);
                     }
                 }
 
-                // Регистрация дополнительных моделей (для модулей с несколькими morphs)
-                foreach ($moduleConfig['morphs'] ?? [] as $extraClass) {
-                    /** @var class-string $extraClass */
-                    $extraMorphName = $extraClass::$morphName;
-                    Relation::morphMap([$extraMorphName => $extraClass]);
+                // Регистрация наблюдателей
+                foreach ($moduleConfig['observers'] ?? [] as $modelClass => $observerClass) {
+                    $modelClass::observe($observerClass);
                 }
 
                 // Регистрация консольных команд
@@ -133,6 +136,11 @@ class ModuleServiceProvider extends ServiceProvider
                     $this->app->booted(function () use ($moduleConfig) {
                         $moduleConfig['schedule']($this->app->make(Schedule::class));
                     });
+                }
+
+                // Регистрация пересчётов
+                foreach ($moduleConfig['restatement'] ?? [] as $key => $callback) {
+                    Restatement::register($key, $callback);
                 }
             }
 

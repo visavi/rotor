@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Classes\Registry;
+use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
-use App\Classes\Restatement;
 use App\Models\User;
 use App\Models\UserField;
 use Illuminate\Http\RedirectResponse;
@@ -19,8 +20,6 @@ use Illuminate\View\View;
 
 class UserController extends AdminController
 {
-    public static array $extraDeleteHandlers = [];
-
     /**
      * Главная страница
      */
@@ -214,7 +213,7 @@ class UserController extends AdminController
                     );
                 }
 
-                foreach (static::$extraDeleteHandlers as $handler) {
+                foreach (Registry::$adminDeleteHandlers as $handler) {
                     $handler($user, $request);
                 }
 

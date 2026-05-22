@@ -86,14 +86,14 @@ class ModuleRegistry extends Model
                 $registryLabel = $registry->name ?: $registry->url;
 
                 $versions = $module['versions'] ?? [];
-                $best    = self::bestCompatibleVersion($versions);
-                $latest  = $versions[0] ?? [];
+                $best = self::bestCompatibleVersion($versions);
+                $latest = $versions[0] ?? [];
                 $version = $best ?? $latest;
 
                 $extra = ['registry' => $registryLabel];
 
                 if ($best && isset($latest['version']) && version_compare($latest['version'], $best['version'], '>')) {
-                    $extra['latest_version']  = $latest['version'];
+                    $extra['latest_version'] = $latest['version'];
                     $extra['latest_requires'] = $latest['requires'] ?? null;
                 }
 

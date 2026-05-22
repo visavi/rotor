@@ -13,8 +13,6 @@ class SearchImport extends Command
     protected $signature = 'search:import';
     protected $description = 'Sync existing records to search index';
 
-    public static array $classes = [];
-
     /**
      * Handle
      */
@@ -23,7 +21,7 @@ class SearchImport extends Command
         $models = array_merge([
             Comment::class,
             User::class,
-        ], static::$classes);
+        ], \App\Classes\Registry::$searchClasses);
 
         DB::disableQueryLog();
         DB::connection()->unsetEventDispatcher();

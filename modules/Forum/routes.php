@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Forum\Controllers\ActiveController;
+use Modules\Forum\Controllers\Admin\ForumController as AdminForumController;
+use Modules\Forum\Controllers\Admin\ForumSettingController;
 use Modules\Forum\Controllers\BookmarkController;
 use Modules\Forum\Controllers\ForumController;
 use Modules\Forum\Controllers\NewController;
 use Modules\Forum\Controllers\TopicController;
-use Modules\Forum\Controllers\Admin\ForumController as AdminForumController;
-use Modules\Forum\Controllers\Admin\ForumSettingController;
 
 /* ---- Публичные роуты ---- */
 Route::prefix('forums')
