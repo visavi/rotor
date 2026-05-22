@@ -121,6 +121,13 @@ class ModuleServiceProvider extends ServiceProvider
                     }
                 }
 
+                // Регистрация дополнительных моделей (для модулей с несколькими morphs)
+                foreach ($moduleConfig['morphs'] ?? [] as $extraClass) {
+                    /** @var class-string $extraClass */
+                    $extraMorphName = $extraClass::$morphName;
+                    Relation::morphMap([$extraMorphName => $extraClass]);
+                }
+
                 // Регистрация консольных команд
                 if (isset($moduleConfig['schedule'])) {
                     $this->app->booted(function () use ($moduleConfig) {
