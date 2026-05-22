@@ -49,7 +49,6 @@
     <nav class="paper-nav">
         <ul class="paper-nav__list">
             @hook('sidebarMenuStart')
-            <li><a class="menu-item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
             @hook('sidebarMenuEnd')
         </ul>
     </nav>

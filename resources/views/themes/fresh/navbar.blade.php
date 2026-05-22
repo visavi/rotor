@@ -110,13 +110,6 @@
     <div class="app-topnav__inner">
         <ul class="app-topnav__menu">
             @hook('sidebarMenuStart')
-            <li>
-                <a class="app-topnav__item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}">
-                    <i class="far fa-comment-alt"></i>
-                    <span>{{ __('index.forums') }}</span>
-                    <span class="badge menu-badge">{{ statsForum() }}</span>
-                </a>
-            </li>
             @hook('sidebarMenuEnd')
         </ul>
 

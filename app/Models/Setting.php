@@ -36,7 +36,6 @@ class Setting extends Model
             'mails',
             'info',
             'comments',
-            'forums',
             'messages',
             'blogs',
             'pages',

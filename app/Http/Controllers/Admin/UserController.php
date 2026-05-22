@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\Restatement;
 use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
-use App\Models\Post;
-use App\Models\Topic;
+use App\Classes\Restatement;
 use App\Models\User;
 use App\Models\UserField;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +19,8 @@ use Illuminate\View\View;
 
 class UserController extends AdminController
 {
+    public static array $extraDeleteHandlers = [];
+
     /**
      * Главная страница
      */
@@ -194,8 +194,6 @@ class UserController extends AdminController
         if ($request->isMethod('post')) {
             $loginblack = empty($request->input('loginblack')) ? 0 : 1;
             $mailblack = empty($request->input('mailblack')) ? 0 : 1;
-            $deltopics = empty($request->input('deltopics')) ? 0 : 1;
-            $delposts = empty($request->input('delposts')) ? 0 : 1;
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
             $delimages = empty($request->input('delimages')) ? 0 : 1;
 
@@ -216,30 +214,8 @@ class UserController extends AdminController
                     );
                 }
 
-                // Удаление тем форума
-                if ($deltopics) {
-                    $topics = Topic::query()->where('user_id', $user->id)->get();
-
-                    $topics->each(static function (Topic $topic) {
-                        $topic->delete();
-                    });
-
-                    if ($topics->isNotEmpty()) {
-                        Restatement::run('forums');
-                    }
-                }
-
-                // Удаление постов форума
-                if ($delposts) {
-                    $posts = Post::query()->where('user_id', $user->id)->get();
-
-                    $posts->each(static function (Post $post) {
-                        $post->delete();
-                    });
-
-                    if ($posts->isNotEmpty()) {
-                        Restatement::run('forums');
-                    }
+                foreach (static::$extraDeleteHandlers as $handler) {
+                    $handler($user, $request);
                 }
 
                 // Удаление комментариев

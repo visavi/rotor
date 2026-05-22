@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 class Feed extends Model
 {
     public static array $types = [
-        'topics'   => ['class' => Topic::class,   'withs' => ['lastPost.user', 'lastPost.files', 'forum.parent']],
         'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
     ];
 

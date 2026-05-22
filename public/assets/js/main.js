@@ -1030,6 +1030,12 @@ if (feedContainer && feedSentinel) {
             const temp     = document.createElement('div')
             temp.innerHTML = html
 
+            const newPagination = temp.querySelector('.feed-pagination')
+            if (newPagination?.dataset.empty === '1') {
+                loadObserver.disconnect()
+                return
+            }
+
             temp.querySelectorAll('.feed-pagination, .feed-pagination-top').forEach(el => el.classList.add('d-none'))
 
             feedContainer.append(...temp.children)

@@ -1,12 +1,19 @@
 <?php
 
+use App\Classes\Feed;
 use App\Classes\Hook;
 use App\Classes\Restatement;
+use App\Console\Commands\SearchImport;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\SitemapController;
 use App\Models\Search;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Modules\Forum\Models\Bookmark;
 use Modules\Forum\Models\Post;
 use Modules\Forum\Models\Topic;
 use Modules\Forum\Observers\PostObserver;
@@ -23,8 +30,9 @@ AjaxController::$extraComplaintTypes[Post::$morphName] = function (int $id, mixe
     return ['model' => $model, 'path' => $path];
 };
 
-// Загрузка файлов к постам
+// Загрузка файлов и рейтинг постов
 AjaxController::$extraFileTypes[] = Post::$morphName;
+AjaxController::$extraRatingTypes[] = Post::$morphName;
 
 // Пересчет форума
 Restatement::register('forums', function () {
@@ -39,7 +47,7 @@ Restatement::register('votes', function () {
 
 // Удаление данных при удалении пользователя
 User::$extraDeleteCallbacks[] = function (User $user): void {
-    \Modules\Forum\Models\Bookmark::query()->where('user_id', $user->id)->delete();
+    Bookmark::query()->where('user_id', $user->id)->delete();
 };
 
 // Регистрация eager loading для поиска
@@ -49,6 +57,70 @@ Search::$morphWith[Topic::class] = ['forum', 'lastPost'];
 // Регистрация поиска по постам (дополнительный morph помимо topics)
 Search::$types[Post::$morphName]   = __('index.posts');
 Search::$viewMap[Post::$morphName] = 'forum::search/_posts';
+
+// Регистрация моделей для поиска через SearchImport
+SearchImport::$classes[] = Post::class;
+SearchImport::$classes[] = Topic::class;
+
+// Регистрация страницы sitemap для тем форума
+SitemapController::$extraPages['topics'] = function (): array {
+    return Cache::remember('TopicsSitemap', 600, static function () {
+        $topics = Topic::query()
+            ->orderByDesc('created_at')
+            ->limit(10000)
+            ->get();
+
+        $locs = [];
+        foreach ($topics as $topic) {
+            $locs[] = [
+                'loc'     => route('topics.topic', ['id' => $topic->id]),
+                'lastmod' => gmdate('c', $topic->created_at),
+            ];
+        }
+
+        return $locs;
+    });
+};
+
+// Резолвер для опросов в ленте (тема -> последний пост)
+Feed::$extraPollResolvers[Topic::class] = function (Topic $topic): ?array {
+    if (! $topic->last_post_id) {
+        return null;
+    }
+
+    return [Post::$morphName, $topic->last_post_id];
+};
+
+// Удаление тем и постов при удалении пользователя из админки
+AdminUserController::$extraDeleteHandlers[] = function (User $user, Request $request): void {
+    if ($request->input('deltopics')) {
+        $topics = Topic::query()->where('user_id', $user->id)->get();
+        $topics->each(static fn (Topic $topic) => $topic->delete());
+        if ($topics->isNotEmpty()) {
+            Restatement::run('forums');
+        }
+    }
+
+    if ($request->input('delposts')) {
+        $posts = Post::query()->where('user_id', $user->id)->get();
+        $posts->each(static fn (Post $post) => $post->delete());
+        if ($posts->isNotEmpty()) {
+            Restatement::run('forums');
+        }
+    }
+};
+
+// Добавление чекбоксов удаления на страницу удаления пользователя
+Hook::add('adminUserDeleteFields', function (string $content, $user): string {
+    return $content . '<div class="form-check">
+        <input type="checkbox" class="form-check-input" value="1" name="deltopics" id="deltopics">
+        <label class="form-check-label" for="deltopics">' . __('users.forum_topics') . '</label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" value="1" name="delposts" id="delposts">
+        <label class="form-check-label" for="delposts">' . __('users.forum_posts') . '</label>
+    </div>' . PHP_EOL;
+});
 
 // Ссылки на форум в анкете пользователя
 Hook::add('userProfileLinks', function (string $content, $user) {

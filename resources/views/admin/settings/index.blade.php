@@ -21,7 +21,6 @@
                     <a class="nav-link" href="/admin/settings?act=mails" id="mails">{{ __('settings.mails') }}</a>
                     <a class="nav-link" href="/admin/settings?act=info" id="info">{{ __('settings.info') }}</a>
                     <a class="nav-link" href="/admin/settings?act=comments" id="comments">{{ __('settings.comments') }}</a>
-                    <a class="nav-link" href="/admin/settings?act=forums" id="forums">{{ __('settings.forums') }}</a>
                     <a class="nav-link" href="/admin/settings?act=messages" id="messages">{{ __('settings.messages') }}</a>
                     <a class="nav-link" href="/admin/settings?act=pages" id="pages">{{ __('settings.pages') }}</a>
                     <a class="nav-link" href="/admin/settings?act=others" id="others">{{ __('settings.others') }}</a>

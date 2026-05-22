@@ -44,20 +44,7 @@
                         @endif
                         ({{ $name }})
                     </div>
-                    <div class="d-flex gap-2 align-items-center">
-                        @if (! $compatible)
-                            <span class="badge bg-danger" title="{{ __('admin.modules.requires') }}: {{ $requires }}">
-                                {{ __('admin.modules.incompatible') }}
-                            </span>
-                        @else
-                            @if ($installed && ! $isActive)
-                                <span class="badge bg-warning text-dark">{{ __('main.disabled') }}</span>
-                            @endif
-                            @if ($hasUpdate)
-                                <span class="badge bg-info">{{ __('main.update_available') }}</span>
-                            @endif
-                        @endif
-
+                    <div>
                         @if (! $compatible)
                             {{-- incompatible: no action buttons --}}
                         @elseif (! $localExists)
@@ -76,17 +63,29 @@
                                     <i class="fas fa-arrow-up"></i> {{ __('main.update') }}
                                 </button>
                             </form>
-                        @elseif ($installed)
-                            <span class="badge bg-success">{{ __('main.installed') }}</span>
-                        @else
-                            <a href="/admin/modules/module?module={{ $name }}" class="btn btn-sm btn-outline-success">
-                                {{ __('main.install') }}
+                        @elseif (! $installed)
+                            <a href="/admin/modules/module?module={{ $name }}" class="btn btn-sm btn-success">
+                                <i class="fas fa-plug"></i> {{ __('main.install') }}
                             </a>
                         @endif
                     </div>
                 </div>
 
                 <div class="section-content">
+                    @if (! $compatible)
+                        <span class="badge bg-danger">{{ __('admin.modules.incompatible') }}</span>
+                    @else
+                        @if ($installed)
+                            <span class="badge bg-success">{{ __('main.installed') }}</span>
+                        @endif
+                        @if ($installed && ! $isActive)
+                            <span class="badge bg-warning text-dark">{{ __('main.disabled') }}</span>
+                        @endif
+                        @if ($hasUpdate)
+                            <span class="badge bg-info">{{ __('main.update_available') }}</span>
+                        @endif
+                    @endif
+                    <br>
                     {{ $info['description'] ?? '' }}<br>
                     {{ __('main.version') }}: {{ $info['version'] ?? '—' }}<br>
                     {{ __('main.author') }}: {{ $info['author'] ?? '—' }}
@@ -94,6 +93,19 @@
                         <a href="{{ $info['homepage'] }}">{{ $info['homepage'] }}</a>
                     @endif
                     <br>
+                    @if ($requires)
+                        <small class="{{ $compatible ? 'text-muted' : 'text-danger' }}">
+                            {{ __('admin.modules.requires') }}: Rotor >= {{ $requires }}
+                        </small><br>
+                    @endif
+                    @if (! empty($info['latest_version']))
+                        <small class="text-warning">
+                            {{ __('admin.modules.latest_version') }}: {{ $info['latest_version'] }}
+                            @if (! empty($info['latest_requires']))
+                                ({{ __('admin.modules.requires') }}: Rotor >= {{ $info['latest_requires'] }})
+                            @endif
+                        </small><br>
+                    @endif
                     <small class="text-muted">{{ __('admin.registries.source') }}: {{ $info['registry'] }}</small>
                 </div>
             </div>

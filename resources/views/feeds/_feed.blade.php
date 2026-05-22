@@ -7,9 +7,13 @@
 @forelse ($posts as $post)
     @includeIf(\App\Models\Feed::$viewMap[$post->getMorphClass()] ?? 'feeds._' . $post->getMorphClass())
 @empty
-    {{ showError(__('forums.empty_posts')) }}
+    @if ($posts->currentPage() === 1)
+        {{ showError(__('main.empty_feed')) }}
+    @endif
 @endforelse
 
-<div class="d-flex justify-content-center feed-pagination" data-next="{{ $posts->hasMorePages() ? route('feed', ['page' => $posts->currentPage() + 1]) : '' }}">
+<div class="d-flex justify-content-center feed-pagination"
+    data-next="{{ $posts->hasMorePages() ? route('feed', ['page' => $posts->currentPage() + 1]) : '' }}"
+    data-empty="{{ $posts->isEmpty() ? '1' : '0' }}">
     {{ $posts->links('feeds._paginator') }}
 </div>

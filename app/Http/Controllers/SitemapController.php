@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Topic;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 
 class SitemapController extends Controller
 {
     public static array $extraPages = [];
 
-    private array $pages = [
-        'topics',
-    ];
-
     private function getAllPages(): array
     {
-        return array_merge($this->pages, array_keys(static::$extraPages));
+        return array_keys(static::$extraPages);
     }
 
     /**
@@ -59,33 +53,6 @@ class SitemapController extends Controller
 
     private function getPageData(string $page): array
     {
-        if (isset(static::$extraPages[$page])) {
-            return (static::$extraPages[$page])();
-        }
-
-        return $this->$page();
-    }
-
-    /**
-     * Генерирует темы форума
-     */
-    private function topics(): array
-    {
-        return Cache::remember('TopicsSitemap', 600, static function () {
-            $topics = Topic::query()
-                ->orderByDesc('created_at')
-                ->limit(10000)
-                ->get();
-
-            $locs = [];
-            foreach ($topics as $topic) {
-                $locs[] = [
-                    'loc'     => route('topics.topic', ['id' => $topic->id]),
-                    'lastmod' => gmdate('c', $topic->created_at),
-                ];
-            }
-
-            return $locs;
-        });
+        return (static::$extraPages[$page])();
     }
 }

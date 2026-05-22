@@ -131,7 +131,6 @@
                     </div>
                 @endif
 
-                <b><a href="{{ route('forums.active-topics', ['user' => $user->login]) }}">{{ __('index.forums') }}</a></b> (<a href="{{ route('forums.active-posts', ['user' => $user->login]) }}">{{ __('main.messages') }}</a>)
                 @hook('userProfileLinks', $user)
             </div>
         </div>

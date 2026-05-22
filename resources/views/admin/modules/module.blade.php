@@ -50,8 +50,23 @@
     @endif
 
     <p>
-        {{ __('main.version') }}: {{ $module->version ?? $moduleConfig['version']  }}<br>
-        {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a>
+        @php
+            $installedVersion = $module->version ?? $moduleConfig['version'];
+            $registryVersion  = $registryInfo['version'] ?? null;
+            $hasUpdate        = $registryVersion && version_compare($registryVersion, $installedVersion, '>');
+        @endphp
+        {{ __('main.version') }}: {{ $installedVersion }}
+        @if ($hasUpdate)
+            <span class="badge bg-info ms-1">{{ __('main.update_available') }}: {{ $registryVersion }}</span>
+        @endif
+        <br>
+        {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
+        @if (! empty($moduleConfig['requires']))
+            @php $compatible = version_compare(ROTOR_VERSION, $moduleConfig['requires'], '>='); @endphp
+            <span class="{{ $compatible ? 'text-muted' : 'text-danger' }}">
+                {{ __('admin.modules.requires') }}: Rotor >= {{ $moduleConfig['requires'] }}
+            </span>
+        @endif
     </p>
 
     @if (isset($moduleConfig['screenshots']))

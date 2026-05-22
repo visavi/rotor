@@ -19,7 +19,6 @@ use App\Http\Controllers\Admin\DelUserController;
 use App\Http\Controllers\Admin\EditorController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\FileController as AdminFileController;
-use App\Http\Controllers\Admin\ForumController as AdminForumController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LogController;
@@ -67,40 +66,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::match(['get', 'post'], '/', 'index')->name('index');
                 Route::match(['get', 'post'], '/edit/{id}', 'edit')->name('edit');
                 Route::post('/clear', 'clear')->name('clear');
-            });
-
-        /* Форум */
-        Route::controller(AdminForumController::class)
-            ->prefix('forums')
-            ->name('forums.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/{id}', 'forum')->name('forum');
-                Route::post('/create', 'create')->name('create');
-                Route::match(['get', 'post'], '/{id}/edit', 'edit')->name('edit');
-                Route::delete('/{id}/delete', 'delete')->name('delete');
-                Route::post('/restatement', 'restatement')->name('restatement');
-            });
-
-        /* Темы */
-        Route::controller(AdminForumController::class)
-            ->prefix('topics')
-            ->name('topics.')
-            ->group(function () {
-                Route::get('/{id}', 'topic')->name('topic');
-                Route::match(['get', 'post'], '/{id}/edit', 'editTopic')->name('edit');
-                Route::match(['get', 'post'], '/{id}/move', 'moveTopic')->name('move');
-                Route::post('/{id}/action', 'actionTopic')->name('action');
-                Route::delete('/{id}/delete', 'deleteTopic')->name('delete');
-            });
-
-        /* Посты */
-        Route::controller(AdminForumController::class)
-            ->prefix('posts')
-            ->name('posts.')
-            ->group(function () {
-                Route::match(['get', 'post'], '/{id}/edit', 'editPost')->name('edit');
-                Route::post('/delete', 'deletePosts')->name('delete');
             });
 
         /* Админская реклама */

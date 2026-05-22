@@ -7,14 +7,14 @@ namespace App\Classes;
 use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
-use App\Models\Post;
-use App\Models\Topic;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\HtmlString;
 
 class Feed
 {
+    public static array $extraPollResolvers = [];
+
     private mixed $user;
 
     public function __construct()
@@ -107,11 +107,21 @@ class Feed
         $pairs = [];
 
         foreach ($posts as $post) {
-            if ($post instanceof Topic) {
-                if ($post->last_post_id) {
-                    $pairs[Post::$morphName][] = $post->last_post_id;
+            $resolved = false;
+            foreach (static::$extraPollResolvers as $class => $resolver) {
+                if ($post instanceof $class) {
+                    $result = $resolver($post);
+                    if ($result) {
+                        [$morphName, $id] = $result;
+                        if ($id) {
+                            $pairs[$morphName][] = $id;
+                        }
+                    }
+                    $resolved = true;
+                    break;
                 }
-            } else {
+            }
+            if (! $resolved) {
                 $pairs[$post->getMorphClass()][] = $post->id;
             }
         }

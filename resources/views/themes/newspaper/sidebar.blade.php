@@ -28,7 +28,6 @@
     <div class="paper-sidebar-section">
         <ul class="paper-sidebar-menu">
             @hook('sidebarMenuStart')
-            <li><a class="menu-item{{ request()->is('forums*', 'topics*') ? ' active' : '' }}" href="{{ route('forums.index') }}"><i class="menu-icon far fa-comment-alt"></i><span class="menu-label">{{ __('index.forums') }}</span><span class="badge menu-badge">{{ statsForum() }}</span></a></li>
             @hook('sidebarMenuEnd')
         </ul>
     </div>

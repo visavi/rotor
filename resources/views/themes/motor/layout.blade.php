@@ -42,7 +42,6 @@
                     </span>
                     <ul class="menu-nav">
                         @hook('sidebarMenuStart')
-                        <li><a href="{{ route('forums.index') }}">{{ __('index.forums') }}</a></li>
                         @hook('sidebarMenuEnd')
                     </ul>
                 </div>

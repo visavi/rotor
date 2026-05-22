@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Message;
-use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Sticker;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -36,11 +35,6 @@ class AjaxController extends Controller
         $page = $request->input('page');
 
         switch ($type) {
-            case Post::$morphName:
-                $model = Post::query()->find($id);
-                $path = route('topics.topic', ['id' => $model->topic_id, 'pid' => $model->id], false);
-                break;
-
             case Message::$morphName:
                 $model = Message::query()->find($id);
                 break;
@@ -93,7 +87,6 @@ class AjaxController extends Controller
     public function rating(Request $request): JsonResponse
     {
         $validTypes = array_merge([
-            Post::$morphName,
             Comment::$morphName,
         ], static::$extraRatingTypes);
 
@@ -157,7 +150,6 @@ class AjaxController extends Controller
         $fileTypes = array_merge([
             Comment::$morphName,
             Message::$morphName,
-            Post::$morphName,
         ], static::$extraFileTypes);
 
         $id = int($request->input('id'));
@@ -265,7 +257,6 @@ class AjaxController extends Controller
         $types = array_merge([
             Comment::$morphName,
             Message::$morphName,
-            Post::$morphName,
         ], static::$extraMediaTypes, static::$extraFileTypes);
 
         $id = int($request->input('id'));

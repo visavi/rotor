@@ -4,10 +4,7 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\Message;
-use App\Models\Post;
-use App\Models\Topic;
 use App\Models\User;
-use App\Models\Vote;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,11 +24,8 @@ class MorphMapServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Relation::enforceMorphMap([
-            Topic::$morphName   => Topic::class,
-            Post::$morphName    => Post::class,
             Message::$morphName => Message::class,
             Comment::$morphName => Comment::class,
-            Vote::$morphName    => Vote::class,
             User::$morphName    => User::class,
         ]);
     }

@@ -268,5 +268,6 @@ return [
     'directory_not_writable'     => 'Директория недоступна для записи!',
     'closed_comments'            => 'Комментирование закрыто!',
 
-    'online' => 'Онлайн',
+    'online'      => 'Онлайн',
+    'empty_feed'  => 'Записей еще нет!',
 ];

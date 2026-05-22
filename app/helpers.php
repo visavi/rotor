@@ -15,11 +15,9 @@ use App\Models\Invite;
 use App\Models\Notice;
 use App\Models\Online;
 use App\Models\PaidAdvert;
-use App\Models\Post;
 use App\Models\Setting;
 use App\Models\Spam;
 use App\Models\Sticker;
-use App\Models\Topic;
 use App\Models\User;
 use cbschuld\Browser;
 use Illuminate\Mail\Message;
@@ -377,23 +375,6 @@ function statsInvite(): string
         ->pluck('cnt', 'used');
 
     return ($invites[0] ?? 0) . '/' . ($invites[1] ?? 0);
-}
-
-/**
- * Возвращает количество тем и сообщений в форуме
- */
-function statsForum(): string
-{
-    return Cache::remember('statForums', 600, static function () {
-        $topics = Topic::query()->count();
-        $posts = Post::query()->count();
-
-        $totalNew = Post::query()
-            ->where('created_at', '>', strtotime('-1 day', SITETIME))
-            ->count();
-
-        return formatShortNum($topics) . '/' . formatShortNum($posts) . ($totalNew ? '/+' . $totalNew : '');
-    });
 }
 
 /**

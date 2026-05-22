@@ -8,11 +8,6 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CounterController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\Forum\ActiveController;
-use App\Http\Controllers\Forum\BookmarkController;
-use App\Http\Controllers\Forum\ForumController;
-use App\Http\Controllers\Forum\NewController;
-use App\Http\Controllers\Forum\TopicController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvitationController;
@@ -69,51 +64,6 @@ Route::controller(SitemapController::class)
     ->group(function () {
         Route::get('/sitemap.xml', 'index');
         Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+');
-    });
-
-/* Категория форума */
-Route::prefix('forums')
-    ->name('forums.')
-    ->group(function () {
-        Route::get('/', [ForumController::class, 'index'])->name('index');
-        Route::get('/{id}', [ForumController::class, 'forum'])->name('forum');
-
-        Route::get('/rss', [ForumController::class, 'rss'])->name('rss');
-        Route::match(['get', 'post'], '/create', [ForumController::class, 'create'])->name('create');
-
-        Route::get('/active/posts', [ActiveController::class, 'posts'])->name('active-posts');
-        Route::get('/active/topics', [ActiveController::class, 'topics'])->name('active-topics');
-        Route::delete('/active/{id}/delete', [ActiveController::class, 'destroy'])->name('active-delete');
-
-        Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks');
-        Route::post('/bookmarks/delete', [BookmarkController::class, 'delete'])->name('bookmarks.delete');
-        Route::post('/bookmarks/perform', [BookmarkController::class, 'perform'])->name('bookmarks.perform');
-    });
-
-/* Темы форума */
-Route::prefix('topics')
-    ->name('topics.')
-    ->group(function () {
-        Route::get('/', [NewController::class, 'topics'])->name('index');
-
-        Route::get('/{id}', [TopicController::class, 'index'])->name('topic');
-        Route::post('/{id}/vote', [TopicController::class, 'vote'])->name('vote');
-        Route::post('/{id}/open', [TopicController::class, 'open'])->name('open');
-        Route::post('/{id}/close', [TopicController::class, 'close'])->name('close');
-        Route::post('/{id}/create', [TopicController::class, 'create'])->name('create');
-        Route::post('/{id}/delete', [TopicController::class, 'delete'])->name('delete');
-        Route::get('/{id}/print', [TopicController::class, 'print'])->name('print');
-        Route::match(['get', 'post'], '/{id}/edit', [TopicController::class, 'edit'])->name('edit');
-
-        Route::get('/{id}/rss', [ForumController::class, 'rssPosts'])->name('rss');
-    });
-
-/* Посты форума */
-Route::prefix('posts')
-    ->name('posts.')
-    ->group(function () {
-        Route::get('/', [NewController::class, 'posts'])->name('index');
-        Route::match(['get', 'post'], '/{id}/edit', [TopicController::class, 'editPost'])->name('edit');
     });
 
 /* Ajax */

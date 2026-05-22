@@ -30,6 +30,9 @@ class ModuleRegistry extends Model
         ];
     }
 
+    /**
+     * Fetches the data from the registry.
+     */
     public function fetch(bool $force = false): array
     {
         $ttl = 3600;
@@ -63,6 +66,9 @@ class ModuleRegistry extends Model
         }
     }
 
+    /**
+     * Returns an array of available modules.
+     */
     public static function getAvailableModules(bool $force = false): array
     {
         $registries = self::query()->where('active', true)->get();
@@ -79,12 +85,22 @@ class ModuleRegistry extends Model
                 $name = $module['module'];
                 $registryLabel = $registry->name ?: $registry->url;
 
-                $best = self::bestCompatibleVersion($module['versions'] ?? []);
-                $version = $best ?? $module['versions'][0] ?? [];
+                $versions = $module['versions'] ?? [];
+                $best    = self::bestCompatibleVersion($versions);
+                $latest  = $versions[0] ?? [];
+                $version = $best ?? $latest;
+
+                $extra = ['registry' => $registryLabel];
+
+                if ($best && isset($latest['version']) && version_compare($latest['version'], $best['version'], '>')) {
+                    $extra['latest_version']  = $latest['version'];
+                    $extra['latest_requires'] = $latest['requires'] ?? null;
+                }
+
                 $modules[$name] = array_merge(
                     array_diff_key($module, ['versions' => true]),
                     $version,
-                    ['registry' => $registryLabel],
+                    $extra,
                 );
             }
         }
@@ -92,6 +108,9 @@ class ModuleRegistry extends Model
         return $modules;
     }
 
+    /**
+     * Returns the best compatible version of a module.
+     */
     private static function bestCompatibleVersion(array $versions): ?array
     {
         $compatible = array_filter(

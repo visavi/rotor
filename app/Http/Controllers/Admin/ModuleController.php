@@ -96,7 +96,9 @@ class ModuleController extends AdminController
             $moduleConfig['middleware'] = file_get_contents($modulePath . '/middleware.php');
         }
 
-        return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName'));
+        $registryInfo = ModuleRegistry::getAvailableModules()[$moduleName] ?? null;
+
+        return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName', 'registryInfo'));
     }
 
     /**

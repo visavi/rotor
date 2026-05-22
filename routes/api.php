@@ -32,9 +32,4 @@ Route::controller(ApiController::class)
         Route::get('/messages/new', 'newMessages');
         Route::post('/messages/send', 'send'); // deprecated, используйте POST /talk/{login}
         Route::post('/talk/{login}', 'createTalk');
-        Route::get('/forums', 'categoryForums');
-        Route::get('/forums/{id}', 'forums');
-        Route::post('/forums/{id}', 'createTopic');
-        Route::get('/topics/{id}', 'topics');
-        Route::post('/topics/{id}', 'createPost');
     });

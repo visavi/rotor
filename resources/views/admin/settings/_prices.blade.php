@@ -16,12 +16,6 @@
         <div class="invalid-feedback">{{ textError('sets[editratingpoint]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[editforumpoint]') }}">
-        <label for="editforumpoint" class="form-label">{{ __('settings.points_topics_edit') }}:</label>
-        <input type="number" class="form-control" id="editforumpoint" name="sets[editforumpoint]" maxlength="4" value="{{ getInput('sets.editforumpoint', $settings['editforumpoint']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[editforumpoint]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[advertpoint]') }}">
         <label for="advertpoint" class="form-label">{{ __('settings.points_advert_hide') }}:</label>
         <input type="number" class="form-control" id="advertpoint" name="sets[advertpoint]" maxlength="4" value="{{ getInput('sets.advertpoint', $settings['advertpoint']) }}" required>

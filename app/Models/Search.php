@@ -54,8 +54,6 @@ class Search extends Model
     {
         $base = [
             Comment::$morphName => __('index.comments'),
-            Post::$morphName    => __('index.posts'),
-            Topic::$morphName   => __('index.topics'),
             User::$morphName    => __('index.users'),
         ];
 

@@ -31,15 +31,7 @@
 
             <b>{{ __('users.delete_activity') }}:</b><br>
 
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" value="1" name="deltopics" id="deltopics">
-                <label class="form-check-label" for="deltopics">{{ __('users.forum_topics') }}</label>
-            </div>
-
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" value="1" name="delposts" id="delposts">
-                <label class="form-check-label" for="delposts">{{ __('users.forum_posts') }}</label>
-            </div>
+            @hook('adminUserDeleteFields', $user)
 
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" value="1" name="delcomments" id="delcomments">

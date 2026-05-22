@@ -14,7 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mobicms\Captcha\Image as MobicmsCaptcha;
-use Modules\Load\Models\Down;
 use Symfony\Component\HttpFoundation\Response;
 use Visavi\Captcha\CaptchaBuilder as AnimatedCaptchaBuilder;
 use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
@@ -79,21 +78,24 @@ class HomeController extends Controller
             $validator->length($searchQuery, 3, 64, ['find' => __('main.request_length')]);
 
             if ($validator->isValid()) {
+                $registeredTypes = array_keys(Relation::morphMap());
+
                 $posts = Search::query()
                     ->whereIn('relate_type', array_keys($types))
                     ->when($type, function ($query) use ($type) {
                         $query->where('relate_type', $type);
                     })
+                    ->where(function ($query) use ($registeredTypes) {
+                        $query->where('relate_type', '!=', Comment::$morphName)
+                            ->orWhereIn('relate_id', Comment::whereIn('relate_type', $registeredTypes)->select('id'));
+                    })
                     ->whereFullText('text', $searchQuery . '*', ['mode' => 'boolean'])
                     ->with('relate')
                     ->orderByRaw(...$order)
                     ->paginate(10)
-                    ->appends(compact('query', 'sort', 'type'))
-                    ->loadMorph('relate', array_filter(array_merge([
-                        Relation::getMorphedModel('articles') => ['category'],
-                        Comment::class                        => ['relate'],
-                        Down::class                           => ['category'],
-                    ], Search::$morphWith)));
+                    ->appends(compact('query', 'sort', 'type'));
+
+                $posts->loadMorph('relate', [Comment::class => ['relate'], ...Search::$morphWith]);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

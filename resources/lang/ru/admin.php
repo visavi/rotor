@@ -233,6 +233,7 @@ return [
         'module_dir_exists'        => 'Директория модуля уже существует!',
         'incompatible'             => 'Несовместим',
         'requires'                 => 'Требуется версия движка',
+        'latest_version'           => 'Доступна новая версия',
     ],
 
     'registries' => [

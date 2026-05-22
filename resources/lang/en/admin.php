@@ -233,6 +233,7 @@ return [
         'module_dir_exists'        => 'Module directory already exists!',
         'incompatible'             => 'Incompatible',
         'requires'                 => 'Requires engine version',
+        'latest_version'           => 'Newer version available',
     ],
 
     'registries' => [
