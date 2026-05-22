@@ -165,6 +165,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public static string $morphName = 'users';
 
+    public static array $extraDeleteCallbacks = [];
+
     /**
      * Get the attributes that should be cast.
      */
@@ -543,6 +545,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             Banhist::query()->where('user_id', $this->id)->delete();
             Bookmark::query()->where('user_id', $this->id)->delete();
             Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
+
+            foreach (static::$extraDeleteCallbacks as $callback) {
+                $callback($this);
+            }
 
             return parent::delete();
         });
