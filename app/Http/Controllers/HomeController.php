@@ -8,9 +8,7 @@ use App\Classes\Feed;
 use App\Classes\Validator;
 use App\Models\Ban;
 use App\Models\Comment;
-use App\Models\Post;
 use App\Models\Search;
-use App\Models\Topic;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -91,13 +89,11 @@ class HomeController extends Controller
                     ->orderByRaw(...$order)
                     ->paginate(10)
                     ->appends(compact('query', 'sort', 'type'))
-                    ->loadMorph('relate', array_filter([
+                    ->loadMorph('relate', array_filter(array_merge([
                         Relation::getMorphedModel('articles') => ['category'],
                         Comment::class                        => ['relate'],
                         Down::class                           => ['category'],
-                        Post::class                           => ['topic'],
-                        Topic::class                          => ['forum', 'lastPost'],
-                    ]));
+                    ], Search::$morphWith)));
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

@@ -22,6 +22,8 @@ class Search extends Model
 
     public static array $viewMap = [];
 
+    public static array $morphWith = [];
+
     /**
      * The table associated with the model.
      */
