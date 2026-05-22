@@ -18,33 +18,9 @@
     </div>
 
     <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[feed_topics_show]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[feed_topics_show]" id="feed_topics_show"{{ getInput('sets.feed_topics_show', $settings['feed_topics_show']) ? ' checked' : '' }}>
-        <label class="form-check-label" for="feed_topics_show">{{ __('settings.feed_topics_show') }}</label>
-    </div>
-
-    <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[feed_news_show]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[feed_news_show]" id="feed_news_show"{{ getInput('sets.feed_news_show', $settings['feed_news_show']) ? ' checked' : '' }}>
-        <label class="form-check-label" for="feed_news_show">{{ __('settings.feed_news_show') }}</label>
-    </div>
-
-    <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[feed_comments_show]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[feed_comments_show]" id="feed_comments_show"{{ getInput('sets.feed_comments_show', $settings['feed_comments_show']) ? ' checked' : '' }}>
         <label class="form-check-label" for="feed_comments_show">{{ __('settings.feed_comments_show') }}</label>
-    </div>
-
-    <div class="mb-3{{ hasError('sets[feed_topics_rating]') }}">
-        <label for="feed_topics_rating" class="form-label">{{ __('settings.feed_topics_rating') }}:</label>
-        <input type="number" class="form-control" id="feed_topics_rating" name="sets[feed_topics_rating]" maxlength="2" value="{{ getInput('sets.feed_topics_rating', $settings['feed_topics_rating']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[feed_topics_rating]') }}</div>
-    </div>
-
-    <div class="mb-3{{ hasError('sets[feed_news_rating]') }}">
-        <label for="feed_news_rating" class="form-label">{{ __('settings.feed_news_rating') }}:</label>
-        <input type="number" class="form-control" id="feed_news_rating" name="sets[feed_news_rating]" maxlength="2" value="{{ getInput('sets.feed_news_rating', $settings['feed_news_rating']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[feed_news_rating]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[feed_comments_rating]') }}">

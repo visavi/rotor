@@ -20,19 +20,11 @@ use Illuminate\Support\Str;
 trait CommentableTrait
 {
     /**
-     * Возвращает класс модели, с которой связан контроллер
-     */
-    protected function commentableModel(): string
-    {
-        return 'App\\Models\\' . Str::before(class_basename(static::class), 'Controller');
-    }
-
-    /**
      * Возвращает [routeName, params] для редиректа на страницу модели
      */
     protected function commentableViewRoute(Model $model): array
     {
-        $plural = Str::plural(Str::snake(class_basename($this->commentableModel())));
+        $plural = Str::plural(Str::snake(class_basename($this->commentableModelClass)));
 
         return [$plural . '.view', ['id' => $model->id]];
     }
@@ -42,7 +34,7 @@ trait CommentableTrait
      */
     protected function findCommentParent(int $id): Model
     {
-        $model = ($this->commentableModel())::query()->find($id);
+        $model = ($this->commentableModelClass)::query()->find($id);
         if (! $model) {
             abort(404, __('main.record_not_found'));
         }
