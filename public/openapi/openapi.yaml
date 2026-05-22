@@ -86,17 +86,6 @@ components:
                     type:
                         - string
                         - null
-                visits:
-                    type: integer
-                allforum:
-                    type: integer
-                    description: 'Количество постов на форуме'
-                allguest:
-                    type: integer
-                    description: 'Количество записей в гостевой'
-                allcomments:
-                    type: integer
-                    description: 'Количество комментариев'
                 themes:
                     type: string
                     description: 'Текущая тема оформления'
@@ -151,9 +140,6 @@ components:
                 newprivat:
                     type: integer
                     description: 'Непрочитанных приватных сообщений'
-                newwall:
-                    type: integer
-                    description: 'Новых записей на стене'
         User:
             type: object
             properties:
@@ -187,14 +173,6 @@ components:
                     type:
                         - string
                         - null
-                visits:
-                    type: integer
-                allforum:
-                    type: integer
-                allguest:
-                    type: integer
-                allcomments:
-                    type: integer
                 themes:
                     type: string
                 point:

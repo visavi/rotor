@@ -64,8 +64,8 @@ class ModuleController extends AdminController
             $moduleConfig['screenshots'] = glob($modulePath . '/screenshots/*.{gif,png,jpg,jpeg,webp}', GLOB_BRACE);
         }
 
-        if (file_exists($modulePath . '/migrations')) {
-            $moduleConfig['migrations'] = array_map('basename', glob($modulePath . '/migrations/*.php'));
+        if (file_exists($modulePath . '/database/migrations')) {
+            $moduleConfig['migrations'] = array_map('basename', glob($modulePath . '/database/migrations/*.php'));
         }
 
         if (file_exists($modulePath . '/resources/assets')) {

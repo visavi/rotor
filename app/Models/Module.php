@@ -56,7 +56,7 @@ class Module extends Model
      */
     public function migrate(): void
     {
-        $migrationPath = base_path('modules/' . $this->name . '/migrations');
+        $migrationPath = base_path('modules/' . $this->name . '/database/migrations');
 
         if (file_exists($migrationPath)) {
             DB::transaction(function () use ($migrationPath) {
@@ -74,7 +74,7 @@ class Module extends Model
      */
     public function rollback(): void
     {
-        $migrationPath = base_path('modules/' . $this->name . '/migrations');
+        $migrationPath = base_path('modules/' . $this->name . '/database/migrations');
 
         if (file_exists($migrationPath)) {
             DB::transaction(function () use ($migrationPath) {

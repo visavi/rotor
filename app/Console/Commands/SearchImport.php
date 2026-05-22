@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Classes\Registry;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -21,7 +22,7 @@ class SearchImport extends Command
         $models = array_merge([
             Comment::class,
             User::class,
-        ], \App\Classes\Registry::$searchClasses);
+        ], Registry::$searchClasses);
 
         DB::disableQueryLog();
         DB::connection()->unsetEventDispatcher();
