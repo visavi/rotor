@@ -31,7 +31,7 @@
                 $localExists = in_array($name, $moduleNames, true);
                 $hasUpdate   = $installed && isset($info['version']) && version_compare($info['version'], $modules[$name]->version, '>');
                 $requires    = $info['requires'] ?? null;
-                $compatible  = ! $requires || version_compare(ROTOR_VERSION, ltrim($requires, '>=<~^'), '>=');
+                $compatible  = ! $requires || version_compare(ROTOR_VERSION, $requires, '>=');
             @endphp
             <div class="section mb-3 shadow">
                 <div class="section-title d-flex align-items-center justify-content-between">

@@ -72,12 +72,39 @@ class ModuleRegistry extends Model
             $data = $registry->fetch($force);
 
             foreach ($data['modules'] ?? [] as $module) {
-                if (isset($module['module'])) {
-                    $modules[$module['module']] = $module + ['registry' => $registry->name ?: $registry->url];
+                if (! isset($module['module'])) {
+                    continue;
                 }
+
+                $name = $module['module'];
+                $registryLabel = $registry->name ?: $registry->url;
+
+                $best = self::bestCompatibleVersion($module['versions'] ?? []);
+                $version = $best ?? $module['versions'][0] ?? [];
+                $modules[$name] = array_merge(
+                    array_diff_key($module, ['versions' => true]),
+                    $version,
+                    ['registry' => $registryLabel],
+                );
             }
         }
 
         return $modules;
+    }
+
+    private static function bestCompatibleVersion(array $versions): ?array
+    {
+        $compatible = array_filter(
+            $versions,
+            static fn (array $v) => empty($v['requires']) || version_compare(ROTOR_VERSION, $v['requires'], '>='),
+        );
+
+        if (empty($compatible)) {
+            return null;
+        }
+
+        usort($compatible, static fn ($a, $b) => version_compare($b['version'], $a['version']));
+
+        return $compatible[0];
     }
 }
