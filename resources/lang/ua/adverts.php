@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'create_advert' => 'Розмістити',
+    'create_advert' => 'Розмістити рекламу',
     'expires'       => 'Закінчується',
     'expired'       => 'Мир',
     'color'         => 'Колір',

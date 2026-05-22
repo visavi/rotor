@@ -4,8 +4,8 @@ use App\Classes\Feed;
 use App\Classes\Hook;
 use App\Classes\Restatement;
 use App\Console\Commands\SearchImport;
-use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Search;
 use App\Models\User;
@@ -51,11 +51,11 @@ User::$extraDeleteCallbacks[] = function (User $user): void {
 };
 
 // Регистрация eager loading для поиска
-Search::$morphWith[Post::class]  = ['topic'];
+Search::$morphWith[Post::class] = ['topic'];
 Search::$morphWith[Topic::class] = ['forum', 'lastPost'];
 
 // Регистрация поиска по постам (дополнительный morph помимо topics)
-Search::$types[Post::$morphName]   = __('index.posts');
+Search::$types[Post::$morphName] = __('index.posts');
 Search::$viewMap[Post::$morphName] = 'forum::search/_posts';
 
 // Регистрация моделей для поиска через SearchImport
@@ -140,10 +140,10 @@ Hook::add('sidebarMenuStart', function (string $content) {
         return $content;
     }
 
-    $url    = route('forums.index');
+    $url = route('forums.index');
     $active = request()->is('forums*', 'topics*') ? ' active' : '';
-    $label  = __('index.forums');
-    $stats  = statsForum();
+    $label = __('index.forums');
+    $stats = statsForum();
 
     return '<li>
         <a class="menu-item' . $active . '" href="' . $url . '">
@@ -160,7 +160,7 @@ Hook::add('adminBlockEditor', function (string $content) {
         return $content;
     }
 
-    $url   = route('admin.forums.index');
+    $url = route('admin.forums.index');
     $label = __('index.forums');
     $stats = statsForum();
 
@@ -174,7 +174,7 @@ Hook::add('adminSettingsNav', function (string $content) {
         return $content;
     }
 
-    $url   = route('forum.settings');
+    $url = route('forum.settings');
     $label = __('forum::forums.settings');
 
     return $content . '<a class="nav-link" href="' . $url . '">' . $label . '</a>' . PHP_EOL;

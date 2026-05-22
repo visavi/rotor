@@ -164,7 +164,7 @@ class ForumController extends AdminController
             abort(403, __('errors.forbidden'));
         }
 
-        Restatement::run('forums');
+        Restatement::run(['forums', 'votes']);
 
         return redirect()
             ->route('admin.forums.index')

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'create_advert' => 'Post',
+    'create_advert' => 'Post Ad',
     'expires'       => 'Expires',
     'expired'       => 'Expired',
     'color'         => 'Colour',

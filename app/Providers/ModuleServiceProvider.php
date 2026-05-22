@@ -34,6 +34,18 @@ class ModuleServiceProvider extends ServiceProvider
         foreach ($modules as $module => $settings) {
             $moduleKey = Str::snake($module);
 
+            // Загрузка представлений
+            $viewsPath = base_path('modules/' . $module . '/resources/views');
+            if (file_exists($viewsPath)) {
+                $this->loadViewsFrom($viewsPath, $moduleKey);
+            }
+
+            // Загрузка языковых файлов
+            $langPath = base_path('modules/' . $module . '/resources/lang');
+            if (file_exists($langPath)) {
+                $this->loadTranslationsFrom($langPath, $moduleKey);
+            }
+
             // Загрузка helpers
             $helpersFile = base_path('modules/' . $module . '/helpers.php');
             if (file_exists($helpersFile)) {
@@ -50,18 +62,6 @@ class ModuleServiceProvider extends ServiceProvider
             $routesFile = base_path('modules/' . $module . '/routes.php');
             if (file_exists($routesFile)) {
                 $this->loadRoutesFrom($routesFile);
-            }
-
-            // Загрузка представлений
-            $viewsPath = base_path('modules/' . $module . '/resources/views');
-            if (file_exists($viewsPath)) {
-                $this->loadViewsFrom($viewsPath, $moduleKey);
-            }
-
-            // Загрузка языковых файлов
-            $langPath = base_path('modules/' . $module . '/resources/lang');
-            if (file_exists($langPath)) {
-                $this->loadTranslationsFrom($langPath, $moduleKey);
             }
 
             // Загрузка конфигурации

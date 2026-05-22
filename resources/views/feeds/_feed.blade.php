@@ -8,7 +8,7 @@
     @includeIf(\App\Models\Feed::$viewMap[$post->getMorphClass()] ?? 'feeds._' . $post->getMorphClass())
 @empty
     @if ($posts->currentPage() === 1)
-        {{ showError(__('main.empty_feed')) }}
+        @include('feeds._welcome')
     @endif
 @endforelse
 

@@ -270,4 +270,5 @@ return [
 
     'online'      => 'Online',
     'empty_feed'  => 'No records yet!',
+
 ];
