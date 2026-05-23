@@ -5,59 +5,55 @@ use App\Classes\Hook;
 /**
  * Хуки смотрите в исходном коде сайта, html комментарии начинаются с символа @, к примеру <!--@head-->
  * Хуки имеют приоритет 0 по умолчанию, чем выше приоритет, тем раньше вызывается хук
+ *
+ * Callback возвращает свой фрагмент (или null/'' чтобы ничего не добавлять).
  */
 
 // Подключение пользовательского CSS (редактор в /admin/editor)
-Hook::add('head', function ($content) {
+Hook::add('head', function () {
     $path = public_path('assets/custom.css');
     if (file_exists($path) && filesize($path) > 0) {
-        return $content . '<link rel="stylesheet" href="/assets/custom.css?v=' . filemtime($path) . '">' . PHP_EOL;
+        return '<link rel="stylesheet" href="/assets/custom.css?v=' . filemtime($path) . '">';
     }
 
-    return $content;
+    return null;
 }, -1);
 
 // Подключение пользовательского JS (редактор в /admin/editor)
-Hook::add('footer', function ($content) {
+Hook::add('footer', function () {
     $path = public_path('assets/custom.js');
     if (file_exists($path) && filesize($path) > 0) {
-        return $content . '<script src="/assets/custom.js?v=' . filemtime($path) . '"></script>' . PHP_EOL;
+        return '<script src="/assets/custom.js?v=' . filemtime($path) . '"></script>';
     }
 
-    return $content;
+    return null;
 }, -1);
 
 // Пример css хука
-/* Hook::add('head', function ($content) {
-    return $content . '<link rel="stylesheet" href="/assets/styles.css">' . PHP_EOL;
-});*/
+// Hook::add('head', '<link rel="stylesheet" href="/assets/styles.css">');
 
 // Пример js хука
-/*Hook::add('footer', function ($content) {
-    return $content . '<script type="module" src="/assets/scripts.js"></script>' . PHP_EOL;
-});*/
+// Hook::add('footer', '<script type="module" src="/assets/scripts.js"></script>');
 
 // Пример вставки счетчика в футер только для главной страницы
-/*Hook::add('footerEnd', function ($content) {
+/*Hook::add('footerEnd', function () {
     if (request()->routeIs('home')) {
-        return $content . '<a href="/"><img src="/assets/img/images/logo.png" alt="text"></a>' . PHP_EOL;
+        return '<a href="/"><img src="/assets/img/images/logo.png" alt="text"></a>';
     }
 
-    return $content;
+    return null;
 });*/
 
 // Пример вставки ссылки в меню сайта с приоритетом 10
-/*Hook::add('sidebarMenuEnd', function ($content) {
-    return $content . '<li>
+/*Hook::add('sidebarMenuEnd', function () {
+    return '<li>
         <a class="menu-item' . (request()->is('page*') ? ' active' : '') . '" href="/">
             <i class="menu-icon fa-solid fa-home"></i>
             <span class="menu-label">Текст в меню</span>
             <span class="badge menu-badge">5</span>
         </a>
-    </li>' . PHP_EOL;
+    </li>';
 }, 10);*/
 
 // Пример вставки ссылки в футер сайта
-/*Hook::add('footerColumnMiddle', function ($content) {
-    return $content . '<li><a class="footer-item" href="/page">Текст ссылки</a></li>' . PHP_EOL;
-});*/
+// Hook::add('footerColumnMiddle', '<li><a class="footer-item" href="/page">Текст ссылки</a></li>');

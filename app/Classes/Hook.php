@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Classes;
 
+use Stringable;
+
 class Hook
 {
     private static array $hooks = [];
@@ -17,35 +19,41 @@ class Hook
     }
 
     /**
-     * Добавляет функцию для хука
+     * Добавляет хук
+     *
+     * Принимает строку/Stringable или callable вида fn(mixed $args = null): string|Stringable|null.
+     * Чем выше priority, тем раньше хук выводится.
      */
-    public static function add(string $hookName, callable $callback, int $priority = 0): void
+    public static function add(string $hookName, string|Stringable|callable $value, int $priority = 0): void
     {
         if (! isset(self::$hooks[$hookName])) {
             self::$hooks[$hookName] = [];
         }
 
         self::$hooks[$hookName][] = [
-            'callback' => $callback,
+            'value'    => $value,
             'priority' => $priority,
         ];
 
-        usort(self::$hooks[$hookName], function ($a, $b) {
-            return $b['priority'] <=> $a['priority'];
-        });
+        usort(self::$hooks[$hookName], static fn ($a, $b) => $b['priority'] <=> $a['priority']);
     }
 
     /**
      * Вызывает хук
      */
-    public static function call(string $hookName, mixed $args = null, string $result = ''): ?string
+    public static function call(string $hookName, mixed $args = null): string
     {
-        $result .= '<!--@' . $hookName . '-->';
+        $result = '<!--@' . $hookName . '-->';
 
-        if (isset(self::$hooks[$hookName])) {
-            foreach (self::$hooks[$hookName] as $hook) {
-                $result = $hook['callback']($result, $args);
+        foreach (self::$hooks[$hookName] ?? [] as $hook) {
+            $value = $hook['value'];
+            $fragment = (is_string($value) || $value instanceof Stringable) ? $value : $value($args);
+
+            if ($fragment === null || $fragment === '') {
+                continue;
             }
+
+            $result .= (string) $fragment . PHP_EOL;
         }
 
         return $result;
