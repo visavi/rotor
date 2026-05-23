@@ -59,13 +59,11 @@ class Module extends Model
         $migrationPath = base_path('modules/' . $this->name . '/database/migrations');
 
         if (file_exists($migrationPath)) {
-            DB::transaction(function () use ($migrationPath) {
-                Artisan::call('migrate', [
-                    '--force'    => true,
-                    '--realpath' => true,
-                    '--path'     => $migrationPath,
-                ]);
-            });
+            Artisan::call('migrate', [
+                '--force'    => true,
+                '--realpath' => true,
+                '--path'     => $migrationPath,
+            ]);
         }
     }
 
@@ -77,21 +75,19 @@ class Module extends Model
         $migrationPath = base_path('modules/' . $this->name . '/database/migrations');
 
         if (file_exists($migrationPath)) {
-            DB::transaction(function () use ($migrationPath) {
-                $migrator = app('migrator');
-                $nextBatchNumber = $migrator->getRepository()->getNextBatchNumber();
-                $migrationNames = array_keys($migrator->getMigrationFiles($migrationPath));
+            $migrator = app('migrator');
+            $nextBatchNumber = $migrator->getRepository()->getNextBatchNumber();
+            $migrationNames = array_keys($migrator->getMigrationFiles($migrationPath));
 
-                DB::table(config('database.migrations.table'))
-                    ->whereIn('migration', $migrationNames)
-                    ->update(['batch' => $nextBatchNumber]);
+            DB::table(config('database.migrations.table'))
+                ->whereIn('migration', $migrationNames)
+                ->update(['batch' => $nextBatchNumber]);
 
-                Artisan::call('migrate:rollback', [
-                    '--force'    => true,
-                    '--realpath' => true,
-                    '--path'     => $migrationPath,
-                ]);
-            });
+            Artisan::call('migrate:rollback', [
+                '--force'    => true,
+                '--realpath' => true,
+                '--path'     => $migrationPath,
+            ]);
         }
     }
 

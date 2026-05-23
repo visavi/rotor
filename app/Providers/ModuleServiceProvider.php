@@ -94,39 +94,32 @@ class ModuleServiceProvider extends ServiceProvider
             if (file_exists($moduleFile)) {
                 $moduleConfig = include $moduleFile;
 
-                // Регистрация моделей
-                $morphs = $moduleConfig['morphs'] ?? [];
-                $class = $morphs[0] ?? null;
+                // Регистрация моделей и их возможностей
+                foreach ($moduleConfig['models'] ?? [] as $model => $config) {
+                    /** @var class-string $model */
+                    $morphName = $model::$morphName;
+                    Relation::morphMap([$morphName => $model]);
 
-                foreach ($morphs as $morphClass) {
-                    /** @var class-string $morphClass */
-                    Relation::morphMap([$morphClass::$morphName => $morphClass]);
-                }
-
-                if ($class) {
-                    /** @var class-string $class */
-                    $morphName = $class::$morphName;
-
-                    if ($search = $moduleConfig['search'] ?? null) {
-                        Registry::search($class, $search['label'], $search['view'], $search['with'] ?? []);
+                    if ($search = $config['search'] ?? null) {
+                        Registry::search($model, $search['label'], $search['view'], $search['with'] ?? []);
                     }
 
-                    if ($feed = $moduleConfig['feed'] ?? null) {
-                        Registry::feed($class, $feed['withs'], $feed['view']);
+                    if ($feed = $config['feed'] ?? null) {
+                        Registry::feed($model, $feed['withs'], $feed['view']);
                     }
 
-                    match ($moduleConfig['upload'] ?? null) {
+                    match ($config['upload'] ?? null) {
                         'media' => Registry::mediaType($morphName),
                         'file'  => Registry::fileType($morphName),
                         default => null,
                     };
 
-                    if (isset($moduleConfig['rating'])) {
+                    if (! empty($config['rating'])) {
                         Registry::ratingType($morphName);
                     }
 
-                    if (isset($moduleConfig['spam'])) {
-                        Registry::spam($morphName, $moduleConfig['spam']);
+                    if ($spam = $config['spam'] ?? null) {
+                        Registry::spam($morphName, $spam);
                     }
                 }
 
