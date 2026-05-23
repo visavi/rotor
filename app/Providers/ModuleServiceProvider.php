@@ -79,8 +79,12 @@ class ModuleServiceProvider extends ServiceProvider
             $middlewareFile = base_path('modules/' . $module . '/middleware.php');
             if (file_exists($middlewareFile)) {
                 $middleware = include $middlewareFile;
-                foreach ($middleware as $alias => $class) {
+
+                foreach ($middleware['aliases'] ?? [] as $alias => $class) {
                     $router->aliasMiddleware($alias, $class);
+                }
+
+                foreach ($middleware['web'] ?? [] as $class) {
                     $router->pushMiddlewareToGroup('web', $class);
                 }
             }
