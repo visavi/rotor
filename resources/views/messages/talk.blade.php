@@ -96,7 +96,7 @@
         </form><br>
     @endif
 
-    <i class="fa fa-search"></i> <a href="/searchusers">{{ __('index.user_search') }}</a><br>
+    <i class="fa fa-search"></i> <a href="/users">{{ __('index.user_search') }}</a><br>
 @stop
 
 @push('scripts')

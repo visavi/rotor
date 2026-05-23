@@ -23,7 +23,6 @@ use App\Http\Controllers\User\BanController;
 use App\Http\Controllers\User\ListController;
 use App\Http\Controllers\User\PictureController;
 use App\Http\Controllers\User\RecoveryController;
-use App\Http\Controllers\User\SearchController as UserSearchController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -97,15 +96,6 @@ Route::controller(PictureController::class)
     ->group(function () {
         Route::match(['get', 'post'], '/', 'index')->name('index');
         Route::delete('/delete', 'delete')->name('delete');
-    });
-
-/* Поиск пользователя */
-Route::controller(UserSearchController::class)
-    ->prefix('searchusers')
-    ->group(function () {
-        Route::get('/', 'index');
-        Route::get('/sort/{letter}', 'sort')->where('letter', '[0-9a-z]+');
-        Route::match(['get', 'post'], '/search', 'search');
     });
 
 /* Личные сообщения */

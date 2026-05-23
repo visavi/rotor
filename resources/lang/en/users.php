@@ -99,10 +99,6 @@ return [
     Indicate the correct email, registration data will be sent to it',
 
     'login_or_username' => 'Login or username',
-    'search_text'       => '
-    If the search result did not return anything, then you can search by the first characters of the login<br>
-    In this case, a result similar to the request you entered will be displayed.',
-
     'theme'               => 'Subject',
     'language'            => 'Language',
     'time_shifting'       => 'Time shifting',

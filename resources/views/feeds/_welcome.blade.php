@@ -1,11 +1,29 @@
-<div class="text-center rounded-3 mb-4 p-5"
-     style="background:linear-gradient(135deg,#1a73e8 0%,#0d47a1 100%);color:#fff;">
-    <div class="mb-3">
-        <i class="fas fa-rocket" style="font-size:3rem;opacity:.9;"></i>
+<div class="text-center rounded-3 mb-4 p-5 position-relative overflow-hidden"
+     style="background:linear-gradient(135deg,#6f42c1 0%,#1a73e8 40%,#00c6ff 100%);color:#fff;">
+
+    {{-- animated shimmer overlay --}}
+    <div class="position-absolute top-0 start-0 w-100 h-100" aria-hidden="true" style="
+        background:linear-gradient(120deg,transparent 20%,rgba(255,255,255,.12) 50%,transparent 80%);
+        background-size:200% 100%;
+        animation:hero-shimmer 3s linear infinite;
+        pointer-events:none;
+    "></div>
+
+    <div class="position-relative">
+        <div class="mb-3">
+            <i class="fas fa-rocket" style="font-size:3rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25));"></i>
+        </div>
+        <h2 class="fw-bold mb-2" style="font-size:1.9rem;text-shadow:0 2px 8px rgba(0,0,0,.2);">{{ setting('title') }}</h2>
+        <p class="mb-0" style="opacity:.9;font-size:1rem;text-shadow:0 1px 4px rgba(0,0,0,.15);">{{ __('welcome.slogan') }}</p>
     </div>
-    <h2 class="fw-bold mb-2" style="font-size:1.75rem;">{{ setting('title') }}</h2>
-    <p class="mb-0" style="opacity:.85;font-size:1rem;">{{ __('welcome.slogan') }}</p>
 </div>
+
+<style>
+@keyframes hero-shimmer {
+    0%   { background-position: -100% 0; }
+    100% { background-position:  200% 0; }
+}
+</style>
 
 <p class="text-muted text-center mb-4" style="font-size:.95rem;">
     {{ __('welcome.feed_hint') }}

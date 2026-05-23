@@ -10,7 +10,7 @@ return [
     'step2_text'  => 'Title, description, registration rules, currency, themes — everything is flexible',
     'step2_btn'   => 'Settings',
     'step3_title' => 'Create your first post',
-    'step3_text'  => 'Any blog entry, news post, or forum topic — and the feed comes alive',
+    'step3_text'  => 'Any blog post, news article, or forum topic will start the feed — users will see the activity right away',
 
     'features_title' => 'Platform features',
 

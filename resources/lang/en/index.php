@@ -74,7 +74,6 @@ return [
     'note'             => 'Note',
     'upload_photo'     => 'Upload photo',
     'search_users'     => 'Search users',
-    'search_results'   => 'Search results',
     'account'          => 'Account',
 
     'upgrade'           => 'System upgrade',
