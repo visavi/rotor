@@ -98,7 +98,7 @@ return [
     All fields are required, you can add more complete information about yourself in your profile after registration<br>
     Indicate the correct email, registration data will be sent to it',
 
-    'login_or_username' => 'Login or username',
+    'login_or_username'   => 'Login or username',
     'theme'               => 'Subject',
     'language'            => 'Language',
     'time_shifting'       => 'Time shifting',
