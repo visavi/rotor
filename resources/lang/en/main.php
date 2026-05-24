@@ -268,6 +268,5 @@ return [
     'directory_not_writable'     => 'The directory is not writable!',
     'closed_comments'            => 'Commenting is closed!',
 
-    'online'     => 'Online',
-    'empty_feed' => 'No records yet!',
+    'online' => 'Online',
 ];

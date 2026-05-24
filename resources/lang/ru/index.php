@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'votes'       => 'Голосования',
     'pages'       => 'Полезная информация',
     'search'      => 'Поиск по сайту',
     'mails'       => 'Обратная связь',
@@ -11,7 +10,6 @@ return [
     'user_search' => 'Поиск пользователя',
     'statistics'  => 'Статистика посещений',
     'comments'    => 'Комментарии',
-    'topics'      => 'Темы форума',
 
     'login'     => 'Авторизация',
     'logout'    => 'Выход',
@@ -22,7 +20,6 @@ return [
     'private_message' => 'Приватное сообщение!',
     'courses'         => 'Курсы валют',
     'courses_error'   => 'Не удалось загрузить последние курсы валют!',
-    'online'          => 'На сайте',
 
     'db_queries'      => 'DB запросы',
     'db_speed'        => 'DB скорость',
@@ -38,16 +35,12 @@ return [
     'api_interface' => 'API интерфейс',
     'user_statuses' => 'Статусы пользователей',
 
-    'mail_contact'       => 'Почта / Контакты',
-    'profile_settings'   => 'Анкета / Настройки',
     'my_account'         => 'Моя анкета',
     'my_profile'         => 'Мой профиль',
     'my_details'         => 'Мои данные',
     'my_settings'        => 'Мои настройки',
-    'activity'           => 'Активность',
     'admin_advertising'  => 'Админская реклама',
     'advertising'        => 'Реклама',
-    'reputation_history' => 'История репутации',
     'reputation_edit'    => 'Изменения репутации',
     'money_transfer'     => 'Перевод денег',
 
@@ -69,7 +62,6 @@ return [
     'cash_transactions' => 'Денежные операции',
     'ip_ban'            => 'IP-бан',
     'phpinfo'           => 'PHP-информация',
-    'new_loads'         => 'Новые публикации',
     'errors'            => 'Ошибки / Автобаны',
     'stickers'          => 'Стикеры',
     'blacklist'         => 'Черный список',

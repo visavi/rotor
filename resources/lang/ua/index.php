@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'votes'         => 'Голосування',
     'pages'         => 'Корисна інформація',
     'search'        => 'Пошук сайтом',
     'mails'         => 'Зворотний зв’язок',
@@ -11,7 +10,6 @@ return [
     'user_search'   => 'Пошук користувача',
     'statistics'    => 'Статистика відвідувань',
     'comments'      => 'Коментарі',
-    'topics'        => 'Теми форуму',
 
     'login'     => 'Авторизація',
     'logout'    => 'Вихід',
@@ -22,7 +20,6 @@ return [
     'private_message' => 'Приватне повідомлення!',
     'courses'         => 'Курси валют',
     'courses_error'   => 'Неможливо завантажити останні курси валют!',
-    'online'          => 'На сайті',
 
     'db_queries'      => 'DB запити',
     'db_speed'        => 'DB швидкість',
@@ -39,16 +36,12 @@ return [
     'user_statuses' => 'Статуси користувачів',
 
 
-    'mail_contact'       => 'Пошта / Контакти',
-    'profile_settings'   => 'Анкета / Налаштування',
     'my_account'         => 'Моя анкета',
     'my_profile'         => 'Мій профіль',
     'my_details'         => 'Мої дані',
     'my_settings'        => 'Мої налаштування',
-    'activity'           => 'Активність',
     'admin_advertising'  => 'Адмінська реклама',
     'advertising'        => 'Реклама',
-    'reputation_history' => 'Історія репутації',
     'reputation_edit'    => 'Зміни репутації',
     'money_transfer'     => 'Переказ грошей',
 
@@ -70,7 +63,6 @@ return [
     'cash_transactions' => 'Грошові операції',
     'ip_ban'            => 'IP-бан',
     'phpinfo'           => 'PHP-інформація',
-    'new_loads'         => 'Нові публікації',
     'errors'            => 'Помилки / Автобани',
     'stickers'          => 'Стікери',
     'blacklist'         => 'Чорний список',

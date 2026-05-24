@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'votes'         => 'Voting',
     'pages'         => 'Useful information',
     'search'        => 'Site search',
     'mails'         => 'Feedback',
@@ -11,7 +10,6 @@ return [
     'user_search'   => 'User search',
     'statistics'    => 'Attendance Statistics',
     'comments'      => 'Comments',
-    'topics'        => 'Forum topics',
 
     'login'     => 'Login',
     'logout'    => 'Logout',
@@ -22,7 +20,6 @@ return [
     'private_message' => 'Private message!',
     'courses'         => 'Exchange rates',
     'courses_error'   => 'Failed to download the latest exchange rates!',
-    'online'          => 'Online',
 
     'db_queries'      => 'DB queries',
     'db_speed'        => 'DB speed',
@@ -39,16 +36,12 @@ return [
     'user_statuses' => 'User statuses',
 
 
-    'mail_contact'       => 'Mail / Contact',
-    'profile_settings'   => 'Profile / Settings',
     'my_account'         => 'My account',
     'my_profile'         => 'My profile',
     'my_details'         => 'My details',
     'my_settings'        => 'Settings',
-    'activity'           => 'Activity',
     'admin_advertising'  => 'Admin advertising',
     'advertising'        => 'Advertising',
-    'reputation_history' => 'Reputation history',
     'reputation_edit'    => 'Reputation changes',
     'money_transfer'     => 'Money transfer',
 
@@ -70,7 +63,6 @@ return [
     'cash_transactions' => 'Cash transactions',
     'ip_ban'            => 'IP ban',
     'phpinfo'           => 'PHP info',
-    'new_loads'         => 'New publications',
     'errors'            => 'Errors / Bans',
     'stickers'          => 'Stickers',
     'blacklist'         => 'Blacklist',
