@@ -79,6 +79,8 @@
                             <span class="badge bg-danger">{{ __('admin.modules.files_missing') }}</span>
                         @elseif ($installed)
                             <span class="badge bg-success">{{ __('main.installed') }}</span>
+                        @else
+                            <span class="badge bg-secondary">{{ __('main.not_installed') }}</span>
                         @endif
                         @if ($installed && $localExists && ! $isActive)
                             <span class="badge bg-warning text-dark">{{ __('main.disabled') }}</span>

@@ -12,6 +12,10 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next, ?string $level = null)
     {
+        if (! auth()->check()) {
+            return redirect()->route('login');
+        }
+
         if (! isAdmin($level)) {
             abort(403, __('errors.forbidden'));
         }

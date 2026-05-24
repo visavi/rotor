@@ -351,6 +351,7 @@ class ModuleController extends AdminController
     {
         if (is_link($path)) {
             unlink($path);
+
             return;
         }
 

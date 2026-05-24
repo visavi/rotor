@@ -25,6 +25,11 @@ class UserFactory extends Factory
 
     public function admin(): static
     {
+        return $this->state(['level' => User::ADMIN]);
+    }
+
+    public function boss(): static
+    {
         return $this->state(['level' => User::BOSS]);
     }
 }
