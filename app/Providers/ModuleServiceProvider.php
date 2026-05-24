@@ -101,7 +101,7 @@ class ModuleServiceProvider extends ServiceProvider
                     Relation::morphMap([$morphName => $model]);
 
                     if ($search = $config['search'] ?? null) {
-                        Registry::search($model, $search['label'], $search['view'], $search['with'] ?? []);
+                        Registry::search($model, $search['view'], $search['with'] ?? []);
                     }
 
                     if ($feed = $config['feed'] ?? null) {
@@ -118,8 +118,12 @@ class ModuleServiceProvider extends ServiceProvider
                         Registry::ratingType($morphName);
                     }
 
-                    if ($spam = $config['spam'] ?? null) {
-                        Registry::spam($morphName, $spam);
+                    if ($label = $config['label'] ?? null) {
+                        Registry::label($morphName, $label);
+                    }
+
+                    if (! empty($config['spam'])) {
+                        Registry::spam($morphName, Registry::$labelTypes[$morphName] ?? $morphName);
                     }
                 }
 

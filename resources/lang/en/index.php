@@ -1,16 +1,7 @@
 <?php
 
 return [
-    'news'          => 'News',
-    'communication' => 'Communication',
-    'guestbook'     => 'Guest book',
-    'photos'        => 'Gallery',
     'votes'         => 'Voting',
-    'offers'        => 'Suggestions / Problems',
-    'forums'        => 'Forum',
-    'loads'         => 'Downloads',
-    'blogs'         => 'Blogs',
-    'boards'        => 'Bulletin board',
     'pages'         => 'Useful information',
     'search'        => 'Site search',
     'mails'         => 'Feedback',
@@ -21,7 +12,6 @@ return [
     'statistics'    => 'Attendance Statistics',
     'comments'      => 'Comments',
     'topics'        => 'Forum topics',
-    'posts'         => 'Forum posts',
 
     'login'     => 'Login',
     'logout'    => 'Logout',
@@ -32,7 +22,6 @@ return [
     'private_message' => 'Private message!',
     'courses'         => 'Exchange rates',
     'courses_error'   => 'Failed to download the latest exchange rates!',
-    'calendar'        => 'Calendar',
     'online'          => 'Online',
 
     'db_queries'      => 'DB queries',
@@ -49,11 +38,6 @@ return [
     'api_interface' => 'Api interface',
     'user_statuses' => 'User statuses',
 
-    'recent_activity' => 'Recent activity',
-    'recent_topics'   => 'Recent topics',
-    'recent_files'    => 'Recent files',
-    'recent_articles' => 'Recent articles',
-    'recent_photos'   => 'Recent photos',
 
     'mail_contact'       => 'Mail / Contact',
     'profile_settings'   => 'Profile / Settings',
@@ -86,7 +70,6 @@ return [
     'cash_transactions' => 'Cash transactions',
     'ip_ban'            => 'IP ban',
     'phpinfo'           => 'PHP info',
-    'new_articles'      => 'New articles',
     'new_loads'         => 'New publications',
     'errors'            => 'Errors / Bans',
     'stickers'          => 'Stickers',

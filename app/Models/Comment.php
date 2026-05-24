@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use App\Classes\Registry;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -242,13 +243,6 @@ class Comment extends Model
      */
     public function getRelateType(): string
     {
-        return match ($this->relate_type) {
-            'articles' => __('index.blogs'),
-            'downs'    => __('index.loads'),
-            'news'     => __('index.news'),
-            'offers'   => __('index.offers'),
-            'photos'   => __('index.photos'),
-            default    => $this->relate_type,
-        };
+        return Registry::$labelTypes[$this->relate_type] ?? $this->relate_type;
     }
 }

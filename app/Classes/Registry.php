@@ -8,6 +8,7 @@ class Registry
 {
     public static array $complaintTypes = [];
     public static array $fileTypes = [];
+    public static array $labelTypes = [];
     public static array $mediaTypes = [];
     public static array $ratingTypes = [];
     public static array $spamTypes = [];
@@ -48,6 +49,14 @@ class Registry
     public static function ratingType(string $morphName): void
     {
         static::$ratingTypes[] = $morphName;
+    }
+
+    /**
+     * Регистрирует отображаемое название для morph-типа
+     */
+    public static function label(string $morphName, string $label): void
+    {
+        static::$labelTypes[$morphName] = $label;
     }
 
     /**
@@ -103,10 +112,10 @@ class Registry
     /**
      * Регистрирует модель в полнотекстовом поиске: метка, шаблон и eager-загрузки
      */
-    public static function search(string $class, string $label, string $view, array $with = []): void
+    public static function search(string $class, string $view, array $with = []): void
     {
         /** @var class-string $class */
         $morphName = $class::$morphName;
-        static::$search[$morphName] = ['class' => $class, 'label' => $label, 'view' => $view, 'with' => $with];
+        static::$search[$morphName] = ['class' => $class, 'view' => $view, 'with' => $with];
     }
 }

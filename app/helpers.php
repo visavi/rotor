@@ -472,7 +472,6 @@ function truncateDescription(HtmlString|string $value, int $words = 20, string $
     return Str::words(trim($value), $words, $end);
 }
 
-
 /**
  * Возвращает код админской рекламы
  */
@@ -944,16 +943,6 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 function renderText(?string $text): HtmlString
 {
     return new HtmlString(nl2br(e((string) $text)));
-}
-
-/**
- * Обрабатывает BB-код
- *
- * @deprecated - используется renderHtml
- */
-function bbCode(?string $text): HtmlString
-{
-    return new HtmlString($text);
 }
 
 /**

@@ -1,16 +1,7 @@
 <?php
 
 return [
-    'news'          => 'Новини',
-    'communication' => 'Спілкування',
-    'guestbook'     => 'Гостьова',
-    'photos'        => 'Галерея',
     'votes'         => 'Голосування',
-    'offers'        => 'Пропозиції / Проблеми',
-    'forums'        => 'Форум',
-    'loads'         => 'Завантаження',
-    'blogs'         => 'Блоги',
-    'boards'        => 'Оголошення',
     'pages'         => 'Корисна інформація',
     'search'        => 'Пошук сайтом',
     'mails'         => 'Зворотний зв’язок',
@@ -21,7 +12,6 @@ return [
     'statistics'    => 'Статистика відвідувань',
     'comments'      => 'Коментарі',
     'topics'        => 'Теми форуму',
-    'posts'         => 'Повідомлення форуму',
 
     'login'     => 'Авторизація',
     'logout'    => 'Вихід',
@@ -32,7 +22,6 @@ return [
     'private_message' => 'Приватне повідомлення!',
     'courses'         => 'Курси валют',
     'courses_error'   => 'Неможливо завантажити останні курси валют!',
-    'calendar'        => 'Календар',
     'online'          => 'На сайті',
 
     'db_queries'      => 'DB запити',
@@ -49,11 +38,6 @@ return [
     'api_interface' => 'API інтерфейс',
     'user_statuses' => 'Статуси користувачів',
 
-    'recent_activity' => 'Остання активність',
-    'recent_topics'   => 'Останні теми',
-    'recent_files'    => 'Останні файли',
-    'recent_articles' => 'Останні статті',
-    'recent_photos'   => 'Останні фотографії',
 
     'mail_contact'       => 'Пошта / Контакти',
     'profile_settings'   => 'Анкета / Налаштування',
@@ -86,7 +70,6 @@ return [
     'cash_transactions' => 'Грошові операції',
     'ip_ban'            => 'IP-бан',
     'phpinfo'           => 'PHP-інформація',
-    'new_articles'      => 'Нові статті',
     'new_loads'         => 'Нові публікації',
     'errors'            => 'Помилки / Автобани',
     'stickers'          => 'Стікери',

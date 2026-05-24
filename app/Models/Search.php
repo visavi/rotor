@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Classes\Registry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -51,7 +52,7 @@ class Search extends Model
             User::$morphName    => __('index.users'),
         ];
 
-        return array_merge($base, array_map(fn ($s) => $s['label'], \App\Classes\Registry::$search));
+        return array_merge($base, array_intersect_key(Registry::$labelTypes, Registry::$search));
     }
 
     /**
