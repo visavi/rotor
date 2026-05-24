@@ -1,8 +1,6 @@
 /public/build
 /public/hot
 /public/storage
-/public/assets/custom.css
-/public/assets/custom.js
 /node_modules
 /storage/*.key
 /storage/debugbar

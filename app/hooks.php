@@ -9,26 +9,6 @@ use App\Classes\Hook;
  * Callback возвращает свой фрагмент (или null/'' чтобы ничего не добавлять).
  */
 
-// Подключение пользовательского CSS (редактор в /admin/editor)
-Hook::add('head', function () {
-    $path = public_path('assets/custom.css');
-    if (file_exists($path) && filesize($path) > 0) {
-        return '<link rel="stylesheet" href="/assets/custom.css?v=' . filemtime($path) . '">';
-    }
-
-    return null;
-}, -1);
-
-// Подключение пользовательского JS (редактор в /admin/editor)
-Hook::add('footer', function () {
-    $path = public_path('assets/custom.js');
-    if (file_exists($path) && filesize($path) > 0) {
-        return '<script src="/assets/custom.js?v=' . filemtime($path) . '"></script>';
-    }
-
-    return null;
-}, -1);
-
 // Пример css хука
 // Hook::add('head', '<link rel="stylesheet" href="/assets/styles.css">');
 

@@ -49,13 +49,13 @@ class Hook
     /**
      * Вызывает хук
      */
-    public static function call(string $hookName, mixed $args = null): string
+    public static function call(string $hookName, mixed ...$args): string
     {
         $result = '<!--@' . $hookName . '-->';
 
         foreach (self::$hooks[$hookName] ?? [] as $hook) {
             $value = $hook['value'];
-            $fragment = (is_string($value) || $value instanceof Stringable) ? $value : $value($args);
+            $fragment = (is_string($value) || $value instanceof Stringable) ? $value : $value(...$args);
 
             if ($fragment === null || $fragment === '') {
                 continue;

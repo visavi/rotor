@@ -16,7 +16,6 @@ use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\CheckerController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\DelUserController;
-use App\Http\Controllers\Admin\EditorController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\FileController as AdminFileController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
@@ -147,15 +146,6 @@ Route::middleware(['check.admin', 'admin.logger'])
 
         /* Админ */
         Route::middleware('check.admin:admin')->group(function () {
-            /* Редактор CSS/JS */
-            Route::controller(EditorController::class)
-                ->prefix('editor')
-                ->name('editor.')
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/', 'save')->name('save');
-                });
-
             /* Правила */
             Route::controller(RuleController::class)
                 ->prefix('rules')
