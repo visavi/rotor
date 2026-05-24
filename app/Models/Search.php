@@ -51,7 +51,7 @@ class Search extends Model
             User::$morphName    => __('index.users'),
         ];
 
-        return array_merge($base, \App\Classes\Registry::$searchTypes);
+        return array_merge($base, array_map(fn ($s) => $s['label'], \App\Classes\Registry::$search));
     }
 
     /**

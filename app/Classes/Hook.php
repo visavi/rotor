@@ -39,6 +39,14 @@ class Hook
     }
 
     /**
+     * Проверяет, зарегистрирован ли хук
+     */
+    public static function has(string $hookName): bool
+    {
+        return ! empty(self::$hooks[$hookName]);
+    }
+
+    /**
      * Вызывает хук
      */
     public static function call(string $hookName, mixed $args = null): string

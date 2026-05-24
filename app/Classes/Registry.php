@@ -15,75 +15,98 @@ class Registry
     public static array $pollResolvers = [];
     public static array $deleteUserCallbacks = [];
     public static array $adminDeleteHandlers = [];
-    public static array $feedTypes = [];
-    public static array $feedViewMap = [];
-    public static array $searchTypes = [];
-    public static array $searchViewMap = [];
-    public static array $searchMorphWith = [];
-    public static array $searchClasses = [];
+    public static array $feeds = [];
+    public static array $search = [];
 
+    /**
+     * Регистрирует обработчик жалобы на контент типа $type
+     */
     public static function complaint(string $type, callable $handler): void
     {
         static::$complaintTypes[$type] = $handler;
     }
 
+    /**
+     * Помечает тип как поддерживающий загрузку файлов (не медиа)
+     */
     public static function fileType(string $morphName): void
     {
         static::$fileTypes[] = $morphName;
     }
 
+    /**
+     * Помечает тип как поддерживающий загрузку медиафайлов (фото/видео)
+     */
     public static function mediaType(string $morphName): void
     {
         static::$mediaTypes[] = $morphName;
     }
 
+    /**
+     * Помечает тип как поддерживающий рейтинг
+     */
     public static function ratingType(string $morphName): void
     {
         static::$ratingTypes[] = $morphName;
     }
 
+    /**
+     * Регистрирует тип как источник спама с меткой для админки
+     */
     public static function spam(string $morphName, string $label): void
     {
         static::$spamTypes[$morphName] = $label;
     }
 
+    /**
+     * Регистрирует страницу sitemap с её генератором
+     */
     public static function sitemap(string $key, callable $handler): void
     {
         static::$sitemapPages[$key] = $handler;
     }
 
+    /**
+     * Регистрирует резолвер голосований для модели
+     */
     public static function pollResolver(string $class, callable $handler): void
     {
         static::$pollResolvers[$class] = $handler;
     }
 
+    /**
+     * Регистрирует колбэк на самостоятельное удаление пользователя
+     */
     public static function onDeleteUser(callable $handler): void
     {
         static::$deleteUserCallbacks[] = $handler;
     }
 
+    /**
+     * Регистрирует колбэк на удаление пользователя администратором
+     */
     public static function onAdminDeleteUser(callable $handler): void
     {
         static::$adminDeleteHandlers[] = $handler;
     }
 
+    /**
+     * Регистрирует модель как источник ленты: eager-загрузки и шаблон отображения
+     */
     public static function feed(string $class, array $withs, string $view): void
     {
         /** @var class-string $class */
         $morphName = $class::$morphName;
-        static::$feedTypes[$morphName] = ['class' => $class, 'withs' => $withs];
-        static::$feedViewMap[$morphName] = $view;
+        static::$feeds[$morphName] = ['class' => $class, 'withs' => $withs, 'view' => $view];
     }
 
+    /**
+     * Регистрирует модель в полнотекстовом поиске: метка, шаблон и eager-загрузки
+     */
     public static function search(string $class, string $label, string $view, array $with = []): void
     {
         /** @var class-string $class */
         $morphName = $class::$morphName;
-        static::$searchTypes[$morphName] = $label;
-        static::$searchViewMap[$morphName] = $view;
-        static::$searchClasses[] = $class;
-        if ($with) {
-            static::$searchMorphWith[$class] = $with;
-        }
+        static::$search[$morphName] = ['class' => $class, 'label' => $label, 'view' => $view, 'with' => $with];
     }
 }

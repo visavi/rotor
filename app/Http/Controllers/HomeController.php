@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Feed;
+use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Models\Ban;
 use App\Models\Comment;
@@ -95,7 +96,8 @@ class HomeController extends Controller
                     ->paginate(10)
                     ->appends(compact('query', 'sort', 'type'));
 
-                $posts->loadMorph('relate', [Comment::class => ['relate'], ...\App\Classes\Registry::$searchMorphWith]);
+                $morphWith = array_filter(array_column(Registry::$search, 'with', 'class'));
+                $posts->loadMorph('relate', [Comment::class => ['relate'], ...$morphWith]);
             } else {
                 setInput($request->all());
                 setFlash('danger', $validator->getErrors());

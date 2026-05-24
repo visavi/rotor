@@ -7,7 +7,7 @@
 @section('content')
     @include('ads/_top')
 
-    @if(Hook::getHooks()['homepageView'] ?? false)
+    @if(Hook::has('homepageView'))
         {!! Hook::call('homepageView') !!}
     @else
         <div id="feed-container">{{ (new Feed())->getFeed() }}</div>

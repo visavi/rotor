@@ -29,7 +29,7 @@ class Feed
      */
     private static function allTypes(): array
     {
-        return array_merge(self::$baseTypes, Registry::$feedTypes);
+        return array_merge(self::$baseTypes, Registry::$feeds);
     }
 
     public function getFeed(): HtmlString

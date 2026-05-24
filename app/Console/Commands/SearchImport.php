@@ -22,7 +22,7 @@ class SearchImport extends Command
         $models = array_merge([
             Comment::class,
             User::class,
-        ], Registry::$searchClasses);
+        ], array_column(Registry::$search, 'class'));
 
         DB::disableQueryLog();
         DB::connection()->unsetEventDispatcher();
