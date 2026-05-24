@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\AdminAdvertController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdvertController as AdminUserAdvertController;
 use App\Http\Controllers\Admin\AntimatController;
-use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\BanController as AdminBanController;
 use App\Http\Controllers\Admin\BanhistController;
 use App\Http\Controllers\Admin\BanlistController;
@@ -17,7 +16,6 @@ use App\Http\Controllers\Admin\CheckerController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\DelUserController;
 use App\Http\Controllers\Admin\ErrorController;
-use App\Http\Controllers\Admin\FileController as AdminFileController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LogController;
@@ -232,15 +230,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::post('/clear', 'clear');
                 });
 
-            /* Бэкап */
-            Route::controller(BackupController::class)
-                ->prefix('backups')
-                ->group(function () {
-                    Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::delete('/delete', 'delete');
-                });
-
             /* Сканирование */
             Route::controller(CheckerController::class)
                 ->prefix('checkers')
@@ -270,16 +259,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/create', 'create');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
                     Route::delete('/delete/{id}', 'delete');
-                });
-
-            /* Редактор */
-            Route::controller(AdminFileController::class)
-                ->prefix('files')
-                ->group(function () {
-                    Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/edit', 'edit');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::delete('/delete', 'delete');
                 });
 
             /* Пользовательская реклама */
