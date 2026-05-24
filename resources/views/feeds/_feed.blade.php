@@ -1,4 +1,4 @@
-@use('App\Classes\Registry');
+@use('App\Classes\Registry')
 @if ($posts->currentPage() > 1)
     <div class="d-flex justify-content-center feed-pagination-top feed-pagination-top--initial">
         {{ $posts->links('feeds._paginator') }}

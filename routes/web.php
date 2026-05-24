@@ -41,8 +41,6 @@ use Illuminate\Support\Facades\Route;
     return view('welcome');
 });*/
 
-require __DIR__ . '/redirects.php';
-
 Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('home');

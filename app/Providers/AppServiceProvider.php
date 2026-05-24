@@ -36,8 +36,6 @@ class AppServiceProvider extends ServiceProvider
         Route::pattern('slug', '[a-z0-9-\.]+');
         Route::pattern('login', '[\w\-]+');
 
-        Route::macro('admin', static fn () => Route::middleware(['web', 'check.admin', 'admin.logger'])->prefix('admin'));
-
         DB::connection()->enableQueryLog();
 
         Paginator::$defaultView = 'app/_paginator';
