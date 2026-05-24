@@ -10,7 +10,6 @@ return [
     'delete_talk'         => 'Delete talk',
     'dialogue'            => 'Dialogue',
     'dialogue_with'       => 'Dialogue with :user',
-    'warning'             => 'Attention, given user is in ignore list!',
     'empty_dialogue'      => 'No correspondence history!',
     'send_yourself'       => 'You cannot send a letter to yourself!',
     'success_sent'        => 'Email sent successfully!',

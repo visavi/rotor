@@ -96,7 +96,6 @@ return [
 
     'points_transfer'     => 'Asset for money transfer',
     'points_rating_edit'  => 'Asset for changing reputation',
-    'points_topics_edit'  => 'Asset to change forum topics',
     'points_advert_hide'  => 'Asset to hide advertising',
     'points_status_edit'  => 'Asset to change status',
     'moneys_status_edit'  => 'Cost of status change',
@@ -132,13 +131,11 @@ return [
     'site_closed_guest' => 'Closed to guests',
     'site_closed_all'   => 'Closed to everyone',
 
-    'feed_topics_show'     => 'Show forum posts',
     'feed_news_show'       => 'Show news',
     'feed_downs_show'      => 'Show downloads',
     'feed_comments_show'   => 'Show comments',
     'feed_per_page'        => 'Number of posts per page',
     'feed_cache_time'      => 'Feed cache time (sec.)',
-    'feed_topics_rating'   => 'Hide posts with rating',
     'feed_news_rating'     => 'Hide news with rating',
     'feed_downs_rating'    => 'Hide downloads with rating',
     'feed_comments_rating' => 'Hide comments with rating',
@@ -149,4 +146,5 @@ return [
 
 
     'seo_slug_template' => 'Link template',
+    'loads_max_files'   => 'Maximum load count. files',
 ];
