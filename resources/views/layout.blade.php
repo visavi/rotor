@@ -1,3 +1,4 @@
+@use('App\Classes\Hook')
 @extends('theme::layout')
 
 @section('header')
@@ -9,11 +10,11 @@
 @stop
 
 @section('advertTop')
-    @include('ads/_top_all')
+    {!! Hook::call('advertTop') !!}
 @stop
 
 @section('advertBottom')
-    @include('ads/_bottom_all')
+    {!! Hook::call('advertBottom') !!}
 @stop
 
 @section('advertAdmin')

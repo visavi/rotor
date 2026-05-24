@@ -21,7 +21,6 @@ use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ModuleRegistryController;
 use App\Http\Controllers\Admin\NoticeController;
-use App\Http\Controllers\Admin\PaidAdvertController;
 use App\Http\Controllers\Admin\ReglistController;
 use App\Http\Controllers\Admin\RuleController;
 use App\Http\Controllers\Admin\SearchController;
@@ -266,16 +265,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
                     Route::post('/delete', 'delete');
-                });
-
-            /* Платная реклама */
-            Route::controller(PaidAdvertController::class)
-                ->prefix('paid-adverts')
-                ->group(function () {
-                    Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::delete('/delete/{id}', 'delete');
                 });
 
             /* Пользовательские поля */

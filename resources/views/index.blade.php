@@ -5,7 +5,7 @@
 @section('title', setting('logos'))
 
 @section('content')
-    @include('ads/_top')
+    {!! Hook::call('advertIndexTop') !!}
 
     @if(Hook::has('homepageView'))
         {!! Hook::call('homepageView') !!}
@@ -14,5 +14,5 @@
         <div id="feed-sentinel"></div>
     @endif
 
-    @include('ads/_bottom')
+    {!! Hook::call('advertIndexBottom') !!}
 @stop

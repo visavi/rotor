@@ -14,7 +14,6 @@ use App\Models\Error;
 use App\Models\Invite;
 use App\Models\Notice;
 use App\Models\Online;
-use App\Models\PaidAdvert;
 use App\Models\Setting;
 use App\Models\Spam;
 use App\Models\Sticker;
@@ -473,24 +472,6 @@ function truncateDescription(HtmlString|string $value, int $words = 20, string $
     return Str::words(trim($value), $words, $end);
 }
 
-/**
- * Возвращает код платной рекламы
- */
-function getAdvertPaid(string $place): ?HtmlString
-{
-    $adverts = PaidAdvert::statAdverts();
-
-    if (isset($adverts[$place])) {
-        $links = [];
-        foreach ($adverts[$place] as $advert) {
-            $links[] = Arr::random($advert);
-        }
-
-        return new HtmlString(implode('<br>', $links));
-    }
-
-    return null;
-}
 
 /**
  * Возвращает код админской рекламы
