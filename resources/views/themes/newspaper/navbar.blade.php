@@ -48,8 +48,7 @@
     <!-- Section Navigation -->
     <nav class="paper-nav">
         <ul class="paper-nav__list">
-            @hook('sidebarMenuStart')
-            @hook('sidebarMenuEnd')
+            @hook('sidebarMenu')
         </ul>
     </nav>
 </header>

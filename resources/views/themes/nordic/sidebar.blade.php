@@ -44,8 +44,7 @@
     </ul>
 
     <ul class="app-menu">
-        @hook('sidebarMenuStart')
-@hook('sidebarMenuEnd')
+        @hook('sidebarMenu')
     </ul>
 
     <ul class="app-menu app-sidebar__footer">

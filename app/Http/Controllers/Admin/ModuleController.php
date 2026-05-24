@@ -305,6 +305,30 @@ class ModuleController extends AdminController
         return $moduleName;
     }
 
+    /**
+     * Удаление файлов модуля с диска
+     */
+    public function deleteFiles(Request $request): RedirectResponse
+    {
+        $moduleName = $request->input('module');
+        $modulePath = base_path('modules/' . $moduleName);
+
+        if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
+            abort(200, __('admin.modules.module_not_found'));
+        }
+
+        if (Module::query()->where('name', $moduleName)->exists()) {
+            abort(200, __('admin.modules.delete_files_not_uninstalled'));
+        }
+
+        $this->deleteDirectory($modulePath);
+
+        Artisan::call('route:clear');
+        setFlash('success', __('admin.modules.module_files_deleted'));
+
+        return redirect()->route('admin.modules.index');
+    }
+
     private function chmodRecursive(string $path): void
     {
         chmod($path, 0755);
@@ -325,6 +349,11 @@ class ModuleController extends AdminController
 
     private function deleteDirectory(string $path): void
     {
+        if (is_link($path)) {
+            unlink($path);
+            return;
+        }
+
         if (! is_dir($path)) {
             return;
         }
@@ -335,7 +364,7 @@ class ModuleController extends AdminController
             }
 
             $full = $path . '/' . $item;
-            is_dir($full) ? $this->deleteDirectory($full) : unlink($full);
+            is_dir($full) && ! is_link($full) ? $this->deleteDirectory($full) : unlink($full);
         }
 
         rmdir($path);
@@ -369,6 +398,12 @@ class ModuleController extends AdminController
             ]);
             $result = __('admin.modules.module_success_disabled');
         } else {
+            if (env('MODULES_SAFE_MODE', false)) {
+                setFlash('danger', __('admin.modules.safe_mode_enabled'));
+
+                return redirect('admin/modules/module?module=' . $moduleName);
+            }
+
             $module->rollback();
             $module->delete();
             $result = __('admin.modules.module_success_deleted');

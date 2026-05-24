@@ -131,7 +131,7 @@
                     </div>
                 @endif
 
-                @hook('userProfileLinks', $user)
+                <ul class="list-inline mb-0">@hook('userProfileLinks', $user)</ul>
             </div>
         </div>
     </div>

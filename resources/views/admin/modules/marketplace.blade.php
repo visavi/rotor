@@ -75,10 +75,12 @@
                     @if (! $compatible)
                         <span class="badge bg-danger">{{ __('admin.modules.incompatible') }}</span>
                     @else
-                        @if ($installed)
+                        @if ($installed && ! $localExists)
+                            <span class="badge bg-danger">{{ __('admin.modules.files_missing') }}</span>
+                        @elseif ($installed)
                             <span class="badge bg-success">{{ __('main.installed') }}</span>
                         @endif
-                        @if ($installed && ! $isActive)
+                        @if ($installed && $localExists && ! $isActive)
                             <span class="badge bg-warning text-dark">{{ __('main.disabled') }}</span>
                         @endif
                         @if ($hasUpdate)

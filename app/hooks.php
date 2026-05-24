@@ -45,7 +45,7 @@ Hook::add('footer', function () {
 });*/
 
 // Пример вставки ссылки в меню сайта с приоритетом 10
-/*Hook::add('sidebarMenuEnd', function () {
+/*Hook::add('sidebarMenu', function () {
     return '<li>
         <a class="menu-item' . (request()->is('page*') ? ' active' : '') . '" href="/">
             <i class="menu-icon fa-solid fa-home"></i>

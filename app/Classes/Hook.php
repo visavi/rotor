@@ -61,7 +61,7 @@ class Hook
                 continue;
             }
 
-            $result .= (string) $fragment . PHP_EOL;
+            $result .= $fragment . PHP_EOL;
         }
 
         return $result;

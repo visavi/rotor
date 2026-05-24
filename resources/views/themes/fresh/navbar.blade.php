@@ -109,8 +109,7 @@
 <nav class="app-topnav">
     <div class="app-topnav__inner">
         <ul class="app-topnav__menu">
-            @hook('sidebarMenuStart')
-            @hook('sidebarMenuEnd')
+            @hook('sidebarMenu')
         </ul>
 
         <div class="app-topnav__right">

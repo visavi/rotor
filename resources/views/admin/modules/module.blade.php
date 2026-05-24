@@ -180,5 +180,6 @@
         @endif
     @else
         <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">{{ __('main.install') }}</a>
+        <a class="btn btn-danger ms-2" href="/admin/modules/delete?module={{ $moduleName }}" onclick="return confirm('{{ __('admin.modules.confirm_delete_files') }}')">{{ __('admin.modules.delete_files') }}</a>
     @endif
 @stop

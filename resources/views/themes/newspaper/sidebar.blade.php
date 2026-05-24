@@ -27,8 +27,7 @@
 
     <div class="paper-sidebar-section">
         <ul class="paper-sidebar-menu">
-            @hook('sidebarMenuStart')
-            @hook('sidebarMenuEnd')
+            @hook('sidebarMenu')
         </ul>
     </div>
 

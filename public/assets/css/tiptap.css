@@ -451,6 +451,7 @@ blockquote::before {
     max-height: 450px;
     height: auto;
     border-radius: 4px;
+    margin: 1px;
 }
 
 /* Video embed */

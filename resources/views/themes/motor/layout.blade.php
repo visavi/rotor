@@ -41,8 +41,7 @@
                         @include('themes/motor/menu')
                     </span>
                     <ul class="menu-nav">
-                        @hook('sidebarMenuStart')
-                        @hook('sidebarMenuEnd')
+                        @hook('sidebarMenu')
                     </ul>
                 </div>
             </div>

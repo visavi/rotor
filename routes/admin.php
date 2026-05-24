@@ -344,6 +344,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::post('/download', 'download')->name('download');
                     Route::get('/install', 'install')->name('install');
                     Route::get('/uninstall', 'uninstall')->name('uninstall');
+                    Route::get('/delete', 'deleteFiles')->name('delete');
                 });
 
             /* Реестры модулей */
