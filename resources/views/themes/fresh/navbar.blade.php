@@ -113,7 +113,7 @@
         </ul>
 
         <div class="app-topnav__right">
-            <span class="app-topnav__online">@yield('online')</span>
+            <span class="app-topnav__online">{{ showOnline() }}</span>
             <span class="app-topnav__lang">
                 <i class="fas fa-globe-americas"></i>
                 <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /

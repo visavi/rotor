@@ -5,14 +5,16 @@
 @section('title', setting('logos'))
 
 @section('content')
-    {!! Hook::call('advertIndexTop') !!}
+    @hook('advertIndexTop')
 
     @if(Hook::has('homepageView'))
-        {!! Hook::call('homepageView') !!}
+        @hook('homepageView')
     @else
-        <div id="feed-container">{{ (new Feed())->getFeed() }}</div>
+        <div id="feed-container">
+            {{ (new Feed())->getFeed() }}
+        </div>
         <div id="feed-sentinel"></div>
     @endif
 
-    {!! Hook::call('advertIndexBottom') !!}
+    @hook('advertIndexBottom')
 @stop

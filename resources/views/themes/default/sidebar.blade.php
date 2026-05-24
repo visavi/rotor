@@ -74,7 +74,7 @@
 
         <li>
             <span class="float-end">
-                @yield('online')
+                {{ showOnline() }}
             </span>
 
             <i class="fas fa-globe-americas"></i>

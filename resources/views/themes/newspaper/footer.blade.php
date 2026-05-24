@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="paper-footer-bottom">
-            @yield('counter')
+            {{ showCounter() }}
             <div class="paper-footer-social">
                 <a target="_blank" href="https://telegram.me/visavinet"><i class="fab fa-telegram fa-lg"></i></a>
                 <a target="_blank" href="https://vk.com/visavinet"><i class="fab fa-vk fa-lg"></i></a>
@@ -36,6 +36,6 @@
             <div class="paper-footer-copy">{{ setting('copy') }}</div>
         </div>
         @hook('footerEnd')
-        @yield('performance')
+        {{ performance() }}
     </footer>
 </div>

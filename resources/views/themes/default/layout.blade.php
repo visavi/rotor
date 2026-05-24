@@ -35,15 +35,15 @@
     @yield('flash')
 
     <div class="mb-2">
-        @yield('advertTop')
-        @yield('advertAdmin')
-        @yield('advertUser')
+        @hook('advertTop')
+        {{ getAdvertAdmin() }}
+        {{ getAdvertUser() }}
     </div>
 
     @hook('contentStart')
     @yield('content')
     @hook('contentEnd')
-    @yield('advertBottom')
+    @hook('advertBottom')
 </main>
 
 @include('themes/default/footer')

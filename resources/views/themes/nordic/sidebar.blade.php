@@ -56,7 +56,7 @@
             </form>
         </li>
         <li>
-            <span class="float-end">@yield('online')</span>
+            <span class="float-end">{{ showOnline() }}</span>
             <i class="fas fa-globe-americas"></i>
             <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
             <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>

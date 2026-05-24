@@ -25,7 +25,7 @@
             </ul>
         </div>
         <div class="col-12 py-3">
-            @yield('counter')
+            {{ showCounter() }}
             <div class="float-end">
                 <a target="_blank" href="https://telegram.me/visavinet"><i class="fab fa-telegram fa-2x" style="color: #0088cc"></i></a>
                 <a target="_blank" href="https://vk.com/visavinet"><i class="fab fa-vk fa-2x" style="color: #45668e"></i></a>
@@ -35,5 +35,5 @@
         </div>
         @hook('footerEnd')
     </footer>
-    @yield('performance')
+    {{ performance() }}
 </div>

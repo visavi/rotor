@@ -1,4 +1,3 @@
-@use('App\Classes\Hook')
 @extends('theme::layout')
 
 @section('header')
@@ -7,34 +6,6 @@
 
 @section('flash')
     @include('app/_flash')
-@stop
-
-@section('advertTop')
-    {!! Hook::call('advertTop') !!}
-@stop
-
-@section('advertBottom')
-    {!! Hook::call('advertBottom') !!}
-@stop
-
-@section('advertAdmin')
-    {{ getAdvertAdmin() }}
-@stop
-
-@section('advertUser')
-    {{ getAdvertUser() }}
-@stop
-
-@section('counter')
-    {{ showCounter() }}
-@stop
-
-@section('online')
-    {{ showOnline() }}
-@stop
-
-@section('performance')
-    {{ performance() }}
 @stop
 
 @if (getUser())

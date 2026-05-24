@@ -51,9 +51,9 @@
             <div class="bcontent">
                 <div class="mcontentwide">
 
-                    @yield('advertTop')
-                    @yield('advertAdmin')
-                    @yield('advertUser')
+                    @hook('advertTop')
+                    {{ getAdvertAdmin() }}
+                    {{ getAdvertUser() }}
 
                     @include('themes/motor/note')
                     @hook('header')
@@ -66,12 +66,12 @@
                     @yield('content')
                     @hook('contentEnd')
 
-                    @yield('advertBottom')
+                    @hook('advertBottom')
 
                     <div class="small" id="down">
-                        @yield('counter')
-                        @yield('online')
-                        @yield('performance')
+                        {{ showCounter() }}
+                        {{ showOnline() }}
+                        {{ performance() }}
                     </div>
                 </div>
             </div>

@@ -38,9 +38,9 @@
 
 <div class="site">
     <div class="content">
-        @yield('advertTop')
-        @yield('advertAdmin')
-        @yield('advertUser')
+        @hook('advertTop')
+        {{ getAdvertAdmin() }}
+        {{ getAdvertUser() }}
 
         @include('themes/motor/note')
         @hook('header')
@@ -53,17 +53,17 @@
         @yield('content')
         @hook('contentEnd')
 
-        @yield('advertBottom')
+        @hook('advertBottom')
     </div>
 </div>
 
 <div class="lol" id="down">
     <a href="{{ route('home') }}">{{ setting('copy') }}</a><br>
-    @yield('online')
-    @yield('counter')
+    {{ showOnline() }}
+    {{ showCounter() }}
 </div>
 <div class="site" style="text-align:center">
-    @yield('performance')
+    {{ performance() }}
 </div>
 @stack('scripts')
 <div class="scrollup"></div>

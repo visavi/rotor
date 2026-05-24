@@ -43,7 +43,7 @@
         <i class="fas fa-globe-americas"></i>
         <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
         <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
-        <span class="online-counter">@yield('online')</span>
+        <span class="online-counter">{{ showOnline() }}</span>
         @hook('sidebarFooterEnd')
     </div>
 </aside>
