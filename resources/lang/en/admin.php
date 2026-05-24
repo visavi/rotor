@@ -88,18 +88,6 @@ return [
         'success_sent'            => 'Message sent successfully!',
     ],
 
-    'delusers' => [
-        'condition'         => 'Delete users who have not visited the site',
-        'minimum_asset'     => 'Minimum Asset',
-        'deleted_condition' => 'Users who have not visited the site more will be deleted',
-        'asset_condition'   => 'And having in their assets no more',
-        'deleted_users'     => 'Users will be deleted',
-        'delete_users'      => 'Delete users',
-        'invalid_period'    => 'The specified time for deletion is invalid!',
-        'users_not_found'   => 'There are no users to delete!',
-        'success_deleted'   => 'Users successfully deleted!',
-    ],
-
     'errors' => [
         'hint'            => 'Attention! Logging is turned off in the settings! ',
         'errors'          => 'Errors',

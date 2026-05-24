@@ -79,7 +79,6 @@
                 <i class="far fa-circle text-muted"></i> <a href="/admin/delivery">{{ __('index.private_mailing') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/logs">{{ __('index.logs_visits') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/notices">{{ __('index.email_templates') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/delusers">{{ __('index.user_cleaning') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/paid-adverts">{{ __('index.paid_adverts') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/user-fields">{{ __('index.user_fields') }}</a><br>
                 <i class="far fa-circle text-muted"></i> <a href="/admin/search">{{ __('index.search') }}</a><br>

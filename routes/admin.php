@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\CheckerController;
 use App\Http\Controllers\Admin\DeliveryController;
-use App\Http\Controllers\Admin\DelUserController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
@@ -283,14 +282,6 @@ Route::middleware(['check.admin', 'admin.logger'])
             Route::resource('user-fields', UserFieldController::class)
                 ->parameters(['user-fields' => 'id'])
                 ->except('show');
-
-            /* Чистка пользователей */
-            Route::controller(DelUserController::class)
-                ->prefix('delusers')
-                ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index');
-                    Route::post('/clear', 'clear');
-                });
 
             Route::controller(SearchController::class)
                 ->prefix('search')

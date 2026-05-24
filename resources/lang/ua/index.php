@@ -97,7 +97,6 @@ return [
     'private_mailing'   => 'Приват-розсилка',
     'logs_visits'       => 'Логи відвідувань',
     'email_templates'   => 'Шаблони листів',
-    'user_cleaning'     => 'Чистка користувачів',
     'paid_adverts'      => 'Платна реклама',
     'user_fields'       => 'Користувацькі поля',
     'modules'           => 'Модулі',
