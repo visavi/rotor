@@ -32,8 +32,6 @@ return [
     'comment_point'     => 'Total points awarded',
     'comment_money'     => 'Total moneys awarded',
 
-
-
     'images_reduction_size'  => 'Reducing photos when uploading',
     'images_copyright'       => 'Copyright overlay',
     'archive_file_path'      => 'The path to the file to add to the archive',
@@ -44,7 +42,6 @@ return [
     'online_enable'      => 'Online',
     'online_time'        => 'Online counting time (minutes)',
     'online_time_hint'   => 'For how many minutes to remember the users IP',
-
 
     'mails_count_days'  => 'Qty. days before sending a private notification by email ',
     'mails_send_emails' => 'Sending emails in one operation',
@@ -68,7 +65,6 @@ return [
 
     'messages_per_page' => 'Letters in private on page',
     'messages_captcha'  => 'Threshold for turning off the protective picture',
-
 
     'log_enable'      => 'Enable logging',
     'description'     => 'Short description (description)',
@@ -143,7 +139,6 @@ return [
     'invite_days'   => 'Number of days to receive new keys',
     'invite_rating' => 'Rating required to receive keys',
     'invite_count'  => 'Number of keys received by the user',
-
 
     'seo_slug_template' => 'Link template',
     'loads_max_files'   => 'Maximum load count. files',

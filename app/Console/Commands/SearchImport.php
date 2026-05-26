@@ -20,8 +20,8 @@ class SearchImport extends Command
     public function handle(): int
     {
         $models = array_merge([
-            Comment::class,
             User::class,
+            Comment::class,
         ], array_column(Registry::$search, 'class'));
 
         DB::disableQueryLog();

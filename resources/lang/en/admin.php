@@ -67,16 +67,6 @@ return [
         'success_cleared' => 'Admin chat successfully cleared!',
     ],
 
-    'delivery' => [
-        'online'                  => 'Online',
-        'active'                  => 'Active',
-        'admins'                  => 'Administration',
-        'users'                   => 'To all users',
-        'not_recipients_selected' => 'You have not selected mailing recipients!',
-        'not_recipients'          => 'Missing mailing recipients!',
-        'success_sent'            => 'Message sent successfully!',
-    ],
-
     'errors' => [
         'hint'            => 'Attention! Logging is turned off in the settings! ',
         'errors'          => 'Errors',
@@ -221,7 +211,6 @@ return [
         'go_to_message' => 'Go to post',
         'empty_spam'    => 'There are no complaints yet!',
     ],
-
 
     'not_exists_boss' => '
         Attention! Boss profile missing<br>

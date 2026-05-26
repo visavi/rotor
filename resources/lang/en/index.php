@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'pages'         => 'Useful information',
-    'search'        => 'Site search',
-    'mails'         => 'Feedback',
-    'users'         => 'Users',
-    'messages'      => 'Messages',
-    'chat'          => 'Chat',
-    'user_search'   => 'User search',
-    'statistics'    => 'Attendance Statistics',
-    'comments'      => 'Comments',
+    'pages'       => 'Useful information',
+    'search'      => 'Site search',
+    'mails'       => 'Feedback',
+    'users'       => 'Users',
+    'messages'    => 'Messages',
+    'chat'        => 'Chat',
+    'user_search' => 'User search',
+    'statistics'  => 'Attendance Statistics',
+    'comments'    => 'Comments',
 
     'login'     => 'Login',
     'logout'    => 'Logout',
@@ -35,15 +35,14 @@ return [
     'api_interface' => 'Api interface',
     'user_statuses' => 'User statuses',
 
-
-    'my_account'         => 'My account',
-    'my_profile'         => 'My profile',
-    'my_details'         => 'My details',
-    'my_settings'        => 'Settings',
-    'admin_advertising'  => 'Admin advertising',
-    'advertising'        => 'Advertising',
-    'reputation_edit'    => 'Reputation changes',
-    'money_transfer'     => 'Money transfer',
+    'my_account'        => 'My account',
+    'my_profile'        => 'My profile',
+    'my_details'        => 'My details',
+    'my_settings'       => 'Settings',
+    'admin_advertising' => 'Admin advertising',
+    'advertising'       => 'Advertising',
+    'reputation_edit'   => 'Reputation changes',
+    'money_transfer'    => 'Money transfer',
 
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',

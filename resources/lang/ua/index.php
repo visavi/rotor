@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'pages'         => 'Корисна інформація',
-    'search'        => 'Пошук сайтом',
-    'mails'         => 'Зворотний зв’язок',
-    'users'         => 'Користувачі',
-    'messages'      => 'Повідомлення',
-    'chat'          => 'Чат',
-    'user_search'   => 'Пошук користувача',
-    'statistics'    => 'Статистика відвідувань',
-    'comments'      => 'Коментарі',
+    'pages'       => 'Корисна інформація',
+    'search'      => 'Пошук сайтом',
+    'mails'       => 'Зворотний зв’язок',
+    'users'       => 'Користувачі',
+    'messages'    => 'Повідомлення',
+    'chat'        => 'Чат',
+    'user_search' => 'Пошук користувача',
+    'statistics'  => 'Статистика відвідувань',
+    'comments'    => 'Коментарі',
 
     'login'     => 'Авторизація',
     'logout'    => 'Вихід',
@@ -35,15 +35,14 @@ return [
     'api_interface' => 'API інтерфейс',
     'user_statuses' => 'Статуси користувачів',
 
-
-    'my_account'         => 'Моя анкета',
-    'my_profile'         => 'Мій профіль',
-    'my_details'         => 'Мої дані',
-    'my_settings'        => 'Мої налаштування',
-    'admin_advertising'  => 'Адмінська реклама',
-    'advertising'        => 'Реклама',
-    'reputation_edit'    => 'Зміни репутації',
-    'money_transfer'     => 'Переказ грошей',
+    'my_account'        => 'Моя анкета',
+    'my_profile'        => 'Мій профіль',
+    'my_details'        => 'Мої дані',
+    'my_settings'       => 'Мої налаштування',
+    'admin_advertising' => 'Адмінська реклама',
+    'advertising'       => 'Реклама',
+    'reputation_edit'   => 'Зміни репутації',
+    'money_transfer'    => 'Переказ грошей',
 
     'confirm_register' => 'Підтвердження реєстрації',
     'banned'           => 'Вас забанили',

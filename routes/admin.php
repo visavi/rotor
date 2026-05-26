@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\BanlistController;
 use App\Http\Controllers\Admin\BlacklistController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ChatController;
-use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
@@ -226,9 +225,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/', 'index');
                     Route::post('/clear', 'clear');
                 });
-
-            /* Приват рассылка */
-            Route::match(['get', 'post'], '/delivery', [DeliveryController::class, 'index']);
 
             /* Логи */
             Route::controller(LogController::class)

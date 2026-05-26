@@ -21,7 +21,7 @@
     <div class="section mb-3 shadow">
         <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.editor') }}</div>
         <div class="section-body">
-            <div class="row row-cols-2 row-cols-md-4 g-2">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                 <div class="col">
                     <a href="/admin/chats" class="app-tile">
                         <div class="app-tile-icon" style="background:#0dcaf0"><i class="fas fa-comments"></i></div>
@@ -40,8 +40,8 @@
                         <div class="app-tile-label">{{ __('index.advertising') }}</div>
                     </a>
                 </div>
+                @hook('adminBlockEditor')
             </div>
-            @hook('adminBlockEditor')
         </div>
     </div>
 
@@ -49,7 +49,7 @@
         <div class="section mb-3 shadow">
             <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.moder') }}</div>
             <div class="section-body">
-                <div class="row row-cols-2 row-cols-md-4 g-2">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
                         <a href="/admin/spam" class="app-tile">
                             <div class="app-tile-icon" style="background:#dc3545"><i class="fas fa-exclamation-triangle"></i></div>
@@ -98,8 +98,8 @@
                             <div class="app-tile-label">{{ __('index.cash_transactions') }}</div>
                         </a>
                     </div>
+                    @hook('adminBlockModer')
                 </div>
-                @hook('adminBlockModer')
             </div>
         </div>
     @endif
@@ -108,7 +108,7 @@
         <div class="section mb-3 shadow">
             <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.admin') }}</div>
             <div class="section-body">
-                <div class="row row-cols-2 row-cols-md-4 g-2">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
                         <a href="/admin/rules" class="app-tile">
                             <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-gavel"></i></div>
@@ -151,8 +151,8 @@
                             <div class="app-tile-label">{{ __('index.user_statuses') }}</div>
                         </a>
                     </div>
+                    @hook('adminBlockAdmin')
                 </div>
-                @hook('adminBlockAdmin')
             </div>
         </div>
     @endif
@@ -161,7 +161,7 @@
         <div class="section mb-3 shadow">
             <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.boss') }}</div>
             <div class="section-body">
-                <div class="row row-cols-2 row-cols-md-4 g-2">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
                         <a href="/admin/modules" class="app-tile">
                             <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-puzzle-piece"></i></div>
@@ -184,12 +184,6 @@
                         <a href="/admin/caches" class="app-tile">
                             <div class="app-tile-icon" style="background:#198754"><i class="fas fa-broom"></i></div>
                             <div class="app-tile-label">{{ __('index.cache_clear') }}</div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="/admin/delivery" class="app-tile">
-                            <div class="app-tile-icon" style="background:#0dcaf0"><i class="fas fa-paper-plane"></i></div>
-                            <div class="app-tile-label">{{ __('index.private_mailing') }}</div>
                         </a>
                     </div>
                     <div class="col">
@@ -216,8 +210,8 @@
                             <div class="app-tile-label">{{ __('index.search') }}</div>
                         </a>
                     </div>
+                    @hook('adminBlockBoss')
                 </div>
-                @hook('adminBlockBoss')
             </div>
         </div>
     @endif
