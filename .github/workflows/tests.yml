@@ -43,7 +43,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: :php-psr
           tools: composer:v2
-          coverage: none
+          coverage: pcov
 
       - name: Move .env file
         run: mv .env.example .env
@@ -63,7 +63,13 @@ jobs:
           php artisan db:seed
 
       - name: Unit Tests
-        run: composer test
+        run: composer test -- --coverage-clover=clover.xml
+
+      - name: Upload coverage to Coveralls
+        if: matrix.php == '8.3'
+        uses: coverallsapp/github-action@v2
+        with:
+          file: clover.xml
 
       - name: Source Linter
         run: composer lint

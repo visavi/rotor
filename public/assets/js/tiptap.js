@@ -963,13 +963,6 @@ function initEditor(textarea) {
 
     // === Image Upload Helper ===
     async function uploadImage(editor, file, pos = null) {
-        // Проверка размера файла (10MB максимум)
-        const maxSize = 10 * 1024 * 1024
-        if (file.size > maxSize) {
-            notyf.error(__('editor.upload_failed') + ': файл слишком большой')
-            return
-        }
-
         // Проверка типа файла
         if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
             notyf.error(__('editor.upload_failed') + ': неподдерживаемый формат')

@@ -67,7 +67,6 @@ return [
     'blacklist'         => 'Черный список',
     'site_settings'     => 'Настройки сайта',
     'cache_clear'       => 'Очистка кеша',
-    'site_scan'         => 'Сканирование сайта',
     'private_mailing'   => 'Приват-рассылка',
     'logs_visits'       => 'Логи посещений',
     'email_templates'   => 'Шаблоны писем',

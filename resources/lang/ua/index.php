@@ -68,7 +68,6 @@ return [
     'blacklist'         => 'Чорний список',
     'site_settings'     => 'Налаштування сайту',
     'cache_clear'       => 'Очищення кешу',
-    'site_scan'         => 'Сканування сайту',
     'private_mailing'   => 'Приват-розсилка',
     'logs_visits'       => 'Логи відвідувань',
     'email_templates'   => 'Шаблони листів',

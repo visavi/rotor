@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\BanlistController;
 use App\Http\Controllers\Admin\BlacklistController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ChatController;
-use App\Http\Controllers\Admin\CheckerController;
 use App\Http\Controllers\Admin\DeliveryController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
@@ -226,15 +225,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index');
                     Route::post('/clear', 'clear');
-                });
-
-            /* Сканирование */
-            Route::controller(CheckerController::class)
-                ->prefix('checkers')
-                ->name('checkers.')
-                ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index')->name('index');
-                    Route::post('/scan', 'scan')->name('scan');
                 });
 
             /* Приват рассылка */

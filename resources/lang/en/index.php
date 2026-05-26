@@ -68,7 +68,6 @@ return [
     'blacklist'         => 'Blacklist',
     'site_settings'     => 'Site settings',
     'cache_clear'       => 'Clear cache',
-    'site_scan'         => 'Website crawl',
     'private_mailing'   => 'Private newsletter',
     'logs_visits'       => 'Visit logs',
     'email_templates'   => 'Email templates',

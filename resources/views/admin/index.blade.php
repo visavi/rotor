@@ -2,6 +2,7 @@
 
 @section('title', __('index.panel'))
 
+
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
@@ -18,31 +19,86 @@
     @hook('adminHeader')
 
     <div class="section mb-3 shadow">
-        <div class="section-title">
-            <i class="fa fa-cog fa-lg text-muted"></i> {{ __('main.editor') }}
-        </div>
+        <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.editor') }}</div>
         <div class="section-body">
-            <i class="far fa-circle text-muted"></i> <a href="/admin/chats">{{ __('index.admin_chat') }}</a> <span class="badge bg-adaptive">{{ statsChat() }}</span><br>
-            <i class="far fa-circle text-muted"></i> <a href="/admin/admin-adverts">{{ __('index.admin_advertising') }}</a><br>
-            <i class="far fa-circle text-muted"></i> <a href="/admin/adverts">{{ __('index.advertising') }}</a><br>
+            <div class="row row-cols-2 row-cols-md-4 g-2">
+                <div class="col">
+                    <a href="/admin/chats" class="app-tile">
+                        <div class="app-tile-icon" style="background:#0dcaf0"><i class="fas fa-comments"></i></div>
+                        <div class="app-tile-label">{{ __('index.admin_chat') }}<span class="badge bg-adaptive app-tile-badge">{{ statsChat() }}</span></div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/admin-adverts" class="app-tile">
+                        <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-ad"></i></div>
+                        <div class="app-tile-label">{{ __('index.admin_advertising') }}</div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/adverts" class="app-tile">
+                        <div class="app-tile-icon" style="background:#ffc107"><i class="fas fa-bullhorn"></i></div>
+                        <div class="app-tile-label">{{ __('index.advertising') }}</div>
+                    </a>
+                </div>
+            </div>
             @hook('adminBlockEditor')
         </div>
     </div>
 
     @if (isAdmin('moder'))
         <div class="section mb-3 shadow">
-            <div class="section-title">
-                <i class="fa fa-cog fa-lg text-muted"></i> {{ __('main.moder') }}
-            </div>
+            <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.moder') }}</div>
             <div class="section-body">
-                <i class="far fa-circle text-muted"></i> <a href="/admin/spam">{{ __('index.complains') }}</a> <span class="badge bg-adaptive">{{ statsSpam() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/bans">{{ __('index.ban_unban') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/banlists">{{ __('index.banned_list') }}</a> <span class="badge bg-adaptive">{{ statsBanned() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/reglists">{{ __('index.pending_list') }}</a> <span class="badge bg-adaptive">{{ statsRegList() }}</span><br>
-<i class="far fa-circle text-muted"></i> <a href="/admin/antimat">{{ __('index.antimat') }}</a> <span class="badge bg-adaptive">{{ statsAntimat() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/banhists">{{ __('index.ban_history') }}</a> <span class="badge bg-adaptive">{{ statsBanHist() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/invitations">{{ __('index.invitations') }}</a> <span class="badge bg-adaptive">{{ statsInvite() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/transfers">{{ __('index.cash_transactions') }}</a><br>
+                <div class="row row-cols-2 row-cols-md-4 g-2">
+                    <div class="col">
+                        <a href="/admin/spam" class="app-tile">
+                            <div class="app-tile-icon" style="background:#dc3545"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="app-tile-label">{{ __('index.complains') }}<span class="badge bg-adaptive app-tile-badge">{{ statsSpam() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/bans" class="app-tile">
+                            <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-ban"></i></div>
+                            <div class="app-tile-label">{{ __('index.ban_unban') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/banlists" class="app-tile">
+                            <div class="app-tile-icon" style="background:#d63384"><i class="fas fa-list"></i></div>
+                            <div class="app-tile-label">{{ __('index.banned_list') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBanned() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/reglists" class="app-tile">
+                            <div class="app-tile-icon" style="background:#20c997"><i class="fas fa-user-clock"></i></div>
+                            <div class="app-tile-label">{{ __('index.pending_list') }}<span class="badge bg-adaptive app-tile-badge">{{ statsRegList() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/antimat" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-filter"></i></div>
+                            <div class="app-tile-label">{{ __('index.antimat') }}<span class="badge bg-adaptive app-tile-badge">{{ statsAntimat() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/banhists" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-history"></i></div>
+                            <div class="app-tile-label">{{ __('index.ban_history') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBanHist() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/invitations" class="app-tile">
+                            <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-envelope-open"></i></div>
+                            <div class="app-tile-label">{{ __('index.invitations') }}<span class="badge bg-adaptive app-tile-badge">{{ statsInvite() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/transfers" class="app-tile">
+                            <div class="app-tile-icon" style="background:#198754"><i class="fas fa-exchange-alt"></i></div>
+                            <div class="app-tile-label">{{ __('index.cash_transactions') }}</div>
+                        </a>
+                    </div>
+                </div>
                 @hook('adminBlockModer')
             </div>
         </div>
@@ -50,17 +106,52 @@
 
     @if (isAdmin('admin'))
         <div class="section mb-3 shadow">
-            <div class="section-title">
-                <i class="fa fa-cog fa-lg text-muted"></i> {{ __('main.admin') }}
-            </div>
+            <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.admin') }}</div>
             <div class="section-body">
-                <i class="far fa-circle text-muted"></i> <a href="/admin/rules">{{ __('index.site_rules') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/ipbans">{{ __('index.ip_ban') }}</a> <span class="badge bg-adaptive">{{ statsIpBanned() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/phpinfo">{{ __('index.phpinfo') }}</a> <span class="badge bg-adaptive">{{ parseVersion(PHP_VERSION) }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/errors">{{ __('index.errors') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/blacklists">{{ __('index.blacklist') }}</a> <span class="badge bg-adaptive">{{ statsBlacklist() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/stickers">{{ __('index.stickers') }}</a> <span class="badge bg-adaptive">{{ statsStickers() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/status">{{ __('index.user_statuses') }}</a><br>
+                <div class="row row-cols-2 row-cols-md-4 g-2">
+                    <div class="col">
+                        <a href="/admin/rules" class="app-tile">
+                            <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-gavel"></i></div>
+                            <div class="app-tile-label">{{ __('index.site_rules') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/ipbans" class="app-tile">
+                            <div class="app-tile-icon" style="background:#dc3545"><i class="fas fa-shield-alt"></i></div>
+                            <div class="app-tile-label">{{ __('index.ip_ban') }}<span class="badge bg-adaptive app-tile-badge">{{ statsIpBanned() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/phpinfo" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-info-circle"></i></div>
+                            <div class="app-tile-label">{{ __('index.phpinfo') }}<span class="badge bg-adaptive app-tile-badge">{{ parseVersion(PHP_VERSION) }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/errors" class="app-tile">
+                            <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-bug"></i></div>
+                            <div class="app-tile-label">{{ __('index.errors') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/blacklists" class="app-tile">
+                            <div class="app-tile-icon" style="background:#212529"><i class="fas fa-minus-circle"></i></div>
+                            <div class="app-tile-label">{{ __('index.blacklist') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBlacklist() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/stickers" class="app-tile">
+                            <div class="app-tile-icon" style="background:#ffc107"><i class="fas fa-smile"></i></div>
+                            <div class="app-tile-label">{{ __('index.stickers') }}<span class="badge bg-adaptive app-tile-badge">{{ statsStickers() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/status" class="app-tile">
+                            <div class="app-tile-icon" style="background:#20c997"><i class="fas fa-user-tag"></i></div>
+                            <div class="app-tile-label">{{ __('index.user_statuses') }}</div>
+                        </a>
+                    </div>
+                </div>
                 @hook('adminBlockAdmin')
             </div>
         </div>
@@ -68,20 +159,64 @@
 
     @if (isAdmin('boss'))
         <div class="section mb-3 shadow">
-            <div class="section-title">
-                <i class="fa fa-cog fa-lg text-muted"></i> {{ __('main.boss') }}
-            </div>
+            <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.boss') }}</div>
             <div class="section-body">
-                <i class="far fa-circle text-muted"></i> <a href="/admin/modules">{{ __('index.modules') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/settings">{{ __('index.site_settings') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/users">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/caches">{{ __('index.cache_clear') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/checkers">{{ __('index.site_scan') }}</a> <span class="badge bg-adaptive">{{ statsChecker() }}</span><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/delivery">{{ __('index.private_mailing') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/logs">{{ __('index.logs_visits') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/notices">{{ __('index.email_templates') }}</a><br>
-<i class="far fa-circle text-muted"></i> <a href="/admin/user-fields">{{ __('index.user_fields') }}</a><br>
-                <i class="far fa-circle text-muted"></i> <a href="/admin/search">{{ __('index.search') }}</a><br>
+                <div class="row row-cols-2 row-cols-md-4 g-2">
+                    <div class="col">
+                        <a href="/admin/modules" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-puzzle-piece"></i></div>
+                            <div class="app-tile-label">{{ __('index.modules') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/settings" class="app-tile">
+                            <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-sliders-h"></i></div>
+                            <div class="app-tile-label">{{ __('index.site_settings') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/users" class="app-tile">
+                            <div class="app-tile-icon" style="background:#20c997"><i class="fas fa-users"></i></div>
+                            <div class="app-tile-label">{{ __('index.users') }}<span class="badge bg-adaptive app-tile-badge">{{ statsUsers() }}</span></div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/caches" class="app-tile">
+                            <div class="app-tile-icon" style="background:#198754"><i class="fas fa-broom"></i></div>
+                            <div class="app-tile-label">{{ __('index.cache_clear') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/delivery" class="app-tile">
+                            <div class="app-tile-icon" style="background:#0dcaf0"><i class="fas fa-paper-plane"></i></div>
+                            <div class="app-tile-label">{{ __('index.private_mailing') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/logs" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-list-alt"></i></div>
+                            <div class="app-tile-label">{{ __('index.logs_visits') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/notices" class="app-tile">
+                            <div class="app-tile-icon" style="background:#d63384"><i class="fas fa-envelope"></i></div>
+                            <div class="app-tile-label">{{ __('index.email_templates') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/user-fields" class="app-tile">
+                            <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-user-edit"></i></div>
+                            <div class="app-tile-label">{{ __('index.user_fields') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/search" class="app-tile">
+                            <div class="app-tile-icon" style="background:#212529"><i class="fas fa-search"></i></div>
+                            <div class="app-tile-label">{{ __('index.search') }}</div>
+                        </a>
+                    </div>
+                </div>
                 @hook('adminBlockBoss')
             </div>
         </div>

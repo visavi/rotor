@@ -352,18 +352,6 @@ function statsStickers(): int
 }
 
 /**
- * Возвращает дату последнего сканирования сайта
- */
-function statsChecker(): string
-{
-    if (Storage::disk('local')->exists('checker.php')) {
-        return dateFixed(Storage::disk('local')->lastModified('checker.php'));
-    }
-
-    return '0';
-}
-
-/**
  * Возвращает количество приглашений на регистрацию
  */
 function statsInvite(): string
