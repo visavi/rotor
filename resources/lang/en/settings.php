@@ -127,13 +127,9 @@ return [
     'site_closed_guest' => 'Closed to guests',
     'site_closed_all'   => 'Closed to everyone',
 
-    'feed_news_show'       => 'Show news',
-    'feed_downs_show'      => 'Show downloads',
     'feed_comments_show'   => 'Show comments',
     'feed_per_page'        => 'Number of posts per page',
     'feed_cache_time'      => 'Feed cache time (sec.)',
-    'feed_news_rating'     => 'Hide news with rating',
-    'feed_downs_rating'    => 'Hide downloads with rating',
     'feed_comments_rating' => 'Hide comments with rating',
 
     'invite_days'   => 'Number of days to receive new keys',
