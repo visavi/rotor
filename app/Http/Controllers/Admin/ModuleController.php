@@ -42,7 +42,9 @@ class ModuleController extends AdminController
             'not-installed' => count($moduleNames) - count($installed),
         ];
 
-        return view('admin/modules/index', compact('moduleInstall', 'moduleNames', 'counts'));
+        $registryModules = ModuleRegistry::getAvailableModules();
+
+        return view('admin/modules/index', compact('moduleInstall', 'moduleNames', 'counts', 'registryModules'));
     }
 
     /**
@@ -200,7 +202,12 @@ class ModuleController extends AdminController
             return redirect()->route('admin.modules.upload');
         }
 
-        return redirect('/admin/modules/module?module=' . $moduleName)
+        $isUpdate = Module::query()->where('name', $moduleName)->exists();
+        $redirect = $isUpdate
+            ? '/admin/modules/install?module=' . $moduleName . '&update=1'
+            : '/admin/modules/module?module=' . $moduleName;
+
+        return redirect($redirect)
             ->with('success', __('admin.modules.upload_success_extracted'));
     }
 
@@ -214,7 +221,7 @@ class ModuleController extends AdminController
         if (! filter_var($url, FILTER_VALIDATE_URL)) {
             setFlash('danger', __('admin.modules.download_invalid_url'));
 
-            return redirect()->route('admin.modules.upload');
+            return redirect()->back();
         }
 
         try {
@@ -223,7 +230,7 @@ class ModuleController extends AdminController
             if (! $response->ok()) {
                 setFlash('danger', __('admin.modules.download_failed'));
 
-                return redirect()->route('admin.modules.upload');
+                return redirect()->back();
             }
 
             $tempDir = storage_path('app/temp');
@@ -238,10 +245,15 @@ class ModuleController extends AdminController
         } catch (\Exception $e) {
             setFlash('danger', $e->getMessage());
 
-            return redirect()->route('admin.modules.upload');
+            return redirect()->back();
         }
 
-        return redirect('/admin/modules/module?module=' . $moduleName)
+        $isUpdate = Module::query()->where('name', $moduleName)->exists();
+        $redirect = $isUpdate
+            ? '/admin/modules/install?module=' . $moduleName . '&update=1'
+            : '/admin/modules/module?module=' . $moduleName;
+
+        return redirect($redirect)
             ->with('success', __('admin.modules.upload_success_extracted'));
     }
 
@@ -256,7 +268,6 @@ class ModuleController extends AdminController
             throw new \RuntimeException(__('admin.modules.zip_open_failed'));
         }
 
-        // Определяем корневую директорию модуля в архиве
         $topDirs = [];
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $name = $zip->getNameIndex($i);
@@ -285,12 +296,6 @@ class ModuleController extends AdminController
         }
 
         $targetPath = base_path('modules/' . $moduleName);
-
-        if (file_exists($targetPath) && ! is_link($targetPath)) {
-            $zip->close();
-            throw new \RuntimeException(__('admin.modules.module_dir_exists'));
-        }
-
         $zip->extractTo(base_path('modules/'));
         $zip->close();
 

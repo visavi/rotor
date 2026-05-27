@@ -40,7 +40,11 @@ class ModuleRegistryController extends AdminController
 
         $registry->fetch(force: true);
 
-        setFlash('success', __('admin.registries.registry_success_added'));
+        if ($registry->fetchFailed) {
+            setFlash('danger', __('admin.registries.registry_fetch_failed'));
+        } else {
+            setFlash('success', __('admin.registries.registry_success_added'));
+        }
 
         return redirect()->route('admin.registries.index');
     }
@@ -50,7 +54,11 @@ class ModuleRegistryController extends AdminController
         $registry = ModuleRegistry::query()->findOrFail($id);
         $registry->fetch(force: true);
 
-        setFlash('success', __('admin.registries.registry_success_refreshed'));
+        if ($registry->fetchFailed) {
+            setFlash('danger', __('admin.registries.registry_fetch_failed'));
+        } else {
+            setFlash('success', __('admin.registries.registry_success_refreshed'));
+        }
 
         return redirect()->route('admin.registries.index');
     }

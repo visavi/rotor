@@ -150,6 +150,7 @@ return [
         'zip_no_module_file'           => 'module.php not found in archive!',
         'module_dir_exists'            => 'Module directory already exists!',
         'incompatible'                 => 'Incompatible',
+        'conflict'                     => 'Registry conflict',
         'files_missing'                => 'Files missing',
         'requires'                     => 'Requires engine version',
         'latest_version'               => 'Newer version available',
@@ -171,6 +172,7 @@ return [
         'registry_success_added'     => 'Registry successfully added!',
         'registry_success_deleted'   => 'Registry successfully deleted!',
         'registry_success_refreshed' => 'Registry successfully refreshed!',
+        'registry_fetch_failed'      => 'Failed to update registry!',
     ],
 
     'notices' => [

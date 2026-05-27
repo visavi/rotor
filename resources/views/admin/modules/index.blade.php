@@ -26,9 +26,12 @@
         <div id="modules-list">
             @foreach ($moduleNames as $name => $moduleConfig)
                 @php
-                    $isInstalled = isset($moduleInstall[$name]);
-                    $isActive    = $isInstalled && $moduleInstall[$name]->active;
-                    $status      = $isInstalled ? ($isActive ? 'installed' : 'disabled') : 'not-installed';
+                    $isInstalled   = isset($moduleInstall[$name]);
+                    $isActive      = $isInstalled && $moduleInstall[$name]->active;
+                    $activeStatus  = $isActive ? 'installed' : 'disabled';
+                    $status        = $isInstalled ? $activeStatus : 'not-installed';
+                    $registryVer   = $registryModules[$name]['version'] ?? null;
+                    $hasRegistryUpdate = $isInstalled && $registryVer && version_compare($registryVer, $moduleInstall[$name]->version, '>');
                 @endphp
                 <div class="section mb-3 shadow js-module-card" data-status="{{ $status }}">
                     <div class="section-title">
@@ -45,6 +48,8 @@
 
                             @if (version_compare($moduleConfig['version'], $moduleInstall[$name]->version, '>'))
                                 <span class="badge bg-info">{{ __('main.update_available') }} (v.{{ $moduleConfig['version'] }})</span>
+                            @elseif ($hasRegistryUpdate)
+                                <span class="badge bg-info">{{ __('main.update_available') }} (v.{{ $registryVer }})</span>
                             @endif
                             <br>
                         @else

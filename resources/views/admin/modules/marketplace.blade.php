@@ -88,6 +88,11 @@
                         @if ($hasUpdate)
                             <span class="badge bg-info">{{ __('main.update_available') }}</span>
                         @endif
+                        @if (! empty($info['conflict']))
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-exclamation-triangle"></i> {{ __('admin.modules.conflict') }}: {{ implode(', ', $info['conflict']) }}
+                            </span>
+                        @endif
                     @endif
                     <br>
                     {{ $info['description'] ?? '' }}<br>

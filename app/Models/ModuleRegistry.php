@@ -33,6 +33,8 @@ class ModuleRegistry extends Model
     /**
      * Fetches the data from the registry.
      */
+    public bool $fetchFailed = false;
+
     public function fetch(bool $force = false): array
     {
         $ttl = 3600;
@@ -45,12 +47,16 @@ class ModuleRegistry extends Model
             $response = Http::timeout(10)->get($this->url);
 
             if (! $response->ok()) {
+                $this->fetchFailed = true;
+
                 return $this->cached_data ?? [];
             }
 
             $data = $response->json();
 
             if (! is_array($data)) {
+                $this->fetchFailed = true;
+
                 return $this->cached_data ?? [];
             }
 
@@ -62,6 +68,8 @@ class ModuleRegistry extends Model
 
             return $data;
         } catch (\Exception) {
+            $this->fetchFailed = true;
+
             return $this->cached_data ?? [];
         }
     }
@@ -76,6 +84,7 @@ class ModuleRegistry extends Model
 
         foreach ($registries as $registry) {
             $data = $registry->fetch($force);
+            $registryLabel = $registry->name ?: $registry->url;
 
             foreach ($data['modules'] ?? [] as $module) {
                 if (! isset($module['module'])) {
@@ -83,14 +92,18 @@ class ModuleRegistry extends Model
                 }
 
                 $name = $module['module'];
-                $registryLabel = $registry->name ?: $registry->url;
+
+                if (isset($modules[$name])) {
+                    $modules[$name]['conflict'][] = $registryLabel;
+                    continue;
+                }
 
                 $versions = $module['versions'] ?? [];
                 $best = self::bestCompatibleVersion($versions);
                 $latest = $versions[0] ?? [];
                 $version = $best ?? $latest;
 
-                $extra = ['registry' => $registryLabel];
+                $extra = ['registry' => $registryLabel, 'conflict' => []];
 
                 if ($best && isset($latest['version']) && version_compare($latest['version'], $best['version'], '>')) {
                     $extra['latest_version'] = $latest['version'];

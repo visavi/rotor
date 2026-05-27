@@ -150,6 +150,7 @@ return [
         'zip_no_module_file'           => 'Файл module.php не найден в архиве!',
         'module_dir_exists'            => 'Директория модуля уже существует!',
         'incompatible'                 => 'Несовместим',
+        'conflict'                     => 'Конфликт реестров',
         'files_missing'                => 'Файлы отсутствуют',
         'requires'                     => 'Требуется версия движка',
         'latest_version'               => 'Доступна новая версия',
@@ -171,6 +172,7 @@ return [
         'registry_success_added'     => 'Реестр успешно добавлен!',
         'registry_success_deleted'   => 'Реестр успешно удалён!',
         'registry_success_refreshed' => 'Реестр успешно обновлён!',
+        'registry_fetch_failed'      => 'Не удалось обновить реестр!',
     ],
 
     'notices' => [
