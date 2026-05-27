@@ -206,7 +206,7 @@
                     </div>
                     <div class="col">
                         <a href="/admin/search" class="app-tile">
-                            <div class="app-tile-icon" style="background:#212529"><i class="fas fa-search"></i></div>
+                            <div class="app-tile-icon" style="background:#de00de"><i class="fas fa-search"></i></div>
                             <div class="app-tile-label">{{ __('index.search') }}</div>
                         </a>
                     </div>
