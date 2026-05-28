@@ -173,13 +173,33 @@ class Module extends Model
 
         $result = [];
         foreach ($settings as $name => $moduleSettings) {
+            $moduleSettings = $moduleSettings ?? [];
             $result[$name] = [
-                'settings' => $moduleSettings ?? [],
+                'settings' => $moduleSettings,
+                'config'   => self::loadModuleConfig($name, $moduleSettings),
                 'files'    => self::scanModuleFiles($name),
             ];
         }
 
         return $result;
+    }
+
+    /**
+     * Загружает merged config модуля (file + settings)
+     */
+    private static function loadModuleConfig(string $name, array $settings): ?array
+    {
+        $configFile = base_path('modules/' . $name . '/config.php');
+        if (! file_exists($configFile)) {
+            return null;
+        }
+
+        $config = include $configFile;
+        if (! is_array($config)) {
+            return null;
+        }
+
+        return $settings ? array_replace_recursive($config, $settings) : $config;
     }
 
     /**
@@ -195,7 +215,6 @@ class Module extends Model
             'helpers'    => file_exists($base . 'helpers.php'),
             'hooks'      => file_exists($base . 'hooks.php'),
             'routes'     => file_exists($base . 'routes.php'),
-            'config'     => file_exists($base . 'config.php'),
             'middleware' => file_exists($base . 'middleware.php'),
             'module'     => file_exists($base . 'module.php'),
             'commands'   => array_map(

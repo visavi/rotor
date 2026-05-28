@@ -31,7 +31,6 @@ class ModuleServiceProvider extends ServiceProvider
 
         foreach ($modules as $module => $data) {
             $files = $data['files'];
-            $settings = $data['settings'];
             $base = base_path('modules/' . $module . '/');
             $moduleKey = Str::snake($module);
 
@@ -55,15 +54,8 @@ class ModuleServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom($base . 'routes.php');
             }
 
-            if ($files['config']) {
-                $this->mergeConfigFrom($base . 'config.php', $moduleKey);
-
-                if ($settings) {
-                    Config::set($moduleKey, array_replace_recursive(
-                        config($moduleKey, []),
-                        $settings
-                    ));
-                }
+            if ($data['config'] !== null) {
+                Config::set($moduleKey, $data['config']);
             }
 
             if ($files['middleware']) {
