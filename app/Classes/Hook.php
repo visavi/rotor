@@ -9,6 +9,7 @@ use Stringable;
 class Hook
 {
     private static array $hooks = [];
+    private static array $dirty = [];
 
     /**
      * Возвращает все хуки
@@ -35,7 +36,7 @@ class Hook
             'priority' => $priority,
         ];
 
-        usort(self::$hooks[$hookName], static fn ($a, $b) => $b['priority'] <=> $a['priority']);
+        self::$dirty[$hookName] = true;
     }
 
     /**
@@ -51,6 +52,11 @@ class Hook
      */
     public static function call(string $hookName, mixed ...$args): string
     {
+        if (self::$dirty[$hookName] ?? false) {
+            usort(self::$hooks[$hookName], static fn ($a, $b) => $b['priority'] <=> $a['priority']);
+            unset(self::$dirty[$hookName]);
+        }
+
         $result = '<!--@' . $hookName . '-->';
 
         foreach (self::$hooks[$hookName] ?? [] as $hook) {
