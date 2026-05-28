@@ -14,9 +14,9 @@
 @stop
 
 @section('header')
-    @if ($module && $module->active && isset($moduleConfig['panel']))
+    @if ($module && $module->active && isset($moduleConfig['actions']))
         @php
-            $links = $moduleConfig['panel'];
+            $links = $moduleConfig['actions'];
         @endphp
 
         @if (count($links) === 1)
