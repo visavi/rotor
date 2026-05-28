@@ -143,15 +143,65 @@ class Module extends Model
      */
     public static function getEnabledModules(): array
     {
-        return Cache::rememberForever('modules', static function () {
-            try {
-                return self::query()
-                    ->where('active', true)
-                    ->pluck('settings', 'name')
-                    ->all();
-            } catch (Exception) {
-                return [];
-            }
-        });
+        $cached = Cache::get('modules', []);
+        if ($cached !== []) {
+            return $cached;
+        }
+
+        $modules = self::loadEnabledModules();
+
+        if ($modules !== []) {
+            Cache::forever('modules', $modules);
+        }
+
+        return $modules;
+    }
+
+    /**
+     * Загружает активные модули с их файловой структурой
+     */
+    private static function loadEnabledModules(): array
+    {
+        try {
+            $settings = self::query()
+                ->where('active', true)
+                ->pluck('settings', 'name')
+                ->all();
+        } catch (Exception) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($settings as $name => $moduleSettings) {
+            $result[$name] = [
+                'settings' => $moduleSettings ?? [],
+                'files'    => self::scanModuleFiles($name),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Сканирует наличие файлов модуля
+     */
+    private static function scanModuleFiles(string $name): array
+    {
+        $base = base_path('modules/' . $name . '/');
+
+        return [
+            'views'      => is_dir($base . 'resources/views'),
+            'lang'       => is_dir($base . 'resources/lang'),
+            'helpers'    => file_exists($base . 'helpers.php'),
+            'hooks'      => file_exists($base . 'hooks.php'),
+            'routes'     => file_exists($base . 'routes.php'),
+            'config'     => file_exists($base . 'config.php'),
+            'middleware' => file_exists($base . 'middleware.php'),
+            'module'     => file_exists($base . 'module.php'),
+            'commands'   => array_map(
+                static fn ($file) => 'Modules\\' . $name . '\\Console\\' . basename($file, '.php'),
+                glob($base . 'Console/*.php') ?: []
+            ),
+        ];
     }
 }

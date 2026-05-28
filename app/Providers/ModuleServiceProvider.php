@@ -29,43 +29,34 @@ class ModuleServiceProvider extends ServiceProvider
     {
         $modules = Module::getEnabledModules();
 
-        foreach ($modules as $module => $settings) {
+        foreach ($modules as $module => $data) {
+            $files = $data['files'];
+            $settings = $data['settings'];
+            $base = base_path('modules/' . $module . '/');
             $moduleKey = Str::snake($module);
 
-            // Загрузка представлений
-            $viewsPath = base_path('modules/' . $module . '/resources/views');
-            if (file_exists($viewsPath)) {
-                $this->loadViewsFrom($viewsPath, $moduleKey);
+            if ($files['views']) {
+                $this->loadViewsFrom($base . 'resources/views', $moduleKey);
             }
 
-            // Загрузка языковых файлов
-            $langPath = base_path('modules/' . $module . '/resources/lang');
-            if (file_exists($langPath)) {
-                $this->loadTranslationsFrom($langPath, $moduleKey);
+            if ($files['lang']) {
+                $this->loadTranslationsFrom($base . 'resources/lang', $moduleKey);
             }
 
-            // Загрузка helpers
-            $helpersFile = base_path('modules/' . $module . '/helpers.php');
-            if (file_exists($helpersFile)) {
-                include_once $helpersFile;
+            if ($files['helpers']) {
+                include_once $base . 'helpers.php';
             }
 
-            // Загрузка hooks
-            $hooksFile = base_path('modules/' . $module . '/hooks.php');
-            if (file_exists($hooksFile)) {
-                include_once $hooksFile;
+            if ($files['hooks']) {
+                include_once $base . 'hooks.php';
             }
 
-            // Загрузка маршрутов
-            $routesFile = base_path('modules/' . $module . '/routes.php');
-            if (file_exists($routesFile)) {
-                $this->loadRoutesFrom($routesFile);
+            if ($files['routes']) {
+                $this->loadRoutesFrom($base . 'routes.php');
             }
 
-            // Загрузка конфигурации
-            $configFile = base_path('modules/' . $module . '/config.php');
-            if (file_exists($configFile)) {
-                $this->mergeConfigFrom($configFile, $moduleKey);
+            if ($files['config']) {
+                $this->mergeConfigFrom($base . 'config.php', $moduleKey);
 
                 if ($settings) {
                     Config::set($moduleKey, array_replace_recursive(
@@ -75,10 +66,8 @@ class ModuleServiceProvider extends ServiceProvider
                 }
             }
 
-            // Регистрация middleware
-            $middlewareFile = base_path('modules/' . $module . '/middleware.php');
-            if (file_exists($middlewareFile)) {
-                $middleware = include $middlewareFile;
+            if ($files['middleware']) {
+                $middleware = include $base . 'middleware.php';
 
                 foreach ($middleware['aliases'] ?? [] as $alias => $class) {
                     $router->aliasMiddleware($alias, $class);
@@ -89,10 +78,8 @@ class ModuleServiceProvider extends ServiceProvider
                 }
             }
 
-            // Загрузка capabilities из module.php
-            $moduleFile = base_path('modules/' . $module . '/module.php');
-            if (file_exists($moduleFile)) {
-                $moduleConfig = include $moduleFile;
+            if ($files['module']) {
+                $moduleConfig = include $base . 'module.php';
 
                 // Регистрация моделей и их возможностей
                 foreach ($moduleConfig['models'] ?? [] as $model => $config) {
@@ -133,7 +120,7 @@ class ModuleServiceProvider extends ServiceProvider
                 }
 
                 // Регистрация консольных команд
-                if (isset($moduleConfig['schedule'])) {
+                if (isset($moduleConfig['schedule']) && $this->app->runningInConsole()) {
                     $this->app->booted(function () use ($moduleConfig) {
                         $moduleConfig['schedule']($this->app->make(Schedule::class));
                     });
@@ -145,13 +132,8 @@ class ModuleServiceProvider extends ServiceProvider
                 }
             }
 
-            // Регистрация консольных команд
-            if ($this->app->runningInConsole()) {
-                $commands = array_map(
-                    static fn ($file) => 'Modules\\' . $module . '\\Console\\' . basename($file, '.php'),
-                    glob(base_path('modules/' . $module . '/Console/*.php')) ?: []
-                );
-                $this->commands($commands);
+            if (! empty($files['commands']) && $this->app->runningInConsole()) {
+                $this->commands($files['commands']);
             }
         }
     }
