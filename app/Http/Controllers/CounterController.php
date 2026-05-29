@@ -22,14 +22,13 @@ class CounterController extends Controller
         $counters = Counter31::query()
             ->orderByDesc('period')
             ->limit(30)
-            ->get();
+            ->get()
+            ->keyBy('period');
 
         for ($i = 0; $i < 30; $i++) {
             $curDate = date('Y-m-d 00:00:00', strtotime("-$i day", SITETIME));
 
-            $cnt = $counters->first(static function ($item) use ($curDate) {
-                return $item->period === $curDate;
-            });
+            $cnt = $counters->get($curDate);
 
             $counts31['hits'][] = $cnt->hits ?? 0;
             $counts31['hosts'][] = $cnt->hosts ?? 0;
@@ -40,14 +39,13 @@ class CounterController extends Controller
         $counters = Counter24::query()
             ->orderByDesc('period')
             ->limit(24)
-            ->get();
+            ->get()
+            ->keyBy('period');
 
         for ($i = 0; $i < 24; $i++) {
             $curHour = date('Y-m-d H:00:00', strtotime("-$i hour", SITETIME));
 
-            $cnt = $counters->first(static function ($item) use ($curHour) {
-                return $item->period === $curHour;
-            });
+            $cnt = $counters->get($curHour);
 
             $counts24['hits'][] = $cnt->hits ?? 0;
             $counts24['hosts'][] = $cnt->hosts ?? 0;

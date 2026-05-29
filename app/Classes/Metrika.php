@@ -9,11 +9,17 @@ use App\Models\Counter24;
 use App\Models\Counter31;
 use App\Models\Online;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use PDOException;
 
 class Metrika
 {
+    /**
+     * Закэшированный счетчик в пределах жизни инстанса
+     */
+    private ?Counter $resultCounter = null;
+
     /**
      * Генерирует счетчик
      */
@@ -37,9 +43,19 @@ class Metrika
                 $counter = (object) ['dayhosts' => 0, 'dayhits' => 0];
             }
 
-            $img = imagecreatefrompng(public_path('assets/img/images/counter.png'));
-            $color = imagecolorallocate($img, 62, 62, 62);
             $font = public_path('assets/fonts/font.ttf');
+            $template = public_path('assets/img/images/counter.png');
+
+            if (! function_exists('imagecreatefrompng') || ! is_file($template) || ! is_file($font)) {
+                return;
+            }
+
+            $img = @imagecreatefrompng($template);
+            if ($img === false) {
+                return;
+            }
+
+            $color = imagecolorallocate($img, 62, 62, 62);
 
             $onlineStr = $online >= 1000
                 ? round($online / 1000, 1) . 'K'
@@ -83,7 +99,10 @@ class Metrika
         $period = date('Y-m-d H:00:00', SITETIME);
         $day = date('Y-m-d 00:00:00', SITETIME);
 
-        Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
+        // Чистка устаревших онлайн раз в 30с на весь сайт, а не на каждую сессию
+        if (Cache::add('online_cleanup', true, 30)) {
+            Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
+        }
 
         $user = getUser();
         $ip = getIp();
@@ -172,8 +191,6 @@ class Metrika
      */
     private function getResultCounter(): ?Counter
     {
-        static $instance = null;
-
-        return $instance ??= Counter::query()->first();
+        return $this->resultCounter ??= Counter::query()->first();
     }
 }
