@@ -827,7 +827,7 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 {
     $html = (string) $text;
 
-    if (str_contains($html, 'hidden') && ! auth()->check()) {
+    if (str_contains($html, 'class="hidden"') && ! auth()->check()) {
         $html = preg_replace(
             '/<div class="hidden">.*?<\/div>/s',
             '<div class="hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
@@ -835,10 +835,19 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
         );
     }
 
-    if (str_contains($html, 'image')) {
+    if (str_contains($html, 'class="image"')) {
         $html = preg_replace(
             '/<img\s([^>]*)class="image"([^>]*)>/i',
             '<img $1class="image" data-fancybox="' . $group . '"$2>',
+            $html
+        );
+    }
+
+    if (str_contains($html, 'class="user"')) {
+        $names = User::names();
+        $html = preg_replace_callback(
+            '#<a class="user" href="/users/([^"/]+)">@[^<]*</a>#',
+            static fn ($m) => '<a class="user" href="/users/' . $m[1] . '">@' . e($names[$m[1]] ?? $m[1]) . '</a>',
             $html
         );
     }

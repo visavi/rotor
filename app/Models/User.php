@@ -322,6 +322,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * Возвращает карту login => name для резолва упоминаний
+     *
+     * @return array<string, string>
+     */
+    public static function names(): array
+    {
+        static $names = null;
+
+        return $names ??= Cache::rememberForever('users', static fn () => self::query()
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->pluck('name', 'login')
+            ->all());
+    }
+
+    /**
      * Is user online
      */
     public function isOnline(): bool

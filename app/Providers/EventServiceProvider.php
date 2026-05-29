@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\User;
 use App\Observers\CommentObserver;
+use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -22,5 +24,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Comment::observe(CommentObserver::class);
+        User::observe(UserObserver::class);
     }
 }

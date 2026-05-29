@@ -1098,10 +1098,20 @@ function initEditor(textarea) {
             TableHeader,
             TableCell,
             CharacterCount,
-            Mention.configure({
+            Mention.extend({
+                addAttributes() {
+                    return {
+                        id:    { default: null, parseHTML: el => el.getAttribute('href')?.split('/').pop() || null },
+                        label: { default: null, parseHTML: el => el.textContent.replace(/^@/, '').trim() || null },
+                    }
+                },
+                parseHTML() {
+                    return [{ tag: 'a.user[href]', priority: 1100 }]
+                },
+            }).configure({
                 HTMLAttributes: { class: 'user' },
                 renderHTML({ options, node }) {
-                    return ['a', mergeAttributes(options.HTMLAttributes, { href: '/users/' + node.attrs.id }), '@' + node.attrs.id]
+                    return ['a', mergeAttributes(options.HTMLAttributes, { href: '/users/' + node.attrs.id }), '@' + (node.attrs.label || node.attrs.id)]
                 },
                 suggestion,
             }),
