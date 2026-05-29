@@ -57,7 +57,6 @@ return [
     'pending_list'      => 'Очікуючі',
     'antimat'           => 'Антимат',
     'ip_ban'            => 'IP-бан',
-    'phpinfo'           => 'PHP-інформація',
     'errors'            => 'Помилки / Автобани',
     'stickers'          => 'Стікери',
     'blacklist'         => 'Чорний список',

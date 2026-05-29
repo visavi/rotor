@@ -92,12 +92,6 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/phpinfo" class="app-tile">
-                            <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-info-circle"></i></div>
-                            <div class="app-tile-label">{{ __('index.phpinfo') }}<span class="badge bg-adaptive app-tile-badge">{{ parseVersion(PHP_VERSION) }}</span></div>
-                        </a>
-                    </div>
-                    <div class="col">
                         <a href="/admin/errors" class="app-tile">
                             <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-bug"></i></div>
                             <div class="app-tile-label">{{ __('index.errors') }}</div>
