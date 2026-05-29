@@ -16,7 +16,6 @@ use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\TransferController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BanController;
 use App\Http\Controllers\User\ListController;
@@ -106,14 +105,6 @@ Route::controller(MessageController::class)
         Route::get('/talk/{login}', 'talk')->name('talk');
         Route::delete('/delete/{uid}', 'delete')->whereNumber('uid')->name('delete');
         Route::match(['get', 'post'], '/send', 'send')->name('send');
-    });
-
-/* Перевод денег */
-Route::controller(TransferController::class)
-    ->prefix('transfers')
-    ->group(function () {
-        Route::get('/', 'index');
-        Route::post('/send', 'send');
     });
 
 Route::controller(InvitationController::class)

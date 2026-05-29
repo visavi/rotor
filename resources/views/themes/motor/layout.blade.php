@@ -56,7 +56,6 @@
         <div class="backgr">
             <div class="bcontent">
                 <div class="mcontentwide">
-
                     @hook('advertTop')
 
                     @include('themes/motor/note')

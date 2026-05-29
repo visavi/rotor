@@ -4,12 +4,6 @@
 
 <form method="post">
     @csrf
-    <div class="mb-3{{ hasError('sets[sendmoneypoint]') }}">
-        <label for="sendmoneypoint" class="form-label">{{ __('settings.points_transfer') }}:</label>
-        <input type="number" class="form-control" id="sendmoneypoint" name="sets[sendmoneypoint]" maxlength="4" value="{{ getInput('sets.sendmoneypoint', $settings['sendmoneypoint']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[sendmoneypoint]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[editratingpoint]') }}">
         <label for="editratingpoint" class="form-label">{{ __('settings.points_rating_edit') }}:</label>
         <input type="number" class="form-control" id="editratingpoint" name="sets[editratingpoint]" maxlength="4" value="{{ getInput('sets.editratingpoint', $settings['editratingpoint']) }}" required>

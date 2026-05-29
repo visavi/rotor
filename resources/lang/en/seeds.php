@@ -56,8 +56,6 @@ return [
         'invite_name' => 'Sending invitation keys',
         'invite_text' => '<p>Congratulations! You have received invitation keys</p><p>Your keys: %key%</p><p>With these keys you can invite your friends to our site!</p>',
 
-        'transfer_name' => 'Money transfer',
-        'transfer_text' => '<p>User %login% transferred %money% to you</p><p>Comment: %comment%</p>',
 
         'rating_name' => 'Reputation change',
         'rating_text' => '<p>User %login% gave you %vote%! (Your rating: %rating%)</p><p>Comment: %comment%</p>',

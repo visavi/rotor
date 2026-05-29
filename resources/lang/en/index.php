@@ -42,7 +42,6 @@ return [
     'admin_advertising' => 'Admin advertising',
     'advertising'       => 'Advertising',
     'reputation_edit'   => 'Reputation changes',
-    'money_transfer'    => 'Money transfer',
 
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',
@@ -58,7 +57,6 @@ return [
     'pending_list'      => 'Awaiting',
     'antimat'           => 'Antimat',
     'invitations'       => 'Invitations',
-    'cash_transactions' => 'Cash transactions',
     'ip_ban'            => 'IP ban',
     'phpinfo'           => 'PHP info',
     'errors'            => 'Errors / Bans',

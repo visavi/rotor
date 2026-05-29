@@ -42,7 +42,6 @@ return [
     'admin_advertising' => 'Админская реклама',
     'advertising'       => 'Реклама',
     'reputation_edit'   => 'Изменения репутации',
-    'money_transfer'    => 'Перевод денег',
 
     'confirm_register' => 'Подтверждение регистрации',
     'banned'           => 'Вас забанили',
@@ -58,7 +57,6 @@ return [
     'pending_list'      => 'Ожидающие',
     'antimat'           => 'Антимат',
     'invitations'       => 'Приглашения',
-    'cash_transactions' => 'Денежные операции',
     'ip_ban'            => 'IP-бан',
     'phpinfo'           => 'PHP-информация',
     'errors'            => 'Ошибки / Автобаны',

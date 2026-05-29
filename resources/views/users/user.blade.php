@@ -154,7 +154,6 @@
             @else
                 @hook('userNotPersonalStart', $user)
                 <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
-                <i class="fas fa-coins"></i> <a href="/transfers?user={{ $user->login }}">{{ __('index.money_transfer') }}</a><br>
 
                 @if (isAdmin('moder'))
                     @if (setting('invite'))
@@ -166,7 +165,6 @@
                     @endif
                     <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
                     <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
-                    <i class="fa-solid fa-money-bill-transfer"></i> <a href="/admin/transfers/view?user={{ $user->login }}">{{ __('index.cash_transactions') }}</a><br>
                 @endif
 
                 @if (isAdmin('boss'))

@@ -87,10 +87,8 @@ return [
     'blacklist_per_page'    => 'Даних на сторінку в чорному списку',
     'reglist_per_page'      => 'Користувачів у списку тих, хто очікує',
     'invites_per_page'      => 'Інвайтів у запрошеннях',
-    'transfers_per_page'    => 'Грошові операції',
     'ratinglist_per_page'   => 'Голосів в історії рейтингу',
 
-    'points_transfer'     => 'Актив для перерахування грошей',
     'points_rating_edit'  => 'Актива зміни репутації',
     'points_advert_hide'  => 'Актив для приховання реклами',
     'points_status_edit'  => 'Актива зміни статусу',

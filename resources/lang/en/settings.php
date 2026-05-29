@@ -87,10 +87,8 @@ return [
     'blacklist_per_page'    => 'Data per page blacklisted',
     'reglist_per_page'      => 'Users on the pending list',
     'invites_per_page'      => 'Invites to invitations',
-    'transfers_per_page'    => 'Cash transactions',
     'ratinglist_per_page'   => 'Votes in ranking history',
 
-    'points_transfer'     => 'Asset for money transfer',
     'points_rating_edit'  => 'Asset for changing reputation',
     'points_advert_hide'  => 'Asset to hide advertising',
     'points_status_edit'  => 'Asset to change status',

@@ -70,12 +70,6 @@
         <div class="invalid-feedback">{{ textError('sets[listinvite]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[listtransfers]') }}">
-        <label for="listtransfers" class="form-label">{{ __('settings.transfers_per_page') }}:</label>
-        <input type="number" class="form-control" id="listtransfers" name="sets[listtransfers]" maxlength="2" value="{{ getInput('sets.listtransfers', $settings['listtransfers']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[listtransfers]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[ratinglist]') }}">
         <label for="ratinglists" class="form-label">{{ __('settings.ratinglist_per_page') }}:</label>
         <input type="number" class="form-control" id="ratinglist" name="sets[ratinglist]" maxlength="2" value="{{ getInput('sets.ratinglist', $settings['ratinglist']) }}" required>

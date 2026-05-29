@@ -23,7 +23,6 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SpamController;
 use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\StickerController;
-use App\Http\Controllers\Admin\TransferController as AdminTransferController;
 use App\Http\Controllers\Admin\UpgradeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\UserFieldController;
@@ -103,14 +102,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/send', 'send');
                     Route::post('/mail', 'mail');
                     Route::post('/delete', 'delete');
-                });
-
-            /* Денежный переводы */
-            Route::controller(AdminTransferController::class)
-                ->prefix('transfers')
-                ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/view', 'view');
                 });
         });
 

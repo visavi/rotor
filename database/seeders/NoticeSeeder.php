@@ -95,15 +95,6 @@ class NoticeSeeder extends Seeder
                 'protect'    => 1,
             ],
             [
-                'type'       => 'transfer',
-                'name'       => __('seeds.notices.transfer_name'),
-                'text'       => __('seeds.notices.transfer_text'),
-                'user_id'    => 1,
-                'created_at' => SITETIME,
-                'updated_at' => SITETIME,
-                'protect'    => 1,
-            ],
-            [
                 'type'       => 'rating',
                 'name'       => __('seeds.notices.rating_name'),
                 'text'       => __('seeds.notices.rating_text'),

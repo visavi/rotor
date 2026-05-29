@@ -74,12 +74,6 @@
                             <div class="app-tile-label">{{ __('index.invitations') }}<span class="badge bg-adaptive app-tile-badge">{{ statsInvite() }}</span></div>
                         </a>
                     </div>
-                    <div class="col">
-                        <a href="/admin/transfers" class="app-tile">
-                            <div class="app-tile-icon" style="background:#198754"><i class="fas fa-exchange-alt"></i></div>
-                            <div class="app-tile-label">{{ __('index.cash_transactions') }}</div>
-                        </a>
-                    </div>
                     @hook('adminBlockModer')
                 </div>
             </div>

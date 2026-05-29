@@ -1,6 +1,7 @@
 <?php
 
 use App\Classes\CloudFlare;
+use App\Classes\HtmlRenderer;
 use App\Classes\Metrika;
 use App\Models\Antimat;
 use App\Models\Ban;
@@ -825,47 +826,7 @@ function plural(int $num, mixed $forms): string
  */
 function renderHtml(?string $text, string $group = 'gallery'): HtmlString
 {
-    $html = (string) $text;
-
-    if (str_contains($html, 'class="hidden"') && ! auth()->check()) {
-        $html = preg_replace(
-            '/<div class="hidden">.*?<\/div>/s',
-            '<div class="hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
-            $html
-        );
-    }
-
-    if (str_contains($html, 'class="image"')) {
-        $html = preg_replace(
-            '/<img\s([^>]*)class="image"([^>]*)>/i',
-            '<img $1class="image" data-fancybox="' . $group . '"$2>',
-            $html
-        );
-    }
-
-    if (str_contains($html, 'class="user"')) {
-        $names = User::names();
-        $html = preg_replace_callback(
-            '#<a class="user" href="/users/([^"/]+)">@[^<]*</a>#',
-            static fn ($m) => '<a class="user" href="/users/' . $m[1] . '">@' . e($names[$m[1]] ?? $m[1]) . '</a>',
-            $html
-        );
-    }
-
-    if (str_contains($html, '<a ')) {
-        $siteHost = parse_url(config('app.url'), PHP_URL_HOST);
-        $html = preg_replace_callback(
-            '/<a\b([^>]*)>/i',
-            static fn ($m) => preg_match('/href="([^"]*)"/i', $m[1], $h)
-            && ($host = parse_url($h[1], PHP_URL_HOST))
-            && $host !== $siteHost
-                ? '<a' . $m[1] . ' target="_blank" rel="noopener nofollow">'
-                : $m[0],
-            $html
-        );
-    }
-
-    return new HtmlString($html);
+    return HtmlRenderer::html($text, $group);
 }
 
 /**
@@ -873,7 +834,7 @@ function renderHtml(?string $text, string $group = 'gallery'): HtmlString
  */
 function renderText(?string $text): HtmlString
 {
-    return new HtmlString(nl2br(e((string) $text)));
+    return HtmlRenderer::text($text);
 }
 
 /**
