@@ -68,12 +68,6 @@
                             <div class="app-tile-label">{{ __('index.ban_history') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBanHist() }}</span></div>
                         </a>
                     </div>
-                    <div class="col">
-                        <a href="/admin/invitations" class="app-tile">
-                            <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-envelope-open"></i></div>
-                            <div class="app-tile-label">{{ __('index.invitations') }}<span class="badge bg-adaptive app-tile-badge">{{ statsInvite() }}</span></div>
-                        </a>
-                    </div>
                     @hook('adminBlockModer')
                 </div>
             </div>

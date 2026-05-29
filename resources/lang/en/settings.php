@@ -14,7 +14,6 @@ return [
     'files'       => 'File upload',
     'stickers'    => 'Stickers',
     'feeds'       => 'Post feed',
-    'invitations' => 'Invitations',
     'seo'         => 'SEO',
 
     'adverts_count_links' => 'Qty. sponsored links',
@@ -60,8 +59,6 @@ return [
     'access_site'              => 'Access to the site',
     'registration_allow'       => 'Allow Registration',
     'registration_confirm'     => 'Confirmation of registration',
-    'registration_invite'      => 'Invitation Registration',
-    'registration_invite_hint' => 'To register you must enter a special invitation key',
 
     'messages_per_page' => 'Letters in private on page',
     'messages_captcha'  => 'Threshold for turning off the protective picture',
@@ -86,7 +83,6 @@ return [
     'logs_per_page'         => 'View logs per page',
     'blacklist_per_page'    => 'Data per page blacklisted',
     'reglist_per_page'      => 'Users on the pending list',
-    'invites_per_page'      => 'Invites to invitations',
     'ratinglist_per_page'   => 'Votes in ranking history',
 
     'points_rating_edit'  => 'Asset for changing reputation',
@@ -130,9 +126,6 @@ return [
     'feed_cache_time'      => 'Feed cache time (sec.)',
     'feed_comments_rating' => 'Hide comments with rating',
 
-    'invite_days'   => 'Number of days to receive new keys',
-    'invite_rating' => 'Rating required to receive keys',
-    'invite_count'  => 'Number of keys received by the user',
 
     'seo_slug_template' => 'Link template',
     'loads_max_files'   => 'Maximum load count. files',

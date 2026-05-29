@@ -64,12 +64,6 @@
         <div class="invalid-feedback">{{ textError('sets[reglist]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[listinvite]') }}">
-        <label for="listinvite" class="form-label">{{ __('settings.invites_per_page') }}:</label>
-        <input type="number" class="form-control" id="listinvite" name="sets[listinvite]" maxlength="2" value="{{ getInput('sets.listinvite', $settings['listinvite']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[listinvite]') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets[ratinglist]') }}">
         <label for="ratinglists" class="form-label">{{ __('settings.ratinglist_per_page') }}:</label>
         <input type="number" class="form-control" id="ratinglist" name="sets[ratinglist]" maxlength="2" value="{{ getInput('sets.ratinglist', $settings['ratinglist']) }}" required>

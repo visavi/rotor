@@ -8,7 +8,6 @@ use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\BlackList;
 use App\Models\Flood;
-use App\Models\Invite;
 use App\Models\User;
 use App\Models\UserField;
 use Illuminate\Database\Query\JoinClause;
@@ -33,11 +32,10 @@ class UserController extends Controller
 
         $user->load('lastBan');
         $adminGroups = User::ADMIN_GROUPS;
-        $invite = Invite::query()->where('invite_user_id', $user->id)->first();
 
         $fields = UserField::query()->withUserData($user->id)->whereNotNull('user_data.value')->get();
 
-        return view('users/user', compact('user', 'invite', 'adminGroups', 'fields'));
+        return view('users/user', compact('user', 'adminGroups', 'fields'));
     }
 
     /**
@@ -58,17 +56,14 @@ class UserController extends Controller
                 $login = (string) $request->input('login');
                 $password = $request->input('password');
                 $password2 = $request->input('password2');
-                $invite = setting('invite') ? $request->input('invite') : '';
                 $email = strtolower((string) $request->input('email'));
                 $domain = Str::substr(strrchr($email, '@'), 1);
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-                $invitation = null;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
                     ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
                     ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
                     ->email($email, ['email' => __('validator.email')])
-                    ->length($invite, 12, 16, ['invite' => __('users.invite_length_requirements')], (bool) setting('invite'))
                     ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
                     ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
                     ->equal($password, $password2, ['password2' => __('users.passwords_different')])
@@ -93,17 +88,6 @@ class UserController extends Controller
                 $validator
                     ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')])
                     ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
-
-                // Проверка пригласительного ключа
-                if (setting('invite')) {
-                    $invitation = Invite::query()
-                        ->select('id')
-                        ->where('hash', $invite)
-                        ->where('used', 0)
-                        ->first();
-
-                    $validator->notEmpty($invitation, ['invite' => __('users.invitation_invalid')]);
-                }
 
                 // Подтверждение регистрации
                 $confirmToken = null;
@@ -130,15 +114,6 @@ class UserController extends Controller
                         'updated_at'    => SITETIME,
                         'created_at'    => SITETIME,
                     ]);
-
-                    // Активация пригласительного ключа
-                    if ($invitation && setting('invite')) {
-                        $invitation->update([
-                            'used'           => true,
-                            'used_at'        => SITETIME,
-                            'invite_user_id' => $user->id,
-                        ]);
-                    }
 
                     // ----- Уведомление в приват ----//
                     $textNotice = textNotice('register', ['username' => $login]);

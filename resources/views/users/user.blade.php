@@ -87,10 +87,6 @@
                 @endif
                 {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
 
-                @if ($invite)
-                    {{ __('users.invitation') }}: {{ $invite->user->getProfile() }}<br>
-                @endif
-
                 {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
 
                 @foreach($fields as $field)
@@ -156,13 +152,6 @@
                 <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
 
                 @if (isAdmin('moder'))
-                    @if (setting('invite'))
-                        <form action="/admin/invitations/send" method="post">
-                            @csrf
-                            <input type="hidden" name="user" value="{{ $user->login }}">
-                            <button class="btn btn-link p-0"><i class="fa-solid fa-handshake"></i> {{ __('users.send_invite') }}</button>
-                        </form>
-                    @endif
                     <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
                     <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
                 @endif

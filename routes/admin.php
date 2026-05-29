@@ -10,7 +10,6 @@ use App\Http\Controllers\Admin\BanlistController;
 use App\Http\Controllers\Admin\BlacklistController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ErrorController;
-use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
@@ -93,16 +92,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::post('/delete', 'delete');
                 });
 
-            /* Приглашения */
-            Route::controller(AdminInvitationController::class)
-                ->prefix('invitations')
-                ->group(function () {
-                    Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::match(['get', 'post'], '/send', 'send');
-                    Route::post('/mail', 'mail');
-                    Route::post('/delete', 'delete');
-                });
         });
 
         /* Админ */

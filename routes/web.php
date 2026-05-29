@@ -9,7 +9,6 @@ use App\Http\Controllers\CounterController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallController;
-use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OnlineController;
@@ -105,14 +104,6 @@ Route::controller(MessageController::class)
         Route::get('/talk/{login}', 'talk')->name('talk');
         Route::delete('/delete/{uid}', 'delete')->whereNumber('uid')->name('delete');
         Route::match(['get', 'post'], '/send', 'send')->name('send');
-    });
-
-Route::controller(InvitationController::class)
-    ->prefix('invitations')
-    ->name('invitations.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('/create', 'store')->name('store');
     });
 
 /* Репутация пользователя */

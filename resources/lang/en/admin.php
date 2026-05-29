@@ -75,18 +75,6 @@ return [
         'success_cleared' => 'Logs successfully cleared!',
     ],
 
-    'invitations' => [
-        'key_generation'        => 'Generation of new keys',
-        'send_to_user'          => 'Send key to user',
-        'sending_keys'          => 'Key distribution',
-        'send_to_active_users'  => 'Send keys to active users',
-        'keys_not_amount'       => 'Not specified the number of keys!',
-        'keys_success_created'  => 'Keys successfully created!',
-        'keys_success_sent'     => 'Keys sent successfully!',
-        'keys_empty_recipients' => 'Missing key recipients!',
-        'keys_success_deleted'  => 'Selected keys successfully deleted!',
-    ],
-
     'ipbans' => [
         'history'             => 'History of the autobahns',
         'empty_ip'            => 'The ban list is still empty!',

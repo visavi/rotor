@@ -45,7 +45,6 @@ class Setting extends Model
             'files',
             'stickers',
             'feeds',
-            'invitations',
             'seo',
         ];
     }

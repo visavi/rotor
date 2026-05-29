@@ -56,7 +56,6 @@ return [
     'banned_list'       => 'Banned',
     'pending_list'      => 'Awaiting',
     'antimat'           => 'Antimat',
-    'invitations'       => 'Invitations',
     'ip_ban'            => 'IP ban',
     'phpinfo'           => 'PHP info',
     'errors'            => 'Errors / Bans',

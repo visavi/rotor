@@ -29,7 +29,6 @@
                     <a class="nav-link" href="/admin/settings?act=files" id="files">{{ __('settings.files') }}</a>
                     <a class="nav-link" href="/admin/settings?act=stickers" id="stickers">{{ __('settings.stickers') }}</a>
                     <a class="nav-link" href="/admin/settings?act=feeds" id="feeds">{{ __('settings.feeds') }}</a>
-                    <a class="nav-link" href="/admin/settings?act=invitations" id="invitations">{{ __('settings.invitations') }}</a>
                     <a class="nav-link" href="/admin/settings?act=seo" id="seo">{{ __('settings.seo') }}</a>
                     @hook('adminSettingsNav')
                 </div>

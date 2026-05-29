@@ -9,7 +9,6 @@ use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Counter;
 use App\Models\Error;
-use App\Models\Invite;
 use App\Models\Notice;
 use App\Models\Online;
 use App\Models\Setting;
@@ -346,19 +345,6 @@ function statsAntimat(): int
 function statsStickers(): int
 {
     return Sticker::query()->count();
-}
-
-/**
- * Возвращает количество приглашений на регистрацию
- */
-function statsInvite(): string
-{
-    $invites = Invite::query()
-        ->selectRaw('used, count(*) as cnt')
-        ->groupBy('used')
-        ->pluck('cnt', 'used');
-
-    return ($invites[0] ?? 0) . '/' . ($invites[1] ?? 0);
 }
 
 /**

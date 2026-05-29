@@ -20,14 +20,6 @@
         </div>
     @endif
 
-    @if (setting('invite'))
-        <div class="alert alert-warning">
-            <i class="fa fa-pencil-alt text-muted"></i>
-            <b>{{ __('users.invite_registration') }}</b><br>
-            {{ __('users.invite_registration_hint') }}
-        </div>
-    @endif
-
     <div class="section-form mb-3 shadow">
         <form action="/register" method="post">
             @csrf
@@ -56,14 +48,6 @@
                 <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ getInput('email') }}" required>
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
-
-            @if (setting('invite'))
-                <div class="mb-3{{ hasError('invite') }}">
-                    <label for="inputInvite" class="form-label">{{ __('users.invitation_key') }}:</label>
-                    <input class="form-control" name="invite" id="inputInvite" maxlength="16" value="{{ getInput('invite') }}" required>
-                    <div class="invalid-feedback">{{ textError('invite') }}</div>
-                </div>
-            @endif
 
             <?php $inputGender = getInput('gender', 'male'); ?>
             Пол:

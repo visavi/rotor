@@ -270,7 +270,6 @@ class ApiController extends Controller
                 'score_name'        => setting('scorename'),
                 'site_closed'       => (bool) setting('closedsite'),
                 'registration_open' => (bool) setting('openreg'),
-                'invite_only'       => (bool) setting('invite'),
             ],
             'upload' => [
                 'max_files'     => setting('maxfiles'),

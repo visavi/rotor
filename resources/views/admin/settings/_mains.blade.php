@@ -118,14 +118,5 @@
         <label class="form-check-label" for="regkeys">{{ __('settings.registration_confirm') }}</label>
     </div>
 
-    <div class="form-check">
-        <input type="hidden" value="0" name="sets[invite]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[invite]" id="invite"{{ getInput('sets.invite', $settings['invite']) ? ' checked' : '' }}>
-        <label class="form-check-label" for="invite">{{ __('settings.registration_invite') }}</label>
-        <p class="text-muted fst-italic">
-            {{ __('settings.registration_invite_hint') }}
-        </p>
-    </div>
-
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

@@ -58,7 +58,6 @@ return [
     'remember_me'     => 'To remember me',
     'enter'           => 'To come in',
     'forgot_password' => 'Forgot your password?',
-    'invitation_key'  => 'Invitation Key',
 
     'avatar_generation' => 'Avatar is automatically generated from your photo',
 
@@ -78,18 +77,14 @@ return [
     'forum_posts'     => 'Forum Posts',
     'assets'          => 'Assets',
     'moneys'          => 'Moneys',
-    'invitation'      => 'Registered by invitation',
     'last_visit'      => 'Last visit',
     'go_website'      => 'Go to the site',
     'send_message'    => 'Send a message',
-    'send_invite'     => 'Send invite',
     'add_to'          => 'Add to',
     'reputation'      => 'Reputation',
 
     'confirm_registration'      => 'Registration confirmation is included!',
     'confirm_registration_hint' => 'A code will be sent to your mailbox, which is necessary to confirm registration!',
-    'invite_registration'       => 'Invitation Registration Included!',
-    'invite_registration_hint'  => 'User registration is possible only with special invitation keys',
     'login_requirements'        => 'Only Latin characters, numbers and hyphens (3 to 20 characters)',
     'password_requirements'     => 'Minimum password length 6 characters',
     'register_text'             => '
@@ -129,7 +124,6 @@ return [
     'already_registered'            => 'You have already registered, it is forbidden to create multiple accounts!',
     'registration_suspended'        => 'Registration is temporarily suspended, please check back later!',
     'login_begin_requirements'      => 'Login must start with a letter or number!',
-    'invite_length_requirements'    => 'Too long or short invitation key!',
     'login_length_requirements'     => 'Login is too long or short!',
     'password_length_requirements'  => 'Password is too long or short!',
     'passwords_different'           => 'The entered passwords are different from each other!',
@@ -140,7 +134,6 @@ return [
     'email_already_exists'          => 'The email address you entered is already in use on the system!',
     'domain_is_blacklisted'         => 'The domain from your email address is blacklisted!',
     'email_is_blacklisted'          => 'The email address you entered is blacklisted!',
-    'invitation_invalid'            => 'Invitation code is invalid!',
     'photo_success_uploaded'        => 'Photo uploaded successfully!',
     'photo_not_exist'               => 'This photo does not exist!',
     'photo_success_deleted'         => 'Photo successfully deleted!',

@@ -75,18 +75,6 @@ return [
         'success_cleared' => 'Логи успешно очищены!',
     ],
 
-    'invitations' => [
-        'key_generation'        => 'Генерация новых ключей',
-        'send_to_user'          => 'Отправить ключ пользователю',
-        'sending_keys'          => 'Рассылка ключей',
-        'send_to_active_users'  => 'Разослать ключи активным пользователям',
-        'keys_not_amount'       => 'Не указано количество ключей!',
-        'keys_success_created'  => 'Ключи успешно созданы!',
-        'keys_success_sent'     => 'Ключи успешно отправлены!',
-        'keys_empty_recipients' => 'Отсутствуют получатели ключей!',
-        'keys_success_deleted'  => 'Выбранные ключи успешно удалены!',
-    ],
-
     'ipbans' => [
         'history'             => 'История автобанов',
         'empty_ip'            => 'В бан-листе пока пусто!',
