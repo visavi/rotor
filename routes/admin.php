@@ -114,9 +114,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::post('/clear', 'clear')->name('clear');
                 });
 
-            /* PHP-info */
-            Route::get('/phpinfo', [AdminController::class, 'phpinfo']);
-
             /* Ошибки */
             Route::controller(ErrorController::class)
                 ->prefix('errors')
