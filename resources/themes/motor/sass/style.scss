@@ -333,3 +333,14 @@ textarea {
         padding: 10px 15px;
     }
 }
+
+.hooks-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .badge { display: none; }
+}

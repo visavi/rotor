@@ -54,11 +54,30 @@
   }
 }
 
+.paper-hooks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
 .paper-actions {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 10px;
+
+  .app-nav__item {
+    display: flex;
+    align-items: center;
+    color: $ink-dark;
+    text-decoration: none;
+    padding: 2px 4px;
+
+    &:hover { color: $ink-red; }
+  }
 }
 
 .paper-search {

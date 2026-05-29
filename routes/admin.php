@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Admin\AdminAdvertController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AdvertController as AdminUserAdvertController;
 use App\Http\Controllers\Admin\AntimatController;
 use App\Http\Controllers\Admin\BanController as AdminBanController;
 use App\Http\Controllers\Admin\BanhistController;
 use App\Http\Controllers\Admin\BanlistController;
 use App\Http\Controllers\Admin\BlacklistController;
 use App\Http\Controllers\Admin\CacheController;
-use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\InvitationController as AdminInvitationController;
 use App\Http\Controllers\Admin\IpBanController;
@@ -50,27 +47,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/', 'index')->name('index');
                 Route::get('/check', 'check')->name('check');
             });
-
-        /* Админ-чат */
-        Route::controller(ChatController::class)
-            ->prefix('chats')
-            ->name('chats.')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index')->name('index');
-                Route::match(['get', 'post'], '/edit/{id}', 'edit')->name('edit');
-                Route::post('/clear', 'clear')->name('clear');
-            });
-
-        /* Админская реклама */
-        Route::controller(AdminAdvertController::class)
-            ->prefix('admin-adverts')
-            ->group(function () {
-                Route::match(['get', 'post'], '/', 'index');
-                Route::delete('/delete', 'delete');
-            });
-
-        /* Пользовательская реклама */
-        Route::get('/adverts', [AdminUserAdvertController::class, 'index']);
 
         /* Модер */
         Route::middleware('check.admin:moder')->group(function () {
@@ -243,14 +219,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/create', 'create');
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
                     Route::delete('/delete/{id}', 'delete');
-                });
-
-            /* Пользовательская реклама */
-            Route::controller(AdminUserAdvertController::class)
-                ->prefix('adverts')
-                ->group(function () {
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
-                    Route::post('/delete', 'delete');
                 });
 
             /* Пользовательские поля */

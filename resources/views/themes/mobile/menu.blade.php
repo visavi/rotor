@@ -8,9 +8,6 @@
                 <li><a href="{{ route('admin.spam.index') }}"><span style="color:#ff0000">{{ __('index.complains') }}</span></a></li>
             @endif
 
-            @if ($user->newchat < statsNewChat())
-                <li><a href="{{ route('admin.chats.index') }}"><span style="color:#ff0000">{{ __('index.chat') }}</span></a></li>
-            @endif
         @endif
     </ul>
 @else

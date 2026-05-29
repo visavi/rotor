@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommentController;
@@ -123,14 +122,6 @@ Route::controller(InvitationController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/create', 'store')->name('store');
-    });
-
-/* Реклама */
-Route::controller(AdvertController::class)
-    ->prefix('adverts')
-    ->group(function () {
-        Route::get('/', 'index');
-        Route::match(['get', 'post'], '/create', 'create');
     });
 
 /* Репутация пользователя */

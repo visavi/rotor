@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use App\Classes\Registry;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
@@ -228,7 +229,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Возвращает последний бан
      */
-    public function lastBan(): hasOne
+    public function lastBan(): HasOne
     {
         return $this->hasOne(Banhist::class, 'user_id', 'id')
             ->whereIn('type', ['ban', 'change'])
@@ -543,7 +544,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             Banhist::query()->where('user_id', $this->id)->delete();
             Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
 
-            foreach (\App\Classes\Registry::$deleteUserCallbacks as $callback) {
+            foreach (Registry::$deleteUserCallbacks as $callback) {
                 $callback($this);
             }
 

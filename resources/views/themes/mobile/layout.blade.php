@@ -30,17 +30,21 @@
 <div class="menu">
     @include('themes/mobile/menu')
 
-    <div class="float-end">
-        <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-        <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+    <div class="float-end" style="display:flex; align-items:center; gap:8px">
+        <ul class="hooks-nav">
+            @hook('navbarStart')
+            @hook('navbarEnd')
+        </ul>
+        <div>
+            <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
+            <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+        </div>
     </div>
 </div>
 
 <div class="site">
     <div class="content">
         @hook('advertTop')
-        {{ getAdvertAdmin() }}
-        {{ getAdvertUser() }}
 
         @include('themes/motor/note')
         @hook('header')

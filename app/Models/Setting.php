@@ -42,7 +42,6 @@ class Setting extends Model
             'others',
             'protects',
             'prices',
-            'adverts',
             'files',
             'stickers',
             'feeds',

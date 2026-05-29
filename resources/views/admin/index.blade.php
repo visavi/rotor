@@ -22,24 +22,6 @@
         <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.editor') }}</div>
         <div class="section-body">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
-                <div class="col">
-                    <a href="/admin/chats" class="app-tile">
-                        <div class="app-tile-icon" style="background:#0dcaf0"><i class="fas fa-comments"></i></div>
-                        <div class="app-tile-label">{{ __('index.admin_chat') }}<span class="badge bg-adaptive app-tile-badge">{{ statsChat() }}</span></div>
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="/admin/admin-adverts" class="app-tile">
-                        <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-ad"></i></div>
-                        <div class="app-tile-label">{{ __('index.admin_advertising') }}</div>
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="/admin/adverts" class="app-tile">
-                        <div class="app-tile-icon" style="background:#ffc107"><i class="fas fa-bullhorn"></i></div>
-                        <div class="app-tile-label">{{ __('index.advertising') }}</div>
-                    </a>
-                </div>
                 @hook('adminBlockEditor')
             </div>
         </div>

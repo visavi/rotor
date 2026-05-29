@@ -8,7 +8,12 @@
                 <input name="query" class="paper-search__input" type="search" placeholder="{{ __('main.search') }}" minlength="3" maxlength="64" required>
                 <button class="paper-search__btn"><i class="fa fa-search"></i></button>
             </form>
-            @hook('navbarStart')
+
+            <ul class="paper-hooks">
+                @hook('navbarStart')
+                @hook('navbarEnd')
+            </ul>
+
             @if ($user = getUser())
                 <div class="dropdown paper-user">
                     <a href="#" class="paper-user__link" data-bs-toggle="dropdown">
@@ -38,7 +43,6 @@
             @else
                 <a class="paper-login-btn" href="{{ route('login') }}">{{ __('index.login') }}</a>
             @endif
-            @hook('navbarEnd')
             <a class="paper-sidebar-toggle" href="#" data-bs-toggle="sidebar" aria-label="Toggle Sidebar">
                 <i class="fas fa-bars"></i>
             </a>

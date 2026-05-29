@@ -38,11 +38,6 @@
                 <label class="form-check-label" for="delcomments">{{ __('main.comments') }}</label>
             </div>
 
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" value="1" name="delimages" id="delimages">
-                <label class="form-check-label" for="delimages">{{ __('users.photos') }}</label>
-            </div>
-
             <button class="btn btn-danger">{{ __('main.delete') }}</button>
         </form>
     </div>

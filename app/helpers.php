@@ -2,13 +2,10 @@
 
 use App\Classes\CloudFlare;
 use App\Classes\Metrika;
-use App\Models\AdminAdvert;
-use App\Models\Advert;
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\BlackList;
-use App\Models\Chat;
 use App\Models\Counter;
 use App\Models\Error;
 use App\Models\Invite;
@@ -364,30 +361,6 @@ function statsInvite(): string
 }
 
 /**
- * Возвращает количество сообщений в админ-чате
- */
-function statsChat(): string
-{
-    return Cache::remember('statChat', 3600, static function () {
-        $total = Chat::query()->count();
-
-        $totalNew = Chat::query()
-            ->where('created_at', '>', strtotime('-1 day', SITETIME))
-            ->count();
-
-        return formatShortNum($total) . ($totalNew ? '/+' . $totalNew : '');
-    });
-}
-
-/**
- * Возвращает время последнего сообщения в админ-чате
- */
-function statsNewChat(): int
-{
-    return Chat::query()->max('created_at') ?? 0;
-}
-
-/**
  * Частично скрывает email
  */
 function hideMail(string $email): string
@@ -457,44 +430,6 @@ function truncateDescription(HtmlString|string $value, int $words = 20, string $
     $value = strip_tags(preg_replace('/[\s\n\r]+/', ' ', $value));
 
     return Str::words(trim($value), $words, $end);
-}
-
-/**
- * Возвращает код админской рекламы
- */
-function getAdvertAdmin(): ?HtmlString
-{
-    $adverts = AdminAdvert::statAdverts();
-
-    if ($adverts) {
-        $result = Arr::random($adverts);
-
-        return new HtmlString(view('adverts/_admin_links', compact('result')));
-    }
-
-    return null;
-}
-
-/**
- * Возвращает код пользовательской рекламы
- */
-function getAdvertUser(): ?HtmlString
-{
-    $adverts = Advert::statAdverts();
-    $result = '';
-
-    if ($adverts) {
-        $total = count($adverts);
-        $show = setting('rekusershow') > $total ? $total : setting('rekusershow');
-        $links = Arr::random($adverts, $show);
-        $result = implode('<br>', $links);
-    }
-
-    if ($result || getUser()) {
-        return new HtmlString(view('adverts/_links', compact('result')));
-    }
-
-    return null;
 }
 
 /**

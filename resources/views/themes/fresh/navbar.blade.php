@@ -42,14 +42,6 @@
                     </li>
                 @endif
 
-                @if ($user->newchat < statsNewChat())
-                    <li>
-                        <a class="app-nav__item" href="{{ route('admin.chats.index') }}" aria-label="{{ __('index.chat') }}">
-                            <i class="far fa-bell fa-lg"></i>
-                            <span class="badge bg-notify">!</span>
-                        </a>
-                    </li>
-                @endif
             @endif
 
 
@@ -68,7 +60,6 @@
                     </ul>
                 </li>
 
-                @hook('navbarSurprise')
             @endif
 
             <!-- User Menu -->

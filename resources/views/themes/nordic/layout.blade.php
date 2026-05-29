@@ -36,8 +36,6 @@
 
     <div class="mb-2">
         @hook('advertTop')
-        {{ getAdvertAdmin() }}
-        {{ getAdvertUser() }}
     </div>
 
     @hook('contentStart')

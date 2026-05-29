@@ -194,7 +194,6 @@ class UserController extends AdminController
             $loginblack = empty($request->input('loginblack')) ? 0 : 1;
             $mailblack = empty($request->input('mailblack')) ? 0 : 1;
             $delcomments = empty($request->input('delcomments')) ? 0 : 1;
-            $delimages = empty($request->input('delimages')) ? 0 : 1;
 
             $validator->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
 
@@ -230,11 +229,6 @@ class UserController extends AdminController
                     if ($comments->isNotEmpty()) {
                         Restatement::run(['blogs', 'loads', 'news', 'photos', 'offers']);
                     }
-                }
-
-                // Удаление фотографий в галерее
-                if ($delimages) {
-                    $user->deleteAlbum();
                 }
 
                 $user->delete();

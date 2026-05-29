@@ -30,9 +30,15 @@
                 <div class="logo">
                     <a href="{{ route('home') }}"><img src="{{ setting('logotip') }}" alt="{{ setting('title') }}"></a>
 
-                    <div class="ms-auto">
-                        <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-                        <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+                    <div class="ms-auto" style="display:flex; align-items:center; gap:8px">
+                        <ul class="hooks-nav">
+                            @hook('navbarStart')
+                            @hook('navbarEnd')
+                        </ul>
+                        <div>
+                            <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
+                            <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+                        </div>
                     </div>
                 </div>
 
@@ -52,8 +58,6 @@
                 <div class="mcontentwide">
 
                     @hook('advertTop')
-                    {{ getAdvertAdmin() }}
-                    {{ getAdvertUser() }}
 
                     @include('themes/motor/note')
                     @hook('header')
