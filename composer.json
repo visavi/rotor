@@ -71,7 +71,7 @@
         "phpstan": "phpstan analyse --no-progress -vvv",
         "test": "vendor/bin/phpunit",
         "lint": "vendor/bin/pint --test",
-        "fix": "vendor/bin/pint",
+        "fix": "vendor/bin/pint . modules/*",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

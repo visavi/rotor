@@ -46,7 +46,6 @@ return [
 
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',
-    'note'             => 'Note',
     'upload_photo'     => 'Upload photo',
     'search_users'     => 'Search users',
     'account'          => 'Account',

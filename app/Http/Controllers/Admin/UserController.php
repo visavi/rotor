@@ -212,7 +212,7 @@ class UserController extends AdminController
                     );
                 }
 
-                foreach (Registry::$adminDeleteHandlers as $handler) {
+                foreach (Registry::$onAdminDeleteUser as $handler) {
                     $handler($user, $request);
                 }
 

@@ -41,43 +41,6 @@ class UserController extends Controller
     }
 
     /**
-     * Note
-     */
-    public function note(string $login, Request $request, Validator $validator): View|RedirectResponse
-    {
-        if (! isAdmin()) {
-            abort(403, __('main.page_only_admins'));
-        }
-
-        if (! $user = getUserByLogin($login)) {
-            abort(404, __('validator.user'));
-        }
-
-        if ($request->isMethod('post')) {
-            $notice = $request->input('notice');
-
-            $validator->length($notice, 0, 1000, ['notice' => __('users.note_to_big')]);
-
-            if ($validator->isValid()) {
-                $user->note()->updateOrCreate([], [
-                    'text'         => $notice,
-                    'edit_user_id' => getUser('id'),
-                    'updated_at'   => SITETIME,
-                ]);
-
-                return redirect()
-                    ->route('users.user', ['login' => $user->login])
-                    ->with('success', __('users.note_saved_success'));
-            }
-
-            $request->flash();
-            $request->session()->flash('flash.danger', $validator->getErrors());
-        }
-
-        return view('users/note', compact('user'));
-    }
-
-    /**
      * Registration
      */
     public function register(Request $request, Validator $validator): View|RedirectResponse

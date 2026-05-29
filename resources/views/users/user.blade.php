@@ -136,21 +136,7 @@
         </div>
     </div>
 
-    @if (isAdmin())
-    <div class="alert alert-success mb-3">
-        <i class="fa fa-thumbtack"></i> <b>{{ __('main.note') }}:</b> (<a href="/users/{{ $user->login }}/note">{{ __('main.change') }}</a>)<br>
-
-        @if (! empty($user->note->text))
-            {{ $user->note->getText() }}
-            {{ __('main.changed') }}: {{ $user->note->editUser->getProfile() }} <small class="section-date text-muted fst-italic">{{ dateFixed($user->note->updated_at) }}</small><br>
-        @else
-            {{ __('users.empty_note') }}<br>
-        @endif
-
-        </div>
-    @endif
-
-    <div class="alert alert-info mb-3">
+<div class="alert alert-info mb-3">
         @hook('userActionStart', $user)
 
         @if (!empty($user->site))

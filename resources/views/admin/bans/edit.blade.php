@@ -71,12 +71,6 @@
                     <div class="invalid-feedback">{{ textError('reason') }}</div>
                 </div>
 
-                <div class="mb-3{{ hasError('note') }}">
-                    <label for="notice" class="form-label">{{ __('main.note') }}:</label>
-                    <textarea class="form-control tiptap" id="notice" rows="5" name="notice">{{ getInput('notice', $user->note->text) }}</textarea>
-                    <div class="invalid-feedback">{{ textError('notice') }}</div>
-                </div>
-
                 <button class="btn btn-primary">{{ __('admin.bans.banned') }}</button>
             </form>
         </div>

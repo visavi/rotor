@@ -14,8 +14,8 @@ class Registry
     public static array $spamTypes = [];
     public static array $sitemapPages = [];
     public static array $pollResolvers = [];
-    public static array $deleteUserCallbacks = [];
-    public static array $adminDeleteHandlers = [];
+    public static array $onDeleteUser = [];
+    public static array $onAdminDeleteUser = [];
     public static array $feeds = [];
     public static array $search = [];
 
@@ -84,11 +84,11 @@ class Registry
     }
 
     /**
-     * Регистрирует колбэк на самостоятельное удаление пользователя
+     * Регистрирует колбэк на удаление пользователя
      */
     public static function onDeleteUser(callable $handler): void
     {
-        static::$deleteUserCallbacks[] = $handler;
+        static::$onDeleteUser[] = $handler;
     }
 
     /**
@@ -96,7 +96,7 @@ class Registry
      */
     public static function onAdminDeleteUser(callable $handler): void
     {
-        static::$adminDeleteHandlers[] = $handler;
+        static::$onAdminDeleteUser[] = $handler;
     }
 
     /**

@@ -40,14 +40,11 @@ class BanController extends AdminController
             $time = int($request->input('time'));
             $type = $request->input('type');
             $reason = $request->input('reason');
-            $notice = $request->input('notice');
-
             $validator
                 ->false($user->level === User::BANNED && $user->timeban > SITETIME, __('admin.bans.user_banned'))
                 ->gt($time, 0, ['time' => __('admin.bans.time_not_indicated')])
                 ->in($type, ['minutes', 'hours', 'days'], ['type' => __('admin.bans.time_not_selected')])
-                ->length($reason, 5, 1000, ['reason' => __('validator.text')])
-                ->length($notice, 0, 1000, ['notice' => __('validator.text_long')]);
+                ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
 
             if ($validator->isValid()) {
                 if ($type === 'days') {
@@ -70,12 +67,6 @@ class BanController extends AdminController
                     'reason'       => $reason,
                     'term'         => $time,
                     'created_at'   => SITETIME,
-                ]);
-
-                $user->note()->updateOrCreate([], [
-                    'text'         => $notice,
-                    'edit_user_id' => getUser('id'),
-                    'updated_at'   => SITETIME,
                 ]);
 
                 setFlash('success', __('admin.bans.success_banned'));

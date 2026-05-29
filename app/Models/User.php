@@ -238,14 +238,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Возвращает заметку пользователя
-     */
-    public function note(): HasOne
-    {
-        return $this->hasOne(Note::class)->withDefault();
-    }
-
-    /**
      * Возвращает дополнительные поля
      */
     public function data(): HasMany
@@ -539,12 +531,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             Message::query()->where('user_id', $this->id)->delete();
             Dialogue::query()->where('user_id', $this->id)->delete();
             Rating::query()->where('user_id', $this->id)->delete();
-            Note::query()->where('user_id', $this->id)->delete();
             Notebook::query()->where('user_id', $this->id)->delete();
             Banhist::query()->where('user_id', $this->id)->delete();
             Invite::query()->where('user_id', $this->id)->orWhere('invite_user_id', $this->id)->delete();
 
-            foreach (Registry::$deleteUserCallbacks as $callback) {
+            foreach (Registry::$onDeleteUser as $callback) {
                 $callback($this);
             }
 
