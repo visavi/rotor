@@ -30,28 +30,34 @@ class ModuleServiceProvider extends ServiceProvider
         $modules = Module::getEnabledModules();
 
         foreach ($modules as $module => $data) {
+            $base = base_path('modules/' . $module);
+
+            // чтобы не падать на include отсутствующих файлов из устаревшего кэша
+            if (! is_dir($base)) {
+                continue;
+            }
+
             $files = $data['files'];
-            $base = base_path('modules/' . $module . '/');
             $moduleKey = Str::snake($module);
 
             if ($files['views']) {
-                $this->loadViewsFrom($base . 'resources/views', $moduleKey);
+                $this->loadViewsFrom($base . '/resources/views', $moduleKey);
             }
 
             if ($files['lang']) {
-                $this->loadTranslationsFrom($base . 'resources/lang', $moduleKey);
+                $this->loadTranslationsFrom($base . '/resources/lang', $moduleKey);
             }
 
             if ($files['helpers']) {
-                include_once $base . 'helpers.php';
+                include_once $base . '/helpers.php';
             }
 
             if ($files['hooks']) {
-                include_once $base . 'hooks.php';
+                include_once $base . '/hooks.php';
             }
 
             if ($files['routes']) {
-                $this->loadRoutesFrom($base . 'routes.php');
+                $this->loadRoutesFrom($base . '/routes.php');
             }
 
             if ($data['config'] !== null) {
@@ -59,7 +65,7 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             if ($files['middleware']) {
-                $middleware = include $base . 'middleware.php';
+                $middleware = include $base . '/middleware.php';
 
                 foreach ($middleware['aliases'] ?? [] as $alias => $class) {
                     $router->aliasMiddleware($alias, $class);
@@ -71,7 +77,7 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             if ($files['module']) {
-                $moduleConfig = include $base . 'module.php';
+                $moduleConfig = include $base . '/module.php';
 
                 // Регистрация моделей и их возможностей
                 foreach ($moduleConfig['models'] ?? [] as $model => $config) {

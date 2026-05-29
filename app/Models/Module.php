@@ -173,11 +173,9 @@ class Module extends Model
 
         $result = [];
         foreach ($settings as $name => $moduleSettings) {
-            $moduleSettings = $moduleSettings ?? [];
             $result[$name] = [
-                'settings' => $moduleSettings,
-                'config'   => self::loadModuleConfig($name, $moduleSettings),
-                'files'    => self::scanModuleFiles($name),
+                'files'  => self::scanModuleFiles($name),
+                'config' => self::loadModuleConfig($name, $moduleSettings),
             ];
         }
 
