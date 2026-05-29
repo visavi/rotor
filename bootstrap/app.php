@@ -9,6 +9,7 @@ use App\Http\Middleware\CheckThrottle;
 use App\Http\Middleware\CheckToken;
 use App\Http\Middleware\CheckUser;
 use App\Http\Middleware\CheckUserState;
+use App\Http\Middleware\SaveStatistic;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -44,6 +45,7 @@ return Application::configure(basePath: dirname(__DIR__))
             CheckThrottle::class,
             CheckAccessSite::class,
             CheckUserState::class,
+            SaveStatistic::class,
 
             ShareErrorsFromSession::class,
             PreventRequestForgery::class,

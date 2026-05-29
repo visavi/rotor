@@ -233,9 +233,6 @@ function statsCounter(): array
  */
 function showCounter(): ?HtmlString
 {
-    $metrika = new Metrika();
-    $metrika->saveStatistic();
-
     $counter = statsCounter();
 
     if (setting('incount') > 0) {
