@@ -5,5 +5,4 @@
 
 @if ($countFiles)
     @include('app/_slider')
-    {{--@include('app/_carousel')--}}
 @endif

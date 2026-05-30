@@ -70,34 +70,17 @@
     </p>
 
     @if (isset($moduleConfig['screenshots']))
-        <?php $countScreens = count($moduleConfig['screenshots']); ?>
-        <div id="myCarousel" class="carousel slide media-file my-3" data-bs-ride="carousel">
-            @if ($countScreens > 1)
-                <div class="carousel-indicators">
-                    @for ($i = 0; $i < $countScreens; $i++)
-                        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ $i }}"{!! empty($i) ? ' class="active"' : '' !!}></button>
-                    @endfor
-                </div>
-            @endif
-
-            <div class="carousel-inner">
+        <div class="f-carousel media-file my-3" style="--f-carousel-slide-width: 100%; --f-carousel-spacing: 8px;">
+            <div class="f-carousel__viewport">
                 @foreach ($moduleConfig['screenshots'] as $screenshot)
-                    <div class="carousel-item{{ $loop->first ? ' active' : '' }}">
-                        {{ imageBase64($screenshot, ['class' => 'w-100']) }}
+                    @php $src = 'data:image/' . getExtension($screenshot) . ';base64,' . base64_encode(file_get_contents($screenshot)); @endphp
+                    <div class="f-carousel__slide">
+                        <a href="{{ $src }}" data-fancybox="module-screens">
+                            <img src="{{ $src }}" alt="{{ basename($screenshot) }}" class="d-block w-100" style="max-height: 420px; object-fit: contain;">
+                        </a>
                     </div>
                 @endforeach
             </div>
-
-            @if ($countScreens > 1)
-                <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            @endif
         </div>
     @endif
 

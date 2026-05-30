@@ -957,33 +957,6 @@ function simplePaginate(array|Collection $items, int $perPage, array $appends = 
 
     return $collection;
 }
-
-/**
- * Возвращает сформированный код base64 картинки
- */
-function imageBase64(string $path, array $params = []): HtmlString
-{
-    $type = getExtension($path);
-    $data = file_get_contents($path);
-
-    if (! isset($params['class'])) {
-        $params['class'] = 'img-fluid';
-    }
-
-    if (empty($params['alt'])) {
-        $params['alt'] = basename($path);
-    }
-
-    $strParams = [];
-    foreach ($params as $key => $param) {
-        $strParams[] = $key . '="' . $param . '"';
-    }
-
-    $strParams = implode(' ', $strParams);
-
-    return new HtmlString('<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '"' . $strParams . '>');
-}
-
 /**
  * Выводит прогресс-бар
  */

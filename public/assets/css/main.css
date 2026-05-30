@@ -786,3 +786,26 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 .app-tile-label { font-size: .88rem; font-weight: 600; line-height: 1.3; display: flex; flex-direction: column; align-items: flex-start; }
 .app-tile-badge { margin-top: .2rem; }
+/* Fancybox: компактные тёмные стрелки — единый вид в лайтбоксе и инлайн-карусели */
+.fancybox__container .f-button.is-arrow {
+    --f-button-width: 36px;
+    --f-button-height: 36px;
+    --f-button-svg-width: 18px;
+    --f-button-svg-height: 18px;
+    --f-button-bg: rgba(0, 0, 0, .2);
+    --f-button-hover-bg: rgba(0, 0, 0, .55);
+    --f-button-color: #fff;
+    --f-button-border-radius: 50%;
+    --f-arrow-pos: 1rem;
+}
+.f-carousel .f-button.is-arrow {
+    --f-arrow-width: 36px;
+    --f-arrow-height: 36px;
+    --f-arrow-svg-width: 18px;
+    --f-arrow-svg-height: 18px;
+    --f-arrow-bg: rgba(0, 0, 0, .2);
+    --f-arrow-hover-bg: rgba(0, 0, 0, .55);
+    --f-arrow-color: #fff;
+    --f-arrow-border-radius: 50%;
+    --f-arrow-pos: 3px;
+}

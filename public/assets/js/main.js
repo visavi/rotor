@@ -178,6 +178,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {})
 
+    let hoveredCarousel = null
+    document.querySelectorAll('.f-carousel').forEach(el => {
+        const carousel = fancyCarousel(el, { infinite: true, adaptiveHeight: true }, fancyCarouselPlugins)
+        carousel.init()
+
+        el.addEventListener('mouseenter', () => hoveredCarousel = carousel)
+        el.addEventListener('mouseleave', () => { if (hoveredCarousel === carousel) hoveredCarousel = null })
+    })
+
+    document.addEventListener('keydown', e => {
+        if (!hoveredCarousel) return
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault()
+            hoveredCarousel.prev()
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault()
+            hoveredCarousel.next()
+        }
+    })
+
     document.querySelectorAll('.slide-thumb-link[data-type="html5video"]').forEach(link => {
         const video = link.querySelector('video')
         if (!video) return
