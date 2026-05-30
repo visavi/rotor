@@ -28,9 +28,20 @@
             </a>
         </div>
 
-        <div class="input-group input-group-sm mb-3">
-            <span class="input-group-text"><i class="fas fa-search"></i></span>
-            <input type="text" class="form-control" placeholder="{{ __('main.search') }}" autocomplete="off" data-module-search>
+        <div class="row g-2 mb-3">
+            <div class="col-md-8">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="{{ __('main.search') }}" autocomplete="off" data-module-search>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select form-select-sm" data-module-sort>
+                    <option value="name">{{ __('main.sort') }}: {{ __('main.title') }}</option>
+                    <option value="status">{{ __('main.sort') }}: {{ __('main.status') }}</option>
+                    <option value="version">{{ __('main.sort') }}: {{ __('main.version') }}</option>
+                </select>
+            </div>
         </div>
 
         <div data-module-list>
@@ -44,8 +55,14 @@
                 $compatible  = ! $requires || version_compare(ROTOR_VERSION, $requires, '>=');
                 $searchText  = mb_strtolower(trim(($info['name'] ?? $name) . ' ' . $name . ' ' . ($info['description'] ?? '') . ' ' . ($info['author'] ?? '')));
                 $status      = $installed && $localExists ? ($isActive ? 'installed' : 'disabled') : 'not-installed';
+                $sortStatus  = $status === 'installed' ? 0 : ($status === 'disabled' ? 1 : 2);
             @endphp
-            <div class="section mb-3 shadow" data-module-card data-status="{{ $status }}" data-search="{{ $searchText }}">
+            <div class="section mb-3 shadow" data-module-card
+                 data-status="{{ $status }}"
+                 data-search="{{ $searchText }}"
+                 data-name="{{ mb_strtolower($info['name'] ?? $name) }}"
+                 data-version="{{ $info['version'] ?? '0' }}"
+                 data-sort-status="{{ $sortStatus }}">
                 <div class="section-title d-flex align-items-center justify-content-between">
                     <div>
                         <i class="fas fa-plug"></i>

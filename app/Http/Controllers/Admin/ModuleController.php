@@ -247,8 +247,16 @@ class ModuleController extends AdminController
                 return redirect()->back();
             }
 
+            $body = $response->body();
+
+            if (substr($body, 0, 4) !== "PK\x03\x04") {
+                setFlash('danger', __('admin.modules.download_not_zip'));
+
+                return redirect()->back();
+            }
+
             $contentLength = (int) $response->header('Content-Length');
-            if (($contentLength > 0 && $contentLength > $maxSize) || strlen($response->body()) > $maxSize) {
+            if (($contentLength > 0 && $contentLength > $maxSize) || strlen($body) > $maxSize) {
                 setFlash('danger', __('admin.modules.download_too_large', ['size' => formatSize($maxSize)]));
 
                 return redirect()->back();
@@ -259,10 +267,13 @@ class ModuleController extends AdminController
                 mkdir($tempDir, 0755, true);
             }
             $tempFile = $tempDir . '/rotor_module_' . uniqid() . '.zip';
-            file_put_contents($tempFile, $response->body());
+            file_put_contents($tempFile, $body);
 
-            $moduleName = $this->extractZip($tempFile);
-            @unlink($tempFile);
+            try {
+                $moduleName = $this->extractZip($tempFile);
+            } finally {
+                @unlink($tempFile);
+            }
         } catch (\Exception $e) {
             setFlash('danger', $e->getMessage());
 
@@ -317,15 +328,34 @@ class ModuleController extends AdminController
         }
 
         $targetPath = base_path('modules/' . $moduleName);
-        $zip->extractTo(base_path('modules/'));
+
+        // Существующий модуль уводим в резервную копию, чтобы чистая распаковка
+        // не оставила старых файлов и можно было откатиться при сбое
+        $backupPath = null;
+        if (is_dir($targetPath)) {
+            $backupPath = base_path('modules/.backup_' . $moduleName . '_' . time());
+            if (! rename($targetPath, $backupPath)) {
+                $zip->close();
+                throw new \RuntimeException(__('admin.modules.zip_backup_failed'));
+            }
+        }
+
+        if (! $zip->extractTo(base_path('modules/'))) {
+            $zip->close();
+            $this->restoreBackup($targetPath, $backupPath);
+            throw new \RuntimeException(__('admin.modules.zip_extract_failed'));
+        }
         $zip->close();
 
         $this->chmodRecursive($targetPath);
 
         if (! file_exists($targetPath . '/module.php')) {
-            // Откат: удалить распакованное
-            $this->deleteDirectory($targetPath);
+            $this->restoreBackup($targetPath, $backupPath);
             throw new \RuntimeException(__('admin.modules.zip_no_module_file'));
+        }
+
+        if ($backupPath) {
+            $this->deleteDirectory($backupPath);
         }
 
         return $moduleName;
@@ -353,6 +383,18 @@ class ModuleController extends AdminController
         setFlash('success', __('admin.modules.module_files_deleted'));
 
         return redirect()->route('admin.modules.index');
+    }
+
+    /**
+     * Откат распаковки: удалить частично распакованное и вернуть резервную копию
+     */
+    private function restoreBackup(string $targetPath, ?string $backupPath): void
+    {
+        $this->deleteDirectory($targetPath);
+
+        if ($backupPath && is_dir($backupPath)) {
+            rename($backupPath, $targetPath);
+        }
     }
 
     private function chmodRecursive(string $path): void
