@@ -1,7 +1,11 @@
+@php $modulesUpdates = \App\Models\Module::updatesCount(); @endphp
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
         <a class="nav-link{{ request()->routeIs('admin.modules.index') ? ' active' : '' }}" href="{{ route('admin.modules.index') }}">
             {{ __('main.installed') }}
+            @if ($modulesUpdates > 0)
+                <span class="badge bg-info" title="{{ __('main.update_available') }}">{{ $modulesUpdates }}</span>
+            @endif
         </a>
     </li>
     <li class="nav-item">

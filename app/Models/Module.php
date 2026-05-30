@@ -139,6 +139,40 @@ class Module extends Model
     }
 
     /**
+     * Количество установленных модулей с доступным обновлением
+     */
+    public static function updatesCount(): int
+    {
+        $installed = self::query()->pluck('version', 'name')->all();
+        if (! $installed) {
+            return 0;
+        }
+
+        $registry = ModuleRegistry::getAvailableModules();
+
+        $count = 0;
+        foreach ($installed as $name => $version) {
+            $configFile = base_path('modules/' . $name . '/module.php');
+            if (! file_exists($configFile)) {
+                continue;
+            }
+
+            $config = include $configFile;
+            $localVersion = $config['version'] ?? null;
+            $registryVersion = $registry[$name]['version'] ?? null;
+
+            $hasUpdate = ($localVersion && version_compare($localVersion, $version, '>'))
+                || ($registryVersion && version_compare($registryVersion, $version, '>'));
+
+            if ($hasUpdate) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
      * Get enabled modules
      */
     public static function getEnabledModules(): array
