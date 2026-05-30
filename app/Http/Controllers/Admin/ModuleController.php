@@ -172,7 +172,19 @@ class ModuleController extends AdminController
             $moduleNames[] = basename($module);
         }
 
-        return view('admin/modules/marketplace', compact('available', 'modules', 'moduleNames'));
+        $counts = ['all' => count($available), 'installed' => 0, 'disabled' => 0, 'not-installed' => 0];
+        foreach ($available as $name => $info) {
+            $localExists = in_array($name, $moduleNames, true);
+            $installed = $modules->has($name) && $localExists;
+
+            if ($installed) {
+                $counts[$modules[$name]->active ? 'installed' : 'disabled']++;
+            } else {
+                $counts['not-installed']++;
+            }
+        }
+
+        return view('admin/modules/marketplace', compact('available', 'modules', 'moduleNames', 'counts'));
     }
 
     /**
@@ -224,11 +236,20 @@ class ModuleController extends AdminController
             return redirect()->back();
         }
 
+        $maxSize = (int) setting('filesize') * 1024;
+
         try {
             $response = Http::timeout(30)->get($url);
 
             if (! $response->ok()) {
                 setFlash('danger', __('admin.modules.download_failed'));
+
+                return redirect()->back();
+            }
+
+            $contentLength = (int) $response->header('Content-Length');
+            if (($contentLength > 0 && $contentLength > $maxSize) || strlen($response->body()) > $maxSize) {
+                setFlash('danger', __('admin.modules.download_too_large', ['size' => formatSize($maxSize)]));
 
                 return redirect()->back();
             }

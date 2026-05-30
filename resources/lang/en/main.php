@@ -6,6 +6,7 @@ return [
     'site_rules'        => 'Site rules',
     'stickers'          => 'Stickers',
     'search'            => 'Search',
+    'nothing_found'     => 'Nothing found',
     'rss'               => 'RSS',
     'print'             => 'Print',
     'review'            => 'Review',

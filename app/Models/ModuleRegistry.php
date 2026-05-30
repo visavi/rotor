@@ -47,17 +47,13 @@ class ModuleRegistry extends Model
             $response = Http::timeout(10)->get($this->url);
 
             if (! $response->ok()) {
-                $this->fetchFailed = true;
-
-                return $this->cached_data ?? [];
+                return $this->markFailed();
             }
 
             $data = $response->json();
 
             if (! is_array($data)) {
-                $this->fetchFailed = true;
-
-                return $this->cached_data ?? [];
+                return $this->markFailed();
             }
 
             $this->update([
@@ -68,10 +64,19 @@ class ModuleRegistry extends Model
 
             return $data;
         } catch (\Exception) {
-            $this->fetchFailed = true;
-
-            return $this->cached_data ?? [];
+            return $this->markFailed();
         }
+    }
+
+    /**
+     * Помечает реестр недоступным и продлевает кэш, чтобы не опрашивать его каждый запрос.
+     */
+    private function markFailed(): array
+    {
+        $this->fetchFailed = true;
+        $this->update(['cached_at' => now()]);
+
+        return $this->cached_data ?? [];
     }
 
     /**

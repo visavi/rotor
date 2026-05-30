@@ -91,7 +91,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/view', 'view');
                     Route::post('/delete', 'delete');
                 });
-
         });
 
         /* Админ */

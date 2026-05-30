@@ -53,8 +53,6 @@ return [
         'comment_added_name' => 'Новый комментарий к вашей записи',
         'comment_added_text' => '<p>Пользователь %login% прокомментировал вашу запись <strong>%page%</strong></p><p>%text%</p>',
 
-
-
         'rating_name' => 'Изменение репутации',
         'rating_text' => '<p>Пользователь %login% поставил вам %vote%! (Ваш рейтинг: %rating%)</p><p>Комментарий: %comment%</p>',
 

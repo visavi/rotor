@@ -17,13 +17,29 @@
 
     @if ($moduleNames)
         <div class="d-flex flex-wrap gap-2 mb-3">
-            <button class="btn btn-sm btn-primary js-module-filter active" data-filter="all">{{ __('main.all') }} <span class="badge bg-white text-primary">{{ $counts['all'] }}</span></button>
-            <button class="btn btn-sm btn-outline-success js-module-filter" data-filter="installed">{{ __('main.installed') }} <span class="badge bg-success">{{ $counts['installed'] }}</span></button>
-            <button class="btn btn-sm btn-outline-secondary js-module-filter" data-filter="disabled">{{ __('main.disabled') }} <span class="badge bg-warning text-dark">{{ $counts['disabled'] }}</span></button>
-            <button class="btn btn-sm btn-outline-danger js-module-filter" data-filter="not-installed">{{ __('main.not_installed') }} <span class="badge bg-danger">{{ $counts['not-installed'] }}</span></button>
+            <button class="btn btn-sm btn-primary active" data-module-filter data-filter="all" data-class-active="btn-primary" data-class-idle="btn-outline-primary">{{ __('main.all') }} <span class="badge bg-white text-primary">{{ $counts['all'] }}</span></button>
+            <button class="btn btn-sm btn-outline-success" data-module-filter data-filter="installed" data-class-active="btn-success" data-class-idle="btn-outline-success">{{ __('main.installed') }} <span class="badge bg-success">{{ $counts['installed'] }}</span></button>
+            <button class="btn btn-sm btn-outline-secondary" data-module-filter data-filter="disabled" data-class-active="btn-secondary" data-class-idle="btn-outline-secondary">{{ __('main.disabled') }} <span class="badge bg-warning text-dark">{{ $counts['disabled'] }}</span></button>
+            <button class="btn btn-sm btn-outline-danger" data-module-filter data-filter="not-installed" data-class-active="btn-danger" data-class-idle="btn-outline-danger">{{ __('main.not_installed') }} <span class="badge bg-danger">{{ $counts['not-installed'] }}</span></button>
         </div>
 
-        <div id="modules-list">
+        <div class="row g-2 mb-3">
+            <div class="col-md-8">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="{{ __('main.search') }}" autocomplete="off" data-module-search>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select form-select-sm" data-module-sort>
+                    <option value="name">{{ __('main.sort') }}: {{ __('main.title') }}</option>
+                    <option value="status">{{ __('main.sort') }}: {{ __('main.status') }}</option>
+                    <option value="version">{{ __('main.sort') }}: {{ __('main.version') }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div data-module-list>
             @foreach ($moduleNames as $name => $moduleConfig)
                 @php
                     $isInstalled   = isset($moduleInstall[$name]);
@@ -32,8 +48,16 @@
                     $status        = $isInstalled ? $activeStatus : 'not-installed';
                     $registryVer   = $registryModules[$name]['version'] ?? null;
                     $hasRegistryUpdate = $isInstalled && $registryVer && version_compare($registryVer, $moduleInstall[$name]->version, '>');
+                    $sortVersion   = $moduleInstall[$name]->version ?? ($moduleConfig['version'] ?? '0');
+                    $sortStatus    = $status === 'installed' ? 0 : ($status === 'disabled' ? 1 : 2);
+                    $searchText    = mb_strtolower(trim(($moduleConfig['name'] ?? $name) . ' ' . $name . ' ' . ($moduleConfig['description'] ?? '') . ' ' . ($moduleConfig['author'] ?? '')));
                 @endphp
-                <div class="section mb-3 shadow js-module-card" data-status="{{ $status }}">
+                <div class="section mb-3 shadow" data-module-card
+                     data-status="{{ $status }}"
+                     data-search="{{ $searchText }}"
+                     data-name="{{ mb_strtolower($moduleConfig['name'] ?? $name) }}"
+                     data-version="{{ $sortVersion }}"
+                     data-sort-status="{{ $sortStatus }}">
                     <div class="section-title">
                         <i class="fas fa-plug {{ $isActive ? 'text-success' : 'text-muted' }}"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
                     </div>
@@ -63,51 +87,12 @@
             @endforeach
         </div>
 
-        <div id="modules-empty" class="d-none">
-            {{ showError(__('admin.modules.empty_modules')) }}
+        <div class="d-none" data-module-empty>
+            {{ showError(__('main.nothing_found')) }}
         </div>
     @else
         {{ showError(__('admin.modules.empty_modules')) }}
     @endif
 
-    @push('scripts')
-        <script>
-            document.querySelectorAll('.js-module-filter').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const filter = this.dataset.filter;
-
-                    document.querySelectorAll('.js-module-filter').forEach(b => {
-                        b.classList.remove('active', 'btn-primary', 'btn-success', 'btn-secondary', 'btn-danger');
-                        b.classList.add(
-                            b.dataset.filter === 'all'           ? 'btn-outline-primary'    :
-                            b.dataset.filter === 'installed'     ? 'btn-outline-success'    :
-                            b.dataset.filter === 'disabled'      ? 'btn-outline-secondary'  :
-                                                                   'btn-outline-danger'
-                        );
-                    });
-
-                    this.classList.add('active');
-                    this.classList.remove(
-                        'btn-outline-primary', 'btn-outline-success',
-                        'btn-outline-secondary', 'btn-outline-danger'
-                    );
-                    this.classList.add(
-                        filter === 'all'           ? 'btn-primary'   :
-                        filter === 'installed'     ? 'btn-success'   :
-                        filter === 'disabled'      ? 'btn-secondary' :
-                                                     'btn-danger'
-                    );
-
-                    let visible = 0;
-                    document.querySelectorAll('.js-module-card').forEach(card => {
-                        const show = filter === 'all' || card.dataset.status === filter;
-                        card.classList.toggle('d-none', !show);
-                        if (show) visible++;
-                    });
-
-                    document.getElementById('modules-empty').classList.toggle('d-none', visible > 0);
-                });
-            });
-        </script>
-    @endpush
+    @include('admin/modules/_filter')
 @stop

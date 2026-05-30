@@ -53,8 +53,6 @@ return [
         'comment_added_name' => 'New comment on your post',
         'comment_added_text' => '<p>User %login% commented on your post <strong>%page%</strong></p><p>%text%</p>',
 
-
-
         'rating_name' => 'Reputation change',
         'rating_text' => '<p>User %login% gave you %vote%! (Your rating: %rating%)</p><p>Comment: %comment%</p>',
 

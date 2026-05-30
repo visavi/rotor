@@ -6,6 +6,7 @@ return [
     'site_rules'        => 'Правила сайту',
     'stickers'          => 'Стікери',
     'search'            => 'Пошук',
+    'nothing_found'     => 'Нічого не знайдено',
     'rss'               => 'RSS',
     'print'             => 'Друк',
     'review'            => 'Огляд',

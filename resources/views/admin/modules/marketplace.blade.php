@@ -16,14 +16,24 @@
 @section('content')
     @include('admin/modules/_tabs')
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">{{ __('admin.modules.marketplace_hint') }}</span>
-        <a href="{{ route('admin.modules.marketplace', ['refresh' => 1]) }}" class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-sync-alt"></i> {{ __('main.refresh') }}
-        </a>
-    </div>
-
     @if ($available)
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <button class="btn btn-sm btn-primary active" data-module-filter data-filter="all" data-class-active="btn-primary" data-class-idle="btn-outline-primary">{{ __('main.all') }} <span class="badge bg-white text-primary">{{ $counts['all'] }}</span></button>
+            <button class="btn btn-sm btn-outline-success" data-module-filter data-filter="installed" data-class-active="btn-success" data-class-idle="btn-outline-success">{{ __('main.installed') }} <span class="badge bg-success">{{ $counts['installed'] }}</span></button>
+            <button class="btn btn-sm btn-outline-secondary" data-module-filter data-filter="disabled" data-class-active="btn-secondary" data-class-idle="btn-outline-secondary">{{ __('main.disabled') }} <span class="badge bg-warning text-dark">{{ $counts['disabled'] }}</span></button>
+            <button class="btn btn-sm btn-outline-danger" data-module-filter data-filter="not-installed" data-class-active="btn-danger" data-class-idle="btn-outline-danger">{{ __('main.not_installed') }} <span class="badge bg-danger">{{ $counts['not-installed'] }}</span></button>
+
+            <a href="{{ route('admin.modules.marketplace', ['refresh' => 1]) }}" class="btn btn-sm btn-outline-secondary ms-auto">
+                <i class="fas fa-sync-alt"></i> {{ __('main.refresh') }}
+            </a>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" placeholder="{{ __('main.search') }}" autocomplete="off" data-module-search>
+        </div>
+
+        <div data-module-list>
         @foreach ($available as $name => $info)
             @php
                 $installed   = $modules->has($name);
@@ -32,8 +42,10 @@
                 $hasUpdate   = $installed && isset($info['version']) && version_compare($info['version'], $modules[$name]->version, '>');
                 $requires    = $info['requires'] ?? null;
                 $compatible  = ! $requires || version_compare(ROTOR_VERSION, $requires, '>=');
+                $searchText  = mb_strtolower(trim(($info['name'] ?? $name) . ' ' . $name . ' ' . ($info['description'] ?? '') . ' ' . ($info['author'] ?? '')));
+                $status      = $installed && $localExists ? ($isActive ? 'installed' : 'disabled') : 'not-installed';
             @endphp
-            <div class="section mb-3 shadow">
+            <div class="section mb-3 shadow" data-module-card data-status="{{ $status }}" data-search="{{ $searchText }}">
                 <div class="section-title d-flex align-items-center justify-content-between">
                     <div>
                         <i class="fas fa-plug"></i>
@@ -119,12 +131,22 @@
                 </div>
             </div>
         @endforeach
+        </div>
+
+        <div class="d-none" data-module-empty>
+            {{ showError(__('main.nothing_found')) }}
+        </div>
+
+        @include('admin/modules/_filter')
     @else
         {{ showError(__('admin.registries.no_modules')) }}
 
         <div class="text-center mt-3">
             <a href="{{ route('admin.registries.index') }}" class="btn btn-primary">
                 {{ __('admin.registries.add_registry') }}
+            </a>
+            <a href="{{ route('admin.modules.marketplace', ['refresh' => 1]) }}" class="btn btn-outline-secondary">
+                <i class="fas fa-sync-alt"></i> {{ __('main.refresh') }}
             </a>
         </div>
     @endif
