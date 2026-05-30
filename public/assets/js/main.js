@@ -146,8 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const target = document.querySelector(initialHash)
             if (target) {
                 const navbarHeight = getNavbarHeight()
-                const behavior = initialHash === '#comments' ? 'instant' : 'smooth'
-                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior })
+                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'instant' })
             }
         }, 100)
     } else if (new URLSearchParams(location.search).has('page')) {
