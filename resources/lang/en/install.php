@@ -46,5 +46,6 @@ return [
     You can download the Rotor engine on the official website [url=https://visavi.net]visavi.net[/url]',
     'success_install' => 'Congratulations, Rotor has been successfully installed!',
     'success_update'  => 'Congratulations, Rotor has been successfully updated!',
-    'main_page'       => 'Go to the main page of the site',
+    'main_page'          => 'Go to the main page of the site',
+    'update_mode_notice' => 'Warning! You are in update mode. Only new migrations from the upgrades folder will be applied.',
 ];

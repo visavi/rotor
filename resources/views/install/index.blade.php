@@ -1,6 +1,6 @@
 @extends('layout_simple')
 
-@section('title', (setting('app_installed') ? __('install.update') : __('install.install')) . ' Rotor')
+@section('title', ($isUpdate ? __('install.update') : __('install.install')) . ' Rotor')
 
 @section('content')
     <div class="container border px-5" style="background: var(--bs-body-bg);">
@@ -8,6 +8,12 @@
             <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2>Mobile CMS</h2>
         </div>
+
+        @if ($isUpdate)
+            <div class="alert alert-warning fw-bold">
+                {{ __('install.update_mode_notice') }}
+            </div>
+        @endif
 
         <div class="row">
             <div class="col-12 mb-3">
@@ -163,8 +169,10 @@
                         </div>
                     @endif
 
-                    <a class="btn btn-primary" style="font-size: 18px" href="/install/status?lang={{ $lang }}">{{ __('install.check_status') }}</a>
-                    <span class="text-info fw-bold">{{ setting('app_installed') ? __('install.update') : __('install.install') }}</span>
+                    <a class="btn {{ $isUpdate ? 'btn-warning' : 'btn-primary' }}" style="font-size: 18px" href="/install/status?lang={{ $lang }}">
+                        {{ __('install.check_status') }}
+                        <span class="badge {{ $isUpdate ? 'bg-dark' : 'bg-light text-dark' }} ms-1">{{ $isUpdate ? __('install.update') : __('install.install') }}</span>
+                    </a>
                 @else
                     <div class="alert alert-danger">
                         {{ __('install.requirements_failed') }}<br>

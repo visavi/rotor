@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Middleware\ApplySettings;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CounterController;
@@ -47,7 +48,8 @@ Route::controller(HomeController::class)
         Route::get('/captcha', 'captcha')->name('captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+')->name('language');
         Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban')
-            ->withoutMiddleware('web');
+            ->withoutMiddleware('web')
+            ->middleware(ApplySettings::class);
 
         Route::get('/403', 'error403');
         Route::get('/404', 'error404');

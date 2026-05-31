@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -64,7 +65,9 @@ class InstallController extends Controller
         $dirs = array_merge($storage, $uploads, $dirs);
         $languages = getAvailableLanguages();
 
-        return view('install/index', compact('keys', 'languages', 'versions', 'dirs'));
+        $isUpdate = $this->isUpdate();
+
+        return view('install/index', compact('keys', 'languages', 'versions', 'dirs', 'isUpdate'));
     }
 
     /**
@@ -78,8 +81,9 @@ class InstallController extends Controller
 
         Artisan::call('migrate:status');
         $output = Artisan::output();
+        $isUpdate = $this->isUpdate();
 
-        return view('install/status', compact('output'));
+        return view('install/status', compact('output', 'isUpdate'));
     }
 
     /**
@@ -87,10 +91,12 @@ class InstallController extends Controller
      */
     public function migrate(): View
     {
+        $isUpdate = $this->isUpdate();
+
         Artisan::call('migrate', ['--force' => true]);
         $output = Artisan::output();
 
-        if (! setting('app_installed')) {
+        if (! $isUpdate) {
             Artisan::call('key:generate', ['--force' => true]);
         }
 
@@ -98,7 +104,7 @@ class InstallController extends Controller
         Artisan::call('route:clear');
         Artisan::call('config:clear');
 
-        return view('install/migrate', compact('output'));
+        return view('install/migrate', compact('output', 'isUpdate'));
     }
 
     /**
@@ -207,16 +213,31 @@ class InstallController extends Controller
      */
     public function finish(): View
     {
-        // -------------- Установка -------------//
+        if ($this->isUpdate()) {
+            abort(403);
+        }
+
+        // Помечаем все апгрейды как выполненные — свежая схема уже содержит все изменения
+        $batch = DB::table('migrations')->max('batch') + 1;
+        foreach (glob(database_path('upgrades/*.php')) as $file) {
+            DB::table('migrations')->insertOrIgnore([
+                'migration' => pathinfo($file, PATHINFO_FILENAME),
+                'batch'     => $batch,
+            ]);
+        }
+
         Setting::query()
             ->where('name', 'app_installed')
-            ->update([
-                'value' => 1,
-            ]);
+            ->update(['value' => 1]);
 
         clearCache('settings');
 
         return view('install/finish');
+    }
+
+    private function isUpdate(): bool
+    {
+        return (bool) setting('app_installed');
     }
 
     /**

@@ -1,6 +1,6 @@
 @extends('layout_simple')
 
-@section('title', setting('app_installed') ? __('install.step2_update') : __('install.step2_install'))
+@section('title', $isUpdate ? __('install.step2_update') : __('install.step2_install'))
 
 @section('content')
     <div class="container border px-5">
@@ -9,7 +9,13 @@
             <h2>Mobile CMS</h2>
         </div>
 
-        <h1>{{ setting('app_installed') ? __('install.step2_update') : __('install.step2_install') }}</h1>
+        <h1>{{ $isUpdate ? __('install.step2_update') : __('install.step2_install') }}</h1>
+
+        @if ($isUpdate)
+            <div class="alert alert-warning fw-bold">
+                {{ __('install.update_mode_notice') }}
+            </div>
+        @endif
 
         <pre class="prettyprint p-3 mb-3">{{ $output }}</pre>
 
