@@ -547,7 +547,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             Message::query()->where('user_id', $this->id)->delete();
             Dialogue::query()->where('user_id', $this->id)->delete();
             Rating::query()->where('user_id', $this->id)->delete();
-            Notebook::query()->where('user_id', $this->id)->delete();
             Banhist::query()->where('user_id', $this->id)->delete();
 
             foreach (Registry::$onDeleteUser as $callback) {

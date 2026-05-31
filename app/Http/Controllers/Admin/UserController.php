@@ -191,9 +191,9 @@ class UserController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $loginblack = empty($request->input('loginblack')) ? 0 : 1;
-            $mailblack = empty($request->input('mailblack')) ? 0 : 1;
-            $delcomments = empty($request->input('delcomments')) ? 0 : 1;
+            $loginblack = $request->boolean('loginblack');
+            $mailblack = $request->boolean('mailblack');
+            $delcomments = $request->boolean('delcomments');
 
             $validator->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
 
@@ -227,7 +227,7 @@ class UserController extends AdminController
                     });
 
                     if ($comments->isNotEmpty()) {
-                        Restatement::run(['blogs', 'loads', 'news', 'photos', 'offers']);
+                        Restatement::run(array_keys(Restatement::$handlers));
                     }
                 }
 
