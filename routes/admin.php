@@ -43,7 +43,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->name('upgrade.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::get('/check', 'check')->name('check');
+                Route::get('/migrate', 'migrate')->name('migrate');
             });
 
         /* Модер */

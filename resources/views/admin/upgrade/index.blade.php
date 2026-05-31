@@ -17,7 +17,7 @@
 
     @if ($hasNewVersion)
         <div class="alert alert-warning my-3">
-            <i class="fa fa-check"></i> Доступно обновление системы!
+            <i class="fa fa-exclamation-triangle"></i> Доступно обновление системы!
         </div>
 
         <div class="post mb-3">
@@ -52,11 +52,28 @@
         </div>
     @endif
 
-    <div class="alert alert-success my-3">
-        <i class="fa fa-check"></i> База данных в актуальном состоянии
-    </div>
+    @if (count($pendingMigrations) > 0)
+        <div class="alert alert-warning my-3">
+            <i class="fa fa-database"></i> Ожидают выполнения миграций: <strong>{{ count($pendingMigrations) }}</strong>
+            <ul class="mb-0 mt-2">
+                @foreach ($pendingMigrations as $migration)
+                    <li><code>{{ $migration }}</code></li>
+                @endforeach
+            </ul>
+        </div>
 
-    <div class="section mb-3 shadow">
-        {{ renderHtml(nl2br($migrateOutput)) }}
-    </div>
+        <a href="{{ route('admin.upgrade.migrate') }}" class="btn btn-warning mb-3">
+            <i class="fa fa-play"></i> Выполнить миграции ({{ count($pendingMigrations) }})
+        </a>
+    @else
+        <div class="alert alert-success my-3">
+            <i class="fa fa-check"></i> База данных в актуальном состоянии
+        </div>
+    @endif
+
+    @if (session('migrateOutput'))
+        <div class="section mb-3 shadow">
+            {{ renderHtml(nl2br(session('migrateOutput'))) }}
+        </div>
+    @endif
 @stop
