@@ -37,34 +37,34 @@ class ModuleServiceProvider extends ServiceProvider
                 continue;
             }
 
-            $files = $data['files'];
+            $files = $data['files'] ?? [];
             $moduleKey = Str::snake($module);
 
-            if ($files['views']) {
+            if ($files['views'] ?? false) {
                 $this->loadViewsFrom($base . '/resources/views', $moduleKey);
             }
 
-            if ($files['lang']) {
+            if ($files['lang'] ?? false) {
                 $this->loadTranslationsFrom($base . '/resources/lang', $moduleKey);
             }
 
-            if ($files['helpers']) {
+            if ($files['helpers'] ?? false) {
                 include_once $base . '/helpers.php';
             }
 
-            if ($files['hooks']) {
+            if ($files['hooks'] ?? false) {
                 include_once $base . '/hooks.php';
             }
 
-            if ($files['routes']) {
+            if ($files['routes'] ?? false) {
                 $this->loadRoutesFrom($base . '/routes.php');
             }
 
-            if ($data['config'] !== null) {
+            if ($data['config'] ?? false) {
                 Config::set($moduleKey, $data['config']);
             }
 
-            if ($files['middleware']) {
+            if ($files['middleware'] ?? false) {
                 $middleware = include $base . '/middleware.php';
 
                 foreach ($middleware['aliases'] ?? [] as $alias => $class) {
@@ -76,7 +76,7 @@ class ModuleServiceProvider extends ServiceProvider
                 }
             }
 
-            if ($files['module']) {
+            if ($files['module'] ?? false) {
                 $moduleConfig = include $base . '/module.php';
 
                 // Регистрация моделей и их возможностей
