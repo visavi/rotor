@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AjaxController;
-use App\Http\Middleware\ApplySettings;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CounterController;
@@ -22,6 +21,7 @@ use App\Http\Controllers\User\ListController;
 use App\Http\Controllers\User\PictureController;
 use App\Http\Controllers\User\RecoveryController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Middleware\ApplySettings;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -213,7 +213,7 @@ if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
         ->group(function () {
             Route::get('/', 'index')->name('install');
             Route::get('/status', 'status');
-            Route::get('/migrate', 'migrate');
+            Route::get('/migrate/next', 'migrateNext');
             Route::get('/seed', 'seed');
             Route::match(['get', 'post'], '/account', 'account');
             Route::get('/finish', 'finish');

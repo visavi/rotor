@@ -220,4 +220,17 @@ return [
         'input'        => 'Оne-line field',
         'textarea'     => 'Multiline field',
     ],
+    'upgrade' => [
+        'site_version'   => 'Site version v:version',
+        'new_version'    => 'A system update is available!',
+        'actual_version' => 'You have the latest version',
+        'download'       => 'Download',
+        'pending'        => 'Pending migrations: :count',
+        'run'            => 'Run migrations (:count)',
+        'db_actual'      => 'Database is up to date',
+        'running'        => 'Running...',
+        'done_btn'       => 'Done',
+        'all_done'       => 'All migrations completed',
+        'request_error'  => 'Request error',
+    ],
 ];

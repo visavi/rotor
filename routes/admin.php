@@ -44,6 +44,7 @@ Route::middleware(['check.admin', 'admin.logger'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::get('/migrate', 'migrate')->name('migrate');
+                Route::get('/migrate/next', 'migrateNext')->name('migrate.next');
             });
 
         /* Модер */

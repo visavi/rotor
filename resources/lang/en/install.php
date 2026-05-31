@@ -44,8 +44,15 @@ return [
     Rotor is a functionally complete open source content management system written in PHP. It uses a MySQL database to store the contents of your site. Rotor is a flexible, powerful and intuitive system with minimal hosting requirements, a high level of protection and is an excellent choice for building a site of any complexity
     The main feature of Rotor is the low load on system resources, even with a very large audience of the site, the server load will not be minimal, and you will not experience any problems with the display of information.
     You can download the Rotor engine on the official website [url=https://visavi.net]visavi.net[/url]',
-    'success_install' => 'Congratulations, Rotor has been successfully installed!',
-    'success_update'  => 'Congratulations, Rotor has been successfully updated!',
-    'main_page'          => 'Go to the main page of the site',
-    'update_mode_notice' => 'Warning! You are in update mode. Only new migrations from the upgrades folder will be applied.',
+    'success_install'            => 'Congratulations, Rotor has been successfully installed!',
+    'success_update'             => 'Congratulations, Rotor has been successfully updated!',
+    'main_page'                  => 'Go to the main page of the site',
+    'update_mode_notice'         => 'Warning! You are in update mode. Only new migrations from the upgrades folder will be applied.',
+    'migrations_pending'         => 'Pending migrations: :count',
+    'migrations_run'             => 'Run migrations (:count)',
+    'migrations_running'         => 'Running...',
+    'migrations_done_btn'        => 'Done',
+    'migrations_all_done'        => 'All migrations completed',
+    'migrations_nothing_pending' => 'All migrations already applied',
+    'migrations_error'           => 'Request error',
 ];
