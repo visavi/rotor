@@ -99,7 +99,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ]);
             }
 
-            if ($request->wantsJson()) {
+            if ($request->wantsJson() || $request->is('api/*')) {
                 return response()->json([
                     'message' => $exception->getMessage() ?: __('errors.error'),
                 ], $exception->getStatusCode());
