@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use FilesystemIterator;
 use Illuminate\Support\Facades\Http;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -92,8 +93,11 @@ class UpgradeService
             throw new RuntimeException('Update not downloaded');
         }
 
+        $archiveFiles = $this->collectFiles($sourcePath);
+
         $errors = [];
         $this->copyDirectory($sourcePath, base_path(), $errors);
+        $this->deleteOrphans($archiveFiles);
 
         return $errors;
     }
@@ -159,7 +163,7 @@ class UpgradeService
     private function copyDirectory(string $src, string $dst, array &$errors): void
     {
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($src, RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
@@ -183,6 +187,62 @@ class UpgradeService
         }
     }
 
+    /**
+     * Собирает список относительных путей всех файлов в директории
+     */
+    private function collectFiles(string $path): array
+    {
+        $files = [];
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $item) {
+            if ($item->isFile()) {
+                $relative = substr($item->getPathname(), strlen($path) + 1);
+                $files[] = str_replace('\\', '/', $relative);
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Удаляет файлы в управляемых директориях которых нет в архиве
+     */
+    private function deleteOrphans(array $archiveFiles): void
+    {
+        $archiveSet = array_flip($archiveFiles);
+
+        foreach ($this->writableDirs as $dir) {
+            $dirPath = base_path($dir);
+
+            if (! is_dir($dirPath)) {
+                continue;
+            }
+
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS)
+            );
+
+            foreach ($iterator as $item) {
+                if (! $item->isFile()) {
+                    continue;
+                }
+
+                $relative = str_replace('\\', '/', substr($item->getPathname(), strlen(base_path()) + 1));
+
+                if ($this->isExcluded($relative)) {
+                    continue;
+                }
+
+                if (! isset($archiveSet[$relative])) {
+                    @unlink($item->getPathname());
+                }
+            }
+        }
+    }
+
     private function isExcluded(string $relative): bool
     {
         foreach ($this->excluded as $exclude) {
@@ -197,7 +257,7 @@ class UpgradeService
     private function deleteDirectory(string $path): void
     {
         $items = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
             RecursiveIteratorIterator::CHILD_FIRST
         );
 

@@ -17,7 +17,7 @@
 
     <ul class="nav nav-tabs mt-3" id="upgradeTabs">
         <li class="nav-item">
-            <button class="nav-link {{ count($newReleases) > 0 ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#tab-core">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-core">
                 {{ __('admin.upgrade.core_updates') }}
                 @if (count($newReleases) > 0)
                     <span class="badge bg-warning text-dark ms-1">{{ count($newReleases) }}</span>
@@ -25,7 +25,7 @@
             </button>
         </li>
         <li class="nav-item">
-            <button class="nav-link {{ count($newReleases) === 0 ? 'active' : '' }}" data-bs-toggle="tab" data-bs-target="#tab-db">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-db">
                 {{ __('admin.upgrade.db_tab') }}
                 @if (count($pendingMigrations) > 0)
                     <span class="badge bg-warning text-dark ms-1">{{ count($pendingMigrations) }}</span>
@@ -37,7 +37,7 @@
     <div class="tab-content border border-top-0 p-4 mb-3">
 
         {{-- Вкладка: обновление ядра --}}
-        <div class="tab-pane fade {{ count($newReleases) > 0 ? 'show active' : '' }}" id="tab-core">
+        <div class="tab-pane fade show active" id="tab-core">
 
             @if (count($permErrors) > 0)
                 <div class="alert alert-danger">
@@ -101,7 +101,7 @@
         </div>
 
         {{-- Вкладка: миграции БД --}}
-        <div class="tab-pane fade {{ count($newReleases) === 0 ? 'show active' : '' }}" id="tab-db">
+        <div class="tab-pane fade" id="tab-db">
 
             @if (count($pendingMigrations) > 0)
                 <div class="alert alert-warning">
