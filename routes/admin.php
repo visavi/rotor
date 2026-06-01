@@ -37,18 +37,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                 Route::get('/', 'main')->name('index');
             });
 
-        /* Проверка обновлений */
-        Route::controller(UpgradeController::class)
-            ->prefix('upgrade')
-            ->name('upgrade.')
-            ->group(function () {
-                Route::get('/', 'index')->name('index');
-                Route::get('/migrate', 'migrate')->name('migrate');
-                Route::get('/migrate/next', 'migrateNext')->name('migrate.next');
-                Route::post('/download', 'download')->name('download');
-                Route::post('/apply', 'apply')->name('apply');
-            });
-
         /* Модер */
         Route::middleware('check.admin:moder')->group(function () {
             /* Жалобы */
@@ -160,6 +148,18 @@ Route::middleware(['check.admin', 'admin.logger'])
 
         /* Босс */
         Route::middleware('check.admin:boss')->group(function () {
+            /* Проверка обновлений */
+            Route::controller(UpgradeController::class)
+                ->prefix('upgrade')
+                ->name('upgrade.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/migrate', 'migrate')->name('migrate');
+                    Route::get('/migrate/next', 'migrateNext')->name('migrate.next');
+                    Route::post('/download', 'download')->name('download');
+                    Route::post('/apply', 'apply')->name('apply');
+                });
+
             /* Настройки */
             Route::match(['get', 'post'], '/settings', [SettingController::class, 'index']);
 

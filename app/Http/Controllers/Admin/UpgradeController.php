@@ -33,7 +33,7 @@ class UpgradeController extends AdminController
         $hasNewVersion = version_compare(ROTOR_VERSION, $latestVersion, '<');
         $pendingMigrations = $this->migrations->getPendingMigrations($this->migrationPaths());
         $newReleases = $this->upgrade->getNewReleases($githubService);
-        $permErrors  = $newReleases ? $this->upgrade->checkPermissions() : [];
+        $permErrors = $newReleases ? $this->upgrade->checkPermissions() : [];
 
         return view('admin/upgrade/index', compact(
             'hasNewVersion',
