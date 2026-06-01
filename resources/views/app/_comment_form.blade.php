@@ -20,8 +20,7 @@
             </form>
         </div>
 
-        <a href="/rules">{{ __('main.rules') }}</a> /
-        <a href="/stickers">{{ __('main.stickers') }}</a><br><br>
+
     @else
         {{ showError(__('main.not_authorized')) }}
     @endif
