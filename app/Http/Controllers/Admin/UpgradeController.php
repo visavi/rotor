@@ -33,7 +33,7 @@ class UpgradeController extends AdminController
         $hasNewVersion = version_compare(ROTOR_VERSION, $latestVersion, '<');
         $pendingMigrations = $this->migrations->getPendingMigrations($this->migrationPaths());
         $newReleases = $this->upgrade->getNewReleases($githubService);
-        $permErrors = $this->upgrade->checkPermissions();
+        $permErrors  = $newReleases ? $this->upgrade->checkPermissions() : [];
 
         return view('admin/upgrade/index', compact(
             'hasNewVersion',
@@ -79,11 +79,15 @@ class UpgradeController extends AdminController
             return response()->json(['error' => __('admin.upgrade.invalid_params')], 422);
         }
 
+        Artisan::call('down');
+
         try {
             $errors = $this->upgrade->applyUpdate($tag);
             $this->upgrade->cleanup($tag);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
+        } finally {
+            Artisan::call('up');
         }
 
         Artisan::call('cache:clear');

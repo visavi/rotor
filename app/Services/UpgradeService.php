@@ -48,8 +48,24 @@ class UpgradeService
         foreach ($this->writableDirs as $dir) {
             $path = base_path($dir);
 
-            if (file_exists($path) && ! is_writable($path)) {
-                $failed[] = $dir;
+            if (! file_exists($path)) {
+                continue;
+            }
+
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            foreach ($iterator as $item) {
+                if ($item->isDir() && ! $item->isWritable()) {
+                    $relative = str_replace('\\', '/', substr($item->getPathname(), strlen(base_path()) + 1));
+                    $failed[] = $relative;
+
+                    if (count($failed) >= 10) {
+                        return $failed;
+                    }
+                }
             }
         }
 
