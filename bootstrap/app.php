@@ -37,10 +37,10 @@ return Application::configure(basePath: dirname(__DIR__))
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
+            ApplySettings::class,
         ]);
 
         $middleware->group('web', [
-            ApplySettings::class,
             CheckInstallSite::class,
             CheckThrottle::class,
             CheckAccessSite::class,

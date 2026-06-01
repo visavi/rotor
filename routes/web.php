@@ -21,7 +21,6 @@ use App\Http\Controllers\User\ListController;
 use App\Http\Controllers\User\PictureController;
 use App\Http\Controllers\User\RecoveryController;
 use App\Http\Controllers\User\UserController;
-use App\Http\Middleware\ApplySettings;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,8 +47,7 @@ Route::controller(HomeController::class)
         Route::get('/captcha', 'captcha')->name('captcha');
         Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+')->name('language');
         Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban')
-            ->withoutMiddleware('web')
-            ->middleware(ApplySettings::class);
+            ->withoutMiddleware('web');
 
         Route::get('/403', 'error403');
         Route::get('/404', 'error404');
