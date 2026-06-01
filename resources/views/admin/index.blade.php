@@ -16,7 +16,8 @@
     <div class="mb-3">
         <i class="fa fa-key fa-lg"></i>
         <b>
-            @if(getUser()->isAdmin('boss'))<a href="/admin/upgrade">{{ __('main.version') }} {{ ROTOR_VERSION }}</a>
+            @if(isAdmin('boss'))
+                <a href="/admin/upgrade">{{ __('main.version') }} {{ ROTOR_VERSION }}</a>
             @else
                 {{ __('main.version') }} {{ ROTOR_VERSION }}
             @endif
