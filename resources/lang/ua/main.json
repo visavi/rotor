@@ -13,13 +13,11 @@
     "record_deleted": "Запис успішно видалено!",
     "comment_edited": "Коментар успішно змінено!",
     "copied": "Скопійовано!",
-
     "buttons": {
         "ok": "OK",
         "cancel": "Скасування",
         "load_more": "Завантажити ще"
     },
-
     "editor": {
         "bold": "Жирний (Ctrl+B)",
         "italic": "Курсив (Ctrl+I)",
@@ -41,7 +39,6 @@
         "ordered_list": "Нумерований список",
         "link": "Посилання",
         "url_link": "URL посилання",
-        "link_text": "Текст посилання...",
         "image": "Зображення",
         "url_image": "URL зображення",
         "image_not_found": "Пряме посилання на картинку не знайдено",
@@ -74,6 +71,8 @@
         "table_col_before": "Колонка зліва",
         "table_col_after": "Колонка справа",
         "table_col_delete": "Видалити колонку",
-        "table_delete": "Видалити таблицю"
+        "table_delete": "Видалити таблицю",
+        "link_remove": "Видалити посилання",
+        "link_open": "Відкрити у новій вкладці"
     }
 }

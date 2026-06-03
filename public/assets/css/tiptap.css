@@ -622,3 +622,56 @@ a.user:hover {
 .reply-form.toolbar-visible .tiptap-toolbar {
     display: flex;
 }
+
+/* ── Link bubble menu ────────────────────────────────────────────────────── */
+
+.tiptap-link-bubble {
+    position: absolute;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.tiptap-link-bubble-input {
+    width: 260px;
+    padding: 2px 6px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 4px;
+    background: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    font-size: 12px;
+    outline: none;
+    margin-right: 4px;
+}
+
+.tiptap-link-bubble-input:focus {
+    border-color: var(--bs-primary);
+}
+
+.tiptap-link-bubble button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--bs-body-color);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.tiptap-link-bubble button:hover {
+    background-color: var(--bs-secondary-bg);
+    border-color: var(--bs-border-color);
+}

@@ -1,5 +1,6 @@
 import { Editor, Extension, Node, mergeAttributes } from '@tiptap/core'
 import { StarterKit } from '@tiptap/starter-kit'
+import { Link } from '@tiptap/extension-link'
 import { TextAlign } from '@tiptap/extension-text-align'
 import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
@@ -10,6 +11,11 @@ import { Mention } from '@tiptap/extension-mention'
 import FileHandler from '@tiptap/extension-file-handler'
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
 import { trans as __ } from './translate.js'
+
+// Ссылка: inclusive=false чтобы пробел после ссылки не входил в неё
+const CustomLink = Link.extend({
+    inclusive() { return false },
+})
 
 const BackgroundColor = Extension.create({
     name: 'backgroundColor',
@@ -658,6 +664,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         el.addEventListener('mousedown', e => { e.preventDefault(); action() })
         if (getActive) activeButtons.push({ el, getActive })
         bar.appendChild(el)
+        return el
     }
 
     function sep() {
@@ -813,7 +820,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     activeButtons.push({ el: tableDd._dropdownBtn, getActive: () => editor.isActive('table') })
     sep()
 
-    btn('fa-link', __('editor.link'), () => {
+    const linkBtn = btn('fa-link', __('editor.link'), () => {
         const existing = editor.getAttributes('link').href || ''
         const { from, to } = editor.state.selection
         const selected = editor.state.doc.textBetween(from, to, '')
@@ -822,12 +829,9 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         if (selected || existing) {
             editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: null }).run()
         } else {
-            const placeholder = __('editor.link_text')
             editor.chain().focus()
-                .insertContent(`<a href="${url}">${placeholder}</a>`)
+                .insertContent(`<a href="${url}">${url}</a>`)
                 .run()
-            const { from } = editor.state.selection
-            editor.commands.setTextSelection({ from: from - placeholder.length, to: from })
         }
     }, () => editor.isActive('link'))
 
@@ -927,7 +931,90 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     editor.on('selectionUpdate', updateActive)
     editor.on('transaction', updateActive)
 
-    return bar
+    return { bar, linkBtn }
+}
+
+// ─── Link bubble ──────────────────────────────────────────────────────────────
+
+function makeEditorBubble(editor, linkBtn) {
+    const bubble = document.createElement('div')
+    bubble.className = 'tiptap-link-bubble'
+    bubble.style.display = 'none'
+    document.body.appendChild(bubble)
+
+    const input = document.createElement('input')
+    input.type = 'url'
+    input.className = 'tiptap-link-bubble-input'
+    input.placeholder = 'https://'
+
+    function applyUrl() {
+        const url = input.value.trim()
+        if (!url) { input.value = editor.getAttributes('link').href || ''; return }
+        if (!validateUrl(url)) { input.value = editor.getAttributes('link').href || ''; return }
+        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+    }
+
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter')  { e.preventDefault(); applyUrl() }
+        if (e.key === 'Escape') { e.preventDefault(); input.value = editor.getAttributes('link').href || ''; editor.commands.focus() }
+    })
+    input.addEventListener('mousedown', e => e.stopPropagation())
+    input.addEventListener('blur', applyUrl)
+
+    function makeBtn(icon, title, action) {
+        const b = document.createElement('button')
+        b.type = 'button'
+        b.title = title
+        b.innerHTML = `<i class="fas ${icon}"></i>`
+        b.addEventListener('mousedown', e => { e.preventDefault(); action() })
+        return b
+    }
+
+    bubble.appendChild(input)
+    bubble.appendChild(makeBtn('fa-external-link-alt', __('editor.link_open'), () => {
+        const href = editor.getAttributes('link').href
+        if (href) window.open(href, '_blank', 'noopener,noreferrer')
+    }))
+    bubble.appendChild(makeBtn('fa-link-slash', __('editor.link_remove'), () => {
+        editor.chain().focus().extendMarkRange('link').unsetLink().run()
+    }))
+
+    let hideTimer = null
+
+    function show() {
+        clearTimeout(hideTimer)
+        if (document.activeElement !== input) {
+            input.value = editor.getAttributes('link').href || ''
+        }
+
+        const rect = linkBtn.getBoundingClientRect()
+        bubble.style.display = 'flex'
+        bubble.style.top  = (rect.bottom + window.scrollY + 4) + 'px'
+        bubble.style.left = '0px'
+
+        requestAnimationFrame(() => {
+            const bw = bubble.getBoundingClientRect().width
+            let left = rect.left + window.scrollX + rect.width / 2 - bw / 2
+            const overflow = left + bw - window.innerWidth + 8
+            if (overflow > 0) left -= overflow
+            bubble.style.left = Math.max(8, left) + 'px'
+        })
+    }
+
+    function hide() { bubble.style.display = 'none' }
+
+    function update() {
+        if (editor.isActive('link') && editor.state.selection.empty) show()
+        else hide()
+    }
+
+    editor.on('selectionUpdate', update)
+    editor.on('blur', ({ event }) => {
+        if (bubble.contains(event?.relatedTarget)) return
+        hideTimer = setTimeout(hide, 150)
+    })
+    editor.on('focus', () => { clearTimeout(hideTimer); update() })
+    document.addEventListener('scroll', () => { if (bubble.style.display !== 'none') update() }, true)
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
@@ -1064,7 +1151,13 @@ function initEditor(textarea) {
             StarterKit.configure({
                 blockquote: false,
                 codeBlock: { HTMLAttributes: { class: 'code' } },
-                link: { shouldAutoLink: (url) => !/[<>"'`]/.test(decodeURIComponent(url)) },
+                link: false,
+            }),
+            CustomLink.configure({
+                openOnClick: false,
+                autolink: false,
+                linkOnPaste: true,
+                HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer nofollow' },
             }),
             Blockquote,
             TextStyle,
@@ -1148,6 +1241,8 @@ function initEditor(textarea) {
     editor.resetChanged  = () => { isChanged = false }
     editor.getIsChanged  = () => isChanged
 
+
+
     window.addEventListener('beforeunload', e => {
         if (isChanged && !editor.isEmpty) { e.preventDefault(); return e.returnValue = '' }
     })
@@ -1173,8 +1268,9 @@ function initEditor(textarea) {
         window._tiptapEditors[textarea.id] = editor
     }
 
-    const toolbar = buildToolbar(editor, textarea, uploadImage)
+    const { bar: toolbar, linkBtn } = buildToolbar(editor, textarea, uploadImage)
     wrapper.insertBefore(toolbar, editorEl)
+    makeEditorBubble(editor, linkBtn)
 
     function getCharCount() {
         let count = editor.storage.characterCount.characters()
