@@ -995,87 +995,55 @@ function confirm(message, callback) {
     confirmDialogEl.showModal()
 }
 
-// Infinite scroll для ленты
+// Кнопка "Загрузить ещё" для ленты
 const feedContainer = document.getElementById('feed-container')
 const feedSentinel  = document.getElementById('feed-sentinel')
 
 if (feedContainer && feedSentinel) {
-    let loading   = false
-    let autoCount = 0
-    const initialPage = parseInt(new URLSearchParams(location.search).get('page') || 1)
+    let loading = false
 
-    // Скрыть стандартную пагинацию
-    feedContainer.querySelectorAll('.feed-pagination').forEach(el => el.classList.add('d-none'))
-
-    // Спиннер перед sentinel
-    const loader = document.createElement('div')
-    loader.className = 'feed-loader d-none'
-    loader.innerHTML = '<span></span><span></span><span></span><span></span><span></span>'
-    feedSentinel.before(loader)
-
-    // URL следующей страницы из data-next последнего pagination
     const getNextUrl = () => {
         const items = feedContainer.querySelectorAll('.feed-pagination')
         return items[items.length - 1]?.dataset.next || ''
     }
 
-    // Кнопка "Загрузить ещё" после AUTO_PAGES автозагрузок
-    const showLoadMoreButton = () => {
-        loadObserver.disconnect()
+    const loader = document.createElement('div')
+    loader.className = 'feed-loader d-none'
+    loader.innerHTML = '<span></span><span></span><span></span><span></span><span></span>'
+    feedSentinel.before(loader)
+
+    const createLoadMoreButton = () => {
         const btn = document.createElement('button')
         btn.type = 'button'
         btn.className = 'btn btn-primary d-block mx-auto my-3'
         btn.textContent = __('buttons.load_more')
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
+            const nextUrl = getNextUrl()
+            if (!nextUrl || loading) return
+
+            loading = true
             btn.remove()
-            autoCount = 0
-            loadObserver.observe(feedSentinel)
-        })
-        feedSentinel.before(btn)
-    }
+            loader.classList.remove('d-none')
 
-    // Загрузка следующей страницы
-    const loadPage = async () => {
-        const nextUrl = getNextUrl()
-        if (!nextUrl) { loadObserver.disconnect(); return }
-        if (loading)  return
+            try {
+                const response = await fetch(nextUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                const html     = await response.text()
+                const temp     = document.createElement('div')
+                temp.innerHTML = html
 
-        loading = true
-        loader.classList.remove('d-none')
+                if (temp.querySelector('.feed-pagination')?.dataset.empty === '1') return
 
-        try {
-            const response = await fetch(nextUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            const html     = await response.text()
-            const temp     = document.createElement('div')
-            temp.innerHTML = html
+                feedContainer.append(...temp.children)
+                setTimeout(initShortView, 100)
 
-            const newPagination = temp.querySelector('.feed-pagination')
-            if (newPagination?.dataset.empty === '1') {
-                loadObserver.disconnect()
-                return
+                if (getNextUrl()) loader.before(createLoadMoreButton())
+            } finally {
+                loading = false
+                loader.classList.add('d-none')
             }
-
-            temp.querySelectorAll('.feed-pagination, .feed-pagination-top').forEach(el => el.classList.add('d-none'))
-
-            feedContainer.append(...temp.children)
-
-            const page = parseInt(new URL(nextUrl).searchParams.get('page'))
-
-            setTimeout(initShortView, 100)
-            history.replaceState(null, '', page > 1 ? `/?page=${page}` : '/')
-
-            autoCount++
-            if (page % 5 === 0) showLoadMoreButton()
-        } finally {
-            loading = false
-            loader.classList.add('d-none')
-        }
+        })
+        return btn
     }
 
-    // Observer для подгрузки при приближении к sentinel
-    const loadObserver = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) loadPage()
-    }, { rootMargin: '200px' })
-
-    loadObserver.observe(feedSentinel)
+    if (getNextUrl()) loader.before(createLoadMoreButton())
 }

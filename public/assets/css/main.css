@@ -266,7 +266,7 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
-    .pagination:not(.pagination-feed) .page-link {
+    .pagination .page-link {
         padding: 0.25rem 0.5rem;
         font-size: 0.7875rem;
         line-height: 1.5;
