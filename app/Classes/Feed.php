@@ -14,7 +14,7 @@ use Illuminate\Support\HtmlString;
 class Feed
 {
     private static array $baseTypes = [
-        'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user']],
+        'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user', 'files']],
     ];
 
     private mixed $user;
@@ -49,6 +49,17 @@ class Feed
             ->whereIn('relate_type', $enabledTypes)
             ->orderByDesc('created_at');
 
+        // Фильтруем ленту по видимым записям каждого типа до подсчёта total,
+        // чтобы пагинация не считала записи, которые потом отсекаются
+        foreach ($enabledTypes as $type) {
+            $idQuery = $this->visibleIdsQuery($type, $allTypes[$type]);
+
+            $query->where(function ($q) use ($type, $idQuery) {
+                $q->where('relate_type', '!=', $type)
+                    ->orWhereIn('relate_id', $idQuery);
+            });
+        }
+
         $version = cache()->get('feed_version', 1);
         $cacheKey = "feed_{$version}_{$currentPage}_" . implode(',', $enabledTypes);
 
@@ -63,26 +74,7 @@ class Feed
                 $withs = $allTypes[$type]['withs'];
                 $ids = $typeRows->pluck('relate_id')->all();
 
-                $modelQuery = $class::with($withs)->whereIn('id', $ids);
-
-                if ($class === Comment::class) {
-                    $modelQuery->whereIn('relate_type', array_keys(Relation::morphMap()));
-                }
-
-                if ($type === 'items') {
-                    $modelQuery->where('expires_at', '>', SITETIME);
-                }
-
-                $minRating = setting("feed_{$type}_rating");
-                if ($minRating) {
-                    if ($type === 'topics') {
-                        $modelQuery->whereHas('lastPost', fn ($q) => $q->where('rating', '>', $minRating));
-                    } else {
-                        $modelQuery->where('rating', '>', $minRating);
-                    }
-                }
-
-                $loadedModels[$type] = $modelQuery->get()->keyBy('id');
+                $loadedModels[$type] = $class::with($withs)->whereIn('id', $ids)->get()->keyBy('id');
             }
 
             $items = $rows
@@ -102,6 +94,33 @@ class Feed
         $allowDownload = $user || setting('down_guest_download');
 
         return new HtmlString((string) view('feeds/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
+    }
+
+    /**
+     * Подзапрос видимых id для типа: morphMap комментариев, scope модуля либо минимальный рейтинг
+     */
+    private function visibleIdsQuery(string $type, array $info)
+    {
+        /** @var class-string $class */
+        $class = $info['class'];
+
+        $idQuery = $class::query();
+
+        if ($class === Comment::class) {
+            $idQuery->whereIn('relate_type', array_keys(Relation::morphMap()));
+        }
+
+        // Scope задаёт условия видимости (активность, срок) и при необходимости join,
+        // чтобы у темы стало доступно поле rating из присоединённого последнего поста
+        if (! empty($info['scope'])) {
+            ($info['scope'])($idQuery);
+        }
+
+        if ($minRating = setting("feed_{$type}_rating")) {
+            $idQuery->where('rating', '>', $minRating);
+        }
+
+        return $idQuery->select($idQuery->getModel()->getQualifiedKeyName());
     }
 
     /**

@@ -2,9 +2,7 @@
 @forelse ($posts as $post)
     @includeIf(Registry::$feeds[$post->getMorphClass()]['view'] ?? 'feeds._' . $post->getMorphClass())
 @empty
-    @if ($posts->currentPage() === 1)
-        @include('feeds._welcome')
-    @endif
+    @include('feeds._welcome')
 @endforelse
 
 <div class="feed-pagination"

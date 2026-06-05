@@ -100,13 +100,15 @@ class Registry
     }
 
     /**
-     * Регистрирует модель как источник ленты: eager-загрузки и шаблон отображения
+     * Регистрирует модель как источник ленты
+     *
+     * @param array $config ['withs' => [], 'view' => '', 'scope' => ?Closure]
      */
-    public static function feed(string $class, array $withs, string $view): void
+    public static function feed(string $class, array $config): void
     {
         /** @var class-string $class */
         $morphName = $class::$morphName;
-        static::$feeds[$morphName] = ['class' => $class, 'withs' => $withs, 'view' => $view];
+        static::$feeds[$morphName] = ['class' => $class] + $config;
     }
 
     /**

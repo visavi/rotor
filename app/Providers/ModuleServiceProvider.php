@@ -90,7 +90,7 @@ class ModuleServiceProvider extends ServiceProvider
                     }
 
                     if ($feed = $config['feed'] ?? null) {
-                        Registry::feed($model, $feed['withs'], $feed['view']);
+                        Registry::feed($model, $feed);
                     }
 
                     match ($config['upload'] ?? null) {
