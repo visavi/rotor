@@ -86,8 +86,11 @@
 
     @if (isset($moduleConfig['migrations']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.migrations') }}</div>
-        @foreach ($moduleConfig['migrations'] as $migration)
-            <i class="fas fa-database"></i> {{ $migration }}<br>
+        @foreach ($moduleConfig['migrations'] as $name => $migration)
+            <details class="spoiler">
+                <summary><i class="fas fa-database"></i> {{ $name }}</summary>
+                <pre class="code"><code>{{ $migration }}</code></pre>
+            </details>
         @endforeach
     @endif
 

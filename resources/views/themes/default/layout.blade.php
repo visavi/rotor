@@ -22,16 +22,11 @@
 </head>
 <body class="app">
 
-@include('themes/default/navbar')
-@include('themes/default/sidebar')
+@yield('navbar')
+@yield('sidebar')
 
 <main class="app-content">
-    <div class="app-title">
-        @yield('header')
-        @yield('breadcrumb')
-        @hook('header')
-    </div>
-
+    @yield('titlebar')
     @yield('flash')
 
     <div class="mb-2">

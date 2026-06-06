@@ -22,15 +22,11 @@
 </head>
 <body class="app">
 
-@include('themes/nordic/navbar')
+@yield('navbar')
 
 <div class="app-body">
 <main class="app-content">
-    <div class="app-title">
-        @yield('header')
-        @yield('breadcrumb')
-        @hook('header')
-    </div>
+    @yield('titlebar')
 
     @yield('flash')
 
@@ -43,7 +39,7 @@
     @hook('contentEnd')
     @hook('advertBottom')
 </main>
-@include('themes/nordic/sidebar')
+@yield('sidebar')
 </div>
 
 @include('themes/nordic/footer')

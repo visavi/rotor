@@ -50,8 +50,7 @@
         @hook('header')
 
         @yield('flash')
-        @yield('breadcrumb')
-        @yield('header')
+        @yield('titlebar')
 
         @hook('contentStart')
         @yield('content')

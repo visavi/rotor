@@ -718,18 +718,51 @@ window.deleteWall = function (el) {
     return false
 }
 
-/* Копирует текст в input */
+/* Копирует текст в буфер обмена */
 window.copyToClipboard = function (el) {
-    const group = el.closest('.input-group')
-    const input = group?.querySelector('input')
-    if (input) { input.select(); document.execCommand('copy') }
+    const container = el.closest('.input-group') ?? el.parentElement
+    const field = container?.querySelector('input, textarea')
+    const text = el.dataset.copy ?? field?.value ?? ''
 
-    const tooltipEl = group?.querySelector('.input-group-text')
+    const fallback = () => {
+        if (field) { field.select(); document.execCommand('copy') }
+    }
+
+    if (navigator.clipboard?.writeText && text) {
+        navigator.clipboard.writeText(text).catch(fallback)
+    } else {
+        fallback()
+    }
+
+    // Галочка на иконке триггера
+    const icon = el.querySelector('i')
+    if (icon && !icon.dataset.copyReset) {
+        const prev = icon.className
+        icon.dataset.copyReset = '1'
+        icon.className = 'fas fa-check'
+        setTimeout(() => {
+            icon.className = prev
+            delete icon.dataset.copyReset
+        }, 1500)
+    }
+
+    // Подсказка «скопировано»: на .input-group-text либо на самом триггере
+    const tooltipEl = container?.querySelector('.input-group-text')
+        ?? (el.matches('[data-bs-toggle="tooltip"]') ? el : null)
+
     if (tooltipEl) {
-        tooltipEl.setAttribute('data-bs-original-title', __('copied'))
+        const original = tooltipEl.getAttribute('data-bs-original-title') ?? tooltipEl.getAttribute('title')
         const tip = bootstrap.Tooltip.getOrCreateInstance(tooltipEl)
+        tooltipEl.setAttribute('data-bs-original-title', __('copied'))
         tip.update()
         tip.show()
+
+        if (original !== null) {
+            setTimeout(() => {
+                tooltipEl.setAttribute('data-bs-original-title', original)
+                tip.update()
+            }, 1500)
+        }
     }
 
     return false

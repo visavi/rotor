@@ -23,15 +23,11 @@
 <body>
 <div class="app">
 
-@include('themes/newspaper/navbar')
+@yield('navbar')
 
 <div class="app-body">
 <main class="app-content">
-    <div class="app-title">
-        @yield('header')
-        @yield('breadcrumb')
-        @hook('header')
-    </div>
+    @yield('titlebar')
 
     @yield('flash')
 
@@ -44,7 +40,7 @@
     @hook('contentEnd')
     @hook('advertBottom')
 </main>
-@include('themes/newspaper/sidebar')
+@yield('sidebar')
 </div>
 
 @include('themes/newspaper/footer')

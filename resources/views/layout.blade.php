@@ -13,3 +13,19 @@
         @include('app/_comment_edit_modal')
     @endpush
 @endif
+
+@section('titlebar')
+    <div class="app-title">
+        @yield('header')
+        @yield('breadcrumb')
+        @hook('header')
+    </div>
+@stop
+
+@section('navbar')
+    @includeIf('theme::navbar')
+@stop
+
+@section('sidebar')
+    @includeIf('theme::sidebar')
+@stop

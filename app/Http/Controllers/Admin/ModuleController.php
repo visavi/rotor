@@ -67,7 +67,11 @@ class ModuleController extends AdminController
         }
 
         if (file_exists($modulePath . '/database/migrations')) {
-            $moduleConfig['migrations'] = array_map('basename', glob($modulePath . '/database/migrations/*.php'));
+            $migrations = [];
+            foreach (glob($modulePath . '/database/migrations/*.php') as $migration) {
+                $migrations[basename($migration)] = file_get_contents($migration);
+            }
+            $moduleConfig['migrations'] = $migrations;
         }
 
         if (file_exists($modulePath . '/resources/assets')) {

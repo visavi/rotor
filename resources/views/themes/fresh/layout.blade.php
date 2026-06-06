@@ -22,14 +22,10 @@
 </head>
 <body class="app">
 
-@include('themes/fresh/navbar')
+@yield('navbar')
 
 <main class="app-content">
-    <div class="app-title">
-        @yield('header')
-        @yield('breadcrumb')
-        @hook('header')
-    </div>
+    @yield('titlebar')
 
     @yield('flash')
 
