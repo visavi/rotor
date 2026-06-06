@@ -10,6 +10,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $sidebar-color;
+  color: $sidebar-light-color;
   border-left: 1px solid #e2e8f0;
   box-shadow: -2px 0 8px rgba(0,0,0,0.04);
   transition: width 0.25s ease, min-width 0.25s ease;
@@ -19,7 +20,7 @@
   @media print { display: none; }
 }
 
-[data-bs-theme=dark] .app-sidebar { background-color: #1a1a2e; border-left-color: #2d2d4e; }
+[data-bs-theme=dark] .app-sidebar { background-color: #1a1a2e; color: #c7d2fe; border-left-color: #2d2d4e; }
 
 .app-sidebar__overlay {
   @media(max-width: 767px) {

@@ -10,6 +10,7 @@
   overflow: auto;
   z-index: 10;
   background-color: $sidebar-color;
+  color: $sidebar-dark-color;
   box-shadow: 0 8px 17px rgba(0, 0, 0, 0.2);
   transition: left 0.3s ease,
   width 0.3s ease;
