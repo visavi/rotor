@@ -188,7 +188,7 @@ class UserController extends Controller
                         $request->session()->regenerate();
                         $user = Auth::user();
 
-                        return redirect($request->input('return', '/'))
+                        return redirect()->intended()
                             ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));
                     }
 
@@ -202,6 +202,12 @@ class UserController extends Controller
 
                 return redirect('login');
             }
+        }
+
+        // Запоминаем страницу, с которой пришёл гость, для возврата после входа
+        $previous = url()->previous();
+        if (! Str::contains($previous, ['/login', '/register', '/recovery'])) {
+            $request->session()->put('url.intended', $previous);
         }
 
         return view('users/login', compact('isFlood'));

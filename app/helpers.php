@@ -568,22 +568,6 @@ function clearCache(array|string|null $keys = null): bool
 }
 
 /**
- * Возвращает текущую страницу
- */
-function returnUrl(?string $url = null): ?string
-{
-    $request = request();
-
-    if ($request->is('/', 'login', 'register', 'recovery', 'restore', 'ban', 'closed')) {
-        return null;
-    }
-
-    $query = $request->has('return') ? $request->input('return') : $request->path();
-
-    return '?return=' . urlencode($url ?? '/' . $query);
-}
-
-/**
  * Saves error logs
  */
 function saveErrorLog(int $code, ?string $message = null): void

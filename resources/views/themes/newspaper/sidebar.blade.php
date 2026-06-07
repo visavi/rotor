@@ -18,7 +18,7 @@
     @else
         <div class="paper-sidebar-section">
             <ul class="paper-sidebar-menu paper-sidebar-links">
-                <li><a class="menu-item" href="{{ route('login') }}{{ returnUrl() }}" rel="nofollow"><i class="menu-icon fas fa-sign-in-alt"></i><span class="menu-label">{{ __('index.login') }}</span></a></li>
+                <li><a class="menu-item" href="{{ route('login') }}" rel="nofollow"><i class="menu-icon fas fa-sign-in-alt"></i><span class="menu-label">{{ __('index.login') }}</span></a></li>
                 <li><a class="menu-item" href="{{ route('register') }}" rel="nofollow"><i class="menu-icon far fa-user"></i><span class="menu-label">{{ __('index.register') }}</span></a></li>
             </ul>
         </div>

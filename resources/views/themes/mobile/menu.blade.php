@@ -12,7 +12,7 @@
     </ul>
 @else
     <ul class="menu-nav">
-        <li><i class="fa fa-lock fa-lg"></i> <a href="{{ route('login') }}{{ returnUrl() }}" rel="nofollow">{{ __('index.login') }}</a></li>
+        <li><i class="fa fa-lock fa-lg"></i> <a href="{{ route('login') }}" rel="nofollow">{{ __('index.login') }}</a></li>
         <li><a href="{{ route('register') }}" rel="nofollow">{{ __('index.register') }}</a></li>
     </ul>
 @endif

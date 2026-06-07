@@ -43,7 +43,7 @@
             <ul class="treeview-menu">
                 @hook('sidebarTreeviewGuestStart')
                 <li>
-                    <a class="treeview-item" href="{{ route('login') }}{{ returnUrl() }}" rel="nofollow">
+                    <a class="treeview-item" href="{{ route('login') }}" rel="nofollow">
                         <i class="icon fas fa-sign-in-alt"></i>
                         {{ __('index.login') }}
                     </a>
