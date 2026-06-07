@@ -11,6 +11,7 @@ use App\Models\Ban;
 use App\Models\Comment;
 use App\Models\Search;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -172,9 +173,8 @@ class HomeController extends Controller
     /**
      * Быстрое изменение языка
      */
-    public function language(string $lang, Request $request): RedirectResponse
+    public function language(string $lang, Request $request): JsonResponse
     {
-        $return = $request->input('return');
         $languages = getAvailableLanguages();
 
         if (preg_match('/^[a-z]+$/', $lang) && in_array($lang, $languages, true)) {
@@ -187,7 +187,7 @@ class HomeController extends Controller
             }
         }
 
-        return redirect($return ?? '/');
+        return response()->json(['success' => true]);
     }
 
     public function error403(): View

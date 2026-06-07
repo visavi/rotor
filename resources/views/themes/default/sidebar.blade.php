@@ -78,8 +78,8 @@
             </span>
 
             <i class="fas fa-globe-americas"></i>
-            <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-            <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+            <a href="#" data-lang="ru">RU</a> /
+            <a href="#" data-lang="en">EN</a>
         </li>
         @hook('sidebarFooterEnd')
     </ul>

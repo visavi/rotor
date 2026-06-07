@@ -337,6 +337,18 @@ document.addEventListener('click', function (e) {
     icon.className = collapsed ? 'fa fa-plus text-muted' : 'fa fa-minus text-muted'
 })
 
+/* Переключение языка (ajax, без перезагрузки на /language) */
+document.addEventListener('click', function (e) {
+    const el = e.target.closest('[data-lang]')
+    if (!el) return
+    e.preventDefault()
+    ajax({
+        url: '/language/' + el.dataset.lang,
+        type: 'POST',
+        success: () => location.reload(),
+    })
+})
+
 /* Ответ на сообщение (для форумов/стен без вложенных комментариев) */
 window.postReply = function (el) {
     postJump()

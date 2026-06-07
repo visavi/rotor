@@ -41,8 +41,8 @@
     <div class="app-sidebar__footer">
         @hook('sidebarFooterStart')
         <i class="fas fa-globe-americas"></i>
-        <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-        <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+        <a href="#" data-lang="ru">RU</a> /
+        <a href="#" data-lang="en">EN</a>
         <span class="online-counter">{{ showOnline() }}</span>
         @hook('sidebarFooterEnd')
     </div>

@@ -107,8 +107,8 @@
             <span class="app-topnav__online">{{ showOnline() }}</span>
             <span class="app-topnav__lang">
                 <i class="fas fa-globe-americas"></i>
-                <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-                <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+                <a href="#" data-lang="ru">RU</a> /
+                <a href="#" data-lang="en">EN</a>
             </span>
         </div>
     </div>

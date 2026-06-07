@@ -36,8 +36,8 @@
                             @hook('navbarEnd')
                         </ul>
                         <div>
-                            <a href="{{ route('language', ['lang' => 'ru']) }}{{ returnUrl() }}">RU</a> /
-                            <a href="{{ route('language', ['lang' => 'en']) }}{{ returnUrl() }}">EN</a>
+                            <a href="#" data-lang="ru">RU</a> /
+                            <a href="#" data-lang="en">EN</a>
                         </div>
                     </div>
                 </div>

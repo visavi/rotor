@@ -45,7 +45,7 @@ Route::controller(HomeController::class)
         Route::get('/closed', 'closed')->name('closed');
         Route::get('/search', 'search')->name('search');
         Route::get('/captcha', 'captcha')->name('captcha');
-        Route::get('/language/{lang}', 'language')->where('lang', '[a-z]+')->name('language');
+        Route::post('/language/{lang}', 'language')->where('lang', '[a-z]+')->name('language');
         Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban')
             ->withoutMiddleware('web');
 
