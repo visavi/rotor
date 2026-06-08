@@ -12,6 +12,8 @@
 @stop
 
 @section('content')
+    @hook('loginButtons')
+
     @if (setting('regkeys'))
         <div class="alert alert-warning">
             <i class="fa fa-pencil-alt text-muted"></i>

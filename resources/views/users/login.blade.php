@@ -12,6 +12,8 @@
 @stop
 
 @section('content')
+    @hook('loginButtons')
+
     <div class="section-form mb-3 shadow">
         <form method="post">
             @csrf

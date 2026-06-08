@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         if (! Schema::hasTable('settings')) {
             Schema::create('settings', function (Blueprint $table) {
-                $table->string('name', 25)->primary();
+                $table->string('name', 50)->primary();
                 $table->string('value');
             });
         }
