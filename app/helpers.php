@@ -1055,11 +1055,7 @@ function getQueryLog(): array
  */
 function setting(?string $key = null, mixed $default = null): mixed
 {
-    static $settings;
-
-    if (! $settings) {
-        $settings = Setting::getSettings();
-    }
+    $settings = Setting::getSettings();
 
     return $key ? ($settings[$key] ?? $default) : $settings;
 }

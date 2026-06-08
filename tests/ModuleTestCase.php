@@ -12,8 +12,6 @@ abstract class ModuleTestCase extends TestCase
 
     protected string $moduleName;
 
-    private static array $migratedModules = [];
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -26,12 +24,11 @@ abstract class ModuleTestCase extends TestCase
 
         $this->registerModuleResources();
 
-        if (! isset(self::$migratedModules[$this->moduleName])) {
-            $path = base_path("modules/{$this->moduleName}/database/migrations");
-            if (is_dir($path)) {
-                $this->artisan('migrate', ['--path' => $path, '--realpath' => true]);
-            }
-            self::$migratedModules[$this->moduleName] = true;
+        // RefreshDatabase выполняет migrate:fresh перед каждым тестом, сбрасывая
+        // и таблицы модуля, и записи в migrations — поэтому мигрируем каждый раз
+        $path = base_path("modules/{$this->moduleName}/database/migrations");
+        if (is_dir($path)) {
+            $this->artisan('migrate', ['--path' => $path, '--realpath' => true]);
         }
     }
 

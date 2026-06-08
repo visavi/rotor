@@ -37,7 +37,6 @@ class Setting extends Model
             'info',
             'comments',
             'messages',
-            'blogs',
             'pages',
             'others',
             'protects',
@@ -50,12 +49,21 @@ class Setting extends Model
     }
 
     /**
+     * Процессный memo настроек (сбрасывается через forgetSettings)
+     */
+    private static ?array $settings = null;
+
+    /**
      * Возвращает настройки сайта по ключу
      */
     public static function getSettings(): array
     {
+        if (self::$settings !== null) {
+            return self::$settings;
+        }
+
         try {
-            return Cache::rememberForever('settings', static function () {
+            return self::$settings = Cache::rememberForever('settings', static function () {
                 $settings = Setting::query()
                     ->pluck('value', 'name')
                     ->all();
@@ -71,5 +79,15 @@ class Setting extends Model
         } catch (Exception) {
             return [];
         }
+    }
+
+    /**
+     * Сбрасывает кеш и процессный memo настроек
+     */
+    public static function forgetSettings(): void
+    {
+        Cache::forget('settings');
+
+        self::$settings = null;
     }
 }
