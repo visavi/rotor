@@ -2,12 +2,12 @@
 
 use App\Classes\CloudFlare;
 use App\Classes\HtmlRenderer;
-use App\Classes\Metrika;
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Counter;
+use App\Models\Counter31;
 use App\Models\Error;
 use App\Models\Notice;
 use App\Models\Online;
@@ -195,9 +195,6 @@ function statsOnline(): array
         $guestsCount = $rows->whereNull('user_id')->count();
         $total = $usersCount + $guestsCount;
 
-        $metrika = new Metrika();
-        $metrika->getCounter($total);
-
         return [$usersCount, $guestsCount, $total, $users];
     });
 }
@@ -229,17 +226,63 @@ function statsCounter(): array
 }
 
 /**
+ * Возвращает статистику посещений по дням за неделю
+ */
+function statsWeek(): Collection
+{
+    return Cache::remember('counter_week', 600, static function () {
+        return Counter31::query()
+            ->orderByDesc('period')
+            ->limit(7)
+            ->get(['period', 'hosts'])
+            ->keyBy('period');
+    });
+}
+
+/**
  * Выводит счетчик посещений
  */
 function showCounter(): ?HtmlString
 {
-    $counter = statsCounter();
+    $incount = setting('incount');
 
-    if (setting('incount') > 0) {
-        return new HtmlString(view('app/_counter', compact('counter')));
+    if ($incount <= 0) {
+        return null;
     }
 
-    return null;
+    $counter = statsCounter();
+    $online = statsOnline()[2];
+
+    $cols = [
+        1 => ['lbl1' => __('counters.hosts'), 'val1' => $counter['dayhosts'], 'lbl2' => __('counters.hosts_total'), 'val2' => $counter['allhosts']],
+        2 => ['lbl1' => __('counters.hits'), 'val1' => $counter['dayhits'], 'lbl2' => __('counters.hits_total'), 'val2' => $counter['allhits']],
+        3 => ['lbl1' => __('counters.hosts'), 'val1' => $counter['dayhosts'], 'lbl2' => __('counters.hits'), 'val2' => $counter['dayhits']],
+        4 => ['lbl1' => __('counters.hosts_total'), 'val1' => $counter['allhosts'], 'lbl2' => __('counters.hits_total'), 'val2' => $counter['allhits']],
+    ];
+
+    $col = $cols[$incount] ?? $cols[3];
+
+    $barColors = ['Mon' => '#0d6efd', 'Tue' => '#6610f2', 'Wed' => '#198754', 'Thu' => '#fd7e14', 'Fri' => '#dc3545', 'Sat' => '#0dcaf0', 'Sun' => '#ffc107'];
+
+    $week = statsWeek();
+
+    $maxHosts = $week->max('hosts') ?: 1;
+    $bars = [];
+    for ($i = 6; $i >= 0; $i--) {
+        $ts = strtotime("-$i day", SITETIME);
+        $date = date('Y-m-d 00:00:00', $ts);
+        $dow = date('D', $ts);
+        $hosts = $week->get($date)?->hosts;
+        $bars[] = [
+            'h' => max(6, (int) round($hosts / $maxHosts * 15)),
+            'c' => $barColors[$dow] ?? '#0d6efd',
+            'l' => __('main.' . strtolower(substr($dow, 0, 2))),
+        ];
+    }
+
+    return new HtmlString(
+        view('app/_counter', ['online' => $online, 'bars' => $bars, ...$col])
+    );
 }
 
 /**

@@ -61,7 +61,6 @@ class SettingController extends AdminController
             __('settings.hits_hits_all'),
             __('settings.hits_hosts'),
             __('settings.hits_all_hosts_all'),
-            __('settings.graphical'),
         ];
 
         $statsite = [
