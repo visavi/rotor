@@ -274,7 +274,7 @@ function showCounter(): ?HtmlString
         $dow = date('D', $ts);
         $hosts = $week->get($date)?->hosts;
         $bars[] = [
-            'h' => max(6, (int) round($hosts / $maxHosts * 15)),
+            'h' => max(7, (int) round($hosts / $maxHosts * 20)),
             'c' => $barColors[$dow] ?? '#0d6efd',
             'l' => __('main.' . strtolower(substr($dow, 0, 2))),
         ];
