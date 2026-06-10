@@ -49,7 +49,7 @@ class Setting extends Model
     }
 
     /**
-     * Процессный memo настроек (сбрасывается через forgetSettings)
+     * Процессный memo настроек (сбрасывается через flush)
      */
     private static ?array $settings = null;
 
@@ -84,7 +84,7 @@ class Setting extends Model
     /**
      * Сбрасывает кеш и процессный memo настроек
      */
-    public static function forgetSettings(): void
+    public static function flush(): void
     {
         Cache::forget('settings');
 

@@ -45,7 +45,7 @@ class SettingController extends AdminController
                     Setting::query()->where('name', $name)->update(['value' => $value]);
                 }
 
-                Setting::forgetSettings();
+                clearCache('settings');
                 setFlash('success', __('settings.settings_success_saved'));
 
                 return redirect('admin/settings?act=' . $act);

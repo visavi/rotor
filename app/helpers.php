@@ -601,10 +601,19 @@ function performance(): ?HtmlString
  */
 function clearCache(array|string|null $keys = null): bool
 {
-    if ($keys) {
-        Cache::deleteMultiple((array) $keys);
-    } else {
+    if ($keys === null) {
         Cache::flush();
+        Setting::flush();
+
+        return true;
+    }
+
+    $keys = (array) $keys;
+    Cache::deleteMultiple($keys);
+
+    // Настройки держат процессный memo — сбрасываем отдельно
+    if (in_array('settings', $keys, true)) {
+        Setting::flush();
     }
 
     return true;

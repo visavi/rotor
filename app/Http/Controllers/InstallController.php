@@ -262,7 +262,7 @@ class InstallController extends Controller
             ->where('name', 'app_installed')
             ->update(['value' => 1]);
 
-        Setting::forgetSettings();
+        clearCache('settings');
 
         return view('install/finish');
     }

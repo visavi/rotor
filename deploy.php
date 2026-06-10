@@ -20,10 +20,6 @@ add('writable_dirs', [
     'public/uploads/*',
 ]);
 
-set('bin/npm', function () {
-    return which('npm');
-});
-
 // Hosts
 host('production')
     ->setHostname('hostname')
@@ -32,9 +28,8 @@ host('production')
 
 // Tasks
 task('build', function () {
-    cd('{{release_path}}');
-    run('{{bin/npm}} ci');
-    run('{{bin/npm}} run build');
+    runLocally('npm run build');
+    upload('public/build/', '{{release_path}}/public/build/');
 });
 
 before('deploy:success', artisan('module:link'));

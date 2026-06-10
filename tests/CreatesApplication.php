@@ -13,6 +13,13 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
 
+        // Регистрируем миграции модулей, чтобы migrate:fresh применял их в общем
+        // прогоне RefreshDatabase один раз, а не в каждом тесте отдельно
+        $migrator = $app->make('migrator');
+        foreach (glob(base_path('modules/*/database/migrations'), GLOB_ONLYDIR) ?: [] as $path) {
+            $migrator->path($path);
+        }
+
         return $app;
     }
 }

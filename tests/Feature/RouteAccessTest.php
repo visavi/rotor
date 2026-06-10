@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
@@ -25,8 +24,6 @@ class RouteAccessTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->seed(DatabaseSeeder::class);
 
         $this->admin = User::factory()->admin()->create(['login' => 'admin_test']);
         $this->user = User::factory()->create(['login' => 'user_test']);

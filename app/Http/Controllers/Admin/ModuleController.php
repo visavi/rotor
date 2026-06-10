@@ -154,7 +154,7 @@ class ModuleController extends AdminController
             ])->save();
         }
 
-        clearCache('modules');
+        clearCache(['modules', 'settings']);
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);
@@ -401,6 +401,9 @@ class ModuleController extends AdminController
         }
     }
 
+    /**
+     * Рекурсивно устанавливает права доступа (755 для директорий, 644 для файлов)
+     */
     private function chmodRecursive(string $path): void
     {
         chmod($path, 0755);
@@ -419,6 +422,9 @@ class ModuleController extends AdminController
         }
     }
 
+    /**
+     * Рекурсивно удаляет директорию, включая симлинки
+     */
     private function deleteDirectory(string $path): void
     {
         if (is_link($path)) {
@@ -482,7 +488,7 @@ class ModuleController extends AdminController
             $result = __('admin.modules.module_success_deleted');
         }
 
-        clearCache('modules');
+        clearCache(['modules', 'settings']);
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);

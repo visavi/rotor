@@ -97,6 +97,6 @@ class SettingSeeder extends Seeder
         Setting::query()->truncate();
         Setting::query()->insert($data);
 
-        Setting::forgetSettings();
+        clearCache('settings');
     }
 }

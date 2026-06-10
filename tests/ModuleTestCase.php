@@ -22,14 +22,8 @@ abstract class ModuleTestCase extends TestCase
             $this->markTestSkipped("Module [{$this->moduleName}] is not installed.");
         }
 
+        // Таблицы модулей создаются единым migrate:fresh (пути — в CreatesApplication)
         $this->registerModuleResources();
-
-        // RefreshDatabase выполняет migrate:fresh перед каждым тестом, сбрасывая
-        // и таблицы модуля, и записи в migrations — поэтому мигрируем каждый раз
-        $path = base_path("modules/{$this->moduleName}/database/migrations");
-        if (is_dir($path)) {
-            $this->artisan('migrate', ['--path' => $path, '--realpath' => true]);
-        }
     }
 
     private function registerModuleResources(): void
