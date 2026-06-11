@@ -149,23 +149,56 @@
 
     <br>
     @if ($module)
-        @if (version_compare($moduleConfig['version'], $module->version, '>'))
-            <a class="btn btn-info" href="/admin/modules/install?module={{ $moduleName }}&amp;update=1">{{ __('main.refresh') }}</a>
-        @endif
+        <div class="d-flex flex-wrap gap-2">
+            @if (version_compare($moduleConfig['version'], $module->version, '>'))
+                <form action="{{ route('admin.modules.install') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="module" value="{{ $moduleName }}">
+                    <input type="hidden" name="update" value="1">
+                    <button class="btn btn-info">{{ __('main.refresh') }}</button>
+                </form>
+            @endif
 
-        @if ($module['active'])
-            <a class="btn btn-warning" href="/admin/modules/uninstall?module={{ $moduleName }}&amp;disable=1">{{ __('main.disable') }}</a>
-        @else
-            <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}&amp;enable=1">{{ __('main.enable') }}</a>
-        @endif
+            @if ($module['active'])
+                <form action="{{ route('admin.modules.uninstall') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="module" value="{{ $moduleName }}">
+                    <input type="hidden" name="disable" value="1">
+                    <button class="btn btn-warning">{{ __('main.disable') }}</button>
+                </form>
+            @else
+                <form action="{{ route('admin.modules.install') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="module" value="{{ $moduleName }}">
+                    <input type="hidden" name="enable" value="1">
+                    <button class="btn btn-success">{{ __('main.enable') }}</button>
+                </form>
+            @endif
 
-        <a class="btn btn-danger" href="/admin/modules/uninstall?module={{ $moduleName }}" onclick="return confirm('{{ __('admin.modules.confirm_delete') }}')">{{ __('main.delete') }}</a>
+            <form action="{{ route('admin.modules.uninstall') }}" method="post"
+                  onsubmit="return confirm('{{ __('admin.modules.confirm_delete') }}')">
+                @csrf
+                <input type="hidden" name="module" value="{{ $moduleName }}">
+                <button class="btn btn-danger">{{ __('main.delete') }}</button>
+            </form>
+        </div>
 
         @if (isset($moduleConfig['migrations']))
             <div class="text-muted fst-italic my-3">{{ __('admin.modules.hint') }}</div>
         @endif
     @else
-        <a class="btn btn-success" href="/admin/modules/install?module={{ $moduleName }}">{{ __('main.install') }}</a>
-        <a class="btn btn-danger ms-2" href="/admin/modules/delete?module={{ $moduleName }}" onclick="return confirm('{{ __('admin.modules.confirm_delete_files') }}')">{{ __('admin.modules.delete_files') }}</a>
+        <div class="d-flex flex-wrap gap-2">
+            <form action="{{ route('admin.modules.install') }}" method="post">
+                @csrf
+                <input type="hidden" name="module" value="{{ $moduleName }}">
+                <button class="btn btn-success">{{ __('main.install') }}</button>
+            </form>
+            <form action="{{ route('admin.modules.delete') }}" method="post"
+                  onsubmit="return confirm('{{ __('admin.modules.confirm_delete_files') }}')">
+                @csrf
+                <input type="hidden" name="module" value="{{ $moduleName }}">
+                <button class="btn btn-danger">{{ __('admin.modules.delete_files') }}</button>
+            </form>
+        </div>
     @endif
 @stop

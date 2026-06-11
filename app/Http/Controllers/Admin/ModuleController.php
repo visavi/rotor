@@ -218,12 +218,7 @@ class ModuleController extends AdminController
             return redirect()->route('admin.modules.upload');
         }
 
-        $isUpdate = Module::query()->where('name', $moduleName)->exists();
-        $redirect = $isUpdate
-            ? '/admin/modules/install?module=' . $moduleName . '&update=1'
-            : '/admin/modules/module?module=' . $moduleName;
-
-        return redirect($redirect)
+        return redirect('/admin/modules/module?module=' . $moduleName)
             ->with('success', __('admin.modules.upload_success_extracted'));
     }
 
@@ -234,7 +229,7 @@ class ModuleController extends AdminController
     {
         $url = trim($request->input('url', ''));
 
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+        if (! filter_var($url, FILTER_VALIDATE_URL) || ! in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
             setFlash('danger', __('admin.modules.download_invalid_url'));
 
             return redirect()->back();
@@ -242,8 +237,15 @@ class ModuleController extends AdminController
 
         $maxSize = (int) setting('filesize') * 1024;
 
+        $tempDir = storage_path('app/temp');
+        if (! is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+        $tempFile = $tempDir . '/rotor_module_' . uniqid() . '.zip';
+
         try {
-            $response = Http::timeout(30)->get($url);
+            // Потоковая запись: лимит проверяется по мере чтения, тело не держим в памяти
+            $response = Http::timeout(30)->withOptions(['stream' => true])->get($url);
 
             if (! $response->ok()) {
                 setFlash('danger', __('admin.modules.download_failed'));
@@ -251,27 +253,44 @@ class ModuleController extends AdminController
                 return redirect()->back();
             }
 
-            $body = $response->body();
+            $stream = $response->toPsrResponse()->getBody();
+            $handle = fopen($tempFile, 'wb');
 
-            if (substr($body, 0, 4) !== "PK\x03\x04") {
-                setFlash('danger', __('admin.modules.download_not_zip'));
+            if ($handle === false) {
+                setFlash('danger', __('admin.modules.download_failed'));
 
                 return redirect()->back();
             }
+            $written = 0;
+            $tooLarge = false;
 
-            $contentLength = (int) $response->header('Content-Length');
-            if (($contentLength > 0 && $contentLength > $maxSize) || strlen($body) > $maxSize) {
+            while (! $stream->eof()) {
+                $chunk = $stream->read(8192);
+                $written += strlen($chunk);
+
+                if ($written > $maxSize) {
+                    $tooLarge = true;
+                    break;
+                }
+
+                fwrite($handle, $chunk);
+            }
+
+            fclose($handle);
+
+            if ($tooLarge) {
+                @unlink($tempFile);
                 setFlash('danger', __('admin.modules.download_too_large', ['size' => formatSize($maxSize)]));
 
                 return redirect()->back();
             }
 
-            $tempDir = storage_path('app/temp');
-            if (! is_dir($tempDir)) {
-                mkdir($tempDir, 0755, true);
+            if (file_get_contents($tempFile, false, null, 0, 4) !== "PK\x03\x04") {
+                @unlink($tempFile);
+                setFlash('danger', __('admin.modules.download_not_zip'));
+
+                return redirect()->back();
             }
-            $tempFile = $tempDir . '/rotor_module_' . uniqid() . '.zip';
-            file_put_contents($tempFile, $body);
 
             try {
                 $moduleName = $this->extractZip($tempFile);
@@ -279,17 +298,13 @@ class ModuleController extends AdminController
                 @unlink($tempFile);
             }
         } catch (\Exception $e) {
+            @unlink($tempFile);
             setFlash('danger', $e->getMessage());
 
             return redirect()->back();
         }
 
-        $isUpdate = Module::query()->where('name', $moduleName)->exists();
-        $redirect = $isUpdate
-            ? '/admin/modules/install?module=' . $moduleName . '&update=1'
-            : '/admin/modules/module?module=' . $moduleName;
-
-        return redirect($redirect)
+        return redirect('/admin/modules/module?module=' . $moduleName)
             ->with('success', __('admin.modules.upload_success_extracted'));
     }
 
@@ -477,7 +492,7 @@ class ModuleController extends AdminController
             ]);
             $result = __('admin.modules.module_success_disabled');
         } else {
-            if (env('MODULES_SAFE_MODE', false)) {
+            if (config('modules.safe_mode')) {
                 setFlash('danger', __('admin.modules.safe_mode_enabled'));
 
                 return redirect('admin/modules/module?module=' . $moduleName);
