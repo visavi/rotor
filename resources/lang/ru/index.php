@@ -18,8 +18,6 @@ return [
     'complains' => 'Жалобы',
 
     'private_message' => 'Приватное сообщение!',
-    'courses'         => 'Курсы валют',
-    'courses_error'   => 'Не удалось загрузить последние курсы валют!',
 
     'db_queries'      => 'DB запросы',
     'db_speed'        => 'DB скорость',

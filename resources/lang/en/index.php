@@ -18,8 +18,6 @@ return [
     'complains' => 'Complains',
 
     'private_message' => 'Private message!',
-    'courses'         => 'Exchange rates',
-    'courses_error'   => 'Failed to download the latest exchange rates!',
 
     'db_queries'      => 'DB queries',
     'db_speed'        => 'DB speed',

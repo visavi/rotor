@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $mime_type
  * @property int    $user_id
  * @property int    $created_at
- * @property-read Model $relate
+ * @property-read ?Model $relate
  */
 class File extends Model
 {

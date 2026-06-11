@@ -68,7 +68,7 @@
         }
     },
     "scripts": {
-        "phpstan": "phpstan analyse --no-progress -vvv",
+        "phpstan": "phpstan analyse --no-progress --memory-limit=1G -vvv",
         "test": "vendor/bin/phpunit",
         "lint": "vendor/bin/pint --test",
         "fix": "vendor/bin/pint . modules/*",

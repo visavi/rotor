@@ -36,6 +36,8 @@ trait CategoryTreeTrait
 
     /**
      * Build parent categories flat
+     *
+     * @param self $category
      */
     private function buildParentCategoriesFlat(Model $category, array &$tree = []): array
     {
@@ -50,6 +52,8 @@ trait CategoryTreeTrait
 
     /**
      * Build all categories tree
+     *
+     * @param Collection<int, self> $categories
      */
     private function buildAllCategoriesTree(Collection $categories, int $parentId = 0, int $depth = 0): array
     {

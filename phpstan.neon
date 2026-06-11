@@ -1,8 +1,15 @@
 includes:
     - ./vendor/larastan/larastan/extension.neon
+    - ./phpstan-baseline.neon
 parameters:
     paths:
         - app
+        - modules
     level: 5
     ignoreErrors:
+        # Module-view namespaces (blog::, forum::) не зарегистрированы при статическом анализе
+        - message: '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
+          path: modules/*
     excludePaths:
+        # Blade-шаблоны анализирует компилятор, а не PHPStan
+        - modules/*/resources/views/*
