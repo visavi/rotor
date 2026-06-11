@@ -237,4 +237,99 @@ class HelperTest extends TestCase
         self::assertTrue(clearCache('testKey'));
         self::assertTrue(clearCache(['key1', 'key2']));
     }
+
+    public function testTruncateHtml(): void
+    {
+        self::assertSame('Hello World', truncateHtml('<b>Hello</b> World', 5)->toHtml());
+        self::assertSame('Hello...', truncateHtml('Hello World', 1)->toHtml());
+        self::assertSame('Hello!', truncateHtml('Hello World', 1, '!')->toHtml());
+        self::assertSame('', truncateHtml(null)->toHtml());
+    }
+
+    public static function parseVersionProvider(): array
+    {
+        return [
+            'full version'  => ['14.0.0', '14.0.0'],
+            'short version' => ['14.0', '14.0.0'],
+            'major only'    => ['14', '14.0.0'],
+            'with suffix'   => ['14.0.0-beta', '14.0.0'],
+            'extra parts'   => ['1.2.3.4', '1.2.3'],
+            'empty string'  => ['', '0.0.0'],
+        ];
+    }
+
+    #[DataProvider('parseVersionProvider')]
+    public function testParseVersion(string $version, string $expected): void
+    {
+        self::assertSame($expected, parseVersion($version));
+    }
+
+    public function testUniqueName(): void
+    {
+        $name = uniqueName();
+
+        self::assertStringNotContainsString('.', $name);
+        self::assertNotSame($name, uniqueName());
+        self::assertStringEndsWith('.jpg', uniqueName('jpg'));
+    }
+
+    public function testAbsolutizeUrls(): void
+    {
+        config(['app.url' => 'https://site.test']);
+
+        self::assertSame(
+            '<a href="https://site.test/page">x</a>',
+            absolutizeUrls('<a href="/page">x</a>')
+        );
+        self::assertSame(
+            '<img src="https://site.test/img/a.png">',
+            absolutizeUrls('<img src="/img/a.png">')
+        );
+        self::assertSame(
+            '<a href="https://other.test/page">x</a>',
+            absolutizeUrls('<a href="https://other.test/page">x</a>')
+        );
+    }
+
+    public function testDeleteDir(): void
+    {
+        $dir = sys_get_temp_dir() . '/helper_test_' . uniqid();
+        mkdir($dir . '/nested', 0777, true);
+        file_put_contents($dir . '/file.txt', 'data');
+        file_put_contents($dir . '/nested/inner.txt', 'data');
+
+        deleteDir($dir);
+
+        self::assertDirectoryDoesNotExist($dir);
+
+        deleteDir($dir . '/missing');
+    }
+
+    public function testDeleteFile(): void
+    {
+        $file = sys_get_temp_dir() . '/helper_test_' . uniqid() . '.txt';
+        file_put_contents($file, 'data');
+
+        self::assertTrue(deleteFile($file));
+        self::assertFileDoesNotExist($file);
+        self::assertTrue(deleteFile($file));
+    }
+
+    public function testPaginate(): void
+    {
+        $paginator = paginate([1, 2, 3, 4, 5], 2, ['sort' => 'name']);
+
+        self::assertSame(5, $paginator->total());
+        self::assertSame(3, $paginator->lastPage());
+        self::assertSame([1, 2], $paginator->items());
+        self::assertStringContainsString('sort=name', $paginator->url(2));
+    }
+
+    public function testSimplePaginate(): void
+    {
+        $paginator = simplePaginate([1, 2, 3], 2);
+
+        self::assertTrue($paginator->hasMorePages());
+        self::assertCount(2, $paginator->items());
+    }
 }

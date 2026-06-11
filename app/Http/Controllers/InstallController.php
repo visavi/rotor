@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Modules\News\Models\News;
 
 class InstallController extends Controller
 {
@@ -215,20 +214,6 @@ class InstallController extends Controller
                 // -------------- Приват ---------------//
                 $text = __('install.text_message', ['login' => $login]);
                 $user->sendMessage(null, $text);
-
-                // -------------- Новость ---------------//
-                if (class_exists(News::class)) {
-                    $textnews = __('install.text_news');
-
-                    News::query()->create([
-                        'title'      => __('install.welcome'),
-                        'text'       => $textnews,
-                        'user_id'    => $user->id,
-                        'created_at' => SITETIME,
-                    ]);
-
-                    clearCache(['statNews', 'pinnedNews', 'statNewsDate']);
-                }
 
                 return redirect('/install/finish');
             }

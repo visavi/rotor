@@ -18,10 +18,6 @@ abstract class ModuleTestCase extends TestCase
 
         $this->withoutMiddleware(CheckInstallSite::class);
 
-        if (! is_dir(base_path("modules/{$this->moduleName}"))) {
-            $this->markTestSkipped("Module [{$this->moduleName}] is not installed.");
-        }
-
         // Таблицы модулей создаются единым migrate:fresh (пути — в CreatesApplication)
         $this->registerModuleResources();
     }

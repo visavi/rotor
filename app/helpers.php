@@ -1074,9 +1074,9 @@ function setting(?string $key = null, mixed $default = null): mixed
  */
 function parseVersion(string $version): string
 {
-    $ver = explode('.', strtok($version, '-'));
+    $ver = explode('.', (string) strtok($version, '-'));
 
-    return $ver[0] . '.' . $ver[1] . '.' . ($ver[2] ?? '0');
+    return ($ver[0] ?: '0') . '.' . ($ver[1] ?? '0') . '.' . ($ver[2] ?? '0');
 }
 
 /**
