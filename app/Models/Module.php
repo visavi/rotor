@@ -174,18 +174,25 @@ class Module extends Model
 
     /**
      * Get enabled modules
+     *
+     * Кеш привязан к версии движка: после обновления ядра структура данных
+     * могла измениться, поэтому устаревший кеш пересобирается
      */
     public static function getEnabledModules(): array
     {
         $cached = Cache::get('modules', []);
-        if ($cached !== []) {
-            return $cached;
+
+        if (($cached['version'] ?? null) === ROTOR_VERSION && ! empty($cached['modules'])) {
+            return $cached['modules'];
         }
 
         $modules = self::loadEnabledModules();
 
         if ($modules !== []) {
-            Cache::forever('modules', $modules);
+            Cache::forever('modules', [
+                'version' => ROTOR_VERSION,
+                'modules' => $modules,
+            ]);
         }
 
         return $modules;

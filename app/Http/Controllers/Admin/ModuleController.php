@@ -124,6 +124,14 @@ class ModuleController extends AdminController
         $module = Module::query()->firstOrNew(['name' => $moduleName]);
 
         $moduleConfig = include $modulePath . '/module.php';
+
+        $requires = $moduleConfig['requires'] ?? null;
+        if ($requires && version_compare(ROTOR_VERSION, $requires, '<')) {
+            setFlash('danger', __('admin.modules.requires') . ' ' . $requires . '!');
+
+            return redirect('admin/modules/module?module=' . $moduleName);
+        }
+
         $module->createSymlink();
         $module->migrate();
 
