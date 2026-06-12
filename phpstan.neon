@@ -10,6 +10,10 @@ parameters:
         - message: '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
           path: modules/*
           reportUnmatched: false
+        # В CI каталог modules пуст, трейты ядра используются только моделями модулей
+        - identifier: trait.unused
+          path: app/Traits/*
+          reportUnmatched: false
     excludePaths:
         # Blade-шаблоны анализирует компилятор, а не PHPStan
         - modules/*/resources/views/*
