@@ -27,7 +27,7 @@ trait CommentableTrait
      */
     private function commentsRelation(Model $model): MorphMany
     {
-        return $model->morphMany(Comment::class, 'relate');
+        return $model->morphMany(Comment::class, 'relate')->with('relate');
     }
 
     /**
