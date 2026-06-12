@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int    $category_id
  * @property string $name
  * @property string $code
+ * @property-read StickersCategory $category
  */
 class Sticker extends Model
 {

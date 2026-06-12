@@ -70,8 +70,10 @@ class Spam extends Model
             return null;
         }
 
-        if ($this->relate->user_id || $this->relate->author_id) {
-            return $this->relate->author ?? $this->relate->user;
+        if ($this->relate->getAttribute('user_id') || $this->relate->getAttribute('author_id')) {
+            $user = $this->relate->getRelationValue('author') ?? $this->relate->getRelationValue('user');
+
+            return $user instanceof User ? $user : null;
         }
 
         return null;

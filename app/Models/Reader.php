@@ -48,19 +48,21 @@ class Reader extends Model
 
     /**
      * Counting stat
+     *
+     * @param Model&object{countingField: string} $model
      */
     public static function countingStat(Model $model): void
     {
         $reader = self::query()
             ->where('relate_type', $model->getMorphClass())
-            ->where('relate_id', $model->id)
+            ->where('relate_id', $model->getKey())
             ->where('ip', getIp())
             ->first();
 
         if (! $reader) {
             self::query()->create([
                 'relate_type' => $model->getMorphClass(),
-                'relate_id'   => $model->id,
+                'relate_id'   => $model->getKey(),
                 'ip'          => getIp(),
                 'created_at'  => SITETIME,
             ]);

@@ -10,6 +10,7 @@ use App\Models\File;
 use App\Models\Flood;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,13 +21,23 @@ use Illuminate\Support\Str;
 trait CommentableTrait
 {
     /**
+     * Связь комментариев модели (morph-имя relate единое по движку)
+     *
+     * @return MorphMany<Comment, Model>
+     */
+    private function commentsRelation(Model $model): MorphMany
+    {
+        return $model->morphMany(Comment::class, 'relate');
+    }
+
+    /**
      * Возвращает [routeName, params] для редиректа на страницу модели
      */
     protected function commentableViewRoute(Model $model): array
     {
         $plural = Str::plural(Str::snake(class_basename($this->commentableModelClass)));
 
-        return [$plural . '.view', ['id' => $model->id]];
+        return [$plural . '.view', ['id' => $model->getKey()]];
     }
 
     /**
@@ -47,7 +58,7 @@ trait CommentableTrait
      */
     protected function checkCommentableModel(Model $model): void
     {
-        if (array_key_exists('active', $model->getAttributes()) && ! $model->active) {
+        if (array_key_exists('active', $model->getAttributes()) && ! $model->getAttribute('active')) {
             abort(200, __('main.record_not_active'));
         }
     }
@@ -68,7 +79,7 @@ trait CommentableTrait
                 ->get()
             : collect();
 
-        $allComments = $model->comments()
+        $allComments = $this->commentsRelation($model)
             ->withoutGlobalScope('active')
             ->select('comments.*', 'polls.vote')
             ->leftJoin('polls', static function (JoinClause $join) {
@@ -129,7 +140,7 @@ trait CommentableTrait
             ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
             ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
 
-        $validator->empty($model->closed, ['msg' => __('main.closed_comments')]);
+        $validator->empty($model->getAttribute('closed'), ['msg' => __('main.closed_comments')]);
 
         if ($validator->isValid()) {
             $msg = antimat($msg);
@@ -140,7 +151,7 @@ trait CommentableTrait
                 ? Comment::query()->find((int) $request->input('parent_id'))
                 : null;
 
-            if ($parentComment && $parentComment->relate_id === $model->id) {
+            if ($parentComment && $parentComment->relate_id === $model->getKey()) {
                 if ($parentComment->depth >= setting('comment_depth')) {
                     $parentId = $parentComment->parent_id;
                     $depth = $parentComment->depth;
@@ -150,7 +161,7 @@ trait CommentableTrait
                 }
             }
 
-            $comment = $model->comments()->create([
+            $comment = $this->commentsRelation($model)->create([
                 'text'       => $msg,
                 'user_id'    => $user->id,
                 'parent_id'  => $parentId,
@@ -200,24 +211,24 @@ trait CommentableTrait
     private function notifyAfterComment(Model $model, Comment $comment, string $msg, string $viewRoute, array $viewParams, ?Comment $parentComment): void
     {
         $url = route($viewRoute, $viewParams, false) . '#comment_' . $comment->id;
+        $title = (string) $model->getAttribute('title');
         $skip = [];
 
-        /** @var User|null $owner */
-        $owner = $model->user?->exists ? $model->user : null;
+        $owner = $model->getRelationValue('user');
+        $owner = $owner instanceof User && $owner->exists ? $owner : null;
         if ($owner && $owner->notify_comment && $owner->id !== getUser('id') && $parentComment === null) {
             $login = getUser('login');
-            $owner->sendMessage(null, textNotice('comment_added', compact('login', 'url') + ['title' => $model->title, 'text' => $msg]));
+            $owner->sendMessage(null, textNotice('comment_added', compact('login', 'url', 'title') + ['text' => $msg]));
             $skip[] = $owner->login;
         }
 
-        /** @var User|null $replyUser */
         $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
         if ($replyUser && ! in_array($replyUser->login, $skip, true) && $replyUser->notify_reply && $replyUser->id !== getUser('id')) {
             $login = getUser('login');
-            $replyUser->sendMessage(null, textNotice('comment_reply', compact('login', 'url') + ['title' => $model->title, 'text' => $msg]));
+            $replyUser->sendMessage(null, textNotice('comment_reply', compact('login', 'url', 'title') + ['text' => $msg]));
             $skip[] = $replyUser->login;
         }
 
-        sendNotify($msg, $url, $model->title, $skip);
+        sendNotify($msg, $url, $title, $skip);
     }
 }

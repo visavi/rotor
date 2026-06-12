@@ -9,8 +9,11 @@ use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Message;
+use App\Models\Poll;
 use App\Models\Spam;
 use App\Models\Sticker;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -80,6 +83,17 @@ class AjaxController extends Controller
     /**
      * Изменяет рейтинг
      */
+    /**
+     * Связь голоса текущего пользователя (morph-имя relate единое по движку)
+     *
+     * @return MorphOne<Poll, Model>
+     */
+    private function pollRelation(Model $post): MorphOne
+    {
+        return $post->morphOne(Poll::class, 'relate')
+            ->where('user_id', getUser('id'));
+    }
+
     public function rating(Request $request): JsonResponse
     {
         $validTypes = array_merge([
@@ -107,7 +121,7 @@ class AjaxController extends Controller
             return response()->json(['success' => false, 'message' => __('main.record_not_found')]);
         }
 
-        $poll = $post->poll()->firstOrNew();
+        $poll = $this->pollRelation($post)->firstOrNew();
         $isCancel = false;
 
         if ($poll->exists) {
@@ -119,7 +133,7 @@ class AjaxController extends Controller
         }
 
         if (! $isCancel) {
-            $post->poll()->create([
+            $this->pollRelation($post)->create([
                 'user_id'    => getUser('id'),
                 'vote'       => $vote,
                 'created_at' => SITETIME,
@@ -132,7 +146,7 @@ class AjaxController extends Controller
         return response()->json([
             'success' => true,
             'cancel'  => $isCancel,
-            'rating'  => formatNum($post->rating)->toHtml(),
+            'rating'  => formatNum((int) $post->getAttribute('rating'))->toHtml(),
         ]);
     }
 
@@ -307,10 +321,11 @@ class AjaxController extends Controller
 
         $grouped = $stickers
             ->groupBy('category_id')
+            ->toBase()
             ->map(fn ($items, $categoryId) => [
-                'id'       => $categoryId,
+                'id'       => (int) $categoryId,
                 'name'     => $items->first()->category->name,
-                'stickers' => $items->map(fn ($s) => ['code' => $s->code, 'name' => $s->name])->values(),
+                'stickers' => $items->map(fn (Sticker $s) => ['code' => $s->code, 'name' => $s->name])->values()->all(),
             ])
             ->values();
 

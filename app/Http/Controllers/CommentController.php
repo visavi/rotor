@@ -66,7 +66,7 @@ class CommentController extends Controller
         $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
 
         $relate = $comment->relate;
-        if ($relate && array_key_exists('closed', $relate->getAttributes()) && $relate->closed) {
+        if ($relate && array_key_exists('closed', $relate->getAttributes()) && $relate->getAttribute('closed')) {
             return response()->json(['success' => false, 'message' => __('main.closed_comments')]);
         }
 

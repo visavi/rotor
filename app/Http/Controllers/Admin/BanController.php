@@ -97,10 +97,9 @@ class BanController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $timeban = int($request->input('timeban'));
             $reason = $request->input('reason');
 
-            $timeban = strtotime($timeban);
+            $timeban = (int) strtotime((string) $request->input('timeban'));
             $term = $timeban - SITETIME;
 
             $validator

@@ -13,6 +13,7 @@ class Registry
     public static array $ratingTypes = [];
     public static array $spamTypes = [];
     public static array $sitemapPages = [];
+    /** @var array<class-string, callable> */
     public static array $pollResolvers = [];
     public static array $onDeleteUser = [];
     public static array $onAdminDeleteUser = [];

@@ -31,8 +31,14 @@ use Illuminate\Support\Str;
  * @property string $brow
  * @property int    $created_at
  * @property int    $deleted_at
- * @property-read Collection<Poll> $polls
- * @property-read Poll             $poll
+ * @property ?int   $parent_id
+ * @property int    $depth
+ * @property-read User                      $user
+ * @property-read ?Model                    $relate
+ * @property-read Collection<int, File>     $files
+ * @property-read Collection<int, self>     $children
+ * @property-read Collection<int, Poll>     $polls
+ * @property-read Poll                      $poll
  */
 class Comment extends Model
 {
@@ -232,7 +238,7 @@ class Comment extends Model
     {
         $plural = Str::plural($this->relate_type);
         $params = $this->relate_type === 'articles'
-            ? ['slug' => $this->relate->slug]
+            ? ['slug' => $this->relate?->getAttribute('slug')]
             : ['id' => $this->relate_id];
 
         return route($plural . '.view', $params, $absolute) . '#comment_' . $this->id;

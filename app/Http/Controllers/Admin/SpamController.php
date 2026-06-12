@@ -56,18 +56,16 @@ class SpamController extends AdminController
         $type = $this->type;
         $types = $this->types;
 
+        $relateWith = in_array($type, ['message', 'wall'])
+            ? 'relate.author'
+            : 'relate.user';
+
         $records = Spam::query()
             ->where('relate_type', $type)
             ->orderByDesc('created_at')
-            ->with('user')
+            ->with(['user', $relateWith])
             ->paginate(setting('spamlist'))
             ->appends(['type' => $type]);
-
-        if (in_array($type, ['message', 'wall'])) {
-            $records->load('relate.author');
-        } else {
-            $records->load('relate.user');
-        }
 
         $total = $this->total;
 

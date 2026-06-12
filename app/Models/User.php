@@ -32,45 +32,45 @@ use Illuminate\Support\Str;
 /**
  * Class User
  *
- * @property int    $id
- * @property string $login
- * @property string $password
- * @property string $email
- * @property string $level
- * @property string $name
- * @property string $country
- * @property string $city
- * @property string $language
- * @property string $info
- * @property string $site
- * @property string $phone
- * @property string $gender
- * @property string $birthday
- * @property int    $newprivat
- * @property string $themes
- * @property string $timezone
- * @property int    $point
- * @property int    $money
- * @property int    $timeban
- * @property string $status
- * @property string $color
- * @property string $avatar
- * @property string $picture
- * @property int    $rating
- * @property int    $posrating
- * @property int    $negrating
- * @property int    $sendprivatmail
- * @property int    $timebonus
- * @property int    $newchat
- * @property bool   $notify_mention
- * @property bool   $notify_reply
- * @property bool   $notify_comment
- * @property string $apikey
- * @property string $subscribe
- * @property string $remember_token
- * @property string $confirm_token
- * @property int    $updated_at
- * @property int    $created_at
+ * @property int         $id
+ * @property string      $login
+ * @property string      $password
+ * @property string      $email
+ * @property string      $level
+ * @property string      $name
+ * @property string      $country
+ * @property string      $city
+ * @property string      $language
+ * @property string      $info
+ * @property string      $site
+ * @property string      $phone
+ * @property string      $gender
+ * @property string      $birthday
+ * @property int         $newprivat
+ * @property string      $themes
+ * @property string      $timezone
+ * @property int         $point
+ * @property int         $money
+ * @property int         $timeban
+ * @property string      $status
+ * @property string      $color
+ * @property string      $avatar
+ * @property string      $picture
+ * @property int         $rating
+ * @property int         $posrating
+ * @property int         $negrating
+ * @property int         $sendprivatmail
+ * @property int         $timebonus
+ * @property int         $newchat
+ * @property bool        $notify_mention
+ * @property bool        $notify_reply
+ * @property bool        $notify_comment
+ * @property string      $apikey
+ * @property string|null $subscribe
+ * @property string      $remember_token
+ * @property string      $confirm_token
+ * @property int         $updated_at
+ * @property int         $created_at
  * @property-read Collection<UserData> $data
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -78,6 +78,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use MustVerifyEmail;
     use Notifiable;
@@ -412,13 +414,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getAvatar(): HtmlString
     {
         if (! $this->id) {
-            return new HtmlString($this->getAvatarGuest());
+            return $this->getAvatarGuest();
         }
 
         if ($this->avatar && file_exists(public_path($this->avatar))) {
             $avatar = $this->getAvatarImage();
         } else {
-            // $avatar = $this->getGravatar();
             $avatar = $this->getAvatarDefault();
         }
 
@@ -459,16 +460,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $letter = mb_strtoupper(Str::substr($name, 0, 1), 'utf-8');
 
         return new HtmlString('<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>');
-    }
-
-    /**
-     * Get gravatar
-     */
-    private function getGravatar(): HtmlString
-    {
-        $hash = hash('sha256', $this->email);
-
-        return new HtmlString('<img class="avatar-default rounded-circle" src="//gravatar.com/avatar/' . $hash . '?d=initials&amp;name=' . $this->getName() . '" alt="">');
     }
 
     /**
@@ -519,20 +510,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getCountMessages(): int
     {
         return Dialogue::query()->where('user_id', $this->id)->count();
-    }
-
-    /**
-     * Удаляет альбом пользователя
-     */
-    public function deleteAlbum(): void
-    {
-        $photos = Photo::query()->where('user_id', $this->id)->get();
-
-        if ($photos->isNotEmpty()) {
-            foreach ($photos as $photo) {
-                $photo->delete();
-            }
-        }
     }
 
     /**
