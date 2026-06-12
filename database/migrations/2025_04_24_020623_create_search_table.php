@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('search', function (Blueprint $table) {
             $table->id();
             $table->text('text');
-            $table->string('relate_type', 10);
+            $table->string('relate_type', 20);
             $table->integer('relate_id');
             $table->integer('created_at');
 

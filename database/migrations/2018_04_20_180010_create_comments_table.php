@@ -13,7 +13,7 @@ return new class extends Migration {
                 $table->unsignedInteger('parent_id')->nullable();
                 $table->unsignedTinyInteger('depth')->default(0);
                 $table->integer('user_id');
-                $table->string('relate_type', 10);
+                $table->string('relate_type', 20);
                 $table->integer('relate_id');
                 $table->text('text');
                 $table->integer('rating')->default(0);

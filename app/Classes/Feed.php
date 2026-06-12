@@ -14,7 +14,7 @@ use Illuminate\Support\HtmlString;
 class Feed
 {
     private static array $baseTypes = [
-        'comments' => ['class' => Comment::class, 'withs' => ['relate', 'user', 'files']],
+        'comments' => ['class' => Comment::class, 'with' => ['relate', 'user', 'files']],
     ];
 
     private mixed $user;
@@ -71,10 +71,10 @@ class Feed
             $loadedModels = [];
             foreach ($grouped as $type => $typeRows) {
                 $class = $allTypes[$type]['class'];
-                $withs = $allTypes[$type]['withs'];
+                $with = $allTypes[$type]['with'];
                 $ids = $typeRows->pluck('relate_id')->all();
 
-                $loadedModels[$type] = $class::with($withs)->whereIn('id', $ids)->get()->keyBy('id');
+                $loadedModels[$type] = $class::with($with)->whereIn('id', $ids)->get()->keyBy('id');
             }
 
             $items = $rows

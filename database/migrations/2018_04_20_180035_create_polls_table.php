@@ -10,7 +10,7 @@ return new class extends Migration {
         if (! Schema::hasTable('polls')) {
             Schema::create('polls', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('relate_type', 10);
+                $table->string('relate_type', 20);
                 $table->integer('relate_id');
                 $table->integer('user_id');
                 $table->string('vote');

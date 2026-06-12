@@ -63,7 +63,7 @@ class Registry
     /**
      * Регистрирует тип как источник спама с меткой для админки
      */
-    public static function spam(string $morphName, string $label): void
+    public static function spamType(string $morphName, string $label): void
     {
         static::$spamTypes[$morphName] = $label;
     }
@@ -103,7 +103,7 @@ class Registry
     /**
      * Регистрирует модель как источник ленты
      *
-     * @param array $config ['withs' => [], 'view' => '', 'scope' => ?Closure]
+     * @param array $config ['with' => [], 'view' => '', 'scope' => ?Closure]
      */
     public static function feed(string $class, array $config): void
     {

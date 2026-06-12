@@ -10,7 +10,7 @@ return new class extends Migration {
         if (! Schema::hasTable('files')) {
             Schema::create('files', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('relate_type', 10);
+                $table->string('relate_type', 20);
                 $table->integer('relate_id');
                 $table->string('path', 100);
                 $table->string('name', 60);
