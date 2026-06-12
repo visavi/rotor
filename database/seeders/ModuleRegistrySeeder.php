@@ -10,8 +10,8 @@ class ModuleRegistrySeeder extends Seeder
     public function run(): void
     {
         DB::table('module_registries')->insertOrIgnore([
-            'url'        => 'https://github.com/visavi/rotor-modules/releases/download/registry/registry.json',
-            'name'       => 'Official Rotor Modules',
+            'url'        => config('modules.default_registry.url'),
+            'name'       => config('modules.default_registry.name'),
             'active'     => true,
             'created_at' => now(),
             'updated_at' => now(),

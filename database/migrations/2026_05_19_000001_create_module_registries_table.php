@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('module_registries', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url');
+            $table->string('url')->unique();
             $table->string('name')->default('');
             $table->boolean('active')->default(true);
             $table->text('cached_data')->nullable();

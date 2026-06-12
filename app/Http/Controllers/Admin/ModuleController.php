@@ -239,7 +239,7 @@ class ModuleController extends AdminController
             return redirect()->back();
         }
 
-        $maxSize = (int) setting('filesize') * 1024;
+        $maxSize = (int) config('modules.download_max_size') * 1024 * 1024;
 
         $tempDir = storage_path('app/temp');
         if (! is_dir($tempDir)) {

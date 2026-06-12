@@ -37,10 +37,17 @@ class ModuleRegistry extends Model
 
     public function fetch(bool $force = false): array
     {
-        $ttl = 3600;
+        $ttl = (int) config('modules.registry_cache_ttl');
 
-        if (! $force && $this->cached_data && $this->cached_at?->gt(now()->subSeconds($ttl))) {
-            return $this->cached_data;
+        // Реестр уже опрашивался: отдаём кэш сразу (даже пустой у недоступного реестра),
+        // протухший обновляем после отправки ответа. Синхронный путь — только для
+        // нового реестра и force
+        if (! $force && $this->cached_at !== null) {
+            if (! $this->cached_at->gt(now()->subSeconds($ttl))) {
+                dispatch(fn () => $this->fetch(true))->afterResponse();
+            }
+
+            return $this->cached_data ?? [];
         }
 
         try {
