@@ -9,6 +9,7 @@ parameters:
         # Module-view namespaces (blog::, forum::) не зарегистрированы при статическом анализе
         - message: '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
           path: modules/*
+          reportUnmatched: false
     excludePaths:
         # Blade-шаблоны анализирует компилятор, а не PHPStan
         - modules/*/resources/views/*

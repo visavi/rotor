@@ -6,11 +6,11 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
+use App\Traits\FilesTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -30,6 +30,7 @@ use Illuminate\Support\HtmlString;
  */
 class Message extends Model
 {
+    use FilesTrait;
     use ConvertVideoTrait;
     use UploadTrait;
 
@@ -89,39 +90,6 @@ class Message extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id')->withDefault();
-    }
-
-    /**
-     * Возвращает загруженные файлы
-     */
-    public function files(): MorphMany
-    {
-        return $this->morphMany(File::class, 'relate')
-            ->orderBy('created_at');
-    }
-
-    /**
-     * Возвращает файлы
-     */
-    public function getFiles(): Collection
-    {
-        return $this->files->filter(static fn (File $f) => ! $f->isImage() && ! $f->isVideo());
-    }
-
-    /**
-     * Возвращает медиафайлы (картинки и видео)
-     */
-    public function getMedia(): Collection
-    {
-        return $this->files->filter(static fn (File $f) => $f->isImage() || $f->isVideo());
-    }
-
-    /**
-     * Возвращает медиафайлы, не вставленные в текст
-     */
-    public function getDetachedMedia(): Collection
-    {
-        return $this->getMedia()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
     }
 
     /**

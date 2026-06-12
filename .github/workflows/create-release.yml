@@ -39,7 +39,13 @@ jobs:
         run: php vendor/bin/cleanup
 
       - name: Create Archive
-        run: zip -r release.zip . -x .git/\* -x node_modules/\* -x tests/\*
+        run: >
+          zip -r release.zip .
+          -x '.git/*' -x '.github/*' -x 'node_modules/*' -x 'tests/*'
+          -x 'package.json' -x 'package-lock.json' -x 'vite.config.js'
+          -x 'pint.json' -x 'phpstan.neon' -x 'phpunit.xml' -x 'composer.lock'
+          -x '.editorconfig' -x '.gitignore' -x '.gitattributes'
+          -x 'deploy.php' -x 'docker-compose.yml' -x 'upgrade-cli'
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2

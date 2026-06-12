@@ -6,13 +6,13 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use App\Classes\Registry;
+use App\Traits\FilesTrait;
+use App\Traits\PollsTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +42,8 @@ use Illuminate\Support\Str;
  */
 class Comment extends Model
 {
+    use PollsTrait;
+    use FilesTrait;
     use SearchableTrait;
     use UploadTrait;
 
@@ -84,39 +86,6 @@ class Comment extends Model
     public function searchableFields(): array
     {
         return ['text'];
-    }
-
-    /**
-     * Возвращает загруженные файлы
-     */
-    public function files(): MorphMany
-    {
-        return $this->morphMany(File::class, 'relate')
-            ->orderBy('created_at');
-    }
-
-    /**
-     * Возвращает файлы
-     */
-    public function getFiles(): Collection
-    {
-        return $this->files->filter(static fn (File $f) => ! $f->isImage() && ! $f->isVideo());
-    }
-
-    /**
-     * Возвращает медиафайлы (картинки и видео)
-     */
-    public function getMedia(): Collection
-    {
-        return $this->files->filter(static fn (File $f) => $f->isImage() || $f->isVideo());
-    }
-
-    /**
-     * Возвращает медиафайлы, не вставленные в текст
-     */
-    public function getDetachedMedia(): Collection
-    {
-        return $this->getMedia()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
     }
 
     /**
@@ -172,23 +141,6 @@ class Comment extends Model
     public function relate(): MorphTo
     {
         return $this->morphTo('relate');
-    }
-
-    /**
-     * Возвращает связь с голосованиями
-     */
-    public function polls(): MorphMany
-    {
-        return $this->MorphMany(Poll::class, 'relate');
-    }
-
-    /**
-     * Возвращает связь с голосованием пользователя
-     */
-    public function poll(): MorphOne
-    {
-        return $this->morphOne(Poll::class, 'relate')
-            ->where('user_id', getUser('id'));
     }
 
     /**

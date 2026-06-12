@@ -73,3 +73,7 @@ jobs:
 
       - name: Source Linter
         run: composer lint
+
+      - name: Static Analysis
+        if: matrix.php == '8.5'
+        run: composer phpstan

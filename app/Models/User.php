@@ -344,6 +344,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function isOnline(): bool
     {
+        if (! $this->id) {
+            return false;
+        }
+
         static $visits;
 
         if (! $visits) {
