@@ -38,13 +38,9 @@ class AjaxController extends Controller
                 $model = Message::query()->find($id);
                 break;
 
-            case 'articles':
-            case 'photos':
-            case 'offers':
-            case 'downs':
+            case Comment::$morphName:
                 $model = Comment::query()->find($id);
                 $path = $model?->getViewUrl(false);
-                $type = 'comments';
                 break;
 
             default:
@@ -81,9 +77,6 @@ class AjaxController extends Controller
     }
 
     /**
-     * Изменяет рейтинг
-     */
-    /**
      * Связь голоса текущего пользователя (morph-имя relate единое по движку)
      *
      * @return MorphOne<Poll, Model>
@@ -94,6 +87,9 @@ class AjaxController extends Controller
             ->where('user_id', getUser('id'));
     }
 
+    /**
+     * Изменяет рейтинг
+     */
     public function rating(Request $request): JsonResponse
     {
         $validTypes = array_merge([
@@ -155,7 +151,7 @@ class AjaxController extends Controller
      */
     public function uploadFile(Request $request, Validator $validator): JsonResponse
     {
-        $imageTypes = array_merge(Registry::$mediaTypes);
+        $imageTypes = Registry::$mediaTypes;
 
         $fileTypes = array_merge([
             Comment::$morphName,
@@ -189,21 +185,19 @@ class AjaxController extends Controller
             $model = new $class();
         }
 
-        $countFiles = File::query()
+        $uploadedFiles = File::query()
             ->where('relate_type', $type)
             ->where('relate_id', $id)
             ->where('user_id', getUser('id'))
-            ->count();
+            ->get(['name']);
 
-        $duplicate = $file && File::query()
-            ->where('relate_type', $type)
-            ->where('relate_id', $id)
-            ->where('user_id', getUser('id'))
-            ->where('name', Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension()))
-            ->exists();
+        $duplicate = $file && $uploadedFiles->contains(
+            'name',
+            Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension())
+        );
 
         $validator
-            ->lt($countFiles, setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]))
+            ->lt($uploadedFiles->count(), setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]))
             ->false($duplicate, __('validator.file_duplicate'));
 
         if ($model->id) {

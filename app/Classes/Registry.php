@@ -13,8 +13,6 @@ class Registry
     public static array $ratingTypes = [];
     public static array $spamTypes = [];
     public static array $sitemapPages = [];
-    /** @var array<class-string, callable> */
-    public static array $pollResolvers = [];
     public static array $onDeleteUser = [];
     public static array $onAdminDeleteUser = [];
     public static array $feeds = [];
@@ -61,11 +59,11 @@ class Registry
     }
 
     /**
-     * Регистрирует тип как источник спама с меткой для админки
+     * Регистрирует тип как источник спама (метка в админке берётся из labelTypes)
      */
-    public static function spamType(string $morphName, string $label): void
+    public static function spamType(string $morphName): void
     {
-        static::$spamTypes[$morphName] = $label;
+        static::$spamTypes[] = $morphName;
     }
 
     /**
@@ -74,14 +72,6 @@ class Registry
     public static function sitemap(string $key, callable $handler): void
     {
         static::$sitemapPages[$key] = $handler;
-    }
-
-    /**
-     * Регистрирует резолвер голосований для модели
-     */
-    public static function pollResolver(string $class, callable $handler): void
-    {
-        static::$pollResolvers[$class] = $handler;
     }
 
     /**
@@ -103,7 +93,7 @@ class Registry
     /**
      * Регистрирует модель как источник ленты
      *
-     * @param array $config ['with' => [], 'view' => '', 'scope' => ?Closure]
+     * @param array $config ['with' => [], 'view' => '', 'scope' => ?Closure, 'poll' => ?Closure]
      */
     public static function feed(string $class, array $config): void
     {

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Models\Spam;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -22,10 +23,15 @@ class SpamController extends AdminController
      */
     public function __construct(Request $request)
     {
+        $moduleTypes = [];
+        foreach (Registry::$spamTypes as $morphName) {
+            $moduleTypes[$morphName] = Registry::$labelTypes[$morphName] ?? $morphName;
+        }
+
         $this->types = array_merge([
-            'messages' => __('index.messages'),
+            'messages' => __('index.private_messages'),
             'comments' => __('main.comments'),
-        ], Registry::$spamTypes);
+        ], $moduleTypes);
 
         $type = $request->input('type');
 
@@ -35,12 +41,12 @@ class SpamController extends AdminController
             ->pluck('total', 'relate_type')
             ->all();
 
-        if ($type) {
-            $this->type = isset($this->types[$type]) ? $type : 'post';
+        if ($type && isset($this->types[$type])) {
+            $this->type = $type;
         } elseif ($spam) {
             $this->type = array_search(max($spam), $spam, true);
         } else {
-            $this->type = 'post';
+            $this->type = array_key_first($this->types);
         }
 
         foreach ($this->types as $key => $value) {
@@ -56,7 +62,9 @@ class SpamController extends AdminController
         $type = $this->type;
         $types = $this->types;
 
-        $relateWith = in_array($type, ['message', 'wall'])
+        // У Message и Wall автор текста в связи author, у остальных моделей — user
+        $model = Relation::getMorphedModel($type);
+        $relateWith = $model && method_exists($model, 'author')
             ? 'relate.author'
             : 'relate.user';
 

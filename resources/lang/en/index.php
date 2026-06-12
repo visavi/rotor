@@ -17,7 +17,8 @@ return [
     'panel'     => 'Control',
     'complains' => 'Complains',
 
-    'private_message' => 'Private message!',
+    'private_message'  => 'Private message!',
+    'private_messages' => 'Private messages',
 
     'db_queries'      => 'DB queries',
     'db_speed'        => 'DB speed',

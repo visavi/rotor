@@ -10,10 +10,12 @@ use App\Traits\FileableTrait;
 use App\Traits\PollableTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -141,6 +143,15 @@ class Comment extends Model
     public function relate(): MorphTo
     {
         return $this->morphTo('relate');
+    }
+
+    /**
+     * Видимые комментарии — у которых relate_type зарегистрирован в morphMap
+     * (комментарии отключённых модулей скрываются)
+     */
+    public function scopeVisible(Builder $query): Builder
+    {
+        return $query->whereIn('relate_type', array_keys(Relation::morphMap()));
     }
 
     /**

@@ -108,7 +108,7 @@ class ModuleServiceProvider extends ServiceProvider
                     }
 
                     if (! empty($config['spam'])) {
-                        Registry::spamType($morphName, Registry::$labelTypes[$morphName] ?? $morphName);
+                        Registry::spamType($morphName);
                     }
                 }
 

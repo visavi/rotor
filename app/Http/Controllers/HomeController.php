@@ -10,7 +10,6 @@ use App\Classes\Validator;
 use App\Models\Ban;
 use App\Models\Comment;
 use App\Models\Search;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -80,16 +79,14 @@ class HomeController extends Controller
             $validator->length($searchQuery, 3, 64, ['find' => __('main.request_length')]);
 
             if ($validator->isValid()) {
-                $registeredTypes = array_keys(Relation::morphMap());
-
                 $posts = Search::query()
                     ->whereIn('relate_type', array_keys($types))
                     ->when($type, function ($query) use ($type) {
                         $query->where('relate_type', $type);
                     })
-                    ->where(function ($query) use ($registeredTypes) {
+                    ->where(function ($query) {
                         $query->where('relate_type', '!=', Comment::$morphName)
-                            ->orWhereIn('relate_id', Comment::whereIn('relate_type', $registeredTypes)->select('id'));
+                            ->orWhereIn('relate_id', Comment::visible()->select('id'));
                     })
                     ->whereFullText('text', $searchQuery . '*', ['mode' => 'boolean'])
                     ->with('relate')

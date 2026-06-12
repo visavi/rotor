@@ -94,7 +94,7 @@
 
                     {{-- Чужое: жалоба инлайн на десктопе, на мобильном в дропдауне --}}
                     @else
-                        <a href="#" class="comment-action-secondary" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
+                        <a href="#" class="comment-action-secondary" onclick="return sendComplaint(this)" data-type="{{ $comment->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
                             <i class="fas fa-flag"></i> {{ __('main.complain') }}
                         </a>
                         @if (isAdmin())
@@ -108,7 +108,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <a class="dropdown-item" href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->relate->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
+                                    <a class="dropdown-item" href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
                                         <i class="fas fa-flag fa-fw me-1"></i> {{ __('main.complain') }}
                                     </a>
                                 </li>

@@ -7,16 +7,11 @@ namespace App\Classes;
 use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\HtmlString;
 
 class Feed
 {
-    private static array $baseTypes = [
-        'comments' => ['class' => Comment::class, 'with' => ['relate', 'user', 'files']],
-    ];
-
     private mixed $user;
 
     public function __construct()
@@ -25,11 +20,17 @@ class Feed
     }
 
     /**
-     * Get feed
+     * Встроенные типы плюс зарегистрированные модулями
      */
     private static function allTypes(): array
     {
-        return array_merge(self::$baseTypes, Registry::$feeds);
+        return array_merge([
+            'comments' => [
+                'class' => Comment::class,
+                'with'  => ['relate', 'user', 'files'],
+                'scope' => fn ($query) => $query->visible(),
+            ],
+        ], Registry::$feeds);
     }
 
     public function getFeed(): HtmlString
@@ -97,7 +98,7 @@ class Feed
     }
 
     /**
-     * Подзапрос видимых id для типа: morphMap комментариев, scope модуля либо минимальный рейтинг
+     * Подзапрос видимых id для типа: scope типа либо минимальный рейтинг
      */
     private function visibleIdsQuery(string $type, array $info)
     {
@@ -105,10 +106,6 @@ class Feed
         $class = $info['class'];
 
         $idQuery = $class::query();
-
-        if ($class === Comment::class) {
-            $idQuery->whereIn('relate_type', array_keys(Relation::morphMap()));
-        }
 
         // Scope задаёт условия видимости (активность, срок) и при необходимости join,
         // чтобы у темы стало доступно поле rating из присоединённого последнего поста
@@ -135,23 +132,20 @@ class Feed
         $pairs = [];
 
         foreach ($posts as $post) {
-            $resolved = false;
-            foreach (Registry::$pollResolvers as $class => $resolver) {
-                if ($post instanceof $class) {
-                    $result = $resolver($post);
-                    if ($result) {
-                        [$morphName, $id] = $result;
-                        if ($id) {
-                            $pairs[$morphName][] = $id;
-                        }
+            $morphName = $post->getMorphClass();
+
+            // Резолвер указывает, что голосование привязано к связанной записи (тема -> последний пост)
+            if ($resolver = Registry::$feeds[$morphName]['poll'] ?? null) {
+                if ($result = $resolver($post)) {
+                    [$type, $id] = $result;
+                    if ($id) {
+                        $pairs[$type][] = $id;
                     }
-                    $resolved = true;
-                    break;
                 }
+                continue;
             }
-            if (! $resolved) {
-                $pairs[$post->getMorphClass()][] = $post->id;
-            }
+
+            $pairs[$morphName][] = $post->id;
         }
 
         if (empty($pairs)) {

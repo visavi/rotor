@@ -479,8 +479,11 @@ window.sendComplaint = function (el) {
             data: { id: el.dataset.id, type: el.dataset.type, page: el.dataset.page },
             dataType: 'json', type: 'post', url: '/ajax/complaint',
             success: function (data) {
-                el.outerHTML = '<i class="fa fa-bell-slash text-muted"></i>'
-                data.success ? notyf.success(__('complain_submitted')) : notyf.error(data.message)
+                if (!data.success) { notyf.error(data.message); return }
+
+                el.classList.add('text-muted', 'pe-none')
+                el.querySelector('i').className = 'fa fa-check'
+                notyf.success(__('complain_submitted'))
             }
         })
     })

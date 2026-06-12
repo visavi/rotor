@@ -17,7 +17,8 @@ return [
     'panel'     => 'Панель',
     'complains' => 'Жалобы',
 
-    'private_message' => 'Приватное сообщение!',
+    'private_message'  => 'Приватное сообщение!',
+    'private_messages' => 'Личные сообщения',
 
     'db_queries'      => 'DB запросы',
     'db_speed'        => 'DB скорость',
