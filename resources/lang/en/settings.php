@@ -106,9 +106,9 @@ return [
     'stickers_per_page'   => 'Stickers on page',
 
     'page_invalid'           => 'Invalid page!',
-    'settings_empty'         => 'Site settings not transferred',
+    'settings_empty'         => 'Settings not transferred',
     'field_required'         => 'Field :field is required!',
-    'settings_success_saved' => 'Site settings successfully saved!',
+    'settings_success_saved' => 'Settings successfully saved!',
 
     'hosts_hosts_all'    => 'Hosts | Hosts total',
     'hits_hits_all'      => 'Hits | Hits total',

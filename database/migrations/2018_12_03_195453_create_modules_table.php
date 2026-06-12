@@ -13,7 +13,6 @@ return new class extends Migration {
                 $table->string('name', 50);
                 $table->string('version', 15);
                 $table->boolean('active')->default(true);
-                $table->json('settings')->nullable();
                 $table->integer('updated_at')->nullable();
                 $table->integer('created_at');
             });

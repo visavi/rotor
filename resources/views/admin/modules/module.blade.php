@@ -107,14 +107,6 @@
         </details>
     @endif
 
-    @if (isset($moduleConfig['settings']))
-        <div class="mt-2 fw-bold">{{ __('admin.modules.settings') }}</div>
-        <details class="spoiler">
-            <summary>{{ __('main.expand_view') }}</summary>
-            <pre class="code"><code>{{ $moduleConfig['settings'] }}</code></pre>
-        </details>
-    @endif
-
     @if (isset($moduleConfig['routes']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.routes') }}</div>
         <details class="spoiler">

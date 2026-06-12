@@ -82,10 +82,6 @@ class ModuleController extends AdminController
             $moduleConfig['config'] = file_get_contents($modulePath . '/config.php');
         }
 
-        if ($module && $module->settings) {
-            $moduleConfig['settings'] = var_export($module->settings, true);
-        }
-
         if (file_exists($modulePath . '/routes.php')) {
             $moduleConfig['routes'] = file_get_contents($modulePath . '/routes.php');
         }

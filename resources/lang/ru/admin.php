@@ -99,7 +99,6 @@ return [
         'migrations'                   => 'Миграции',
         'symlink'                      => 'Симлинк',
         'config'                       => 'Настройки',
-        'settings'                     => 'Расширенные настройки',
         'routes'                       => 'Роуты',
         'hooks'                        => 'Хуки',
         'helpers'                      => 'Хелперы',

@@ -19,7 +19,6 @@ use Illuminate\Support\Str;
  * @property string $name
  * @property string $version
  * @property bool   $active
- * @property array  $settings
  * @property int    $updated_at
  * @property int    $created_at
  */
@@ -46,8 +45,7 @@ class Module extends Model
     protected function casts(): array
     {
         return [
-            'active'   => 'bool',
-            'settings' => 'array',
+            'active' => 'bool',
         ];
     }
 
@@ -204,19 +202,19 @@ class Module extends Model
     private static function loadEnabledModules(): array
     {
         try {
-            $settings = self::query()
+            $names = self::query()
                 ->where('active', true)
-                ->pluck('settings', 'name')
+                ->pluck('name')
                 ->all();
         } catch (Exception) {
             return [];
         }
 
         $result = [];
-        foreach ($settings as $name => $moduleSettings) {
+        foreach ($names as $name) {
             $result[$name] = [
                 'files'  => self::scanModuleFiles($name),
-                'config' => self::loadModuleConfig($name, $moduleSettings ?? []),
+                'config' => self::loadModuleConfig($name),
             ];
         }
 
@@ -224,9 +222,9 @@ class Module extends Model
     }
 
     /**
-     * Загружает merged config модуля (file + settings)
+     * Загружает config модуля
      */
-    private static function loadModuleConfig(string $name, array $settings): ?array
+    private static function loadModuleConfig(string $name): ?array
     {
         $configFile = base_path('modules/' . $name . '/config.php');
         if (! file_exists($configFile)) {
@@ -234,11 +232,8 @@ class Module extends Model
         }
 
         $config = include $configFile;
-        if (! is_array($config)) {
-            return null;
-        }
 
-        return $settings ? array_replace_recursive($config, $settings) : $config;
+        return is_array($config) ? $config : null;
     }
 
     /**

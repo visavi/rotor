@@ -20,6 +20,9 @@
         <div class="comment-header">
             {{ $comment->user->getProfile() }}
             <small class="text-muted section-date" data-date="{{ dateFixed($comment->created_at, original: true) }}">{{ dateFixed($comment->created_at) }}</small>
+            @if (isset($ownerId) && $ownerId === $comment->user_id)
+                <span class="badge bg-info">{{ __('main.author') }}</span>
+            @endif
         </div>
 
         {{-- Раскрыть ветку — вне comment-body, появляется рядом с [+] при сворачивании --}}
@@ -150,7 +153,7 @@
             @if ($hasChildren)
                 <div class="mt-2 comment-children" id="comment-children-{{ $comment->id }}">
                     @foreach ($comment->children as $child)
-                        @include('app/_comment_item', ['comment' => $child, 'action' => $action, 'closed' => $closed])
+                        @include('app/_comment_item', ['comment' => $child, 'action' => $action, 'closed' => $closed, 'ownerId' => $ownerId ?? null])
                     @endforeach
                 </div>
             @endif

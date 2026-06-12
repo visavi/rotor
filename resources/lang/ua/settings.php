@@ -106,9 +106,9 @@ return [
     'stickers_per_page'   => 'Стікерів на стор.',
 
     'page_invalid'           => 'Неприпустима сторінка!',
-    'settings_empty'         => 'Не передано налаштування сайту',
+    'settings_empty'         => 'Не передано налаштування',
     'field_required'         => 'Поле :field обов\'язково для заповнення!',
-    'settings_success_saved' => 'Налаштування сайту успішно збережено!',
+    'settings_success_saved' => 'Налаштування успішно збережено!',
 
     'hosts_hosts_all'    => 'Хости | Хости всього',
     'hits_hits_all'      => 'Хіти | Хіти всього',

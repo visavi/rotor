@@ -106,9 +106,9 @@ return [
     'stickers_per_page'   => 'Стикеров на стр.',
 
     'page_invalid'           => 'Недопустимая страница!',
-    'settings_empty'         => 'Не переданы настройки сайта',
+    'settings_empty'         => 'Не переданы настройки',
     'field_required'         => 'Поле :field обязательно для заполнения!',
-    'settings_success_saved' => 'Настройки сайта успешно сохранены!',
+    'settings_success_saved' => 'Настройки успешно сохранены!',
 
     'hosts_hosts_all'    => 'Хосты | Хосты всего',
     'hits_hits_all'      => 'Хиты | Хиты всего',
