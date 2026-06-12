@@ -18,7 +18,6 @@ use App\Models\User;
 use cbschuld\Browser;
 use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -913,22 +912,6 @@ function getUserByLogin(?string $login): ?User
 }
 
 /**
- * Возвращает объект пользователя по id
- */
-function getUserById(?int $id): ?User
-{
-    return User::query()->find($id);
-}
-
-/**
- * Возвращает объект пользователя по токену
- */
-function getUserByToken(string $token): ?User
-{
-    return User::query()->where('apikey', $token)->first();
-}
-
-/**
  * Возвращает объект пользователя по логину или email
  */
 function getUserByLoginOrEmail(?string $login): ?User
@@ -975,26 +958,6 @@ function paginate(array|Collection $items, int $perPage, array $appends = []): L
 }
 
 /**
- * Разбивает данные по страницам
- */
-function simplePaginate(array|Collection $items, int $perPage, array $appends = []): Paginator
-{
-    $data = $items instanceof Collection ? $items : Collection::make($items);
-
-    $currentPage = Paginator::resolveCurrentPage();
-
-    $collection = new Paginator(
-        $data->slice(max(0, ($currentPage - 1) * $perPage)),
-        $perPage
-    );
-
-    $collection->setPath(request()->url());
-    $collection->appends($appends);
-
-    return $collection;
-}
-
-/**
  * Возвращает сформированный код base64 картинки
  */
 function imageBase64(string $path, array $params = []): HtmlString
@@ -1017,19 +980,7 @@ function imageBase64(string $path, array $params = []): HtmlString
 
     $strParams = implode(' ', $strParams);
 
-    return new HtmlString('<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '"' . $strParams . '>');
-}
-
-/**
- * Выводит прогресс-бар
- */
-function progressBar(int $percent, float|int|string|null $title = null): HtmlString
-{
-    if (! $title) {
-        $title = $percent . '%';
-    }
-
-    return new HtmlString(view('app/_progressbar', compact('percent', 'title')));
+    return new HtmlString('<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '" ' . $strParams . '>');
 }
 
 /**

@@ -19,7 +19,7 @@ class CheckToken
             abort(400, 'Api token missing');
         }
 
-        if (! $user = getUserByToken($token)) {
+        if (! $user = User::query()->where('apikey', $token)->first()) {
             abort(401, 'Unauthorized');
         }
 

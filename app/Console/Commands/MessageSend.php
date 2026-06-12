@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Mailing;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -30,7 +31,7 @@ class MessageSend extends Command
 
         if ($queues->isNotEmpty()) {
             foreach ($queues as $queue) {
-                $user = getUserById($queue->user_id);
+                $user = User::query()->find($queue->user_id);
 
                 if ($user) {
                     $data = [

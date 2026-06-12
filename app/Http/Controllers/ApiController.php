@@ -169,16 +169,6 @@ class ApiController extends Controller
 
     /**
      * Отправляет приватное сообщение
-     *
-     * @deprecated Используйте POST /talk/{login}
-     */
-    public function send(Request $request, Flood $flood): JsonResponse
-    {
-        return $this->createTalk($request->input('login', ''), $request, $flood);
-    }
-
-    /**
-     * Отправляет приватное сообщение
      */
     public function createTalk(string $login, Request $request, Flood $flood): JsonResponse
     {

@@ -3,14 +3,40 @@
 namespace Tests\Unit;
 
 use App\Models\Antimat;
+use App\Models\BlackList;
+use App\Models\Counter;
+use App\Models\Counter31;
+use App\Models\Notice;
+use App\Models\Online;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class HelperTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function tearDown(): void
+    {
+        // Сбрасываем процессный memo настроек, чтобы изменения не протекали в другие тесты
+        Setting::flush();
+
+        parent::tearDown();
+    }
+
+    private function setSetting(string $name, mixed $value): void
+    {
+        Setting::query()->updateOrCreate(['name' => $name], ['value' => $value]);
+        Setting::flush();
+    }
 
     public function testDateFixed(): void
     {
@@ -325,11 +351,347 @@ class HelperTest extends TestCase
         self::assertStringContainsString('sort=name', $paginator->url(2));
     }
 
-    public function testSimplePaginate(): void
+    public function testStatsUsers(): void
     {
-        $paginator = simplePaginate([1, 2, 3], 2);
+        User::factory()->create(['created_at' => SITETIME]);
+        User::factory()->create(['created_at' => strtotime('-2 days', SITETIME)]);
 
-        self::assertTrue($paginator->hasMorePages());
-        self::assertCount(2, $paginator->items());
+        self::assertSame('2/+1', statsUsers());
+    }
+
+    public function testStatsAdmins(): void
+    {
+        User::factory()->create();
+        User::factory()->admin()->create();
+        User::factory()->boss()->create();
+
+        self::assertSame(2, statsAdmins());
+    }
+
+    public function testStatsBanned(): void
+    {
+        User::factory()->create(['level' => User::BANNED, 'timeban' => SITETIME + 600]);
+        User::factory()->create(['level' => User::BANNED, 'timeban' => SITETIME - 600]);
+
+        self::assertSame(1, statsBanned());
+    }
+
+    public function testStatsRegList(): void
+    {
+        User::factory()->create(['level' => User::PENDED]);
+
+        self::assertSame(1, statsRegList());
+    }
+
+    public function testStatsCounts(): void
+    {
+        self::assertSame(DB::table('spam')->count(), statsSpam());
+        self::assertSame(DB::table('banhist')->count(), statsBanHist());
+        self::assertSame(DB::table('ban')->count(), statsIpBanned());
+        self::assertSame(DB::table('antimat')->count(), statsAntimat());
+        self::assertSame(DB::table('stickers')->count(), statsStickers());
+    }
+
+    public function testStatsBlacklist(): void
+    {
+        BlackList::query()->delete();
+        self::assertSame('0/0/0', statsBlacklist());
+
+        BlackList::query()->create(['type' => 'login', 'value' => 'spammer', 'user_id' => 1, 'created_at' => SITETIME]);
+        BlackList::query()->create(['type' => 'email', 'value' => 'spam@mail.ru', 'user_id' => 1, 'created_at' => SITETIME]);
+
+        self::assertSame('1/1/0', statsBlacklist());
+    }
+
+    public function testStatsOnline(): void
+    {
+        $user = User::factory()->create();
+
+        Online::query()->create(['uid' => md5('user'), 'ip' => '127.0.0.1', 'brow' => 'Chrome 100', 'user_id' => $user->id]);
+        Online::query()->create(['uid' => md5('guest'), 'ip' => '127.0.0.2', 'brow' => 'Firefox 100', 'user_id' => null]);
+
+        [$users, $guests, $total] = statsOnline();
+
+        self::assertSame(1, $users);
+        self::assertSame(1, $guests);
+        self::assertSame(2, $total);
+    }
+
+    public function testShowOnline(): void
+    {
+        $this->setSetting('onlines', 0);
+        self::assertNull(showOnline());
+
+        $this->setSetting('onlines', 1);
+        self::assertInstanceOf(HtmlString::class, showOnline());
+    }
+
+    public function testStatsCounter(): void
+    {
+        self::assertArrayHasKey('dayhosts', statsCounter());
+    }
+
+    public function testStatsWeek(): void
+    {
+        Counter31::query()->create(['period' => date('Y-m-d 00:00:00'), 'hosts' => 5, 'hits' => 9]);
+
+        $week = statsWeek();
+
+        self::assertCount(1, $week);
+        self::assertSame(5, $week->first()->hosts);
+    }
+
+    public function testShowCounter(): void
+    {
+        $this->setSetting('incount', 0);
+        self::assertNull(showCounter());
+    }
+
+    public function testShowCounterRender(): void
+    {
+        Counter::query()->delete();
+        Counter::query()->create([
+            'period'   => date('Y-m-d H:i:s'),
+            'allhosts' => 100,
+            'allhits'  => 200,
+            'dayhosts' => 10,
+            'dayhits'  => 20,
+            'hosts24'  => 10,
+            'hits24'   => 20,
+        ]);
+
+        $this->setSetting('incount', 3);
+
+        self::assertInstanceOf(HtmlString::class, showCounter());
+    }
+
+    public function testSendNotifyGuest(): void
+    {
+        sendNotify('<a class="user" href="/users/somebody">@somebody</a>', '/url', 'title');
+
+        self::assertSame(0, DB::table('messages')->count());
+    }
+
+    public function testTextNotice(): void
+    {
+        self::assertSame(__('main.text_missing'), textNotice('missing_type'));
+
+        Notice::query()->create([
+            'type'       => 'test',
+            'name'       => 'Test',
+            'text'       => 'Hello %login%',
+            'user_id'    => 1,
+            'created_at' => SITETIME,
+        ]);
+
+        self::assertSame('Hello <a class="user" href="/users/vasya">@vasya</a>', textNotice('test', ['login' => 'vasya']));
+    }
+
+    public function testPerformanceGuest(): void
+    {
+        self::assertNull(performance());
+    }
+
+    public function testSaveErrorLog(): void
+    {
+        $this->setSetting('errorlog', 1);
+
+        saveErrorLog(404, 'page not found');
+        $this->assertDatabaseHas('errors', ['code' => 404, 'message' => 'page not found']);
+
+        saveErrorLog(999, 'unknown code');
+        self::assertSame(1, DB::table('errors')->count());
+    }
+
+    public function testShowError(): void
+    {
+        $error = showError('Something failed');
+
+        self::assertInstanceOf(HtmlString::class, $error);
+        self::assertStringContainsString('Something failed', (string) $error);
+    }
+
+    public function testGetCaptcha(): void
+    {
+        $this->setSetting('captcha_type', 'graphical');
+
+        self::assertInstanceOf(HtmlString::class, getCaptcha());
+    }
+
+    public function testCaptchaVerify(): void
+    {
+        $this->setSetting('captcha_type', 'graphical');
+
+        request()->setLaravelSession($this->app['session.store']);
+        session(['protect' => 'AbC12']);
+
+        request()->merge(['protect' => 'abc12']);
+        self::assertTrue(captchaVerify());
+
+        request()->merge(['protect' => 'wrong']);
+        self::assertFalse(captchaVerify());
+    }
+
+    public function testSetFlash(): void
+    {
+        setFlash('success', 'Saved');
+
+        self::assertSame('Saved', session('flash.success'));
+    }
+
+    public function testInputHelpers(): void
+    {
+        self::assertSame('fallback', getInput('field', 'fallback'));
+
+        setInput(['field' => 'value', 'nested' => ['key' => 'deep']]);
+
+        self::assertSame('value', getInput('field'));
+        self::assertSame('deep', getInput('nested.key'));
+        self::assertNull(getInput('missing'));
+    }
+
+    public function testErrorHelpers(): void
+    {
+        self::assertSame('', hasError('field'));
+        self::assertNull(textError('field'));
+
+        $errors = new ViewErrorBag();
+        $errors->put('default', new MessageBag(['name' => ['Name is required']]));
+        session(['errors' => $errors]);
+
+        self::assertSame(' is-invalid', hasError('name'));
+        self::assertSame(' is-valid', hasError('other'));
+        self::assertSame('Name is required', textError('name'));
+    }
+
+    public function testSendMail(): void
+    {
+        Mail::fake();
+
+        self::assertTrue(sendMail('mailer.default', [
+            'to'      => 'user@example.com',
+            'subject' => 'Test subject',
+            'text'    => 'Test text',
+        ]));
+    }
+
+    public function testRenderHtml(): void
+    {
+        $html = renderHtml('Hello world');
+
+        self::assertInstanceOf(HtmlString::class, $html);
+        self::assertStringContainsString('Hello world', (string) $html);
+    }
+
+    public function testRenderText(): void
+    {
+        $text = renderText('Hello world');
+
+        self::assertInstanceOf(HtmlString::class, $text);
+        self::assertStringContainsString('Hello world', (string) $text);
+    }
+
+    public function testGetIp(): void
+    {
+        self::assertSame('127.0.0.1', getIp());
+    }
+
+    public function testGetBrowser(): void
+    {
+        $browser = getBrowser();
+
+        self::assertNotSame('', $browser);
+        self::assertLessThanOrEqual(25, mb_strlen($browser));
+    }
+
+    public function testIsAdmin(): void
+    {
+        self::assertFalse(isAdmin());
+
+        $this->actingAs(User::factory()->create());
+        self::assertFalse(isAdmin());
+
+        $this->actingAs(User::factory()->admin()->create());
+        self::assertTrue(isAdmin());
+        self::assertFalse(isAdmin(User::BOSS));
+
+        $this->actingAs(User::factory()->boss()->create());
+        self::assertTrue(isAdmin(User::BOSS));
+    }
+
+    public function testGetUserByLogin(): void
+    {
+        $user = User::factory()->create();
+
+        self::assertTrue($user->is(getUserByLogin($user->login)));
+        self::assertNull(getUserByLogin('missing_login'));
+    }
+
+    public function testGetUserByLoginOrEmail(): void
+    {
+        $user = User::factory()->create();
+
+        self::assertTrue($user->is(getUserByLoginOrEmail($user->login)));
+        self::assertTrue($user->is(getUserByLoginOrEmail($user->email)));
+        self::assertNull(getUserByLoginOrEmail('missing_login'));
+    }
+
+    public function testGetUserGuest(): void
+    {
+        self::assertNull(getUser());
+        self::assertNull(getUser('id'));
+    }
+
+    public function testImageBase64(): void
+    {
+        $path = sys_get_temp_dir() . '/helper_test_' . uniqid() . '.png';
+        file_put_contents($path, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='));
+
+        $img = (string) imageBase64($path);
+
+        self::assertStringContainsString('data:image/png;base64,', $img);
+        self::assertStringContainsString('class="img-fluid"', $img);
+        self::assertStringContainsString('alt="' . basename($path) . '"', $img);
+
+        $custom = (string) imageBase64($path, ['class' => 'thumb', 'alt' => 'Picture', 'width' => 10]);
+
+        self::assertStringContainsString('class="thumb"', $custom);
+        self::assertStringContainsString('alt="Picture"', $custom);
+        self::assertStringContainsString('width="10"', $custom);
+
+        unlink($path);
+    }
+
+    public function testGetQueryLog(): void
+    {
+        DB::enableQueryLog();
+        User::query()->where('login', 'abc')->get();
+
+        $log = getQueryLog();
+
+        self::assertNotEmpty($log);
+        self::assertStringContainsString("'abc'", end($log)['query']);
+    }
+
+    public function testSetting(): void
+    {
+        self::assertIsArray(setting());
+        self::assertSame('fallback', setting('missing_key', 'fallback'));
+
+        $this->setSetting('errorlog', 1);
+        self::assertSame(1, setting('errorlog'));
+    }
+
+    public function testGetAvailableThemes(): void
+    {
+        self::assertContains('default', getAvailableThemes());
+    }
+
+    public function testGetAvailableLanguages(): void
+    {
+        $languages = getAvailableLanguages();
+
+        self::assertContains('ru', $languages);
+        self::assertContains('en', $languages);
     }
 }

@@ -17,6 +17,21 @@ use Illuminate\Support\Facades\Cache;
 class Setting extends Model
 {
     /**
+     * The primary key for the model.
+     */
+    protected $primaryKey = 'name';
+
+    /**
+     * The "type" of the primary key ID.
+     */
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     */
+    public $incrementing = false;
+
+    /**
      * Indicates if the model should be timestamped.
      */
     public $timestamps = false;

@@ -755,45 +755,6 @@ paths:
                     description: 'Пользователь не найден'
                 422:
                     description: 'Ошибка валидации (флуд, игнор-лист, нельзя себе)'
-    /messages/send:
-        post:
-            tags:
-                - Сообщения
-            summary: 'Отправка приватного сообщения (устарело)'
-            operationId: sendMessage
-            deprecated: true
-            requestBody:
-                required: true
-                content:
-                    multipart/form-data:
-                        schema:
-                            type: object
-                            required:
-                                - login
-                                - text
-                            properties:
-                                login:
-                                    type: string
-                                    description: 'Логин получателя'
-                                text:
-                                    type: string
-                                    description: 'Текст сообщения'
-                                'files[]':
-                                    type: array
-                                    items: { type: string, format: binary }
-                                    description: 'Прикреплённые файлы (необязательно)'
-            responses:
-                201:
-                    description: 'Сообщение отправлено'
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    message: { type: string }
-                                    data: { $ref: '#/components/schemas/Message' }
-                422:
-                    description: 'Ошибка валидации (пользователь не найден, флуд, игнор-лист)'
     /messages/new:
         get:
             tags:
