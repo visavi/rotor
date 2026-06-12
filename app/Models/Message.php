@@ -6,7 +6,7 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
-use App\Traits\FilesTrait;
+use App\Traits\FileableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +30,7 @@ use Illuminate\Support\HtmlString;
  */
 class Message extends Model
 {
-    use FilesTrait;
+    use FileableTrait;
     use ConvertVideoTrait;
     use UploadTrait;
 

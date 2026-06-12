@@ -6,8 +6,8 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use App\Classes\Registry;
-use App\Traits\FilesTrait;
-use App\Traits\PollsTrait;
+use App\Traits\FileableTrait;
+use App\Traits\PollableTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -42,8 +42,8 @@ use Illuminate\Support\Str;
  */
 class Comment extends Model
 {
-    use PollsTrait;
-    use FilesTrait;
+    use PollableTrait;
+    use FileableTrait;
     use SearchableTrait;
     use UploadTrait;
 

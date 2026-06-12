@@ -8,7 +8,7 @@ use App\Models\Poll;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-trait PollsTrait
+trait PollableTrait
 {
     /**
      * Возвращает связь с голосованиями

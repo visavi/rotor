@@ -8,7 +8,7 @@ use App\Models\File;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-trait FilesTrait
+trait FileableTrait
 {
     /**
      * Возвращает загруженные файлы
