@@ -72,7 +72,6 @@
                             <div class="mt-2">
                                 <button class="btn btn-warning btn-update"
                                     data-tag="{{ $release['tag_name'] }}"
-                                    data-url="{{ $asset['browser_download_url'] }}"
                                     data-download-url="{{ route('admin.upgrade.download') }}"
                                     data-apply-url="{{ route('admin.upgrade.apply') }}"
                                     data-label-progress="{{ __('admin.upgrade.update_progress') }}"
@@ -128,12 +127,6 @@
             @endif
 
             <div id="migrate-output" class="section mt-3 shadow d-none"></div>
-
-            @if (session('migrateOutput'))
-                <div class="section mt-3 shadow">
-                    {{ renderHtml(nl2br(session('migrateOutput'))) }}
-                </div>
-            @endif
         </div>
     </div>
 @stop
@@ -146,7 +139,6 @@ function runUpdate(btn) {
     }
 
     const tag         = btn.dataset.tag;
-    const url         = btn.dataset.url;
     const downloadUrl = btn.dataset.downloadUrl;
     const applyUrl    = btn.dataset.applyUrl;
     const output      = document.getElementById('update-output');
@@ -163,7 +155,7 @@ function runUpdate(btn) {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
             'X-Requested-With': 'XMLHttpRequest',
         },
-        body: JSON.stringify({ tag, url }),
+        body: JSON.stringify({ tag }),
     })
     .then(r => r.json())
     .then(data => {
@@ -221,7 +213,11 @@ function runMigrations() {
 
     function runNext() {
         fetch('{{ route('admin.upgrade.migrate.next') }}', {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
         })
         .then(r => r.json())
         .then(data => {

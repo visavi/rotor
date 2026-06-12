@@ -8,7 +8,6 @@ use App\Services\GithubService;
 use App\Services\MigrationService;
 use App\Services\UpgradeService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
@@ -47,12 +46,12 @@ class UpgradeController extends AdminController
     /**
      * Скачивает и распаковывает архив релиза
      */
-    public function download(Request $request): JsonResponse
+    public function download(Request $request, GithubService $githubService): JsonResponse
     {
         $tag = (string) $request->input('tag');
-        $url = (string) $request->input('url');
+        $asset = $tag ? $this->upgrade->findAsset($githubService, $tag) : null;
 
-        if (! $tag || ! $url) {
+        if (! $asset) {
             return response()->json(['error' => __('admin.upgrade.invalid_params')], 422);
         }
 
@@ -60,7 +59,7 @@ class UpgradeController extends AdminController
         set_time_limit(0);
 
         try {
-            $this->upgrade->downloadRelease($tag, $url);
+            $this->upgrade->downloadRelease($tag, $asset['browser_download_url']);
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -79,6 +78,12 @@ class UpgradeController extends AdminController
             return response()->json(['error' => __('admin.upgrade.invalid_params')], 422);
         }
 
+        // Копирование тысяч файлов на shared-хостинге легко превышает max_execution_time,
+        // а фатальный таймаут не выполнит finally и оставит сайт в maintenance mode
+        ini_set('max_execution_time', 0);
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         Artisan::call('down');
 
         try {
@@ -94,25 +99,14 @@ class UpgradeController extends AdminController
         Artisan::call('route:clear');
         Artisan::call('config:clear');
 
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+
         return response()->json([
             'success' => true,
             'errors'  => $errors,
         ]);
-    }
-
-    /**
-     * Выполняет все миграции
-     */
-    public function migrate(Request $request): JsonResponse|RedirectResponse
-    {
-        Artisan::call('migrate', ['--force' => true]);
-        $output = Artisan::output();
-
-        if ($request->ajax()) {
-            return response()->json(['output' => $output]);
-        }
-
-        return redirect()->route('admin.upgrade.index')->with('migrateOutput', $output);
     }
 
     /**

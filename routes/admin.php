@@ -154,8 +154,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->name('upgrade.')
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
-                    Route::get('/migrate', 'migrate')->name('migrate');
-                    Route::get('/migrate/next', 'migrateNext')->name('migrate.next');
+                    Route::post('/migrate/next', 'migrateNext')->name('migrate.next');
                     Route::post('/download', 'download')->name('download');
                     Route::post('/apply', 'apply')->name('apply');
                 });

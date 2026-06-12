@@ -41,6 +41,26 @@ class UpgradeService
         }));
     }
 
+    /**
+     * Находит asset релиза по тегу (источник — кешированный список GitHub)
+     */
+    public function findAsset(GithubService $github, string $tag): ?array
+    {
+        foreach ($github->getLatestReleases() as $release) {
+            if (($release['tag_name'] ?? null) === $tag) {
+                foreach ($release['assets'] ?? [] as $asset) {
+                    if (str_ends_with($asset['name'] ?? '', '.zip')) {
+                        return $asset;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        return null;
+    }
+
     public function checkPermissions(): array
     {
         $failed = [];
@@ -70,11 +90,6 @@ class UpgradeService
         }
 
         return $failed;
-    }
-
-    public function isDownloaded(string $tag): bool
-    {
-        return is_dir(storage_path('app/temp/update-' . $tag));
     }
 
     public function downloadRelease(string $tag, string $url): void
@@ -109,11 +124,15 @@ class UpgradeService
             throw new RuntimeException('Update not downloaded');
         }
 
-        $archiveFiles = $this->collectFiles($sourcePath);
-
         $errors = [];
         $this->copyDirectory($sourcePath, base_path(), $errors);
-        $this->deleteOrphans($archiveFiles);
+
+        // Сироты чистим только в vendor: пользовательский код там не живёт,
+        // а старые файлы пакетов остаются досягаемыми для автозагрузчика.
+        // Если в архиве vendor нет (кривой релиз) — не трогаем.
+        if (is_dir($sourcePath . '/vendor')) {
+            $this->deleteVendorOrphans($sourcePath . '/vendor');
+        }
 
         return $errors;
     }
@@ -197,60 +216,61 @@ class UpgradeService
                 if (! is_dir($dest)) {
                     mkdir($dest, 0755, true);
                 }
-            } elseif (! @copy($item->getPathname(), $dest)) {
+            } elseif (! $this->replaceFile($item->getPathname(), $dest)) {
                 $errors[] = $relative;
             }
         }
     }
 
     /**
-     * Собирает список относительных путей всех файлов в директории
+     * Атомарно заменяет файл: копия рядом + rename.
+     * Процессы, читающие старый файл (включая текущий запрос,
+     * лениво подгружающий классы из vendor), сохраняют свой inode.
      */
-    private function collectFiles(string $path): array
+    private function replaceFile(string $src, string $dest): bool
     {
-        $files = [];
+        $tmp = $dest . '.tmp' . getmypid();
+
+        if (! @copy($src, $tmp)) {
+            @unlink($tmp);
+
+            return false;
+        }
+
+        if (! @rename($tmp, $dest)) {
+            @unlink($tmp);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Удаляет из локального vendor файлы, которых нет в vendor архива
+     */
+    private function deleteVendorOrphans(string $archiveVendor): void
+    {
+        $archiveSet = [];
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)
+            new RecursiveDirectoryIterator($archiveVendor, FilesystemIterator::SKIP_DOTS)
         );
 
         foreach ($iterator as $item) {
             if ($item->isFile()) {
-                $relative = substr($item->getPathname(), strlen($path) + 1);
-                $files[] = str_replace('\\', '/', $relative);
+                $relative = str_replace('\\', '/', substr($item->getPathname(), strlen($archiveVendor) + 1));
+                $archiveSet[$relative] = true;
             }
         }
 
-        return $files;
-    }
+        $vendorPath = base_path('vendor');
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($vendorPath, FilesystemIterator::SKIP_DOTS)
+        );
 
-    /**
-     * Удаляет файлы в управляемых директориях которых нет в архиве
-     */
-    private function deleteOrphans(array $archiveFiles): void
-    {
-        $archiveSet = array_flip($archiveFiles);
-
-        foreach ($this->writableDirs as $dir) {
-            $dirPath = base_path($dir);
-
-            if (! is_dir($dirPath)) {
-                continue;
-            }
-
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($dirPath, FilesystemIterator::SKIP_DOTS)
-            );
-
-            foreach ($iterator as $item) {
-                if (! $item->isFile()) {
-                    continue;
-                }
-
-                $relative = str_replace('\\', '/', substr($item->getPathname(), strlen(base_path()) + 1));
-
-                if ($this->isExcluded($relative)) {
-                    continue;
-                }
+        foreach ($iterator as $item) {
+            if ($item->isFile()) {
+                $relative = str_replace('\\', '/', substr($item->getPathname(), strlen($vendorPath) + 1));
 
                 if (! isset($archiveSet[$relative])) {
                     @unlink($item->getPathname());
