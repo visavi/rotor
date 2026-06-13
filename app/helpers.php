@@ -820,26 +820,16 @@ function plural(int $num, mixed $forms): string
         $forms = explode(',', $forms);
     }
 
-    // Разряды разделяются неразрывным пробелом: 1 000 000
     $formatted = number_format($num, 0, ',', "\u{202F}");
 
-    if (count($forms) === 1) {
-        return $formatted . ' ' . $forms[0];
-    }
+    $n = abs($num) % 100;
+    $index = match (true) {
+        $n % 10 === 1 && $n !== 11                         => 0,
+        $n % 10 > 1 && $n % 10 < 5 && ($n < 12 || $n > 14) => 1,
+        default                                            => 2,
+    };
 
-    if ($num % 100 > 10 && $num % 100 < 15) {
-        return $formatted . ' ' . $forms[2];
-    }
-
-    if ($num % 10 === 1) {
-        return $formatted . ' ' . $forms[0];
-    }
-
-    if ($num % 10 > 1 && $num % 10 < 5) {
-        return $formatted . ' ' . $forms[1];
-    }
-
-    return $formatted . ' ' . $forms[2];
+    return $formatted . ' ' . ($forms[$index] ?? $forms[0]);
 }
 
 /**
