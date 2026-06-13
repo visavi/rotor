@@ -99,6 +99,13 @@
 
 .app-menu { @extend .list-unstyled; margin-bottom: 0; }
 
+.app-sidebar__footer-menu {
+  @extend .list-unstyled;
+  margin: 0 16px 10px;
+
+  .app-sidebar__footer { margin: 0; }
+}
+
 .app-sidebar__footer {
   margin: 0 16px;
   padding: 10px 0;

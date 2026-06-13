@@ -76,7 +76,7 @@
                 <label data-bs-toggle="tooltip" title="{{ __('users.notify_mention_hint') }}" class="form-check-label" for="notify_mention">{{ __('users.notify_mention') }}</label>
             </div>
 
-            <div class="form-check">
+            <div class="form-check mb-3">
                 <input type="hidden" value="0" name="subscribe">
                 <input type="checkbox" class="form-check-input" value="1" name="subscribe" id="subscribe"{{ getInput('subscribe', $user->subscribe) ? ' checked' : '' }}>
                 <label data-bs-toggle="tooltip" title="{{ __('users.newsletters_hint') }}" class="form-check-label" for="subscribe">{{ __('users.receive_newsletters') }}</label>

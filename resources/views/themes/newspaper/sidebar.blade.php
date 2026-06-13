@@ -38,12 +38,14 @@
         </form>
     </div>
 
-    <div class="app-sidebar__footer">
+    <ul class="app-sidebar__footer-menu">
         @hook('sidebarFooterStart')
-        <i class="fas fa-globe-americas"></i>
-        <a href="#" data-lang="ru">RU</a> /
-        <a href="#" data-lang="en">EN</a>
-        <span class="online-counter">{{ showOnline() }}</span>
+        <li class="app-sidebar__footer">
+            <i class="fas fa-globe-americas"></i>
+            <a href="#" data-lang="ru">RU</a> /
+            <a href="#" data-lang="en">EN</a>
+            <span class="online-counter">{{ showOnline() }}</span>
+        </li>
         @hook('sidebarFooterEnd')
-    </div>
+    </ul>
 </aside>

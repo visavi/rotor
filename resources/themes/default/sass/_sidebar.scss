@@ -59,7 +59,7 @@
   padding: 10px 5px;
   border-top: 1px solid rgba(0,0,0, 0.25);
   color: #fff;
-  a {
+  a:not(.btn) {
     color: #fff;
   }
 }
