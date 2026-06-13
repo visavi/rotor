@@ -1,6 +1,6 @@
 @extends('layout_simple')
 
-@section('title', __('install.step5_install'))
+@section('title', __('install.step4_install'))
 
 @section('content')
     <div class="container border px-5">
@@ -9,7 +9,7 @@
             <h2>Mobile CMS</h2>
         </div>
 
-        <h1>{{ __('install.step5_install') }}</h1>
+        <h1>{{ __('install.step4_install') }}</h1>
 
         {{ __('install.create_admin_info') }}<br>
         {{ __('install.create_admin_errors') }}<br>

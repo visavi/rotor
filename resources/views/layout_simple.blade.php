@@ -12,7 +12,9 @@
 </head>
 <body>
     <div class="container-fluid">
-        @include('app/_flash')
+        <div class="container mt-3 px-0">
+            @include('app/_flash')
+        </div>
         @yield('content')
     </div>
     @stack('scripts')

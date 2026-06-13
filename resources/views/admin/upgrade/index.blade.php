@@ -103,7 +103,7 @@
         <div class="tab-pane fade" id="tab-db">
 
             @if (count($pendingMigrations) > 0)
-                <div class="alert alert-warning">
+                <div id="pending-alert" class="alert alert-warning">
                     <i class="fa fa-database"></i> {{ __('admin.upgrade.pending', ['count' => count($pendingMigrations)]) }}
                     <ul class="mb-0 mt-2">
                         @foreach ($pendingMigrations as $migration)
@@ -111,6 +111,8 @@
                         @endforeach
                     </ul>
                 </div>
+
+                <div id="migrate-output" class="alert alert-secondary d-none"></div>
 
                 <button id="migrate-btn" class="btn btn-warning" onclick="runMigrations()"
                     data-label="{{ __('admin.upgrade.run', ['count' => count($pendingMigrations)]) }}"
@@ -125,8 +127,6 @@
                     <i class="fa fa-check"></i> {{ __('admin.upgrade.db_actual') }}
                 </div>
             @endif
-
-            <div id="migrate-output" class="section mt-3 shadow d-none"></div>
         </div>
     </div>
 @stop
@@ -145,6 +145,7 @@ function runUpdate(btn) {
 
     btn.disabled = true;
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ' + btn.dataset.labelProgress;
+    btn.parentNode.after(output);
     output.classList.remove('d-none');
     output.innerHTML = '';
 
@@ -204,11 +205,13 @@ function runUpdate(btn) {
 }
 
 function runMigrations() {
-    const btn    = document.getElementById('migrate-btn');
-    const output = document.getElementById('migrate-output');
+    const btn     = document.getElementById('migrate-btn');
+    const output  = document.getElementById('migrate-output');
+    const pending = document.getElementById('pending-alert');
 
     btn.disabled = true;
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ' + btn.dataset.running;
+    if (pending) pending.classList.add('d-none');
     output.classList.remove('d-none');
 
     function runNext() {

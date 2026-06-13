@@ -18,7 +18,7 @@
         <h1>{{ $isUpdate ? __('install.step2_update') : __('install.step2_install') }}</h1>
 
         @if (count($pendingMigrations) > 0)
-            <div class="alert alert-warning my-3">
+            <div id="pending-alert" class="alert alert-warning my-3">
                 <i class="fa fa-database"></i> {{ __('install.migrations_pending', ['count' => count($pendingMigrations)]) }}
                 <ul class="mb-0 mt-2">
                     @foreach ($pendingMigrations as $migration)
@@ -26,6 +26,8 @@
                     @endforeach
                 </ul>
             </div>
+
+            <div id="migrate-output" class="alert alert-secondary d-none"></div>
 
             <button id="migrate-btn" class="btn btn-primary mb-3" onclick="runMigrations()"
                 data-running="{{ __('install.migrations_running') }}"
@@ -47,8 +49,6 @@
             @endif
         @endif
 
-        <div id="migrate-output" class="mb-3 d-none"><pre class="prettyprint p-3"></pre></div>
-
         <footer class="my-5 pt-5 text-muted text-center text-small">
             <p class="mb-1">&copy; 2005-{{ date('Y') }} VISAVI.NET</p>
         </footer>
@@ -57,12 +57,13 @@
     <script>
     function runMigrations() {
         const btn = document.getElementById('migrate-btn');
-        const outputWrap = document.getElementById('migrate-output');
-        const output = outputWrap.querySelector('pre');
+        const output = document.getElementById('migrate-output');
+        const pending = document.getElementById('pending-alert');
 
         btn.disabled = true;
         btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ' + btn.dataset.running;
-        outputWrap.classList.remove('d-none');
+        if (pending) pending.classList.add('d-none');
+        output.classList.remove('d-none');
 
         function runNext() {
             fetch(btn.dataset.next, {
@@ -71,7 +72,7 @@
             .then(r => r.json())
             .then(data => {
                 if (data.error) {
-                    output.innerHTML += '<span class="text-danger">' + data.error + '</span>\n';
+                    output.innerHTML += '<span class="text-danger">' + data.error + '</span><br>';
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fa fa-play"></i> ' + btn.dataset.done;
                     return;
@@ -79,7 +80,7 @@
 
                 if (data.migration) {
                     const text = data.output || data.migration;
-                    output.innerHTML += '<span class="text-success">✓</span> ' + text.replace(/\n/g, ' ') + '\n';
+                    output.innerHTML += '<span class="text-success">✓</span> ' + text.replace(/\n/g, ' ') + '<br>';
                     output.scrollTop = output.scrollHeight;
                 }
 
@@ -91,13 +92,13 @@
                     @else
                         btn.outerHTML = '<a href="/install/seed?lang={{ $lang }}" class="btn btn-primary mb-3"><i class="fa fa-check"></i> ' + doneLabel + '</a>';
                     @endif
-                    output.innerHTML += '\n<strong>' + allDone + '</strong>';
+                    output.innerHTML += '<br><strong>' + allDone + '</strong>';
                 } else {
                     runNext();
                 }
             })
             .catch(() => {
-                output.innerHTML += '<span class="text-danger">' + btn.dataset.error + '</span>\n';
+                output.innerHTML += '<span class="text-danger">' + btn.dataset.error + '</span><br>';
                 btn.disabled = false;
             });
         }

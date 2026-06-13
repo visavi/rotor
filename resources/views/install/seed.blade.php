@@ -1,6 +1,6 @@
 @extends('layout_simple')
 
-@section('title', __('install.step4_install'))
+@section('title', __('install.step3_install'))
 
 @section('content')
     <div class="container border px-5">
@@ -9,9 +9,9 @@
             <h2>Mobile CMS</h2>
         </div>
 
-        <h1>{{ __('install.step4_install') }}</h1>
+        <h1>{{ __('install.step3_install') }}</h1>
 
-        <pre class="prettyprint p-3 mb-3">{{ $output }}</pre>
+        <div class="alert alert-secondary">{!! nl2br(e($output)) !!}</div>
 
         <a class="btn btn-primary" href="/install/account?lang={{ $lang }}">{{ __('install.create_admin') }}</a>
 
