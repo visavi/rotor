@@ -84,9 +84,6 @@
         ]
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "12.4-dev"
-        },
         "laravel": {
             "dont-discover": []
         }
@@ -97,10 +94,7 @@
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
+        "sort-packages": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true

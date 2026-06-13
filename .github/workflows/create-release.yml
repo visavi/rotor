@@ -36,7 +36,9 @@ jobs:
         run: npm run build
 
       - name: Clear vendor
-        run: php vendor/bin/cleanup
+        run: |
+          php vendor/bin/cleanup
+          php vendor/bin/cleanup -p nesbot/carbon/src/Carbon/Lang -i '*.php'
 
       - name: Create Archive
         run: >
