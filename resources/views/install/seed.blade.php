@@ -11,7 +11,7 @@
 
         <h1>{{ __('install.step3_install') }}</h1>
 
-        <div class="alert alert-secondary">{!! nl2br(e($output)) !!}</div>
+        <div class="alert alert-secondary">{!! nl2br(e(preg_replace("/\n{2,}/", "\n", trim($output)))) !!}</div>
 
         <a class="btn btn-primary" href="/install/account?lang={{ $lang }}">{{ __('install.create_admin') }}</a>
 
