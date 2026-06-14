@@ -26,17 +26,11 @@ class UpgradeController extends AdminController
      */
     public function index(GithubService $githubService): View
     {
-        $latestRelease = $githubService->getLatestRelease();
-        $latestVersion = $githubService->getLatestVersionClean();
-
-        $hasNewVersion = version_compare(ROTOR_VERSION, $latestVersion, '<');
         $pendingMigrations = $this->migrations->getPendingMigrations($this->migrationPaths());
         $newReleases = $this->upgrade->getNewReleases($githubService);
         $permErrors = $newReleases ? $this->upgrade->checkPermissions() : [];
 
         return view('admin/upgrade/index', compact(
-            'hasNewVersion',
-            'latestRelease',
             'pendingMigrations',
             'newReleases',
             'permErrors',

@@ -22,6 +22,10 @@
                 {{ __('main.version') }} {{ ROTOR_VERSION }}
             @endif
         </b>
+
+        @if($hasNewVersion)
+            <span class="badge bg-success">{{ __('main.update_available') }}</span>
+        @endif
     </div>
     @hook('adminHeader')
 

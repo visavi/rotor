@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\GithubService;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -13,12 +14,14 @@ class AdminController extends Controller
     /**
      * Главная страница
      */
-    public function main(): View
+    public function main(GithubService $github): View
     {
         $existBoss = User::query()
             ->where('level', User::BOSS)
             ->count();
 
-        return view('admin/index', compact('existBoss'));
+        $hasNewVersion = version_compare(ROTOR_VERSION, $github->getLatestVersionClean(), '<');
+
+        return view('admin/index', compact('existBoss', 'hasNewVersion'));
     }
 }
