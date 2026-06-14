@@ -15,6 +15,14 @@
 @section('content')
     @include('admin/modules/_tabs')
 
+    @if (! empty($failedModules))
+        <div class="alert alert-danger">
+            <i class="fas fa-triangle-exclamation"></i> {{ __('admin.modules.load_failed') }}:
+            <strong>{{ implode(', ', array_keys($failedModules)) }}</strong>.
+            {{ __('admin.modules.load_failed_hint') }}
+        </div>
+    @endif
+
     @if ($moduleNames)
         <div class="d-flex flex-wrap gap-2 mb-3">
             <button class="btn btn-sm btn-primary active" data-module-filter data-filter="all" data-class-active="btn-primary" data-class-idle="btn-outline-primary">{{ __('main.all') }} <span class="badge bg-white text-primary">{{ $counts['all'] }}</span></button>
@@ -68,6 +76,10 @@
 
                             @if (! $isActive)
                                 <span class="badge bg-warning text-dark">{{ __('main.disabled') }}</span>
+                            @endif
+
+                            @if (isset($failedModules[$name]))
+                                <span class="badge bg-danger" title="{{ $failedModules[$name] }}">{{ __('admin.modules.load_error') }}</span>
                             @endif
 
                             @if (version_compare($moduleConfig['version'], $moduleInstall[$name]->version, '>'))

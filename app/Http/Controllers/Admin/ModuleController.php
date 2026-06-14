@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Module;
 use App\Models\ModuleRegistry;
+use App\Providers\ModuleServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -43,8 +44,9 @@ class ModuleController extends AdminController
         ];
 
         $registryModules = ModuleRegistry::getAvailableModules();
+        $failedModules = ModuleServiceProvider::$failed;
 
-        return view('admin/modules/index', compact('moduleInstall', 'moduleNames', 'counts', 'registryModules'));
+        return view('admin/modules/index', compact('moduleInstall', 'moduleNames', 'counts', 'registryModules', 'failedModules'));
     }
 
     /**
