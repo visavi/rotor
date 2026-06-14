@@ -33,8 +33,8 @@
         "mobicms/captcha": "^5.1",
         "php-ffmpeg/php-ffmpeg": "^1.3",
         "symfony/html-sanitizer": "^7.4",
-        "visavi/captcha": "^3.0",
-        "visavi/cleanup": "^2.0"
+        "visavi/captcha": "^3.1",
+        "visavi/cleanup": "^2.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^4.0",

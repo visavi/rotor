@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79049c99485fe243b51e250f85a3ff83",
+    "content-hash": "33fe423c9232f6542954497984db0d44",
     "packages": [
         {
             "name": "brick/math",
@@ -6702,16 +6702,16 @@
         },
         {
             "name": "visavi/captcha",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/captcha.git",
-                "reference": "6c38f9e86cff976197c6405b8e7e59b31c1685b7"
+                "reference": "78925d79ae9f57423ce6ca90923bd79b11bc56d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/captcha/zipball/6c38f9e86cff976197c6405b8e7e59b31c1685b7",
-                "reference": "6c38f9e86cff976197c6405b8e7e59b31c1685b7",
+                "url": "https://api.github.com/repos/visavi/captcha/zipball/78925d79ae9f57423ce6ca90923bd79b11bc56d5",
+                "reference": "78925d79ae9f57423ce6ca90923bd79b11bc56d5",
                 "shasum": ""
             },
             "require": {
@@ -6744,22 +6744,22 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/captcha/issues",
-                "source": "https://github.com/visavi/captcha/tree/v3.0.0"
+                "source": "https://github.com/visavi/captcha/tree/v3.1.0"
             },
-            "time": "2022-03-29T20:37:01+00:00"
+            "time": "2026-06-14T01:14:01+00:00"
         },
         {
             "name": "visavi/cleanup",
-            "version": "v2.0.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/cleanup.git",
-                "reference": "76f5a9dbf1615fdd7145ef5e8a3276b7fa66ca1f"
+                "reference": "c2549768253b9db3bad3030a593e7d5a32bef695"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/cleanup/zipball/76f5a9dbf1615fdd7145ef5e8a3276b7fa66ca1f",
-                "reference": "76f5a9dbf1615fdd7145ef5e8a3276b7fa66ca1f",
+                "url": "https://api.github.com/repos/visavi/cleanup/zipball/c2549768253b9db3bad3030a593e7d5a32bef695",
+                "reference": "c2549768253b9db3bad3030a593e7d5a32bef695",
                 "shasum": ""
             },
             "require": {
@@ -6791,7 +6791,7 @@
                 "issues": "https://github.com/visavi/cleanup/issues",
                 "source": "https://github.com/visavi/cleanup"
             },
-            "time": "2026-06-13T00:59:47+00:00"
+            "time": "2026-06-14T01:33:15+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -10341,5 +10341,5 @@
     "platform-overrides": {
         "php": "8.3.0"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
