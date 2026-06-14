@@ -29,6 +29,10 @@ class ModuleLink extends Command
             $module->createSymlink();
         }
 
+        // Сбрасываем кэш скана модулей, чтобы новый релиз подхватил
+        // изменения в структуре (views, lang, routes, hooks и т.д.)
+        clearCache(['modules', 'settings']);
+
         $this->info('Modules links created.');
 
         return SymfonyCommand::SUCCESS;
