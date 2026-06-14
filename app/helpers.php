@@ -849,6 +849,19 @@ function renderText(?string $text): HtmlString
 }
 
 /**
+ * Рендерит Markdown в HTML
+ *
+ * Одиночный перенос строки преобразуется в <br>, чтобы плоский текст
+ * без markdown-разметки не слипался в один абзац.
+ */
+function renderMarkdown(?string $text): HtmlString
+{
+    return new HtmlString(Str::markdown((string) $text, [
+        'renderer' => ['soft_break' => "<br>\n"],
+    ]));
+}
+
+/**
  * Определяет IP пользователя
  */
 function getIp(): string

@@ -9,7 +9,6 @@ set -euo pipefail
 # Каталог репы модулей определяется так (по приоритету):
 #   1. $ROTOR_MODULES_DIR
 #   2. по симлинку modules/* (rotor/modules/Offer -> ../../rotor-modules/Offer)
-#   3. соседний каталог ../rotor-modules
 #
 # Состояния:
 #   ● правки    — код менялся, но версия в module.php та же, что у релиза → подними версию
@@ -40,8 +39,6 @@ if [ -z "$modulesDir" ]; then
     link="$(find "$coreRoot/modules" -maxdepth 1 -type l 2>/dev/null | head -1 || true)"
     if [ -n "$link" ]; then
         modulesDir="$(dirname "$(cd "$(dirname "$link")" && realpath "$link")")"
-    elif [ -d "$coreRoot/../rotor-modules" ]; then
-        modulesDir="$(cd "$coreRoot/../rotor-modules" && pwd)"
     fi
 fi
 

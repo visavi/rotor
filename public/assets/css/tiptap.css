@@ -402,7 +402,6 @@ blockquote::before {
     font-size: 0.75rem;
     font-weight: 600;
     opacity: 0.6;
-    text-transform: uppercase;
     cursor: pointer;
     user-select: none;
     list-style: none;
@@ -436,13 +435,13 @@ blockquote::before {
 /* Hide block */
 
 .hidden::before {
-    content: '🔒 Скрытый контент';
+    content: '\f023\00a0\00a0Скрытый контент';
     display: block;
+    font-family: var(--fa-family-classic, 'Font Awesome 7 Free'), sans-serif;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 900;
     opacity: 0.6;
     margin-bottom: 6px;
-    text-transform: uppercase;
 }
 
 /* Images */
