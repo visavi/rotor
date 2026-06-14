@@ -1,22 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Сборка пакета обновления: файлы, изменившиеся между двумя тегами,
-# пакуются в dist/rotor<tag2>_upgrade.zip с сохранением структуры.
-# Использование: ./build-upgrade.sh <tag1> <tag2>
+# Сборка пакета обновления: файлы, изменившиеся между двумя версиями,
+# пакуются в dist/rotor<версия2>_upgrade.zip с сохранением структуры.
+# Использование: ./scripts/build-upgrade.sh <версия1> <версия2>   (без префикса v)
+# Пример:        ./scripts/build-upgrade.sh 13.0.0 13.1.0
 
 if [ "$#" -lt 2 ]; then
-    echo "Usage: ./build-upgrade.sh <tag1> <tag2>"
+    echo "Usage (без v): ./scripts/build-upgrade.sh 13.0.0 13.1.0"
     exit 1
 fi
 
-tag1="$1"
-tag2="$2"
-repoRoot="$(cd "$(dirname "$0")" && pwd)"
+ver1="$1"
+ver2="$2"
+tag1="v$ver1"
+tag2="v$ver2"
+repoRoot="$(cd "$(dirname "$0")/.." && pwd)"
 
 dist="$repoRoot/dist"
 mkdir -p "$dist"
-ZIP="$dist/rotor${tag2}_upgrade.zip"
+ZIP="$dist/rotor${ver2}_upgrade.zip"
 
 # Промежуточный каталог, удаляется при выходе
 stageDir="$(mktemp -d)"
@@ -39,6 +42,26 @@ while IFS= read -r file; do
     echo "copy: $file"
     cp "$src" "$dest"
 done <<< "$files"
+
+# Удаляем лишнее из staging (тот же набор, что в build-release.sh)
+( cd "$stageDir" && rm -rf \
+    .git \
+    .github \
+    node_modules \
+    tests \
+    package.json \
+    package-lock.json \
+    vite.config.js \
+    pint.json \
+    phpstan.neon \
+    phpunit.xml \
+    composer.lock \
+    .editorconfig \
+    .gitignore \
+    .gitattributes \
+    deploy.php \
+    docker-compose.yml \
+    scripts )
 
 # public/build из текущего проекта (целиком — vite хеширует имена + manifest.json)
 buildSrc="$repoRoot/public/build"

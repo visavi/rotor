@@ -2,13 +2,14 @@
 set -euo pipefail
 
 # Сборка релизного архива Rotor (зеркалит .github/workflows/create-release.yml)
-# Использование: ./build-release.sh <версия>
-# Пример:        ./build-release.sh 13.1
+# Использование: ./scripts/build-release.sh <версия>   (без префикса v)
+# Пример:        ./scripts/build-release.sh 13.1.0
 
-VERSION="${1:?Укажи версию: ./build-release.sh 13.1}"
+VERSION="${1:?Укажи версию (без v): ./scripts/build-release.sh 13.1.0}"
+TAG="v$VERSION"
 
-# Корень репозитория (каталог скрипта) и URL origin — без хардкода путей
-repoRoot="$(cd "$(dirname "$0")" && pwd)"
+# Корень репозитория (каталог над scripts/) и URL origin — без хардкода путей
+repoRoot="$(cd "$(dirname "$0")/.." && pwd)"
 repoUrl="$(git -C "$repoRoot" remote get-url origin)"
 
 # Сборка во временном каталоге, удаляется при выходе
@@ -19,8 +20,8 @@ dist="$repoRoot/dist"
 mkdir -p "$dist"
 ZIP="$dist/rotor$VERSION.zip"
 
-# Свежий клон
-git clone "$repoUrl" "$buildDir"
+# Свежий клон тега
+git clone --branch "$TAG" --depth 1 "$repoUrl" "$buildDir"
 cd "$buildDir"
 
 # .env
@@ -56,8 +57,7 @@ rm -rf \
   .gitattributes \
   deploy.php \
   docker-compose.yml \
-  build-release.sh \
-  build-upgrade.sh
+  scripts
 
 # Артефакты сборки
 rm -f storage/logs/*.log

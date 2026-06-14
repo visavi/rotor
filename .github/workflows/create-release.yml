@@ -48,7 +48,7 @@ jobs:
           -x 'package.json' -x 'package-lock.json' -x 'vite.config.js'
           -x 'pint.json' -x 'phpstan.neon' -x 'phpunit.xml' -x 'composer.lock'
           -x '.editorconfig' -x '.gitignore' -x '.gitattributes'
-          -x 'deploy.php' -x 'docker-compose.yml' -x 'build-upgrade.sh' -x 'build-release.sh'
+          -x 'deploy.php' -x 'docker-compose.yml' -x 'scripts/*'
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
