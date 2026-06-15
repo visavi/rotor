@@ -7,8 +7,10 @@ namespace App\Classes;
 use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
+use Throwable;
 
 class Feed
 {
@@ -44,14 +46,14 @@ class Feed
         ));
 
         $perPage = setting('feed_per_page');
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPage = Paginator::resolveCurrentPage();
 
         $query = FeedModel::query()
             ->whereIn('relate_type', $enabledTypes)
             ->orderByDesc('created_at');
 
-        // Фильтруем ленту по видимым записям каждого типа до подсчёта total,
-        // чтобы пагинация не считала записи, которые потом отсекаются
+        // Отсекаем невидимые записи каждого типа прямо в запросе,
+        // чтобы они не попадали в выборку и не ломали пагинацию
         foreach ($enabledTypes as $type) {
             $idQuery = $this->visibleIdsQuery($type, $allTypes[$type]);
 
@@ -64,9 +66,9 @@ class Feed
         $version = cache()->get('feed_version', 1);
         $cacheKey = "feed_{$version}_{$currentPage}_" . implode(',', $enabledTypes);
 
-        [$total, $items] = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage, $allTypes) {
-            $total = $query->count();
-            $rows = $query->forPage($currentPage, $perPage)->get();
+        $items = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage, $allTypes) {
+            // Берём на одну запись больше, чтобы Paginator определил наличие следующей страницы без отдельного count()
+            $rows = $query->skip(($currentPage - 1) * $perPage)->take($perPage + 1)->get();
             $grouped = $rows->groupBy('relate_type');
 
             $loadedModels = [];
@@ -78,23 +80,45 @@ class Feed
                 $loadedModels[$type] = $class::with($with)->whereIn('id', $ids)->get()->keyBy('id');
             }
 
-            $items = $rows
+            return $rows
                 ->map(fn ($row) => $loadedModels[$row->relate_type][$row->relate_id] ?? null)
                 ->filter()
                 ->values();
-
-            return [$total, $items];
         });
 
-        $posts = new LengthAwarePaginator($items, $total, $perPage, $currentPage);
+        $posts = new Paginator($this->render($items), $perPage, $currentPage);
         $posts->setPath(url('/'));
 
+        return new HtmlString((string) view('feeds/_feed', compact('posts')));
+    }
+
+    /**
+     * Рендер элементов ленты с изоляцией
+     */
+    private function render(Collection $items): Collection
+    {
         $polls = $this->loadPolls($items);
+        $allowDownload = $this->user || setting('down_guest_download');
 
-        $user = $this->user;
-        $allowDownload = $user || setting('down_guest_download');
+        return $items
+            ->map(function ($post) use ($polls, $allowDownload) {
+                $view = Registry::$feeds[$post->getMorphClass()]['view'] ?? 'feeds._' . $post->getMorphClass();
 
-        return new HtmlString((string) view('feeds/_feed', compact('posts', 'polls', 'user', 'allowDownload')));
+                try {
+                    return view($view, [
+                        'post'          => $post,
+                        'polls'         => $polls,
+                        'user'          => $this->user,
+                        'allowDownload' => $allowDownload,
+                    ])->render();
+                } catch (Throwable $e) {
+                    report($e);
+
+                    return null;
+                }
+            })
+            ->filter()
+            ->values();
     }
 
     /**

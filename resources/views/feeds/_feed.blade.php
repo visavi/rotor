@@ -1,6 +1,5 @@
-@use('App\Classes\Registry')
 @forelse ($posts as $post)
-    @includeIf(Registry::$feeds[$post->getMorphClass()]['view'] ?? 'feeds._' . $post->getMorphClass())
+    {!! $post !!}
 @empty
     @include('feeds._welcome')
 @endforelse
