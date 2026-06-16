@@ -70,6 +70,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           file: clover.xml
+          fail-on-error: false
 
       - name: Source Linter
         run: composer lint

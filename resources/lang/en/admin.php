@@ -147,6 +147,8 @@ return [
         'files_missing'                => 'Files missing',
         'requires'                     => 'Requires engine version',
         'latest_version'               => 'Newer version available',
+        'changelog'                    => 'What\'s new in version',
+        'changelog_full'               => 'Changelog',
     ],
 
     'registries' => [

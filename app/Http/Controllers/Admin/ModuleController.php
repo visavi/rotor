@@ -100,6 +100,13 @@ class ModuleController extends AdminController
             $moduleConfig['middleware'] = file_get_contents($modulePath . '/middleware.php');
         }
 
+        foreach (['changelog.md', 'CHANGELOG.md'] as $changelog) {
+            if (file_exists($modulePath . '/' . $changelog)) {
+                $moduleConfig['changelog'] = file_get_contents($modulePath . '/' . $changelog);
+                break;
+            }
+        }
+
         $registryInfo = ModuleRegistry::getAvailableModules()[$moduleName] ?? null;
 
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName', 'registryInfo'));

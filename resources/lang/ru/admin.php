@@ -147,6 +147,8 @@ return [
         'files_missing'                => 'Файлы отсутствуют',
         'requires'                     => 'Требуется версия движка',
         'latest_version'               => 'Доступна новая версия',
+        'changelog'                    => 'Что нового в версии',
+        'changelog_full'               => 'История изменений',
     ],
 
     'registries' => [

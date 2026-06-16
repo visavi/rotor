@@ -69,6 +69,13 @@
         @endif
     </p>
 
+    @if ($hasUpdate && ! empty($registryInfo['changelog']))
+        <details class="spoiler mt-2">
+            <summary class="text-info"><i class="fa fa-list"></i> {{ __('admin.modules.changelog') }} {{ $registryVersion }}</summary>
+            <div class="small mt-1">{!! nl2br(e($registryInfo['changelog'])) !!}</div>
+        </details>
+    @endif
+
     @if (isset($moduleConfig['screenshots']))
         <div class="f-carousel media-file my-3" style="--f-carousel-slide-width: 100%; --f-carousel-spacing: 8px;">
             <div class="f-carousel__viewport">
@@ -82,6 +89,17 @@
                 @endforeach
             </div>
         </div>
+    @endif
+
+    @if (! empty($moduleConfig['changelog']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.changelog_full') }}</div>
+        <details class="spoiler">
+            <summary>{{ __('main.expand_view') }}</summary>
+            @php
+                $cl = preg_replace('/^#{1,6}\s*(.+)$/m', '<strong>$1</strong>', e($moduleConfig['changelog']));
+            @endphp
+            <div class="small mt-1">{!! nl2br($cl) !!}</div>
+        </details>
     @endif
 
     @if (isset($moduleConfig['migrations']))

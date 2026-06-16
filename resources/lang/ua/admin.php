@@ -146,6 +146,8 @@ return [
         'files_missing'                => 'Файли відсутні',
         'requires'                     => 'Потрібна версія рушія',
         'latest_version'               => 'Доступна нова версія',
+        'changelog'                    => 'Що нового у версії',
+        'changelog_full'               => 'Історія змін',
     ],
 
     'registries' => [
