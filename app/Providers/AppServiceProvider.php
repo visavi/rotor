@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Only old database
-        // Schema::defaultStringLength(191);
+        Schema::defaultStringLength(191);
 
         // Immutable date
         Date::use(CarbonImmutable::class);
