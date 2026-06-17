@@ -43,22 +43,59 @@ class UpgradeService
 
     /**
      * Находит asset релиза по тегу (источник — кешированный список GitHub)
+     *
+     * Lite-архив (без vendor) берём только для патч-релиза — когда мажор и минор
+     * совпадают (14.0.0 → 14.0.1), и только если он реально приложен к релизу.
+     * Смена минора/мажора или отсутствие lite — полный архив с vendor: минор и
+     * мажор могут тянуть новые зависимости, vendor несовместим.
      */
     public function findAsset(GithubService $github, string $tag): ?array
     {
         foreach ($github->getLatestReleases() as $release) {
             if (($release['tag_name'] ?? null) === $tag) {
-                foreach ($release['assets'] ?? [] as $asset) {
-                    if (str_ends_with($asset['name'] ?? '', '.zip')) {
-                        return $asset;
-                    }
-                }
-
-                return null;
+                return $this->selectAsset($release['assets'] ?? [], $tag);
             }
         }
 
         return null;
+    }
+
+    /**
+     * Выбирает архив релиза: lite (без vendor) для патча в той же линии
+     * мажор.минор, иначе полный. Источник — список assets релиза.
+     */
+    public function selectAsset(array $assets, string $tag): ?array
+    {
+        $full = null;
+        $lite = null;
+
+        foreach ($assets as $asset) {
+            $name = $asset['name'] ?? '';
+
+            if (! str_ends_with($name, '.zip')) {
+                continue;
+            }
+
+            if (str_ends_with($name, '_lite.zip')) {
+                $lite = $asset;
+            } else {
+                $full = $asset;
+            }
+        }
+
+        $samePatchLine = $this->branch(ROTOR_VERSION) === $this->branch(ltrim($tag, 'v'));
+
+        return ($samePatchLine && $lite) ? $lite : $full;
+    }
+
+    /**
+     * Линия патчей версии — мажор.минор (14.0.3 → "14.0")
+     */
+    private function branch(string $version): string
+    {
+        $parts = explode('.', $version);
+
+        return $parts[0] . '.' . ($parts[1] ?? '0');
     }
 
     public function checkPermissions(): array

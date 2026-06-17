@@ -28,6 +28,16 @@ class UpgradeController extends AdminController
     {
         $pendingMigrations = $this->migrations->getPendingMigrations($this->migrationPaths());
         $newReleases = $this->upgrade->getNewReleases($githubService);
+
+        // Резолвим архив, который реально скачается (lite/full), чтобы кнопка
+        // показывала честный размер и тип, а не первый попавшийся asset
+        foreach ($newReleases as &$release) {
+            $asset = $this->upgrade->selectAsset($release['assets'] ?? [], $release['tag_name'] ?? '');
+            $release['asset'] = $asset;
+            $release['is_lite'] = $asset && str_ends_with($asset['name'] ?? '', '_lite.zip');
+        }
+        unset($release);
+
         $permErrors = $newReleases ? $this->upgrade->checkPermissions() : [];
 
         return view('admin/upgrade/index', compact(

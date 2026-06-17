@@ -47,7 +47,7 @@
 
             @if (count($newReleases) > 0)
                 @foreach ($newReleases as $release)
-                    @php $asset = $release['assets'][0] ?? null; @endphp
+                    @php $asset = $release['asset'] ?? null; @endphp
 
                     <div class="post mb-3">
                         <div class="post-message fw-bold">
@@ -81,6 +81,7 @@
                                     data-label-reload="{{ __('admin.upgrade.update_reload') }}"
                                     onclick="runUpdate(this)">
                                     <i class="fa fa-download"></i> {{ __('admin.upgrade.update_download', ['size' => formatSize($asset['size'])]) }}
+                                    <span class="badge {{ $release['is_lite'] ? 'bg-info' : 'bg-secondary' }} ms-1">{{ $release['is_lite'] ? 'lite' : 'full' }}</span>
                                 </button>
                             </div>
                         @elseif ($asset)

@@ -50,10 +50,31 @@ jobs:
           -x '.editorconfig' -x '.gitignore' -x '.gitattributes'
           -x 'deploy.php' -x 'docker-compose.yml' -x 'scripts/*'
 
+      # Lite нужен только патч-релизу (третья цифра тега != 0):
+      # на мажоре/миноре апдейтер его не выберет, не плодим лишний ассет.
+      - name: Detect patch release
+        id: relkind
+        run: |
+          patch="$(echo "${GITHUB_REF_NAME#v}" | cut -d. -f3)"
+          [ "${patch:-0}" != "0" ] && echo "lite=true" >> "$GITHUB_OUTPUT" || echo "lite=false" >> "$GITHUB_OUTPUT"
+
+      - name: Create Lite Archive
+        if: steps.relkind.outputs.lite == 'true'
+        run: cp release.zip release_lite.zip && zip -d release_lite.zip 'vendor/*'
+
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: release.zip
-          asset_name: rotor-release-$tag.zip
+          asset_name: rotor-$tag.zip
+          tag: ${{ github.ref }}
+
+      - name: Upload lite binaries to release
+        if: steps.relkind.outputs.lite == 'true'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: release_lite.zip
+          asset_name: rotor-$tag_lite.zip
           tag: ${{ github.ref }}

@@ -63,10 +63,21 @@ rm -rf \
 rm -f storage/logs/*.log
 find "$buildDir" -name '.DS_Store' -delete
 
-# Архив (всё как есть в каталоге)
+# Полный архив (всё как есть в каталоге, с vendor)
 rm -f "$ZIP"
 7zz a -tzip -mx=9 "$ZIP" . -xr!'.DS_Store'
 
+# Lite-архив (без vendor) — только для патч-релиза (третья цифра != 0).
+# Апдейтер выбирает его, когда мажор.минор совпадают (14.0.0 → 14.0.1).
+# Для мажора/минора lite бесполезен (гейт его не пустит) — не собираем.
+patch="$(echo "$VERSION" | cut -d. -f3)"
+if [ "${patch:-0}" != "0" ]; then
+    ZIP_LITE="$dist/rotor${VERSION}_lite.zip"
+    rm -f "$ZIP_LITE"
+    7zz a -tzip -mx=9 "$ZIP_LITE" . -xr!'.DS_Store' -xr!'vendor'
+    echo "Готово (lite): $ZIP_LITE"
+fi
+
 echo "Готово: $ZIP"
-echo "--- содержимое архива ---"
+echo "--- содержимое полного архива ---"
 7zz l "$ZIP"

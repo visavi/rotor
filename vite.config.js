@@ -39,6 +39,8 @@ export default defineConfig({
     },
     build: {
         emptyOutDir: true,
+        // Фикс для старых устройств, чтобы в CSS остался min-width/max-width.
+        cssTarget: ['chrome87', 'edge88', 'firefox78', 'safari13'],
         rollupOptions: {
             checks: {
                 pluginTimings: false,
