@@ -3,7 +3,6 @@
 return [
     'delete_confirm'      => 'Do you really want to delete messages?',
     'system'              => 'System',
-    'you'                 => 'You',
     'new'                 => 'New',
     'notifications'       => 'Notifications',
     'empty_notifications' => 'No notifications!',

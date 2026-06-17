@@ -50,9 +50,8 @@
                 </div>
 
                 <div class="section-body border-top">
-                    <div class="section-message">
-                        {{ $data->type === $data::OUT ? __('messages.you') . ': ' : '' }}
-                        {{ truncateHtml($data->text) }}
+                    <div class="section-message" style="display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden">
+                        {{ $data->getText() }}
                     </div>
                 </div>
             </div>

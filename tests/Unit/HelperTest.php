@@ -266,14 +266,6 @@ class HelperTest extends TestCase
         self::assertTrue(clearCache(['key1', 'key2']));
     }
 
-    public function testTruncateHtml(): void
-    {
-        self::assertSame('Hello World', truncateHtml('<b>Hello</b> World', 5)->toHtml());
-        self::assertSame('Hello...', truncateHtml('Hello World', 1)->toHtml());
-        self::assertSame('Hello!', truncateHtml('Hello World', 1, '!')->toHtml());
-        self::assertSame('', truncateHtml(null)->toHtml());
-    }
-
     public static function parseVersionProvider(): array
     {
         return [

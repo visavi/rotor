@@ -1047,6 +1047,10 @@ function initEditor(textarea) {
     }
 
     let isChanged = false
+    // Плагины могут диспатчить нормализующую транзакцию ещё во время new Editor(),
+    // тогда onUpdate срабатывает до инициализации editor/counterEl ниже (TDZ).
+    // Считаем редактор готовым только после полной настройки.
+    let ready = false
 
     // === Image Upload Helper ===
     async function uploadImage(editor, file, pos = null) {
@@ -1155,8 +1159,9 @@ function initEditor(textarea) {
             }),
             CustomLink.configure({
                 openOnClick: false,
-                autolink: false,
+                autolink: true,
                 linkOnPaste: true,
+                shouldAutoLink: url => !/[<>"'`]/.test(decodeURIComponent(url)),
                 HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer nofollow' },
             }),
             Blockquote,
@@ -1212,8 +1217,10 @@ function initEditor(textarea) {
         content: textarea.value || '',
         onUpdate({ editor }) {
             textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
-            isChanged = true
-            updateCounter()
+            if (ready) {
+                isChanged = true
+                updateCounter()
+            }
         },
         onCreate({ editor }) {
             textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
@@ -1293,6 +1300,7 @@ function initEditor(textarea) {
         }
     }
     updateCounter()
+    ready = true
 
     if (wasRequired) {
         const form = textarea.closest('form')

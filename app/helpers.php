@@ -439,23 +439,15 @@ function icons(string $ext): HtmlString
 }
 
 /**
- * Возвращает обрезанную до заданного количества слов строку
- */
-function truncateHtml(?string $html, int $words = 20, string $end = '...'): HtmlString
-{
-    $text = strip_tags((string) $html);
-
-    return new HtmlString(Str::words($text, $words, $end));
-}
-
-/**
  * Возвращает обрезанную строку с удалением перевода строки
  */
 function truncateDescription(HtmlString|string $value, int $words = 20, string $end = ''): string
 {
-    $value = strip_tags(preg_replace('/[\s\n\r]+/', ' ', $value));
+    $value = preg_replace('/<[^>]+>/', ' ', (string) $value);
+    $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
+    $value = trim(preg_replace('/\s+/', ' ', $value));
 
-    return Str::words(trim($value), $words, $end);
+    return Str::words($value, $words, $end);
 }
 
 /**

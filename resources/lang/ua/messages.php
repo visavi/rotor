@@ -3,7 +3,6 @@
 return [
     'delete_confirm'      => 'Ви дійсно хочете видалити повідомлення?',
     'system'              => 'Система',
-    'you'                 => 'Ви',
     'new'                 => 'Нове',
     'notifications'       => 'Сповіщення',
     'empty_notifications' => 'Свідомості відсутні!',
