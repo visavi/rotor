@@ -11,7 +11,7 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class SearchImport extends Command
 {
-    protected $signature = 'search:import';
+    protected $signature = 'search:import {--model= : Import only this model class (short name or FQCN)}';
     protected $description = 'Sync existing records to search index';
 
     /**
@@ -19,14 +19,34 @@ class SearchImport extends Command
      */
     public function handle(): int
     {
-        $models = array_merge([
+        $allModels = array_merge([
             User::class,
             Comment::class,
         ], array_column(Registry::$search, 'class'));
 
+        $filter = $this->option('model');
+
+        if ($filter) {
+            $models = array_values(array_filter($allModels, fn ($m) => $m === $filter || class_basename($m) === $filter));
+
+            if (empty($models)) {
+                $this->error("Model '{$filter}' not found in search registry.");
+
+                return SymfonyCommand::FAILURE;
+            }
+
+            foreach ($models as $modelClass) {
+                DB::table('search')
+                    ->where('relate_type', (new $modelClass())->getMorphClass())
+                    ->delete();
+            }
+        } else {
+            $models = $allModels;
+            DB::table('search')->truncate();
+        }
+
         DB::disableQueryLog();
         DB::connection()->unsetEventDispatcher();
-        DB::table('search')->truncate();
 
         foreach ($models as $modelClass) {
             $this->syncModelRecords($modelClass);
