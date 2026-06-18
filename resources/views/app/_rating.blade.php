@@ -9,7 +9,7 @@
     @else
         <span class="post-rating-disabled"><i class="fas fa-arrow-down"></i></span>
     @endif
-    <span class="rating-value">{{ formatNum($model->rating) }}</span>
+    <span class="rating-value">{{ formatNum($model->rating ?? 0) }}</span>
     @if ($canVote)
         <a class="post-rating-up{{ $vote === '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $model->id }}" data-type="{{ $type }}" data-vote="+"><i class="fas fa-arrow-up"></i></a>
     @else

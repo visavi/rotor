@@ -20,7 +20,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (! defined('CURL_SSLVERSION_TLSv1_2')) {
+            define('CURL_SSLVERSION_TLSv1_2', 6);
+        }
+
+        if (! defined('CURL_SSLVERSION_TLSv1_3')) {
+            define('CURL_SSLVERSION_TLSv1_3', 7);
+        }
     }
 
     /**
