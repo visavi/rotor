@@ -78,6 +78,7 @@ return [
     'last_comments'     => 'Last comments',
     'continue'          => 'Continue',
     'copy'              => 'Copy',
+    'copy_link'         => 'Copy link',
     'note'              => 'Note',
     'total'             => 'Total',
     'record'            => 'Record',

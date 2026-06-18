@@ -638,7 +638,7 @@ textarea.form-control {
 .comment-children .comment-left::before {
     content: '';
     position: absolute;
-    left: -19px;
+    left: -21px;
     top: 0;
     width: 15px;
     height: 15px;
@@ -652,7 +652,7 @@ textarea.form-control {
 .comment-children > .comment-item:last-child > .comment-left::after {
     content: '';
     position: absolute;
-    left: -20px;
+    left: -22px;
     top: 0;
     bottom: -10px;
     width: 5px;
@@ -667,7 +667,7 @@ textarea.form-control {
 .comment-right {
     flex-grow: 1;
     min-width: 0;
-    padding-left: 6px;
+    padding-left: 8px;
 }
 
 .comment-header {
@@ -683,24 +683,77 @@ textarea.form-control {
     gap: .1rem !important;
 }
 
-.comment-actions .post-rating-up,
-.comment-actions .post-rating-down {
+.comment-actions .js-rating {
+    margin-right: .4rem;
+}
+
+.js-rating {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.5;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.js-rating .rating-value {
     display: inline-block;
-    border-radius: 20px;
+    min-width: 1.2rem;
+    margin: 0 .1rem;
+    text-align: center;
+    font-weight: 700;
 }
 
-.comment-actions .post-rating-down {
-    margin-left: -.5rem;
+.js-rating .post-rating-up,
+.js-rating .post-rating-down,
+.js-rating .post-rating-disabled {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border-radius: 50%;
+    text-decoration: none !important;
+    transition: background .15s, color .15s;
 }
 
-.comment-actions .post-rating-up:hover {
+.js-rating .post-rating-disabled {
+    color: var(--bs-secondary-color);
+    opacity: .25;
+}
+
+.js-rating .post-rating-up:hover {
     background-color: #78c062;
     color: #fff !important;
 }
 
-.comment-actions .post-rating-down:hover {
+.js-rating .post-rating-down:hover {
     background-color: #f75c48;
     color: #fff !important;
+}
+
+.js-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.js-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    text-decoration: none !important;
+    transition: background .15s, color .15s;
+}
+
+.js-actions a:hover {
+    color: var(--bs-body-color);
+    background: var(--bs-secondary-bg);
 }
 
 .comment-actions a,
@@ -708,10 +761,11 @@ textarea.form-control {
     text-decoration: none !important;
     color: var(--bs-secondary-color);
     font-size: .8rem;
+    line-height: 1;
     display: inline-flex;
     align-items: center;
     gap: .25rem;
-    padding: .35rem .5rem;
+    padding: .4rem .55rem;
     border-radius: 20px;
     transition: background .15s, color .15s;
 }
@@ -775,10 +829,6 @@ textarea.form-control {
 
     .comment-header {
         min-height: 20px;
-    }
-
-    .comment-action-secondary {
-        display: none !important;
     }
 }
 

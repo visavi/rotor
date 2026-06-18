@@ -660,7 +660,7 @@ window.changeRating = function (el) {
                 const ratingBlock = el.closest('.js-rating')
                 ratingBlock?.querySelectorAll('a').forEach(a => a.classList.remove('active'))
                 if (!data.cancel) el.classList.add('active')
-                const rating = ratingBlock?.querySelector('b')
+                const rating = ratingBlock?.querySelector('.rating-value')
                 if (rating) rating.innerHTML = data.rating
             } else if (data.message) {
                 notyf.error(data.message)
@@ -740,7 +740,17 @@ window.copyToClipboard = function (el) {
     const text = el.dataset.copy ?? field?.value ?? ''
 
     const fallback = () => {
-        if (field) { field.select(); document.execCommand('copy') }
+        if (field) { field.select(); document.execCommand('copy'); return }
+        if (!text) return
+
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.style.position = 'fixed'
+        ta.style.opacity = '0'
+        document.body.appendChild(ta)
+        ta.select()
+        try { document.execCommand('copy') } catch (e) {}
+        document.body.removeChild(ta)
     }
 
     if (navigator.clipboard?.writeText && text) {
