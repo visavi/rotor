@@ -17,6 +17,20 @@ const CustomLink = Link.extend({
     inclusive() { return false },
 })
 
+// Перенос строки (Shift-Enter) дефолтным hardBreak не прокручивает контейнер,
+// из-за чего курсор уходит за нижнюю границу. Переопределяем со scrollIntoView.
+const HardBreakScroll = Extension.create({
+    name: 'hardBreakScroll',
+    priority: 1000,
+    addKeyboardShortcuts() {
+        const setHardBreak = () => this.editor.chain().setHardBreak().scrollIntoView().run()
+        return {
+            'Shift-Enter': setHardBreak,
+            'Mod-Enter': setHardBreak,
+        }
+    },
+})
+
 const BackgroundColor = Extension.create({
     name: 'backgroundColor',
     addOptions() { return { types: ['textStyle'] } },
@@ -1164,6 +1178,7 @@ function initEditor(textarea) {
                 shouldAutoLink: url => !/[<>"'`]/.test(decodeURIComponent(url)),
                 HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer nofollow' },
             }),
+            HardBreakScroll,
             Blockquote,
             TextStyle,
             Color,

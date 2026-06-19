@@ -63,9 +63,9 @@
                  data-name="{{ mb_strtolower($info['name'] ?? $name) }}"
                  data-version="{{ $info['version'] ?? '0' }}"
                  data-sort-status="{{ $sortStatus }}">
-                <div class="section-title d-flex align-items-center justify-content-between">
-                    <div>
-                        <i class="fas fa-plug"></i>
+                <div class="section-title d-flex align-items-center justify-content-between gap-2">
+                    <div class="text-break" style="min-width: 0">
+                        <i class="fas fa-cube"></i>
                         @if ($localExists)
                             <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $info['name'] ?? $name }}</a>
                         @else
@@ -73,14 +73,14 @@
                         @endif
                         ({{ $name }})
                     </div>
-                    <div>
+                    <div class="flex-shrink-0">
                         @if (! $compatible)
                             {{-- incompatible: no action buttons --}}
                         @elseif (! $localExists)
                             <form action="{{ route('admin.modules.download') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="url" value="{{ $info['download_url'] ?? '' }}">
-                                <button class="btn btn-sm btn-success" {{ empty($info['download_url']) ? 'disabled' : '' }}>
+                                <button class="btn btn-sm btn-success text-nowrap" {{ empty($info['download_url']) ? 'disabled' : '' }}>
                                     <i class="fas fa-download"></i> {{ __('main.install') }}
                                 </button>
                             </form>
@@ -88,12 +88,12 @@
                             <form action="{{ route('admin.modules.download') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="url" value="{{ $info['download_url'] ?? '' }}">
-                                <button class="btn btn-sm btn-info" {{ empty($info['download_url']) ? 'disabled' : '' }}>
+                                <button class="btn btn-sm btn-info text-nowrap" {{ empty($info['download_url']) ? 'disabled' : '' }}>
                                     <i class="fas fa-arrow-up"></i> {{ __('main.update') }}
                                 </button>
                             </form>
                         @elseif (! $installed)
-                            <a href="/admin/modules/module?module={{ $name }}" class="btn btn-sm btn-success">
+                            <a href="/admin/modules/module?module={{ $name }}" class="btn btn-sm btn-success text-nowrap">
                                 <i class="fas fa-plug"></i> {{ __('main.install') }}
                             </a>
                         @endif
