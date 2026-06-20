@@ -248,5 +248,8 @@ return [
     'directory_not_writable'     => 'Директория недоступна для записи!',
     'closed_comments'            => 'Комментирование закрыто!',
 
+    'theme_light' => 'Светлая',
+    'theme_dark'  => 'Тёмная',
+
     'online' => 'Онлайн',
 ];

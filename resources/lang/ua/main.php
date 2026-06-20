@@ -141,7 +141,7 @@ return [
     'plus'     => 'Плюс',
     'minus'    => 'Мінус',
     'pluses'   => 'Плюси',
-    'minuses'  => 'Мінус',
+    'minuses'  => 'Мінуси',
 
     'mo' => 'Пн',
     'tu' => 'Вт',
@@ -158,8 +158,8 @@ return [
     'february'  => 'Лютого',
     'march'     => 'Березня',
     'april'     => 'Квітня',
-    'may'       => 'Мая',
-    'june'      => 'Червень',
+    'may'       => 'Травня',
+    'june'      => 'Червня',
     'july'      => 'Липня',
     'august'    => 'Серпня',
     'september' => 'Вересня',
@@ -168,10 +168,10 @@ return [
     'december'  => 'Грудня',
 
     'minutes' => 'Хвилини',
-    'hours'   => 'Годинник',
+    'hours'   => 'Години',
     'days'    => 'Дні',
 
-    'plural_years'   => 'рік,рок,рок',
+    'plural_years'   => 'рік,роки,років',
     'plural_months'  => 'місяць,місяця,місяців',
     'plural_days'    => 'день,дня,днів',
     'plural_hours'   => 'година,година,годин',
@@ -247,6 +247,9 @@ return [
     'action_not_selected'        => 'Не вибрано дію!',
     'directory_not_writable'     => 'Директорія недоступна для запису!',
     'closed_comments'            => 'Коментування закрите!',
+
+    'theme_light' => 'Світла',
+    'theme_dark'  => 'Темна',
 
     'online' => 'Онлайн',
 ];

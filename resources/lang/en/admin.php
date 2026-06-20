@@ -16,7 +16,7 @@ return [
     ],
 
     'banhists' => [
-        'history'       => 'Story',
+        'history'       => 'History',
         'search_user'   => 'Search by user',
         'empty_history' => 'There is no ban history yet!',
         'view_history'  => 'View History',
@@ -70,13 +70,13 @@ return [
     'errors' => [
         'hint'            => 'Attention! Logging is turned off in the settings! ',
         'errors'          => 'Errors',
-        'autobans'        => 'Autobahns',
+        'autobans'        => 'Auto-bans',
         'logs_not_exist'  => 'The specified logs do not exist!',
         'success_cleared' => 'Logs successfully cleared!',
     ],
 
     'ipbans' => [
-        'history'             => 'History of the autobahns',
+        'history'             => 'Auto-ban history',
         'empty_ip'            => 'The ban list is still empty!',
         'confirm_clear'       => 'Do you really want to clear the IP list?',
         'ip_invalid'          => 'You entered an invalid IP address',

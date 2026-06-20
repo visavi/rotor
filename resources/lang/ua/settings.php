@@ -68,9 +68,9 @@ return [
     'unscannable_ext' => 'Нескановані розширення (через кому)',
     'moneys'          => 'Назва ігрової валюти',
     'points'          => 'Назва балів',
-    'default_status'  => 'Стан за промовчанням',
+    'default_status'  => 'Статус за замовчуванням',
     'guestsuser'      => 'Неавторизований користувач',
-    'deleted_user'    => 'Віддалений користувач',
+    'deleted_user'    => 'Видалений користувач',
     'ban_explanation' => 'Пояснення з бана',
 
     'users_per_page'        => 'Користувачів у юзерлисті',
@@ -85,11 +85,11 @@ return [
     'reglist_per_page'      => 'Користувачів у списку тих, хто очікує',
     'ratinglist_per_page'   => 'Голосів в історії рейтингу',
 
-    'points_rating_edit'  => 'Актива зміни репутації',
+    'points_rating_edit'  => 'Актив для зміни репутації',
     'points_advert_hide'  => 'Актив для приховання реклами',
-    'points_status_edit'  => 'Актива зміни статусу',
+    'points_status_edit'  => 'Актив для зміни статусу',
     'moneys_status_edit'  => 'Вартість зміни статусу',
-    'points_color_edit'   => 'Актива для зміни кольору',
+    'points_color_edit'   => 'Актив для зміни кольору',
     'moneys_color_edit'   => 'Вартість зміни кольору',
     'moneys_bonus'        => 'Щоденний бонус',
     'moneys_registration' => 'Грошей за реєстрацію',
@@ -101,8 +101,8 @@ return [
     'captcha_private'       => 'Секретний ключ',
 
     'stickers_size'       => 'Максимальна вага стікера',
-    'stickers_max_weight' => 'Максимальний розмір наклейки',
-    'stickers_min_weight' => 'Мінімальний розмір наклейки',
+    'stickers_max_weight' => 'Максимальний розмір стікера',
+    'stickers_min_weight' => 'Мінімальний розмір стікера',
     'stickers_per_page'   => 'Стікерів на стор.',
 
     'page_invalid'           => 'Неприпустима сторінка!',

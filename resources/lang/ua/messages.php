@@ -5,7 +5,7 @@ return [
     'system'              => 'Система',
     'new'                 => 'Нове',
     'notifications'       => 'Сповіщення',
-    'empty_notifications' => 'Свідомості відсутні!',
+    'empty_notifications' => 'Сповіщення відсутні!',
     'delete_talk'         => 'Видалити листування',
     'dialogue'            => 'Діалог',
     'dialogue_with'       => 'Діалог з :user',

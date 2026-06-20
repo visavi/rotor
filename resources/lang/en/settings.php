@@ -70,7 +70,7 @@ return [
     'points'          => 'Name of points',
     'default_status'  => 'Default Status',
     'guestsuser'      => 'Unauthorized user',
-    'deleted_user'    => 'Remote user',
+    'deleted_user'    => 'Deleted user',
     'ban_explanation' => 'Ban explanation',
 
     'users_per_page'        => 'Users in userlist',

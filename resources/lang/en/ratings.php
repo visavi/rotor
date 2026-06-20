@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'history'                    => 'Story',
+    'history'                    => 'History',
     'votes_received'             => 'Received votes',
     'votes_gave'                 => 'Votes cast',
     'empty_ratings'              => 'There is nothing in history yet!',

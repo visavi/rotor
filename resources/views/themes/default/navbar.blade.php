@@ -23,13 +23,13 @@
                 <li>
                     <a type="button" class="dropdown-item" data-bs-theme-value="light">
                         <i class="fa-regular fa-sun fa-lg"></i>
-                        Светлая
+                        {{ __('main.theme_light') }}
                     </a>
                 </li>
                 <li>
                     <a type="button" class="dropdown-item" data-bs-theme-value="dark">
                         <i class="fa-regular fa-moon fa-lg"></i>
-                        Темная
+                        {{ __('main.theme_dark') }}
                     </a>
                 </li>
             </ul>

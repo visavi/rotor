@@ -3,7 +3,7 @@
 return [
     'basic_fields'        => 'Основні поля',
     'custom_fields'       => 'Користувацькі поля',
-    'empty_custom_fields' => 'Німа полів користувача',
+    'empty_custom_fields' => 'Немає полів користувача',
 
     'change_email'            => 'Зміна email',
     'email'                   => 'Е-mail',
@@ -71,7 +71,7 @@ return [
     'phone'           => 'Телефон',
     'site'            => 'Сайт',
     'birthday'        => 'Дата народження',
-    'gender'          => 'Пол',
+    'gender'          => 'Стать',
     'about'           => 'Про себе',
     'forum_topics'    => 'Теми у форумі',
     'forum_posts'     => 'Повідомлення у форумі',
@@ -135,7 +135,7 @@ return [
     'domain_is_blacklisted'         => 'Домен від вашої адреси email занесений до чорного списку!',
     'email_is_blacklisted'          => 'Вказана вами адреса email занесена до чорного списку!',
     'photo_success_uploaded'        => 'Фотографію успішно завантажено!',
-    'photo_not_exist'               => 'Цей фотографії не існує!',
+    'photo_not_exist'               => 'Цієї фотографії не існує!',
     'photo_success_deleted'         => 'Фотографію успішно видалено!',
     'incorrect_login_or_password'   => 'Неправильний логін або пароль!',
     'password_reset_required'       => 'Ваш пароль застарів і потребує скидання. Скористайтеся відновленням пароля.',
@@ -158,7 +158,7 @@ return [
     'password_not_different'        => 'Введений пароль не збігається з даними у профілі!',
     'confirm_already_sent'          => 'Ви вже надіслали код підтвердження на нову адресу пошти!',
     'confirm_success_sent'          => 'Лист для підтвердження успішно надіслано!',
-    'changed_code_not_found'        => 'Цей зміни електронної пошти не знайдено!',
+    'changed_code_not_found'        => 'Цей код зміни електронної пошти не знайдено!',
     'email_success_changed'         => 'Адреса електронної пошти успішно змінена!',
     'status_changed_not_ban'        => 'Для зміни статусу у вас не повинно бути порушень!',
     'status_different'              => 'Новий статус повинен відрізнятися від поточного!',
@@ -179,5 +179,5 @@ return [
     'user_new_password'             => 'Новий пароль користувача: :password!',
     'user_success_changed'          => 'Дані користувача успішно змінені!',
     'admins_remove_forbidden'       => 'Заборонено видаляти користувачів із групи адміністраторів!',
-    'user_success_deleted'          => 'Користувач успішно видалено!',
+    'user_success_deleted'          => 'Користувача успішно видалено!',
 ];
