@@ -31,6 +31,27 @@
         <div class="section-message">
             {{ $post->getText() }}
         </div>
+
+        @if ($post->getFiles()->isNotEmpty())
+            @foreach ($post->getFiles() as $file)
+                <div class="media-file">
+                    @if ($file->isVideo())
+                        <div>
+                            <video src="{{ $file->path }}" class="w-100 rounded" preload="metadata" controls playsinline></video>
+                        </div>
+                    @endif
+
+                    @if ($file->isAudio())
+                        <div>
+                            <audio src="{{ $file->path }}" class="w-100 rounded" preload="metadata" controls></audio>
+                        </div>
+                    @endif
+
+                    {{ icons($file->extension) }}
+                    <a href="{{ $file->path }}">{{ $file->name }}</a> ({{ formatSize($file->size) }})
+                </div>
+            @endforeach
+        @endif
     </div>
 
     <div class="section-body">
