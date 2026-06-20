@@ -81,7 +81,7 @@
                                     data-label-reload="{{ __('admin.upgrade.update_reload') }}"
                                     onclick="runUpdate(this)">
                                     <i class="fa fa-download"></i> {{ __('admin.upgrade.update_download', ['size' => formatSize($asset['size'])]) }}
-                                    <span class="badge {{ $release['is_lite'] ? 'bg-info' : 'bg-secondary' }} ms-1">{{ $release['is_lite'] ? 'lite' : 'full' }}</span>
+                                    <span class="badge {{ $release['is_upgrade'] ? 'bg-info' : 'bg-secondary' }} ms-1">{{ $release['is_upgrade'] ? 'upgrade' : 'full' }}</span>
                                 </button>
                             </div>
                         @elseif ($asset)

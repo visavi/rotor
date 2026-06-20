@@ -44,9 +44,9 @@ class UpgradeService
     /**
      * Находит asset релиза по тегу (источник — кешированный список GitHub)
      *
-     * Lite-архив (без vendor) берём только для патч-релиза — когда мажор и минор
+     * Upgrade-архив (без vendor) берём только для патч-релиза — когда мажор и минор
      * совпадают (14.0.0 → 14.0.1), и только если он реально приложен к релизу.
-     * Смена минора/мажора или отсутствие lite — полный архив с vendor: минор и
+     * Смена минора/мажора или отсутствие upgrade — полный архив с vendor: минор и
      * мажор могут тянуть новые зависимости, vendor несовместим.
      */
     public function findAsset(GithubService $github, string $tag): ?array
@@ -61,13 +61,13 @@ class UpgradeService
     }
 
     /**
-     * Выбирает архив релиза: lite (без vendor) для патча в той же линии
+     * Выбирает архив релиза: upgrade (без vendor) для патча в той же линии
      * мажор.минор, иначе полный. Источник — список assets релиза.
      */
     public function selectAsset(array $assets, string $tag): ?array
     {
         $full = null;
-        $lite = null;
+        $upgrade = null;
 
         foreach ($assets as $asset) {
             $name = $asset['name'] ?? '';
@@ -76,8 +76,8 @@ class UpgradeService
                 continue;
             }
 
-            if (str_ends_with($name, '_lite.zip')) {
-                $lite = $asset;
+            if (str_ends_with($name, '_upgrade.zip')) {
+                $upgrade = $asset;
             } else {
                 $full = $asset;
             }
@@ -85,7 +85,7 @@ class UpgradeService
 
         $samePatchLine = $this->branch(ROTOR_VERSION) === $this->branch(ltrim($tag, 'v'));
 
-        return ($samePatchLine && $lite) ? $lite : $full;
+        return ($samePatchLine && $upgrade) ? $upgrade : $full;
     }
 
     /**
