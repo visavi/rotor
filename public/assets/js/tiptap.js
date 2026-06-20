@@ -10,7 +10,7 @@ import { CharacterCount } from '@tiptap/extension-character-count'
 import { Mention } from '@tiptap/extension-mention'
 import FileHandler from '@tiptap/extension-file-handler'
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
-import { trans as __ } from './translate.js'
+import { __ } from './translate.js'
 
 // Ссылка: inclusive=false чтобы пробел после ссылки не входил в неё
 const CustomLink = Link.extend({

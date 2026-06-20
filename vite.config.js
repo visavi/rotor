@@ -1,7 +1,39 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import path from 'path';
+import fs from 'fs';
+import { createHash } from 'crypto';
 import { compression } from 'vite-plugin-compression2';
+
+// Собирает переводы для JS из resources/lang/{locale}/main.json
+// в public/build/lang/{locale}-{hash}.js как window.translations = {...}
+// и дописывает в manifest.json стабильный ключ lang/{locale}.js.
+function langPlugin() {
+    return {
+        name: 'build-lang',
+        closeBundle() {
+            const srcDir = path.resolve(__dirname, 'resources/lang');
+            const outDir = path.resolve(__dirname, 'public/build/lang');
+            fs.mkdirSync(outDir, { recursive: true });
+
+            const manifestPath = path.resolve(__dirname, 'public/build/manifest.json');
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+
+            for (const locale of fs.readdirSync(srcDir)) {
+                const file = path.join(srcDir, locale, 'main.json');
+                if (!fs.existsSync(file)) continue;
+
+                const json = fs.readFileSync(file, 'utf-8').trim();
+                const hash = createHash('sha256').update(json).digest('hex').slice(0, 8);
+
+                fs.writeFileSync(path.join(outDir, `${locale}-${hash}.js`), `window.translations = ${json}`);
+                manifest[`lang/${locale}.js`] = { file: `lang/${locale}-${hash}.js` };
+            }
+
+            fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4));
+        },
+    };
+}
 
 export default defineConfig({
     plugins: [
@@ -20,6 +52,7 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        langPlugin(),
     ],
     resolve: {
         alias: {

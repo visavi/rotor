@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'lang'              => 'English',
     'write'             => 'Write',
     'rules'             => 'Rules',
     'site_rules'        => 'Site rules',

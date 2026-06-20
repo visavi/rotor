@@ -106,9 +106,8 @@
         <div class="app-topnav__right">
             <span class="app-topnav__online">{{ showOnline() }}</span>
             <span class="app-topnav__lang">
-                <i class="fas fa-globe-americas"></i>
-                <a href="#" data-lang="ru">RU</a> /
-                <a href="#" data-lang="en">EN</a>
+                <img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="22" class="flag" onerror="this.remove()">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#languageModal">{{ __('main.lang') }}</a>
             </span>
         </div>
     </div>

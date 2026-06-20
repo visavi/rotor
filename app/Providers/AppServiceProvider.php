@@ -57,13 +57,19 @@ class AppServiceProvider extends ServiceProvider
         // Immutable date
         Date::use(CarbonImmutable::class);
 
-        Blade::directive('hook', function ($expression) {
+        // Hook directive
+        Blade::directive('hook', static function ($expression) {
             $args = explode(',', $expression, 2);
 
             $hookName = trim($args[0]);
             $args = isset($args[1]) ? trim($args[1]) : 'null';
 
             return "<?= \\App\\Classes\\Hook::call($hookName, $args); ?>";
+        });
+
+        // Translation directive
+        Blade::directive('translation', static function () {
+            return '<?= translationScript(); ?>';
         });
 
         /*if (app()->environment('production')) {

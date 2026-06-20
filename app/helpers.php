@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
@@ -1053,7 +1054,26 @@ function getAvailableThemes(): array
  */
 function getAvailableLanguages(): array
 {
-    return array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR) ?: []);
+    static $languages;
+
+    return $languages ??= array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR) ?: []);
+}
+
+/**
+ * Возвращает скрипт для js-переводов
+ */
+function translationScript(): string
+{
+    $locale = app()->getLocale();
+
+    if ($src = rescue(static fn () => Vite::asset("lang/{$locale}.js"), null, false)) {
+        return '<script src="' . $src . '"></script>';
+    }
+
+    $path = resource_path("lang/{$locale}/main.json");
+    $json = is_file($path) ? trim((string) file_get_contents($path)) : '{}';
+
+    return '<script>window.translations = ' . $json . '</script>';
 }
 
 /**

@@ -1,5 +1,5 @@
 import * as bootstrap from 'bootstrap'
-import { trans as __ } from './translate.js'
+import { __ } from './translate.js'
 import './globals.js'
 import './tiptap-editor.js'
 import './prettify.js'

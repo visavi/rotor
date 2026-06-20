@@ -8,12 +8,6 @@
     @include('app/_flash')
 @stop
 
-@if (getUser())
-    @push('scripts')
-        @include('app/_comment_edit_modal')
-    @endpush
-@endif
-
 @section('titlebar')
     <div class="app-title">
         @yield('header')
@@ -29,3 +23,8 @@
 @section('sidebar')
     @includeIf('theme::sidebar')
 @stop
+
+@push('scripts')
+    @include('app/_language_modal')
+    @includeWhen(getUser(), 'app/_comment_edit_modal')
+@endpush

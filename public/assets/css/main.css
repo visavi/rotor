@@ -2,6 +2,11 @@ body.modal-open {
     padding-right: 0 !important;
 }
 
+.flag {
+    vertical-align: middle;
+    box-shadow: 0 0 0 1px rgba(128, 128, 128, .3);
+}
+
 .section {
     background: var(--bs-body-bg);
     padding: 15px;
@@ -818,13 +823,13 @@ textarea.form-control {
     }
 
     .comment-children .comment-left::before {
-        left: -14px;
+        left: -16px;
         width: 11px;
         height: 13px;
     }
 
     .comment-children > .comment-item:last-child > .comment-left::after {
-        left: -15px;
+        left: -17px;
     }
 
     .comment-header {

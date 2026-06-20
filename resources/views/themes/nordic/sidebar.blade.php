@@ -57,9 +57,8 @@
         </li>
         <li>
             <span class="float-end">{{ showOnline() }}</span>
-            <i class="fas fa-globe-americas"></i>
-            <a href="#" data-lang="ru">RU</a> /
-            <a href="#" data-lang="en">EN</a>
+            <img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="22" class="flag" onerror="this.remove()">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#languageModal">{{ __('main.lang') }}</a>
         </li>
         @hook('sidebarFooterEnd')
     </ul>
