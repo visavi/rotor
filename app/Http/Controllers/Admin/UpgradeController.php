@@ -144,10 +144,18 @@ class UpgradeController extends AdminController
 
         $remaining = count($pending) - 1;
 
+        try {
+            $output = $this->migrations->runOne($file);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => "Ошибка миграции {$name}: " . $e->getMessage(),
+            ], 500);
+        }
+
         return response()->json([
             'done'      => $remaining === 0,
             'migration' => $name,
-            'output'    => $this->migrations->runOne($file),
+            'output'    => $output,
             'remaining' => $remaining,
         ]);
     }

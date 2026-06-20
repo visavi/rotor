@@ -215,6 +215,13 @@ function runMigrations() {
     if (pending) pending.classList.add('d-none');
     output.classList.remove('d-none');
 
+    function stopWithError(message) {
+        output.innerHTML += '<span class="text-danger">' + message + '</span><br>';
+        output.scrollTop = output.scrollHeight;
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-play"></i> ' + btn.dataset.label;
+    }
+
     function runNext() {
         fetch('{{ route('admin.upgrade.migrate.next') }}', {
             method: 'POST',
@@ -223,15 +230,16 @@ function runMigrations() {
                 'X-Requested-With': 'XMLHttpRequest',
             },
         })
-        .then(r => r.json())
-        .then(data => {
-            if (data.error) {
-                output.innerHTML += '<span class="text-danger">' + data.error + '</span><br>';
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa fa-play"></i> ' + btn.dataset.label;
-                return;
+        .then(async r => {
+            const data = await r.json().catch(() => ({}));
+
+            if (! r.ok || data.error) {
+                throw new Error(data.error || data.message || btn.dataset.error);
             }
 
+            return data;
+        })
+        .then(data => {
             if (data.migration) {
                 const text = data.output || data.migration;
                 output.innerHTML += '<span class="text-success">✓</span> ' + text.replace(/\n/g, ' ') + '<br>';
@@ -243,14 +251,14 @@ function runMigrations() {
                 const allDone   = btn.dataset.allDone;
                 btn.outerHTML = '<a href="{{ route('admin.upgrade.index') }}" class="btn btn-success"><i class="fa fa-check"></i> ' + doneLabel + '</a>';
                 output.innerHTML += '<br><strong>' + allDone + '</strong>';
-            } else {
+            } else if (data.migration) {
                 runNext();
+            } else {
+                stopWithError(btn.dataset.error);
             }
         })
-        .catch(() => {
-            output.innerHTML += '<span class="text-danger">' + btn.dataset.error + '</span><br>';
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa fa-play"></i> ' + btn.dataset.label;
+        .catch(err => {
+            stopWithError(err.message || btn.dataset.error);
         });
     }
 

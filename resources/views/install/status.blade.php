@@ -30,6 +30,7 @@
             <div id="migrate-output" class="alert alert-secondary d-none"></div>
 
             <button id="migrate-btn" class="btn btn-primary mb-3" onclick="runMigrations()"
+                data-label="{{ __('install.migrations_run', ['count' => count($pendingMigrations)]) }}"
                 data-running="{{ __('install.migrations_running') }}"
                 data-done="{{ __('install.migrations_done_btn') }}"
                 data-all-done="{{ __('install.migrations_all_done') }}"
@@ -65,19 +66,27 @@
         if (pending) pending.classList.add('d-none');
         output.classList.remove('d-none');
 
+        function stopWithError(message) {
+            output.innerHTML += '<span class="text-danger">' + message + '</span><br>';
+            output.scrollTop = output.scrollHeight;
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa fa-play"></i> ' + btn.dataset.label;
+        }
+
         function runNext() {
             fetch(btn.dataset.next, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) {
-                    output.innerHTML += '<span class="text-danger">' + data.error + '</span><br>';
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fa fa-play"></i> ' + btn.dataset.done;
-                    return;
+            .then(async r => {
+                const data = await r.json().catch(() => ({}));
+
+                if (! r.ok || data.error) {
+                    throw new Error(data.error || data.message || btn.dataset.error);
                 }
 
+                return data;
+            })
+            .then(data => {
                 if (data.migration) {
                     const text = data.output || data.migration;
                     output.innerHTML += '<span class="text-success">✓</span> ' + text.replace(/\n/g, ' ') + '<br>';
@@ -93,13 +102,14 @@
                         btn.outerHTML = '<a href="/install/seed?lang={{ $lang }}" class="btn btn-primary mb-3"><i class="fa fa-check"></i> ' + doneLabel + '</a>';
                     @endif
                     output.innerHTML += '<br><strong>' + allDone + '</strong>';
-                } else {
+                } else if (data.migration) {
                     runNext();
+                } else {
+                    stopWithError(btn.dataset.error);
                 }
             })
-            .catch(() => {
-                output.innerHTML += '<span class="text-danger">' + btn.dataset.error + '</span><br>';
-                btn.disabled = false;
+            .catch(err => {
+                stopWithError(err.message || btn.dataset.error);
             });
         }
 
