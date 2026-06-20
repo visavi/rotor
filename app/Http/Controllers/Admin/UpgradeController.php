@@ -103,6 +103,10 @@ class UpgradeController extends AdminController
         Artisan::call('route:clear');
         Artisan::call('config:clear');
 
+        // Обновление затирает файлы ядра — восстанавливаем симлинки
+        // и опубликованные файлы активных модулей
+        Artisan::call('module:sync');
+
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }

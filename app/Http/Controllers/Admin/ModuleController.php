@@ -138,6 +138,7 @@ class ModuleController extends AdminController
         }
 
         $module->createSymlink();
+        $module->publish();
         $module->migrate();
 
         Artisan::call('route:clear');
@@ -496,6 +497,7 @@ class ModuleController extends AdminController
         }
 
         $module->deleteSymlink();
+        $module->unpublish();
         Artisan::call('route:clear');
 
         if ($disable) {

@@ -30,7 +30,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '14.0.1';
+const ROTOR_VERSION = '14.0.2';
 define('SITETIME', time());
 
 /**

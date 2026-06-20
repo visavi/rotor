@@ -121,6 +121,64 @@ class Module extends Model
     }
 
     /**
+     * Копирует файлы модуля в директории движка
+     */
+    public function publish(): void
+    {
+        foreach ($this->getPublishMap() as $from => $to) {
+            if (! file_exists($from)) {
+                continue;
+            }
+
+            if (is_dir($from)) {
+                File::copyDirectory($from, $to);
+            } else {
+                File::ensureDirectoryExists(dirname($to));
+                File::copy($from, $to);
+            }
+        }
+    }
+
+    /**
+     * Удаляет ранее скопированные файлы модуля
+     */
+    public function unpublish(): void
+    {
+        foreach ($this->getPublishMap() as $from => $to) {
+            if (is_dir($from)) {
+                File::deleteDirectory($to);
+            } elseif (is_file($from)) {
+                File::delete($to);
+            }
+        }
+    }
+
+    /**
+     * Карта публикации файлов модуля [источник => назначение]
+     */
+    private function getPublishMap(): array
+    {
+        $configFile = base_path('modules/' . $this->name . '/module.php');
+        if (! file_exists($configFile)) {
+            return [];
+        }
+
+        $config = include $configFile;
+
+        $map = [];
+        foreach ($config['publish'] ?? [] as $from => $to) {
+            // Защита от выхода за пределы директорий
+            if (str_contains($from, '..') || str_contains($to, '..')) {
+                continue;
+            }
+
+            $map[base_path('modules/' . $this->name . '/' . $from)] = base_path($to);
+        }
+
+        return $map;
+    }
+
+    /**
      * Получает название директории для симлинка
      */
     public function getLinkName(): string

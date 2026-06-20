@@ -117,6 +117,13 @@
         <i class="fas fa-external-link-alt"></i> {{ $moduleConfig['symlink'] }}<br>
     @endif
 
+    @if (! empty($moduleConfig['publish']))
+        <div class="mt-2 fw-bold">{{ __('admin.modules.publish') }}</div>
+        @foreach ($moduleConfig['publish'] as $from => $to)
+            <i class="fas fa-copy"></i> {{ $from }} <i class="fas fa-arrow-right"></i> {{ $to }}<br>
+        @endforeach
+    @endif
+
     @if (isset($moduleConfig['config']))
         <div class="mt-2 fw-bold">{{ __('admin.modules.config') }}</div>
         <details class="spoiler">

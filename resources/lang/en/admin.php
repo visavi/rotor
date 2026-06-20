@@ -98,6 +98,7 @@ return [
         'module'                       => 'Module',
         'migrations'                   => 'Migrations',
         'symlink'                      => 'Symlink',
+        'publish'                      => 'Published files',
         'config'                       => 'Config',
         'routes'                       => 'Routes',
         'hooks'                        => 'Hooks',

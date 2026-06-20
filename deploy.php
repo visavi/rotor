@@ -32,6 +32,6 @@ task('build', function () {
     upload('public/build/', '{{release_path}}/public/build/');
 });
 
-before('deploy:success', artisan('module:link'));
+before('deploy:success', artisan('module:sync'));
 after('deploy:update_code', 'build');
 after('deploy:failed', 'deploy:unlock');

@@ -98,6 +98,7 @@ return [
         'module'                       => 'Модуль',
         'migrations'                   => 'Миграции',
         'symlink'                      => 'Симлинк',
+        'publish'                      => 'Публикация файлов',
         'config'                       => 'Настройки',
         'routes'                       => 'Роуты',
         'hooks'                        => 'Хуки',
