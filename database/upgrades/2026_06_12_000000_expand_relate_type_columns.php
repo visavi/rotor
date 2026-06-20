@@ -11,19 +11,19 @@ return new class extends Migration {
 
     public function up(): void
     {
-        foreach ($this->tables as $table) {
-            Schema::table($table, function (Blueprint $table) {
-                $table->string('relate_type', 20)->change();
-            });
+        foreach ($this->tables as $name) {
+            if (Schema::hasColumn($name, 'relate_type')) {
+                Schema::table($name, fn (Blueprint $table) => $table->string('relate_type', 20)->change());
+            }
         }
     }
 
     public function down(): void
     {
-        foreach ($this->tables as $table) {
-            Schema::table($table, function (Blueprint $table) {
-                $table->string('relate_type', 10)->change();
-            });
+        foreach ($this->tables as $name) {
+            if (Schema::hasColumn($name, 'relate_type')) {
+                Schema::table($name, fn (Blueprint $table) => $table->string('relate_type', 10)->change());
+            }
         }
     }
 };

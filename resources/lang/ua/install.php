@@ -38,7 +38,15 @@ return [
     'delete_install'        => 'Після закінчення інсталяції необхідно видалити файл app/Http/Controllers/InstallController.php, пароль та інші дані ви зможете змінити у своєму профілі',
     'text_message'          => 'Привіт, :login! Вітаємо з успішною установкою нашого двигуна Rotor.<br>
     Нові версії, апгрейди, а також безліч інших доповнень ви знайдете на нашому сайті <a href="https://visavi.net">visavi.net</a>',
-    'success_install' => 'Вітаємо, Rotor був успішно встановлений!',
-    'success_update'  => 'Вітаємо, Rotor був успішно оновлений!',
-    'main_page'       => 'Перейти на головну сторінку сайту',
+    'success_install'            => 'Вітаємо, Rotor був успішно встановлений!',
+    'success_update'             => 'Вітаємо, Rotor був успішно оновлений!',
+    'main_page'                  => 'Перейти на головну сторінку сайту',
+    'update_mode_notice'         => 'Увага! Ви перебуваєте в режимі оновлення. Будуть застосовані всі очікуючі міграції.',
+    'migrations_pending'         => 'Очікують виконання міграцій: :count',
+    'migrations_run'             => 'Виконати міграції (:count)',
+    'migrations_running'         => 'Виконується...',
+    'migrations_done_btn'        => 'Готово',
+    'migrations_all_done'        => 'Всі міграції виконані',
+    'migrations_nothing_pending' => 'Всі міграції вже виконані',
+    'migrations_error'           => 'Помилка запиту',
 ];

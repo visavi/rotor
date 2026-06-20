@@ -11,9 +11,16 @@ return new class extends Migration {
             return;
         }
 
-        Schema::table('votes', function (Blueprint $table) {
-            $table->dropColumn(['closed', 'description']);
-        });
+        $columns = array_filter(
+            ['closed', 'description'],
+            fn (string $column) => Schema::hasColumn('votes', $column)
+        );
+
+        if ($columns) {
+            Schema::table('votes', function (Blueprint $table) use ($columns) {
+                $table->dropColumn(array_values($columns));
+            });
+        }
     }
 
     public function down(): void
@@ -23,8 +30,13 @@ return new class extends Migration {
         }
 
         Schema::table('votes', function (Blueprint $table) {
-            $table->text('description')->nullable()->after('title');
-            $table->boolean('closed')->default(false)->after('count');
+            if (! Schema::hasColumn('votes', 'description')) {
+                $table->text('description')->nullable()->after('title');
+            }
+
+            if (! Schema::hasColumn('votes', 'closed')) {
+                $table->boolean('closed')->default(false)->after('count');
+            }
         });
     }
 };

@@ -8,17 +8,21 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('adverts', function (Blueprint $table) {
-            $table->string('type', 10)->default('user')->after('bold');
-        });
-
-        if (Schema::hasTable('admin_adverts')) {
-            Schema::dropIfExists('admin_adverts');
+        if (Schema::hasTable('adverts') && ! Schema::hasColumn('adverts', 'type')) {
+            Schema::table('adverts', function (Blueprint $table) {
+                $table->string('type', 10)->default('user')->after('bold');
+            });
         }
+
+        Schema::dropIfExists('admin_adverts');
     }
 
     public function down(): void
     {
+        if (Schema::hasTable('admin_adverts')) {
+            return;
+        }
+
         Schema::create('admin_adverts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('site', 100);
@@ -30,10 +34,12 @@ return new class extends Migration {
             $table->integer('deleted_at')->nullable();
         });
 
-        DB::table('adverts')->where('type', 'admin')->delete();
+        if (Schema::hasColumn('adverts', 'type')) {
+            DB::table('adverts')->where('type', 'admin')->delete();
 
-        Schema::table('adverts', function (Blueprint $table) {
-            $table->dropColumn('type');
-        });
+            Schema::table('adverts', function (Blueprint $table) {
+                $table->dropColumn('type');
+            });
+        }
     }
 };

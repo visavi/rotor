@@ -3,16 +3,21 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void
     {
-        DB::statement('ALTER TABLE settings DROP PRIMARY KEY, MODIFY name VARCHAR(50) NOT NULL, ADD PRIMARY KEY (name)');
+        Schema::table('settings', function (Blueprint $table) {
+            $table->string('name', 50)->change();
+        });
     }
 
     public function down(): void
     {
-        DB::statement('ALTER TABLE settings DROP PRIMARY KEY, MODIFY name VARCHAR(25) NOT NULL, ADD PRIMARY KEY (name)');
+        Schema::table('settings', function (Blueprint $table) {
+            $table->string('name', 25)->change();
+        });
     }
 };

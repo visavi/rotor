@@ -41,7 +41,7 @@ return [
     'success_install'            => 'Congratulations, Rotor has been successfully installed!',
     'success_update'             => 'Congratulations, Rotor has been successfully updated!',
     'main_page'                  => 'Go to the main page of the site',
-    'update_mode_notice'         => 'Warning! You are in update mode. Only new migrations from the upgrades folder will be applied.',
+    'update_mode_notice'         => 'Warning! You are in update mode. All pending migrations will be applied.',
     'migrations_pending'         => 'Pending migrations: :count',
     'migrations_run'             => 'Run migrations (:count)',
     'migrations_running'         => 'Running...',

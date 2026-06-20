@@ -7,19 +7,26 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['visits', 'allforum', 'allguest', 'allcomments', 'newwall']);
-        });
+        $columns = array_filter(
+            ['visits', 'allforum', 'allguest', 'allcomments', 'newwall'],
+            fn (string $column) => Schema::hasColumn('users', $column)
+        );
+
+        if ($columns) {
+            Schema::table('users', function (Blueprint $table) use ($columns) {
+                $table->dropColumn(array_values($columns));
+            });
+        }
     }
 
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('visits')->default(0);
-            $table->integer('allforum')->default(0);
-            $table->integer('allguest')->default(0);
-            $table->integer('allcomments')->default(0);
-            $table->integer('newwall')->default(0);
+            foreach (['visits', 'allforum', 'allguest', 'allcomments', 'newwall'] as $column) {
+                if (! Schema::hasColumn('users', $column)) {
+                    $table->integer($column)->default(0);
+                }
+            }
         });
     }
 };

@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        if (Schema::hasTable('module_registries')) {
+            return;
+        }
+
         Schema::create('module_registries', function (Blueprint $table) {
             $table->increments('id');
             $table->string('url');
