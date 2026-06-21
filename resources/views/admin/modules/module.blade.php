@@ -172,7 +172,7 @@
                     @csrf
                     <input type="hidden" name="module" value="{{ $moduleName }}">
                     <input type="hidden" name="update" value="1">
-                    <button class="btn btn-info">{{ __('main.refresh') }}</button>
+                    <button class="btn btn-info"><i class="fas fa-arrow-up"></i> {{ __('admin.modules.update_apply') }}</button>
                 </form>
             @endif
 

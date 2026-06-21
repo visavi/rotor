@@ -49,11 +49,11 @@ class UpgradeService
      * Смена минора/мажора или отсутствие upgrade — полный архив с vendor: минор и
      * мажор могут тянуть новые зависимости, vendor несовместим.
      */
-    public function findAsset(GithubService $github, string $tag): ?array
+    public function findAsset(GithubService $github, string $tag, bool $forceFull = false): ?array
     {
         foreach ($github->getLatestReleases() as $release) {
             if (($release['tag_name'] ?? null) === $tag) {
-                return $this->selectAsset($release['assets'] ?? [], $tag);
+                return $this->selectAsset($release['assets'] ?? [], $tag, $forceFull);
             }
         }
 
@@ -61,10 +61,9 @@ class UpgradeService
     }
 
     /**
-     * Выбирает архив релиза: upgrade (без vendor) для патча в той же линии
-     * мажор.минор, иначе полный. Источник — список assets релиза.
+     * Делит assets релиза на полный (с vendor) и upgrade-архив (без vendor)
      */
-    public function selectAsset(array $assets, string $tag): ?array
+    public function splitAssets(array $assets): array
     {
         $full = null;
         $upgrade = null;
@@ -81,6 +80,22 @@ class UpgradeService
             } else {
                 $full = $asset;
             }
+        }
+
+        return ['full' => $full, 'upgrade' => $upgrade];
+    }
+
+    /**
+     * Выбирает архив релиза: upgrade (без vendor) для патча в той же линии
+     * мажор.минор, иначе полный. $forceFull принудительно берёт полный архив
+     * (запасной вариант, когда патч сменил composer-зависимости).
+     */
+    public function selectAsset(array $assets, string $tag, bool $forceFull = false): ?array
+    {
+        ['full' => $full, 'upgrade' => $upgrade] = $this->splitAssets($assets);
+
+        if ($forceFull) {
+            return $full ?? $upgrade;
         }
 
         $samePatchLine = $this->branch(ROTOR_VERSION) === $this->branch(ltrim($tag, 'v'));

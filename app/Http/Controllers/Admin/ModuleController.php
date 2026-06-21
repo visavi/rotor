@@ -318,8 +318,14 @@ class ModuleController extends AdminController
             return redirect()->back();
         }
 
+        // Для уже установленного модуля распаковка — лишь первый шаг обновления:
+        // подсказываем, что версия применится по кнопке «Применить обновление»
+        $extracted = Module::query()->where('name', $moduleName)->exists()
+            ? __('admin.modules.update_extracted')
+            : __('admin.modules.upload_success_extracted');
+
         return redirect('/admin/modules/module?module=' . $moduleName)
-            ->with('success', __('admin.modules.upload_success_extracted'));
+            ->with('success', $extracted);
     }
 
     /**
@@ -389,6 +395,13 @@ class ModuleController extends AdminController
 
         if ($backupPath) {
             $this->deleteDirectory($backupPath);
+        }
+
+        // Файлы перезаписаны на диске, но opcache (revalidate_freq) ещё держит
+        // старый module.php — без сброса кнопка обновления и новый код модуля
+        // подхватятся только со следующим запросом после ревалидации
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
         }
 
         return $moduleName;

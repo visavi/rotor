@@ -32,19 +32,58 @@ class UpgradeController extends AdminController
         // Резолвим архив, который реально скачается (upgrade/full), чтобы кнопка
         // показывала честный размер и тип, а не первый попавшийся asset
         foreach ($newReleases as &$release) {
+            $split = $this->upgrade->splitAssets($release['assets'] ?? []);
             $asset = $this->upgrade->selectAsset($release['assets'] ?? [], $release['tag_name'] ?? '');
             $release['asset'] = $asset;
             $release['is_upgrade'] = $asset && str_ends_with($asset['name'] ?? '', '_upgrade.zip');
+            // Полный архив как запасной вариант — только когда по умолчанию выбран upgrade
+            $release['full_asset'] = $release['is_upgrade'] ? $split['full'] : null;
         }
         unset($release);
 
-        $permErrors = $newReleases ? $this->upgrade->checkPermissions() : [];
+        // Переустановка текущей версии (скачать тот же релиз заново) — доступна,
+        // пока текущий релиз ещё в списке последних релизов GitHub
+        $reinstall = $this->reinstallInfo($githubService);
+
+        $permErrors = ($newReleases || $reinstall) ? $this->upgrade->checkPermissions() : [];
 
         return view('admin/upgrade/index', compact(
             'pendingMigrations',
             'newReleases',
+            'reinstall',
             'permErrors',
         ));
+    }
+
+    /**
+     * Собирает данные для переустановки текущей версии
+     */
+    private function reinstallInfo(GithubService $githubService): ?array
+    {
+        $currentTag = 'v' . ROTOR_VERSION;
+
+        foreach ($githubService->getLatestReleases() as $release) {
+            if (($release['tag_name'] ?? null) !== $currentTag || empty($release['assets'])) {
+                continue;
+            }
+
+            $split = $this->upgrade->splitAssets($release['assets']);
+            $asset = $this->upgrade->selectAsset($release['assets'], $currentTag);
+
+            if (! $asset) {
+                return null;
+            }
+
+            $isUpgrade = str_ends_with($asset['name'] ?? '', '_upgrade.zip');
+
+            return [
+                'tag'        => $currentTag,
+                'asset'      => $asset,
+                'full_asset' => $isUpgrade ? $split['full'] : null,
+            ];
+        }
+
+        return null;
     }
 
     /**
@@ -53,7 +92,8 @@ class UpgradeController extends AdminController
     public function download(Request $request, GithubService $githubService): JsonResponse
     {
         $tag = (string) $request->input('tag');
-        $asset = $tag ? $this->upgrade->findAsset($githubService, $tag) : null;
+        $full = (bool) $request->input('full');
+        $asset = $tag ? $this->upgrade->findAsset($githubService, $tag, $full) : null;
 
         if (! $asset) {
             return response()->json(['error' => __('admin.upgrade.invalid_params')], 422);

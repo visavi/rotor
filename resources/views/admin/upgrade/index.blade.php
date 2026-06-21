@@ -32,6 +32,13 @@
                 @endif
             </button>
         </li>
+        @if ($reinstall)
+            <li class="nav-item ms-auto">
+                <button class="nav-link text-body-secondary" data-bs-toggle="tab" data-bs-target="#tab-reinstall">
+                    <i class="fa fa-rotate-right"></i> {{ __('admin.upgrade.reinstall_tab') }}
+                </button>
+            </li>
+        @endif
     </ul>
 
     <div class="tab-content border border-top-0 p-4 mb-3">
@@ -55,8 +62,8 @@
                         </div>
 
                         @if ($release['body'])
-                            <div class="post-message">
-                                {{ renderHtml(nl2br($release['body'])) }}
+                            <div class="post-message markdown-body">
+                                {{ renderMarkdown($release['body']) }}
                             </div>
                         @endif
 
@@ -69,20 +76,21 @@
                         </div>
 
                         @if ($asset && count($permErrors) === 0)
-                            <div class="mt-2">
-                                <button class="btn btn-warning btn-update"
-                                    data-tag="{{ $release['tag_name'] }}"
-                                    data-download-url="{{ route('admin.upgrade.download') }}"
-                                    data-apply-url="{{ route('admin.upgrade.apply') }}"
-                                    data-label-progress="{{ __('admin.upgrade.update_progress') }}"
-                                    data-label-applying="{{ __('admin.upgrade.update_applying') }}"
-                                    data-label-done="{{ __('admin.upgrade.update_done') }}"
-                                    data-label-error="{{ __('admin.upgrade.request_error') }}"
-                                    data-label-reload="{{ __('admin.upgrade.update_reload') }}"
-                                    onclick="runUpdate(this)">
-                                    <i class="fa fa-download"></i> {{ __('admin.upgrade.update_download', ['size' => formatSize($asset['size'])]) }}
-                                    <span class="badge {{ $release['is_upgrade'] ? 'bg-info' : 'bg-secondary' }} ms-1">{{ $release['is_upgrade'] ? 'upgrade' : 'full' }}</span>
-                                </button>
+                            <div class="mt-2 d-flex flex-wrap align-items-center gap-2">
+                                @include('admin/upgrade/_update-button', [
+                                    'tag'   => $release['tag_name'],
+                                    'label' => __('admin.upgrade.update_download', ['size' => formatSize($asset['size'])]),
+                                    'badge' => $release['is_upgrade'] ? 'upgrade' : 'full',
+                                ])
+
+                                @if ($release['full_asset'])
+                                    @include('admin/upgrade/_update-button', [
+                                        'tag'   => $release['tag_name'],
+                                        'label' => __('admin.upgrade.download_full', ['size' => formatSize($release['full_asset']['size'])]),
+                                        'full'  => true,
+                                        'class' => 'btn-sm btn-outline-secondary',
+                                    ])
+                                @endif
                             </div>
                         @elseif ($asset)
                             <div class="mt-2">
@@ -129,22 +137,57 @@
                 </div>
             @endif
         </div>
+
+        {{-- Вкладка: переустановка текущей версии --}}
+        @if ($reinstall)
+            <div class="tab-pane fade" id="tab-reinstall">
+                <p class="text-body-secondary">{{ __('admin.upgrade.reinstall_hint') }}</p>
+
+                @if (count($permErrors) > 0)
+                    <div class="alert alert-danger">
+                        <i class="fa fa-lock"></i> {{ __('admin.upgrade.perm_error', ['dirs' => implode(', ', $permErrors)]) }}
+                    </div>
+                @else
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        @include('admin/upgrade/_update-button', [
+                            'tag'     => $reinstall['tag'],
+                            'label'   => __('admin.upgrade.reinstall', ['size' => formatSize($reinstall['asset']['size'])]),
+                            'class'   => 'btn-outline-secondary',
+                            'confirm' => __('admin.upgrade.reinstall_confirm'),
+                        ])
+
+                        @if ($reinstall['full_asset'])
+                            @include('admin/upgrade/_update-button', [
+                                'tag'     => $reinstall['tag'],
+                                'label'   => __('admin.upgrade.download_full', ['size' => formatSize($reinstall['full_asset']['size'])]),
+                                'full'    => true,
+                                'class'   => 'btn-outline-secondary',
+                                'confirm' => __('admin.upgrade.reinstall_confirm'),
+                            ])
+                        @endif
+                    </div>
+                @endif
+            </div>
+        @endif
     </div>
 @stop
 
 @push('scripts')
 <script>
 function runUpdate(btn) {
-    if (! confirm('{{ __('admin.upgrade.update_confirm') }}')) {
+    if (! confirm(btn.dataset.confirm)) {
         return;
     }
 
     const tag         = btn.dataset.tag;
+    const full        = btn.dataset.full;
     const downloadUrl = btn.dataset.downloadUrl;
     const applyUrl    = btn.dataset.applyUrl;
     const output      = document.getElementById('update-output');
 
-    btn.disabled = true;
+    // На странице может быть несколько кнопок (upgrade/полная/переустановка) —
+    // блокируем все, чтобы не запустить параллельно
+    document.querySelectorAll('.btn-update').forEach(b => b.disabled = true);
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> ' + btn.dataset.labelProgress;
     btn.parentNode.after(output);
     output.classList.remove('d-none');
@@ -157,13 +200,13 @@ function runUpdate(btn) {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
             'X-Requested-With': 'XMLHttpRequest',
         },
-        body: JSON.stringify({ tag }),
+        body: JSON.stringify({ tag, full }),
     })
     .then(r => r.json())
     .then(data => {
         if (data.error) {
             output.innerHTML = '<span class="text-danger">' + data.error + '</span>';
-            btn.disabled = false;
+            document.querySelectorAll('.btn-update').forEach(b => b.disabled = false);
             return;
         }
 
@@ -183,7 +226,7 @@ function runUpdate(btn) {
     .then(data => {
         if (data.error) {
             output.innerHTML = '<span class="text-danger">' + data.error + '</span>';
-            btn.disabled = false;
+            document.querySelectorAll('.btn-update').forEach(b => b.disabled = false);
             return;
         }
 
@@ -201,7 +244,7 @@ function runUpdate(btn) {
     })
     .catch(() => {
         output.innerHTML = '<span class="text-danger">' + btn.dataset.labelError + '</span>';
-        btn.disabled = false;
+        document.querySelectorAll('.btn-update').forEach(b => b.disabled = false);
     });
 }
 

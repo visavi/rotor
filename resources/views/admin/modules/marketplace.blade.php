@@ -89,7 +89,7 @@
                                 @csrf
                                 <input type="hidden" name="url" value="{{ $info['download_url'] ?? '' }}">
                                 <button class="btn btn-sm btn-info text-nowrap" {{ empty($info['download_url']) ? 'disabled' : '' }}>
-                                    <i class="fas fa-arrow-up"></i> {{ __('main.update') }}
+                                    <i class="fas fa-download"></i> {{ __('admin.modules.update_download') }}
                                 </button>
                             </form>
                         @elseif (! $installed)
