@@ -12,17 +12,14 @@ function langPlugin() {
     return {
         name: 'build-lang',
         closeBundle() {
-            const srcDir = path.resolve(__dirname, 'resources/lang');
             const outDir = path.resolve(__dirname, 'public/build/lang');
             fs.mkdirSync(outDir, { recursive: true });
 
             const manifestPath = path.resolve(__dirname, 'public/build/manifest.json');
             const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
-            for (const locale of fs.readdirSync(srcDir)) {
-                const file = path.join(srcDir, locale, 'main.json');
-                if (!fs.existsSync(file)) continue;
-
+            for (const file of fs.globSync(path.resolve(__dirname, 'resources/lang/*/main.json'))) {
+                const locale = path.basename(path.dirname(file));
                 const json = fs.readFileSync(file, 'utf-8').trim();
                 const hash = createHash('sha256').update(json).digest('hex').slice(0, 8);
 
