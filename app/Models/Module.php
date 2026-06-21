@@ -121,6 +121,35 @@ class Module extends Model
     }
 
     /**
+     * Синхронизирует все активные модули с ядром: симлинки и публикация файлов.
+     *
+     * Каждый модуль обёрнут в try/catch — битый модуль (ошибка в module.php,
+     * проблема с правами на симлинк и т.п.) не роняет синхронизацию остальных.
+     * Полная синхронизация делает публикацию независимой от порядка установки:
+     * напр. перевод модуля-языка подмешается в Форум, даже если Форум поставили позже.
+     *
+     * @return array<string, string> [имя модуля => текст ошибки]
+     */
+    public static function syncAll(): array
+    {
+        $failed = [];
+
+        foreach (self::query()->where('active', true)->get() as $module) {
+            try {
+                $module->createSymlink();
+                $module->publish();
+            } catch (\Throwable $e) {
+                $failed[$module->name] = $e->getMessage();
+                report($e);
+            }
+        }
+
+        clearCache(['modules', 'settings']);
+
+        return $failed;
+    }
+
+    /**
      * Копирует файлы модуля в директории движка
      */
     public function publish(): void
@@ -169,6 +198,13 @@ class Module extends Model
         foreach ($config['publish'] ?? [] as $from => $to) {
             // Защита от выхода за пределы директорий
             if (str_contains($from, '..') || str_contains($to, '..')) {
+                continue;
+            }
+
+            // Публикация в другой модуль только если он есть на диске
+            // (напр. модуль-язык подмешивает перевод в modules/Forum/...)
+            if (preg_match('#^modules/([^/]+)/#', $to, $match)
+                && ! is_dir(base_path('modules/' . $match[1]))) {
                 continue;
             }
 

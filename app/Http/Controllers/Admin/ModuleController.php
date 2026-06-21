@@ -168,7 +168,11 @@ class ModuleController extends AdminController
             ])->save();
         }
 
-        clearCache(['modules', 'settings']);
+        // Полная синхронизация активных модулей: порядок установки перестаёт
+        // иметь значение (напр. перевод модуля-языка подмешается в Форум,
+        // даже если Форум поставили позже). Сама сбрасывает кэш модулей.
+        Module::syncAll();
+
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);

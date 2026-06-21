@@ -23,18 +23,13 @@ class ModuleSync extends Command
      */
     public function handle(): int
     {
-        $modules = Module::query()->where('active', true)->get();
+        // Обновление ядра затирает опубликованные файлы — публикуем заново.
+        // syncAll изолирует битые модули и сам сбрасывает кэш скана модулей.
+        $failed = Module::syncAll();
 
-        foreach ($modules as $module) {
-            $module->createSymlink();
-
-            // Обновление ядра затирает опубликованные файлы — публикуем заново
-            $module->publish();
+        foreach ($failed as $name => $message) {
+            $this->warn(sprintf('Module "%s" failed: %s', $name, $message));
         }
-
-        // Сбрасываем кэш скана модулей, чтобы новый релиз подхватил
-        // изменения в структуре (views, lang, routes, hooks и т.д.)
-        clearCache(['modules', 'settings']);
 
         $this->info('Modules links created and files published.');
 
