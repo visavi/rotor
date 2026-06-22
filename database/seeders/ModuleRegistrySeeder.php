@@ -9,12 +9,14 @@ class ModuleRegistrySeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('module_registries')->insertOrIgnore([
-            'url'        => config('modules.default_registry.url'),
-            'name'       => config('modules.default_registry.name'),
-            'active'     => true,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        foreach (config('modules.default_registries', []) as $registry) {
+            DB::table('module_registries')->insertOrIgnore([
+                'url'        => $registry['url'],
+                'name'       => $registry['name'],
+                'active'     => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

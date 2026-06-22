@@ -41,15 +41,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Реестр модулей по умолчанию
+    | Реестры по умолчанию
     |--------------------------------------------------------------------------
     |
-    | Официальный реестр, добавляется сидером при установке движка.
+    | Официальные реестры, добавляются сидером при установке движка.
     |
     */
 
-    'default_registry' => [
-        'url'  => 'https://github.com/visavi/rotor-modules/releases/download/registry/registry.json',
-        'name' => 'Official Rotor Modules',
+    'default_registries' => [
+        [
+            'url'  => 'https://github.com/visavi/rotor-modules/releases/download/registry/registry.json',
+            'name' => 'Official Rotor Modules',
+        ],
+        [
+            'url'  => 'https://github.com/visavi/rotor-languages/releases/download/registry/registry.json',
+            'name' => 'Official Rotor Languages',
+        ],
     ],
 ];

@@ -37,7 +37,7 @@
                         <i class="fas fa-database {{ $registry->active ? 'text-success' : 'text-muted' }}"></i>
                         <span class="fw-bold">{{ $registry->name ?: $registry->url }}</span>
                         @if ($registry->name)
-                            <small class="text-muted">{{ $registry->url }}</small>
+                            <br><small class="text-muted">{{ $registry->url }}</small>
                         @endif
                     </div>
                     <div class="d-flex gap-2">
