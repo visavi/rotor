@@ -12,7 +12,7 @@ class HtmlRenderer
     /**
      * Обрабатывает HTML для вывода
      */
-    public static function html(?string $text, string $group = 'gallery'): HtmlString
+    public static function html(?string $text, ?string $group = null): HtmlString
     {
         $html = (string) $text;
 
@@ -51,9 +51,9 @@ class HtmlRenderer
     /**
      * Подключает галерею к изображениям
      */
-    protected static function images(string $html, string $group): string
+    protected static function images(string $html, ?string $group): string
     {
-        if (str_contains($html, 'class="image"')) {
+        if ($group && str_contains($html, 'class="image"')) {
             $html = preg_replace(
                 '/<img\s([^>]*)class="image"([^>]*)>/i',
                 '<img $1class="image" data-fancybox="' . $group . '"$2>',

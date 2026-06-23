@@ -828,7 +828,7 @@ function plural(int $num, mixed $forms): string
 /**
  * RenderHtml
  */
-function renderHtml(?string $text, string $group = 'gallery'): HtmlString
+function renderHtml(?string $text, ?string $group = null): HtmlString
 {
     return HtmlRenderer::html($text, $group);
 }
@@ -843,13 +843,6 @@ function renderText(?string $text): HtmlString
 
 /**
  * Рендерит Markdown в HTML
- *
- * Одиночный перенос строки преобразуется в <br>, чтобы плоский текст
- * без markdown-разметки не слипался в один абзац.
- *
- * Сырой HTML экранируется (html_input => escape): источник —
- * недоверенный текст (релизы GitHub), литеральный <script> не должен
- * исполняться.
  */
 function renderMarkdown(?string $text): HtmlString
 {
