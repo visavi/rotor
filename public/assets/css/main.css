@@ -29,10 +29,6 @@ body.modal-open {
     margin: 0.25rem 0;
 }
 
-.section-content {
-
-}
-
 .section-message {
     overflow-wrap: break-word;
     margin-bottom: 1rem;
@@ -163,23 +159,6 @@ textarea.form-control {
     max-height: 450px;
 }
 
-.carousel {
-    position: relative;
-    display: inline-block;
-}
-
-.carousel-control-prev,
-.carousel-control-next {
-    width: 35px;
-    height: 35px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    margin: 10px;
-}
-
-
 .is-invalid .form-control,
 .is-invalid .form-select,
 .is-invalid .input-group-text {
@@ -208,12 +187,6 @@ textarea.form-control {
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
-.hidden-text {
-    padding: 10px;
-    margin: 0.5rem 0;
-    background-color: var(--base-bg);
-    font-size: 90%;
-}
 .section-action {
     display: flex;
     align-items: center;
@@ -306,33 +279,9 @@ textarea.form-control {
     margin-bottom: 10px;
 }
 
-.pre-scrollable {
-    max-height: 340px;
-}
-
 .form-required .form-label:after {
     content: "*";
     color: red;
-}
-
-/* Calendar grid */
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 35px);
-    gap: 2px;
-    width: fit-content;
-}
-
-.calendar-head {
-    font-weight: 600;
-    padding: 3px 0;
-    font-size: 0.85em;
-}
-
-.calendar-cell {
-    padding: 3px 2px;
-    font-size: 0.9em;
-    min-height: 24px;
 }
 
 /* Fix input width in form-group */
@@ -858,6 +807,7 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 .app-tile-label { font-size: .88rem; font-weight: 600; line-height: 1.3; display: flex; flex-direction: column; align-items: flex-start; }
 .app-tile-badge { margin-top: .2rem; }
+
 /* Fancybox: компактные тёмные стрелки — единый вид в лайтбоксе и инлайн-карусели */
 .fancybox__container .f-button.is-arrow {
     --f-button-width: 36px;
