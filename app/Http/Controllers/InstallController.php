@@ -69,8 +69,55 @@ class InstallController extends Controller
         $languages = getAvailableLanguages();
 
         $isUpdate = $this->isUpdate();
+        $database = $this->databaseChecks($versions);
 
-        return view('install/index', compact('keys', 'languages', 'versions', 'dirs', 'isUpdate'));
+        return view('install/index', compact('keys', 'languages', 'versions', 'dirs', 'isUpdate', 'database'));
+    }
+
+    /**
+     * Проверка подключения к БД и её версии (driver-aware, с защитой от падения)
+     */
+    private function databaseChecks(array $versions): array
+    {
+        $driver = (string) config('database.default');
+        $pdoExt = $driver === 'pgsql' ? 'pdo_pgsql' : 'pdo_mysql';
+
+        $database = [
+            'driver'     => $driver,
+            'pdoExt'     => $pdoExt,
+            'pdoLoaded'  => extension_loaded($pdoExt),
+            'connected'  => false,
+            'error'      => null,
+            'client'     => '',
+            'mysqlnd'    => true,
+            'version'    => '',
+            'versionOk'  => false,
+            'minVersion' => match ($driver) {
+                'mariadb' => $versions['maria'],
+                'pgsql'   => $versions['pgsql'],
+                default   => $versions['mysql'],
+            },
+        ];
+
+        try {
+            $pdo = DB::connection()->getPdo();
+            $database['connected'] = true;
+
+            if (in_array($driver, ['mysql', 'mariadb'], true)) {
+                $database['client'] = (string) ($pdo->getAttribute(\PDO::ATTR_CLIENT_VERSION) ?: '');
+                $database['mysqlnd'] = stripos($database['client'], 'mysqlnd') !== false;
+            }
+
+            $raw = DB::selectOne('SELECT VERSION() as version')->version ?? '';
+            preg_match('/(\d+\.\d+(?:\.\d+)?)/', (string) $raw, $match);
+
+            $database['version'] = (string) $raw;
+            $database['versionOk'] = isset($match[1]) && version_compare($match[1], $database['minVersion'], '>=');
+        } catch (\Throwable $e) {
+            $database['error'] = $e->getMessage();
+        }
+
+        return $database;
     }
 
     /**
@@ -263,56 +310,5 @@ class InstallController extends Controller
     private function isUpdate(): bool
     {
         return (bool) setting('app_installed');
-    }
-
-    /**
-     * Parse PHP modules
-     */
-    private static function parsePhpModules(): array
-    {
-        ob_start();
-        phpinfo(INFO_MODULES);
-        $s = ob_get_clean();
-        $s = strip_tags($s, '<h2><th><td>');
-        $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', '<info>\\1</info>', $s);
-        $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', '<info>\\1</info>', $s);
-        $vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
-        $vModules = [];
-        $iMax = count($vTmp);
-
-        for ($i = 1; $i < $iMax; $i++) {
-            if (preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $vTmp[$i], $vMat)) {
-                $vName = trim($vMat[1]);
-                $vTmp2 = explode("\n", $vTmp[$i + 1]);
-                foreach ($vTmp2 as $vOne) {
-                    $vPat = '<info>([^<]+)<\/info>';
-                    $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
-                    $vPat2 = "/$vPat\s*$vPat/";
-                    if (preg_match($vPat3, $vOne, $vMat)) {
-                        $vModules[$vName][trim($vMat[1])] = [trim($vMat[2]), trim($vMat[3])];
-                    } elseif (preg_match($vPat2, $vOne, $vMat)) {
-                        $vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
-                    }
-                }
-            }
-        }
-
-        return $vModules;
-    }
-
-    /**
-     * Get PHP module setting
-     */
-    public static function getModuleSetting(string $pModuleName, array $pSettings): string
-    {
-        $vModules = self::parsePhpModules();
-
-        foreach ($pSettings as $pSetting) {
-            if (isset($vModules[$pModuleName][$pSetting])) {
-                return $vModules[$pModuleName][$pSetting];
-            }
-        }
-
-        return __('main.undefined');
     }
 }

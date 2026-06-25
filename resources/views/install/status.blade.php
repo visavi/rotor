@@ -3,7 +3,7 @@
 @section('title', $isUpdate ? __('install.step2_update') : __('install.step2_install'))
 
 @section('content')
-    <div class="container border px-5">
+    <div class="container border rounded-3 shadow-sm px-3 px-md-5 my-4" style="max-width: 960px; background: var(--bs-tertiary-bg);">
         <div class="py-5 text-center">
             <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2>Mobile CMS</h2>

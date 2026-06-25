@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\FileViewFinder;
+use Throwable;
 
 class ApplySettings
 {
@@ -15,21 +16,25 @@ class ApplySettings
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = auth()->user();
+        try {
+            $user = auth()->user();
+        } catch (Throwable) {
+            $user = null;
+        }
 
-        $language = $user->language ?? setting('language');
-        $theme = $user->themes ?? setting('themes');
+        $language = $user->language ?? setting('language', config('app.locale'));
+        $theme = $user->themes ?? setting('themes', 'default');
 
         if ($request->session()->has('language')) {
             $language = $request->session()->get('language');
         }
 
         if (! file_exists(resource_path('lang/' . $language))) {
-            $language = setting('language');
+            $language = setting('language', config('app.locale'));
         }
 
         if (! file_exists(resource_path('views/themes/' . $theme))) {
-            $theme = setting('themes');
+            $theme = setting('themes', 'default');
         }
 
         App::setLocale($language);
