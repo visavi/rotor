@@ -19,7 +19,7 @@ return [
     'modules_required'      => 'required for module installation',
     'mysqlnd_notice'        => 'PDO uses old libmysqlclient instead of mysqlnd — numbers from the DB may come back as strings. Switch the driver to mysqlnd (often in the hosting panel) or set DB_NATIVE_TYPES=true in .env',
     'db_connection_failed'  => 'No database connection, check the settings in .env',
-    'chmod_views'           =>'Additionally, you can set permissions on directories and files with templates inside resources / views - this is necessary for editing website templates',
+    'chmod_views'           => 'Additionally, you can set permissions on directories and files with templates inside resources / views - this is necessary for editing website templates',
     'chmod_rights'          => 'Chmod right',
     'chmod'                 => 'If any item is highlighted in red, you need to go over FTP and set the CHMOD permission record',
     'errors'                => 'Some settings are recommended for full compatibility, but the script is able to work even if the recommended settings do not match the current ones.',

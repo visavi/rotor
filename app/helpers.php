@@ -37,10 +37,14 @@ define('SITETIME', time());
  * Форматирует время с учетом часовых поясов
  */
 function dateFixed(
-    DateTimeInterface|int|null $timestamp,
+    DateTimeInterface|int|string|null $timestamp,
     string $format = 'd.m.Y / H:i',
     bool $original = false,
 ): string {
+    if (is_numeric($timestamp)) {
+        $timestamp = (int) $timestamp;
+    }
+
     $date = Date::parse($timestamp)->setTimezone(config('app.timezone'));
     $shift = (int) getUser('timezone');
     $dateStamp = $date->addHours($shift)->format($format);
