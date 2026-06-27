@@ -137,9 +137,14 @@ class ModuleController extends AdminController
             return redirect('admin/modules/module?module=' . $moduleName);
         }
 
-        $module->createSymlink();
-        $module->publish();
-        $module->migrate();
+        // Файлы на диск кладём только для активного модуля: свежая установка,
+        // включение или обновление уже активного. Обновление выключенного модуля
+        // лишь повышает версию — его файлы не должны возвращаться на диск.
+        if (! $module->exists || $enable || $module->active) {
+            $module->createSymlink();
+            $module->publish();
+            $module->migrate();
+        }
 
         Artisan::call('route:clear');
         $result = __('admin.modules.module_success_installed');
