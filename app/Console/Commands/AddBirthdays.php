@@ -38,11 +38,10 @@ class AddBirthdays extends Command
                 $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title') . '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
 
                 Mailing::query()->create([
-                    'user_id'    => $user->id,
-                    'type'       => 'birthdays',
-                    'subject'    => $subject,
-                    'text'       => $text,
-                    'created_at' => SITETIME,
+                    'user_id' => $user->id,
+                    'type'    => 'birthdays',
+                    'subject' => $subject,
+                    'text'    => $text,
                 ]);
             }
         }

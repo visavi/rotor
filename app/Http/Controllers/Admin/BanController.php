@@ -66,7 +66,6 @@ class BanController extends AdminController
                     'type'         => Banhist::BAN,
                     'reason'       => $reason,
                     'term'         => $time,
-                    'created_at'   => SITETIME,
                 ]);
 
                 setFlash('success', __('admin.bans.success_banned'));
@@ -118,7 +117,6 @@ class BanController extends AdminController
                     'type'         => Banhist::CHANGE,
                     'reason'       => $reason,
                     'term'         => $term,
-                    'created_at'   => SITETIME,
                 ]);
 
                 setFlash('success', __('main.record_changed_success'));
@@ -157,7 +155,6 @@ class BanController extends AdminController
             'user_id'      => $user->id,
             'send_user_id' => getUser('id'),
             'type'         => Banhist::UNBAN,
-            'created_at'   => SITETIME,
         ]);
 
         setFlash('success', __('admin.bans.success_unbanned'));

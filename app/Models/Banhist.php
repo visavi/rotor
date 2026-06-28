@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
@@ -12,14 +13,14 @@ use Illuminate\Support\HtmlString;
 /**
  * Class Banhist
  *
- * @property int    $id
- * @property int    $user_id
- * @property int    $send_user_id
- * @property string $type
- * @property string $reason
- * @property int    $term
- * @property int    $created_at
- * @property int    $explain
+ * @property int             $id
+ * @property int             $user_id
+ * @property int             $send_user_id
+ * @property string          $type
+ * @property string          $reason
+ * @property int             $term
+ * @property bool            $explain
+ * @property CarbonImmutable $created_at
  */
 class Banhist extends Model
 {
@@ -29,9 +30,9 @@ class Banhist extends Model
     protected $table = 'banhist';
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.

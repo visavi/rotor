@@ -8,6 +8,7 @@ use App\Casts\HtmlCast;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\FileableTrait;
 use App\Traits\UploadTrait;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,11 +19,11 @@ use Illuminate\Support\HtmlString;
 /**
  * Class Message
  *
- * @property int    $id
- * @property int    $user_id
- * @property int    $author_id
- * @property string $text
- * @property int    $created_at
+ * @property int             $id
+ * @property int             $user_id
+ * @property int             $author_id
+ * @property string          $text
+ * @property CarbonImmutable $created_at
  * @property-read User $user
  * @property-read User $author
  * @property-read Collection<File> $files
@@ -38,9 +39,9 @@ class Message extends Model
     public const string OUT = 'out'; // Отправленные
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.
@@ -108,10 +109,9 @@ class Message extends Model
         $authorId = $author->id ?? 0;
 
         $message = self::query()->create([
-            'user_id'    => $user->id,
-            'author_id'  => $authorId,
-            'text'       => $text,
-            'created_at' => SITETIME,
+            'user_id'   => $user->id,
+            'author_id' => $authorId,
+            'text'      => $text,
         ]);
 
         Dialogue::query()->create([
@@ -119,7 +119,6 @@ class Message extends Model
             'user_id'    => $user->id,
             'author_id'  => $authorId,
             'type'       => self::IN,
-            'created_at' => SITETIME,
         ]);
 
         if ($authorId && $withAuthor) {
@@ -129,7 +128,6 @@ class Message extends Model
                 'author_id'  => $user->id,
                 'type'       => self::OUT,
                 'reading'    => 1,
-                'created_at' => SITETIME,
             ]);
         }
 

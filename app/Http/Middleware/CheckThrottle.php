@@ -38,7 +38,7 @@ class CheckThrottle
             if (! isset($bannedIps[$ip])) {
                 $inserted = Ban::query()->insertOrIgnore([
                     'ip'         => $ip,
-                    'created_at' => SITETIME,
+                    'created_at' => now(),
                 ]);
 
                 if ($inserted) {

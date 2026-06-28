@@ -15,7 +15,7 @@ return new class extends Migration {
                 $table->string('referer')->nullable();
                 $table->ipAddress('ip');
                 $table->string('brow', 25);
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index('created_at');
             });

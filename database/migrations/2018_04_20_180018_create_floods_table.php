@@ -13,7 +13,7 @@ return new class extends Migration {
                 $table->string('uid', 32);
                 $table->string('page', 30);
                 $table->integer('attempts')->default(0);
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index('uid');
             });

@@ -63,8 +63,7 @@ class StickerController extends AdminController
 
         if ($validator->isValid()) {
             $category = StickersCategory::query()->create([
-                'name'       => $name,
-                'created_at' => SITETIME,
+                'name' => $name,
             ]);
 
             setFlash('success', __('stickers.category_success_created'));
@@ -96,8 +95,7 @@ class StickerController extends AdminController
 
             if ($validator->isValid()) {
                 $category->update([
-                    'name'       => $name,
-                    'updated_at' => SITETIME,
+                    'name' => $name,
                 ]);
 
                 setFlash('success', __('stickers.category_success_changed'));

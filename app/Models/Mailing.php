@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Mailing
  *
- * @property int    $id
- * @property int    $user_id
- * @property string $type
- * @property string $subject
- * @property string $text
- * @property int    $sent
- * @property int    $created_at
- * @property int    $sent_at
+ * @property int                  $id
+ * @property int                  $user_id
+ * @property string               $type
+ * @property string               $subject
+ * @property string               $text
+ * @property int                  $sent
+ * @property CarbonImmutable      $created_at
+ * @property CarbonImmutable|null $sent_at
  */
 class Mailing extends Model
 {
@@ -27,9 +28,9 @@ class Mailing extends Model
     protected $table = 'mailings';
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.
@@ -43,6 +44,7 @@ class Mailing extends Model
     {
         return [
             'user_id' => 'int',
+            'sent_at' => 'datetime',
         ];
     }
 

@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Reader
  *
- * @property int    $id
- * @property string $relate_type
- * @property int    $relate_id
- * @property string $ip
- * @property int    $created_at
+ * @property int             $id
+ * @property string          $relate_type
+ * @property int             $relate_id
+ * @property string          $ip
+ * @property CarbonImmutable $created_at
  */
 class Reader extends Model
 {
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.
@@ -64,7 +65,6 @@ class Reader extends Model
                 'relate_type' => $model->getMorphClass(),
                 'relate_id'   => $model->getKey(),
                 'ip'          => getIp(),
-                'created_at'  => SITETIME,
             ]);
 
             $model->increment($model->countingField);

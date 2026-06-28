@@ -25,12 +25,11 @@ class AdminLogger
     {
         if (auth()->check()) {
             Log::query()->create([
-                'user_id'    => auth()->id(),
-                'request'    => Str::substr($request->getRequestUri(), 0, 250),
-                'referer'    => Str::substr($request->header('referer'), 0, 250),
-                'ip'         => getIp(),
-                'brow'       => getBrowser(),
-                'created_at' => SITETIME,
+                'user_id' => auth()->id(),
+                'request' => Str::substr($request->getRequestUri(), 0, 250),
+                'referer' => Str::substr($request->header('referer'), 0, 250),
+                'ip'      => getIp(),
+                'brow'    => getBrowser(),
             ]);
         }
     }

@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->string('name')->default('');
             $table->boolean('active')->default(true);
             $table->text('cached_data')->nullable();
-            $table->timestamp('cached_at')->nullable();
-            $table->timestamps();
+            $table->dateTime('cached_at')->nullable();
+            $table->datetimes();
         });
     }
 

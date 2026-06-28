@@ -24,7 +24,7 @@ class DeleteDialogues extends Command
     public function handle(): int
     {
         $dialogues = Dialogue::query()
-            ->where('created_at', '<', strtotime('-3 year', SITETIME))
+            ->where('created_at', '<', now()->subYears(3))
             ->where('author_id', 0)
             ->limit(1000)
             ->get();

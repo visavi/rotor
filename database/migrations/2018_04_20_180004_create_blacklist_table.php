@@ -13,7 +13,7 @@ return new class extends Migration {
                 $table->string('type', 30);
                 $table->string('value', 100);
                 $table->integer('user_id');
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index('type');
                 $table->index('value');

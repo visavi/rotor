@@ -16,7 +16,7 @@ return new class extends Migration {
                 $table->integer('author_id');
                 $table->enum('type', [Message::IN, Message::OUT]);
                 $table->boolean('reading')->default(false);
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index(['user_id', 'author_id']);
                 $table->index(['message_id', 'created_at']);

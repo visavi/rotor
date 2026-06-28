@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
@@ -11,13 +12,13 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class Dialogue
  *
- * @property int    $id
- * @property int    $message_id
- * @property int    $user_id
- * @property int    $author_id
- * @property string $type
- * @property int    $reading
- * @property int    $created_at
+ * @property int             $id
+ * @property int             $message_id
+ * @property int             $user_id
+ * @property int             $author_id
+ * @property string          $type
+ * @property int             $reading
+ * @property CarbonImmutable $created_at
  * @property-read User    $author
  * @property-read Message $message
  */
@@ -27,9 +28,9 @@ class Dialogue extends Model
     public const string OUT = 'out';  // Отправленные
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.

@@ -11,8 +11,8 @@ return new class extends Migration {
             Schema::create('stickers_categories', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name', 50);
-                $table->integer('updated_at')->nullable();
-                $table->integer('created_at');
+                $table->dateTime('updated_at')->nullable();
+                $table->dateTime('created_at')->nullable();
             });
         }
     }

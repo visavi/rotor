@@ -45,7 +45,7 @@ class RuleController extends AdminController
             if ($validator->isValid()) {
                 $rules->fill([
                     'text'       => $msg,
-                    'created_at' => SITETIME,
+                    'created_at' => now(),
                 ])->save();
 
                 setFlash('success', __('admin.rules.rules_success_saved'));

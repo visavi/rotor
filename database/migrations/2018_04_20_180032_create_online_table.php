@@ -13,7 +13,7 @@ return new class extends Migration {
                 $table->ipAddress('ip');
                 $table->string('brow', 25);
                 $table->integer('user_id')->nullable();
-                $table->integer('updated_at')->nullable();
+                $table->dateTime('updated_at')->nullable();
             });
         }
     }

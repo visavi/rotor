@@ -47,13 +47,11 @@ class NoticeController extends AdminController
 
             if ($validator->isValid()) {
                 $notice = Notice::query()->create([
-                    'type'       => $type,
-                    'name'       => $name,
-                    'text'       => $text,
-                    'user_id'    => getUser('id'),
-                    'protect'    => $protect,
-                    'created_at' => SITETIME,
-                    'updated_at' => SITETIME,
+                    'type'    => $type,
+                    'name'    => $name,
+                    'text'    => $text,
+                    'user_id' => getUser('id'),
+                    'protect' => $protect,
                 ]);
 
                 setFlash('success', __('admin.notices.notice_success_saved'));
@@ -90,11 +88,10 @@ class NoticeController extends AdminController
 
             if ($validator->isValid()) {
                 $notice->update([
-                    'name'       => $name,
-                    'text'       => $text,
-                    'user_id'    => getUser('id'),
-                    'protect'    => $protect,
-                    'updated_at' => SITETIME,
+                    'name'    => $name,
+                    'text'    => $text,
+                    'user_id' => getUser('id'),
+                    'protect' => $protect,
                 ]);
 
                 setFlash('success', __('admin.notices.notice_success_saved'));

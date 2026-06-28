@@ -624,14 +624,13 @@ function saveErrorLog(int $code, ?string $message = null): void
 
     if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([
-            'code'       => $code,
-            'request'    => Str::substr(request()->getRequestUri(), 0, 250),
-            'referer'    => Str::substr(request()->header('referer'), 0, 250),
-            'user_id'    => getUser('id'),
-            'message'    => Str::substr($message, 0, 250),
-            'ip'         => getIp(),
-            'brow'       => getBrowser(),
-            'created_at' => SITETIME,
+            'code'    => $code,
+            'request' => Str::substr(request()->getRequestUri(), 0, 250),
+            'referer' => Str::substr(request()->header('referer'), 0, 250),
+            'user_id' => getUser('id'),
+            'message' => Str::substr($message, 0, 250),
+            'ip'      => getIp(),
+            'brow'    => getBrowser(),
         ]);
     }
 }

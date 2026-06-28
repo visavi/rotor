@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('rules', function (Blueprint $table) {
                 $table->increments('id');
                 $table->text('text');
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
             });
         }
     }

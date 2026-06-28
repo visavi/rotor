@@ -12,7 +12,7 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->ipAddress('ip');
                 $table->integer('user_id')->nullable();
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->unique('ip');
             });

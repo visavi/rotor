@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
 /**
- * @property int                 $id
- * @property string              $url
- * @property string              $name
- * @property bool                $active
- * @property array               $cached_data
- * @property \Carbon\Carbon|null $cached_at
- * @property \Carbon\Carbon      $created_at
- * @property \Carbon\Carbon      $updated_at
+ * @property int                  $id
+ * @property string               $url
+ * @property string               $name
+ * @property bool                 $active
+ * @property array                $cached_data
+ * @property CarbonImmutable|null $cached_at
+ * @property CarbonImmutable      $created_at
+ * @property CarbonImmutable      $updated_at
  */
 class ModuleRegistry extends Model
 {

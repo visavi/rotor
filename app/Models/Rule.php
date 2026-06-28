@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Rule
  *
- * @property int    $id
- * @property string $text
- * @property int    $created_at
+ * @property int             $id
+ * @property string          $text
+ * @property CarbonImmutable $created_at
  */
 class Rule extends Model
 {
@@ -32,7 +33,8 @@ class Rule extends Model
     protected function casts(): array
     {
         return [
-            'text' => HtmlCast::class,
+            'text'       => HtmlCast::class,
+            'created_at' => 'datetime',
         ];
     }
 }

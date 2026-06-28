@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Error
  *
- * @property int    $id
- * @property int    $code
- * @property string $request
- * @property string $referer
- * @property int    $user_id
- * @property string $message
- * @property string $ip
- * @property string $brow
- * @property int    $created_at
+ * @property int             $id
+ * @property int             $code
+ * @property string          $request
+ * @property string          $referer
+ * @property int             $user_id
+ * @property string          $message
+ * @property string          $ip
+ * @property string          $brow
+ * @property CarbonImmutable $created_at
  */
 class Error extends Model
 {
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.

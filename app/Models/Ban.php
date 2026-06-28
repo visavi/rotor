@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Ban
  *
- * @property int    $id
- * @property string $ip
- * @property int    $user_id
- * @property int    $created_at
+ * @property int             $id
+ * @property string          $ip
+ * @property int             $user_id
+ * @property CarbonImmutable $created_at
  */
 class Ban extends Model
 {
@@ -38,7 +39,8 @@ class Ban extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'int',
+            'user_id'    => 'int',
+            'created_at' => 'datetime',
         ];
     }
 

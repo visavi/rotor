@@ -122,7 +122,7 @@ class HomeController extends Controller
 
         if (
             ! $ban->user_id
-            && $ban->created_at < strtotime('-1 minute', SITETIME)
+            && $ban->created_at->lt(now()->subMinute())
             && $request->isMethod('post')
             && captchaVerify()
         ) {

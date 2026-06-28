@@ -13,7 +13,7 @@ return new class extends Migration {
                 $table->string('relate_type', 20);
                 $table->integer('relate_id');
                 $table->ipAddress('ip');
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index(['relate_type', 'relate_id', 'ip']);
             });

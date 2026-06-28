@@ -79,7 +79,7 @@
                             </li>
                             @if (getUser())
                                 @if ($ownComment)
-                                    @if ($comment->created_at + 600 > SITETIME)
+                                    @if ($comment->created_at->gt(now()->subMinutes(10)))
                                         <li>
                                             <a class="dropdown-item" href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments">
                                                 <i class="fas fa-edit fa-fw me-1"></i> {{ __('main.edit') }}

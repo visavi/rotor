@@ -15,8 +15,8 @@ return new class extends Migration {
                 $table->text('text');
                 $table->integer('user_id');
                 $table->boolean('protect')->default(false);
-                $table->integer('updated_at')->nullable();
-                $table->integer('created_at');
+                $table->dateTime('updated_at')->nullable();
+                $table->dateTime('created_at')->nullable();
 
                 $table->unique('type');
             });

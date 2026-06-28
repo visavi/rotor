@@ -40,11 +40,10 @@ class AddSubscribers extends Command
                 $text = 'Здравствуйте ' . e($user->getName()) . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . config('app.url') . '/messages">' . config('app.url') . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
 
                 Mailing::query()->create([
-                    'user_id'    => $user->id,
-                    'type'       => 'messages',
-                    'subject'    => $subject,
-                    'text'       => $text,
-                    'created_at' => SITETIME,
+                    'user_id' => $user->id,
+                    'type'    => 'messages',
+                    'subject' => $subject,
+                    'text'    => $text,
                 ]);
 
                 $user->update(['sendprivatmail' => 1]);

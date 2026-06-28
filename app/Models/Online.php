@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Online
  *
- * @property string $ip
- * @property string $brow
- * @property int    $updated_at
- * @property int    $user_id
+ * @property string          $ip
+ * @property string          $brow
+ * @property int             $user_id
+ * @property CarbonImmutable $updated_at
  */
 class Online extends Model
 {
@@ -48,7 +49,8 @@ class Online extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'int',
+            'user_id'    => 'int',
+            'updated_at' => 'datetime',
         ];
     }
 

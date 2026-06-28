@@ -10,6 +10,7 @@ use App\Traits\FileableTrait;
 use App\Traits\PollableTrait;
 use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,17 +25,17 @@ use Illuminate\Support\Str;
 /**
  * Class Comment
  *
- * @property int    $id
- * @property int    $user_id
- * @property string $relate_type
- * @property int    $relate_id
- * @property string $text
- * @property string $ip
- * @property string $brow
- * @property int    $created_at
- * @property int    $deleted_at
- * @property ?int   $parent_id
- * @property int    $depth
+ * @property int                  $id
+ * @property int                  $user_id
+ * @property string               $relate_type
+ * @property int                  $relate_id
+ * @property string               $text
+ * @property string               $ip
+ * @property string               $brow
+ * @property ?int                 $parent_id
+ * @property int                  $depth
+ * @property CarbonImmutable      $created_at
+ * @property CarbonImmutable|null $deleted_at
  * @property-read User                      $user
  * @property-read ?Model                    $relate
  * @property-read Collection<int, File>     $files
@@ -50,9 +51,9 @@ class Comment extends Model
     use UploadTrait;
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.
@@ -67,7 +68,7 @@ class Comment extends Model
         return [
             'user_id'    => 'int',
             'text'       => HtmlCast::class,
-            'deleted_at' => 'int',
+            'deleted_at' => 'datetime',
         ];
     }
 
@@ -190,7 +191,7 @@ class Comment extends Model
                 $file->delete();
             });
 
-            $this->update(['text' => null, 'deleted_at' => time()]);
+            $this->update(['text' => null, 'deleted_at' => now()]);
         });
     }
 

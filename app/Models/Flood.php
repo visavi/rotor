@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Flood
  *
- * @property int    $id
- * @property int    $user_id
- * @property string $page
- * @property int    $created_at
+ * @property int             $id
+ * @property int             $user_id
+ * @property string          $uid
+ * @property string          $page
+ * @property int             $attempts
+ * @property CarbonImmutable $created_at
  */
 class Flood extends Model
 {
@@ -33,7 +36,8 @@ class Flood extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'int',
+            'user_id'    => 'int',
+            'created_at' => 'datetime',
         ];
     }
 
@@ -79,7 +83,7 @@ class Flood extends Model
      */
     public function isFlood(int $attempts = 1): bool
     {
-        self::query()->where('created_at', '<', SITETIME)->delete();
+        self::query()->where('created_at', '<', now())->delete();
 
         $flood = self::query()
             ->where('uid', $this->getUid())
@@ -104,7 +108,7 @@ class Flood extends Model
             'uid'  => $this->getUid(),
             'page' => request()->getPathInfo(),
         ], [
-            'created_at' => SITETIME + $period,
+            'created_at' => now()->addSeconds($period),
         ])->increment('attempts');
     }
 

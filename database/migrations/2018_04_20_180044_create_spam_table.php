@@ -14,7 +14,7 @@ return new class extends Migration {
                 $table->integer('relate_id');
                 $table->integer('user_id');
                 $table->string('path', 100)->nullable();
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index('created_at');
                 $table->index(['relate_type', 'relate_id']);

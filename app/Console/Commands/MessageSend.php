@@ -46,7 +46,7 @@ class MessageSend extends Command
 
                 $queue->update([
                     'sent'    => 1,
-                    'sent_at' => SITETIME,
+                    'sent_at' => now(),
                 ]);
             }
         }

@@ -59,7 +59,7 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => __('main.comment_deleted')]);
         }
 
-        if ($comment->created_at + 600 < SITETIME) {
+        if ($comment->created_at->lt(now()->subMinutes(10))) {
             return response()->json(['success' => false, 'message' => __('main.editing_impossible')]);
         }
 

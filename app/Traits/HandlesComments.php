@@ -162,13 +162,12 @@ trait HandlesComments
             }
 
             $comment = $this->commentsRelation($model)->create([
-                'text'       => $msg,
-                'user_id'    => $user->id,
-                'parent_id'  => $parentId,
-                'depth'      => $depth,
-                'created_at' => SITETIME,
-                'ip'         => getIp(),
-                'brow'       => getBrowser(),
+                'text'      => $msg,
+                'user_id'   => $user->id,
+                'parent_id' => $parentId,
+                'depth'     => $depth,
+                'ip'        => getIp(),
+                'brow'      => getBrowser(),
             ]);
 
             File::query()

@@ -201,14 +201,14 @@ class UserController extends AdminController
                 if ($loginblack) {
                     BlackList::query()->firstOrCreate(
                         ['type' => 'login', 'value' => $user->login],
-                        ['user_id' => getUser('id'), 'created_at' => SITETIME],
+                        ['user_id' => getUser('id')],
                     );
                 }
 
                 if ($mailblack) {
                     BlackList::query()->firstOrCreate(
                         ['type' => 'email', 'value' => $user->email],
-                        ['user_id' => getUser('id'), 'created_at' => SITETIME],
+                        ['user_id' => getUser('id')],
                     );
                 }
 

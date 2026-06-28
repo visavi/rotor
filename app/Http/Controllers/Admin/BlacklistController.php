@@ -63,10 +63,9 @@ class BlacklistController extends AdminController
 
             if ($validator->isValid()) {
                 BlackList::query()->create([
-                    'type'       => $type,
-                    'value'      => $value,
-                    'user_id'    => getUser('id'),
-                    'created_at' => SITETIME,
+                    'type'    => $type,
+                    'value'   => $value,
+                    'user_id' => getUser('id'),
                 ]);
 
                 setFlash('success', __('main.record_added_success'));

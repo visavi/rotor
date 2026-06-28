@@ -35,7 +35,7 @@ class Metrika
 
         // Чистка устаревших онлайн раз в 30с на весь сайт, а не на каждую сессию
         if (Cache::add('online_cleanup', true, 30)) {
-            Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
+            Online::query()->where('updated_at', '<', now()->subSeconds((int) setting('timeonline')))->delete();
         }
 
         $user = getUser();
@@ -54,7 +54,7 @@ class Metrika
                     'uid'        => $uid,
                     'ip'         => $ip,
                     'brow'       => $brow,
-                    'updated_at' => SITETIME,
+                    'updated_at' => now(),
                     'user_id'    => $user->id ?? null,
                 ]);
             $newHost = $online->wasRecentlyCreated;

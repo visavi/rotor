@@ -64,7 +64,6 @@ class AjaxController extends Controller
                 'relate_id'   => $model->id,
                 'user_id'     => getUser('id'),
                 'path'        => $path,
-                'created_at'  => SITETIME,
             ]);
 
             return response()->json(['success' => true]);

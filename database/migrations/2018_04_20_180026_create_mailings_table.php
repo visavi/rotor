@@ -15,8 +15,8 @@ return new class extends Migration {
                 $table->string('subject', 100);
                 $table->text('text');
                 $table->boolean('sent')->default(false);
-                $table->integer('sent_at')->nullable();
-                $table->integer('created_at');
+                $table->dateTime('sent_at')->nullable();
+                $table->dateTime('created_at')->nullable();
             });
         }
     }
