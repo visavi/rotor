@@ -152,24 +152,20 @@ class ModuleController extends AdminController
         if ($module->exists) {
             if ($update) {
                 $module->update([
-                    'version'    => $moduleConfig['version'],
-                    'updated_at' => SITETIME,
+                    'version' => $moduleConfig['version'],
                 ]);
                 $result = __('admin.modules.module_success_updated');
             }
 
             if ($enable) {
                 $module->update([
-                    'active'     => true,
-                    'updated_at' => SITETIME,
+                    'active' => true,
                 ]);
                 $result = __('admin.modules.module_success_enabled');
             }
         } else {
             $module->fill([
-                'version'    => $moduleConfig['version'],
-                'updated_at' => SITETIME,
-                'created_at' => SITETIME,
+                'version' => $moduleConfig['version'],
             ])->save();
         }
 
@@ -524,8 +520,7 @@ class ModuleController extends AdminController
 
         if ($disable) {
             $module->update([
-                'active'     => false,
-                'updated_at' => SITETIME,
+                'active' => false,
             ]);
             $result = __('admin.modules.module_success_disabled');
         } else {

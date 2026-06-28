@@ -29,7 +29,7 @@ return new class extends Migration {
                 $table->string('timezone', 3)->default('0');
                 $table->integer('point')->default(0);
                 $table->integer('money')->default(0);
-                $table->integer('timeban')->nullable();
+                $table->dateTime('timeban')->nullable();
                 $table->string('status', 50)->nullable();
                 $table->string('color', 10)->nullable();
                 $table->string('avatar', 100)->nullable();
@@ -38,7 +38,7 @@ return new class extends Migration {
                 $table->integer('posrating')->default(0);
                 $table->integer('negrating')->default(0);
                 $table->boolean('sendprivatmail')->default(false);
-                $table->integer('timebonus')->default(0);
+                $table->dateTime('timebonus')->nullable();
                 $table->integer('newchat')->nullable();
                 $table->boolean('notify_mention')->default(true);
                 $table->boolean('notify_reply')->default(true);
@@ -47,8 +47,8 @@ return new class extends Migration {
                 $table->string('subscribe', 32)->nullable();
                 $table->string('confirm_token', 100)->nullable();
                 $table->rememberToken();
-                $table->integer('updated_at')->nullable();
-                $table->integer('created_at');
+                $table->dateTime('updated_at')->nullable();
+                $table->dateTime('created_at')->nullable();
 
                 $table->unique('login');
                 $table->unique('email');

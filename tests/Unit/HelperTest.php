@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
@@ -40,11 +41,13 @@ class HelperTest extends TestCase
 
     public function testDateFixed(): void
     {
-        self::assertSame('01.06.2005 / 12:00', dateFixed(1117612800));
-        self::assertSame('2005-06-01', dateFixed(1117612800, 'Y-m-d'));
-        self::assertSame('1 Июня 2005', dateFixed(1117612800, 'j F Y'));
-        self::assertSame('1 June 2005', dateFixed(1117612800, 'j F Y', true));
-        self::assertSame(dateFixed(time(), 'YmdHi'), dateFixed(null, 'YmdHi'));
+        $date = Carbon::createFromTimestamp(1117612800);
+
+        self::assertSame('01.06.2005 / 12:00', dateFixed($date));
+        self::assertSame('2005-06-01', dateFixed($date, 'Y-m-d'));
+        self::assertSame('1 Июня 2005', dateFixed($date, 'j F Y'));
+        self::assertSame('1 June 2005', dateFixed($date, 'j F Y', true));
+        self::assertSame(dateFixed(now(), 'YmdHi'), dateFixed(null, 'YmdHi'));
     }
 
     public function testCheck(): void
@@ -347,8 +350,8 @@ class HelperTest extends TestCase
 
     public function testStatsUsers(): void
     {
-        User::factory()->create(['created_at' => SITETIME]);
-        User::factory()->create(['created_at' => strtotime('-2 days', SITETIME)]);
+        User::factory()->create(['created_at' => now()]);
+        User::factory()->create(['created_at' => now()->subDays(2)]);
 
         self::assertSame('2/+1', statsUsers());
     }
@@ -364,8 +367,8 @@ class HelperTest extends TestCase
 
     public function testStatsBanned(): void
     {
-        User::factory()->create(['level' => User::BANNED, 'timeban' => SITETIME + 600]);
-        User::factory()->create(['level' => User::BANNED, 'timeban' => SITETIME - 600]);
+        User::factory()->create(['level' => User::BANNED, 'timeban' => now()->addSeconds(600)]);
+        User::factory()->create(['level' => User::BANNED, 'timeban' => now()->subSeconds(600)]);
 
         self::assertSame(1, statsBanned());
     }
@@ -391,8 +394,8 @@ class HelperTest extends TestCase
         BlackList::query()->delete();
         self::assertSame('0/0/0', statsBlacklist());
 
-        BlackList::query()->create(['type' => 'login', 'value' => 'spammer', 'user_id' => 1, 'created_at' => SITETIME]);
-        BlackList::query()->create(['type' => 'email', 'value' => 'spam@mail.ru', 'user_id' => 1, 'created_at' => SITETIME]);
+        BlackList::query()->create(['type' => 'login', 'value' => 'spammer', 'user_id' => 1, 'created_at' => now()]);
+        BlackList::query()->create(['type' => 'email', 'value' => 'spam@mail.ru', 'user_id' => 1, 'created_at' => now()]);
 
         self::assertSame('1/1/0', statsBlacklist());
     }
@@ -475,7 +478,7 @@ class HelperTest extends TestCase
             'name'       => 'Test',
             'text'       => 'Hello %login%',
             'user_id'    => 1,
-            'created_at' => SITETIME,
+            'created_at' => now(),
         ]);
 
         self::assertSame('Hello <a class="user" href="/users/vasya">@vasya</a>', textNotice('test', ['login' => 'vasya']));

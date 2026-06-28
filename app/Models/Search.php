@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Classes\Registry;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * Class Search
  *
- * @property int    $id
- * @property string $relate_type
- * @property int    $relate_id
- * @property string $text
- * @property int    $created_at
+ * @property int             $id
+ * @property string          $relate_type
+ * @property int             $relate_id
+ * @property string          $text
+ * @property CarbonImmutable $created_at
  */
 class Search extends Model
 {
@@ -33,6 +34,16 @@ class Search extends Model
      * The attributes that aren't mass assignable.
      */
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     */
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+        ];
+    }
 
     /**
      * Возвращает связанные объекты

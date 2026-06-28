@@ -23,7 +23,7 @@ class ListController extends Controller
 
         $users = User::query()
             ->when($type === 'admins', fn (Builder $q) => $q->whereIn('level', User::ADMIN_GROUPS))
-            ->when($type === 'birthdays', fn (Builder $q) => $q->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME)))
+            ->when($type === 'birthdays', fn (Builder $q) => $q->whereRaw('substr(birthday, 1, 5) = ?', now()->format('d.m')))
             ->when($user !== '', fn (Builder $q) => $q->where(
                 fn (Builder $q) => $q->where('login', 'like', '%' . $user . '%')->orWhere('name', 'like', '%' . $user . '%')
             ))

@@ -25,7 +25,7 @@ class DeleteFiles extends Command
     {
         $files = File::query()
             ->where('relate_id', 0)
-            ->where('created_at', '<', strtotime('-1 day', SITETIME))
+            ->where('created_at', '<', now()->subDay())
             ->get();
 
         foreach ($files as $file) {

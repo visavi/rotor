@@ -15,7 +15,7 @@ class BlacklistSeeder extends Seeder
         $data = [
             'type'       => 'domain',
             'value'      => 'asdasd.ru',
-            'created_at' => SITETIME,
+            'created_at' => now(),
             'user_id'    => 1,
         ];
 

@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Date;
 
 /**
  * Class EmailChange
  *
- * @property int    $id
- * @property int    $user_id
- * @property string $email
- * @property string $token
- * @property Date   $created_at
+ * @property int             $id
+ * @property int             $user_id
+ * @property string          $email
+ * @property string          $token
+ * @property CarbonImmutable $created_at
  */
 class EmailChange extends Model
 {
@@ -35,7 +35,8 @@ class EmailChange extends Model
     protected function casts(): array
     {
         return [
-            'user_id' => 'int',
+            'user_id'    => 'int',
+            'created_at' => 'datetime',
         ];
     }
 

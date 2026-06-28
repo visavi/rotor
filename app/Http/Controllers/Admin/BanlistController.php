@@ -16,7 +16,7 @@ class BanlistController extends AdminController
     {
         $users = User::query()
             ->where('level', User::BANNED)
-            ->where('timeban', '>', SITETIME)
+            ->where('timeban', '>', now())
             ->orderBy('timeban')
             ->with('lastBan')
             ->paginate(setting('reglist'));

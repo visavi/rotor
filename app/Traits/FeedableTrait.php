@@ -42,10 +42,7 @@ trait FeedableTrait
                 'relate_id'   => $this->getKey(),
             ],
             [
-                // feeds хранит created_at как int-timestamp независимо от типа поля у модели
-                // (трейт общий: у немигрированных моделей created_at ещё int)
-                // @phpstan-ignore instanceof.alwaysTrue
-                'created_at' => $this->created_at instanceof \DateTimeInterface ? $this->created_at->getTimestamp() : (int) $this->created_at,
+                'created_at' => $this->created_at,
             ]
         );
 

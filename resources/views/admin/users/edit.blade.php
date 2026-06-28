@@ -99,12 +99,6 @@
                 <div class="invalid-feedback">{{ textError('site') }}</div>
             </div>
 
-            <div class="mb-3{{ hasError('created') }}">
-                <label for="created" class="form-label">{{ __('users.registered') }}:</label>
-                <input type="text" class="form-control" id="created" name="created" maxlength="10" value="{{ getInput('created', dateFixed($user->created_at, 'd.m.Y', true)) }}" required>
-                <div class="invalid-feedback">{{ textError('created') }}</div>
-            </div>
-
             <div class="mb-3{{ hasError('birthday') }}">
                 <label for="birthday" class="form-label">{{ __('users.birthday') }}:</label>
                 <input type="text" class="form-control" id="birthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
@@ -210,10 +204,10 @@
         </div>
     @endif
 
-    @if ($user->level === 'banned' && $user->timeban > SITETIME)
+    @if ($user->level === 'banned' && $user->timeban?->isFuture())
         <div class="section-form mb-3 shadow">
             <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
-            {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
+            {{ __('users.ending_ban') }}: {{ formatTime((int) $user->timeban->diffInSeconds(now())) }}<br>
 
             @if ($banhist)
                 {{ __('users.term') }}: {{ formatTime($banhist->term) }}<br>
@@ -223,7 +217,10 @@
         </div>
     @endif
 
-    {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br><br>
+    {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y / H:i') }}<br>
+    {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
+    @hook('adminUserCard', $user)
+    <br>
 
     @if (! in_array($user->level, $adminGroups, true))
         <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">{{ __('main.delete') }}</a><br>

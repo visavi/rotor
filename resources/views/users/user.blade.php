@@ -32,10 +32,10 @@
         </div>
     @endif
 
-    @if ($user->level === 'banned' && $user->timeban > SITETIME)
+    @if ($user->level === 'banned' && $user->timeban?->isFuture())
         <div class="alert alert-danger">
             <b>{{ __('users.user_banned') }}</b><br>
-            {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
+            {{ __('users.ending_ban') }}: {{ formatTime((int) $user->timeban->diffInSeconds(now())) }}<br>
 
             @if ($user->lastBan->id)
                 {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>

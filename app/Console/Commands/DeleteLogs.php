@@ -24,14 +24,12 @@ class DeleteLogs extends Command
      */
     public function handle(): int
     {
-        $time = strtotime('-1 month', SITETIME);
-
         Error::query()
-            ->where('created_at', '<', $time)
+            ->where('created_at', '<', now()->subMonth())
             ->delete();
 
         Log::query()
-            ->where('created_at', '<', $time)
+            ->where('created_at', '<', now()->subMonth())
             ->delete();
 
         $this->info('Logs successfully deleted.');

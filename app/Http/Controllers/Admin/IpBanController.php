@@ -30,7 +30,7 @@ class IpBanController extends AdminController
                 Ban::query()->create([
                     'ip'         => $ip,
                     'user_id'    => getUser('id'),
-                    'created_at' => SITETIME,
+                    'created_at' => now(),
                 ]);
 
                 clearCache('ipBan');

@@ -111,8 +111,7 @@ class UserController extends Controller
                         'money'         => setting('registermoney'),
                         'subscribe'     => Str::random(32),
                         'confirm_token' => $confirmToken,
-                        'updated_at'    => SITETIME,
-                        'created_at'    => SITETIME,
+                        'updated_at'    => now(),
                     ]);
 
                     // ----- Уведомление в приват ----//

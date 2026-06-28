@@ -72,7 +72,7 @@
                                 <img class="avatar-default rounded-circle" src="{{ $release['author']['avatar_url'] }}" alt="">
                             </span>
                             <a href="{{ $release['author']['html_url'] }}">{{ $release['author']['login'] }}</a>
-                            <small class="post-date text-body-secondary fst-italic">{{ dateFixed(strtotime($release['created_at'])) }}</small>
+                            <small class="post-date text-body-secondary fst-italic">{{ dateFixed(\Illuminate\Support\Carbon::parse($release['created_at'])) }}</small>
                         </div>
 
                         @if ($asset && count($permErrors) === 0)

@@ -26,7 +26,7 @@ class DeletePending extends Command
         if (setting('regkeys')) {
             $users = User::query()
                 ->where('level', User::PENDED)
-                ->where('created_at', '<', strtotime('-1 day', SITETIME))
+                ->where('created_at', '<', now()->subDay())
                 ->get();
 
             foreach ($users as $user) {

@@ -26,7 +26,7 @@ class CounterController extends Controller
             ->keyBy('period');
 
         for ($i = 0; $i < 30; $i++) {
-            $curDate = date('Y-m-d 00:00:00', strtotime("-$i day", SITETIME));
+            $curDate = now()->subDays($i)->format('Y-m-d 00:00:00');
 
             $cnt = $counters->get($curDate);
 
@@ -43,7 +43,7 @@ class CounterController extends Controller
             ->keyBy('period');
 
         for ($i = 0; $i < 24; $i++) {
-            $curHour = date('Y-m-d H:00:00', strtotime("-$i hour", SITETIME));
+            $curHour = now()->subHours($i)->format('Y-m-d H:00:00');
 
             $cnt = $counters->get($curHour);
 

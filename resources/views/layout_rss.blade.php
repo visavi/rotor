@@ -12,7 +12,7 @@
         <managingEditor>{{ config('app.email') }} ({{ config('app.admin') }})</managingEditor>
         <webMaster>{{ config('app.email') }} ({{ config('app.admin') }})</webMaster>
         <atom:link href="{{ request()->fullUrl() }}" rel="self" type="application/rss+xml" />
-        <lastBuildDate>{{ date('r', SITETIME) }}</lastBuildDate>
+        <lastBuildDate>{{ now()->toRssString() }}</lastBuildDate>
         @yield('content')
     </channel>
 </rss>

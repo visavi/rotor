@@ -9,6 +9,7 @@ use App\Classes\Registry;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
 use App\Traits\UploadTrait;
+use Carbon\CarbonImmutable;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -32,45 +33,45 @@ use Illuminate\Support\Str;
 /**
  * Class User
  *
- * @property int         $id
- * @property string      $login
- * @property string      $password
- * @property string      $email
- * @property string      $level
- * @property string      $name
- * @property string      $country
- * @property string      $city
- * @property string      $language
- * @property string      $info
- * @property string      $site
- * @property string      $phone
- * @property string      $gender
- * @property string      $birthday
- * @property int         $newprivat
- * @property string      $themes
- * @property string      $timezone
- * @property int         $point
- * @property int         $money
- * @property int         $timeban
- * @property string      $status
- * @property string      $color
- * @property string      $avatar
- * @property string      $picture
- * @property int         $rating
- * @property int         $posrating
- * @property int         $negrating
- * @property int         $sendprivatmail
- * @property int         $timebonus
- * @property int         $newchat
- * @property bool        $notify_mention
- * @property bool        $notify_reply
- * @property bool        $notify_comment
- * @property string      $apikey
- * @property string|null $subscribe
- * @property string      $remember_token
- * @property string      $confirm_token
- * @property int         $updated_at
- * @property int         $created_at
+ * @property int                  $id
+ * @property string               $login
+ * @property string               $password
+ * @property string               $email
+ * @property string               $level
+ * @property string               $name
+ * @property string               $country
+ * @property string               $city
+ * @property string               $language
+ * @property string               $info
+ * @property string               $site
+ * @property string               $phone
+ * @property string               $gender
+ * @property string               $birthday
+ * @property int                  $newprivat
+ * @property string               $themes
+ * @property string               $timezone
+ * @property int                  $point
+ * @property int                  $money
+ * @property string               $status
+ * @property string               $color
+ * @property string               $avatar
+ * @property string               $picture
+ * @property int                  $rating
+ * @property int                  $posrating
+ * @property int                  $negrating
+ * @property int                  $sendprivatmail
+ * @property int                  $newchat
+ * @property bool                 $notify_mention
+ * @property bool                 $notify_reply
+ * @property bool                 $notify_comment
+ * @property string               $apikey
+ * @property string|null          $subscribe
+ * @property string               $remember_token
+ * @property string               $confirm_token
+ * @property CarbonImmutable|null $timeban
+ * @property CarbonImmutable|null $timebonus
+ * @property CarbonImmutable|null $updated_at
+ * @property CarbonImmutable      $created_at
  * @property-read Collection<UserData> $data
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -136,9 +137,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public const string FEMALE = 'female';
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
+     *
+     * updated_at управляется вручную (время последнего визита, пишет Metrika),
+     * поэтому Eloquent не должен трогать его на каждом update()
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.
@@ -174,7 +178,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected function casts(): array
     {
         return [
-            'info' => HtmlCast::class,
+            'info'       => HtmlCast::class,
+            'updated_at' => 'datetime',
+            'timeban'    => 'datetime',
+            'timebonus'  => 'datetime',
         ];
     }
 
@@ -587,9 +594,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function gettingBonus(): void
     {
-        if ($this->isActive() && $this->timebonus < strtotime('-23 hours', SITETIME)) {
+        if ($this->isActive() && (! $this->timebonus || $this->timebonus->lt(now()->subHours(23)))) {
             $this->increment('money', setting('bonusmoney'));
-            $this->update(['timebonus' => SITETIME]);
+            $this->update(['timebonus' => now()]);
 
             setFlash('success', __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]));
         }

@@ -25,10 +25,10 @@
 
     <i class="fa fa-history"></i> <b><a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a></b><br><br>
 
-    @if ($user->level === 'banned' && $user->timeban > SITETIME)
+    @if ($user->level === 'banned' && $user->timeban?->isFuture())
         <div class="section shadow mb-3">
             <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
-            {{ __('users.ending_ban') }}: {{ formatTime($user->timeban - SITETIME) }}<br>
+            {{ __('users.ending_ban') }}: {{ formatTime((int) $user->timeban->diffInSeconds(now())) }}<br>
         </div>
 
         <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/change?user={{ $user->login }}">{{ __('main.change') }}</a><br>

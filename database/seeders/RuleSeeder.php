@@ -15,7 +15,7 @@ class RuleSeeder extends Seeder
         $data = [
             'id'         => 1,
             'text'       => __('seeds.rules'),
-            'created_at' => SITETIME,
+            'created_at' => now(),
         ];
 
         Rule::query()->truncate();

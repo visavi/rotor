@@ -24,7 +24,7 @@ class DeleteReaders extends Command
     public function handle(): int
     {
         Reader::query()
-            ->where('created_at', '<', strtotime('-6 month', SITETIME))
+            ->where('created_at', '<', now()->subMonths(6))
             ->delete();
 
         $this->info('Readers successfully deleted.');

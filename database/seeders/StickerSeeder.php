@@ -16,7 +16,7 @@ class StickerSeeder extends Seeder
         $data = [
             'id'         => 1,
             'name'       => 'Смайлы',
-            'created_at' => SITETIME,
+            'created_at' => now(),
         ];
 
         StickersCategory::query()->truncate();

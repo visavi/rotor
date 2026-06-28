@@ -66,7 +66,6 @@ trait UploadTrait
                 'extension'   => $extension,
                 'mime_type'   => $mimeType,
                 'user_id'     => getUser('id'),
-                'created_at'  => SITETIME,
             ]);
         }
 

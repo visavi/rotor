@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Rating
  *
- * @property int    $id
- * @property int    $user_id
- * @property int    $recipient_id
- * @property string $text
- * @property string $vote
- * @property int    $created_at
+ * @property int             $id
+ * @property int             $user_id
+ * @property int             $recipient_id
+ * @property string          $text
+ * @property string          $vote
+ * @property CarbonImmutable $created_at
  */
 class Rating extends Model
 {
@@ -26,9 +27,9 @@ class Rating extends Model
     protected $table = 'rating';
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.

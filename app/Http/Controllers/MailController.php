@@ -42,7 +42,7 @@ class MailController extends Controller
                     HtmlSanitizer::sanitize($message)
                 );
 
-                $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(SITETIME, 'd.m.y / H:i');
+                $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(now(), 'd.m.y / H:i');
                 $data = [
                     'to'      => config('app.email'),
                     'subject' => $subject,

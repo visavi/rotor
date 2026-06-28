@@ -28,7 +28,7 @@ class AddSubscribers extends Command
             ->where('sendprivatmail', 0)
             ->whereIn('level', User::USER_GROUPS)
             ->where('newprivat', '>', 0)
-            ->where('updated_at', '<', strtotime('-' . setting('sendprivatmailday') . ' days', SITETIME))
+            ->where('updated_at', '<', now()->subDays((int) setting('sendprivatmailday')))
             ->whereNotNull('subscribe')
             ->limit(100)
             ->get();

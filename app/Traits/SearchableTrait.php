@@ -65,11 +65,8 @@ trait SearchableTrait
                 'relate_id'   => $this->getKey(),
             ],
             [
-                'text' => $text,
-                // search хранит created_at как int-timestamp независимо от типа поля у модели
-                // (трейт общий: у немигрированных моделей created_at ещё int)
-                // @phpstan-ignore instanceof.alwaysTrue
-                'created_at' => $this->created_at instanceof \DateTimeInterface ? $this->created_at->getTimestamp() : (int) $this->created_at,
+                'text'       => $text,
+                'created_at' => $this->created_at,
             ]
         );
     }

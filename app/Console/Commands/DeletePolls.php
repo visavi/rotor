@@ -24,7 +24,7 @@ class DeletePolls extends Command
     public function handle(): int
     {
         Poll::query()
-            ->where('created_at', '<', strtotime('-1 year', SITETIME))
+            ->where('created_at', '<', now()->subYear())
             ->delete();
 
         $this->info('Polls successfully deleted.');

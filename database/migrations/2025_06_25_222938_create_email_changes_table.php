@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->integer('user_id');
             $table->string('email')->unique();
             $table->string('token');
-            $table->timestamp('created_at');
+            $table->dateTime('created_at')->nullable();
         });
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
@@ -15,24 +16,19 @@ use Illuminate\Support\Str;
 /**
  * Class Module
  *
- * @property int    $id
- * @property string $name
- * @property string $version
- * @property bool   $active
- * @property int    $updated_at
- * @property int    $created_at
+ * @property int             $id
+ * @property string          $name
+ * @property string          $version
+ * @property bool            $active
+ * @property CarbonImmutable $updated_at
+ * @property CarbonImmutable $created_at
  */
 class Module extends Model
 {
     /**
      * Assets modules path
      */
-    protected const ASSETS_PATH = '/assets/modules/';
-
-    /**
-     * Indicates if the model should be timestamped.
-     */
-    public $timestamps = false;
+    protected const string ASSETS_PATH = '/assets/modules/';
 
     /**
      * The attributes that aren't mass assignable.

@@ -129,9 +129,8 @@ class AjaxController extends Controller
 
         if (! $isCancel) {
             $this->pollRelation($post)->create([
-                'user_id'    => getUser('id'),
-                'vote'       => $vote,
-                'created_at' => SITETIME,
+                'user_id' => getUser('id'),
+                'vote'    => $vote,
             ]);
         }
 

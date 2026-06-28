@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string          $name
  * @property string          $text
  * @property int             $user_id
- * @property int $protect
+ * @property int             $protect
  * @property CarbonImmutable $created_at
  * @property CarbonImmutable $updated_at
  */

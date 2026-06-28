@@ -38,8 +38,9 @@ return [
     'create_admin_info'     => 'Before you go to administer your site, you must create an administrator account.',
     'create_admin_errors'   => 'Before clicking the Create button, make sure that there are no error notifications on the previous page, otherwise the process cannot be completed successfully',
     'delete_install'        => 'After the installation is complete, you must delete the app/Http/Controllers/InstallController.php file, you can change the password and other data in your profile',
-    'text_message'          => 'Hello :login! Congratulations on the successful installation of our Rotor engine.<br>
-    New versions, upgrades, as well as many other add-ons can be found on our website. <a href="https://visavi.net">visavi.net</a>',
+    'text_message'          => 'Hello :login! 🎉 Congratulations — the Rotor engine has been installed successfully and is ready to go.<br><br>
+    Rotor is built on a modular architecture: forum, news, blogs, guestbook, classifieds board, photo gallery, downloads and much more are connected as separate modules — install only what your site really needs.<br><br>
+    Fresh versions, updates, new modules and themes can be found on our website <a href="https://visavi.net">visavi.net</a>. Enjoy!',
     'success_install'            => 'Congratulations, Rotor has been successfully installed!',
     'success_update'             => 'Congratulations, Rotor has been successfully updated!',
     'main_page'                  => 'Go to the main page of the site',

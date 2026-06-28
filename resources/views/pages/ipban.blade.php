@@ -8,7 +8,7 @@
     {!! __('pages.banned_text') !!}<br>
 
     @if (! $ban->user_id)
-        @if ($ban->created_at < strtotime('-1 minute', SITETIME))
+        @if ($ban->created_at->lt(now()->subMinute()))
             <div class="section-form mb-3 shadow">
                 <form method="post">
                     {{ getCaptcha() }}

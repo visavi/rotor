@@ -250,17 +250,16 @@ class InstallController extends Controller
 
             if ($validator->isValid()) {
                 $user = User::query()->create([
-                    'login'      => $login,
-                    'password'   => Hash::make($password),
-                    'email'      => $email,
-                    'level'      => User::BOSS,
-                    'gender'     => User::MALE,
-                    'themes'     => 'default',
-                    'point'      => 500,
-                    'money'      => 100000,
-                    'status'     => 'Boss',
-                    'language'   => $lang,
-                    'created_at' => SITETIME,
+                    'login'    => $login,
+                    'password' => Hash::make($password),
+                    'email'    => $email,
+                    'level'    => User::BOSS,
+                    'gender'   => User::MALE,
+                    'themes'   => 'default',
+                    'point'    => 500,
+                    'money'    => 100000,
+                    'status'   => 'Boss',
+                    'language' => $lang,
                 ]);
 
                 // ------------- Авторизация -----------//

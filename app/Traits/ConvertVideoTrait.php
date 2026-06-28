@@ -27,21 +27,6 @@ trait ConvertVideoTrait
                 'timeout'          => config('ffmpeg.timeout'),
             ];
 
-            // Сохраняем скрин с 5 секунды
-            /*$ffmpeg = FFMpeg::create($config);
-            $video = $ffmpeg->open(public_path($file['path']));
-
-            $frame = $video->frame(TimeCode::fromSeconds(5));
-            $frame->save(public_path($file['path'] . '.jpg'));
-
-            $this->files()->create([
-                'path'       => $file['path'] . '.jpg',
-                'name'       => 'screenshot.jpg',
-                'size'       => filesize(public_path($file['path'] . '.jpg')),
-                'user_id'    => getUser('id'),
-                'created_at' => SITETIME,
-            ]);*/
-
             // Перекодируем видео в h264
             $ffprobe = FFProbe::create($config);
             $videoInfo = $ffprobe

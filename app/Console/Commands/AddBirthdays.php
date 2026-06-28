@@ -27,7 +27,7 @@ class AddBirthdays extends Command
         $deliveryUsers = User::query()
             ->where('point', '>', 0)
             ->whereIn('level', User::USER_GROUPS)
-            ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
+            ->whereRaw('substr(birthday, 1, 5) = ?', now()->format('d.m'))
             ->whereNotNull('subscribe')
             ->get();
 

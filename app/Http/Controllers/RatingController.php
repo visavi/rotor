@@ -54,7 +54,7 @@ class RatingController extends Controller
         $getRating = Rating::query()
             ->where('user_id', $this->user->id)
             ->where('recipient_id', $user->id)
-            ->where('created_at', '>', strtotime('-3 month', SITETIME))
+            ->where('created_at', '>', now()->subMonths(3))
             ->first();
 
         if ($getRating) {
@@ -78,7 +78,6 @@ class RatingController extends Controller
                     'recipient_id' => $user->id,
                     'text'         => $text,
                     'vote'         => $vote === 'plus' ? '+' : '-',
-                    'created_at'   => SITETIME,
                 ]);
 
                 if ($vote === 'plus') {

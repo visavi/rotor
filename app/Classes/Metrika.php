@@ -26,12 +26,12 @@ class Metrika
     {
         session()->increment('hits');
 
-        if (session('online') > SITETIME) {
+        if (session('online') > now()->timestamp) {
             return;
         }
 
-        $period = date('Y-m-d H:00:00', SITETIME);
-        $day = date('Y-m-d 00:00:00', SITETIME);
+        $period = now()->format('Y-m-d H:00:00');
+        $day = now()->format('Y-m-d 00:00:00');
 
         // Чистка устаревших онлайн раз в 30с на весь сайт, а не на каждую сессию
         if (Cache::add('online_cleanup', true, 30)) {
@@ -44,7 +44,7 @@ class Metrika
         $uid = md5($ip . $brow);
 
         if ($user) {
-            $user->update(['updated_at' => SITETIME]);
+            $user->update(['updated_at' => now()]);
         }
 
         try {
@@ -117,7 +117,7 @@ class Metrika
         $counter->refresh();
 
         session(['hits' => 0]);
-        session(['online' => strtotime('+30 seconds', SITETIME)]);
+        session(['online' => now()->addSeconds(30)->timestamp]);
     }
 
     /**

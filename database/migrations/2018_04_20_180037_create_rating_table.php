@@ -14,7 +14,7 @@ return new class extends Migration {
                 $table->integer('recipient_id');
                 $table->text('text');
                 $table->string('vote', 1);
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index('user_id');
             });

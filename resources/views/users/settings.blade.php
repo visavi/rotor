@@ -46,7 +46,7 @@
 
             <?php $inputTimezone = (int) getInput('timezone', $user->timezone); ?>
             <div class="mb-3{{ hasError('timezone') }}">
-                <label for="timezone" class="form-label">{{ __('users.time_shifting') }} {{ dateFixed(SITETIME, 'H:i') }}:</label>
+                <label for="timezone" class="form-label">{{ __('users.time_shifting') }} {{ dateFixed(now(), 'H:i') }}:</label>
 
                 <select class="form-select" name="timezone" id="timezone">
                     @foreach ($setting['timezones'] as $timezone)

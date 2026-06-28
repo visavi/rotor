@@ -91,7 +91,6 @@ class UserController extends AdminController
             $themes = $request->input('themes');
             $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
             $info = $request->input('info');
-            $created = $request->input('created');
 
             $validator
                 ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
@@ -100,7 +99,6 @@ class UserController extends AdminController
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->url($site, ['site' => __('validator.url')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
-                ->regex($created, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['created' => __('validator.date')], false)
                 ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false)
                 ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => __('users.theme_not_installed')])
                 ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')]);
@@ -130,25 +128,24 @@ class UserController extends AdminController
                 $rating = $posrating - $negrating;
 
                 $user->update([
-                    'password'   => $password,
-                    'level'      => $level,
-                    'email'      => $email,
-                    'name'       => $name,
-                    'country'    => $country,
-                    'city'       => $city,
-                    'phone'      => $phone,
-                    'site'       => $site,
-                    'birthday'   => $birthday,
-                    'point'      => $point,
-                    'money'      => $money,
-                    'status'     => $status,
-                    'rating'     => $rating,
-                    'posrating'  => $posrating,
-                    'negrating'  => $negrating,
-                    'themes'     => $themes,
-                    'gender'     => $gender,
-                    'info'       => $info,
-                    'created_at' => strtotime($created),
+                    'password'  => $password,
+                    'level'     => $level,
+                    'email'     => $email,
+                    'name'      => $name,
+                    'country'   => $country,
+                    'city'      => $city,
+                    'phone'     => $phone,
+                    'site'      => $site,
+                    'birthday'  => $birthday,
+                    'point'     => $point,
+                    'money'     => $money,
+                    'status'    => $status,
+                    'rating'    => $rating,
+                    'posrating' => $posrating,
+                    'negrating' => $negrating,
+                    'themes'    => $themes,
+                    'gender'    => $gender,
+                    'info'      => $info,
                 ]);
 
                 foreach ($fields as $field) {

@@ -31,20 +31,15 @@ use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
 const ROTOR_VERSION = '14.0.3';
-define('SITETIME', time());
 
 /**
  * Форматирует время с учетом часовых поясов
  */
 function dateFixed(
-    DateTimeInterface|int|string|null $timestamp,
+    ?DateTimeInterface $timestamp,
     string $format = 'd.m.Y / H:i',
     bool $original = false,
 ): string {
-    if (is_numeric($timestamp)) {
-        $timestamp = (int) $timestamp;
-    }
-
     $date = Date::parse($timestamp)->setTimezone(config('app.timezone'));
     $shift = (int) getUser('timezone');
     $dateStamp = $date->addHours($shift)->format($format);
@@ -273,7 +268,7 @@ function showCounter(): ?HtmlString
     $maxHosts = $week->max('hosts') ?: 1;
     $bars = [];
     for ($i = 6; $i >= 0; $i--) {
-        $ts = strtotime("-$i day", SITETIME);
+        $ts = now()->subDays($i)->timestamp;
         $date = date('Y-m-d 00:00:00', $ts);
         $dow = date('D', $ts);
         $hosts = $week->get($date)?->hosts;
@@ -296,7 +291,7 @@ function statsUsers(): string
 {
     return Cache::remember('statUsers', 1800, static function () {
         $stat = User::query()->count();
-        $new = User::query()->where('created_at', '>', strtotime('-1 day', SITETIME))->count();
+        $new = User::query()->where('created_at', '>', now()->subDay())->count();
 
         if ($new) {
             $stat .= '/+' . $new;
@@ -331,7 +326,7 @@ function statsBanned(): int
 {
     return User::query()
         ->where('level', User::BANNED)
-        ->where('timeban', '>', SITETIME)
+        ->where('timeban', '>', now())
         ->count();
 }
 
@@ -625,10 +620,10 @@ function saveErrorLog(int $code, ?string $message = null): void
     if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([
             'code'    => $code,
-            'request' => Str::substr(request()->getRequestUri(), 0, 250),
-            'referer' => Str::substr(request()->header('referer'), 0, 250),
+            'request' => Str::substr(request()->getRequestUri(), 0, 191),
+            'referer' => Str::substr(request()->header('referer'), 0, 191),
             'user_id' => getUser('id'),
-            'message' => Str::substr($message, 0, 250),
+            'message' => Str::substr($message, 0, 191),
             'ip'      => getIp(),
             'brow'    => getBrowser(),
         ]);

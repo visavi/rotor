@@ -9,6 +9,7 @@ use App\Models\Banhist;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class BanController extends AdminController
@@ -41,7 +42,7 @@ class BanController extends AdminController
             $type = $request->input('type');
             $reason = $request->input('reason');
             $validator
-                ->false($user->level === User::BANNED && $user->timeban > SITETIME, __('admin.bans.user_banned'))
+                ->false($user->level === User::BANNED && $user->timeban?->isFuture(), __('admin.bans.user_banned'))
                 ->gt($time, 0, ['time' => __('admin.bans.time_not_indicated')])
                 ->in($type, ['minutes', 'hours', 'days'], ['type' => __('admin.bans.time_not_selected')])
                 ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
@@ -57,7 +58,7 @@ class BanController extends AdminController
 
                 $user->update([
                     'level'   => User::BANNED,
-                    'timeban' => SITETIME + $time,
+                    'timeban' => now()->addSeconds($time),
                 ]);
 
                 Banhist::query()->create([
@@ -91,15 +92,15 @@ class BanController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
+        if ($user->level !== User::BANNED || ! $user->timeban || $user->timeban->isPast()) {
             abort(200, __('admin.bans.user_not_banned'));
         }
 
         if ($request->isMethod('post')) {
             $reason = $request->input('reason');
 
-            $timeban = (int) strtotime((string) $request->input('timeban'));
-            $term = $timeban - SITETIME;
+            $timeban = Carbon::parse($request->input('timeban'));
+            $term = $timeban->timestamp - now()->timestamp;
 
             $validator
                 ->gt($term, 0, ['timeban' => __('admin.bans.time_empty')])
@@ -142,7 +143,7 @@ class BanController extends AdminController
             abort(404, __('validator.user'));
         }
 
-        if ($user->level !== User::BANNED || $user->timeban < SITETIME) {
+        if ($user->level !== User::BANNED || ! $user->timeban || $user->timeban->isPast()) {
             abort(200, __('admin.bans.user_not_banned'));
         }
 

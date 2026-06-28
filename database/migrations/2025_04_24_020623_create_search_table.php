@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->text('text');
             $table->string('relate_type', 20);
             $table->integer('relate_id');
-            $table->integer('created_at');
+            $table->dateTime('created_at')->nullable();
 
             $table->fullText(['text']);
             $table->unique(['relate_type', 'relate_id']);

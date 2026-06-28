@@ -18,7 +18,7 @@ return new class extends Migration {
                 $table->string('extension', 10)->nullable();
                 $table->string('mime_type', 100)->nullable();
                 $table->integer('user_id');
-                $table->integer('created_at');
+                $table->dateTime('created_at')->nullable();
 
                 $table->index(['relate_type', 'relate_id']);
                 $table->index('user_id');

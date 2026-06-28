@@ -27,10 +27,10 @@ class BanController extends Controller
             abort(200, __('users.not_banned'));
         }
 
-        if ($user->timeban <= SITETIME) {
+        if (! $user->timeban || $user->timeban->lte(now())) {
             $user->update([
                 'level'   => User::USER,
-                'timeban' => 0,
+                'timeban' => null,
             ]);
 
             setFlash('success', __('users.ban_expired'));

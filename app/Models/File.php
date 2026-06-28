@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -12,16 +13,16 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class File
  *
- * @property int    $id
- * @property string $relate_type
- * @property int    $relate_id
- * @property string $path
- * @property string $name
- * @property int    $size
- * @property string $extension
- * @property string $mime_type
- * @property int    $user_id
- * @property int    $created_at
+ * @property int             $id
+ * @property string          $relate_type
+ * @property int             $relate_id
+ * @property string          $path
+ * @property string          $name
+ * @property int             $size
+ * @property string          $extension
+ * @property string          $mime_type
+ * @property int             $user_id
+ * @property CarbonImmutable $created_at
  * @property-read ?Model $relate
  */
 class File extends Model
@@ -31,9 +32,9 @@ class File extends Model
     public const array IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
 
     /**
-     * Indicates if the model should be timestamped.
+     * The name of the "updated at" column.
      */
-    public $timestamps = false;
+    public const ?string UPDATED_AT = null;
 
     /**
      * The attributes that aren't mass assignable.
