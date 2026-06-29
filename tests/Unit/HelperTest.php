@@ -12,7 +12,7 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
@@ -41,7 +41,7 @@ class HelperTest extends TestCase
 
     public function testDateFixed(): void
     {
-        $date = Carbon::createFromTimestamp(1117612800);
+        $date = Date::createFromTimestamp(1117612800);
 
         self::assertSame('01.06.2005 / 12:00', dateFixed($date));
         self::assertSame('2005-06-01', dateFixed($date, 'Y-m-d'));

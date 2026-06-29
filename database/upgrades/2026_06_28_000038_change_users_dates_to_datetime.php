@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -31,7 +31,7 @@ return new class extends Migration {
         }
 
         // 0 в timebonus = «бонус никогда не брали» → null
-        $toDt = static fn ($v) => $v ? Carbon::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
+        $toDt = static fn ($v) => $v ? Date::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
 
         Schema::table('users', function (Blueprint $table) {
             $table->dateTime('timeban_dt')->nullable();
@@ -65,7 +65,7 @@ return new class extends Migration {
             return;
         }
 
-        $toInt = static fn ($v) => $v ? Carbon::parse($v, config('app.timezone'))->getTimestamp() : null;
+        $toInt = static fn ($v) => $v ? Date::parse($v, config('app.timezone'))->getTimestamp() : null;
 
         Schema::table('users', function (Blueprint $table) {
             $table->integer('timeban_int')->nullable();

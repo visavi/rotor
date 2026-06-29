@@ -9,7 +9,7 @@ use App\Models\Banhist;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
 class BanController extends AdminController
@@ -99,7 +99,7 @@ class BanController extends AdminController
         if ($request->isMethod('post')) {
             $reason = $request->input('reason');
 
-            $timeban = Carbon::parse($request->input('timeban'));
+            $timeban = Date::parse($request->input('timeban'));
             $term = $timeban->timestamp - now()->timestamp;
 
             $validator

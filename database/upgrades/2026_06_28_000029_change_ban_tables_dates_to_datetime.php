@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -25,7 +25,7 @@ return new class extends Migration {
 
     public function up(): void
     {
-        $toDt = static fn ($v) => $v ? Carbon::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
+        $toDt = static fn ($v) => $v ? Date::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
 
         // ban — без индекса на created_at
         if (Schema::getColumnType('ban', 'created_at') !== 'datetime') {
@@ -55,7 +55,7 @@ return new class extends Migration {
 
     public function down(): void
     {
-        $toInt = static fn ($v) => $v ? Carbon::parse($v, config('app.timezone'))->getTimestamp() : null;
+        $toInt = static fn ($v) => $v ? Date::parse($v, config('app.timezone'))->getTimestamp() : null;
 
         if (Schema::getColumnType('ban', 'created_at') === 'datetime') {
             Schema::table('ban', fn (Blueprint $table) => $table->integer('created_at_int')->nullable());

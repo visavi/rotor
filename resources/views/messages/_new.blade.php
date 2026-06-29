@@ -8,7 +8,7 @@
             <span class="app-notification__icon avatar-mini">{{ $dialogue->author->getAvatarImage() }}</span>
             <div>
                 <p class="app-notification__author">{{ $author }}</p>
-                <p class="app-notification__meta">{{ dateFixed(\Illuminate\Support\Carbon::parse($dialogue->last_created_at)) }}</p>
+                <p class="app-notification__meta">{{ dateFixed(\Illuminate\Support\Facades\Date::parse($dialogue->last_created_at)) }}</p>
             </div>
 
             <div class="app-notification__cnt">

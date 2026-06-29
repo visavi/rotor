@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -30,7 +30,7 @@ return new class extends Migration {
             return;
         }
 
-        $toDt = static fn ($v) => $v ? Carbon::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
+        $toDt = static fn ($v) => $v ? Date::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
 
         Schema::table('polls', fn (Blueprint $table) => $table->dateTime('created_at_dt')->nullable());
         $this->convert('polls', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
@@ -45,7 +45,7 @@ return new class extends Migration {
             return;
         }
 
-        $toInt = static fn ($v) => $v ? Carbon::parse($v, config('app.timezone'))->getTimestamp() : null;
+        $toInt = static fn ($v) => $v ? Date::parse($v, config('app.timezone'))->getTimestamp() : null;
 
         Schema::table('polls', fn (Blueprint $table) => $table->integer('created_at_int')->nullable());
         $this->convert('polls', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
