@@ -48,6 +48,11 @@ class HelperTest extends TestCase
         self::assertSame('1 Июня 2005', dateFixed($date, 'j F Y'));
         self::assertSame('1 June 2005', dateFixed($date, 'j F Y', true));
         self::assertSame(dateFixed(now(), 'YmdHi'), dateFixed(null, 'YmdHi'));
+
+        // Мост совместимости для модулей с timestamp-полями
+        self::assertSame('01.06.2005 / 12:00', dateFixed(1117612800));
+        self::assertSame('01.06.2005 / 12:00', dateFixed('1117612800'));
+        self::assertIsInt(SITETIME);
     }
 
     public function testCheck(): void

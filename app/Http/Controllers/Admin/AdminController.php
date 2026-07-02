@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Module;
 use App\Models\User;
 use App\Services\GithubService;
 use Illuminate\View\View;
@@ -21,7 +22,8 @@ class AdminController extends Controller
             ->count();
 
         $hasNewVersion = version_compare(ROTOR_VERSION, $github->getLatestVersionClean(), '<');
+        $modulesUpdates = isAdmin(User::BOSS) ? Module::updatesCount() : 0;
 
-        return view('admin/index', compact('existBoss', 'hasNewVersion'));
+        return view('admin/index', compact('existBoss', 'hasNewVersion', 'modulesUpdates'));
     }
 }

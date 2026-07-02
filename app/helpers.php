@@ -30,16 +30,27 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '14.0.3';
+const ROTOR_VERSION = '14.1.0';
+
+/**
+ * @deprecated Мост совместимости для модулей, не обновлённых на datetime. Будет удалён в 15.0
+ */
+define('SITETIME', time());
 
 /**
  * Форматирует время с учетом часовых поясов
+ *
+ * int|string в $timestamp — мост совместимости для модулей с timestamp-полями, будет удалён в 15.0
  */
 function dateFixed(
-    ?DateTimeInterface $timestamp,
+    DateTimeInterface|int|string|null $timestamp,
     string $format = 'd.m.Y / H:i',
     bool $original = false,
 ): string {
+    if (is_numeric($timestamp)) {
+        $timestamp = (int) $timestamp;
+    }
+
     $date = Date::parse($timestamp)->setTimezone(config('app.timezone'));
     $shift = (int) getUser('timezone');
     $dateStamp = $date->addHours($shift)->format($format);

@@ -140,8 +140,37 @@ class ModuleRegistry extends Command
             'author'      => (string) ($config['author'] ?? ''),
             'email'       => (string) ($config['email'] ?? ''),
             'homepage'    => (string) ($config['homepage'] ?? ''),
-            'versions'    => $versions,
+            'versions'    => $this->pruneShadowed($versions),
         ];
+    }
+
+    /**
+     * Убирает затенённые версии: клиент берёт самую новую версию с requires
+     * не выше своего ядра, поэтому версия достижима, только если её requires
+     * строго ниже, чем у всех более новых. Остаётся «фронтир» — по одной
+     * новейшей версии на каждую линию ядра
+     *
+     * @param array<int, array<string, mixed>> $versions отсортированы по убыванию версии
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function pruneShadowed(array $versions): array
+    {
+        $kept = [];
+        $minRequires = null;
+
+        foreach ($versions as $version) {
+            $requires = (string) ($version['requires'] ?? '') ?: '0';
+
+            if ($minRequires !== null && version_compare($requires, $minRequires, '>=')) {
+                continue;
+            }
+
+            $kept[] = $version;
+            $minRequires = $requires;
+        }
+
+        return $kept;
     }
 
     /**

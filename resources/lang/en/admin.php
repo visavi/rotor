@@ -122,6 +122,7 @@ return [
         'confirm_delete_files'         => 'Delete module files from disk? This action is irreversible!',
         'module_files_deleted'         => 'Module files deleted from disk!',
         'marketplace'                  => 'Marketplace',
+        'updates_available'            => 'Module updates available (:count). Outdated modules may be incompatible with the current engine version.',
         'upload'                       => 'Upload',
         'download'                     => 'Download',
         'upload_from_file'             => 'Install from ZIP file',

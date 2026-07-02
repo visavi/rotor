@@ -27,6 +27,13 @@
             <span class="badge bg-success">{{ __('main.update_available') }}</span>
         @endif
     </div>
+
+    @if ($modulesUpdates > 0)
+        <div class="alert alert-warning">
+            <i class="fas fa-puzzle-piece"></i>
+            {{ __('admin.modules.updates_available', ['count' => $modulesUpdates]) }}
+        </div>
+    @endif
     @hook('adminHeader')
 
     <div class="section mb-3 shadow">
