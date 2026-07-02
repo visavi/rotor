@@ -10,10 +10,13 @@ return new class extends Migration {
     /**
      * Чанковая конверсия с транзакцией на чанк: createFromTimestamp/parse сохраняют
      * историческую таймзону (старый DST), а батч-коммит убирает fsync-на-строку.
+     * whereNull по $resumeCol позволяет продолжить с места падения (таймаут на шареде).
      */
-    private function convert(string $table, array $cols, callable $map): void
+    private function convert(string $table, string $resumeCol, array $cols, callable $map): void
     {
-        DB::table($table)->select(array_merge(['id'], $cols))->orderBy('id')
+        DB::table($table)->select(array_merge(['id'], $cols))
+            ->whereNull($resumeCol)
+            ->orderBy('id')
             ->chunkById(5000, function ($rows) use ($table, $map) {
                 DB::transaction(function () use ($rows, $table, $map) {
                     foreach ($rows as $row) {
@@ -21,6 +24,23 @@ return new class extends Migration {
                     }
                 });
             });
+    }
+
+    /**
+     * Создаёт только отсутствующие временные колонки: упавший upgrade мог
+     * оставить их с прошлого запуска, повторный запуск не должен падать.
+     */
+    private function addTempColumns(string $table, string $type, array $cols): void
+    {
+        $missing = array_filter($cols, static fn ($col) => ! Schema::hasColumn($table, $col));
+
+        if ($missing) {
+            Schema::table($table, static function (Blueprint $blueprint) use ($type, $missing) {
+                foreach ($missing as $col) {
+                    $blueprint->{$type}($col)->nullable();
+                }
+            });
+        }
     }
 
     public function up(): void
@@ -33,13 +53,8 @@ return new class extends Migration {
         // 0 в timebonus = «бонус никогда не брали» → null
         $toDt = static fn ($v) => $v ? Date::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->dateTime('timeban_dt')->nullable();
-            $table->dateTime('timebonus_dt')->nullable();
-            $table->dateTime('created_at_dt')->nullable();
-            $table->dateTime('updated_at_dt')->nullable();
-        });
-        $this->convert('users', ['created_at', 'updated_at', 'timeban', 'timebonus'], static fn ($r) => [
+        $this->addTempColumns('users', 'dateTime', ['timeban_dt', 'timebonus_dt', 'created_at_dt', 'updated_at_dt']);
+        $this->convert('users', 'created_at_dt', ['created_at', 'updated_at', 'timeban', 'timebonus'], static fn ($r) => [
             'created_at_dt' => $toDt($r->created_at),
             'updated_at_dt' => $toDt($r->updated_at),
             'timeban_dt'    => $toDt($r->timeban),
@@ -67,13 +82,8 @@ return new class extends Migration {
 
         $toInt = static fn ($v) => $v ? Date::parse($v, config('app.timezone'))->getTimestamp() : null;
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('timeban_int')->nullable();
-            $table->integer('timebonus_int')->nullable();
-            $table->integer('created_at_int')->nullable();
-            $table->integer('updated_at_int')->nullable();
-        });
-        $this->convert('users', ['created_at', 'updated_at', 'timeban', 'timebonus'], static fn ($r) => [
+        $this->addTempColumns('users', 'integer', ['timeban_int', 'timebonus_int', 'created_at_int', 'updated_at_int']);
+        $this->convert('users', 'created_at_int', ['created_at', 'updated_at', 'timeban', 'timebonus'], static fn ($r) => [
             'created_at_int' => $toInt($r->created_at),
             'updated_at_int' => $toInt($r->updated_at),
             'timeban_int'    => $toInt($r->timeban),

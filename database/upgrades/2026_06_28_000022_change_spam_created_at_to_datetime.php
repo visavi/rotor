@@ -10,10 +10,13 @@ return new class extends Migration {
     /**
      * Чанковая конверсия с транзакцией на чанк: createFromTimestamp/parse сохраняют
      * историческую таймзону (старый DST), а батч-коммит убирает fsync-на-строку.
+     * whereNull по $resumeCol позволяет продолжить с места падения (таймаут на шареде).
      */
-    private function convert(string $table, array $cols, callable $map): void
+    private function convert(string $table, string $resumeCol, array $cols, callable $map): void
     {
-        DB::table($table)->select(array_merge(['id'], $cols))->orderBy('id')
+        DB::table($table)->select(array_merge(['id'], $cols))
+            ->whereNull($resumeCol)
+            ->orderBy('id')
             ->chunkById(5000, function ($rows) use ($table, $map) {
                 DB::transaction(function () use ($rows, $table, $map) {
                     foreach ($rows as $row) {
@@ -21,6 +24,23 @@ return new class extends Migration {
                     }
                 });
             });
+    }
+
+    /**
+     * Создаёт только отсутствующие временные колонки: упавший upgrade мог
+     * оставить их с прошлого запуска, повторный запуск не должен падать.
+     */
+    private function addTempColumns(string $table, string $type, array $cols): void
+    {
+        $missing = array_filter($cols, static fn ($col) => ! Schema::hasColumn($table, $col));
+
+        if ($missing) {
+            Schema::table($table, static function (Blueprint $blueprint) use ($type, $missing) {
+                foreach ($missing as $col) {
+                    $blueprint->{$type}($col)->nullable();
+                }
+            });
+        }
     }
 
     public function up(): void
@@ -32,8 +52,8 @@ return new class extends Migration {
 
         $toDt = static fn ($v) => $v ? Date::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
 
-        Schema::table('spam', fn (Blueprint $table) => $table->dateTime('created_at_dt')->nullable());
-        $this->convert('spam', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
+        $this->addTempColumns('spam', 'dateTime', ['created_at_dt']);
+        $this->convert('spam', 'created_at_dt', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
         Schema::table('spam', function (Blueprint $table) {
             $table->dropIndex(['created_at']);
             $table->dropColumn('created_at');
@@ -51,8 +71,8 @@ return new class extends Migration {
 
         $toInt = static fn ($v) => $v ? Date::parse($v, config('app.timezone'))->getTimestamp() : null;
 
-        Schema::table('spam', fn (Blueprint $table) => $table->integer('created_at_int')->nullable());
-        $this->convert('spam', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
+        $this->addTempColumns('spam', 'integer', ['created_at_int']);
+        $this->convert('spam', 'created_at_int', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
         Schema::table('spam', function (Blueprint $table) {
             $table->dropIndex(['created_at']);
             $table->dropColumn('created_at');

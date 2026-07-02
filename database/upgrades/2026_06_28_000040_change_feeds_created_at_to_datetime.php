@@ -12,9 +12,11 @@ return new class extends Migration {
      * историческую таймзону (старый DST), а батч-коммит убирает fsync-на-строку.
      * feeds конвертируем (не truncate) — команды переиндексации ленты нет.
      */
-    private function convert(string $table, array $cols, callable $map): void
+    private function convert(string $table, string $resumeCol, array $cols, callable $map): void
     {
-        DB::table($table)->select(array_merge(['id'], $cols))->orderBy('id')
+        DB::table($table)->select(array_merge(['id'], $cols))
+            ->whereNull($resumeCol)
+            ->orderBy('id')
             ->chunkById(5000, function ($rows) use ($table, $map) {
                 DB::transaction(function () use ($rows, $table, $map) {
                     foreach ($rows as $row) {
@@ -22,6 +24,23 @@ return new class extends Migration {
                     }
                 });
             });
+    }
+
+    /**
+     * Создаёт только отсутствующие временные колонки: упавший upgrade мог
+     * оставить их с прошлого запуска, повторный запуск не должен падать.
+     */
+    private function addTempColumns(string $table, string $type, array $cols): void
+    {
+        $missing = array_filter($cols, static fn ($col) => ! Schema::hasColumn($table, $col));
+
+        if ($missing) {
+            Schema::table($table, static function (Blueprint $blueprint) use ($type, $missing) {
+                foreach ($missing as $col) {
+                    $blueprint->{$type}($col)->nullable();
+                }
+            });
+        }
     }
 
     public function up(): void
@@ -33,8 +52,8 @@ return new class extends Migration {
 
         $toDt = static fn ($v) => $v ? Date::createFromTimestamp($v, config('app.timezone'))->format('Y-m-d H:i:s') : null;
 
-        Schema::table('feeds', fn (Blueprint $table) => $table->dateTime('created_at_dt')->nullable());
-        $this->convert('feeds', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
+        $this->addTempColumns('feeds', 'dateTime', ['created_at_dt']);
+        $this->convert('feeds', 'created_at_dt', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
         Schema::table('feeds', function (Blueprint $table) {
             $table->dropIndex(['relate_type', 'created_at']);
             $table->dropIndex(['created_at']);
@@ -57,7 +76,7 @@ return new class extends Migration {
         $toInt = static fn ($v) => $v ? Date::parse($v, config('app.timezone'))->getTimestamp() : null;
 
         Schema::table('feeds', fn (Blueprint $table) => $table->unsignedInteger('created_at_int')->nullable());
-        $this->convert('feeds', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
+        $this->convert('feeds', 'created_at_int', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
         Schema::table('feeds', function (Blueprint $table) {
             $table->dropIndex(['relate_type', 'created_at']);
             $table->dropIndex(['created_at']);

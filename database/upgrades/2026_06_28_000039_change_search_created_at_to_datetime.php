@@ -16,17 +16,7 @@ return new class extends Migration {
         // Индекс поиска перегенерируем: чистим таблицу, на пустой смена типа мгновенна.
         // Переиндексация: php artisan search:import
         DB::table('search')->truncate();
-
-        Schema::table('search', function (Blueprint $table) {
-            $table->dropIndex(['relate_type', 'created_at']);
-            $table->dropIndex(['created_at']);
-            $table->dropColumn('created_at');
-        });
-        Schema::table('search', function (Blueprint $table) {
-            $table->dateTime('created_at')->nullable();
-            $table->index(['relate_type', 'created_at']);
-            $table->index('created_at');
-        });
+        Schema::table('search', static fn (Blueprint $table) => $table->dateTime('created_at')->nullable()->change());
     }
 
     public function down(): void
@@ -37,16 +27,6 @@ return new class extends Migration {
         }
 
         DB::table('search')->truncate();
-
-        Schema::table('search', function (Blueprint $table) {
-            $table->dropIndex(['relate_type', 'created_at']);
-            $table->dropIndex(['created_at']);
-            $table->dropColumn('created_at');
-        });
-        Schema::table('search', function (Blueprint $table) {
-            $table->integer('created_at')->nullable();
-            $table->index(['relate_type', 'created_at']);
-            $table->index('created_at');
-        });
+        Schema::table('search', static fn (Blueprint $table) => $table->integer('created_at')->nullable()->change());
     }
 };
