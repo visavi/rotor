@@ -25,6 +25,9 @@ class RouteAccessTest extends TestCase
     {
         parent::setUp();
 
+        // Иначе все маршруты отвечают 302 на /install и до контроллеров дело не доходит
+        $this->overrideSetting('app_installed', 1);
+
         $this->admin = User::factory()->admin()->create(['login' => 'admin_test']);
         $this->user = User::factory()->create(['login' => 'user_test']);
     }

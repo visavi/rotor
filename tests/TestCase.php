@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\Setting;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use ReflectionClass;
@@ -22,7 +23,17 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->withoutVite();
-        clearCache('settings');
+        // flush() сбрасывает и кеш, и процессный memo — иначе настройки протекают между тестами
+        Setting::flush();
+    }
+
+    /**
+     * Переопределяет настройку сайта; БД откатит RefreshDatabase, memo сбросит setUp
+     */
+    protected function overrideSetting(string $name, mixed $value): void
+    {
+        Setting::query()->updateOrCreate(['name' => $name], ['value' => $value]);
+        Setting::flush();
     }
 
     /**

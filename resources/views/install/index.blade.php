@@ -70,19 +70,19 @@
                         <div class="card h-100 shadow-sm">
                             <div class="card-header fw-semibold">{{ __('install.check_requirements') }}</div>
                             <ul class="list-group list-group-flush">
-                                <?php $errors['critical']['php'] = version_compare(PHP_VERSION, $versions['php']) >= 0 ?>
+                                <?php $checks['critical']['php'] = version_compare(PHP_VERSION, $versions['php']) >= 0 ?>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span>PHP <span class="text-secondary small ms-1">{{ parseVersion(PHP_VERSION) }}</span></span>
-                                    {!! $errors['critical']['php'] ? $okBadge : $failBadge !!}
+                                    {!! $checks['critical']['php'] ? $okBadge : $failBadge !!}
                                 </li>
 
-                                <?php $errors['critical']['pdo'] = $database['pdoLoaded'] ?>
+                                <?php $checks['critical']['pdo'] = $database['pdoLoaded'] ?>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span>PDO <span class="text-secondary small ms-1">{{ $database['pdoExt'] }} {{ $database['client'] }}</span></span>
-                                    {!! $errors['critical']['pdo'] ? $okBadge : $failBadge !!}
+                                    {!! $checks['critical']['pdo'] ? $okBadge : $failBadge !!}
                                 </li>
 
-                                <?php $errors['critical']['db'] = $database['connected'] ?>
+                                <?php $checks['critical']['db'] = $database['connected'] ?>
                                 @php
                                     $dbBadge = ! $database['connected'] ? $failBadge : ($database['versionOk'] ? $okBadge : $warnBadge);
                                 @endphp
@@ -106,10 +106,10 @@
                                 ];
                                 ?>
                                 @foreach ($extensions as $ext => [$label, $ver])
-                                    <?php $errors['simple'][$ext] = extension_loaded($ext) ?>
+                                    <?php $checks['simple'][$ext] = extension_loaded($ext) ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span>{{ $label }}@if ($ver)<span class="text-secondary small ms-1">{{ $ver }}</span>@endif</span>
-                                        {!! $errors['simple'][$ext] ? $okBadge : $failBadge !!}
+                                        {!! $checks['simple'][$ext] ? $okBadge : $failBadge !!}
                                     </li>
                                 @endforeach
 
@@ -120,7 +120,7 @@
                                 ];
                                 ?>
                                 @foreach ($optional as $key => [$label, $ok])
-                                    <?php $errors['simple'][$key] = $ok ?>
+                                    <?php $checks['simple'][$key] = $ok ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span>{{ $label }}@unless ($ok)<span class="text-secondary small ms-1">{{ __('install.modules_required') }}</span>@endunless</span>
                                         {!! $ok ? $okBadge : $warnBadge !!}
@@ -137,12 +137,12 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($dirs as $dir)
                                     <?php $chmod = decoct(fileperms($dir)) % 1000; ?>
-                                    <?php $errors['chmod'][$dir] = is_writable($dir); ?>
+                                    <?php $checks['chmod'][$dir] = is_writable($dir); ?>
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <span class="text-break small">{{ str_replace(base_path(), '', $dir) }}</span>
                                         <span class="d-flex align-items-center gap-2">
                                             <span class="text-secondary small font-monospace">{{ $chmod }}</span>
-                                            {!! $errors['chmod'][$dir] ? $okBadge : $failBadge !!}
+                                            {!! $checks['chmod'][$dir] ? $okBadge : $failBadge !!}
                                         </span>
                                     </li>
                                 @endforeach
@@ -171,13 +171,13 @@
                     {{ __('install.errors') }}
                 </p>
 
-                @if (! in_array(false, $errors['critical'], true) && ! in_array(false, $errors['chmod'], true))
+                @if (! in_array(false, $checks['critical'], true) && ! in_array(false, $checks['chmod'], true))
                     <div class="alert alert-success d-flex align-items-center gap-2">
                         <i class="fa-solid fa-circle-check"></i>
                         <span>{{ __('install.continue') }}</span>
                     </div>
 
-                    @if (! in_array(false, $errors['simple'], true))
+                    @if (! in_array(false, $checks['simple'], true))
                         <p class="text-success">{{ __('install.requirements_pass') }}</p>
                     @else
                         <div class="alert alert-warning">

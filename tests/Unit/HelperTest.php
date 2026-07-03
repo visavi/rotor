@@ -8,7 +8,6 @@ use App\Models\Counter;
 use App\Models\Counter31;
 use App\Models\Notice;
 use App\Models\Online;
-use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -24,20 +23,6 @@ use Tests\TestCase;
 class HelperTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function tearDown(): void
-    {
-        // Сбрасываем процессный memo настроек, чтобы изменения не протекали в другие тесты
-        Setting::flush();
-
-        parent::tearDown();
-    }
-
-    private function setSetting(string $name, mixed $value): void
-    {
-        Setting::query()->updateOrCreate(['name' => $name], ['value' => $value]);
-        Setting::flush();
-    }
 
     public function testDateFixed(): void
     {
@@ -421,10 +406,10 @@ class HelperTest extends TestCase
 
     public function testShowOnline(): void
     {
-        $this->setSetting('onlines', 0);
+        $this->overrideSetting('onlines', 0);
         self::assertNull(showOnline());
 
-        $this->setSetting('onlines', 1);
+        $this->overrideSetting('onlines', 1);
         self::assertInstanceOf(HtmlString::class, showOnline());
     }
 
@@ -445,7 +430,7 @@ class HelperTest extends TestCase
 
     public function testShowCounter(): void
     {
-        $this->setSetting('incount', 0);
+        $this->overrideSetting('incount', 0);
         self::assertNull(showCounter());
     }
 
@@ -462,7 +447,7 @@ class HelperTest extends TestCase
             'hits24'   => 20,
         ]);
 
-        $this->setSetting('incount', 3);
+        $this->overrideSetting('incount', 3);
 
         self::assertInstanceOf(HtmlString::class, showCounter());
     }
@@ -496,7 +481,7 @@ class HelperTest extends TestCase
 
     public function testSaveErrorLog(): void
     {
-        $this->setSetting('errorlog', 1);
+        $this->overrideSetting('errorlog', 1);
 
         saveErrorLog(404, 'page not found');
         $this->assertDatabaseHas('errors', ['code' => 404, 'message' => 'page not found']);
@@ -515,14 +500,14 @@ class HelperTest extends TestCase
 
     public function testGetCaptcha(): void
     {
-        $this->setSetting('captcha_type', 'graphical');
+        $this->overrideSetting('captcha_type', 'graphical');
 
         self::assertInstanceOf(HtmlString::class, getCaptcha());
     }
 
     public function testCaptchaVerify(): void
     {
-        $this->setSetting('captcha_type', 'graphical');
+        $this->overrideSetting('captcha_type', 'graphical');
 
         request()->setLaravelSession($this->app['session.store']);
         session(['protect' => 'AbC12']);
@@ -680,7 +665,7 @@ class HelperTest extends TestCase
         self::assertIsArray(setting());
         self::assertSame('fallback', setting('missing_key', 'fallback'));
 
-        $this->setSetting('errorlog', 1);
+        $this->overrideSetting('errorlog', 1);
         self::assertSame(1, setting('errorlog'));
     }
 

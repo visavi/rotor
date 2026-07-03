@@ -54,26 +54,40 @@
 
     <h3 class="my-3">{{ __('pages.faq_money') }}</h3>
 
-    {{ __('pages.faq_money_comment') }} -
-    <b>{{ plural(setting('comment_point'), setting('scorename')) }}</b> и <b>{{ plural(setting('comment_money'), setting('moneyname')) }}</b><br>
+    @if (setting('comment_point') || setting('comment_money'))
+        {{ __('pages.faq_money_comment') }} -
+        <b>{{ plural((int) setting('comment_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('comment_money'), setting('moneyname')) }}</b><br>
+    @endif
 
-    {{ __('pages.faq_money_guestbook') }} -
-    <b>{{ plural(setting('guestbook_point'), setting('scorename')) }}</b> и <b>{{ plural(setting('guestbook_money'), setting('moneyname')) }}</b><br>
+    @if (setting('guestbook_point') || setting('guestbook_money'))
+        {{ __('pages.faq_money_guestbook') }} -
+        <b>{{ plural((int) setting('guestbook_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('guestbook_money'), setting('moneyname')) }}</b><br>
+    @endif
 
-    {{ __('pages.faq_money_down') }} -
-    <b>{{ plural(setting('down_point'), setting('scorename')) }}</b> и <b>{{ plural(setting('down_money'), setting('moneyname')) }}</b><br>
+    @if (setting('down_point') || setting('down_money'))
+        {{ __('pages.faq_money_down') }} -
+        <b>{{ plural((int) setting('down_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('down_money'), setting('moneyname')) }}</b><br>
+    @endif
 
-    {{ __('pages.faq_money_blog') }} -
-    <b>{{ plural(setting('blog_point'), setting('scorename')) }}</b> и <b>{{ plural(setting('blog_money'), setting('moneyname')) }}</b><br>
+    @if (setting('blog_point') || setting('blog_money'))
+        {{ __('pages.faq_money_blog') }} -
+        <b>{{ plural((int) setting('blog_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('blog_money'), setting('moneyname')) }}</b><br>
+    @endif
 
-    {{ __('pages.faq_money_forum') }} -
-    <b>{{ plural(setting('forum_point'), setting('scorename')) }}</b> и <b>{{ plural(setting('forum_money'), setting('moneyname')) }}</b><br>
+    @if (setting('forum_point') || setting('forum_money'))
+        {{ __('pages.faq_money_forum') }} -
+        <b>{{ plural((int) setting('forum_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('forum_money'), setting('moneyname')) }}</b><br>
+    @endif
 
-    {{ __('pages.faq_money_register') }} -
-    <b>{{ plural(setting('registermoney'), setting('moneyname')) }}</b><br>
+    @if (setting('registermoney'))
+        {{ __('pages.faq_money_register') }} -
+        <b>{{ plural(setting('registermoney'), setting('moneyname')) }}</b><br>
+    @endif
 
-    {{ __('pages.faq_money_bonus') }} -
-    <b>{{ plural(setting('bonusmoney'), setting('moneyname')) }}</b><br>
+    @if (setting('bonusmoney'))
+        {{ __('pages.faq_money_bonus') }} -
+        <b>{{ plural(setting('bonusmoney'), setting('moneyname')) }}</b><br>
+    @endif
 
     <br>
 

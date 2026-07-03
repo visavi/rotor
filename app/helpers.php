@@ -687,7 +687,9 @@ function captchaVerify(): bool
     }
 
     if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
-        return strtolower($request->input('protect')) === strtolower($request->session()->get('protect'));
+        $sessionCode = (string) $request->session()->pull('protect');
+
+        return $sessionCode !== '' && strtolower((string) $request->input('protect')) === strtolower($sessionCode);
     }
 
     return true;
@@ -933,11 +935,7 @@ function getUserByLoginOrEmail(?string $login): ?User
  */
 function getUser(?string $key = null): mixed
 {
-    static $user;
-
-    if (! $user) {
-        $user = auth()->user();
-    }
+    $user = auth()->user();
 
     return $key ? ($user->$key ?? null) : $user;
 }
