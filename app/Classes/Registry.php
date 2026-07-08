@@ -16,6 +16,7 @@ class Registry
     public static array $onDeleteUser = [];
     public static array $onAdminDeleteUser = [];
     public static array $onSaveStatistic = [];
+    public static array $onAdminLog = [];
     public static array $onProfileValidate = [];
     public static array $onProfileSave = [];
     public static array $feeds = [];
@@ -101,6 +102,16 @@ class Registry
     public static function onSaveStatistic(callable $handler): void
     {
         static::$onSaveStatistic[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк логирования действий администратора
+     *
+     * Колбэк вида fn(Request $request): void — вызывается после отправки ответа
+     */
+    public static function onAdminLog(callable $handler): void
+    {
+        static::$onAdminLog[] = $handler;
     }
 
     /**

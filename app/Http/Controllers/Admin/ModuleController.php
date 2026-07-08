@@ -146,7 +146,6 @@ class ModuleController extends AdminController
             $module->migrate();
         }
 
-        Artisan::call('route:clear');
         $result = __('admin.modules.module_success_installed');
 
         if ($module->exists) {
@@ -173,6 +172,9 @@ class ModuleController extends AdminController
         // иметь значение (напр. перевод модуля-языка подмешается в Форум,
         // даже если Форум поставили позже). Сама сбрасывает кэш модулей.
         Module::syncAll();
+
+        // После syncAll — пересборка увидит роуты нового модуля
+        refreshCaches();
 
         setFlash('success', $result);
 
@@ -430,7 +432,7 @@ class ModuleController extends AdminController
 
         $this->deleteDirectory($modulePath);
 
-        Artisan::call('route:clear');
+        refreshCaches();
         setFlash('success', __('admin.modules.module_files_deleted'));
 
         return redirect()->route('admin.modules.index');
@@ -516,7 +518,6 @@ class ModuleController extends AdminController
 
         $module->deleteSymlink();
         $module->unpublish();
-        Artisan::call('route:clear');
 
         if ($disable) {
             $module->update([
@@ -536,6 +537,10 @@ class ModuleController extends AdminController
         }
 
         clearCache(['modules', 'settings']);
+
+        // После смены статуса модуля — пересборка соберёт роуты без него
+        refreshCaches();
+
         setFlash('success', $result);
 
         return redirect('admin/modules/module?module=' . $moduleName);

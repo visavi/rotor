@@ -62,7 +62,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('delete:files')->daily();
-        $schedule->command('delete:logs')->daily();
+        $schedule->command('delete:errors')->daily();
         $schedule->command('delete:pending')->daily();
         $schedule->command('delete:polls')->weekly();
         $schedule->command('delete:readers')->weekly();

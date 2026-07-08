@@ -139,9 +139,7 @@ class UpgradeController extends AdminController
             Artisan::call('up');
         }
 
-        Artisan::call('cache:clear');
-        Artisan::call('route:clear');
-        Artisan::call('config:clear');
+        refreshCaches();
 
         // Обновление затирает файлы ядра — восстанавливаем симлинки
         // и опубликованные файлы активных модулей
@@ -168,9 +166,7 @@ class UpgradeController extends AdminController
         $pending = $this->migrations->getPendingMigrations($this->migrationPaths());
 
         if (empty($pending)) {
-            Artisan::call('cache:clear');
-            Artisan::call('route:clear');
-            Artisan::call('config:clear');
+            refreshCaches();
 
             return response()->json(['done' => true, 'migration' => null, 'output' => '']);
         }

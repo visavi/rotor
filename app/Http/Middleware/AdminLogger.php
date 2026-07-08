@@ -2,10 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Log;
+use App\Classes\Registry;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminLogger
@@ -24,13 +23,9 @@ class AdminLogger
     public function terminate(Request $request, Response $response): void
     {
         if (auth()->check()) {
-            Log::query()->create([
-                'user_id' => auth()->id(),
-                'request' => Str::substr($request->getRequestUri(), 0, 191),
-                'referer' => Str::substr($request->header('referer'), 0, 191),
-                'ip'      => getIp(),
-                'brow'    => getBrowser(),
-            ]);
+            foreach (Registry::$onAdminLog as $handler) {
+                $handler($request);
+            }
         }
     }
 }

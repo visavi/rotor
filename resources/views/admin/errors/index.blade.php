@@ -51,7 +51,7 @@
         </div>
 
         @if (isAdmin('boss'))
-            <form action="/admin/errors/clear" method="post" onsubmit="return confirm('{{ __('admin.logs.confirm_clear') }}')">
+            <form action="/admin/errors/clear" method="post" onsubmit="return confirm('{{ __('admin.errors.confirm_clear') }}')">
                 @csrf
                 <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
             </form><br>

@@ -51,14 +51,6 @@ return [
         'invalid_login'  => 'Invalid characters in login!',
     ],
 
-    'caches' => [
-        'files'           => 'Files',
-        'views'           => 'Views',
-        'clear'           => 'Clear cache',
-        'empty_files'     => 'No files yet!',
-        'success_cleared' => 'Cache successfully cleared!',
-        'only_file_cache' => 'Only the file cache is displayed',
-    ],
 
     'chat' => [
         'clear'           => 'Clear chat',
@@ -71,6 +63,7 @@ return [
         'hint'            => 'Attention! Logging is turned off in the settings! ',
         'errors'          => 'Errors',
         'autobans'        => 'Auto-bans',
+        'confirm_clear'   => 'Are you sure you want to clear the logs?',
         'logs_not_exist'  => 'The specified logs do not exist!',
         'success_cleared' => 'Logs successfully cleared!',
     ],
@@ -86,13 +79,6 @@ return [
         'ip_success_cleared'  => 'IP list cleared successfully!',
     ],
 
-    'logs' => [
-        'page'            => 'Page',
-        'referer'         => 'Referer',
-        'confirm_clear'   => 'Are you sure you want to clear the logs?',
-        'empty_logs'      => 'There are no logs yet!',
-        'success_cleared' => 'The log file has been cleared successfully!',
-    ],
 
     'modules' => [
         'module'                       => 'Module',

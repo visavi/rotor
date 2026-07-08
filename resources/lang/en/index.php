@@ -58,9 +58,7 @@ return [
     'stickers'        => 'Stickers',
     'blacklist'       => 'Blacklist',
     'site_settings'   => 'Site settings',
-    'cache_clear'     => 'Clear cache',
     'private_mailing' => 'Private newsletter',
-    'logs_visits'     => 'Visit logs',
     'email_templates' => 'Email templates',
     'modules'         => 'Modules',
 ];

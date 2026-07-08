@@ -8,10 +8,8 @@ use App\Http\Controllers\Admin\BanController as AdminBanController;
 use App\Http\Controllers\Admin\BanhistController;
 use App\Http\Controllers\Admin\BanlistController;
 use App\Http\Controllers\Admin\BlacklistController;
-use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ErrorController;
 use App\Http\Controllers\Admin\IpBanController;
-use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ModuleRegistryController;
 use App\Http\Controllers\Admin\NoticeController;
@@ -169,23 +167,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::get('/search', 'search');
                     Route::match(['get', 'post'], '/edit', 'edit');
                     Route::match(['get', 'post'], '/delete', 'delete');
-                });
-
-            /* Очистка кеша */
-            Route::controller(CacheController::class)
-                ->prefix('caches')
-                ->group(function () {
-                    Route::get('/', 'index');
-                    Route::post('/clear', 'clear');
-                });
-
-            /* Логи */
-            Route::controller(LogController::class)
-                ->prefix('logs')
-                ->name('logs.')
-                ->group(function () {
-                    Route::get('/', 'index')->name('index')->withoutMiddleware('admin.logger');
-                    Route::post('/clear', 'clear')->name('clear');
                 });
 
             /* Шаблоны писем */

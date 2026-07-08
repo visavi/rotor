@@ -19,6 +19,7 @@ use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -558,6 +559,19 @@ function clearCache(array|string|null $keys = null): bool
     }
 
     return true;
+}
+
+/**
+ * Сбрасывает все кеши фреймворка, в production сразу пересобирает кеши роутов и конфига
+ */
+function refreshCaches(): void
+{
+    Artisan::call('optimize:clear');
+
+    if (app()->isProduction()) {
+        Artisan::call('route:cache');
+        Artisan::call('config:cache');
+    }
 }
 
 /**

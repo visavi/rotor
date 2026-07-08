@@ -163,18 +163,6 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/caches" class="app-tile">
-                            <div class="app-tile-icon" style="background:#198754"><i class="fas fa-broom"></i></div>
-                            <div class="app-tile-label">{{ __('index.cache_clear') }}</div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="/admin/logs" class="app-tile">
-                            <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-list-alt"></i></div>
-                            <div class="app-tile-label">{{ __('index.logs_visits') }}</div>
-                        </a>
-                    </div>
-                    <div class="col">
                         <a href="/admin/notices" class="app-tile">
                             <div class="app-tile-icon" style="background:#d63384"><i class="fas fa-envelope"></i></div>
                             <div class="app-tile-label">{{ __('index.email_templates') }}</div>

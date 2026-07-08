@@ -58,9 +58,7 @@ return [
     'stickers'        => 'Стікери',
     'blacklist'       => 'Чорний список',
     'site_settings'   => 'Налаштування сайту',
-    'cache_clear'     => 'Очищення кешу',
     'private_mailing' => 'Приват-розсилка',
-    'logs_visits'     => 'Логи відвідувань',
     'email_templates' => 'Шаблони листів',
     'modules'         => 'Модулі',
 ];

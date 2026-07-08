@@ -150,9 +150,7 @@ class InstallController extends Controller
                 Artisan::call('key:generate', ['--force' => true]);
             }
 
-            Artisan::call('cache:clear');
-            Artisan::call('route:clear');
-            Artisan::call('config:clear');
+            refreshCaches();
 
             return response()->json(['done' => true, 'migration' => null, 'output' => '']);
         }
@@ -205,9 +203,7 @@ class InstallController extends Controller
         Artisan::call('db:seed', ['--force' => true]);
         $output = Artisan::output();
 
-        Artisan::call('cache:clear');
-        Artisan::call('route:clear');
-        Artisan::call('config:clear');
+        refreshCaches();
 
         return view('install/seed', compact('output'));
     }

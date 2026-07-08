@@ -3,24 +3,23 @@
 namespace App\Console\Commands;
 
 use App\Models\Error;
-use App\Models\Log;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
-class DeleteLogs extends Command
+class DeleteErrors extends Command
 {
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'delete:logs';
+    protected $signature = 'delete:errors';
 
     /**
      * The console command description.
      */
-    protected $description = 'Delete logs';
+    protected $description = 'Delete error logs';
 
     /**
-     * Удаляет старые записи логов
+     * Удаляет старые записи логов ошибок
      */
     public function handle(): int
     {
@@ -28,11 +27,7 @@ class DeleteLogs extends Command
             ->where('created_at', '<', now()->subMonth())
             ->delete();
 
-        Log::query()
-            ->where('created_at', '<', now()->subMonth())
-            ->delete();
-
-        $this->info('Logs successfully deleted.');
+        $this->info('Errors successfully deleted.');
 
         return SymfonyCommand::SUCCESS;
     }
