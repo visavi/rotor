@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'basic_fields'        => 'Basic fields',
-    'custom_fields'       => 'Custom fields',
+    'basic_fields'  => 'Basic fields',
+    'custom_fields' => 'Custom fields',
 
     'change_email'            => 'Change email',
     'email'                   => 'Email',

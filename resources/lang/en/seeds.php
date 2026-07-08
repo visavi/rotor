@@ -53,7 +53,6 @@ return [
         'comment_added_name' => 'New comment on your post',
         'comment_added_text' => '<p>User %login% commented on your post <strong>%page%</strong></p><p>%text%</p>',
 
-
         'explain_name' => 'Explanation of violation',
         'explain_text' => '<p>Explanation of violation: %message%</p>',
 

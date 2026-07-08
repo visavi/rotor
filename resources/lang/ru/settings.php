@@ -107,8 +107,8 @@ return [
     'field_required'         => 'Поле :field обязательно для заполнения!',
     'settings_success_saved' => 'Настройки успешно сохранены!',
 
-    'graphical'          => 'Графический',
-    'animated'           => 'Анимированный',
+    'graphical' => 'Графический',
+    'animated'  => 'Анимированный',
 
     'site_open'         => 'Сайт открыт',
     'site_closed_guest' => 'Закрыто для гостей',

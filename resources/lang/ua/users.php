@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'basic_fields'        => 'Основні поля',
-    'custom_fields'       => 'Користувацькі поля',
+    'basic_fields'  => 'Основні поля',
+    'custom_fields' => 'Користувацькі поля',
 
     'change_email'            => 'Зміна email',
     'email'                   => 'Е-mail',

@@ -51,7 +51,6 @@ return [
         'invalid_login'  => 'Invalid characters in login!',
     ],
 
-
     'chat' => [
         'clear'           => 'Clear chat',
         'confirm_clear'   => 'Do you really want to clear the admin chat?',
@@ -78,7 +77,6 @@ return [
         'ip_selected_deleted' => 'The selected IPs have been successfully removed from the list!',
         'ip_success_cleared'  => 'IP list cleared successfully!',
     ],
-
 
     'modules' => [
         'module'                       => 'Module',

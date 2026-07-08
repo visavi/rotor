@@ -9,7 +9,6 @@ use App\Models\ModuleRegistry;
 use App\Providers\ModuleServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use ZipArchive;

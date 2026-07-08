@@ -107,8 +107,8 @@ return [
     'field_required'         => 'Field :field is required!',
     'settings_success_saved' => 'Settings successfully saved!',
 
-    'graphical'          => 'Graphical',
-    'animated'           => 'Animated',
+    'graphical' => 'Graphical',
+    'animated'  => 'Animated',
 
     'site_open'         => 'The site is open',
     'site_closed_guest' => 'Closed to guests',

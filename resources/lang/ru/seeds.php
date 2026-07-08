@@ -53,7 +53,6 @@ return [
         'comment_added_name' => 'Новый комментарий к вашей записи',
         'comment_added_text' => '<p>Пользователь %login% прокомментировал вашу запись <strong>%page%</strong></p><p>%text%</p>',
 
-
         'explain_name' => 'Объяснение нарушения',
         'explain_text' => '<p>Объяснение нарушения: %message%</p>',
 
