@@ -14,12 +14,14 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::create('socials', static function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('network', 50)->default('');
-            $table->string('network_id', 100)->default('');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('socials')) {
+            Schema::create('socials', static function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->string('network', 50)->default('');
+                $table->string('network_id', 100)->default('');
+                $table->timestamps();
+            });
+        }
     }
 };

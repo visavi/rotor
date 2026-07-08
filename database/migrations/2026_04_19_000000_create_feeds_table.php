@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('feeds', function (Blueprint $table) {
-            $table->id();
-            $table->string('relate_type', 20);
-            $table->unsignedInteger('relate_id');
-            $table->dateTime('created_at')->nullable();
+        if (! Schema::hasTable('feeds')) {
+            Schema::create('feeds', function (Blueprint $table) {
+                $table->id();
+                $table->string('relate_type', 20);
+                $table->unsignedInteger('relate_id');
+                $table->dateTime('created_at')->nullable();
 
-            $table->unique(['relate_type', 'relate_id']);
-            $table->index('created_at');
-            $table->index(['relate_type', 'created_at']);
-        });
+                $table->unique(['relate_type', 'relate_id']);
+                $table->index('created_at');
+                $table->index(['relate_type', 'created_at']);
+            });
+        }
     }
 
     public function down(): void

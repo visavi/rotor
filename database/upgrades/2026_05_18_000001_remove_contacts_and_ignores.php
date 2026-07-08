@@ -24,18 +24,22 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::create('contacts', static function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('to_user_id');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('contacts')) {
+            Schema::create('contacts', static function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('to_user_id');
+                $table->timestamps();
+            });
+        }
 
-        Schema::create('ignores', static function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('to_user_id');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('ignores')) {
+            Schema::create('ignores', static function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('to_user_id');
+                $table->timestamps();
+            });
+        }
     }
 };

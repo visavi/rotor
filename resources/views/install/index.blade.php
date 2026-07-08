@@ -41,9 +41,9 @@
                     <div class="card-header fw-semibold">{{ __('install.env') }}</div>
                     <div class="card-body">
                         <dl class="row mb-2 small">
-                            @foreach ($keys as $key)
+                            @foreach ($keys as $key => $value)
                                 <dt class="col-sm-4 col-lg-3 fw-normal text-secondary">{{ $key }}</dt>
-                                <dd class="col-sm-8 col-lg-9 mb-1"><code>{{ trim(var_export(env($key), true), "'") }}</code></dd>
+                                <dd class="col-sm-8 col-lg-9 mb-1"><code>{{ trim(var_export($value, true), "'") }}</code></dd>
                             @endforeach
                         </dl>
                         <span class="text-success fst-italic small">{{ __('install.app_key') }}</span>

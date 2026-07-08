@@ -41,17 +41,28 @@ class InstallController extends Controller
      */
     public function index(): View
     {
+        // Сброс всех кэшей на входе в установку: после сброса таблиц stale-кэш
+        // (settings, modules и пр.) уводит движок в неверное состояние —
+        // напр. держит модуль «активным», а его таблицы ещё не мигрированы.
+        // config:clear убирает кэш конфига, чтобы config() отражал
+        // свежеотредактированный .env, а не старые креды БД из кэша
+        Artisan::call('config:clear');
+        clearCache();
+
+        // Читаем через config(), а не env(): env() возвращает null при
+        // закэшированном конфиге, config() отдаёт значения в любом случае
+        $driver = (string) config('database.default');
         $keys = [
-            'APP_ENV',
-            'APP_DEBUG',
-            'DB_CONNECTION',
-            'DB_HOST',
-            'DB_PORT',
-            'DB_DATABASE',
-            'DB_USERNAME',
-            'APP_URL',
-            'APP_EMAIL',
-            'APP_ADMIN',
+            'APP_ENV'       => config('app.env'),
+            'APP_DEBUG'     => config('app.debug'),
+            'DB_CONNECTION' => $driver,
+            'DB_HOST'       => config("database.connections.$driver.host"),
+            'DB_PORT'       => config("database.connections.$driver.port"),
+            'DB_DATABASE'   => config("database.connections.$driver.database"),
+            'DB_USERNAME'   => config("database.connections.$driver.username"),
+            'APP_URL'       => config('app.url'),
+            'APP_EMAIL'     => config('app.email'),
+            'APP_ADMIN'     => config('app.admin'),
         ];
 
         $versions = [
@@ -305,6 +316,14 @@ class InstallController extends Controller
 
     private function isUpdate(): bool
     {
-        return (bool) setting('app_installed');
+        // Читаем из БД напрямую, минуя кэш настроек: после сброса таблиц кэш
+        // может держать app_installed=1 и уводить установщик в режим обновления
+        if (! Schema::hasTable('settings')) {
+            return false;
+        }
+
+        return (bool) Setting::query()
+            ->where('name', 'app_installed')
+            ->value('value');
     }
 }

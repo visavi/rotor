@@ -17,12 +17,10 @@ class GithubService
      */
     public function getLatestCommits(): array
     {
-        return Cache::remember('commits', $this->defaultCacheTtl, function () {
-            return $this->fetchGitHubData(
-                endpoint: 'commits',
-                params: ['per_page' => 100]
-            );
-        });
+        return $this->cachedFetch('commits', fn () => $this->fetchGitHubData(
+            endpoint: 'commits',
+            params: ['per_page' => 100]
+        ));
     }
 
     /**
@@ -59,12 +57,47 @@ class GithubService
      */
     public function getLatestReleases(): array
     {
-        return Cache::remember('releases', $this->defaultCacheTtl, function () {
-            return $this->fetchGitHubData(
-                endpoint: 'releases',
-                params: ['per_page' => 10]
-            );
-        });
+        return $this->cachedFetch('releases', fn () => $this->fetchGitHubData(
+            endpoint: 'releases',
+            params: ['per_page' => 10]
+        ));
+    }
+
+    /**
+     * Отдаёт данные из кэша сразу (даже протухшие), протухший кэш обновляет
+     * после отправки ответа. Синхронный запрос к GitHub — только на холодном
+     * кэше, чтобы страница не подвисала на каждом промахе.
+     */
+    protected function cachedFetch(string $key, callable $fetcher): array
+    {
+        $cached = Cache::get($key);
+
+        // Холодный кэш: тянем синхронно, иначе данных вообще не будет
+        if (! is_array($cached)) {
+            return $this->store($key, $fetcher);
+        }
+
+        // Протухло: отдаём старое, обновляем в фоне после ответа
+        if (($cached['cached_at'] ?? 0) < now()->getTimestamp() - $this->defaultCacheTtl) {
+            dispatch(fn () => $this->store($key, $fetcher))->afterResponse();
+        }
+
+        return $cached['data'] ?? [];
+    }
+
+    /**
+     * Запрашивает данные и кладёт в кэш вместе с меткой времени
+     */
+    protected function store(string $key, callable $fetcher): array
+    {
+        $data = $fetcher();
+
+        Cache::forever($key, [
+            'data'      => $data,
+            'cached_at' => now()->getTimestamp(),
+        ]);
+
+        return $data;
     }
 
     /**

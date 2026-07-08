@@ -11,13 +11,15 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::create('notes', function ($table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->text('text')->nullable();
-            $table->integer('edit_user_id');
-            $table->integer('updated_at');
-            $table->unique('user_id');
-        });
+        if (! Schema::hasTable('notes')) {
+            Schema::create('notes', function ($table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->text('text')->nullable();
+                $table->integer('edit_user_id');
+                $table->integer('updated_at');
+                $table->unique('user_id');
+            });
+        }
     }
 };

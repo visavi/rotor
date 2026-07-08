@@ -19,13 +19,15 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::create('login', static function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('ip', 45)->default('');
-            $table->string('brow', 250)->default('');
-            $table->string('type', 20)->default('');
-            $table->integer('created_at')->default(0);
-        });
+        if (! Schema::hasTable('login')) {
+            Schema::create('login', static function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->string('ip', 45)->default('');
+                $table->string('brow', 250)->default('');
+                $table->string('type', 20)->default('');
+                $table->integer('created_at')->default(0);
+            });
+        }
     }
 };

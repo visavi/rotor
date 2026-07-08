@@ -7,13 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('email_changes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->string('email')->unique();
-            $table->string('token');
-            $table->dateTime('created_at')->nullable();
-        });
+        if (! Schema::hasTable('email_changes')) {
+            Schema::create('email_changes', function (Blueprint $table) {
+                $table->id();
+                $table->integer('user_id');
+                $table->string('email')->unique();
+                $table->string('token');
+                $table->dateTime('created_at')->nullable();
+            });
+        }
     }
 
     public function down(): void

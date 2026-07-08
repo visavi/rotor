@@ -7,18 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('search', function (Blueprint $table) {
-            $table->id();
-            $table->text('text');
-            $table->string('relate_type', 20);
-            $table->integer('relate_id');
-            $table->dateTime('created_at')->nullable();
+        if (! Schema::hasTable('search')) {
+            Schema::create('search', function (Blueprint $table) {
+                $table->id();
+                $table->text('text');
+                $table->string('relate_type', 20);
+                $table->integer('relate_id');
+                $table->dateTime('created_at')->nullable();
 
-            $table->fullText(['text']);
-            $table->unique(['relate_type', 'relate_id']);
-            $table->index(['relate_type', 'created_at']);
-            $table->index('created_at');
-        });
+                $table->fullText(['text']);
+                $table->unique(['relate_type', 'relate_id']);
+                $table->index(['relate_type', 'created_at']);
+                $table->index('created_at');
+            });
+        }
     }
 
     public function down(): void
