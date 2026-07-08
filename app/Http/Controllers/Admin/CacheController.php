@@ -38,9 +38,7 @@ class CacheController extends AdminController
         if ($type === 'views') {
             Artisan::call('view:clear');
         } else {
-            Artisan::call('cache:clear');
-            Artisan::call('route:clear');
-            Artisan::call('config:clear');
+            Artisan::call('optimize:clear');
         }
 
         setFlash('success', __('admin.caches.success_cleared'));
