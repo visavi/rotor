@@ -181,12 +181,6 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/user-fields" class="app-tile">
-                            <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-user-edit"></i></div>
-                            <div class="app-tile-label">{{ __('index.user_fields') }}</div>
-                        </a>
-                    </div>
-                    <div class="col">
                         <a href="/admin/search" class="app-tile">
                             <div class="app-tile-icon" style="background:#de00de"><i class="fas fa-search"></i></div>
                             <div class="app-tile-label">{{ __('index.search') }}</div>

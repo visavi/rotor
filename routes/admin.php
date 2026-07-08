@@ -24,7 +24,6 @@ use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\StickerController;
 use App\Http\Controllers\Admin\UpgradeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\UserFieldController;
 use Illuminate\Support\Facades\Route;
 
 /* Админ-панель */
@@ -198,11 +197,6 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::match(['get', 'post'], '/edit/{id}', 'edit');
                     Route::delete('/delete/{id}', 'delete');
                 });
-
-            /* Пользовательские поля */
-            Route::resource('user-fields', UserFieldController::class)
-                ->parameters(['user-fields' => 'id'])
-                ->except('show');
 
             Route::controller(SearchController::class)
                 ->prefix('search')

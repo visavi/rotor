@@ -15,6 +15,9 @@ class Registry
     public static array $sitemapPages = [];
     public static array $onDeleteUser = [];
     public static array $onAdminDeleteUser = [];
+    public static array $onSaveStatistic = [];
+    public static array $onProfileValidate = [];
+    public static array $onProfileSave = [];
     public static array $feeds = [];
     public static array $search = [];
 
@@ -88,6 +91,37 @@ class Registry
     public static function onAdminDeleteUser(callable $handler): void
     {
         static::$onAdminDeleteUser[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк на сохранение статистики посещений
+     *
+     * Колбэк вида fn(bool $newHost, int $hits): void
+     */
+    public static function onSaveStatistic(callable $handler): void
+    {
+        static::$onSaveStatistic[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк валидации при сохранении профиля пользователя
+     *
+     * Колбэк вида fn(User $user, Request $request, Validator $validator, bool $strict): void
+     * $strict = false, когда профиль сохраняет администратор — обязательность полей не проверяется
+     */
+    public static function onProfileValidate(callable $handler): void
+    {
+        static::$onProfileValidate[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк сохранения данных профиля пользователя
+     *
+     * Колбэк вида fn(User $user, Request $request): void — вызывается после успешной валидации
+     */
+    public static function onProfileSave(callable $handler): void
+    {
+        static::$onProfileSave[] = $handler;
     }
 
     /**

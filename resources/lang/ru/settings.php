@@ -36,7 +36,6 @@ return [
     'archive_file_path'      => 'Путь к файлу добавляемого в архив',
     'archive_file_path_hint' => 'Файл должен находиться в директории public (Пример: /test.txt)',
 
-    'counters_enable'    => 'Отображение счетчика',
     'performance_enable' => 'Производительность',
     'online_enable'      => 'Онлайн',
     'online_time'        => 'Время подсчета онлайн (минут)',
@@ -83,9 +82,7 @@ return [
     'logs_per_page'         => 'Просмотр логов на страницу',
     'blacklist_per_page'    => 'Данных на страницу в черном списке',
     'reglist_per_page'      => 'Пользователей в списке ожидающих',
-    'ratinglist_per_page'   => 'Голосов в истории рейтинга',
 
-    'points_rating_edit'  => 'Актива для изменения репутации',
     'points_advert_hide'  => 'Актива для скрытия рекламы',
     'points_status_edit'  => 'Актива для изменения статуса',
     'moneys_status_edit'  => 'Стоимость изменения статуса',
@@ -110,10 +107,6 @@ return [
     'field_required'         => 'Поле :field обязательно для заполнения!',
     'settings_success_saved' => 'Настройки успешно сохранены!',
 
-    'hosts_hosts_all'    => 'Хосты | Хосты всего',
-    'hits_hits_all'      => 'Хиты | Хиты всего',
-    'hits_hosts'         => 'Хиты | Хосты',
-    'hits_all_hosts_all' => 'Хиты всего | Хосты всего',
     'graphical'          => 'Графический',
     'animated'           => 'Анимированный',
 

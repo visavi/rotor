@@ -64,11 +64,5 @@
         <div class="invalid-feedback">{{ textError('sets[reglist]') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[ratinglist]') }}">
-        <label for="ratinglists" class="form-label">{{ __('settings.ratinglist_per_page') }}:</label>
-        <input type="number" class="form-control" id="ratinglist" name="sets[ratinglist]" maxlength="2" value="{{ getInput('sets.ratinglist', $settings['ratinglist']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[ratinglist]') }}</div>
-    </div>
-
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

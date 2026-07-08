@@ -4,20 +4,6 @@
 
 <form method="post">
     @csrf
-    <?php $inputCounter = (int) getInput('sets.incount', $settings['incount']); ?>
-    <div class="mb-3{{ hasError('sets[incount]') }}">
-        <label for="incount" class="form-label">{{ __('settings.counters_enable') }}:</label>
-        <select class="form-select" id="incount" name="sets[incount]">
-
-            @foreach ($counters as $key => $counter)
-                <?php $selected = ($key === $inputCounter) ? ' selected' : ''; ?>
-                <option value="{{ $key }}"{{ $selected }}>{{ $counter }}</option>
-            @endforeach
-
-        </select>
-        <div class="invalid-feedback">{{ textError('sets[incount]') }}</div>
-    </div>
-
     <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[performance]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[performance]" id="performance"{{ getInput('sets.performance', $settings['performance']) ? ' checked' : '' }}>

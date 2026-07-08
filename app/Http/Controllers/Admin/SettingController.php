@@ -55,14 +55,6 @@ class SettingController extends AdminController
             setFlash('danger', $validator->getErrors());
         }
 
-        $counters = [
-            __('main.disable'),
-            __('settings.hosts_hosts_all'),
-            __('settings.hits_hits_all'),
-            __('settings.hits_hosts'),
-            __('settings.hits_all_hosts_all'),
-        ];
-
         $statsite = [
             __('settings.site_open'),
             __('settings.site_closed_guest'),
@@ -85,6 +77,6 @@ class SettingController extends AdminController
 
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/settings/index', compact('settings', 'act', 'counters', 'statsite', 'protects', 'slugs'));
+        return view('admin/settings/index', compact('settings', 'act', 'statsite', 'protects', 'slugs'));
     }
 }

@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\Access\Authorizable;
@@ -72,7 +71,6 @@ use Illuminate\Support\Str;
  * @property CarbonImmutable|null $timebonus
  * @property CarbonImmutable|null $updated_at
  * @property CarbonImmutable      $created_at
- * @property-read Collection<UserData> $data
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -244,14 +242,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             ->whereIn('type', ['ban', 'change'])
             ->orderByDesc('created_at')
             ->withDefault();
-    }
-
-    /**
-     * Возвращает дополнительные поля
-     */
-    public function data(): HasMany
-    {
-        return $this->hasMany(UserData::class, 'user_id');
     }
 
     /**
@@ -534,7 +524,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
             Message::query()->where('user_id', $this->id)->delete();
             Dialogue::query()->where('user_id', $this->id)->delete();
-            Rating::query()->where('user_id', $this->id)->delete();
             Banhist::query()->where('user_id', $this->id)->delete();
 
             foreach (Registry::$onDeleteUser as $callback) {

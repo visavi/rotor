@@ -36,7 +36,6 @@ return [
     'archive_file_path'      => 'The path to the file to add to the archive',
     'archive_file_path_hint' => 'The file must be in the public directory (Example: /test.txt)',
 
-    'counters_enable'    => 'Counter display',
     'performance_enable' => 'Performance',
     'online_enable'      => 'Online',
     'online_time'        => 'Online counting time (minutes)',
@@ -83,9 +82,7 @@ return [
     'logs_per_page'         => 'View logs per page',
     'blacklist_per_page'    => 'Data per page blacklisted',
     'reglist_per_page'      => 'Users on the pending list',
-    'ratinglist_per_page'   => 'Votes in ranking history',
 
-    'points_rating_edit'  => 'Asset for changing reputation',
     'points_advert_hide'  => 'Asset to hide advertising',
     'points_status_edit'  => 'Asset to change status',
     'moneys_status_edit'  => 'Cost of status change',
@@ -110,10 +107,6 @@ return [
     'field_required'         => 'Field :field is required!',
     'settings_success_saved' => 'Settings successfully saved!',
 
-    'hosts_hosts_all'    => 'Hosts | Hosts total',
-    'hits_hits_all'      => 'Hits | Hits total',
-    'hits_hosts'         => 'Hits | Hosts',
-    'hits_all_hosts_all' => 'Hits total | Hosts total',
     'graphical'          => 'Graphical',
     'animated'           => 'Animated',
 

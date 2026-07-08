@@ -8,7 +8,6 @@ return [
     'messages'    => 'Повідомлення',
     'chat'        => 'Чат',
     'user_search' => 'Пошук користувача',
-    'statistics'  => 'Статистика відвідувань',
     'comments'    => 'Коментарі',
 
     'login'     => 'Авторизація',
@@ -40,7 +39,6 @@ return [
     'my_settings'       => 'Мої налаштування',
     'admin_advertising' => 'Адмінська реклама',
     'advertising'       => 'Реклама',
-    'reputation_edit'   => 'Зміни репутації',
 
     'confirm_register' => 'Підтвердження реєстрації',
     'banned'           => 'Вас забанили',
@@ -64,6 +62,5 @@ return [
     'private_mailing' => 'Приват-розсилка',
     'logs_visits'     => 'Логи відвідувань',
     'email_templates' => 'Шаблони листів',
-    'user_fields'     => 'Користувацькі поля',
     'modules'         => 'Модулі',
 ];

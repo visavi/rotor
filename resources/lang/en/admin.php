@@ -221,14 +221,6 @@ return [
         Attention! It is necessary to delete the file app/Http/Controllers/InstallController.php<br>
         The presence of this file may compromise the security of the site. Remove it now!',
 
-    'user_fields' => [
-        'required'     => 'Required',
-        'edit_field'   => 'Edit field',
-        'create_field' => 'Create field',
-        'empty_fields' => 'No user fields yet!',
-        'input'        => 'Оne-line field',
-        'textarea'     => 'Multiline field',
-    ],
     'upgrade' => [
         'site_version'      => 'Site version v:version',
         'new_version'       => 'A system update is available!',

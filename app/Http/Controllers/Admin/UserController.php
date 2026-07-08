@@ -11,7 +11,6 @@ use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
 use App\Models\User;
-use App\Models\UserField;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -71,8 +70,6 @@ class UserController extends AdminController
             $allGroups[$level] = User::getLevelByKey($level);
         }
 
-        $fields = UserField::query()->withUserData($user->id)->get();
-
         if ($request->isMethod('post')) {
             $level = $request->input('level');
             $password = $request->input('password');
@@ -103,14 +100,9 @@ class UserController extends AdminController
                 ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => __('users.theme_not_installed')])
                 ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')]);
 
-            foreach ($fields as $field) {
-                $validator->length(
-                    $request->input('field' . $field->id),
-                    $field->min,
-                    $field->max,
-                    ['field' . $field->id => __('validator.text')],
-                    false // Для админа поля не обязательны
-                );
+            // Для админа обязательность полей не проверяется
+            foreach (Registry::$onProfileValidate as $handler) {
+                $handler($user, $request, $validator, false);
             }
 
             if ($validator->isValid()) {
@@ -148,13 +140,8 @@ class UserController extends AdminController
                     'info'      => $info,
                 ]);
 
-                foreach ($fields as $field) {
-                    $user->data()
-                        ->updateOrCreate([
-                            'field_id' => $field->id,
-                        ], [
-                            'value' => $field->sanitizeValue($request->input('field' . $field->id)),
-                        ]);
+                foreach (Registry::$onProfileSave as $handler) {
+                    $handler($user, $request);
                 }
 
                 clearCache('status');
@@ -173,7 +160,7 @@ class UserController extends AdminController
             ->orderByDesc('created_at')
             ->first();
 
-        return view('admin/users/edit', compact('user', 'banhist', 'allThemes', 'allGroups', 'adminGroups', 'fields'));
+        return view('admin/users/edit', compact('user', 'banhist', 'allThemes', 'allGroups', 'adminGroups'));
     }
 
     /**

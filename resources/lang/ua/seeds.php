@@ -53,8 +53,6 @@ return [
         'comment_added_name' => 'Новий коментар до вашого запису',
         'comment_added_text' => '<p>Користувач %login% прокоментував ваш запис <strong>%page%</strong></p><p>%text%</p>',
 
-        'rating_name' => 'Зміна репутації',
-        'rating_text' => '<p>Користувач %login% поставив вам %vote%! (Ваш рейтинг: %rating%)</p><p>Коментар: %comment%</p>',
 
         'explain_name' => 'Пояснення порушення',
         'explain_text' => '<p>Пояснення порушення: %message%</p>',

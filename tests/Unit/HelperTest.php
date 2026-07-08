@@ -4,8 +4,6 @@ namespace Tests\Unit;
 
 use App\Models\Antimat;
 use App\Models\BlackList;
-use App\Models\Counter;
-use App\Models\Counter31;
 use App\Models\Notice;
 use App\Models\Online;
 use App\Models\User;
@@ -413,43 +411,10 @@ class HelperTest extends TestCase
         self::assertInstanceOf(HtmlString::class, showOnline());
     }
 
-    public function testStatsCounter(): void
-    {
-        self::assertArrayHasKey('dayhosts', statsCounter());
-    }
-
-    public function testStatsWeek(): void
-    {
-        Counter31::query()->create(['period' => date('Y-m-d 00:00:00'), 'hosts' => 5, 'hits' => 9]);
-
-        $week = statsWeek();
-
-        self::assertCount(1, $week);
-        self::assertSame(5, $week->first()->hosts);
-    }
-
     public function testShowCounter(): void
     {
-        $this->overrideSetting('incount', 0);
+        // Без модуля счётчика хук counter не зарегистрирован
         self::assertNull(showCounter());
-    }
-
-    public function testShowCounterRender(): void
-    {
-        Counter::query()->delete();
-        Counter::query()->create([
-            'period'   => date('Y-m-d H:i:s'),
-            'allhosts' => 100,
-            'allhits'  => 200,
-            'dayhosts' => 10,
-            'dayhits'  => 20,
-            'hosts24'  => 10,
-            'hits24'   => 20,
-        ]);
-
-        $this->overrideSetting('incount', 3);
-
-        self::assertInstanceOf(HtmlString::class, showCounter());
     }
 
     public function testSendNotifyGuest(): void

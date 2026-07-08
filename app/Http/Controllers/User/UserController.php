@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User;
 
+use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\BlackList;
 use App\Models\Flood;
 use App\Models\User;
-use App\Models\UserField;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,9 +32,7 @@ class UserController extends Controller
         $user->load('lastBan');
         $adminGroups = User::ADMIN_GROUPS;
 
-        $fields = UserField::query()->withUserData($user->id)->whereNotNull('user_data.value')->get();
-
-        return view('users/user', compact('user', 'adminGroups', 'fields'));
+        return view('users/user', compact('user', 'adminGroups'));
     }
 
     /**
@@ -234,16 +231,6 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $fields = UserField::query()
-            ->select('uf.*', 'ud.value')
-            ->from('user_fields as uf')
-            ->leftJoin('user_data as ud', static function (JoinClause $join) use ($user) {
-                $join->on('uf.id', 'ud.field_id')
-                    ->where('ud.user_id', $user->id);
-            })
-            ->orderBy('uf.sort')
-            ->get();
-
         if ($request->isMethod('post')) {
             $info = $request->input('info');
             $name = $request->input('name');
@@ -261,14 +248,8 @@ class UserController extends Controller
                 ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')])
                 ->length($name, 3, 20, ['name' => __('users.name_short_or_long')], false);
 
-            foreach ($fields as $field) {
-                $validator->length(
-                    $request->input('field' . $field->id),
-                    $field->min,
-                    $field->max,
-                    ['field' . $field->id => __('validator.text')],
-                    $field->required
-                );
+            foreach (Registry::$onProfileValidate as $handler) {
+                $handler($user, $request, $validator, true);
             }
 
             if ($validator->isValid()) {
@@ -286,13 +267,8 @@ class UserController extends Controller
                     'info'     => $info,
                 ]);
 
-                foreach ($fields as $field) {
-                    $user->data()
-                        ->updateOrCreate([
-                            'field_id' => $field->id,
-                        ], [
-                            'value' => $field->sanitizeValue($request->input('field' . $field->id)),
-                        ]);
+                foreach (Registry::$onProfileSave as $handler) {
+                    $handler($user, $request);
                 }
 
                 setFlash('success', __('users.profile_success_changed'));
@@ -304,7 +280,7 @@ class UserController extends Controller
             setFlash('danger', $validator->getErrors());
         }
 
-        return view('users/profile', compact('user', 'fields'));
+        return view('users/profile', compact('user'));
     }
 
     /**

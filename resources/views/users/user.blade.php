@@ -89,25 +89,7 @@
 
                 {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
 
-                @foreach($fields as $field)
-                    {{ $field->name }}:
-                    @if ($field->type === 'textarea')
-                        {{ renderHtml($field->value) }}
-                    @else
-                        {{ $field->value }}
-                    @endif
-                    <br>
-                @endforeach
-
-                @if (getUser())
-                    <a href="/ratings/{{ $user->login }}">{{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{ $user->posrating }}/-{{ $user->negrating }})</a><br>
-                    @if (getUser('login') !== $user->login)
-                        <a href="/users/{{ $user->login }}/rating?vote=plus"><i class="fa fa-arrow-up"></i><span style="color:#0099cc"> {{ __('main.plus') }}</span></a> /
-                        <a href="/users/{{ $user->login }}/rating?vote=minus"><span style="color:#ff0000">{{ __('main.minus') }}</span> <i class="fa fa-arrow-down"></i></a><br>
-                    @endif
-                @else
-                    {{ __('main.reputation') }}: <b>{{ formatNum($user->rating) }}</b> (+{{ $user->posrating }}/-{{ $user->negrating }})<br>
-                @endif
+                @hook('userFields', $user)
                 @hook('userEnd', $user)
             </div>
 

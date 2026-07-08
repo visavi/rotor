@@ -8,7 +8,6 @@ return [
     'messages'    => 'Сообщения',
     'chat'        => 'Чат',
     'user_search' => 'Поиск пользователя',
-    'statistics'  => 'Статистика посещений',
     'comments'    => 'Комментарии',
 
     'login'     => 'Авторизация',
@@ -40,7 +39,6 @@ return [
     'my_settings'       => 'Мои настройки',
     'admin_advertising' => 'Админская реклама',
     'advertising'       => 'Реклама',
-    'reputation_edit'   => 'Изменения репутации',
 
     'confirm_register' => 'Подтверждение регистрации',
     'banned'           => 'Вас забанили',
@@ -64,6 +62,5 @@ return [
     'private_mailing' => 'Приват-рассылка',
     'logs_visits'     => 'Логи посещений',
     'email_templates' => 'Шаблоны писем',
-    'user_fields'     => 'Пользовательские поля',
     'modules'         => 'Модули',
 ];

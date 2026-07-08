@@ -1,4 +1,5 @@
 @extends('layout')
+@use('App\Classes\Hook')
 
 @section('title', __('users.edit_user') . ' ' . $user->getName())
 
@@ -33,7 +34,9 @@
         <nav>
             <div class="nav nav-tabs">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#nav-basic-fields" type="button">{{ __('users.basic_fields') }}</button>
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-custom-fields" type="button">{{ __('users.custom_fields') }}</button>
+                @if (Hook::has('adminUserFields'))
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-custom-fields" type="button">{{ __('users.custom_fields') }}</button>
+                @endif
             </div>
         </nav>
 
@@ -170,23 +173,11 @@
             </div>
 
              </div>
-            <div class="tab-pane fade py-3" id="nav-custom-fields">
-                @forelse ($fields as $field)
-                    <div class="mb-3{{ $field->required ? ' form-required' : null }}{{ hasError('field' . $field->id) }}">
-                        <label for="{{ 'field' . $field->id }}" class="form-label">{{ $field->name }}:</label>
-                        @if ($field->type === 'textarea')
-                            <textarea class="form-control tiptap" id="{{ 'field' . $field->id }}" cols="25" rows="5" name="{{ 'field' . $field->id }}">{{ getInput('field' . $field->id, $field->value) }}</textarea>
-                        @else
-                            <input class="form-control" id="{{ 'field' . $field->id }}" name="{{ 'field' . $field->id }}" maxlength="{{ $field->length }}" value="{{ getInput('field' . $field->id, $field->value) }}">
-                        @endif
-                        <div class="invalid-feedback">{{ textError('field' . $field->id) }}</div>
-                    </div>
-                @empty
-                    <div class="alert alert-warning">
-                        {{ __('users.empty_custom_fields') }}
-                    </div>
-                @endforelse
-            </div>
+            @if (Hook::has('adminUserFields'))
+                <div class="tab-pane fade py-3" id="nav-custom-fields">
+                    @hook('adminUserFields', $user)
+                </div>
+            @endif
         </div>
 
             <button class="btn btn-primary">{{ __('main.change') }}</button>

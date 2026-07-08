@@ -8,7 +8,6 @@ return [
     'messages'    => 'Messages',
     'chat'        => 'Chat',
     'user_search' => 'User search',
-    'statistics'  => 'Attendance Statistics',
     'comments'    => 'Comments',
 
     'login'     => 'Login',
@@ -40,7 +39,6 @@ return [
     'my_settings'       => 'Settings',
     'admin_advertising' => 'Admin advertising',
     'advertising'       => 'Advertising',
-    'reputation_edit'   => 'Reputation changes',
 
     'confirm_register' => 'Confirmation of registration',
     'banned'           => 'You are banned',
@@ -64,6 +62,5 @@ return [
     'private_mailing' => 'Private newsletter',
     'logs_visits'     => 'Visit logs',
     'email_templates' => 'Email templates',
-    'user_fields'     => 'User fields',
     'modules'         => 'Modules',
 ];

@@ -3,7 +3,6 @@
 return [
     'basic_fields'        => 'Основные поля',
     'custom_fields'       => 'Пользовательские поля',
-    'empty_custom_fields' => 'Нет пользовательский полей',
 
     'change_email'            => 'Изменение email',
     'email'                   => 'Е-mail',

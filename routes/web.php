@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CounterController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallController;
@@ -13,7 +12,6 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OnlineController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\User\AccountController;
 use App\Http\Controllers\User\BanController;
@@ -106,23 +104,11 @@ Route::controller(MessageController::class)
         Route::match(['get', 'post'], '/send', 'send')->name('send');
     });
 
-/* Репутация пользователя */
-Route::controller(RatingController::class)
-    ->prefix('ratings')
-    ->group(function () {
-        Route::get('/{login}/gave', 'gave');
-        Route::get('/{login}/{received?}', 'received');
-        Route::post('/delete', 'delete');
-    });
-
 /* API */
 Route::get('/api', [ApiController::class, 'index']);
 
 /* Бан */
 Route::match(['get', 'post'], '/ban', [BanController::class, 'ban'])->name('ban');
-
-/* Счетчики */
-Route::get('/counters', [CounterController::class, 'index']);
 
 /* Страницы сайта */
 Route::get('/files/{page?}', [FileController::class, 'index'])->where('page', '.+');
@@ -131,7 +117,6 @@ Route::get('/files/{page?}', [FileController::class, 'index'])->where('page', '.
 Route::prefix('users')
     ->group(function () {
         Route::match(['get', 'post'], '/', [ListController::class, 'userlist'])->name('users.index');
-        Route::match(['get', 'post'], '/{login}/rating', [RatingController::class, 'index']);
     });
 
 /* Профиль пользователя */

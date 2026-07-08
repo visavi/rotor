@@ -86,15 +86,6 @@ class NoticeSeeder extends Seeder
                 'protect'    => 1,
             ],
             [
-                'type'       => 'rating',
-                'name'       => __('seeds.notices.rating_name'),
-                'text'       => __('seeds.notices.rating_text'),
-                'user_id'    => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-                'protect'    => 1,
-            ],
-            [
                 'type'       => 'explain',
                 'name'       => __('seeds.notices.explain_name'),
                 'text'       => __('seeds.notices.explain_text'),

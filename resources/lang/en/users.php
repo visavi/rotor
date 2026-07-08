@@ -3,7 +3,6 @@
 return [
     'basic_fields'        => 'Basic fields',
     'custom_fields'       => 'Custom fields',
-    'empty_custom_fields' => 'No custom fields',
 
     'change_email'            => 'Change email',
     'email'                   => 'Email',
