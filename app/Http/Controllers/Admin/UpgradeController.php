@@ -139,15 +139,11 @@ class UpgradeController extends AdminController
             Artisan::call('up');
         }
 
-        refreshCaches();
-
         // Обновление затирает файлы ядра — восстанавливаем симлинки
-        // и опубликованные файлы активных модулей
+        // и опубликованные файлы активных модулей до пересборки кешей
         Artisan::call('module:sync');
 
-        if (function_exists('opcache_reset')) {
-            opcache_reset();
-        }
+        refreshCaches();
 
         return response()->json([
             'success' => true,

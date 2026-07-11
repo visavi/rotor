@@ -572,6 +572,11 @@ function refreshCaches(): void
         Artisan::call('route:cache');
         Artisan::call('config:cache');
     }
+
+    // При opcache.validate_timestamps=0 fpm исполняет старые файлы до сброса OPcache
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
 }
 
 /**
