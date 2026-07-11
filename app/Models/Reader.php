@@ -67,7 +67,8 @@ class Reader extends Model
                 'ip'          => getIp(),
             ]);
 
-            $model->increment($model->countingField);
+            // Счётчик просмотров/скачиваний — не изменение контента, observers не дёргаем
+            $model->incrementQuietly($model->countingField);
         }
     }
 }
