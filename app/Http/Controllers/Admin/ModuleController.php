@@ -101,7 +101,12 @@ class ModuleController extends AdminController
 
         foreach (['changelog.md', 'CHANGELOG.md'] as $changelog) {
             if (file_exists($modulePath . '/' . $changelog)) {
-                $moduleConfig['changelog'] = file_get_contents($modulePath . '/' . $changelog);
+                // Убираем шапку "# Changelog" — на странице уже есть свой заголовок
+                $moduleConfig['changelog'] = trim((string) preg_replace(
+                    '/^#\s+changelog\s*/ui',
+                    '',
+                    file_get_contents($modulePath . '/' . $changelog)
+                ));
                 break;
             }
         }

@@ -72,7 +72,7 @@
     @if ($hasUpdate && ! empty($registryInfo['changelog']))
         <details class="spoiler mt-2">
             <summary class="text-info"><i class="fa fa-list"></i> {{ __('admin.modules.changelog') }} {{ $registryVersion }}</summary>
-            <div class="small mt-1">{!! nl2br(e($registryInfo['changelog'])) !!}</div>
+            <div class="small mt-1 markdown-body">{{ renderMarkdown($registryInfo['changelog']) }}</div>
         </details>
     @endif
 
@@ -95,10 +95,7 @@
         <div class="mt-2 fw-bold">{{ __('admin.modules.changelog_full') }}</div>
         <details class="spoiler">
             <summary>{{ __('main.expand_view') }}</summary>
-            @php
-                $cl = preg_replace('/^#{1,6}\s*(.+)$/m', '<strong>$1</strong>', e($moduleConfig['changelog']));
-            @endphp
-            <div class="small mt-1">{!! nl2br($cl) !!}</div>
+            <div class="small mt-1 markdown-body">{{ renderMarkdown($moduleConfig['changelog']) }}</div>
         </details>
     @endif
 
@@ -219,3 +216,16 @@
         </div>
     @endif
 @stop
+
+@push('styles')
+    <style>
+        .markdown-body :is(h1, h2, h3, h4) { font-size: 1rem; font-weight: 700; margin: .85rem 0 .4rem; color: var(--bs-body-color); }
+        .markdown-body ul, .markdown-body ol { padding-left: 1.25rem; margin-bottom: .5rem; }
+        .markdown-body li { margin-bottom: .2rem; }
+        .markdown-body p { margin-bottom: .5rem; }
+        .markdown-body code { font-size: .85em; padding: .1rem .35rem; border-radius: .3rem; background: var(--bs-tertiary-bg); }
+        .markdown-body pre { padding: .75rem; border-radius: .5rem; background: var(--bs-tertiary-bg); overflow-x: auto; }
+        .markdown-body pre code { padding: 0; background: none; }
+        .markdown-body :last-child { margin-bottom: 0; }
+    </style>
+@endpush
