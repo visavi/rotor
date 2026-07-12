@@ -59,7 +59,7 @@ class GithubService
     {
         return $this->cachedFetch('releases', fn () => $this->fetchGitHubData(
             endpoint: 'releases',
-            params: ['per_page' => 10]
+            params: ['per_page' => 100]
         ));
     }
 

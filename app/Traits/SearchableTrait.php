@@ -28,6 +28,12 @@ trait SearchableTrait
         });
 
         static::updated(static function ($model) {
+            // Переиндексируем только при изменении поисковых полей или видимости,
+            // иначе каждый апдейт (визиты, баллы, счетчики) дергает таблицу search
+            if (! $model->wasChanged([...$model->searchableFields(), 'active'])) {
+                return;
+            }
+
             if ($model->shouldBeSearchable()) {
                 $model->updateSearchIndex();
             } else {

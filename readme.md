@@ -1,172 +1,194 @@
-Rotor - mobile cms
-=========
+# Rotor CMS
 
-![](/public/assets/img/images/logo.png)  
+<p align="center">
+  <img src="/public/assets/img/images/logo_big.png" alt="Rotor CMS" width="400">
+</p>
 
-[Description in Russian](https://github.com/visavi/rotor/blob/master/readme_ru.md)
+<p align="center">
+  <b>Lightweight modular CMS with a forum, blogs, gallery and file downloads.<br>
+  Fast even on cheap shared hosting.</b>
+</p>
 
-[![Php Version](https://img.shields.io/packagist/php-v/visavi/rotor)](https://php.net)
-[![Latest Stable Version](https://poser.pugx.org/visavi/rotor/v/stable)](https://packagist.org/packages/visavi/rotor)
-[![Total Downloads](https://poser.pugx.org/visavi/rotor/downloads)](https://packagist.org/packages/visavi/rotor)
-[![Latest Unstable Version](https://poser.pugx.org/visavi/rotor/v/unstable)](https://packagist.org/packages/visavi/rotor)
-[![License](https://poser.pugx.org/visavi/rotor/license)](https://packagist.org/packages/visavi/rotor)
-[![Code Climate](https://codeclimate.com/github/visavi/rotor/badges/gpa.svg)](https://codeclimate.com/github/visavi/rotor)
-[![Coverage Status](https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master)](https://coveralls.io/github/visavi/rotor?branch=master)
+<p align="center">
+  <a href="https://php.net"><img src="https://img.shields.io/packagist/php-v/visavi/rotor" alt="PHP Version"></a>
+  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://poser.pugx.org/visavi/rotor/v/stable" alt="Latest Stable Version"></a>
+  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://poser.pugx.org/visavi/rotor/downloads" alt="Total Downloads"></a>
+  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://poser.pugx.org/visavi/rotor/license" alt="License"></a>
+  <a href="https://coveralls.io/github/visavi/rotor?branch=master"><img src="https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master" alt="Coverage Status"></a>
+</p>
 
-Welcome!
-We thank you for choosing to use our script for your site. Rotor mobile cms is a functionally complete open source content management system written in PHP. It uses a MySQL database to store the contents of your site.
+<p align="center">
+  <a href="https://github.com/visavi/rotor/blob/master/readme_ru.md">Описание на русском</a>
+</p>
 
-**Rotor** is a flexible, powerful and intuitive system with minimal hosting requirements, a high level of protection and an excellent choice for building a website of any complexity.
+---
 
-The main feature of Rotor is low load on system resources and high speed, even with a very large audience of the site, the load on the server will be minimal, and you will not experience any problems with displaying information.
+**Rotor** is an open source content management system written in PHP. It combines a community platform (forum, guestbook, wall, private messages) with classic site features (news, blogs, photo gallery, downloads, static pages) in a single lightweight package.
 
-### Installing the Rotor engine (From the archive)
+The engine is built on Laravel components but stays deliberately small: it installs in minutes, runs comfortably on inexpensive shared hosting, and keeps server load minimal even with a large audience.
 
-1. Configure the site so that `public` is the root directory (Not necessary for apache)
+## Screenshots
 
-2. Unpack the archive
+| Home page | Forum |
+|---|---|
+| ![Home](/public/assets/img/screenshots/home.png) | ![Forum](/public/assets/img/screenshots/forum.png) |
 
-3. Set up the .env configuration file, environment, data for accessing the database, administrator login and email, and data for sending emails, sendmail or smtp.
+**Live example:** [visavi.net](https://visavi.net) — the developer community site, always running the latest version of Rotor.
 
-4. Set write permissions to all directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage`
+## Features
 
-5. Go to the main page of the site, you will be automatically transferred to the installer
+- **Forum** — categories, topics, voting, moderation
+- **Blogs and news** — articles with comments, categories, RSS
+- **Photo gallery** — albums, comments, watermarks
+- **Downloads** — file archive with categories and moderation
+- **Community tools** — guestbook, user walls, private messages, boards (classifieds), mini-chat
+- **Users** — registration, social auth, groups and permissions, ratings, custom profile fields
+- **Administration** — full admin panel, page editor, style editor, backups, logs, spam/word filters
+- **Modular architecture** — features ship as modules that can be installed, updated and disabled independently
+- **Performance** — aggressive caching, minimal queries, works well without opcache tuning or dedicated servers
+- **Themes** — customizable templates and styles
 
-6. Complete all installer conditions
+## Requirements
 
-### Installing the Rotor engine (From the repository)
+- PHP **8.3+**
+- MySQL 5.7.8+, MariaDB 10.2.7+ or PostgreSQL 9.2+
+- Any web server: Apache, Nginx, or the built-in PHP server
 
-1. Configure the site so that `public` is the root directory (Not necessary for apache)
+## Quick start
 
-2. Unpack the archive
+### One command (Composer)
 
-3. Configure the .env configuration file, the environment, the data for accessing the database, the administrator's login and email, and the data for sending mail, sendmail or smtp. If you install CMS manually, then rename the configuration file .env.example to .env
-
-4. Set write permissions to all directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage` or execute the command `php artisan app:permission`
-
-5. Install and configure the dependency manager [Composer](https://getcomposer.org).
-   or you can download the finished package
-    [composer.phar](https://getcomposer.org/composer.phar)
-    and run it through the command
-   `php composer.phar install`
-
-6. Go to the site directory run the command in the console `composer install`
-
-7. Create a database with utf8mb4 encoding and a user for it from the control panel on your server, during the installation of the script, you will need to enter this data to be connected to the .env file
-`CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`  
-   
-8. Migrate using the console command `php artisan migrate`
-
-9. Fill out the database using the command `php artisan db:seed`
-
-### Installation by one command
-To install the stable version, go to the site directory in the console and execute the command
-```
+```bash
 composer create-project visavi/rotor .
 ```
 
-To install the latest version, run the command
-```
+Then open the site in a browser — the installer starts automatically and walks you through database setup and creating an admin account.
+
+For the latest development version:
+
+```bash
 composer create-project --stability=dev visavi/rotor .
 ```
 
-### Requirements
+### Docker (Laravel Sail)
 
-Minimal PHP version required for PHP 8.3, MySQL 5.7.8, MariaDB 10.2.7 or Postgres 9.2
+```bash
+git clone https://github.com/visavi/rotor.git
+cd rotor
+cp .env.example .env
+composer install
+./vendor/bin/sail up -d
+```
 
-### Migrations and database seeder
+Open `http://localhost` and follow the installer.
 
-Current migration status `php artisan migrate:status`
+### From an archive
 
-Create migrations `php artisan make:migration CreateTestTable`
+1. Unpack the archive so that `public` is the web root (not required for Apache — the bundled `.htaccess` handles it)
+2. Copy `.env.example` to `.env` and fill in the database credentials, admin login/email and mail settings
+3. Make the directories inside `public/uploads`, `public/assets/modules`, `bootstrap/cache` and `storage` writable, or run `php artisan app:permission`
+4. Open the site's main page — you will be redirected to the installer
 
-Performing migrations `php artisan migrate` or `php artisan migrate --path=/database/migrations/CreateTestTable.php` to migrate to a specific version
+### Manual installation
 
-Rollback last migration `php artisan migrate:rollback` or `php artisan migrate:rollback --step=1` to rollback all migrations to a specific version
+```bash
+git clone https://github.com/visavi/rotor.git
+cd rotor
+cp .env.example .env        # fill in DB credentials, admin login/email, mail settings
+composer install
+php artisan migrate
+php artisan db:seed
+```
 
-Create seeder `php 
-artisan make:seeder UsersSeeder`
+Create the database with utf8mb4 encoding beforehand:
 
-Performing seeder `php artisan db:seed` or `php artisan db:seed --class=UserSeeder` for a specific seed
+```sql
+CREATE DATABASE rotor CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-### Caching Settings
+### Local run without a web server
 
-If you set `APP_ENV = production`, then routes and project configuration settings will be cached
+```bash
+php artisan serve
+```
 
-### Cron settings
+Then open `http://localhost:8000`.
+
+## Server configuration
+
+### Cron
 
 ```
 * * * * * php /path-to-site/artisan schedule:run >>/dev/null 2>&1
 ```
 
-### Apache settings
+### Apache
 
-There are 2 ways to install the engine on a regular hosting
+Two layouts work on typical shared hosting:
 
-Default. All files are placed in the public_html directory. htaccess in the root of the site, redirects all requests to the public directory.
+1. **Default.** Put all files in `public_html`. The `.htaccess` in the site root redirects every request to the `public` directory, and the `.htaccess` inside `public` routes them to `index.php`.
+2. **Split.** Put the engine one level above `public_html` and move the contents of `public` into `public_html`. Uncomment the corresponding code in `app/Providers/AppServiceProvider.php` to point the engine at the new public path. The root `.htaccess` can then be removed.
 
-.htaccess inside public handles all requests and redirects them to index.php
+### Nginx
 
-If method 1 is not suitable or does not work well, then you can place all files on the same level as public_html, and transfer all files from public to public_html.
+Add to the `server` section (strips trailing slashes and blocks direct PHP access in upload dirs):
 
-You also need to specify that public_html will be instead of the public directory, for this you need to uncomment the code in the `app/Providers/AppServiceProvider.php` file.
-
-.htaccess at the root of the engine can be removed.
-
-### Nginx settings
-
-For the paths to be processed correctly, you need to configure the site.
-
-Add the following entry to the server section:
-
-```
+```nginx
 if (!-d $request_filename) {
     rewrite ^/(.*)/$ /$1 permanent;
 }
 
-```
-necessary to remove slashes at the end of the path and prohibit viewing php files
-
-```
 location ~* /(assets|themes|uploads)/.*\.php$ {
     deny all;
 }
 ```
-In the location / section, you must replace the line
 
+In `location /` replace:
+
+```nginx
+try_files $uri $uri/ =404;
 ```
-try_files $uri $uri/ =404
 
-to
+with:
 
+```nginx
 try_files $uri $uri/ /index.php?$query_string;
 ```
 
-### Run without Nginx
+## Development
 
-If there is no Nginx server on the local machine, it is sufficient to use the built-in PHP server through the console. To raise the server and access the system you need:
+### Frontend assets (Vite)
 
-1. While in the console, go to the public folder
-2. Run the command in the console `php -S localhost:8000` or `php artisan serve`
-3. Enter the browser link localhost:8000
-
-If, when the server starts, the console displays information that port 8000 is busy, try port 8080
-
-### Webpack settings
-
-To build css and js, you need to install npm and nodejs, then run the commands
-```
+```bash
 npm ci
 npm run build
 ```
 
-### Author
-Author: Vantuz  
-Email: admin@visavi.net  
-Site: https://visavi.net  
-Telegram: @visavi  
-Phone: +79167407574  
+### Migrations and seeding
 
-### License
+```bash
+php artisan migrate:status      # current migration status
+php artisan migrate             # run migrations
+php artisan migrate:rollback    # rollback the last batch
+php artisan db:seed             # seed the database
+```
 
-The Rotor is open-sourced software licensed under the [GPL-3.0 license](http://opensource.org/licenses/GPL-3.0)
+### Production caching
+
+With `APP_ENV=production` routes and configuration are cached automatically.
+
+## Community & support
+
+- **Forum:** [visavi.net](https://visavi.net/forums) — questions, modules, themes, announcements
+- **Telegram:** [@visavi](https://t.me/visavi)
+- **Issues:** [GitHub Issues](https://github.com/visavi/rotor/issues) — bug reports and feature requests
+
+Contributions are welcome — fork the repository and open a pull request.
+
+## Author
+
+**Vantuz** — [visavi.net](https://visavi.net) · admin@visavi.net · Telegram [@visavi](https://t.me/visavi)
+
+## License
+
+Rotor is open-sourced software licensed under the [GPL-3.0 license](https://opensource.org/licenses/GPL-3.0).
