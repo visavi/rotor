@@ -134,7 +134,11 @@ class AjaxController extends Controller
             ]);
         }
 
-        $vote === '+' ? $post->increment('rating') : $post->decrement('rating');
+        // Голос — не изменение контента: обновляем рейтинг через query builder,
+        // чтобы не порождать событие updated (FeedableTrait иначе перезаписывал бы
+        // feeds и сбрасывал кеш ленты на каждый голос)
+        $query = $post->newQuery()->whereKey($post->getKey());
+        $vote === '+' ? $query->increment('rating') : $query->decrement('rating');
         $post->refresh();
 
         return response()->json([

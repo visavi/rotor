@@ -917,7 +917,11 @@ window.updateMessageCount = function (newCount) {
 }
 
 /* Get new messages */
+let newMessagesLoading = false
 window.getNewMessages = function () {
+    if (newMessagesLoading) return false
+    newMessagesLoading = true
+
     const notifyItem = document.querySelector('.js-messages-block .app-nav__item')
     const badge = notifyItem?.querySelector('.badge')
     const titleSpan = document.querySelector('.app-notification__title span')
@@ -926,7 +930,10 @@ window.getNewMessages = function () {
     ajax({
         dataType: 'json', type: 'GET', url: '/messages/new',
         beforeSend: () => messagesList?.insertAdjacentHTML('beforeend', '<li class="js-message-spin text-center"><i class="fas fa-spinner fa-spin fa-2x my-2"></i></li>'),
-        complete: () => messagesList?.querySelectorAll('.js-message-spin').forEach(s => s.remove()),
+        complete: () => {
+            newMessagesLoading = false
+            messagesList?.querySelectorAll('.js-message-spin').forEach(s => s.remove())
+        },
         success(data) {
             if (!data?.success) {
                 badge?.remove()

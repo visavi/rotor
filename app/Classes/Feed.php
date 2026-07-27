@@ -63,7 +63,9 @@ class Feed
             });
         }
 
-        $version = cache()->get('feed_version', 1);
+        // Дефолт 0: после сброса кеша первый increment на отсутствующем ключе даёт 1,
+        // и он должен отличаться от версии, под которой закеширована лента
+        $version = cache()->get('feed_version', 0);
         $cacheKey = "feed_{$version}_{$currentPage}_" . implode(',', $enabledTypes);
 
         $items = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage, $allTypes) {
