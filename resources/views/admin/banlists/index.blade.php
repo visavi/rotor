@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="section-body border-top">
-                    {{ __('users.ending_ban') }}: {{ formatTime((int) $user->timeban->diffInSeconds(now())) }}<br>
+                    {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}<br>
 
                     @if ($user->lastBan->id)
                         {{ __('users.banned') }}: {{ $user->lastBan->sendUser->getProfile() }}<br>

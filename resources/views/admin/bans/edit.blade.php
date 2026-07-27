@@ -28,7 +28,7 @@
     @if ($user->level === 'banned' && $user->timeban?->isFuture())
         <div class="section shadow mb-3">
             <div class="p-1 my-1 bg-danger text-white">{{ __('users.user_banned') }}</div>
-            {{ __('users.ending_ban') }}: {{ formatTime((int) $user->timeban->diffInSeconds(now())) }}<br>
+            {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}<br>
         </div>
 
         <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/change?user={{ $user->login }}">{{ __('main.change') }}</a><br>

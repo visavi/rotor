@@ -23,7 +23,7 @@
         {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>
     @endif
 
-    {{ __('users.ending_ban') }}: {{ formatTime((int) $user->timeban->diffInSeconds(now())) }}<br>
+    {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}<br>
 
     <div class="section-form mb-3 shadow">
         <form method="post" action="/admin/bans/change?user={{ $user->login }}">
