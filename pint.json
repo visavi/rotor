@@ -9,7 +9,7 @@
                 "=>": "align_single_space_minimal"
             }
         },
-        "new_with_braces": {
+        "new_with_parentheses": {
             "anonymous_class": false
         },
         "braces_position": {

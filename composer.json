@@ -41,7 +41,7 @@
         "deployer/deployer": "^8.0",
         "fakerphp/faker": "^1.24",
         "larastan/larastan": "^3.9",
-        "laravel/pint": "^1.22",
+        "laravel/pint": "^1.30",
         "laravel/sail": "^1.41",
         "laravel/tinker": "^3.0",
         "mockery/mockery": "^1.6",
