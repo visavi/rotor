@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a82ad015e410d1e35f144b1de3127d1e",
+    "content-hash": "caf5bcd226b03b4749bf27c7e7f4b55f",
     "packages": [
         {
             "name": "brick/math",
@@ -6704,16 +6704,16 @@
         },
         {
             "name": "visavi/captcha",
-            "version": "v3.1.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/visavi/captcha.git",
-                "reference": "78925d79ae9f57423ce6ca90923bd79b11bc56d5"
+                "reference": "97496dbcb3fee5aeb3ed4c9b92b8162bd7f39753"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/visavi/captcha/zipball/78925d79ae9f57423ce6ca90923bd79b11bc56d5",
-                "reference": "78925d79ae9f57423ce6ca90923bd79b11bc56d5",
+                "url": "https://api.github.com/repos/visavi/captcha/zipball/97496dbcb3fee5aeb3ed4c9b92b8162bd7f39753",
+                "reference": "97496dbcb3fee5aeb3ed4c9b92b8162bd7f39753",
                 "shasum": ""
             },
             "require": {
@@ -6746,9 +6746,9 @@
             ],
             "support": {
                 "issues": "https://github.com/visavi/captcha/issues",
-                "source": "https://github.com/visavi/captcha/tree/v3.1.0"
+                "source": "https://github.com/visavi/captcha/tree/v4.0.0"
             },
-            "time": "2026-06-14T01:14:01+00:00"
+            "time": "2026-08-02T22:34:41+00:00"
         },
         {
             "name": "visavi/cleanup",
