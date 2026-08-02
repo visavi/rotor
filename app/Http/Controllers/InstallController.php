@@ -280,8 +280,9 @@ class InstallController extends Controller
                 return redirect('/install/finish');
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('/install/account')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('install/account', compact('login', 'email'));

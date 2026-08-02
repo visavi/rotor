@@ -44,11 +44,11 @@
                 @csrf
                 <div class="mb-3{{ hasError('time') }}">
                     <label for="time" class="form-label">{{ __('admin.bans.time_ban') }}:</label>
-                    <input class="form-control" name="time" id="time" value="{{ getInput('time') }}" required>
+                    <input class="form-control" name="time" id="time" value="{{ old('time') }}" required>
                     <div class="invalid-feedback">{{ textError('time') }}</div>
                 </div>
 
-                <?php $inputType = getInput('type'); ?>
+                <?php $inputType = old('type'); ?>
                 <div class="mb-3{{ hasError('type') }}">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" id="inputTypeMinutes" name="type" value="minutes"{{ $inputType === 'minutes' ? ' checked' : '' }}>
@@ -67,7 +67,7 @@
 
                 <div class="mb-3{{ hasError('reason') }}">
                     <label for="reason" class="form-label">{{ __('users.reason_ban') }}:</label>
-                    <textarea class="form-control tiptap" id="reason" rows="5" name="reason" required>{{ getInput('reason') }}</textarea>
+                    <textarea class="form-control tiptap" id="reason" rows="5" name="reason" required>{{ old('reason') }}</textarea>
                     <div class="invalid-feedback">{{ textError('reason') }}</div>
                 </div>
 

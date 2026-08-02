@@ -23,7 +23,7 @@
             <div class="mb-3{{ hasError('category') }}">
                 <label for="inputCategory" class="form-label">{{ __('stickers.category') }}</label>
 
-                <?php $inputCategory = (int) getInput('cid', $sticker->category->id); ?>
+                <?php $inputCategory = (int) old('cid', $sticker->category->id); ?>
                 <select class="form-select" id="inputCategory" name="cid">
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
@@ -34,7 +34,7 @@
 
             <div class="mb-3{{ hasError('code') }}">
                 <label for="code" class="form-label">{{ __('stickers.sticker_code') }}:</label>
-                <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code', $sticker->code) }}" required>
+                <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ old('code', $sticker->code) }}" required>
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
 

@@ -58,7 +58,7 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertRedirect('/login');
-        $response->assertSessionHas('flash.danger');
+        $response->assertSessionHas('danger');
         $this->assertGuest();
         $this->assertDatabaseHas('floods', ['page' => '/login']);
     }

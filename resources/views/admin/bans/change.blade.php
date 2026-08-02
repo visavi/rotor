@@ -30,13 +30,13 @@
             @csrf
             <div class="col-sm-4 mb-3{{ hasError('timeban') }}">
                 <label for="timeban" class="form-label">{{ __('admin.bans.time_ban') }}:</label>
-                <input class="form-control" type="datetime-local" name="timeban" id="timeban" value="{{ getInput('timeban', dateFixed($user->timeban, 'Y-m-d\TH:i')) }}" required>
+                <input class="form-control" type="datetime-local" name="timeban" id="timeban" value="{{ old('timeban', dateFixed($user->timeban, 'Y-m-d\TH:i')) }}" required>
                 <div class="invalid-feedback">{{ textError('timeban') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('reason') }}">
                 <label for="reason" class="form-label">{{ __('users.reason_ban') }}:</label>
-                <textarea class="form-control tiptap" id="reason" rows="5" name="reason" required>{{ getInput('reason', $user->lastBan->reason) }}</textarea>
+                <textarea class="form-control tiptap" id="reason" rows="5" name="reason" required>{{ old('reason', $user->lastBan->reason) }}</textarea>
                 <div class="invalid-feedback">{{ textError('reason') }}</div>
             </div>
 

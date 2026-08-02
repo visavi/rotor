@@ -75,9 +75,8 @@ class PictureController extends Controller
                 $this->user->avatar = $avatar;
                 $this->user->save();
 
-                setFlash('success', __('users.photo_success_uploaded'));
-
-                return redirect('profile');
+                return redirect('profile')
+                    ->with('success', __('users.photo_success_uploaded'));
             }
 
             return redirect('/pictures')
@@ -99,19 +98,19 @@ class PictureController extends Controller
             $validator->addError(__('users.photo_not_exist'));
         }
 
-        if ($validator->isValid()) {
-            deleteFile(public_path($this->user->picture));
-            deleteFile(public_path($this->user->avatar));
-
-            $this->user->picture = null;
-            $this->user->avatar = null;
-            $this->user->save();
-
-            setFlash('success', __('users.photo_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('profile')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('profile');
+        deleteFile(public_path($this->user->picture));
+        deleteFile(public_path($this->user->avatar));
+
+        $this->user->picture = null;
+        $this->user->avatar = null;
+        $this->user->save();
+
+        return redirect('profile')
+            ->with('success', __('users.photo_success_deleted'));
     }
 }

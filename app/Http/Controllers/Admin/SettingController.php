@@ -30,7 +30,7 @@ class SettingController extends AdminController
 
             $validator->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
 
-            foreach ($sets as $name => $value) {
+            foreach ((array) $sets as $name => $value) {
                 if (empty($opt[$name]) || ! empty($value)) {
                     $validator->length($value, 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => $name])]);
                 }
@@ -46,13 +46,14 @@ class SettingController extends AdminController
                 }
 
                 clearCache('settings');
-                setFlash('success', __('settings.settings_success_saved'));
 
-                return redirect('admin/settings?act=' . $act);
+                return redirect('admin/settings?act=' . $act)
+                    ->with('success', __('settings.settings_success_saved'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/settings?act=' . $act)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $statsite = [

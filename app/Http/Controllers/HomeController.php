@@ -97,8 +97,9 @@ class HomeController extends Controller
                 $morphWith = array_filter(array_column(Registry::$search, 'with', 'class'));
                 $posts->loadMorph('relate', [Comment::class => ['relate'], ...$morphWith]);
             } else {
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+                // GET-страница рендерится сразу, редирект тут неуместен —
+                // flash() пишет в сессию немедленно и корректно истекает
+                session()->flash('danger', $validator->getErrors());
             }
         }
 
@@ -129,9 +130,8 @@ class HomeController extends Controller
             $ban->delete();
             clearCache('ipBan');
 
-            setFlash('success', __('pages.ip_success_unbanned'));
-
-            return redirect('/');
+            return redirect('/')
+                ->with('success', __('pages.ip_success_unbanned'));
         }
 
         return response()->view('pages/ipban', compact('ban'), 429);

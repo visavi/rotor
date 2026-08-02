@@ -69,13 +69,13 @@ class BanController extends AdminController
                     'term'         => $time,
                 ]);
 
-                setFlash('success', __('admin.bans.success_banned'));
-
-                return redirect('admin/bans/edit?user=' . $user->login);
+                return redirect('admin/bans/edit?user=' . $user->login)
+                    ->with('success', __('admin.bans.success_banned'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/bans/edit?user=' . $user->login)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/bans/edit', compact('user'));
@@ -120,13 +120,13 @@ class BanController extends AdminController
                     'term'         => $term,
                 ]);
 
-                setFlash('success', __('main.record_changed_success'));
-
-                return redirect('admin/bans/edit?user=' . $user->login);
+                return redirect('admin/bans/edit?user=' . $user->login)
+                    ->with('success', __('main.record_changed_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/bans/change?user=' . $user->login)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/bans/change', compact('user'));
@@ -158,8 +158,7 @@ class BanController extends AdminController
             'type'         => Banhist::UNBAN,
         ]);
 
-        setFlash('success', __('admin.bans.success_unbanned'));
-
-        return redirect('admin/bans/edit?user=' . $user->login);
+        return redirect('admin/bans/edit?user=' . $user->login)
+            ->with('success', __('admin.bans.success_unbanned'));
     }
 }

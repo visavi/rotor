@@ -136,9 +136,8 @@ class ModuleController extends AdminController
 
         $requires = $moduleConfig['requires'] ?? null;
         if ($requires && version_compare(ROTOR_VERSION, $requires, '<')) {
-            setFlash('danger', __('admin.modules.requires') . ' ' . $requires . '!');
-
-            return redirect('admin/modules/module?module=' . $moduleName);
+            return redirect('admin/modules/module?module=' . $moduleName)
+                ->with('danger', __('admin.modules.requires') . ' ' . $requires . '!');
         }
 
         // Файлы на диск кладём только для активного модуля: свежая установка,
@@ -180,9 +179,8 @@ class ModuleController extends AdminController
         // После syncAll — пересборка увидит роуты нового модуля
         refreshCaches();
 
-        setFlash('success', $result);
-
-        return redirect('admin/modules/module?module=' . $moduleName);
+        return redirect('admin/modules/module?module=' . $moduleName)
+            ->with('success', $result);
     }
 
     /**
@@ -230,17 +228,15 @@ class ModuleController extends AdminController
     public function uploadZip(Request $request): RedirectResponse
     {
         if (! $request->hasFile('zip') || ! $request->file('zip')->isValid()) {
-            setFlash('danger', __('admin.modules.upload_invalid_file'));
-
-            return redirect()->route('admin.modules.upload');
+            return redirect()->route('admin.modules.upload')
+                ->with('danger', __('admin.modules.upload_invalid_file'));
         }
 
         try {
             $moduleName = $this->extractZip($request->file('zip')->getPathname());
         } catch (\Exception $e) {
-            setFlash('danger', $e->getMessage());
-
-            return redirect()->route('admin.modules.upload');
+            return redirect()->route('admin.modules.upload')
+                ->with('danger', $e->getMessage());
         }
 
         return redirect('/admin/modules/module?module=' . $moduleName)
@@ -255,9 +251,8 @@ class ModuleController extends AdminController
         $url = trim($request->input('url', ''));
 
         if (! filter_var($url, FILTER_VALIDATE_URL) || ! in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
-            setFlash('danger', __('admin.modules.download_invalid_url'));
-
-            return redirect()->back();
+            return redirect()->back()
+                ->with('danger', __('admin.modules.download_invalid_url'));
         }
 
         $maxSize = (int) config('modules.download_max_size') * 1024 * 1024;
@@ -273,18 +268,16 @@ class ModuleController extends AdminController
             $response = Http::timeout(30)->withOptions(['stream' => true])->get($url);
 
             if (! $response->ok()) {
-                setFlash('danger', __('admin.modules.download_failed'));
-
-                return redirect()->back();
+                return redirect()->back()
+                    ->with('danger', __('admin.modules.download_failed'));
             }
 
             $stream = $response->toPsrResponse()->getBody();
             $handle = fopen($tempFile, 'wb');
 
             if ($handle === false) {
-                setFlash('danger', __('admin.modules.download_failed'));
-
-                return redirect()->back();
+                return redirect()->back()
+                    ->with('danger', __('admin.modules.download_failed'));
             }
             $written = 0;
             $tooLarge = false;
@@ -305,16 +298,16 @@ class ModuleController extends AdminController
 
             if ($tooLarge) {
                 @unlink($tempFile);
-                setFlash('danger', __('admin.modules.download_too_large', ['size' => formatSize($maxSize)]));
 
-                return redirect()->back();
+                return redirect()->back()
+                    ->with('danger', __('admin.modules.download_too_large', ['size' => formatSize($maxSize)]));
             }
 
             if (file_get_contents($tempFile, false, null, 0, 4) !== "PK\x03\x04") {
                 @unlink($tempFile);
-                setFlash('danger', __('admin.modules.download_not_zip'));
 
-                return redirect()->back();
+                return redirect()->back()
+                    ->with('danger', __('admin.modules.download_not_zip'));
             }
 
             try {
@@ -324,9 +317,9 @@ class ModuleController extends AdminController
             }
         } catch (\Exception $e) {
             @unlink($tempFile);
-            setFlash('danger', $e->getMessage());
 
-            return redirect()->back();
+            return redirect()->back()
+                ->with('danger', $e->getMessage());
         }
 
         // Для уже установленного модуля распаковка — лишь первый шаг обновления:
@@ -437,9 +430,9 @@ class ModuleController extends AdminController
         $this->deleteDirectory($modulePath);
 
         refreshCaches();
-        setFlash('success', __('admin.modules.module_files_deleted'));
 
-        return redirect()->route('admin.modules.index');
+        return redirect()->route('admin.modules.index')
+            ->with('success', __('admin.modules.module_files_deleted'));
     }
 
     /**
@@ -530,9 +523,8 @@ class ModuleController extends AdminController
             $result = __('admin.modules.module_success_disabled');
         } else {
             if (config('modules.safe_mode')) {
-                setFlash('danger', __('admin.modules.safe_mode_enabled'));
-
-                return redirect('admin/modules/module?module=' . $moduleName);
+                return redirect('admin/modules/module?module=' . $moduleName)
+                    ->with('danger', __('admin.modules.safe_mode_enabled'));
             }
 
             $module->rollback();
@@ -545,8 +537,7 @@ class ModuleController extends AdminController
         // После смены статуса модуля — пересборка соберёт роуты без него
         refreshCaches();
 
-        setFlash('success', $result);
-
-        return redirect('admin/modules/module?module=' . $moduleName);
+        return redirect('admin/modules/module?module=' . $moduleName)
+            ->with('success', $result);
     }
 }

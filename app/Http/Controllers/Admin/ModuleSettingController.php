@@ -39,9 +39,8 @@ abstract class ModuleSettingController extends AdminController
         $sets = $request->input('sets', []);
 
         if (empty($sets)) {
-            setFlash('danger', __('settings.settings_empty'));
-
-            return redirect()->back();
+            return redirect()->back()
+                ->with('danger', __('settings.settings_empty'));
         }
 
         foreach ($sets as $name => $value) {
@@ -49,8 +48,8 @@ abstract class ModuleSettingController extends AdminController
         }
 
         clearCache('settings');
-        setFlash('success', __('settings.settings_success_saved'));
 
-        return redirect()->route($this->route);
+        return redirect()->route($this->route)
+            ->with('success', __('settings.settings_success_saved'));
     }
 }

@@ -42,7 +42,7 @@ class RegisterTest extends TestCase
         $response = $this->register();
 
         $response->assertRedirect('/');
-        $response->assertSessionHas('flash.success');
+        $response->assertSessionHas('success');
 
         $user = User::query()->where('login', 'newuser')->first();
         $this->assertNotNull($user);
@@ -72,8 +72,8 @@ class RegisterTest extends TestCase
 
         $response = $this->register(['email' => 'other@example.com']);
 
-        $response->assertOk();
-        $response->assertSee('alert-danger', false);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
         $this->assertDatabaseCount('users', 1);
         $this->assertGuest();
     }
@@ -84,8 +84,8 @@ class RegisterTest extends TestCase
 
         $response = $this->register(['login' => 'otheruser']);
 
-        $response->assertOk();
-        $response->assertSee('alert-danger', false);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
         $this->assertDatabaseCount('users', 1);
         $this->assertGuest();
     }
@@ -95,8 +95,8 @@ class RegisterTest extends TestCase
     {
         $response = $this->register(['login' => $login]);
 
-        $response->assertOk();
-        $response->assertSee('alert-danger', false);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
         $this->assertDatabaseCount('users', 0);
         $this->assertGuest();
     }
@@ -119,8 +119,8 @@ class RegisterTest extends TestCase
 
         $response = $this->register();
 
-        $response->assertOk();
-        $response->assertSee('alert-danger', false);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
         $this->assertDatabaseCount('users', 0);
         $this->assertGuest();
     }
@@ -142,8 +142,8 @@ class RegisterTest extends TestCase
         // Повтор с тем же кодом и валидными данными — капча уже потреблена
         $response = $this->post('/register', self::VALID_INPUT);
 
-        $response->assertOk();
-        $response->assertSee('alert-danger', false);
+        $response->assertRedirect();
+        $response->assertSessionHasErrors();
         $this->assertDatabaseCount('users', 0);
         $this->assertGuest();
     }

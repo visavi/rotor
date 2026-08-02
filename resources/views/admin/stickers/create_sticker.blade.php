@@ -30,7 +30,7 @@
 
             <div class="mb-3{{ hasError('code') }}">
                 <label for="code" class="form-label">{{ __('stickers.sticker_code') }}:</label>
-                <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ getInput('code') }}" required>
+                <input type="text" class="form-control" id="code" name="code" maxlength="20" value="{{ old('code') }}" required>
                 <div class="invalid-feedback">{{ textError('code') }}</div>
             </div>
 

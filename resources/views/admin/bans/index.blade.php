@@ -17,7 +17,7 @@
     <div class="section-form mb-3 shadow">
         <form method="get" action="/admin/bans/edit">
             <div class="input-group{{ hasError('user') }}">
-                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
+                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ old('user') }}" placeholder="{{ __('main.user_login') }}" required>
                 <button class="btn btn-primary">{{ __('main.edit') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>

@@ -19,7 +19,7 @@
             <div class="mb-3{{ hasError('themes') }}">
                 <label for="themes" class="form-label">{{ __('users.theme') }}:</label>
 
-                <?php $inputThemes = getInput('themes', $user->themes); ?>
+                <?php $inputThemes = old('themes', $user->themes); ?>
                 <select class="form-select" name="themes" id="themes">
                     @foreach ($setting['themes'] as $theme)
                         <?php $selected = ($theme === $inputThemes) ? ' selected' : ''; ?>
@@ -30,7 +30,7 @@
                 <div class="invalid-feedback">{{ textError('themes') }}</div>
             </div>
 
-            <?php $inputLang = getInput('language', $user->language); ?>
+            <?php $inputLang = old('language', $user->language); ?>
             <div class="mb-3{{ hasError('language') }}">
                 <label for="language" class="form-label">{{ __('users.language') }}:</label>
 
@@ -44,7 +44,7 @@
                 <div class="invalid-feedback">{{ textError('language') }}</div>
             </div>
 
-            <?php $inputTimezone = (int) getInput('timezone', $user->timezone); ?>
+            <?php $inputTimezone = (int) old('timezone', $user->timezone); ?>
             <div class="mb-3{{ hasError('timezone') }}">
                 <label for="timezone" class="form-label">{{ __('users.time_shifting') }} {{ dateFixed(now(), 'H:i') }}:</label>
 
@@ -60,25 +60,25 @@
 
             <div class="form-check">
                 <input type="hidden" value="0" name="notify_comment">
-                <input type="checkbox" class="form-check-input" value="1" name="notify_comment" id="notify_comment"{{ getInput('notify_comment', $user->notify_comment) ? ' checked' : '' }}>
+                <input type="checkbox" class="form-check-input" value="1" name="notify_comment" id="notify_comment"{{ old('notify_comment', $user->notify_comment) ? ' checked' : '' }}>
                 <label data-bs-toggle="tooltip" title="{{ __('users.notify_comment_hint') }}" class="form-check-label" for="notify_comment">{{ __('users.notify_comment') }}</label>
             </div>
 
             <div class="form-check">
                 <input type="hidden" value="0" name="notify_reply">
-                <input type="checkbox" class="form-check-input" value="1" name="notify_reply" id="notify_reply"{{ getInput('notify_reply', $user->notify_reply) ? ' checked' : '' }}>
+                <input type="checkbox" class="form-check-input" value="1" name="notify_reply" id="notify_reply"{{ old('notify_reply', $user->notify_reply) ? ' checked' : '' }}>
                 <label data-bs-toggle="tooltip" title="{{ __('users.notify_reply_hint') }}" class="form-check-label" for="notify_reply">{{ __('users.notify_reply') }}</label>
             </div>
 
             <div class="form-check">
                 <input type="hidden" value="0" name="notify_mention">
-                <input type="checkbox" class="form-check-input" value="1" name="notify_mention" id="notify_mention"{{ getInput('notify_mention', $user->notify_mention) ? ' checked' : '' }}>
+                <input type="checkbox" class="form-check-input" value="1" name="notify_mention" id="notify_mention"{{ old('notify_mention', $user->notify_mention) ? ' checked' : '' }}>
                 <label data-bs-toggle="tooltip" title="{{ __('users.notify_mention_hint') }}" class="form-check-label" for="notify_mention">{{ __('users.notify_mention') }}</label>
             </div>
 
             <div class="form-check mb-3">
                 <input type="hidden" value="0" name="subscribe">
-                <input type="checkbox" class="form-check-input" value="1" name="subscribe" id="subscribe"{{ getInput('subscribe', $user->subscribe) ? ' checked' : '' }}>
+                <input type="checkbox" class="form-check-input" value="1" name="subscribe" id="subscribe"{{ old('subscribe', $user->subscribe) ? ' checked' : '' }}>
                 <label data-bs-toggle="tooltip" title="{{ __('users.newsletters_hint') }}" class="form-check-label" for="subscribe">{{ __('users.receive_newsletters') }}</label>
             </div>
 

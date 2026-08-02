@@ -34,7 +34,7 @@ class ReglistController extends AdminController
                             'level' => User::USER,
                         ]);
 
-                    setFlash('success', __('admin.reglists.users_success_approved'));
+                    $message = __('admin.reglists.users_success_approved');
                 } else {
                     $users = User::query()
                         ->whereIn('id', $choice)
@@ -44,14 +44,16 @@ class ReglistController extends AdminController
                         $user->delete();
                     });
 
-                    setFlash('success', __('admin.reglists.users_success_deleted'));
+                    $message = __('admin.reglists.users_success_deleted');
                 }
 
-                return redirect('admin/reglists?page=' . $page);
+                return redirect('admin/reglists?page=' . $page)
+                    ->with('success', $message);
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $users = User::query()

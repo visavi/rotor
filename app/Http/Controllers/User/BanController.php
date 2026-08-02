@@ -33,9 +33,8 @@ class BanController extends Controller
                 'timeban' => null,
             ]);
 
-            setFlash('success', __('users.ban_expired'));
-
-            return redirect('/');
+            return redirect('/')
+                ->with('success', __('users.ban_expired'));
         }
 
         $banhist = Banhist::query()
@@ -66,13 +65,13 @@ class BanController extends Controller
                     'explain' => 1,
                 ]);
 
-                setFlash('success', __('users.explain_sent_success'));
-
-                return redirect('ban');
+                return redirect('ban')
+                    ->with('success', __('users.explain_sent_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('ban')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('users/bans', compact('user', 'banhist'));

@@ -68,8 +68,9 @@ class RecoveryController extends Controller
                 return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('recovery')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('users/recovery');

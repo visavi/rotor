@@ -19,10 +19,10 @@
             @csrf
             <div class="mb-3">
                 <label for="inputLogin" class="form-label">{{ __('users.login_or_email') }}:</label>
-                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ getInput('login') }}" required>
+                <input class="form-control" name="login" id="inputLogin" maxlength="50" value="{{ old('login') }}" required>
 
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
-                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ getInput('password') }}" required>
+                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ old('password') }}" required>
             </div>
 
             <div class="form-check">

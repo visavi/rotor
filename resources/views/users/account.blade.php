@@ -20,7 +20,7 @@
             @csrf
             <div class="mb-3{{ hasError('email') }}">
                 <label for="email" class="form-label">{{ __('users.email') }}:</label>
-                <input class="form-control" id="email" name="email" maxlength="50" value="{{ getInput('email', $user->email) }}">
+                <input class="form-control" id="email" name="email" maxlength="50" value="{{ old('email', $user->email) }}">
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
@@ -45,7 +45,7 @@
                 @csrf
                 <label for="status" class="form-label">{{ __('users.personal_status') }}:</label>
                 <div class="input-group{{ hasError('status') }}">
-                    <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ getInput('status', $user->status) }}">
+                    <input type="text" class="form-control" id="status" name="status" maxlength="20" value="{{ old('status', $user->status) }}">
                     <button class="btn btn-primary">{{ __('main.change') }}</button>
                 </div>
                 <div class="invalid-feedback">{{ textError('status') }}</div>
@@ -69,7 +69,7 @@
         <div class="section-form mb-3 shadow">
             <form method="post" action="/accounts/editcolor">
                 @csrf
-                <?php $color = getInput('color', $user->color); ?>
+                <?php $color = old('color', $user->color); ?>
                 <div class="col-sm-4 mb-3{{ hasError('color') }}">
                     <label for="color" class="form-label">{{ __('users.personal_color') }}:</label>
                     <div class="input-group">
@@ -100,13 +100,13 @@
             @csrf
             <div class="mb-3{{ hasError('new_password') }}">
                 <label for="new_password" class="form-label">{{ __('users.new_password') }}:</label>
-                <input class="form-control" id="new_password" name="new_password" maxlength="20" value="{{ getInput('new_password') }}">
+                <input class="form-control" id="new_password" name="new_password" maxlength="20" value="{{ old('new_password') }}">
                 <div class="invalid-feedback">{{ textError('new_password') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('confirm_password') }}">
                 <label for="confirm_password" class="form-label">{{ __('users.confirm_password') }}:</label>
-                <input class="form-control" id="confirm_password" name="confirm_password" maxlength="20" value="{{ getInput('confirm_password') }}">
+                <input class="form-control" id="confirm_password" name="confirm_password" maxlength="20" value="{{ old('confirm_password') }}">
                 <div class="invalid-feedback">{{ textError('confirm_password') }}</div>
             </div>
 

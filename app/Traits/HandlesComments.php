@@ -189,19 +189,17 @@ trait HandlesComments
                 return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
             }
 
-            setFlash('success', __('main.comment_added_success'));
-
-            return $this->redirectAfterCommentAdded($model, $comment->id);
+            return $this->redirectAfterCommentAdded($model, $comment->id)
+                ->with('success', __('main.comment_added_success'));
         }
 
         if ($request->wantsJson()) {
             return response()->json(['errors' => $validator->getErrors()], 422);
         }
 
-        setInput($request->all());
-        setFlash('danger', $validator->getErrors());
-
-        return redirect()->route($viewRoute, $viewParams);
+        return redirect()->route($viewRoute, $viewParams)
+            ->withInput()
+            ->withErrors($validator->getErrors());
     }
 
     /**

@@ -15,7 +15,7 @@
     {{ __('users.welcome', ['login' => getUser('login')]) }}<br>
     {{ __('users.confirm_enter') }}<br>
 
-    <?php $checkEmail = getInput('email') ? true : false; ?>
+    <?php $checkEmail = old('email') ? true : false; ?>
     <?php $display = $checkEmail ? '' : ' style="display: none"'; ?>
 
     <div class="js-resending-form"{!! $display !!}>
@@ -24,7 +24,7 @@
                 @csrf
                 <div class="mb-3{{ hasError('email') }}">
                     <label for="email" class="form-label">{{ __('users.email') }}:</label>
-                    <input class="form-control" name="email" id="email" maxlength="50" value="{{ getInput('email', $user->email) }}" required>
+                    <input class="form-control" name="email" id="email" maxlength="50" value="{{ old('email', $user->email) }}" required>
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
 

@@ -52,17 +52,14 @@ class MailController extends Controller
 
                 $send = sendMail('mailer.default', $data);
 
-                if ($send) {
-                    setFlash('success', __('mails.success_sent'));
-                } else {
-                    setFlash('danger', __('mails.failed_sent'));
-                }
-
-                return redirect('/mails');
+                return $send
+                    ? redirect('/mails')->with('success', __('mails.success_sent'))
+                    : redirect('/mails')->with('danger', __('mails.failed_sent'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('/mails')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('mails/index');
@@ -88,8 +85,7 @@ class MailController extends Controller
         $user->subscribe = null;
         $user->save();
 
-        setFlash('success', __('mails.success_unsubscribed'));
-
-        return redirect('/');
+        return redirect('/')
+            ->with('success', __('mails.success_unsubscribed'));
     }
 }

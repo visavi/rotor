@@ -129,13 +129,13 @@ class UserController extends Controller
 
                     Auth::login($user, true);
 
-                    setFlash('success', __('users.welcome', ['login' => $login]));
-
-                    return redirect('/');
+                    return redirect('/')
+                        ->with('success', __('users.welcome', ['login' => $login]));
                 }
 
-                setInput($request->all());
-                setFlash('danger', $validator->getErrors());
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors($validator->getErrors());
             }
         }
 
@@ -174,10 +174,9 @@ class UserController extends Controller
                     try {
                         $authorized = Auth::attempt($credentials, $remember);
                     } catch (\RuntimeException) {
-                        setInput($request->all());
-                        setFlash('danger', __('users.password_reset_required'));
-
-                        return redirect('recovery');
+                        return redirect('recovery')
+                            ->withInput()
+                            ->with('danger', __('users.password_reset_required'));
                     }
 
                     if ($authorized) {
@@ -189,14 +188,15 @@ class UserController extends Controller
                     }
 
                     $flood->saveState(300);
-                    setInput($request->all());
-                    setFlash('danger', __('users.incorrect_login_or_password'));
-                } else {
-                    setInput($request->all());
-                    setFlash('danger', $validator->getErrors());
+
+                    return redirect('login')
+                        ->withInput()
+                        ->with('danger', __('users.incorrect_login_or_password'));
                 }
 
-                return redirect('login');
+                return redirect('login')
+                    ->withInput()
+                    ->withErrors($validator->getErrors());
             }
         }
 
@@ -271,13 +271,13 @@ class UserController extends Controller
                     $handler($user, $request);
                 }
 
-                setFlash('success', __('users.profile_success_changed'));
-
-                return redirect('profile');
+                return redirect('profile')
+                    ->with('success', __('users.profile_success_changed'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('users/profile', compact('user'));
@@ -334,13 +334,14 @@ class UserController extends Controller
                 ];
 
                 sendMail('mailer.register', $data);
-                setFlash('success', __('users.confirm_code_success_sent'));
 
-                return redirect()->route('verify');
+                return redirect()->route('verify')
+                    ->with('success', __('users.confirm_code_success_sent'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->route('verify')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('users/verify', compact('user'));
@@ -404,17 +405,13 @@ class UserController extends Controller
                     'language'       => $language,
                 ]);
 
-                if (now()->month === 4 && now()->day === 1 && ! empty($themes)) {
-                    $request->session()->put('april_fools_theme', $themes);
-                }
-
-                setFlash('success', __('users.settings_success_changed'));
-
-                return redirect('settings');
+                return redirect('settings')
+                    ->with('success', __('users.settings_success_changed'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('users/settings', compact('user', 'setting'));

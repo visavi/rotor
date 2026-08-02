@@ -57,18 +57,18 @@ class BanhistController extends AdminController
 
         $validator->true($del, __('validator.deletion'));
 
-        if ($validator->isValid()) {
-            Banhist::query()->whereIn('id', $del)->delete();
+        $redirect = $login
+            ? 'admin/banhists/view?user=' . $login . '&page=' . $page
+            : 'admin/banhists?page=' . $page;
 
-            setFlash('success', __('main.records_deleted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect($redirect)
+                ->withErrors($validator->getErrors());
         }
 
-        if ($login) {
-            return redirect('admin/banhists/view?user=' . $login . '&page=' . $page);
-        }
+        Banhist::query()->whereIn('id', $del)->delete();
 
-        return redirect('admin/banhists?page=' . $page);
+        return redirect($redirect)
+            ->with('success', __('main.records_deleted_success'));
     }
 }

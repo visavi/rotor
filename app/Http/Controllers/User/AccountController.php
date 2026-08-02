@@ -60,34 +60,34 @@ class AccountController extends Controller
         $emailChange = EmailChange::query()->where('user_id', $user->id)->first();
         $validator->empty($emailChange, __('users.confirm_already_sent'));
 
-        if ($validator->isValid()) {
-            $token = Str::random(32);
-            $changeUrl = route('accounts.edit-mail', ['token' => $token]);
-
-            $subject = 'Изменение email на ' . setting('title');
-            $data = [
-                'to'        => $email,
-                'subject'   => $subject,
-                'username'  => $user->getName(),
-                'changeUrl' => $changeUrl,
-            ];
-
-            sendMail('mailer.change_mail', $data);
-
-            EmailChange::query()->create([
-                'user_id'    => $user->id,
-                'email'      => $email,
-                'token'      => $token,
-                'created_at' => now(),
-            ]);
-
-            setFlash('success', __('users.confirm_success_sent'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('accounts')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('accounts');
+        $token = Str::random(32);
+        $changeUrl = route('accounts.edit-mail', ['token' => $token]);
+
+        $subject = 'Изменение email на ' . setting('title');
+        $data = [
+            'to'        => $email,
+            'subject'   => $subject,
+            'username'  => $user->getName(),
+            'changeUrl' => $changeUrl,
+        ];
+
+        sendMail('mailer.change_mail', $data);
+
+        EmailChange::query()->create([
+            'user_id'    => $user->id,
+            'email'      => $email,
+            'token'      => $token,
+            'created_at' => now(),
+        ]);
+
+        return redirect('accounts')
+            ->with('success', __('users.confirm_success_sent'));
     }
 
     /**
@@ -153,20 +153,21 @@ class AccountController extends Controller
             ->gte($user->money, $cost, ['status' => __('users.status_moneys')])
             ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false);
 
-        if ($validator->isValid()) {
-            $user->update([
-                'status' => $status,
-                'money'  => DB::raw('money - ' . $cost),
-            ]);
-
-            clearCache('status');
-            setFlash('success', __('users.status_success_changed'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('accounts')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('accounts');
+        $user->update([
+            'status' => $status,
+            'money'  => DB::raw('money - ' . $cost),
+        ]);
+
+        clearCache('status');
+
+        return redirect('accounts')
+            ->with('success', __('users.status_success_changed'));
     }
 
     /**
@@ -188,19 +189,19 @@ class AccountController extends Controller
             ->gte($user->money, $cost, ['color' => __('users.color_moneys')])
             ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
-        if ($validator->isValid()) {
-            $user->update([
-                'color' => $color,
-                'money' => DB::raw('money - ' . $cost),
-            ]);
-
-            setFlash('success', __('users.color_success_changed'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('accounts')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('accounts');
+        $user->update([
+            'color' => $color,
+            'money' => DB::raw('money - ' . $cost),
+        ]);
+
+        return redirect('accounts')
+            ->with('success', __('users.color_success_changed'));
     }
 
     /**
@@ -277,9 +278,8 @@ class AccountController extends Controller
             'apikey' => $apiKey,
         ]);
 
-        setFlash('success', $message);
-
-        return redirect('accounts');
+        return redirect('accounts')
+            ->with('success', $message);
     }
 
     /**

@@ -61,7 +61,7 @@
         <form action="/admin/banhists/view" method="get">
             <label for="user" class="form-label">{{ __('admin.banhists.search_user') }}:</label>
             <div class="input-group{{ hasError('user') }}">
-                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ getInput('user') }}" placeholder="{{ __('main.user_login') }}" required>
+                <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ old('user') }}" placeholder="{{ __('main.user_login') }}" required>
                 <button class="btn btn-primary">{{ __('main.search') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('user') }}</div>

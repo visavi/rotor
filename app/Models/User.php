@@ -578,15 +578,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Getting daily bonus
+     * Начисляет ежедневный бонус
+     *
+     * Возвращает текст уведомления, если бонус начислен, иначе null.
+     * Сессию не трогает — за показ уведомления отвечает вызывающий код
      */
-    public function gettingBonus(): void
+    public function gettingBonus(): ?string
     {
-        if ($this->isActive() && (! $this->timebonus || $this->timebonus->lt(now()->subHours(23)))) {
-            $this->increment('money', setting('bonusmoney'));
-            $this->update(['timebonus' => now()]);
-
-            setFlash('success', __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]));
+        if (! $this->isActive() || ($this->timebonus && $this->timebonus->gte(now()->subHours(23)))) {
+            return null;
         }
+
+        $this->increment('money', setting('bonusmoney'));
+        $this->update(['timebonus' => now()]);
+
+        return __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]);
     }
 }

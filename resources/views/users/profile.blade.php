@@ -21,42 +21,42 @@
                     <div class="col-md-6">
                         <div class="mb-3{{ hasError('name') }}">
                             <label for="inputName" class="form-label">{{ __('users.name') }}:</label>
-                            <input class="form-control" id="inputName" name="name" maxlength="20" value="{{ getInput('name', $user->name) }}">
+                            <input class="form-control" id="inputName" name="name" maxlength="20" value="{{ old('name', $user->name) }}">
                             <div class="invalid-feedback">{{ textError('name') }}</div>
                         </div>
 
                         <div class="mb-3{{ hasError('country') }}">
                             <label for="inputCountry" class="form-label">{{ __('users.country') }}:</label>
-                            <input class="form-control" id="inputCountry" name="country" maxlength="30" value="{{ getInput('country', $user->country) }}">
+                            <input class="form-control" id="inputCountry" name="country" maxlength="30" value="{{ old('country', $user->country) }}">
                             <div class="invalid-feedback">{{ textError('country') }}</div>
                         </div>
 
                         <div class="mb-3{{ hasError('city') }}">
                             <label for="inputCity" class="form-label">{{ __('users.city') }}:</label>
-                            <input class="form-control" id="inputCity" name="city" maxlength="50" value="{{ getInput('city', $user->city) }}">
+                            <input class="form-control" id="inputCity" name="city" maxlength="50" value="{{ old('city', $user->city) }}">
                             <div class="invalid-feedback">{{ textError('city') }}</div>
                         </div>
 
                         <div class="mb-3{{ hasError('phone') }}">
                             <label for="inputPhone" class="form-label">{{ __('users.phone') }}:</label>
-                            <input class="phone form-control" id="inputPhone" name="phone" placeholder="+7 ___ ___-__-__" maxlength="18" value="{{ getInput('phone', $user->phone) }}">
+                            <input class="phone form-control" id="inputPhone" name="phone" placeholder="+7 ___ ___-__-__" maxlength="18" value="{{ old('phone', $user->phone) }}">
                             <div class="invalid-feedback">{{ textError('phone') }}</div>
                         </div>
 
                         <div class="mb-3{{ hasError('site') }}">
                             <label for="inputSite" class="form-label">{{ __('users.site') }}:</label>
-                            <input class="form-control" id="inputSite" name="site" maxlength="50" value="{{ getInput('site', $user->site) }}">
+                            <input class="form-control" id="inputSite" name="site" maxlength="50" value="{{ old('site', $user->site) }}">
                             <div class="invalid-feedback">{{ textError('site') }}</div>
                         </div>
 
 
                         <div class="mb-3{{ hasError('birthday') }}">
                             <label for="inputBirthday" class="form-label">{{ __('users.birthday') }} (dd.mm.yyyy):</label>
-                            <input class="birthday form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
+                            <input class="birthday form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ old('birthday', $user->birthday) }}">
                             <div class="invalid-feedback">{{ textError('birthday') }}</div>
                         </div>
 
-                        <?php $inputGender = getInput('gender', $user->gender); ?>
+                        <?php $inputGender = old('gender', $user->gender); ?>
                         {{ __('users.gender') }}:
                         <div class="mb-3{{ hasError('gender') }}">
                             <div class="form-check">
@@ -88,7 +88,7 @@
                     <div class="col-md-12">
                         <div class="mb-3{{ hasError('info') }}">
                             <label for="info" class="form-label">{{ __('users.about') }}:</label>
-                            <textarea class="form-control tiptap" id="info" cols="25" rows="5" name="info">{{ getInput('info', $user->info) }}</textarea>
+                            <textarea class="form-control tiptap" id="info" cols="25" rows="5" name="info">{{ old('info', $user->info) }}</textarea>
                             <div class="invalid-feedback">{{ textError('info') }}</div>
                         </div>
 

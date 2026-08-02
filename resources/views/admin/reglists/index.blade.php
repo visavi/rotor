@@ -50,7 +50,7 @@
                 </div>
             @endforeach
 
-            <?php $inputAction = getInput('action'); ?>
+            <?php $inputAction = old('action'); ?>
             <div class="input-group{{ hasError('action') }}">
                 <select class="form-select" name="action">
                     <option>{{ __('main.action') }}</option>

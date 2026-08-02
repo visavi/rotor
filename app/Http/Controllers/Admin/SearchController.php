@@ -33,8 +33,7 @@ class SearchController extends AdminController
     {
         Artisan::call('search:import');
 
-        setFlash('success', __('main.records_added_success'));
-
-        return redirect()->route('admin.search.index');
+        return redirect()->route('admin.search.index')
+            ->with('success', __('main.records_added_success'));
     }
 }

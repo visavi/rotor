@@ -19,7 +19,7 @@
             <form method="post" action="/install/account?lang={{ $lang }}">
                 <div class="mb-3{{ hasError('login') }}">
                     <label for="login" class="form-label">{{ __('users.login') }} (max20):</label>
-                    <input type="text" class="form-control" name="login" id="login" maxlength="20" value="{{ $login }}">
+                    <input type="text" class="form-control" name="login" id="login" maxlength="20" value="{{ old('login', $login) }}">
                     <span class="text-muted fst-italic">{{ __('users.login_requirements') }}</span>
                     <div class="invalid-feedback">{{ textError('login') }}</div>
                 </div>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="mb-3{{ hasError('email') }}">
                     <label for="email" class="form-label">{{ __('users.email') }}:</label>
-                    <input class="form-control" name="email" id="email" maxlength="50" value="{{ $email }}">
+                    <input class="form-control" name="email" id="email" maxlength="50" value="{{ old('email', $email) }}">
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                 </div>
 

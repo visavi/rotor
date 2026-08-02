@@ -61,20 +61,18 @@ class StickerController extends AdminController
 
         $validator->length($name, 3, 50, ['name' => __('validator.text')]);
 
-        if ($validator->isValid()) {
-            $category = StickersCategory::query()->create([
-                'name' => $name,
-            ]);
-
-            setFlash('success', __('stickers.category_success_created'));
-
-            return redirect('admin/stickers/' . $category->id);
+        if (! $validator->isValid()) {
+            return redirect('admin/stickers')
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
-        setInput($request->all());
-        setFlash('danger', $validator->getErrors());
+        $category = StickersCategory::query()->create([
+            'name' => $name,
+        ]);
 
-        return redirect('admin/stickers');
+        return redirect('admin/stickers/' . $category->id)
+            ->with('success', __('stickers.category_success_created'));
     }
 
     /**
@@ -98,13 +96,13 @@ class StickerController extends AdminController
                     'name' => $name,
                 ]);
 
-                setFlash('success', __('stickers.category_success_changed'));
-
-                return redirect('admin/stickers');
+                return redirect('admin/stickers')
+                    ->with('success', __('stickers.category_success_changed'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/stickers/edit/' . $category->id)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/stickers/edit_category', compact('category'));
@@ -126,15 +124,15 @@ class StickerController extends AdminController
             $validator->addError(__('stickers.category_has_stickers'));
         }
 
-        if ($validator->isValid()) {
-            $category->delete();
-
-            setFlash('success', __('stickers.category_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('admin/stickers')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('admin/stickers');
+        $category->delete();
+
+        return redirect('admin/stickers')
+            ->with('success', __('stickers.category_success_deleted'));
     }
 
     /**
@@ -189,9 +187,9 @@ class StickerController extends AdminController
                 ]);
 
                 clearCache(['stickers', 'stickers_map']);
-                setFlash('success', __('stickers.sticker_success_created'));
 
-                return redirect('admin/stickers/' . $cid);
+                return redirect('admin/stickers/' . $cid)
+                    ->with('success', __('stickers.sticker_success_created'));
             }
 
             return redirect('/admin/stickers/sticker/create')
@@ -235,13 +233,14 @@ class StickerController extends AdminController
                 ]);
 
                 clearCache(['stickers', 'stickers_map']);
-                setFlash('success', __('stickers.sticker_success_changed'));
 
-                return redirect('admin/stickers/' . $cid . '?page=' . $page);
+                return redirect('admin/stickers/' . $cid . '?page=' . $page)
+                    ->with('success', __('stickers.sticker_success_changed'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/stickers/sticker/edit/' . $sticker->id . '?page=' . $page)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $categories = StickersCategory::query()->get();
@@ -271,8 +270,8 @@ class StickerController extends AdminController
         $sticker->delete();
 
         clearCache(['stickers', 'stickers_map']);
-        setFlash('success', __('stickers.sticker_success_deleted'));
 
-        return redirect('admin/stickers/' . $category . '?page=' . $page);
+        return redirect('admin/stickers/' . $category . '?page=' . $page)
+            ->with('success', __('stickers.sticker_success_deleted'));
     }
 }

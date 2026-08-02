@@ -6,48 +6,48 @@
     @csrf
     <div class="mb-3{{ hasError('sets[title]') }}">
         <label for="title" class="form-label">{{ __('settings.page_title') }}:</label>
-        <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets.title', $settings['title']) }}" required>
+        <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ old('sets.title', $settings['title']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[title]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[logos]') }}">
         <label for="logos" class="form-label">{{ __('settings.caption_top') }}:</label>
-        <input type="text" class="form-control" id="logos" name="sets[logos]" maxlength="100" value="{{ getInput('sets.logos', $settings['logos']) }}" required>
+        <input type="text" class="form-control" id="logos" name="sets[logos]" maxlength="100" value="{{ old('sets.logos', $settings['logos']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[logos]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[copy]') }}">
         <label for="copy" class="form-label">{{ __('settings.caption_bottom') }}:</label>
-        <input type="text" class="form-control" id="copy" name="sets[copy]" maxlength="100" value="{{ getInput('sets.copy', $settings['copy']) }}" required>
+        <input type="text" class="form-control" id="copy" name="sets[copy]" maxlength="100" value="{{ old('sets.copy', $settings['copy']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[copy]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[logotip]') }}">
         <label for="logotip" class="form-label">{{ __('settings.logotype') }}:</label>
-        <input type="text" class="form-control" id="logotip" name="sets[logotip]" maxlength="100" value="{{ getInput('sets.logotip', $settings['logotip']) }}" required>
+        <input type="text" class="form-control" id="logotip" name="sets[logotip]" maxlength="100" value="{{ old('sets.logotip', $settings['logotip']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[logotip]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[floodstime]') }}">
         <label for="floodstime" class="form-label">{{ __('settings.antiflood') }}:</label>
-        <input type="number" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets.floodstime', $settings['floodstime']) }}" required>
+        <input type="number" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ old('sets.floodstime', $settings['floodstime']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[floodstime]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[doslimit]') }}">
         <label for="doslimit" class="form-label">{{ __('settings.request_limit') }}:</label>
-        <input type="number" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets.doslimit', $settings['doslimit']) }}" required>
+        <input type="number" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ old('sets.doslimit', $settings['doslimit']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[doslimit]') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[currency]') }}">
         <label for="currency" class="form-label">{{ __('settings.currency') }}:</label>
-        <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ getInput('sets.currency', $settings['currency']) }}" required>
+        <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ old('sets.currency', $settings['currency']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[currency]') }}</div>
     </div>
 
     <?php $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR)); ?>
-    <?php $inputLang = getInput('language', $settings['language']); ?>
+    <?php $inputLang = old('language', $settings['language']); ?>
 
     <div class="mb-3{{ hasError('sets[language]') }}">
         <label for="language" class="form-label">{{ __('settings.language') }}:</label>
@@ -61,7 +61,7 @@
         <div class="invalid-feedback">{{ textError('sets[language]') }}</div>
     </div>
 
-    <?php $inputLangFallback = getInput('language_fallback', $settings['language_fallback']); ?>
+    <?php $inputLangFallback = old('language_fallback', $settings['language_fallback']); ?>
 
     <div class="mb-3{{ hasError('sets[language_fallback]') }}">
         <label for="language_fallback" class="form-label">{{ __('settings.fallback_language') }}:</label>
@@ -80,7 +80,7 @@
     </p>
 
     <?php $themes = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR)); ?>
-    <?php $inputThemes = getInput('sets.themes', $settings['themes']); ?>
+    <?php $inputThemes = old('sets.themes', $settings['themes']); ?>
 
     <div class="mb-3{{ hasError('sets[themes]') }}">
         <label for="themes" class="form-label">{{ __('settings.theme') }}:</label>
@@ -93,7 +93,7 @@
         <div class="invalid-feedback">{{ textError('sets[themes]') }}</div>
     </div>
 
-    <?php $inputSite = getInput('sets.closedsite', $settings['closedsite']); ?>
+    <?php $inputSite = old('sets.closedsite', $settings['closedsite']); ?>
 
     <div class="mb-3{{ hasError('sets[closedsite]') }}">
         <label for="closedsite" class="form-label">{{ __('settings.access_site') }}:</label>
@@ -108,13 +108,13 @@
 
     <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[openreg]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[openreg]" id="openreg"{{ getInput('sets.openreg', $settings['openreg']) ? ' checked' : '' }}>
+        <input type="checkbox" class="form-check-input" value="1" name="sets[openreg]" id="openreg"{{ old('sets.openreg', $settings['openreg']) ? ' checked' : '' }}>
         <label class="form-check-label" for="openreg">{{ __('settings.registration_allow') }}</label>
     </div>
 
     <div class="form-check mb-3">
         <input type="hidden" value="0" name="sets[regkeys]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[regkeys]" id="regkeys"{{ getInput('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
+        <input type="checkbox" class="form-check-input" value="1" name="sets[regkeys]" id="regkeys"{{ old('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
         <label class="form-check-label" for="regkeys">{{ __('settings.registration_confirm') }}</label>
     </div>
 

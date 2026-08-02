@@ -27,31 +27,31 @@
             @csrf
             <div class="mb-3{{ hasError('login') }}">
                 <label for="inputLogin" class="form-label">{{ __('users.login') }}:</label>
-                <input onkeyup="return checkLogin(this);" class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ getInput('login') }}" required>
+                <input onkeyup="return checkLogin(this);" class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ old('login') }}" required>
                 <div class="invalid-feedback">{{ textError('login') }}</div>
                 <span class="text-muted fst-italic">{{ __('users.login_requirements') }}</span>
             </div>
 
             <div class="mb-3{{ hasError('password') }}">
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
-                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ getInput('password') }}" required>
+                <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ old('password') }}" required>
                 <div class="invalid-feedback">{{ textError('password') }}</div>
                 <span class="text-muted fst-italic">{{ __('users.password_requirements') }}</span>
             </div>
 
             <div class="mb-3{{ hasError('password2') }}">
                 <label for="inputPassword2" class="form-label">{{ __('users.confirm_password') }}:</label>
-                <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" value="{{ getInput('password2') }}" required>
+                <input class="form-control" name="password2" type="password" id="inputPassword2" maxlength="20" value="{{ old('password2') }}" required>
                 <div class="invalid-feedback">{{ textError('password2') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('email') }}">
                 <label for="inputEmail" class="form-label">{{ __('users.email') }}:</label>
-                <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ getInput('email') }}" required>
+                <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ old('email') }}" required>
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 
-            <?php $inputGender = getInput('gender', 'male'); ?>
+            <?php $inputGender = old('gender', 'male'); ?>
             Пол:
             <div class="mb-3{{ hasError('gender') }}">
                 <div class="form-check">

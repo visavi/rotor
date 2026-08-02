@@ -35,13 +35,13 @@ class IpBanController extends AdminController
 
                 clearCache('ipBan');
 
-                setFlash('success', __('admin.ipbans.ip_success_added'));
-
-                return redirect('admin/ipbans');
+                return redirect('admin/ipbans')
+                    ->with('success', __('admin.ipbans.ip_success_added'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $logs = Ban::query()
@@ -62,16 +62,18 @@ class IpBanController extends AdminController
 
         $validator->true($del, __('validator.deletion'));
 
-        if ($validator->isValid()) {
-            Ban::query()->whereIn('id', $del)->delete();
-            clearCache('ipBan');
+        $redirect = 'admin/ipbans?page=' . $page;
 
-            setFlash('success', __('admin.ipbans.ip_selected_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect($redirect)
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('admin/ipbans?page=' . $page);
+        Ban::query()->whereIn('id', $del)->delete();
+        clearCache('ipBan');
+
+        return redirect($redirect)
+            ->with('success', __('admin.ipbans.ip_selected_deleted'));
     }
 
     /**
@@ -81,15 +83,15 @@ class IpBanController extends AdminController
     {
         $validator->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
-        if ($validator->isValid()) {
-            Ban::query()->truncate();
-            clearCache('ipBan');
-
-            setFlash('success', __('admin.ipbans.ip_success_cleared'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect()->route('admin.ipbans.index')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect()->route('admin.ipbans.index');
+        Ban::query()->truncate();
+        clearCache('ipBan');
+
+        return redirect()->route('admin.ipbans.index')
+            ->with('success', __('admin.ipbans.ip_success_cleared'));
     }
 }

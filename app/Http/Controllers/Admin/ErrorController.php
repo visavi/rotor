@@ -65,14 +65,14 @@ class ErrorController extends AdminController
     {
         $validator->true(isAdmin(User::BOSS), __('main.page_only_admins'));
 
-        if ($validator->isValid()) {
-            Error::query()->truncate();
-
-            setFlash('success', __('admin.errors.success_cleared'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect()->route('admin.errors.index')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect()->route('admin.errors.index');
+        Error::query()->truncate();
+
+        return redirect()->route('admin.errors.index')
+            ->with('success', __('admin.errors.success_cleared'));
     }
 }

@@ -145,13 +145,14 @@ class UserController extends AdminController
                 }
 
                 clearCache('status');
-                setFlash('success', [__('users.user_success_changed'), $text]);
 
-                return redirect('admin/users/edit?user=' . $user->login);
+                return redirect('admin/users/edit?user=' . $user->login)
+                    ->with('success', array_filter([__('users.user_success_changed'), $text]));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/users/edit?user=' . $user->login)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $banhist = Banhist::query()
@@ -217,13 +218,13 @@ class UserController extends AdminController
 
                 $user->delete();
 
-                setFlash('success', __('users.user_success_deleted'));
-
-                return redirect('admin/users');
+                return redirect('admin/users')
+                    ->with('success', __('users.user_success_deleted'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/users/delete?user=' . $user->login)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/users/delete', compact('user'));

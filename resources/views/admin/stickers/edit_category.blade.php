@@ -20,7 +20,7 @@
             @csrf
             <div class="mb-3{{ hasError('name') }}">
                 <label for="name" class="form-label">{{ __('stickers.category') }}:</label>
-                <input class="form-control" name="name" id="name" maxlength="50" value="{{ getInput('name', $category->name) }}" required>
+                <input class="form-control" name="name" id="name" maxlength="50" value="{{ old('name', $category->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
             <button class="btn btn-primary">{{ __('main.change') }}</button>

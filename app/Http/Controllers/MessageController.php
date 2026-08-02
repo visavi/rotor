@@ -153,13 +153,13 @@ class MessageController extends Controller
 
             $flood->saveState();
 
-            setFlash('success', __('messages.success_sent'));
-        } else {
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('messages/talk/' . $user->login)
+                ->with('success', __('messages.success_sent'));
         }
 
-        return redirect('messages/talk/' . $user->login);
+        return redirect('messages/talk/' . $user->login)
+            ->withInput()
+            ->withErrors($validator->getErrors());
     }
 
     /**
@@ -178,17 +178,17 @@ class MessageController extends Controller
             ->notEmpty($dialogues->count(), ['user' => __('messages.empty_dialogue')])
             ->empty(getUser('newprivat'), __('messages.unread_messages'));
 
-        if ($validator->isValid()) {
-            foreach ($dialogues as $dialogue) {
-                $dialogue->delete();
-            }
-
-            setFlash('success', __('messages.success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('messages?page=' . $page)
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('messages?page=' . $page);
+        foreach ($dialogues as $dialogue) {
+            $dialogue->delete();
+        }
+
+        return redirect('messages?page=' . $page)
+            ->with('success', __('messages.success_deleted'));
     }
 
     /**

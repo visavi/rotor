@@ -23,15 +23,13 @@ class ModuleRegistryController extends AdminController
         $url = trim($request->input('url', ''));
 
         if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            setFlash('danger', __('admin.registries.invalid_url'));
-
-            return redirect()->route('admin.registries.index');
+            return redirect()->route('admin.registries.index')
+                ->with('danger', __('admin.registries.invalid_url'));
         }
 
         if (ModuleRegistry::query()->where('url', $url)->exists()) {
-            setFlash('danger', __('admin.registries.already_exists'));
-
-            return redirect()->route('admin.registries.index');
+            return redirect()->route('admin.registries.index')
+                ->with('danger', __('admin.registries.already_exists'));
         }
 
         $registry = ModuleRegistry::query()->create([
@@ -40,13 +38,11 @@ class ModuleRegistryController extends AdminController
 
         $registry->fetch(force: true);
 
-        if ($registry->fetchFailed) {
-            setFlash('danger', __('admin.registries.registry_fetch_failed'));
-        } else {
-            setFlash('success', __('admin.registries.registry_success_added'));
-        }
-
-        return redirect()->route('admin.registries.index');
+        return $registry->fetchFailed
+            ? redirect()->route('admin.registries.index')
+                ->with('danger', __('admin.registries.registry_fetch_failed'))
+            : redirect()->route('admin.registries.index')
+                ->with('success', __('admin.registries.registry_success_added'));
     }
 
     public function refresh(int $id): RedirectResponse
@@ -54,13 +50,11 @@ class ModuleRegistryController extends AdminController
         $registry = ModuleRegistry::query()->findOrFail($id);
         $registry->fetch(force: true);
 
-        if ($registry->fetchFailed) {
-            setFlash('danger', __('admin.registries.registry_fetch_failed'));
-        } else {
-            setFlash('success', __('admin.registries.registry_success_refreshed'));
-        }
-
-        return redirect()->route('admin.registries.index');
+        return $registry->fetchFailed
+            ? redirect()->route('admin.registries.index')
+                ->with('danger', __('admin.registries.registry_fetch_failed'))
+            : redirect()->route('admin.registries.index')
+                ->with('success', __('admin.registries.registry_success_refreshed'));
     }
 
     public function toggle(int $id): RedirectResponse
@@ -75,8 +69,7 @@ class ModuleRegistryController extends AdminController
     {
         ModuleRegistry::query()->findOrFail($id)->delete();
 
-        setFlash('success', __('admin.registries.registry_success_deleted'));
-
-        return redirect()->route('admin.registries.index');
+        return redirect()->route('admin.registries.index')
+            ->with('success', __('admin.registries.registry_success_deleted'));
     }
 }

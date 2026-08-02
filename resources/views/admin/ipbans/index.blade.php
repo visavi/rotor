@@ -59,7 +59,7 @@
         <form action="/admin/ipbans" method="post">
             @csrf
             <div class="input-group{{ hasError('ip') }}">
-                <input type="text" class="form-control" id="ip" name="ip" maxlength="39" value="{{ getInput('ip') }}" placeholder="IP-address" required>
+                <input type="text" class="form-control" id="ip" name="ip" maxlength="39" value="{{ old('ip') }}" placeholder="IP-address" required>
                 <button class="btn btn-primary">{{ __('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('ip') }}</div>

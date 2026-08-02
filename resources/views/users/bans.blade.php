@@ -12,7 +12,7 @@
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('users.explanation') }}:</label>
-                        <textarea class="form-control" id="msg" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                        <textarea class="form-control" id="msg" rows="5" name="msg" required>{{ old('msg') }}</textarea>
                         <div class="invalid-feedback">{{ textError('msg') }}</div>
                     </div>
                     <button class="btn btn-primary">{{ __('main.send') }}</button>
