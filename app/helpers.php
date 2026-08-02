@@ -656,16 +656,19 @@ function captchaVerify(): bool
 /**
  * Сохраняет flash уведомления
  *
+ * Мост совместимости для модулей, не переведённых на redirect()->with(). Будет удалён в 15.0
+ *
  * @deprecated since 10.1 - Use redirect()->with('success', 'Message') or redirect()->withErrors($validator->getErrors())
- * $request->session()->flash('flash.{status}', $message);
  */
 function setFlash(string $status, mixed $message): void
 {
-    session(['flash.' . $status => $message]);
+    app('session')->flash($status, $message);
 }
 
 /**
  * Сохраняет POST данные введенных пользователем
+ *
+ * Мост совместимости для модулей, не переведённых на redirect()->withInput(). Будет удалён в 15.0
  *
  * @deprecated since 10.1 - Use $request->flash() or redirect()->withInput();
  */
@@ -676,6 +679,8 @@ function setInput(array $data): void
 
 /**
  * Возвращает значение из POST данных
+ *
+ * Мост совместимости для модулей, не переведённых на old(). Будет удалён в 15.0
  *
  * @deprecated since 10.1 - Use old('field', 'default');
  */

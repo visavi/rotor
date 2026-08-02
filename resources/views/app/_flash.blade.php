@@ -1,16 +1,8 @@
-{{-- Сводим обе системы флеш-уведомлений к одной --}}
 @php
-    $flashBag = (array) session('flash', []);
-
     $grouped = collect(['success', 'danger', 'warning', 'info'])
-        ->mapWithKeys(fn ($status) => [$status => array_unique(array_merge(
-            (array) session()->get($status, []),
-            (array) ($flashBag[$status] ?? []),
-        ))])
+        ->mapWithKeys(fn ($status) => [$status => array_unique((array) session()->get($status, []))])
         ->filter()
         ->all();
-
-    session()->forget('flash');
 @endphp
 
 {{-- Ошибки валидации --}}

@@ -488,7 +488,8 @@ class HelperTest extends TestCase
     {
         setFlash('success', 'Saved');
 
-        self::assertSame('Saved', session('flash.success'));
+        // Legacy-хелпер пишет в тот же ключ, что и redirect()->with()
+        self::assertSame('Saved', session('success'));
     }
 
     public function testInputHelpers(): void
