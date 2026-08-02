@@ -54,13 +54,13 @@ class NoticeController extends AdminController
                     'protect' => $protect,
                 ]);
 
-                setFlash('success', __('admin.notices.notice_success_saved'));
-
-                return redirect('admin/notices/edit/' . $notice->id);
+                return redirect('admin/notices/edit/' . $notice->id)
+                    ->with('success', __('admin.notices.notice_success_saved'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/notices/create');
@@ -94,13 +94,13 @@ class NoticeController extends AdminController
                     'protect' => $protect,
                 ]);
 
-                setFlash('success', __('admin.notices.notice_success_saved'));
-
-                return redirect('admin/notices/edit/' . $notice->id);
+                return redirect('admin/notices/edit/' . $notice->id)
+                    ->with('success', __('admin.notices.notice_success_saved'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/notices/edit', compact('notice'));
@@ -113,18 +113,20 @@ class NoticeController extends AdminController
     {
         $notice = Notice::query()->find($id);
 
-        $validator
-            ->notEmpty($notice, __('admin.notices.notice_not_found'))
-            ->empty($notice->protect, __('admin.notices.notice_protect'));
+        $validator->notEmpty($notice, __('admin.notices.notice_not_found'));
 
-        if ($validator->isValid()) {
-            $notice->delete();
-
-            setFlash('success', __('admin.notices.notice_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if ($notice) {
+            $validator->empty($notice->protect, __('admin.notices.notice_protect'));
         }
 
-        return redirect('admin/notices');
+        if (! $validator->isValid()) {
+            return redirect('admin/notices')
+                ->withErrors($validator->getErrors());
+        }
+
+        $notice->delete();
+
+        return redirect('admin/notices')
+            ->with('success', __('admin.notices.notice_success_deleted'));
     }
 }

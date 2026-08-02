@@ -32,13 +32,13 @@ class AntimatController extends AdminController
                     'string' => $word,
                 ]);
 
-                setFlash('success', __('main.record_added_success'));
-
-                return redirect('admin/antimat');
+                return redirect('admin/antimat')
+                    ->with('success', __('main.record_added_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $words = Antimat::query()->get();
@@ -56,15 +56,15 @@ class AntimatController extends AdminController
         $word = Antimat::query()->find($id);
         $validator->notEmpty($word, __('main.record_not_found'));
 
-        if ($validator->isValid()) {
-            $word->delete();
-
-            setFlash('success', __('main.record_deleted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('admin/antimat')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('admin/antimat');
+        $word->delete();
+
+        return redirect('admin/antimat')
+            ->with('success', __('main.record_deleted_success'));
     }
 
     /**
@@ -74,14 +74,14 @@ class AntimatController extends AdminController
     {
         $validator->true(isAdmin(User::BOSS), __('main.page_only_owner'));
 
-        if ($validator->isValid()) {
-            Antimat::query()->truncate();
-
-            setFlash('success', __('main.records_cleared_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect()->route('admin.antimat.index')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect()->route('admin.antimat.index');
+        Antimat::query()->truncate();
+
+        return redirect()->route('admin.antimat.index')
+            ->with('success', __('main.records_cleared_success'));
     }
 }

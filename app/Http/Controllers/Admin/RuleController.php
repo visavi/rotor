@@ -48,13 +48,13 @@ class RuleController extends AdminController
                     'created_at' => now(),
                 ])->save();
 
-                setFlash('success', __('admin.rules.rules_success_saved'));
-
-                return redirect('admin/rules');
+                return redirect('admin/rules')
+                    ->with('success', __('admin.rules.rules_success_saved'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/rules/edit', compact('rules'));

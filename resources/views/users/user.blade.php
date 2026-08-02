@@ -35,10 +35,9 @@
     @if ($user->level === 'banned' && $user->timeban?->isFuture())
         <div class="alert alert-danger">
             <b>{{ __('users.user_banned') }}</b><br>
-            {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}<br>
-
+            {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}
             @if ($user->lastBan->id)
-                {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>
+                <br>{{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}
             @endif
         </div>
     @endif

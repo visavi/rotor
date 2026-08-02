@@ -68,13 +68,13 @@ class BlacklistController extends AdminController
                     'user_id' => getUser('id'),
                 ]);
 
-                setFlash('success', __('main.record_added_success'));
-
-                return redirect('admin/blacklists?type=' . $type);
+                return redirect('admin/blacklists?type=' . $type)
+                    ->with('success', __('main.record_added_success'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect('admin/blacklists?type=' . $type)
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         $lists = BlackList::query()
@@ -98,14 +98,16 @@ class BlacklistController extends AdminController
 
         $validator->true($del, __('validator.deletion'));
 
-        if ($validator->isValid()) {
-            BlackList::query()->where('type', $type)->whereIn('id', $del)->delete();
+        $redirect = 'admin/blacklists?type=' . $type . '&page=' . $page;
 
-            setFlash('success', __('main.records_deleted_success'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect($redirect)
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('admin/blacklists?type=' . $type . '&page=' . $page);
+        BlackList::query()->where('type', $type)->whereIn('id', $del)->delete();
+
+        return redirect($redirect)
+            ->with('success', __('main.records_deleted_success'));
     }
 }

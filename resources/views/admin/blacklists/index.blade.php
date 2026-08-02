@@ -59,7 +59,7 @@
         <form action="/admin/blacklists?type={{ $type }}" method="post">
             @csrf
             <div class="input-group{{ hasError('value') }}">
-                <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ getInput('value') }}" placeholder="{{ __('main.record') }}" required>
+                <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ old('value') }}" placeholder="{{ __('main.record') }}" required>
                 <button class="btn btn-primary">{{ __('main.add') }}</button>
             </div>
             <div class="invalid-feedback">{{ textError('value') }}</div>

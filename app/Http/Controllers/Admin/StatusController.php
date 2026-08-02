@@ -45,13 +45,13 @@ class StatusController extends AdminController
                     'color'   => $color,
                 ]);
 
-                setFlash('success', __('statuses.status_success_added'));
-
-                return redirect('admin/status');
+                return redirect('admin/status')
+                    ->with('success', __('statuses.status_success_added'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/status/create');
@@ -88,13 +88,13 @@ class StatusController extends AdminController
                     'color'   => $color,
                 ]);
 
-                setFlash('success', __('statuses.status_success_edited'));
-
-                return redirect('admin/status');
+                return redirect('admin/status')
+                    ->with('success', __('statuses.status_success_edited'));
             }
 
-            setInput($request->all());
-            setFlash('danger', $validator->getErrors());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($validator->getErrors());
         }
 
         return view('admin/status/edit', compact('status'));
@@ -110,14 +110,14 @@ class StatusController extends AdminController
         $status = Status::query()->find($id);
         $validator->notEmpty($status, __('statuses.status_not_found'));
 
-        if ($validator->isValid()) {
-            $status->delete();
-
-            setFlash('success', __('statuses.status_success_deleted'));
-        } else {
-            setFlash('danger', $validator->getErrors());
+        if (! $validator->isValid()) {
+            return redirect('admin/status')
+                ->withErrors($validator->getErrors());
         }
 
-        return redirect('admin/status');
+        $status->delete();
+
+        return redirect('admin/status')
+            ->with('success', __('statuses.status_success_deleted'));
     }
 }

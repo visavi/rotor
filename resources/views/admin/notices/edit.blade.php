@@ -27,19 +27,19 @@
             @csrf
             <div class="mb-3{{ hasError('name') }}">
                 <label for="name" class="form-label">{{ __('main.title') }}:</label>
-                <input type="text" class="form-control" id="name" name="name" maxlength="100" value="{{ getInput('name', $notice->name) }}" required>
+                <input type="text" class="form-control" id="name" name="name" maxlength="100" value="{{ old('name', $notice->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('text') }}">
                 <label for="text" class="form-label">{{ __('main.text') }}:</label>
-                <textarea class="form-control tiptap" id="text" rows="15" name="text" required>{{ getInput('text', $notice->text) }}</textarea>
+                <textarea class="form-control tiptap" id="text" rows="15" name="text" required>{{ old('text', $notice->text) }}</textarea>
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
             <div class="form-check">
                 <label class="form-check-label">
-                    <input name="protect" class="form-check-input" type="checkbox" value="1"{{ getInput('protect', $notice->protect) ? ' checked' : '' }}>
+                    <input name="protect" class="form-check-input" type="checkbox" value="1"{{ old('protect', $notice->protect) ? ' checked' : '' }}>
                     {{ __('admin.notices.system_template') }}
                 </label>
             </div>

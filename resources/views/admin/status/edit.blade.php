@@ -19,19 +19,19 @@
             @csrf
             <div class="mb-3">
                 <label for="inputFrom" class="form-label">{{ __('main.from') }}:</label>
-                <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputFrom" name="topoint" placeholder="От" value="{{ getInput('topoint', $status->topoint) }}">
+                <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputFrom" name="topoint" placeholder="От" value="{{ old('topoint', $status->topoint) }}">
 
                 <label for="inputTo" class="form-label">{{ __('main.to') }}:</label>
-                <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputTo" name="point" placeholder="До" value="{{ getInput('point', $status->point) }}">
+                <input type="text" pattern="\d*" maxlength="10" class="form-control" id="inputTo" name="point" placeholder="До" value="{{ old('point', $status->point) }}">
             </div>
 
             <div class="mb-3{{ hasError('name') }}">
                 <label for="inputName" class="form-label">{{ __('main.status') }}:</label>
-                <input type="text" maxlength="30" class="form-control" id="inputName" name="name" placeholder="Статус" value="{{ getInput('name', $status->name) }}" required>
+                <input type="text" maxlength="30" class="form-control" id="inputName" name="name" placeholder="Статус" value="{{ old('name', $status->name) }}" required>
                 <div class="invalid-feedback">{{ textError('name') }}</div>
             </div>
 
-            <?php $color = getInput('color', $status->color); ?>
+            <?php $color = old('color', $status->color); ?>
             <div class="col-sm-4 mb-3{{ hasError('color') }}">
                 <label for="color" class="form-label">{{ __('main.color') }}:</label>
                 <div class="input-group">
