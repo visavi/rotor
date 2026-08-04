@@ -175,6 +175,16 @@ document.addEventListener('DOMContentLoaded', function () {
         addOnBlur: true,
     })
 
+    // Выбор пользователей, адрес поиска задается через data-server
+    tags.init('.input-user', {
+        allowNew: false,
+        liveServer: true,
+        clearEnd: true,
+        allowClear: true,
+        suggestionsThreshold: 2,
+        max: 10,
+    })
+
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {})
 
     let hoveredCarousel = null
