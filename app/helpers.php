@@ -15,6 +15,7 @@ use App\Models\Spam;
 use App\Models\Sticker;
 use App\Models\User;
 use cbschuld\Browser;
+use Illuminate\Container\Container;
 use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\HtmlString;
@@ -569,8 +571,18 @@ function refreshCaches(): void
     Artisan::call('optimize:clear');
 
     if (app()->isProduction()) {
+        // route:cache и config:cache поднимают внутри себя второе приложение
+        // (require bootstrap/app.php), конструктор которого перехватывает
+        // глобальный контейнер и фасады. Без восстановления остаток запроса
+        // работает с чужим экземпляром: теряются view()->share, резолвнутые
+        // сервисы и авторизация
+        $app = app();
+
         Artisan::call('route:cache');
         Artisan::call('config:cache');
+
+        Container::setInstance($app);
+        Facade::setFacadeApplication($app);
     }
 
     // При opcache.validate_timestamps=0 fpm исполняет старые файлы до сброса OPcache

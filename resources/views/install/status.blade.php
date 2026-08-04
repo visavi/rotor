@@ -32,7 +32,7 @@
             <button id="migrate-btn" class="btn btn-primary mb-3" onclick="runMigrations()"
                 data-label="{{ __('install.migrations_run', ['count' => count($pendingMigrations)]) }}"
                 data-running="{{ __('install.migrations_running') }}"
-                data-done="{{ __('install.migrations_done_btn') }}"
+                data-done="{{ $isUpdate ? __('install.main_page') : __('install.seeds') }}"
                 data-all-done="{{ __('install.migrations_all_done') }}"
                 data-next="/install/migrate/next?lang={{ $lang }}"
                 data-error="{{ __('install.migrations_error') }}">
@@ -97,9 +97,9 @@
                     const doneLabel = btn.dataset.done;
                     const allDone = btn.dataset.allDone;
                     @if($isUpdate)
-                        btn.outerHTML = '<a href="/" class="btn btn-primary mb-3"><i class="fa fa-check"></i> ' + doneLabel + '</a>';
+                        btn.outerHTML = '<a href="/" class="btn btn-primary mb-3">' + doneLabel + '</a>';
                     @else
-                        btn.outerHTML = '<a href="/install/seed?lang={{ $lang }}" class="btn btn-primary mb-3"><i class="fa fa-check"></i> ' + doneLabel + '</a>';
+                        btn.outerHTML = '<a href="/install/seed?lang={{ $lang }}" class="btn btn-primary mb-3">' + doneLabel + '</a>';
                     @endif
                     output.innerHTML += '<br><strong>' + allDone + '</strong>';
                 } else if (data.migration) {

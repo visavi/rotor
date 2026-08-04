@@ -48,7 +48,6 @@ return [
     'migrations_pending'         => 'Pending migrations: :count',
     'migrations_run'             => 'Run migrations (:count)',
     'migrations_running'         => 'Running...',
-    'migrations_done_btn'        => 'Done',
     'migrations_all_done'        => 'All migrations completed',
     'migrations_nothing_pending' => 'All migrations already applied',
     'migrations_error'           => 'Request error',

@@ -48,7 +48,6 @@ return [
     'migrations_pending'         => 'Ожидают выполнения миграций: :count',
     'migrations_run'             => 'Выполнить миграции (:count)',
     'migrations_running'         => 'Выполняется...',
-    'migrations_done_btn'        => 'Готово',
     'migrations_all_done'        => 'Все миграции выполнены',
     'migrations_nothing_pending' => 'Все миграции уже выполнены',
     'migrations_error'           => 'Ошибка запроса',
