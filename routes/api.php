@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 Route::controller(ApiController::class)->group(function () {
-    Route::post('/auth', 'auth');
+    Route::post('/auth', 'auth')->middleware('throttle:api-auth');
     Route::get('/config', 'config');
+    // Токен необязателен: гостю лента отдаётся без голосов
+    Route::get('/feed', 'feed')->middleware('check.token.optional');
 });
 
 Route::controller(ApiController::class)
@@ -31,4 +33,5 @@ Route::controller(ApiController::class)
         Route::get('/talk/{login}', 'talk');
         Route::get('/messages/new', 'newMessages');
         Route::post('/talk/{login}', 'createTalk');
+        Route::post('/rating', 'rating');
     });

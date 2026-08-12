@@ -7,6 +7,7 @@ use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckInstallSite;
 use App\Http\Middleware\CheckThrottle;
 use App\Http\Middleware\CheckToken;
+use App\Http\Middleware\CheckTokenOptional;
 use App\Http\Middleware\CheckUser;
 use App\Http\Middleware\CheckUserState;
 use App\Http\Middleware\SaveStatistic;
@@ -33,6 +34,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->throttleApi();
+
         $middleware->append([
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
@@ -54,10 +57,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'check.admin'  => CheckAdmin::class,
-            'check.user'   => CheckUser::class,
-            'check.token'  => CheckToken::class,
-            'admin.logger' => AdminLogger::class,
+            'check.admin'          => CheckAdmin::class,
+            'check.user'           => CheckUser::class,
+            'check.token'          => CheckToken::class,
+            'check.token.optional' => CheckTokenOptional::class,
+            'admin.logger'         => AdminLogger::class,
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {

@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\Rating;
 use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Message;
-use App\Models\Poll;
 use App\Models\Spam;
 use App\Models\Sticker;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -76,76 +74,22 @@ class AjaxController extends Controller
     }
 
     /**
-     * Связь голоса текущего пользователя (morph-имя relate единое по движку)
-     *
-     * @return MorphOne<Poll, Model>
-     */
-    private function pollRelation(Model $post): MorphOne
-    {
-        return $post->morphOne(Poll::class, 'relate')
-            ->where('user_id', getUser('id'));
-    }
-
-    /**
      * Изменяет рейтинг
      */
-    public function rating(Request $request): JsonResponse
+    public function rating(Request $request, Rating $rating): JsonResponse
     {
-        $validTypes = array_merge([
-            Comment::$morphName,
-        ], Registry::$ratingTypes);
+        $result = $rating->vote(
+            getUser(),
+            $request->input('type'),
+            int($request->input('id')),
+            $request->input('vote'),
+        );
 
-        $type = $request->input('type');
-        $vote = $request->input('vote');
-
-        if (! in_array($type, $validTypes, true)) {
-            return response()->json(['success' => false, 'message' => 'Type invalid']);
+        if (isset($result['rating'])) {
+            $result['rating'] = formatNum($result['rating'])->toHtml();
         }
 
-        if (! in_array($vote, ['+', '-'], true)) {
-            return response()->json(['success' => false, 'message' => 'Invalid rating']);
-        }
-
-        $model = Relation::getMorphedModel($type);
-        $post = $model::query()
-            ->where('id', int($request->input('id')))
-            ->where('user_id', '<>', getUser('id'))
-            ->first();
-
-        if (! $post) {
-            return response()->json(['success' => false, 'message' => __('main.record_not_found')]);
-        }
-
-        $poll = $this->pollRelation($post)->firstOrNew();
-        $isCancel = false;
-
-        if ($poll->exists) {
-            if ($poll->vote === $vote) {
-                return response()->json(['success' => false]);
-            }
-            $isCancel = true;
-            $poll->delete();
-        }
-
-        if (! $isCancel) {
-            $this->pollRelation($post)->create([
-                'user_id' => getUser('id'),
-                'vote'    => $vote,
-            ]);
-        }
-
-        // Голос — не изменение контента: обновляем рейтинг через query builder,
-        // чтобы не порождать событие updated (FeedableTrait иначе перезаписывал бы
-        // feeds и сбрасывал кеш ленты на каждый голос)
-        $query = $post->newQuery()->whereKey($post->getKey());
-        $vote === '+' ? $query->increment('rating') : $query->decrement('rating');
-        $post->refresh();
-
-        return response()->json([
-            'success' => true,
-            'cancel'  => $isCancel,
-            'rating'  => formatNum((int) $post->getAttribute('rating'))->toHtml(),
-        ]);
+        return response()->json($result);
     }
 
     /**

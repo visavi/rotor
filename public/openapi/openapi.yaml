@@ -2,7 +2,11 @@ openapi: 3.2.0
 info:
     title: 'Rotor API'
     version: 1.0.0
-    description: 'Для доступа к данным нужен API-ключ, который можно получить через авторизацию или на странице Мои данные'
+    description: |
+        Для доступа к данным нужен API-ключ, который можно получить через авторизацию или на странице Мои данные.
+
+        Лимиты запросов: 120 в минуту на все методы, 10 в минуту на авторизацию.
+        Остаток лимита — в заголовках X-RateLimit-Limit и X-RateLimit-Remaining, при превышении приходит 429 и Retry-After.
 security:
     -
         BearerToken: {  }
@@ -278,6 +282,13 @@ components:
                 parent_id:
                     type: integer
                     description: 'ID родительского раздела (0 — корневой)'
+                parent:
+                    description: 'Родительский раздел, приходит только когда связь загружена; null у корневых'
+                    oneOf:
+                        -
+                            $ref: '#/components/schemas/Forum'
+                        -
+                            type: 'null'
                 sort:
                     type: integer
                     description: 'Порядок сортировки'
@@ -327,6 +338,16 @@ components:
             properties:
                 id:
                     type: integer
+                forum_id:
+                    type: integer
+                    description: 'ID раздела, в котором лежит тема'
+                forum:
+                    description: 'Раздел темы, приходит в GET /topics/{id} (в списке тем раздела не дублируется)'
+                    oneOf:
+                        -
+                            $ref: '#/components/schemas/Forum'
+                        -
+                            type: 'null'
                 title:
                     type: string
                 login:
@@ -432,6 +453,102 @@ components:
                     type: boolean
                 is_video:
                     type: boolean
+        FeedItem:
+            type: object
+            properties:
+                type:
+                    type: string
+                    description: 'Тип записи (comments, news, topics, articles и т.д.)'
+                id:
+                    type: integer
+                section:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Название раздела'
+                title:
+                    type:
+                        - string
+                        - 'null'
+                url:
+                    type:
+                        - string
+                        - 'null'
+                    format: uri
+                text:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'HTML текста записи'
+                rating:
+                    type:
+                        - integer
+                        - 'null'
+                vote:
+                    type:
+                        - object
+                        - 'null'
+                    description: 'Цель голосования, null — тип не поддерживает рейтинг'
+                    properties:
+                        type:
+                            type: string
+                            description: 'Тип для POST /rating (у темы форума — последнее сообщение)'
+                        id:
+                            type: integer
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                            description: 'Голос текущего пользователя, null без токена или если не голосовал'
+                        own:
+                            type: boolean
+                            description: 'Своя запись — голосовать нельзя'
+                comments_count:
+                    type:
+                        - integer
+                        - 'null'
+                user:
+                    $ref: '#/components/schemas/User'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                created_at:
+                    type: string
+                    format: date-time
+                price:
+                    type:
+                        - number
+                        - 'null'
+                    description: 'Только при type=items (объявления): цена, валюта — в настройке currency'
+                phone:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Только при type=items (объявления): телефон продавца'
+                offer_type:
+                    type: string
+                    enum:
+                        - offer
+                        - issue
+                    description: 'Только при type=offers: предложение или проблема'
+                status:
+                    type: string
+                    enum:
+                        - wait
+                        - process
+                        - done
+                        - cancel
+                    description: 'Только при type=offers: статус обработки'
+            additionalProperties: true
+            description: |
+                Набор полей зависит от type: базовые поля приходят всегда, дополнительные — только у своего типа записи
+                (price и phone у объявлений, offer_type и status у предложений).
+                Сторонний модуль может добавить собственные поля, поэтому неизвестные ключи игнорируйте, а не считайте ошибкой.
         PaginationLinks:
             type: object
             properties:
@@ -451,6 +568,47 @@ components:
                         - string
                         - null
                     format: uri
+        SimplePaginationLinks:
+            type: object
+            description: 'last всегда null — общее число страниц не вычисляется'
+            properties:
+                first:
+                    type: string
+                    format: uri
+                last:
+                    type: 'null'
+                prev:
+                    type:
+                        - string
+                        - 'null'
+                    format: uri
+                next:
+                    type:
+                        - string
+                        - 'null'
+                    format: uri
+        SimplePaginationMeta:
+            type: object
+            description: 'Упрощённая пагинация: общее число записей не считается, следующая страница определяется по links.next'
+            properties:
+                current_page:
+                    type: integer
+                current_page_url:
+                    type: string
+                    format: uri
+                from:
+                    type:
+                        - integer
+                        - 'null'
+                path:
+                    type: string
+                    format: uri
+                per_page:
+                    type: integer
+                to:
+                    type:
+                        - integer
+                        - 'null'
         PaginationMeta:
             type: object
             properties:
@@ -512,6 +670,93 @@ paths:
                     description: 'Пользователь заблокирован'
                 422:
                     description: 'Ошибка валидации'
+                429:
+                    description: 'Превышен лимит попыток авторизации (10 в минуту с одного ip)'
+    /feed:
+        get:
+            tags:
+                - Лента
+            summary: 'Лента последних записей сайта'
+            description: 'Токен не обязателен. С токеном в каждом элементе приходит голос текущего пользователя (vote.value)'
+            operationId: getFeed
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    $ref: '#/components/parameters/Page'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/FeedItem'
+                                    links:
+                                        $ref: '#/components/schemas/SimplePaginationLinks'
+                                    meta:
+                                        $ref: '#/components/schemas/SimplePaginationMeta'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    /rating:
+        post:
+            tags:
+                - Лента
+            summary: 'Проголосовать за запись'
+            description: 'Тип и id берутся из поля vote элемента ленты. За свои записи голосовать нельзя, повторный голос в ту же сторону не проходит, голос в другую сторону отменяет предыдущий'
+            operationId: rating
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - type
+                                - id
+                                - vote
+                            properties:
+                                type:
+                                    type: string
+                                    description: 'Тип записи (vote.type из ленты)'
+                                id:
+                                    type: integer
+                                    description: 'Id записи (vote.id из ленты)'
+                                vote:
+                                    type: string
+                                    enum:
+                                        - +
+                                        - '-'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success:
+                                        type: boolean
+                                    cancel:
+                                        type: boolean
+                                        description: 'Голос был отменён (повторное голосование в другую сторону)'
+                                    rating:
+                                        type: integer
+                                        description: 'Рейтинг записи после голосования'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Голос не принят (свой пост, неверный тип или запись не найдена)'
+                429:
+                    description: 'Превышен общий лимит запросов'
     /config:
         get:
             tags:

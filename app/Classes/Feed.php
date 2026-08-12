@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
@@ -24,18 +25,41 @@ class Feed
     /**
      * Встроенные типы плюс зарегистрированные модулями
      */
-    private static function allTypes(): array
+    public static function allTypes(): array
     {
         return array_merge([
             'comments' => [
                 'class' => Comment::class,
                 'with'  => ['relate', 'user', 'files'],
                 'scope' => fn ($query) => $query->visible(),
+                'title' => fn (Comment $post) => $post->relate?->getAttribute('title'),
             ],
         ], Registry::$feeds);
     }
 
+    /**
+     * Конфигурация типа ленты
+     */
+    public static function typeConfig(string $type): array
+    {
+        return self::allTypes()[$type] ?? [];
+    }
+
     public function getFeed(): HtmlString
+    {
+        $posts = $this->getItems();
+        $posts->setPath(url('/'));
+        $posts->setCollection($this->render($posts->getCollection()));
+
+        return new HtmlString((string) view('feeds/_feed', compact('posts')));
+    }
+
+    /**
+     * Возвращает записи ленты без рендера
+     *
+     * @return Paginator<int, Model>
+     */
+    public function getItems(): Paginator
     {
         $allTypes = self::allTypes();
 
@@ -88,10 +112,41 @@ class Feed
                 ->values();
         });
 
-        $posts = new Paginator($this->render($items), $perPage, $currentPage);
-        $posts->setPath(url('/'));
+        return new Paginator($items, $perPage, $currentPage);
+    }
 
-        return new HtmlString((string) view('feeds/_feed', compact('posts')));
+    /**
+     * Проставляет записям голос текущего пользователя (атрибут user_vote)
+     *
+     * @param Collection<int, Model> $items
+     */
+    public function applyVotes(Collection $items): void
+    {
+        $polls = $this->loadPolls($items);
+
+        foreach ($items as $post) {
+            [$type, $id] = self::pollTarget($post);
+
+            $post->setAttribute('user_vote', $id ? ($polls[$type][$id] ?? null) : null);
+        }
+    }
+
+    /**
+     * Запись, за которую идёт голосование: сама запись либо связанная (тема -> последний пост)
+     *
+     * @return array{0: string, 1: int|null}
+     */
+    public static function pollTarget(Model $post): array
+    {
+        $morphName = $post->getMorphClass();
+
+        if ($resolver = Registry::$feeds[$morphName]['poll'] ?? null) {
+            [$type, $id] = $resolver($post) ?: [$morphName, null];
+
+            return [$type, $id];
+        }
+
+        return [$morphName, $post->getKey()];
     }
 
     /**
@@ -158,20 +213,12 @@ class Feed
         $pairs = [];
 
         foreach ($posts as $post) {
-            $morphName = $post->getMorphClass();
+            // Голосование может быть привязано к связанной записи (тема -> последний пост)
+            [$type, $id] = self::pollTarget($post);
 
-            // Резолвер указывает, что голосование привязано к связанной записи (тема -> последний пост)
-            if ($resolver = Registry::$feeds[$morphName]['poll'] ?? null) {
-                if ($result = $resolver($post)) {
-                    [$type, $id] = $result;
-                    if ($id) {
-                        $pairs[$type][] = $id;
-                    }
-                }
-                continue;
+            if ($id) {
+                $pairs[$type][] = $id;
             }
-
-            $pairs[$morphName][] = $post->id;
         }
 
         if (empty($pairs)) {

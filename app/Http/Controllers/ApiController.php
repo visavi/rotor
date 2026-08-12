@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\Feed;
+use App\Classes\Rating;
 use App\Http\Resources\DialogueResource;
+use App\Http\Resources\FeedResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\NewMessageResource;
 use App\Http\Resources\UserProfileResource;
@@ -58,6 +61,36 @@ class ApiController extends Controller
         }
 
         return response()->json(['token' => $user->apikey]);
+    }
+
+    /**
+     * Api ленты
+     */
+    public function feed(): JsonResource
+    {
+        $feed = new Feed();
+        $posts = $feed->getItems();
+        $posts->setPath(url('/api/feed'));
+
+        // Голоса не кешируются вместе с лентой, проставляются под текущего пользователя
+        $feed->applyVotes($posts->getCollection());
+
+        return FeedResource::collection($posts);
+    }
+
+    /**
+     * Api голосования за запись
+     */
+    public function rating(Request $request, Rating $rating): JsonResponse
+    {
+        $result = $rating->vote(
+            getUser(),
+            $request->input('type'),
+            $request->integer('id'),
+            $request->input('vote'),
+        );
+
+        return response()->json($result, $result['success'] ? 200 : 422);
     }
 
     /**

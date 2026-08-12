@@ -4,10 +4,13 @@ namespace App\Providers;
 
 use App\Classes\Restatement;
 use Carbon\CarbonImmutable;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
@@ -35,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Restatement::boot();
+
+        $this->configureRateLimiting();
 
         Route::pattern('id', '\d+');
         Route::pattern('cid', '\d+');
@@ -75,6 +80,19 @@ class AppServiceProvider extends ServiceProvider
         /*if (app()->environment('production')) {
             URL::forceScheme('https');
         }*/
+    }
+
+    /**
+     * Лимиты запросов к API (web-запросы ограничивает CheckThrottle)
+     */
+    private function configureRateLimiting(): void
+    {
+        // Общий лимит на все методы api
+        RateLimiter::for('api', static fn (Request $request) => Limit::perMinute(120)
+            ->by($request->user()?->id ?: getIp()));
+
+        // Авторизация — по ip, чтобы не перебирали пароли
+        RateLimiter::for('api-auth', static fn () => Limit::perMinute(10)->by(getIp()));
 
         // If the public directory is renamed to public_html
         /*$this->app->bind('path.public', function () {
