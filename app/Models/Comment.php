@@ -209,6 +209,28 @@ class Comment extends Model
     }
 
     /**
+     * Путь до комментария: раздел и запись, к которой он оставлен
+     *
+     * @return array<int, array{title: string, url: string}>
+     */
+    public function getBreadcrumbs(bool $absolute = true): array
+    {
+        $breadcrumbs = [[
+            'title' => $this->getRelateType(),
+            'url'   => $absolute ? url($this->relate_type) : '/' . $this->relate_type,
+        ]];
+
+        if ($this->relate && method_exists($this->relate, 'getViewUrl')) {
+            $breadcrumbs[] = [
+                'title' => (string) $this->relate->getAttribute('title'),
+                'url'   => $this->relate->getViewUrl($absolute),
+            ];
+        }
+
+        return $breadcrumbs;
+    }
+
+    /**
      * Возвращает тип связанного объекта
      */
     public function getRelateType(): string

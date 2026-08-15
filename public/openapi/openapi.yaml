@@ -144,6 +144,33 @@ components:
                 newprivat:
                     type: integer
                     description: 'Непрочитанных приватных сообщений'
+        Author:
+            type: object
+            description: 'Автор записи в списках — подписи хватает аватара и ника'
+            properties:
+                login:
+                    type: string
+                name:
+                    type:
+                        - string
+                        - 'null'
+                level:
+                    type: string
+                color:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Цвет ника'
+                avatar:
+                    type:
+                        - string
+                        - 'null'
+                    format: uri
+                status:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'HTML статуса пользователя'
         User:
             type: object
             properties:
@@ -475,6 +502,17 @@ components:
                         - string
                         - 'null'
                     format: uri
+                breadcrumbs:
+                    type: array
+                    description: 'Путь до записи от корня раздела, пустой массив — раздел не указан'
+                    items:
+                        type: object
+                        properties:
+                            title:
+                                type: string
+                            url:
+                                type: string
+                                format: uri
                 text:
                     type:
                         - string
@@ -512,14 +550,37 @@ components:
                         - integer
                         - 'null'
                 user:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    description: 'Картинки и видео для галереи, кроме вставленных в текст'
+                    items:
+                        $ref: '#/components/schemas/File'
                 files:
                     type: array
+                    description: 'Остальные вложения — документы, архивы, аудио'
                     items:
                         $ref: '#/components/schemas/File'
                 created_at:
                     type: string
                     format: date-time
+                relate:
+                    type: object
+                    description: 'Только при type=comments: запись, к которой оставлен комментарий'
+                    properties:
+                        type:
+                            type: string
+                        id:
+                            type: integer
+                        title:
+                            type:
+                                - string
+                                - 'null'
+                        url:
+                            type:
+                                - string
+                                - 'null'
+                            format: uri
                 price:
                     type:
                         - number
@@ -547,7 +608,7 @@ components:
             additionalProperties: true
             description: |
                 Набор полей зависит от type: базовые поля приходят всегда, дополнительные — только у своего типа записи
-                (price и phone у объявлений, offer_type и status у предложений).
+                (relate у комментариев, price и phone у объявлений, offer_type и status у предложений).
                 Сторонний модуль может добавить собственные поля, поэтому неизвестные ключи игнорируйте, а не считайте ошибкой.
         PaginationLinks:
             type: object

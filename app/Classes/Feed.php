@@ -33,6 +33,17 @@ class Feed
                 'with'  => ['relate', 'user', 'files'],
                 'scope' => fn ($query) => $query->visible(),
                 'title' => fn (Comment $post) => $post->relate?->getAttribute('title'),
+                // Комментарий отдаёт запись, к которой оставлен, чтобы клиент мог её открыть
+                'api' => fn (Comment $post): array => [
+                    'relate' => [
+                        'type'  => $post->relate_type,
+                        'id'    => $post->relate_id,
+                        'title' => $post->relate?->getAttribute('title'),
+                        'url'   => $post->relate && method_exists($post->relate, 'getViewUrl')
+                            ? $post->relate->getViewUrl()
+                            : null,
+                    ],
+                ],
             ],
         ], Registry::$feeds);
     }
