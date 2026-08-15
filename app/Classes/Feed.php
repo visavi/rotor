@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
+use App\Traits\FileableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -111,7 +112,7 @@ class Feed
             $loadedModels = [];
             foreach ($grouped as $type => $typeRows) {
                 $class = $allTypes[$type]['class'];
-                $with = $allTypes[$type]['with'];
+                $with = self::eagerLoads($class, $allTypes[$type]['with']);
                 $ids = $typeRows->pluck('relate_id')->all();
 
                 $loadedModels[$type] = $class::with($with)->whereIn('id', $ids)->get()->keyBy('id');
@@ -124,6 +125,26 @@ class Feed
         });
 
         return new Paginator($items, $perPage, $currentPage);
+    }
+
+    /**
+     * Связи для выборки типа: файлы добавляются сами, иначе забытый ключ with
+     * молча оставляет запись в API без вложений
+     *
+     * @param class-string<Model> $class
+     * @param array<int, string>  $with
+     *
+     * @return array<int, string>
+     */
+    private static function eagerLoads(string $class, array $with): array
+    {
+        if (in_array('files', $with, true) || ! in_array(FileableTrait::class, class_uses_recursive($class), true)) {
+            return $with;
+        }
+
+        $with[] = 'files';
+
+        return $with;
     }
 
     /**

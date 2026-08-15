@@ -17,6 +17,28 @@ components:
             scheme: bearer
             description: 'Передайте API-ключ в заголовке: Authorization: Bearer {token}'
     parameters:
+        Sort:
+            name: sort
+            in: query
+            schema:
+                type: string
+                enum:
+                    - date
+                    - name
+                    - title
+                    - price
+                    - visits
+                    - loads
+                    - rating
+                    - comments
+                default: date
+            description: 'Поле сортировки; набор зависит от раздела, неизвестное значение игнорируется'
+        CategoryId:
+            name: category_id
+            in: query
+            schema:
+                type: integer
+            description: 'Ограничить выборку категорией'
         PerPage:
             name: per_page
             in: query
@@ -144,6 +166,529 @@ components:
                 newprivat:
                     type: integer
                     description: 'Непрочитанных приватных сообщений'
+        Category:
+            type: object
+            description: 'Категория раздела с подкатегориями'
+            properties:
+                id:
+                    type: integer
+                parent_id:
+                    type: integer
+                parent:
+                    description: 'Родительская категория; null у корневой, отсутствует, если связь не загружалась'
+                    oneOf:
+                        - $ref: '#/components/schemas/Category'
+                        - type: 'null'
+                name:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                closed:
+                    type: boolean
+                articles_count:
+                    type: integer
+                    description: 'Только у категорий блогов'
+                downs_count:
+                    type: integer
+                    description: 'Только у категорий загрузок'
+                items_count:
+                    type: integer
+                    description: 'Только у категорий объявлений'
+                children:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Category'
+        Comment:
+            type: object
+            description: 'Комментарий записи. Плоский список: ветка ответов собирается по parent_id, depth — глубина вложенности'
+            properties:
+                id:
+                    type: integer
+                parent_id:
+                    type:
+                        - integer
+                        - 'null'
+                    description: 'Комментарий, на который отвечают'
+                depth:
+                    type: integer
+                deleted:
+                    type: boolean
+                    description: 'Удалённый комментарий: text и user пустые, запись остаётся заглушкой, чтобы ветка ответов не рвалась'
+                text:
+                    type:
+                        - string
+                        - 'null'
+                rating:
+                    type: integer
+                vote:
+                    type: object
+                    description: 'Цель голосования для POST /rating'
+                    properties:
+                        type:
+                            type: string
+                        id:
+                            type: integer
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                            description: 'Голос текущего пользователя, null без токена или если не голосовал'
+                        own:
+                            type: boolean
+                            description: 'Свой комментарий — голосовать нельзя'
+                user:
+                    oneOf:
+                        - $ref: '#/components/schemas/Author'
+                        - type: 'null'
+                media:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                created_at:
+                    type: string
+                    format: date-time
+        Photo:
+            type: object
+            properties:
+                id:
+                    type: integer
+                title:
+                    type: string
+                text:
+                    type:
+                        - string
+                        - 'null'
+                url:
+                    type: string
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            title: { type: string }
+                            url: { type: string, format: uri }
+                rating:
+                    type: integer
+                vote:
+                    type: object
+                    properties:
+                        type: { type: string }
+                        id: { type: integer }
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                        own: { type: boolean }
+                closed:
+                    type: boolean
+                    description: 'Комментирование закрыто'
+                comments_count:
+                    type: integer
+                user:
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    description: 'Все снимки записи, включая вставленные в текст'
+                    items:
+                        $ref: '#/components/schemas/File'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type:
+                        - string
+                        - 'null'
+                    format: date-time
+        Item:
+            type: object
+            description: 'Объявление. Комментариев и рейтинга у раздела нет'
+            properties:
+                id:
+                    type: integer
+                title:
+                    type: string
+                text:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            title: { type: string }
+                            url: { type: string, format: uri }
+                category_id:
+                    type: integer
+                category:
+                    $ref: '#/components/schemas/Category'
+                price:
+                    type: integer
+                currency:
+                    type: string
+                    description: 'Валюта сайта из настроек'
+                phone:
+                    type:
+                        - string
+                        - 'null'
+                active:
+                    type: boolean
+                visits:
+                    type: integer
+                user:
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type:
+                        - string
+                        - 'null'
+                    format: date-time
+                expires_at:
+                    type: string
+                    format: date-time
+                    description: 'Срок публикации'
+                expired:
+                    type: boolean
+                    description: 'Срок истёк: объявление пропадает из списков и ленты'
+        Down:
+            type: object
+            properties:
+                id:
+                    type: integer
+                title:
+                    type: string
+                text:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            title: { type: string }
+                            url: { type: string, format: uri }
+                rating:
+                    type: integer
+                vote:
+                    type: object
+                    properties:
+                        type: { type: string }
+                        id: { type: integer }
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                        own: { type: boolean }
+                category_id:
+                    type: integer
+                category:
+                    $ref: '#/components/schemas/Category'
+                active:
+                    type: boolean
+                    description: 'Проверена администрацией'
+                downloads:
+                    type: integer
+                    description: 'Счётчик скачиваний'
+                comments_count:
+                    type: integer
+                user:
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    description: 'Скриншоты и видео'
+                    items:
+                        $ref: '#/components/schemas/File'
+                can_download:
+                    type: boolean
+                    description: 'Скачивание разрешено текущему запросу; false — гостям запрещено настройкой'
+                files:
+                    type: array
+                    description: 'Файлы дистрибутива. Прямого пути нет: качать только по download_url'
+                    items:
+                        type: object
+                        properties:
+                            id: { type: integer }
+                            name: { type: string }
+                            size: { type: integer }
+                            extension: { type: string }
+                            mime_type: { type: string }
+                            download_url:
+                                type:
+                                    - string
+                                    - 'null'
+                                format: uri
+                                description: 'null — скачивание запрещено'
+                            archive_url:
+                                type:
+                                    - string
+                                    - 'null'
+                                format: uri
+                                description: 'Просмотр содержимого zip, у остальных файлов null'
+                links:
+                    type: array
+                    description: 'Внешние ссылки на скачивание'
+                    items:
+                        type: object
+                        properties:
+                            name: { type: string }
+                            download_url:
+                                type:
+                                    - string
+                                    - 'null'
+                                format: uri
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type:
+                        - string
+                        - 'null'
+                    format: date-time
+        Article:
+            type: object
+            properties:
+                id:
+                    type: integer
+                title:
+                    type: string
+                slug:
+                    type: string
+                    description: 'Слаг из ссылки, начинается с id'
+                category_id:
+                    type: integer
+                category:
+                    $ref: '#/components/schemas/Category'
+                text:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            title: { type: string }
+                            url: { type: string, format: uri }
+                rating:
+                    type: integer
+                vote:
+                    type: object
+                    properties:
+                        type: { type: string }
+                        id: { type: integer }
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                        own: { type: boolean }
+                visits:
+                    type: integer
+                comments_count:
+                    type: integer
+                tags:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            name: { type: string }
+                            url: { type: string, format: uri }
+                user:
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type:
+                        - string
+                        - 'null'
+                    format: date-time
+        News:
+            type: object
+            properties:
+                id:
+                    type: integer
+                title:
+                    type: string
+                text:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            title: { type: string }
+                            url: { type: string, format: uri }
+                rating:
+                    type: integer
+                vote:
+                    type: object
+                    properties:
+                        type: { type: string }
+                        id: { type: integer }
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                        own: { type: boolean }
+                closed:
+                    type: boolean
+                    description: 'Комментирование закрыто'
+                top:
+                    type: boolean
+                    description: 'Закреплена вверху списка'
+                comments_count:
+                    type: integer
+                user:
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type:
+                        - string
+                        - 'null'
+                    format: date-time
+        Offer:
+            type: object
+            properties:
+                id:
+                    type: integer
+                type:
+                    type: string
+                    enum:
+                        - offer
+                        - issue
+                status:
+                    type: string
+                    enum:
+                        - wait
+                        - process
+                        - done
+                        - cancel
+                title:
+                    type: string
+                text:
+                    type: string
+                url:
+                    type: string
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            title: { type: string }
+                            url: { type: string, format: uri }
+                rating:
+                    type: integer
+                vote:
+                    type: object
+                    properties:
+                        type: { type: string }
+                        id: { type: integer }
+                        value:
+                            type:
+                                - string
+                                - 'null'
+                            enum:
+                                - +
+                                - '-'
+                                - null
+                        own: { type: boolean }
+                closed:
+                    type: boolean
+                comments_count:
+                    type: integer
+                user:
+                    $ref: '#/components/schemas/Author'
+                media:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                files:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/File'
+                reply:
+                    type:
+                        - object
+                        - 'null'
+                    description: 'Официальный ответ администрации, null — ответа ещё нет'
+                    properties:
+                        text: { type: string }
+                        user: { $ref: '#/components/schemas/Author' }
+                        answered_at: { type: string, format: date-time }
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type:
+                        - string
+                        - 'null'
+                    format: date-time
         Author:
             type: object
             description: 'Автор записи в списках — подписи хватает аватара и ника'
@@ -768,9 +1313,14 @@ paths:
     /rating:
         post:
             tags:
-                - Лента
-            summary: 'Проголосовать за запись'
-            description: 'Тип и id берутся из поля vote элемента ленты. За свои записи голосовать нельзя, повторный голос в ту же сторону не проходит, голос в другую сторону отменяет предыдущий'
+                - Голосование
+            summary: 'Проголосовать за запись или комментарий'
+            description: |
+                Общий эндпоинт для всех разделов: тип и id берутся из поля vote любой записи или комментария —
+                элемента ленты, записи раздела, поста форума. Требует токен.
+
+                За свои записи голосовать нельзя, повторный голос в ту же сторону не проходит,
+                голос в другую сторону отменяет предыдущий.
             operationId: rating
             requestBody:
                 required: true
@@ -785,10 +1335,10 @@ paths:
                             properties:
                                 type:
                                     type: string
-                                    description: 'Тип записи (vote.type из ленты)'
+                                    description: 'Тип записи — vote.type из ответа любого раздела'
                                 id:
                                     type: integer
-                                    description: 'Id записи (vote.id из ленты)'
+                                    description: 'Id записи — vote.id из ответа любого раздела'
                                 vote:
                                     type: string
                                     enum:
@@ -1087,6 +1637,10 @@ paths:
                 - Форум
             summary: 'Разделы форума'
             operationId: getForumCategories
+            security:
+                -
+                    BearerToken: {  }
+                - {}
             responses:
                 200:
                     description: OK
@@ -1102,6 +1656,10 @@ paths:
                 - Форум
             summary: 'Темы форума'
             operationId: getForumTopics
+            security:
+                -
+                    BearerToken: {  }
+                - {}
             parameters:
                 -
                     name: id
@@ -1188,6 +1746,10 @@ paths:
                 - Форум
             summary: 'Посты темы'
             operationId: getTopicPosts
+            security:
+                -
+                    BearerToken: {  }
+                - {}
             parameters:
                 -
                     name: id
@@ -1257,3 +1819,493 @@ paths:
                     description: 'Тема не найдена'
                 422:
                     description: 'Ошибка валидации (тема закрыта, флуд, повтор текста)'
+    /offers:
+        get:
+            tags:
+                - 'Предложения и проблемы'
+            summary: 'Список предложений или проблем'
+            operationId: getOffers
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: type
+                    in: query
+                    description: 'Раздел: предложения или проблемы'
+                    schema:
+                        type: string
+                        enum:
+                            - offer
+                            - issue
+                        default: offer
+                -
+                    $ref: '#/components/parameters/Sort'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Offer' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    /news:
+        get:
+            tags:
+                - Новости
+            summary: 'Список новостей'
+            operationId: getNewsList
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/News' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    /articles:
+        get:
+            tags:
+                - Блоги
+            summary: 'Список статей'
+            description: 'Без category_id приходят статьи всех категорий'
+            operationId: getArticles
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    $ref: '#/components/parameters/CategoryId'
+                -
+                    $ref: '#/components/parameters/Sort'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Article' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    /blogs:
+        get:
+            tags:
+                - Блоги
+            summary: 'Категории блогов'
+            operationId: getBlogCategories
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Category' } }
+    /downs:
+        get:
+            tags:
+                - Загрузки
+            summary: 'Список загрузок'
+            description: 'Приходят только проверенные загрузки; без category_id — из всех категорий'
+            operationId: getDowns
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    $ref: '#/components/parameters/CategoryId'
+                -
+                    $ref: '#/components/parameters/Sort'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Down' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    /loads:
+        get:
+            tags:
+                - Загрузки
+            summary: 'Категории загрузок'
+            operationId: getLoadCategories
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Category' } }
+    /items:
+        get:
+            tags:
+                - Объявления
+            summary: 'Список объявлений'
+            description: 'Истёкшие объявления в список не попадают; без category_id — из всех категорий'
+            operationId: getItems
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    $ref: '#/components/parameters/CategoryId'
+                -
+                    $ref: '#/components/parameters/Sort'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Item' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    /boards:
+        get:
+            tags:
+                - Объявления
+            summary: 'Категории объявлений'
+            operationId: getBoardCategories
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Category' } }
+    /photos:
+        get:
+            tags:
+                - Галерея
+            summary: 'Список фото'
+            operationId: getPhotos
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    $ref: '#/components/parameters/Sort'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Photo' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    '/offers/{id}':
+        get:
+            tags:
+                - 'Предложения и проблемы'
+            summary: 'Запись с комментариями'
+            description: |
+                Токен необязателен: гость читает запись, авторизованному дополнительно приходит его голос в offer.vote.value.
+                Комментарии отдаются страницей плоским списком — дерево ответов клиент собирает сам по parent_id и depth.
+            operationId: getOffer
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    offer: { $ref: '#/components/schemas/Offer' }
+                404:
+                    description: 'Запись не найдена'
+    '/news/{id}':
+        get:
+            tags:
+                - Новости
+            summary: 'Новость с комментариями'
+            description: |
+                Токен необязателен: гость читает новость, авторизованному дополнительно приходит его голос в news.vote.value.
+                Комментарии отдаются страницей плоским списком — дерево ответов клиент собирает сам по parent_id и depth.
+            operationId: getNews
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    news: { $ref: '#/components/schemas/News' }
+                404:
+                    description: 'Новость не найдена'
+    '/articles/{slug}':
+        get:
+            tags:
+                - Блоги
+            summary: 'Статья с комментариями'
+            description: |
+                Принимает как слаг из ссылки (12-test-article), так и просто id.
+                Токен необязателен: гость читает статью, авторизованному дополнительно приходит его голос в article.vote.value.
+            operationId: getArticle
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: slug
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    article: { $ref: '#/components/schemas/Article' }
+                404:
+                    description: 'Статья не найдена'
+    '/downs/{id}':
+        get:
+            tags:
+                - Загрузки
+            summary: 'Загрузка с комментариями'
+            description: |
+                Токен необязателен: гость читает загрузку, авторизованному дополнительно приходит его голос в down.vote.value.
+                Файлы дистрибутива отдаются ссылкой на роут скачивания, а не прямым путём — иначе не считались бы загрузки
+                и не работал бы запрет скачивания гостям (настройка down_guest_download).
+            operationId: getDown
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    down: { $ref: '#/components/schemas/Down' }
+                403:
+                    description: 'Загрузка не проверена — доступна только автору и администрации'
+                404:
+                    description: 'Загрузка не найдена'
+    '/items/{id}':
+        get:
+            tags:
+                - Объявления
+            summary: Объявление
+            description: |
+                У объявлений нет комментариев и рейтинга, поэтому ответ — одна запись без пагинации.
+                Токен необязателен.
+            operationId: getItem
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { $ref: '#/components/schemas/Item' }
+                403:
+                    description: 'Срок объявления истёк — доступно только автору'
+                404:
+                    description: 'Объявление не найдено'
+    '/photos/{id}':
+        get:
+            tags:
+                - Галерея
+            summary: 'Фото с комментариями'
+            description: |
+                Токен необязателен: гость смотрит фото, авторизованному дополнительно приходит его голос в photo.vote.value.
+                В отличие от других разделов, в media попадают все снимки записи, включая вставленные в текст — они и есть её содержимое.
+            operationId: getPhoto
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                                    photo: { $ref: '#/components/schemas/Photo' }
+                404:
+                    description: 'Фото не найдено'

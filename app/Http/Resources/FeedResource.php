@@ -7,14 +7,16 @@ namespace App\Http\Resources;
 use App\Classes\Feed;
 use App\Classes\Rating;
 use App\Classes\Registry;
+use App\Http\Resources\Concerns\ResolvesAttachments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /** @mixin Model */
 class FeedResource extends JsonResource
 {
+    use ResolvesAttachments;
+
     public function toArray(Request $request): array
     {
         $post = $this->resource;
@@ -64,29 +66,5 @@ class FeedResource extends JsonResource
         }
 
         return $post->getAttribute('title');
-    }
-
-    /**
-     * Вложения записи без картинок и видео, только если связь загружена
-     */
-    private function resolveFiles(?Model $source): Collection
-    {
-        if ($source && $source->relationLoaded('files') && method_exists($source, 'getFiles')) {
-            return $source->getFiles();
-        }
-
-        return collect();
-    }
-
-    /**
-     * Картинки и видео записи, кроме вставленных в текст — их клиент и так покажет в тексте
-     */
-    private function resolveMedia(?Model $source): Collection
-    {
-        if ($source && $source->relationLoaded('files') && method_exists($source, 'getDetachedMedia')) {
-            return $source->getDetachedMedia();
-        }
-
-        return collect();
     }
 }
