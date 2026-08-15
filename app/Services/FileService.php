@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Message;
+use App\Support\Registry;
+use App\Support\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -14,7 +16,7 @@ use Illuminate\Support\Str;
 /**
  * Загрузка и удаление вложений — общее для сайта и API
  */
-class FileUploader
+class FileService
 {
     /**
      * Типы, куда грузят картинки и видео (галерея)

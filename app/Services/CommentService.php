@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\File;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  * Создание, правка и удаление комментариев — общее для сайта и API
  */
-class CommentManager
+class CommentService
 {
     /**
      * Время, в течение которого автор может править свой комментарий

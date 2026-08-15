@@ -38,6 +38,8 @@ class UpgradeController extends AdminController
             $release['is_upgrade'] = $asset && str_ends_with($asset['name'] ?? '', '_upgrade.zip');
             // Полный архив как запасной вариант — только когда по умолчанию выбран upgrade
             $release['full_asset'] = $release['is_upgrade'] ? $split['full'] : null;
+            // Модули, собранные под текущий мажор, на следующем могут не завестись
+            $release['outdated_modules'] = $this->upgrade->outdatedModules($release['tag_name'] ?? '');
         }
         unset($release);
 
@@ -47,11 +49,15 @@ class UpgradeController extends AdminController
 
         $permErrors = ($newReleases || $reinstall) ? $this->upgrade->checkPermissions() : [];
 
+        // Следующий мажор скрыт, пока сайт не дошёл до конца своей линии
+        $majorBlocked = $this->upgrade->requiredBeforeMajor($githubService);
+
         return view('admin/upgrade/index', compact(
             'pendingMigrations',
             'newReleases',
             'reinstall',
             'permErrors',
+            'majorBlocked',
         ));
     }
 
@@ -97,6 +103,15 @@ class UpgradeController extends AdminController
 
         if (! $asset) {
             return response()->json(['error' => __('admin.upgrade.invalid_params')], 422);
+        }
+
+        // Прыжок через мажор сносит сайт: мосты совместимости живут в минорах
+        if (! $this->upgrade->canUpgradeTo($tag, $githubService)) {
+            return response()->json([
+                'error' => __('admin.upgrade.major_blocked', [
+                    'version' => $this->upgrade->requiredBeforeMajor($githubService),
+                ]),
+            ], 422);
         }
 
         ini_set('max_execution_time', 0);

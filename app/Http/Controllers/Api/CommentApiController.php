@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Classes\CommentManager;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Flood;
+use App\Services\CommentService;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -18,7 +18,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CommentApiController extends Controller
 {
-    public function __construct(private readonly CommentManager $comments)
+    public function __construct(private readonly CommentService $comments)
     {
     }
 
@@ -47,7 +47,7 @@ class CommentApiController extends Controller
         $user = getUser();
 
         $validated = $request->validate([
-            'type' => ['required', 'string', 'in:' . implode(',', CommentManager::types())],
+            'type' => ['required', 'string', 'in:' . implode(',', CommentService::types())],
             'id'   => ['required', 'integer', 'min:1'],
             'text' => [
                 'required',

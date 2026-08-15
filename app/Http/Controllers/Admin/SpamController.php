@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\Registry;
-use App\Classes\Validator;
 use App\Models\Spam;
+use App\Support\Registry;
+use App\Support\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

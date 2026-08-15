@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Classes\CommentManager;
-use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
+use App\Services\CommentService;
+use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function __construct(private readonly CommentManager $comments)
+    public function __construct(private readonly CommentService $comments)
     {
     }
 

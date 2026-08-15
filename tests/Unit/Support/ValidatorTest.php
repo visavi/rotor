@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Unit\Classes;
+namespace Tests\Unit\Support;
 
-use App\Classes\Validator;
+use App\Support\Validator;
 use Illuminate\Http\UploadedFile;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;

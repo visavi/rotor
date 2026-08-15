@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Classes\CommentManager;
-use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
+use App\Services\CommentService;
+use App\Support\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Query\JoinClause;
@@ -145,7 +145,7 @@ trait HandlesComments
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
-            $comment = app(CommentManager::class)->create(
+            $comment = app(CommentService::class)->create(
                 $model,
                 $user,
                 $msg,

@@ -1,5 +1,5 @@
 @extends('layout')
-@use('App\Classes\Hook')
+@use('App\Support\Hook')
 
 @section('title', __('users.edit_user') . ' ' . $user->getName())
 

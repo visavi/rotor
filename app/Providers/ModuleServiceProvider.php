@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Classes\Registry;
-use App\Classes\Restatement;
 use App\Models\Module;
+use App\Support\Registry;
+use App\Support\Restatement;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;

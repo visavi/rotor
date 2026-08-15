@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Sticker;
 use Illuminate\Support\Facades\Cache;

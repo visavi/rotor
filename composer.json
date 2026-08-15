@@ -58,6 +58,7 @@
             "Modules\\": "modules/"
         },
         "files": [
+            "app/aliases.php",
             "app/helpers.php",
             "app/hooks.php"
         ]

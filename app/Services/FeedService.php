@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Feed as FeedModel;
 use App\Models\Poll;
+use App\Support\Registry;
 use App\Traits\FileableTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
@@ -14,7 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Throwable;
 
-class Feed
+class FeedService
 {
     private mixed $user;
 

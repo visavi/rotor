@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Classes\Restatement;
+use App\Support\Restatement;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
             $hookName = trim($args[0]);
             $args = isset($args[1]) ? trim($args[1]) : 'null';
 
-            return "<?= \\App\\Classes\\Hook::call($hookName, $args); ?>";
+            return "<?= \\App\\Support\\Hook::call($hookName, $args); ?>";
         });
 
         // Translation directive

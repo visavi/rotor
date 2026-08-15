@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Classes\Metrika;
+use App\Services\MetrikaService;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class SaveStatistic
     public function handle(Request $request, Closure $next)
     {
         if ($request->isMethod('GET') && ! $request->ajax() && ! $request->expectsJson()) {
-            (new Metrika())->saveStatistic();
+            (new MetrikaService())->saveStatistic();
         }
 
         return $next($request);

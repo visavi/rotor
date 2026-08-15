@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
-use App\Classes\Registry;
+use App\Support\Registry;
 use App\Traits\FileableTrait;
 use App\Traits\PollableTrait;
 use App\Traits\SearchableTrait;

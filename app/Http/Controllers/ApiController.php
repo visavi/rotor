@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Classes\Feed;
-use App\Classes\Rating;
-use App\Classes\SiteSearch;
 use App\Http\Resources\DialogueResource;
 use App\Http\Resources\FeedResource;
 use App\Http\Resources\MessageResource;
@@ -18,6 +15,9 @@ use App\Models\Dialogue;
 use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\FeedService;
+use App\Services\RatingService;
+use App\Services\SearchService;
 use Closure;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
@@ -71,7 +71,7 @@ class ApiController extends Controller
      */
     public function feed(): JsonResource
     {
-        $feed = new Feed();
+        $feed = new FeedService();
         $posts = $feed->getItems();
         $posts->setPath(url('/api/feed'));
 
@@ -87,18 +87,18 @@ class ApiController extends Controller
     public function search(Request $request): JsonResource
     {
         $query = (string) $request->input('query', $request->input('q', ''));
-        $terms = SiteSearch::terms($query);
-        $type = SiteSearch::type($request->input('type'));
-        $sort = SiteSearch::sort($request->input('sort'));
+        $terms = SearchService::terms($query);
+        $type = SearchService::type($request->input('type'));
+        $sort = SearchService::sort($request->input('sort'));
 
         // Слова короче трех букв fulltext не индексирует, из них запрос не собрать
-        if (mb_strlen($terms) < SiteSearch::MIN_LENGTH || mb_strlen($terms) > SiteSearch::MAX_LENGTH) {
+        if (mb_strlen($terms) < SearchService::MIN_LENGTH || mb_strlen($terms) > SearchService::MAX_LENGTH) {
             throw ValidationException::withMessages([
                 'query' => __('main.request_length'),
             ]);
         }
 
-        $posts = SiteSearch::paginate($terms, $type, $sort, $this->getPerPage($request));
+        $posts = SearchService::paginate($terms, $type, $sort, $this->getPerPage($request));
         $posts->setPath(url('/api/search'));
         $posts->appends($request->only(['query', 'q', 'type', 'sort', 'per_page']));
 
@@ -108,14 +108,14 @@ class ApiController extends Controller
                 'type'  => $type,
                 'sort'  => $sort,
                 // Разделы, по которым можно фильтровать выдачу
-                'types' => SiteSearch::types(),
+                'types' => SearchService::types(),
             ]);
     }
 
     /**
      * Api голосования за запись
      */
-    public function rating(Request $request, Rating $rating): JsonResponse
+    public function rating(Request $request, RatingService $rating): JsonResponse
     {
         $result = $rating->vote(
             getUser(),

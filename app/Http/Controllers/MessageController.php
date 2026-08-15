@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Classes\Validator;
 use App\Models\Dialogue;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
+use App\Support\Validator;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

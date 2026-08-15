@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Classes\Feed;
-use App\Classes\SiteSearch;
-use App\Classes\Validator;
 use App\Models\Ban;
+use App\Services\FeedService;
+use App\Services\SearchService;
+use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,7 +36,7 @@ class HomeController extends Controller
             return redirect(url('/') . ($request->has('page') ? '?page=' . $request->input('page') : ''));
         }
 
-        return (string) (new Feed())->getFeed();
+        return (string) (new FeedService())->getFeed();
     }
 
     /**
@@ -57,18 +57,18 @@ class HomeController extends Controller
     public function search(Request $request, Validator $validator): View|RedirectResponse
     {
         $posts = paginate([], 10);
-        $query = SiteSearch::clean((string) $request->input('query', $request->input('q', '')));
-        $searchQuery = SiteSearch::terms($query);
+        $query = SearchService::clean((string) $request->input('query', $request->input('q', '')));
+        $searchQuery = SearchService::terms($query);
 
-        $types = SiteSearch::types();
-        $sort = SiteSearch::sort(check($request->input('sort', 'relevance')));
-        $type = SiteSearch::type(check($request->input('type')));
+        $types = SearchService::types();
+        $sort = SearchService::sort(check($request->input('sort', 'relevance')));
+        $type = SearchService::type(check($request->input('type')));
 
         if ($query) {
-            $validator->length($searchQuery, SiteSearch::MIN_LENGTH, SiteSearch::MAX_LENGTH, ['find' => __('main.request_length')]);
+            $validator->length($searchQuery, SearchService::MIN_LENGTH, SearchService::MAX_LENGTH, ['find' => __('main.request_length')]);
 
             if ($validator->isValid()) {
-                $posts = SiteSearch::paginate($searchQuery, $type, $sort, 10)
+                $posts = SearchService::paginate($searchQuery, $type, $sort, 10)
                     ->appends(compact('query', 'sort', 'type'));
             } else {
                 // GET-страница рендерится сразу, редирект тут неуместен —

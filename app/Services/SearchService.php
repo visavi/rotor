@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Search;
+use App\Support\Registry;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Полнотекстовый поиск по сайту, общий для страницы поиска и API
  */
-class SiteSearch
+class SearchService
 {
     public const MIN_LENGTH = 3;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Module;
 use FilesystemIterator;
 use Illuminate\Support\Facades\Http;
 use RecursiveDirectoryIterator;
@@ -31,14 +32,134 @@ class UpgradeService
         'vendor',
     ];
 
+    /**
+     * Релизы новее текущей версии, доступные для установки
+     *
+     * Следующий мажор скрывается, пока сайт не дошёл до последнего релиза своей
+     * линии: мосты совместимости и промежуточные upgrade-миграции живут в минорах,
+     * и прыжок 14.0 → 15.0 сносит модули вместе с сайтом.
+     */
     public function getNewReleases(GithubService $github): array
     {
-        return array_values(array_filter($github->getLatestReleases(), function (array $release) {
-            $version = ltrim($release['tag_name'] ?? '', 'v');
-            $version = str_replace(['-alpha', '-beta', '-rc'], '', $version);
-
-            return version_compare(ROTOR_VERSION, $version, '<') && ! empty($release['assets']);
+        $releases = array_values(array_filter($github->getLatestReleases(), function (array $release) {
+            return version_compare(ROTOR_VERSION, $this->releaseVersion($release), '<') && ! empty($release['assets']);
         }));
+
+        if (! $this->requiredBeforeMajor($github)) {
+            return $releases;
+        }
+
+        return array_values(array_filter($releases, function (array $release) {
+            return $this->major($this->releaseVersion($release)) === $this->major(ROTOR_VERSION);
+        }));
+    }
+
+    /**
+     * Версия, до которой нужно обновиться перед переходом на следующий мажор,
+     * либо null — переход не заблокирован
+     */
+    public function requiredBeforeMajor(GithubService $github): ?string
+    {
+        $currentMajor = $this->major(ROTOR_VERSION);
+        $latestInMajor = null;
+        $hasNextMajor = false;
+
+        foreach ($github->getLatestReleases() as $release) {
+            if (empty($release['assets'])) {
+                continue;
+            }
+
+            $version = $this->releaseVersion($release);
+
+            if ($this->major($version) === $currentMajor) {
+                if ($latestInMajor === null || version_compare($version, $latestInMajor, '>')) {
+                    $latestInMajor = $version;
+                }
+            } elseif (version_compare($version, ROTOR_VERSION, '>')) {
+                $hasNextMajor = true;
+            }
+        }
+
+        if (! $hasNextMajor || $latestInMajor === null) {
+            return null;
+        }
+
+        return version_compare(ROTOR_VERSION, $latestInMajor, '<') ? $latestInMajor : null;
+    }
+
+    /**
+     * Разрешено ли обновление до указанного тега
+     */
+    public function canUpgradeTo(string $tag, GithubService $github): bool
+    {
+        $version = ltrim($tag, 'v');
+
+        if ($this->major($version) === $this->major(ROTOR_VERSION)) {
+            return true;
+        }
+
+        return $this->requiredBeforeMajor($github) === null;
+    }
+
+    /**
+     * Установленные модули, собранные под предыдущий мажор ядра
+     *
+     * requires задаёт нижнюю границу, верхней у модуля нет, поэтому единственный
+     * доступный признак — мажор, под который модуль собирался. Список носит
+     * предупредительный характер: обновление он не блокирует.
+     *
+     * @return array<int, array{name: string, version: string, requires: string}>
+     */
+    public function outdatedModules(string $tag): array
+    {
+        $targetMajor = $this->major(ltrim($tag, 'v'));
+
+        if ($targetMajor === $this->major(ROTOR_VERSION)) {
+            return [];
+        }
+
+        $modules = [];
+
+        foreach (Module::query()->orderBy('name')->get() as $module) {
+            $configFile = base_path('modules/' . $module->name . '/module.php');
+
+            if (! file_exists($configFile)) {
+                continue;
+            }
+
+            $config = include $configFile;
+            $requires = (string) ($config['requires'] ?? '');
+
+            if ($requires === '' || version_compare($this->major($requires), $targetMajor, '>=')) {
+                continue;
+            }
+
+            $modules[] = [
+                'name'     => $config['name'] ?? $module->name,
+                'version'  => (string) ($config['version'] ?? $module->version),
+                'requires' => $requires,
+            ];
+        }
+
+        return $modules;
+    }
+
+    /**
+     * Версия релиза без префикса и суффикса предрелиза
+     */
+    private function releaseVersion(array $release): string
+    {
+        $version = ltrim($release['tag_name'] ?? '', 'v');
+
+        return str_replace(['-alpha', '-beta', '-rc'], '', $version);
+    }
+
+    /**
+     * Мажорная часть версии (14.2.2 → "14")
+     */
+    private function major(string $version): string
+    {
+        return explode('.', $version)[0];
     }
 
     /**

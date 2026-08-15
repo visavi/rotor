@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Classes\Registry;
-use App\Classes\Restatement;
-use App\Classes\Validator;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
 use App\Models\User;
+use App\Support\Registry;
+use App\Support\Restatement;
+use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Classes\Registry;
 use App\Models\Comment;
 use App\Models\User;
+use App\Support\Registry;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;

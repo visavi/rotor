@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Classes\Registry;
+use App\Support\Registry;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Classes\Feed;
-use App\Classes\Rating;
-use App\Classes\Registry;
 use App\Http\Resources\Concerns\ResolvesAttachments;
+use App\Services\FeedService;
+use App\Services\RatingService;
+use App\Support\Registry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,14 +21,14 @@ class FeedResource extends JsonResource
     {
         $post = $this->resource;
         $type = $post->getMorphClass();
-        $config = Feed::typeConfig($type);
+        $config = FeedService::typeConfig($type);
 
         // Носитель контента может отличаться от записи ленты (тема форума -> последний пост)
         $source = isset($config['source']) ? ($config['source'])($post) : $post;
 
         // Голосуют не всегда за саму запись ленты (в теме форума — за последнее сообщение)
-        [$voteType, $voteId] = Feed::pollTarget($post);
-        $canVote = in_array($voteType, Rating::types(), true) && $voteId;
+        [$voteType, $voteId] = FeedService::pollTarget($post);
+        $canVote = in_array($voteType, RatingService::types(), true) && $voteId;
 
         return array_merge([
             'type'    => $type,

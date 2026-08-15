@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\IpUtils;
 
-class CloudFlare
+class CloudFlareService
 {
     /**
      * List of IP's used by CloudFlare.

@@ -59,7 +59,7 @@
             @endphp
 
             @if ($post)
-                @includeIf(\App\Classes\Registry::$search[$post->getMorphClass()]['view'] ?? 'search._' . $post->getMorphClass())
+                @includeIf(\App\Support\Registry::$search[$post->getMorphClass()]['view'] ?? 'search._' . $post->getMorphClass())
             @endif
         @endforeach
 

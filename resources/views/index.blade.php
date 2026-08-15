@@ -1,5 +1,5 @@
-@use('App\Classes\Feed')
-@use('App\Classes\Hook')
+@use('App\Services\FeedService')
+@use('App\Support\Hook')
 @extends('layout')
 
 @section('title', setting('logos'))
@@ -11,7 +11,7 @@
         @hook('homepageView')
     @else
         <div id="feed-container">
-            {{ (new Feed())->getFeed() }}
+            {{ (new FeedService())->getFeed() }}
         </div>
         <div id="feed-sentinel"></div>
     @endif

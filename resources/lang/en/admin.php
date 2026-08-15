@@ -220,6 +220,8 @@ return [
         'core_updates'      => 'Core Update',
         'db_tab'            => 'DB Migrations',
         'core_actual'       => 'Core is up to date',
+        'major_blocked'     => 'A new major release is available, but update to version :version first — skipping a major breaks module compatibility',
+        'modules_outdated'  => 'These modules were built for the current major version and may stop working after the update — update them right after upgrading:',
         'perm_error'        => 'No write access to directories: :dirs',
         'update_download'   => 'Download & Update (:size)',
         'download_full'     => 'Full version (:size)',

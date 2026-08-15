@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Classes\FileUploader;
-use App\Classes\Rating;
-use App\Classes\Registry;
-use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Spam;
 use App\Models\Sticker;
+use App\Services\FileService;
+use App\Services\RatingService;
+use App\Support\Registry;
+use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,7 +74,7 @@ class AjaxController extends Controller
     /**
      * Изменяет рейтинг
      */
-    public function rating(Request $request, Rating $rating): JsonResponse
+    public function rating(Request $request, RatingService $rating): JsonResponse
     {
         $result = $rating->vote(
             getUser(),
@@ -93,7 +93,7 @@ class AjaxController extends Controller
     /**
      * Загружает файлы
      */
-    public function uploadFile(Request $request, Validator $validator, FileUploader $uploader): JsonResponse
+    public function uploadFile(Request $request, Validator $validator, FileService $uploader): JsonResponse
     {
         $result = $uploader->upload(
             $request->file('file'),
@@ -132,7 +132,7 @@ class AjaxController extends Controller
     /**
      * Удаляет файлы
      */
-    public function deleteFile(Request $request, Validator $validator, FileUploader $uploader): JsonResponse
+    public function deleteFile(Request $request, Validator $validator, FileService $uploader): JsonResponse
     {
         $result = $uploader->remove(
             int($request->input('id')),

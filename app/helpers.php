@@ -1,8 +1,5 @@
 <?php
 
-use App\Classes\CloudFlare;
-use App\Classes\Hook;
-use App\Classes\HtmlRenderer;
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
@@ -14,6 +11,9 @@ use App\Models\Setting;
 use App\Models\Spam;
 use App\Models\Sticker;
 use App\Models\User;
+use App\Services\CloudFlareService;
+use App\Services\HtmlRenderer;
+use App\Support\Hook;
 use cbschuld\Browser;
 use Illuminate\Container\Container;
 use Illuminate\Mail\Message;
@@ -32,7 +32,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '14.2.2';
+const ROTOR_VERSION = '14.3.0';
 
 /**
  * @deprecated Мост совместимости для модулей, не обновлённых на datetime. Будет удалён в 15.0
@@ -846,7 +846,7 @@ function getIp(): string
 {
     static $ip = null;
 
-    return $ip ??= (new CloudFlare(request()))->ip();
+    return $ip ??= (new CloudFlareService(request()))->ip();
 }
 
 /**

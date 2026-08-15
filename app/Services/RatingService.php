@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Comment;
 use App\Models\Poll;
 use App\Models\User;
+use App\Support\Registry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class Rating
+class RatingService
 {
     /**
      * Типы записей, поддерживающие голосование

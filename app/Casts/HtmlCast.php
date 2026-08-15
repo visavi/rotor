@@ -2,8 +2,8 @@
 
 namespace App\Casts;
 
-use App\Classes\HtmlSanitizer;
-use App\Classes\StickerResolver;
+use App\Services\StickerResolver;
+use App\Support\HtmlSanitizer;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 

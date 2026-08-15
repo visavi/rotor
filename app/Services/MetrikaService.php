@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Classes;
+namespace App\Services;
 
 use App\Models\Online;
+use App\Support\Registry;
 use Illuminate\Support\Facades\Cache;
 use PDOException;
 
-class Metrika
+class MetrikaService
 {
     /**
      * Сохраняет статистику

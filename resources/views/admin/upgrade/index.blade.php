@@ -52,6 +52,12 @@
                 </div>
             @endif
 
+            @if ($majorBlocked)
+                <div class="alert alert-warning">
+                    <i class="fa fa-triangle-exclamation"></i> {{ __('admin.upgrade.major_blocked', ['version' => $majorBlocked]) }}
+                </div>
+            @endif
+
             @if (count($newReleases) > 0)
                 @foreach ($newReleases as $release)
                     @php $asset = $release['asset'] ?? null; @endphp
@@ -74,6 +80,17 @@
                             <a href="{{ $release['author']['html_url'] }}">{{ $release['author']['login'] }}</a>
                             <small class="post-date text-body-secondary fst-italic">{{ dateFixed(\Illuminate\Support\Facades\Date::parse($release['created_at'])) }}</small>
                         </div>
+
+                        @if (count($release['outdated_modules']) > 0)
+                            <div class="alert alert-warning mt-2 mb-0">
+                                <i class="fa fa-puzzle-piece"></i> {{ __('admin.upgrade.modules_outdated') }}
+                                <ul class="mb-0 mt-1">
+                                    @foreach ($release['outdated_modules'] as $module)
+                                        <li>{{ $module['name'] }} {{ $module['version'] }} <span class="text-body-secondary">({{ __('admin.modules.requires') }} {{ $module['requires'] }})</span></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
                         @if ($asset && count($permErrors) === 0)
                             <div class="mt-2 d-flex flex-wrap align-items-center gap-2">

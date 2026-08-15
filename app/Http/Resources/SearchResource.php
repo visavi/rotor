@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Classes\SiteSearch;
 use App\Models\Search;
 use App\Models\User;
+use App\Services\SearchService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,7 +25,7 @@ class SearchResource extends JsonResource
         return [
             'type'    => $this->relate_type,
             'id'      => $this->relate_id,
-            'section' => SiteSearch::types()[$this->relate_type] ?? null,
+            'section' => SearchService::types()[$this->relate_type] ?? null,
             'title'   => $this->resolveTitle($relate),
             // Запись могли удалить, индекс чистится обработчиком модели, но не при удалении пачкой
             'url'         => $this->resolveUrl($relate),

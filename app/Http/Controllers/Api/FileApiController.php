@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Classes\FileUploader;
-use App\Classes\Validator;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FileResource;
 use App\Models\File;
+use App\Services\FileService;
+use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FileApiController extends Controller
 {
-    public function __construct(private readonly FileUploader $uploader)
+    public function __construct(private readonly FileService $uploader)
     {
     }
 
@@ -25,7 +25,7 @@ class FileApiController extends Controller
     public function index(Request $request): JsonResource
     {
         $validated = $request->validate([
-            'type' => ['required', 'string', 'in:' . implode(',', FileUploader::types())],
+            'type' => ['required', 'string', 'in:' . implode(',', FileService::types())],
             'id'   => ['nullable', 'integer', 'min:0'],
         ]);
 
@@ -46,7 +46,7 @@ class FileApiController extends Controller
     public function store(Request $request, Validator $validator): JsonResponse
     {
         $request->validate([
-            'type' => ['required', 'string', 'in:' . implode(',', FileUploader::types())],
+            'type' => ['required', 'string', 'in:' . implode(',', FileService::types())],
             'id'   => ['nullable', 'integer', 'min:0'],
             'file' => ['required', 'file'],
         ]);
@@ -74,7 +74,7 @@ class FileApiController extends Controller
     public function destroy(int $id, Request $request, Validator $validator): JsonResponse
     {
         $request->validate([
-            'type' => ['required', 'string', 'in:' . implode(',', FileUploader::types())],
+            'type' => ['required', 'string', 'in:' . implode(',', FileService::types())],
         ]);
 
         $result = $this->uploader->remove($id, (string) $request->input('type'), $validator);
