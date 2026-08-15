@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Classes\Feed;
-use App\Classes\Registry;
+use App\Classes\SiteSearch;
 use App\Classes\Validator;
 use App\Models\Ban;
-use App\Models\Comment;
-use App\Models\Search;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,43 +57,19 @@ class HomeController extends Controller
     public function search(Request $request, Validator $validator): View|RedirectResponse
     {
         $posts = paginate([], 10);
-        $query = (string) $request->input('query', $request->input('q', ''));
-        $query = trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $query));
-        $searchQuery = implode(' ', array_filter(explode(' ', $query), static fn ($w) => mb_strlen($w) >= 3));
+        $query = SiteSearch::clean((string) $request->input('query', $request->input('q', '')));
+        $searchQuery = SiteSearch::terms($query);
 
-        $types = Search::getRelateTypes();
-
-        $sort = check($request->input('sort', 'relevance'));
-        $order = match ($sort) {
-            'date'     => ['created_at desc'],
-            'date_asc' => ['created_at asc'],
-            default    => ['match(text) against(? in boolean mode) desc', [$searchQuery . '*']],
-        };
-
-        $type = check($request->input('type'));
-        $type = isset($types[$type]) ? $type : null;
+        $types = SiteSearch::types();
+        $sort = SiteSearch::sort(check($request->input('sort', 'relevance')));
+        $type = SiteSearch::type(check($request->input('type')));
 
         if ($query) {
-            $validator->length($searchQuery, 3, 64, ['find' => __('main.request_length')]);
+            $validator->length($searchQuery, SiteSearch::MIN_LENGTH, SiteSearch::MAX_LENGTH, ['find' => __('main.request_length')]);
 
             if ($validator->isValid()) {
-                $posts = Search::query()
-                    ->whereIn('relate_type', array_keys($types))
-                    ->when($type, function ($query) use ($type) {
-                        $query->where('relate_type', $type);
-                    })
-                    ->where(function ($query) {
-                        $query->where('relate_type', '!=', Comment::$morphName)
-                            ->orWhereIn('relate_id', Comment::visible()->select('id'));
-                    })
-                    ->whereFullText('text', $searchQuery . '*', ['mode' => 'boolean'])
-                    ->with('relate')
-                    ->orderByRaw(...$order)
-                    ->paginate(10)
+                $posts = SiteSearch::paginate($searchQuery, $type, $sort, 10)
                     ->appends(compact('query', 'sort', 'type'));
-
-                $morphWith = array_filter(array_column(Registry::$search, 'with', 'class'));
-                $posts->loadMorph('relate', [Comment::class => ['relate'], ...$morphWith]);
             } else {
                 // GET-страница рендерится сразу, редирект тут неуместен —
                 // flash() пишет в сессию немедленно и корректно истекает

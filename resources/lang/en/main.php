@@ -133,6 +133,8 @@ return [
     'attach_file'            => 'Attach file',
     'attach_image'           => 'Attach image',
     'file_not_found'         => 'File not found',
+    'file_uploaded_success'  => 'File uploaded successfully!',
+    'file_deleted_success'   => 'File deleted successfully!',
     'not_uploaded'           => 'Files not uploaded!',
     'server_limit'           => 'Server limitation',
 

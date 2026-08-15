@@ -6,10 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Classes\Feed;
 use App\Classes\Rating;
+use App\Classes\SiteSearch;
 use App\Http\Resources\DialogueResource;
 use App\Http\Resources\FeedResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\NewMessageResource;
+use App\Http\Resources\SearchResource;
 use App\Http\Resources\UserProfileResource;
 use App\Http\Resources\UserResource;
 use App\Models\Dialogue;
@@ -24,6 +26,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ApiController extends Controller
@@ -76,6 +79,37 @@ class ApiController extends Controller
         $feed->applyVotes($posts->getCollection());
 
         return FeedResource::collection($posts);
+    }
+
+    /**
+     * Api поиска по сайту
+     */
+    public function search(Request $request): JsonResource
+    {
+        $query = (string) $request->input('query', $request->input('q', ''));
+        $terms = SiteSearch::terms($query);
+        $type = SiteSearch::type($request->input('type'));
+        $sort = SiteSearch::sort($request->input('sort'));
+
+        // Слова короче трех букв fulltext не индексирует, из них запрос не собрать
+        if (mb_strlen($terms) < SiteSearch::MIN_LENGTH || mb_strlen($terms) > SiteSearch::MAX_LENGTH) {
+            throw ValidationException::withMessages([
+                'query' => __('main.request_length'),
+            ]);
+        }
+
+        $posts = SiteSearch::paginate($terms, $type, $sort, $this->getPerPage($request));
+        $posts->setPath(url('/api/search'));
+        $posts->appends($request->only(['query', 'q', 'type', 'sort', 'per_page']));
+
+        return SearchResource::collection($posts)
+            ->additional([
+                'query' => $query,
+                'type'  => $type,
+                'sort'  => $sort,
+                // Разделы, по которым можно фильтровать выдачу
+                'types' => SiteSearch::types(),
+            ]);
     }
 
     /**

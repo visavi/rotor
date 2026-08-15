@@ -1025,6 +1025,54 @@ components:
                     type: boolean
                 is_video:
                     type: boolean
+        SearchItem:
+            type: object
+            properties:
+                type:
+                    type: string
+                    description: 'Тип найденной записи (comments, users, news, topics и т.д.)'
+                id:
+                    type: integer
+                section:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Название раздела'
+                title:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Заголовок записи; у пользователя — логин, у комментария — заголовок записи, к которой он оставлен'
+                url:
+                    type:
+                        - string
+                        - 'null'
+                    format: uri
+                breadcrumbs:
+                    type: array
+                    description: 'Путь до записи от корня раздела'
+                    items:
+                        type: object
+                        properties:
+                            title:
+                                type: string
+                            url:
+                                type: string
+                                format: uri
+                text:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'HTML текста записи'
+                user:
+                    oneOf:
+                        -
+                            $ref: '#/components/schemas/Author'
+                        -
+                            type: 'null'
+                created_at:
+                    type: string
+                    format: date-time
         FeedItem:
             type: object
             properties:
@@ -1308,6 +1356,388 @@ paths:
                                         $ref: '#/components/schemas/SimplePaginationLinks'
                                     meta:
                                         $ref: '#/components/schemas/SimplePaginationMeta'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    /search:
+        get:
+            tags:
+                - Поиск
+            summary: 'Полнотекстовый поиск по сайту'
+            description: |
+                Ищет по записям разделов, комментариям и пользователям. Токен не нужен — выдача не зависит от пользователя.
+
+                Слова короче трёх символов отбрасываются, из оставшихся собирается запрос;
+                если после отсева ничего не осталось — 422.
+            operationId: getSearch
+            security: []
+            parameters:
+                -
+                    name: query
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                        minLength: 3
+                        maxLength: 64
+                    description: 'Поисковый запрос (синоним — q)'
+                -
+                    name: type
+                    in: query
+                    schema:
+                        type: string
+                    description: 'Ограничить поиск разделом; допустимые значения приходят в types, неизвестное значение игнорируется'
+                -
+                    name: sort
+                    in: query
+                    schema:
+                        type: string
+                        enum:
+                            - relevance
+                            - date
+                            - date_asc
+                        default: relevance
+                    description: 'Сортировка выдачи'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/SearchItem'
+                                    links:
+                                        $ref: '#/components/schemas/PaginationLinks'
+                                    meta:
+                                        $ref: '#/components/schemas/PaginationMeta'
+                                    query:
+                                        type: string
+                                        description: 'Запрос после очистки от пунктуации'
+                                    type:
+                                        type:
+                                            - string
+                                            - 'null'
+                                    sort:
+                                        type: string
+                                    types:
+                                        type: object
+                                        description: 'Разделы, доступные для фильтра: ключ — значение параметра type, значение — название раздела'
+                                        additionalProperties:
+                                            type: string
+                422:
+                    description: 'Слишком короткий или слишком длинный запрос'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    /comments/{id}:
+        get:
+            tags:
+                - Комментарии
+            summary: 'Комментарий по id'
+            description: 'Токен не нужен. Удалённый комментарий приходит заглушкой с deleted: true'
+            operationId: getComment
+            security: []
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        $ref: '#/components/schemas/Comment'
+                404:
+                    description: 'Комментарий не найден'
+                429:
+                    description: 'Превышен общий лимит запросов'
+        patch:
+            tags:
+                - Комментарии
+            summary: 'Редактирование своего комментария'
+            description: 'Править можно только свой комментарий и только в течение 10 минут после публикации. Требует токен'
+            operationId: updateComment
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - text
+                            properties:
+                                text:
+                                    type: string
+                                    description: 'Новый текст, длина ограничена настройками comment_text_min и comment_text_max'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    comment:
+                                        $ref: '#/components/schemas/Comment'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                404:
+                    description: 'Комментарий не найден или принадлежит другому пользователю'
+                422:
+                    description: 'Время редактирования истекло, комментарии закрыты или текст не прошёл проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
+        delete:
+            tags:
+                - Комментарии
+            summary: 'Удаление комментария'
+            description: 'Только для администрации, как и на сайте. Комментарий с ответами удаляется мягко и остаётся заглушкой'
+            operationId: deleteComment
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    soft_deleted:
+                                        type: boolean
+                                        description: 'true — остался заглушкой, потому что на него отвечали'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                403:
+                    description: 'Недостаточно прав'
+                404:
+                    description: 'Комментарий не найден'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    /comments:
+        post:
+            tags:
+                - Комментарии
+            summary: 'Добавление комментария к записи любого раздела'
+            description: |
+                Требует токен. Тип и id записи берутся из ответа раздела или из элемента ленты.
+
+                Файлы можно приложить двумя способами: передать их прямо в этом запросе (multipart, поле files[])
+                или заранее загрузить через POST /files с type=comments и id=0 — такие файлы привяжутся к комментарию автоматически.
+            operationId: createComment
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - type
+                                - id
+                                - text
+                            properties:
+                                type:
+                                    type: string
+                                    description: 'Тип записи (news, articles, downs, photos, offers)'
+                                id:
+                                    type: integer
+                                    description: 'Id записи'
+                                text:
+                                    type: string
+                                parent_id:
+                                    type: integer
+                                    description: 'Id комментария, на который отвечают; глубже настройки ветка не растёт'
+                                files:
+                                    type: array
+                                    items:
+                                        type: string
+                                        format: binary
+            responses:
+                201:
+                    description: 'Комментарий добавлен'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    comment:
+                                        $ref: '#/components/schemas/Comment'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                404:
+                    description: 'Запись не найдена'
+                422:
+                    description: 'Комментарии закрыты, запись не проверена, антифлуд или текст не прошёл проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    /files:
+        get:
+            tags:
+                - Вложения
+            summary: 'Свои вложения'
+            description: 'Возвращает файлы текущего пользователя. Без id — загруженные, но ещё не привязанные к записи. Требует токен'
+            operationId: getFiles
+            parameters:
+                -
+                    name: type
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                    description: 'Тип записи (comments, messages, offers, photos, downs)'
+                -
+                    name: id
+                    in: query
+                    schema:
+                        type: integer
+                        default: 0
+                    description: 'Id записи; 0 — файлы, ожидающие привязки'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/File'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Неизвестный тип'
+                429:
+                    description: 'Превышен общий лимит запросов'
+        post:
+            tags:
+                - Вложения
+            summary: 'Загрузка вложения'
+            description: |
+                Требует токен. Ограничения на размер, количество и расширения приходят в /config.
+
+                id = 0 — запись ещё не создана: файл повиснет за пользователем и привяжется при её сохранении.
+            operationId: uploadFile
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - type
+                                - file
+                            properties:
+                                type:
+                                    type: string
+                                    description: 'Тип записи (comments, messages, offers, photos, downs)'
+                                id:
+                                    type: integer
+                                    default: 0
+                                file:
+                                    type: string
+                                    format: binary
+            responses:
+                201:
+                    description: 'Файл загружен'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    file:
+                                        $ref: '#/components/schemas/File'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Неизвестный тип, превышен лимит файлов, дубликат или файл не прошёл проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    /files/{id}:
+        delete:
+            tags:
+                - Вложения
+            summary: 'Удаление вложения'
+            description: 'Удалить можно своё вложение (администрация — любое). Требует токен'
+            operationId: deleteFile
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - type
+                            properties:
+                                type:
+                                    type: string
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Неизвестный тип, файл не найден или принадлежит другому пользователю'
                 429:
                     description: 'Превышен общий лимит запросов'
     /rating:

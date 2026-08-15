@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\FileUploader;
 use App\Classes\Rating;
 use App\Classes\Registry;
 use App\Classes\Validator;
 use App\Models\Comment;
-use App\Models\File;
 use App\Models\Message;
 use App\Models\Spam;
 use App\Models\Sticker;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
@@ -95,157 +93,54 @@ class AjaxController extends Controller
     /**
      * Загружает файлы
      */
-    public function uploadFile(Request $request, Validator $validator): JsonResponse
+    public function uploadFile(Request $request, Validator $validator, FileUploader $uploader): JsonResponse
     {
-        $imageTypes = Registry::$mediaTypes;
-
-        $fileTypes = array_merge([
-            Comment::$morphName,
-            Message::$morphName,
-        ], Registry::$fileTypes);
-
-        $id = int($request->input('id'));
-        $file = $request->file('file');
-        $type = $request->input('type');
-
-        if (! in_array($type, array_merge($imageTypes, $fileTypes), true)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Type invalid',
-            ]);
-        }
-
-        $class = Relation::getMorphedModel($type);
-        $isImageType = in_array($type, $imageTypes, true);
-
-        if ($id) {
-            $model = $class::query()->find($id);
-
-            if (! $model) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Service not found',
-                ]);
-            }
-        } else {
-            $model = new $class();
-        }
-
-        $uploadedFiles = File::query()
-            ->where('relate_type', $type)
-            ->where('relate_id', $id)
-            ->where('user_id', getUser('id'))
-            ->get(['name']);
-
-        $duplicate = $file && $uploadedFiles->contains(
-            'name',
-            Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension())
+        $result = $uploader->upload(
+            $request->file('file'),
+            (string) $request->input('type'),
+            int($request->input('id')),
+            $validator,
         );
 
-        $validator
-            ->lt($uploadedFiles->count(), setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]))
-            ->false($duplicate, __('validator.file_duplicate'));
-
-        if ($model->id) {
-            $validator->true($model->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
+        if (! $result['success']) {
+            return response()->json(['success' => false, 'message' => $result['message']]);
         }
 
-        if ($validator->isValid()) {
-            $allowedExt = setting($isImageType ? 'media_extensions' : 'file_extensions');
+        $fileData = $result['data'];
+        $isImage = $fileData['type'] === 'image';
 
-            $rules = [
-                'minweight'  => 100,
-                'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', $allowedExt),
+        // Галерее хватает пути, списку файлов нужны имя и размер
+        $data = $isImage
+            ? [
+                'success' => true,
+                'id'      => $fileData['id'],
+                'path'    => $fileData['path'],
+                'type'    => $fileData['type'],
+            ]
+            : [
+                'success' => true,
+                'id'      => $fileData['id'],
+                'path'    => $fileData['path'],
+                'name'    => $fileData['name'],
+                'size'    => $fileData['size'],
+                'type'    => $fileData['type'],
             ];
 
-            $validator->file($file, $rules, __('validator.file_upload_failed'));
-        }
-
-        if ($validator->isValid()) {
-            $fileData = $model->uploadFile($file);
-            if (method_exists($model, 'convertVideo')) {
-                $model->convertVideo($fileData);
-            }
-
-            if ($isImageType) {
-                $data = [
-                    'success' => true,
-                    'id'      => $fileData['id'],
-                    'path'    => $fileData['path'],
-                    'type'    => $fileData['type'],
-                ];
-            } else {
-                if (method_exists($model, 'addFileToArchive')) {
-                    $model->addFileToArchive($fileData);
-                }
-
-                $data = [
-                    'success' => true,
-                    'id'      => $fileData['id'],
-                    'path'    => $fileData['path'],
-                    'name'    => $fileData['name'],
-                    'size'    => $fileData['size'],
-                    'type'    => $fileData['type'],
-                ];
-            }
-
-            return response()->json($data);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
-        ]);
+        return response()->json($data);
     }
 
     /**
      * Удаляет файлы
      */
-    public function deleteFile(Request $request, Validator $validator): JsonResponse
+    public function deleteFile(Request $request, Validator $validator, FileUploader $uploader): JsonResponse
     {
-        $types = array_merge([
-            Comment::$morphName,
-            Message::$morphName,
-        ], Registry::$mediaTypes, Registry::$fileTypes);
+        $result = $uploader->remove(
+            int($request->input('id')),
+            (string) $request->input('type'),
+            $validator,
+        );
 
-        $id = int($request->input('id'));
-        $type = $request->input('type');
-
-        if (! in_array($type, $types, true)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Type invalid',
-            ]);
-        }
-
-        $file = File::query()
-            ->where('relate_type', $type)
-            ->find($id);
-
-        if (! $file) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File not found',
-            ]);
-        }
-
-        $validator
-            ->true($file->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
-
-        if ($validator->isValid()) {
-            $file->delete();
-
-            return response()->json([
-                'success' => true,
-                'path'    => $file->path,
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
-        ]);
+        return response()->json($result);
     }
 
     /**

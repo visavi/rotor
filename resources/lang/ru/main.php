@@ -133,6 +133,8 @@ return [
     'attach_file'            => 'Прикрепить файл',
     'attach_image'           => 'Прикрепить медиафайл',
     'file_not_found'         => 'Файл не найден',
+    'file_uploaded_success'  => 'Файл успешно загружен!',
+    'file_deleted_success'   => 'Файл успешно удален!',
     'not_uploaded'           => 'Файлы еще не загружены!',
     'server_limit'           => 'Ограничение сервера',
 

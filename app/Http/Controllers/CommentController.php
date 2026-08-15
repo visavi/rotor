@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Classes\CommentManager;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function __construct(private readonly CommentManager $comments)
+    {
+    }
+
     /**
      * Возвращает данные комментария для редактирования (текст + файлы)
      */
@@ -59,7 +63,7 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => __('main.comment_deleted')]);
         }
 
-        if ($comment->created_at->lt(now()->subMinutes(10))) {
+        if (! $this->comments->editable($comment)) {
             return response()->json(['success' => false, 'message' => __('main.editing_impossible')]);
         }
 
@@ -74,7 +78,7 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => current($validator->getErrors())]);
         }
 
-        $comment->update(['text' => antimat($msg)]);
+        $this->comments->update($comment, antimat($msg));
 
         return response()->json([
             'success' => true,
@@ -97,23 +101,8 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => __('main.comment_deleted')]);
         }
 
-        $relateType = $comment->relate_type;
-        $relateId = $comment->relate_id;
+        $softDeleted = $this->comments->delete($comment);
 
-        if ($comment->children()->exists()) {
-            $comment->softDelete();
-
-            return response()->json(['success' => true, 'soft_deleted' => true]);
-        }
-
-        $comment->delete();
-
-        $class = Relation::getMorphedModel($relateType);
-        $model = $class::query()->find($relateId);
-        if ($model) {
-            $model->decrement('count_comments');
-        }
-
-        return response()->json(['success' => true, 'soft_deleted' => false]);
+        return response()->json(['success' => true, 'soft_deleted' => $softDeleted]);
     }
 }

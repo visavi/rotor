@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Classes\CommentManager;
 use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Query\JoinClause;
@@ -145,45 +145,15 @@ trait HandlesComments
         if ($validator->isValid()) {
             $msg = antimat($msg);
 
-            $parentId = null;
-            $depth = 0;
-            $parentComment = $request->input('parent_id')
-                ? Comment::query()->find((int) $request->input('parent_id'))
-                : null;
-
-            if ($parentComment && $parentComment->relate_id === $model->getKey()) {
-                if ($parentComment->depth >= setting('comment_depth')) {
-                    $parentId = $parentComment->parent_id;
-                    $depth = $parentComment->depth;
-                } else {
-                    $parentId = $parentComment->id;
-                    $depth = $parentComment->depth + 1;
-                }
-            }
-
-            $comment = $this->commentsRelation($model)->create([
-                'text'      => $msg,
-                'user_id'   => $user->id,
-                'parent_id' => $parentId,
-                'depth'     => $depth,
-                'ip'        => getIp(),
-                'brow'      => getBrowser(),
-            ]);
-
-            File::query()
-                ->where('relate_type', Comment::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
-                ->update(['relate_id' => $comment->id]);
-
-            $user->increment('point', setting('comment_point'));
-            $user->increment('money', setting('comment_money'));
-
-            $model->increment('count_comments');
+            $comment = app(CommentManager::class)->create(
+                $model,
+                $user,
+                $msg,
+                $request->input('parent_id') ? (int) $request->input('parent_id') : null,
+                route($viewRoute, $viewParams, false),
+            );
 
             $flood->saveState();
-
-            $this->notifyAfterComment($model, $comment, $msg, $viewRoute, $viewParams, $parentComment);
 
             if ($request->wantsJson()) {
                 return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
@@ -200,32 +170,5 @@ trait HandlesComments
         return redirect()->route($viewRoute, $viewParams)
             ->withInput()
             ->withErrors($validator->getErrors());
-    }
-
-    /**
-     * Уведомление о добавлении комментария
-     */
-    private function notifyAfterComment(Model $model, Comment $comment, string $msg, string $viewRoute, array $viewParams, ?Comment $parentComment): void
-    {
-        $url = route($viewRoute, $viewParams, false) . '#comment_' . $comment->id;
-        $title = (string) $model->getAttribute('title');
-        $skip = [];
-
-        $owner = $model->getRelationValue('user');
-        $owner = $owner instanceof User && $owner->exists ? $owner : null;
-        if ($owner && $owner->notify_comment && $owner->id !== getUser('id') && $parentComment === null) {
-            $login = getUser('login');
-            $owner->sendMessage(null, textNotice('comment_added', compact('login', 'url', 'title') + ['text' => $msg]));
-            $skip[] = $owner->login;
-        }
-
-        $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
-        if ($replyUser && ! in_array($replyUser->login, $skip, true) && $replyUser->notify_reply && $replyUser->id !== getUser('id')) {
-            $login = getUser('login');
-            $replyUser->sendMessage(null, textNotice('comment_reply', compact('login', 'url', 'title') + ['text' => $msg]));
-            $skip[] = $replyUser->login;
-        }
-
-        sendNotify($msg, $url, $title, $skip);
     }
 }

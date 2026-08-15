@@ -133,6 +133,8 @@ return [
     'attach_file'            => 'Прикріпити файл',
     'attach_image'           => 'Прикріпити картинку',
     'file_not_found'         => 'Файл не знайдено',
+    'file_uploaded_success'  => 'Файл успішно завантажено!',
+    'file_deleted_success'   => 'Файл успішно видалено!',
     'not_uploaded'           => 'Файли ще не завантажені!',
     'server_limit'           => 'Обмеження сервера',
 
