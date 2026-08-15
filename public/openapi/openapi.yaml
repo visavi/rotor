@@ -201,7 +201,7 @@ components:
                         $ref: '#/components/schemas/Category'
         Comment:
             type: object
-            description: 'Комментарий записи. Плоский список: ветка ответов собирается по parent_id, depth — глубина вложенности'
+            description: 'Комментарий записи. Комментарии приходят лентой по дате: ответ помечен parent_id и несёт краткий контекст родителя в parent'
             properties:
                 id:
                     type: integer
@@ -212,6 +212,24 @@ components:
                     description: 'Комментарий, на который отвечают'
                 depth:
                     type: integer
+                    description: 'Глубина вложенности ответа'
+                parent:
+                    type:
+                        - object
+                        - 'null'
+                    description: 'Комментарий, на который отвечают — для строки «в ответ @login». null у корневых и у ответов на удалённые'
+                    properties:
+                        id:
+                            type: integer
+                        login:
+                            type:
+                                - string
+                                - 'null'
+                        excerpt:
+                            type:
+                                - string
+                                - 'null'
+                            description: 'Первые 100 символов текста без разметки'
                 deleted:
                     type: boolean
                     description: 'Удалённый комментарий: text и user пустые, запись остаётся заглушкой, чтобы ветка ответов не рвалась'
@@ -1385,7 +1403,7 @@ paths:
                     in: query
                     schema:
                         type: string
-                    description: 'Ограничить поиск разделом; допустимые значения приходят в types, неизвестное значение игнорируется'
+                    description: 'Ограничить поиск разделом; допустимые значения приходят в /config (types.search), неизвестное значение игнорируется'
                 -
                     name: sort
                     in: query
@@ -1426,11 +1444,6 @@ paths:
                                             - 'null'
                                     sort:
                                         type: string
-                                    types:
-                                        type: object
-                                        description: 'Разделы, доступные для фильтра: ключ — значение параметра type, значение — название раздела'
-                                        additionalProperties:
-                                            type: string
                 422:
                     description: 'Слишком короткий или слишком длинный запрос'
                 429:
@@ -1896,6 +1909,35 @@ paths:
                                             text_max:
                                                 type: integer
                                                 description: 'Максимальная длина текста сообщения'
+                                    types:
+                                        type: object
+                                        description: 'Допустимые значения параметра type в разных ручках. Набор зависит от включённых модулей'
+                                        properties:
+                                            search:
+                                                type: object
+                                                description: 'Разделы поиска: ключ — значение type, значение — название раздела'
+                                                additionalProperties:
+                                                    type: string
+                                            comment:
+                                                type: object
+                                                description: 'Разделы, принимающие комментарии (POST /comments)'
+                                                additionalProperties:
+                                                    type: string
+                                            rating:
+                                                type: array
+                                                description: 'Типы, поддерживающие голосование (POST /rating)'
+                                                items:
+                                                    type: string
+                                            media:
+                                                type: array
+                                                description: 'Типы, принимающие фото и видео (POST /files)'
+                                                items:
+                                                    type: string
+                                            file:
+                                                type: array
+                                                description: 'Типы, принимающие обычные файлы (POST /files)'
+                                                items:
+                                                    type: string
     /user:
         get:
             tags:
@@ -2289,6 +2331,47 @@ paths:
                                     data: { type: array, items: { $ref: '#/components/schemas/Offer' } }
                                     links: { $ref: '#/components/schemas/PaginationLinks' }
                                     meta: { $ref: '#/components/schemas/PaginationMeta' }
+        post:
+            tags:
+                - 'Предложения и проблемы'
+            summary: 'Создание записи'
+            description: 'Требует токен. Медиа прикладываются заранее через POST /files с type=offers и id=0'
+            operationId: createOffer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [type, title, text]
+                            properties:
+                                type:
+                                    type: string
+                                    enum: [offer, issue]
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+            responses:
+                201:
+                    description: 'Запись создана'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    offer:
+                                        $ref: '#/components/schemas/Offer'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Не хватает баллов, антифлуд или текст не прошёл проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     /news:
         get:
             tags:
@@ -2350,6 +2433,61 @@ paths:
                                     data: { type: array, items: { $ref: '#/components/schemas/Article' } }
                                     links: { $ref: '#/components/schemas/PaginationLinks' }
                                     meta: { $ref: '#/components/schemas/PaginationMeta' }
+        post:
+            tags:
+                - Блоги
+            summary: 'Создание статьи'
+            description: |
+                Требует токен. Файлы прикладываются заранее через POST /files с type=articles и id=0.
+
+                draft оставляет статью черновиком, published_at (только для администрации) откладывает публикацию.
+                При включённой модерации статья создаётся скрытой.
+            operationId: createArticle
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [category_id, title, text, tags]
+                            properties:
+                                category_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                tags:
+                                    type: array
+                                    minItems: 1
+                                    maxItems: 10
+                                    items:
+                                        type: string
+                                draft:
+                                    type: boolean
+                                published_at:
+                                    type: string
+                                    format: date-time
+            responses:
+                201:
+                    description: 'Статья создана'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    article:
+                                        $ref: '#/components/schemas/Article'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Раздел закрыт, категория недоступна, антифлуд или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     /blogs:
         get:
             tags:
@@ -2402,6 +2540,54 @@ paths:
                                     data: { type: array, items: { $ref: '#/components/schemas/Down' } }
                                     links: { $ref: '#/components/schemas/PaginationLinks' }
                                     meta: { $ref: '#/components/schemas/PaginationMeta' }
+        post:
+            tags:
+                - Загрузки
+            summary: 'Создание загрузки'
+            description: |
+                Требует токен. Дистрибутив прикладывается заранее через POST /files с type=downs и id=0,
+                либо вместо файла передаются ссылки. Загрузка публикуется после проверки модератором.
+            operationId: createDown
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [category_id, title, text]
+                            properties:
+                                category_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                    description: 'Название уникально среди всех загрузок'
+                                text:
+                                    type: string
+                                links:
+                                    type: array
+                                    items:
+                                        type: string
+                                        format: uri
+            responses:
+                201:
+                    description: 'Загрузка создана'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    down:
+                                        $ref: '#/components/schemas/Down'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Загрузки закрыты, категория недоступна, нет файла и ссылок или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     /loads:
         get:
             tags:
@@ -2454,6 +2640,50 @@ paths:
                                     data: { type: array, items: { $ref: '#/components/schemas/Item' } }
                                     links: { $ref: '#/components/schemas/PaginationLinks' }
                                     meta: { $ref: '#/components/schemas/PaginationMeta' }
+        post:
+            tags:
+                - Объявления
+            summary: 'Создание объявления'
+            description: 'Требует токен. Медиа прикладываются заранее через POST /files с type=items и id=0'
+            operationId: createItem
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [category_id, title, text]
+                            properties:
+                                category_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                price:
+                                    type: integer
+                                phone:
+                                    type: string
+            responses:
+                201:
+                    description: 'Объявление создано'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    item:
+                                        $ref: '#/components/schemas/Item'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Раздел закрыт, категория недоступна, антифлуд или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     /boards:
         get:
             tags:
@@ -2503,14 +2733,55 @@ paths:
                                     data: { type: array, items: { $ref: '#/components/schemas/Photo' } }
                                     links: { $ref: '#/components/schemas/PaginationLinks' }
                                     meta: { $ref: '#/components/schemas/PaginationMeta' }
+        post:
+            tags:
+                - Галерея
+            summary: 'Загрузка фотографии'
+            description: 'Требует токен. Снимки загружаются заранее через POST /files с type=photos и id=0 — без них запись не создаётся'
+            operationId: createPhoto
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [title]
+                            properties:
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                closed:
+                                    type: boolean
+                                    description: 'Закрыть комментирование'
+            responses:
+                201:
+                    description: 'Фотография загружена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    photo:
+                                        $ref: '#/components/schemas/Photo'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                422:
+                    description: 'Раздел закрыт, снимки не загружены или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     '/offers/{id}':
         get:
             tags:
                 - 'Предложения и проблемы'
             summary: 'Запись с комментариями'
             description: |
-                Токен необязателен: гость читает запись, авторизованному дополнительно приходит его голос в offer.vote.value.
-                Комментарии отдаются страницей плоским списком — дерево ответов клиент собирает сам по parent_id и depth.
+                Токен необязателен: гость читает запись, авторизованному дополнительно приходит его голос в data.vote.value.
+                Комментарии отдаются страницей, лентой по дате: у ответа есть parent_id и краткий контекст родителя в parent.
             operationId: getOffer
             security:
                 -
@@ -2537,20 +2808,74 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
-                                    links: { $ref: '#/components/schemas/PaginationLinks' }
-                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
-                                    offer: { $ref: '#/components/schemas/Offer' }
+                                    data: { $ref: '#/components/schemas/Offer' }
+                                    comments:
+                                        type: object
+                                        description: 'Комментарии записи со своей пагинацией'
+                                        properties:
+                                            data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                            links: { $ref: '#/components/schemas/PaginationLinks' }
+                                            meta: { $ref: '#/components/schemas/PaginationMeta' }
                 404:
                     description: 'Запись не найдена'
+        patch:
+            tags:
+                - 'Предложения и проблемы'
+            summary: 'Редактирование своей записи'
+            description: 'Требует токен. Решённую запись править нельзя'
+            operationId: updateOffer
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [type, title, text]
+                            properties:
+                                type:
+                                    type: string
+                                    enum: [offer, issue]
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+            responses:
+                200:
+                    description: 'Запись изменена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    offer:
+                                        $ref: '#/components/schemas/Offer'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                404:
+                    description: 'Запись не найдена или принадлежит другому пользователю'
+                422:
+                    description: 'Запись уже решена или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     '/news/{id}':
         get:
             tags:
                 - Новости
             summary: 'Новость с комментариями'
             description: |
-                Токен необязателен: гость читает новость, авторизованному дополнительно приходит его голос в news.vote.value.
-                Комментарии отдаются страницей плоским списком — дерево ответов клиент собирает сам по parent_id и depth.
+                Токен необязателен: гость читает новость, авторизованному дополнительно приходит его голос в data.vote.value.
+                Комментарии отдаются страницей, лентой по дате: у ответа есть parent_id и краткий контекст родителя в parent.
             operationId: getNews
             security:
                 -
@@ -2577,10 +2902,14 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
-                                    links: { $ref: '#/components/schemas/PaginationLinks' }
-                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
-                                    news: { $ref: '#/components/schemas/News' }
+                                    data: { $ref: '#/components/schemas/News' }
+                                    comments:
+                                        type: object
+                                        description: 'Комментарии записи со своей пагинацией'
+                                        properties:
+                                            data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                            links: { $ref: '#/components/schemas/PaginationLinks' }
+                                            meta: { $ref: '#/components/schemas/PaginationMeta' }
                 404:
                     description: 'Новость не найдена'
     '/articles/{slug}':
@@ -2590,7 +2919,7 @@ paths:
             summary: 'Статья с комментариями'
             description: |
                 Принимает как слаг из ссылки (12-test-article), так и просто id.
-                Токен необязателен: гость читает статью, авторизованному дополнительно приходит его голос в article.vote.value.
+                Токен необязателен: гость читает статью, авторизованному дополнительно приходит его голос в data.vote.value.
             operationId: getArticle
             security:
                 -
@@ -2617,19 +2946,86 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
-                                    links: { $ref: '#/components/schemas/PaginationLinks' }
-                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
-                                    article: { $ref: '#/components/schemas/Article' }
+                                    data: { $ref: '#/components/schemas/Article' }
+                                    comments:
+                                        type: object
+                                        description: 'Комментарии записи со своей пагинацией'
+                                        properties:
+                                            data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                            links: { $ref: '#/components/schemas/PaginationLinks' }
+                                            meta: { $ref: '#/components/schemas/PaginationMeta' }
                 404:
                     description: 'Статья не найдена'
+    '/articles/{id}':
+        patch:
+            tags:
+                - Блоги
+            summary: 'Редактирование своей статьи'
+            description: 'Требует токен. publish переводит черновик в публикацию. Обращение по id, а не по слагу — слаг может измениться'
+            operationId: updateArticle
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [category_id, title, text, tags]
+                            properties:
+                                category_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                tags:
+                                    type: array
+                                    minItems: 1
+                                    maxItems: 10
+                                    items:
+                                        type: string
+                                publish:
+                                    type: boolean
+                                published_at:
+                                    type: string
+                                    format: date-time
+            responses:
+                200:
+                    description: 'Статья изменена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    article:
+                                        $ref: '#/components/schemas/Article'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                403:
+                    description: 'Статья принадлежит другому пользователю'
+                404:
+                    description: 'Статья не найдена'
+                422:
+                    description: 'Категория недоступна или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     '/downs/{id}':
         get:
             tags:
                 - Загрузки
             summary: 'Загрузка с комментариями'
             description: |
-                Токен необязателен: гость читает загрузку, авторизованному дополнительно приходит его голос в down.vote.value.
+                Токен необязателен: гость читает загрузку, авторизованному дополнительно приходит его голос в data.vote.value.
                 Файлы дистрибутива отдаются ссылкой на роут скачивания, а не прямым путём — иначе не считались бы загрузки
                 и не работал бы запрет скачивания гостям (настройка down_guest_download).
             operationId: getDown
@@ -2658,14 +3054,72 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
-                                    links: { $ref: '#/components/schemas/PaginationLinks' }
-                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
-                                    down: { $ref: '#/components/schemas/Down' }
+                                    data: { $ref: '#/components/schemas/Down' }
+                                    comments:
+                                        type: object
+                                        description: 'Комментарии записи со своей пагинацией'
+                                        properties:
+                                            data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                            links: { $ref: '#/components/schemas/PaginationLinks' }
+                                            meta: { $ref: '#/components/schemas/PaginationMeta' }
                 403:
                     description: 'Загрузка не проверена — доступна только автору и администрации'
                 404:
                     description: 'Загрузка не найдена'
+        patch:
+            tags:
+                - Загрузки
+            summary: 'Редактирование своей непроверенной загрузки'
+            description: 'Требует токен. После проверки модератором загрузку правит только администрация'
+            operationId: updateDown
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [category_id, title, text]
+                            properties:
+                                category_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                links:
+                                    type: array
+                                    items:
+                                        type: string
+                                        format: uri
+            responses:
+                200:
+                    description: 'Загрузка изменена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    down:
+                                        $ref: '#/components/schemas/Down'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                404:
+                    description: 'Загрузка не найдена или принадлежит другому пользователю'
+                422:
+                    description: 'Загрузка уже проверена, нет файла и ссылок или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
     '/items/{id}':
         get:
             tags:
@@ -2699,13 +3153,135 @@ paths:
                     description: 'Срок объявления истёк — доступно только автору'
                 404:
                     description: 'Объявление не найдено'
+        patch:
+            tags:
+                - Объявления
+            summary: 'Редактирование своего объявления'
+            operationId: updateItem
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [category_id, title, text]
+                            properties:
+                                category_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                price:
+                                    type: integer
+                                phone:
+                                    type: string
+            responses:
+                200:
+                    description: 'Объявление изменено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    item:
+                                        $ref: '#/components/schemas/Item'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                403:
+                    description: 'Объявление принадлежит другому пользователю'
+                404:
+                    description: 'Объявление не найдено'
+                422:
+                    description: 'Категория недоступна или данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
+        delete:
+            tags:
+                - Объявления
+            summary: 'Удаление своего объявления'
+            operationId: deleteItem
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                403:
+                    description: 'Объявление принадлежит другому пользователю'
+                404:
+                    description: 'Объявление не найдено'
+                429:
+                    description: 'Превышен общий лимит запросов'
+    '/items/{id}/publish':
+        post:
+            tags:
+                - Объявления
+            summary: 'Снятие с публикации и повторная публикация'
+            description: 'Требует токен. Активное объявление снимается, снятое публикуется заново на срок из настроек'
+            operationId: publishItem
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: 'Статус изменён'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    item:
+                                        $ref: '#/components/schemas/Item'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                403:
+                    description: 'Объявление принадлежит другому пользователю'
+                404:
+                    description: 'Объявление не найдено'
+                429:
+                    description: 'Превышен общий лимит запросов'
     '/photos/{id}':
         get:
             tags:
                 - Галерея
             summary: 'Фото с комментариями'
             description: |
-                Токен необязателен: гость смотрит фото, авторизованному дополнительно приходит его голос в photo.vote.value.
+                Токен необязателен: гость смотрит фото, авторизованному дополнительно приходит его голос в data.vote.value.
                 В отличие от других разделов, в media попадают все снимки записи, включая вставленные в текст — они и есть её содержимое.
             operationId: getPhoto
             security:
@@ -2733,9 +3309,94 @@ paths:
                             schema:
                                 type: object
                                 properties:
-                                    data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
-                                    links: { $ref: '#/components/schemas/PaginationLinks' }
-                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
-                                    photo: { $ref: '#/components/schemas/Photo' }
+                                    data: { $ref: '#/components/schemas/Photo' }
+                                    comments:
+                                        type: object
+                                        description: 'Комментарии записи со своей пагинацией'
+                                        properties:
+                                            data: { type: array, items: { $ref: '#/components/schemas/Comment' } }
+                                            links: { $ref: '#/components/schemas/PaginationLinks' }
+                                            meta: { $ref: '#/components/schemas/PaginationMeta' }
                 404:
                     description: 'Фото не найдено'
+        patch:
+            tags:
+                - Галерея
+            summary: 'Редактирование своей фотографии'
+            operationId: updatePhoto
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required: [title]
+                            properties:
+                                title:
+                                    type: string
+                                text:
+                                    type: string
+                                closed:
+                                    type: boolean
+            responses:
+                200:
+                    description: 'Фотография изменена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    photo:
+                                        $ref: '#/components/schemas/Photo'
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                404:
+                    description: 'Запись не найдена или принадлежит другому пользователю'
+                422:
+                    description: 'Данные не прошли проверку'
+                429:
+                    description: 'Превышен общий лимит запросов'
+        delete:
+            tags:
+                - Галерея
+            summary: 'Удаление своей фотографии'
+            description: 'Требует токен. Фотографию с комментариями удалить нельзя'
+            operationId: deletePhoto
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                400:
+                    description: 'Токен не передан'
+                401:
+                    description: 'Неверный токен'
+                404:
+                    description: 'Запись не найдена или принадлежит другому пользователю'
+                422:
+                    description: 'У записи есть комментарии'
+                429:
+                    description: 'Превышен общий лимит запросов'

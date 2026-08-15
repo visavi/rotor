@@ -24,7 +24,7 @@ class SearchTest extends TestCase
     {
         $this->getJson('/api/search?query=шушенское')
             ->assertOk()
-            ->assertJsonStructure(['data', 'links', 'meta', 'types'])
+            ->assertJsonStructure(['data', 'links', 'meta'])
             ->assertJsonPath('query', 'шушенское')
             ->assertJsonPath('sort', 'relevance')
             ->assertJsonPath('type', null);

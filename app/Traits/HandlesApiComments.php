@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -38,8 +39,41 @@ trait HandlesApiComments
                     ->where('polls.relate_type', Comment::$morphName)
                     ->where('polls.user_id', getUser('id'));
             })
-            ->with('user', 'files')
+            // Родитель нужен для контекста ответа, мягко удалённый — тоже
+            ->with(['user', 'files', 'parent' => static function ($query) {
+                $query->withoutGlobalScope('active')->with('user');
+            }])
             ->orderBy('comments.created_at', $this->apiOrder($request))
-            ->paginate($this->apiPerPage($request));
+            // Размер страницы берётся из настройки сайта, как и на страницах «Все комментарии»
+            ->paginate($this->apiPerPage($request, (int) setting('comments_per_page')));
+    }
+
+    /**
+     * Комментарии записи блоком со своей пагинацией
+     *
+     * Сама запись отдаётся в data, комментарии — вложенным ресурсом, поэтому
+     * links и meta собираются вручную: Laravel добавляет их только верхнему уровню
+     */
+    protected function apiCommentsBlock(Model $model, Request $request): array
+    {
+        $comments = $this->apiComments($model, $request);
+
+        return [
+            'data'  => CommentResource::collection($comments->items()),
+            'links' => [
+                'first' => $comments->url(1),
+                'last'  => $comments->url($comments->lastPage()),
+                'prev'  => $comments->previousPageUrl(),
+                'next'  => $comments->nextPageUrl(),
+            ],
+            'meta' => [
+                'current_page' => $comments->currentPage(),
+                'from'         => $comments->firstItem(),
+                'last_page'    => $comments->lastPage(),
+                'per_page'     => $comments->perPage(),
+                'to'           => $comments->lastItem(),
+                'total'        => $comments->total(),
+            ],
+        ];
     }
 }

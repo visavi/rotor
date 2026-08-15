@@ -29,7 +29,9 @@ class CommentApiController extends Controller
     {
         $comment = Comment::query()
             ->withoutGlobalScope('active')
-            ->with('user', 'files')
+            ->with(['user', 'files', 'parent' => static function ($query) {
+                $query->withoutGlobalScope('active')->with('user');
+            }])
             ->find($id);
 
         if (! $comment) {
@@ -89,7 +91,9 @@ class CommentApiController extends Controller
 
         $flood->saveState();
 
-        $comment->load('user', 'files');
+        $comment->load(['user', 'files', 'parent' => static function ($query) {
+            $query->withoutGlobalScope('active')->with('user');
+        }]);
 
         return response()->json([
             'message' => __('main.comment_added_success'),
@@ -133,7 +137,9 @@ class CommentApiController extends Controller
 
         $this->comments->update($comment, antimat($validated['text']));
 
-        $comment->load('user', 'files');
+        $comment->load(['user', 'files', 'parent' => static function ($query) {
+            $query->withoutGlobalScope('active')->with('user');
+        }]);
 
         return response()->json([
             'message' => __('main.message_edited_success'),

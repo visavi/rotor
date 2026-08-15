@@ -22,6 +22,9 @@ class CommentResource extends JsonResource
             'id'        => $this->id,
             'parent_id' => $this->parent_id,
             'depth'     => $this->depth,
+            // Комментарии приходят лентой по дате, родитель может остаться на другой
+            // странице — поэтому ответ несёт краткий контекст с собой
+            'parent' => $this->resolveParent(),
             // Удалённые остаются в выдаче заглушкой, иначе ветка ответов рвётся
             'deleted' => $deleted,
             'text'    => $deleted ? null : absolutizeUrls($this->text),
@@ -36,6 +39,29 @@ class CommentResource extends JsonResource
             'media'      => FileResource::collection($this->resolveMedia($this->resource)),
             'files'      => FileResource::collection($this->resolveFiles($this->resource)),
             'created_at' => dateFixed($this->created_at, 'c', true),
+        ];
+    }
+
+    /**
+     * Комментарий, на который отвечают: автор и начало текста
+     */
+    private function resolveParent(): ?array
+    {
+        if (! $this->parent_id || ! $this->relationLoaded('parent')) {
+            return null;
+        }
+
+        /** @var ?Comment $parent */
+        $parent = $this->parent;
+
+        if (! $parent) {
+            return null;
+        }
+
+        return [
+            'id'      => $parent->id,
+            'login'   => $parent->deleted_at ? null : $parent->user->login,
+            'excerpt' => $parent->deleted_at ? null : mb_substr(strip_tags($parent->text), 0, 100),
         ];
     }
 }

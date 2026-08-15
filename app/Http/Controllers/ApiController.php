@@ -15,9 +15,12 @@ use App\Models\Dialogue;
 use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\CommentService;
 use App\Services\FeedService;
+use App\Services\FileService;
 use App\Services\RatingService;
 use App\Services\SearchService;
+use App\Support\Registry;
 use Closure;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
@@ -102,13 +105,12 @@ class ApiController extends Controller
         $posts->setPath(url('/api/search'));
         $posts->appends($request->only(['query', 'q', 'type', 'sort', 'per_page']));
 
+        // Список разделов для фильтра клиент берёт из /config (types.search)
         return SearchResource::collection($posts)
             ->additional([
                 'query' => $query,
                 'type'  => $type,
                 'sort'  => $sort,
-                // Разделы, по которым можно фильтровать выдачу
-                'types' => SearchService::types(),
             ]);
     }
 
@@ -319,6 +321,16 @@ class ApiController extends Controller
      */
     public function config(): JsonResponse
     {
+        // Значения параметра type в разных ручках: набор зависит от того,
+        // какие модули установлены, поэтому клиент берёт их отсюда, а не хардкодит
+        $types = [
+            'search'  => SearchService::types(),
+            'comment' => $this->labeled(CommentService::types()),
+            'rating'  => RatingService::types(),
+            'media'   => FileService::mediaTypes(),
+            'file'    => FileService::fileTypes(),
+        ];
+
         $data = Cache::remember('apiConfig', 600, static fn () => [
             'site' => [
                 'title'             => setting('title'),
@@ -333,27 +345,40 @@ class ApiController extends Controller
                 'max_file_size' => setting('filesize'),
                 'extensions'    => explode(',', setting('file_extensions')),
             ],
-            'forum' => [
-                'title_min' => setting('forum_title_min'),
-                'title_max' => setting('forum_title_max'),
-                'text_min'  => setting('forum_text_min'),
-                'text_max'  => setting('forum_text_max'),
-            ],
-            'vote' => [
-                'title_min'   => setting('vote_title_min'),
-                'title_max'   => setting('vote_title_max'),
-                'answer_min'  => setting('vote_answer_min'),
-                'answer_max'  => setting('vote_answer_max'),
-                'answers_min' => 2,
-                'answers_max' => 10,
-            ],
             'message' => [
                 'text_min' => setting('comment_text_min'),
                 'text_max' => setting('comment_text_max'),
             ],
         ]);
 
+        // Типы и секции модулей не кешируются вместе с настройками ядра: они зависят
+        // от набора включённых модулей и должны меняться сразу после включения
+        $data['types'] = $types;
+
+        // Секции модулей: какие свои настройки отдавать, модуль объявляет в module.php
+        foreach (Registry::$apiConfig as $section => $settings) {
+            // Строка — имя настройки, любое другое значение отдаётся как есть
+            $data[$section] = array_map(
+                static fn (mixed $value) => is_string($value) ? setting($value) : $value,
+                $settings,
+            );
+        }
+
         return response()->json($data);
+    }
+
+    /**
+     * Дополняет список типов их названиями для UI
+     */
+    private function labeled(array $types): array
+    {
+        $labels = [];
+
+        foreach ($types as $type) {
+            $labels[$type] = Registry::$labelTypes[$type] ?? $type;
+        }
+
+        return $labels;
     }
 
     /**

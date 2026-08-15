@@ -122,6 +122,11 @@ class ModuleServiceProvider extends ServiceProvider
                         }
                     }
 
+                    // Секции модуля в /api/config
+                    foreach ($moduleConfig['api'] ?? [] as $section => $settings) {
+                        Registry::apiConfig($section, $settings);
+                    }
+
                     // Регистрация наблюдателей
                     foreach ($moduleConfig['observers'] ?? [] as $modelClass => $observerClass) {
                         $modelClass::observe($observerClass);

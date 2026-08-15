@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Message;
 use App\Support\Registry;
 use App\Support\Validator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -111,6 +112,53 @@ class FileService
             'file'    => File::query()->find($fileData['id']),
             'data'    => $fileData,
         ];
+    }
+
+    /**
+     * Правила валидации файлов, переданных прямо в запросе
+     *
+     * Набор расширений зависит от того, куда грузят: галерея принимает медиа,
+     * файловые разделы — остальное
+     */
+    public static function rules(string $type): array
+    {
+        $extensions = in_array($type, self::mediaTypes(), true) ? 'media_extensions' : 'file_extensions';
+
+        return [
+            'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
+            'files.*' => ['file', 'max:' . setting('filesize'), 'mimes:' . setting($extensions)],
+        ];
+    }
+
+    /**
+     * Прикладывает к записи файлы, пришедшие в теле запроса
+     *
+     * @param array<int, UploadedFile> $files
+     */
+    public function attachUploaded(Model $model, array $files): void
+    {
+        $isImageType = in_array($model->getMorphClass(), self::mediaTypes(), true);
+
+        foreach ($files as $file) {
+            $this->store($model, $file, $isImageType);
+        }
+    }
+
+    /**
+     * Привязывает к записи вложения, загруженные до её создания
+     *
+     * Клиент грузит файлы с id = 0, они висят за пользователем и ждут записи —
+     * так работает и форма на сайте, и POST /api/files
+     *
+     * @return int Количество привязанных файлов
+     */
+    public function attachPending(Model $model, ?int $userId = null): int
+    {
+        return File::query()
+            ->where('relate_type', $model->getMorphClass())
+            ->where('relate_id', 0)
+            ->where('user_id', $userId ?? getUser('id'))
+            ->update(['relate_id' => $model->getKey()]);
     }
 
     /**

@@ -21,6 +21,7 @@ class Registry
     public static array $onProfileSave = [];
     public static array $feeds = [];
     public static array $search = [];
+    public static array $apiConfig = [];
 
     /**
      * Регистрирует обработчик жалобы на контент типа $type
@@ -145,6 +146,20 @@ class Registry
         /** @var class-string $class */
         $morphName = $class::$morphName;
         static::$feeds[$morphName] = ['class' => $class] + $config;
+    }
+
+    /**
+     * Регистрирует секцию модуля в /api/config
+     *
+     * Настройки лежат в общей таблице плоским списком, поэтому ядро не знает,
+     * какие из них принадлежат модулю и какие безопасно отдавать наружу —
+     * модуль объявляет это сам
+     *
+     * @param array<string, mixed> $settings [ключ в ответе => имя настройки либо готовое значение]
+     */
+    public static function apiConfig(string $section, array $settings): void
+    {
+        static::$apiConfig[$section] = $settings;
     }
 
     /**
