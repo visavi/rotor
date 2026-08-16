@@ -15,6 +15,7 @@ use App\Models\Dialogue;
 use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\ApiSpecService;
 use App\Services\CommentService;
 use App\Services\ComplaintService;
 use App\Services\FeedService;
@@ -41,6 +42,14 @@ class ApiController extends Controller
     public function index(): View
     {
         return view('api/index');
+    }
+
+    /**
+     * Спецификация OpenAPI без выключенных разделов
+     */
+    public function spec(): JsonResponse
+    {
+        return response()->json(ApiSpecService::spec());
     }
 
     /**

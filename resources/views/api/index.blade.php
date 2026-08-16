@@ -13,13 +13,10 @@
 </head>
 <body>
 <div id="swagger-ui"></div>
-<script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
-<script src="https://unpkg.com/js-yaml@4/dist/js-yaml.min.js"></script>
-<script>
-    fetch('{{ url('/openapi/openapi.yaml') }}')
-        .then(r => r.text())
-        .then(text => {
-            const spec = jsyaml.load(text);
+<script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script><script>
+    fetch('{{ url('/api/openapi.json') }}')
+        .then(r => r.json())
+        .then(spec => {
             spec.servers = [{ url: '{{ url('/api') }}' }];
             spec.info.contact = { name: '{{ setting('title') }}', url: '{{ url('/') }}' };
             SwaggerUIBundle({

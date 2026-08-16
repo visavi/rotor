@@ -32,6 +32,8 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('/search', 'search');
     // Статистика общая для всех, от пользователя не зависит
     Route::get('/stats', 'stats');
+    // Спецификация для Swagger UI, разделы выключенных модулей в неё не попадают
+    Route::get('/openapi.json', 'spec');
 });
 
 // Регистрация и восстановление доступны гостю, там своя защита — капча и лимит запросов
