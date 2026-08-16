@@ -91,11 +91,6 @@ class ModuleServiceProvider extends ServiceProvider
 
                     self::registerModuleConfig($moduleConfig);
 
-                    // Регистрация наблюдателей
-                    foreach ($moduleConfig['observers'] ?? [] as $modelClass => $observerClass) {
-                        $modelClass::observe($observerClass);
-                    }
-
                     // Регистрация консольных команд
                     if (isset($moduleConfig['schedule']) && $this->app->runningInConsole()) {
                         $this->app->booted(function () use ($moduleConfig) {
@@ -175,6 +170,11 @@ class ModuleServiceProvider extends ServiceProvider
         // Секции модуля в /api/config
         foreach ($moduleConfig['api'] ?? [] as $section => $settings) {
             Registry::apiConfig($section, $settings);
+        }
+
+        // Наблюдатели за моделями
+        foreach ($moduleConfig['observers'] ?? [] as $modelClass => $observerClass) {
+            $modelClass::observe($observerClass);
         }
     }
 }
