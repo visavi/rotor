@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Setting;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\File;
 use ReflectionClass;
 use ReflectionException;
 
@@ -19,12 +20,41 @@ abstract class TestCase extends BaseTestCase
      */
     protected string $seeder = DatabaseSeeder::class;
 
+    /**
+     * Время старта теста — по нему в конце находятся загруженные файлы
+     */
+    private int $uploadedAfter;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->withoutVite();
         // flush() сбрасывает и кеш, и процессный memo — иначе настройки протекают между тестами
         Setting::flush();
+
+        $this->uploadedAfter = time();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->clearUploads();
+
+        parent::tearDown();
+    }
+
+    /**
+     * Удаляет файлы, залитые тестом
+     *
+     * Загрузки пишутся в public напрямую, поэтому Storage::fake их не перехватывает,
+     * а базу откатывает RefreshDatabase — без уборки в uploads копятся пустые картинки
+     */
+    private function clearUploads(): void
+    {
+        foreach (File::glob(public_path('uploads/*/*')) as $path) {
+            if (is_file($path) && filemtime($path) >= $this->uploadedAfter) {
+                File::delete($path);
+            }
+        }
     }
 
     /**

@@ -165,9 +165,10 @@ class ModuleServiceProvider extends ServiceProvider
                 Registry::spamType($morphName);
             }
 
-            // Счётчик раздела для /api/stats: считаются все записи модели
-            if (! empty($config['stat'])) {
-                Registry::stat($morphName, static fn (): int => $model::query()->count());
+            // Счётчик раздела для /api/stats: true считает все записи модели,
+            // замыкание нужно разделам, где часть записей скрыта модерацией
+            if ($stat = $config['stat'] ?? null) {
+                Registry::stat($morphName, is_callable($stat) ? $stat : static fn (): int => $model::query()->count());
             }
         }
 

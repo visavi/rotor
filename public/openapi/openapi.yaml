@@ -1483,7 +1483,7 @@ paths:
                 - Авторизация
             summary: Регистрация
             description: |
-                Возвращает готовый токен — отдельно авторизовываться не нужно.
+                В ответе приходят готовый токен и профиль нового пользователя — отдельно авторизовываться не нужно.
 
                 Если на сайте включено подтверждение регистрации, аккаунт приходит с pending: true:
                 до перехода по ссылке из письма писать на сайте нельзя, повторить письмо можно через /user/verify.
@@ -1535,11 +1535,21 @@ paths:
                                 type: object
                                 properties:
                                     message: { type: string }
-                                    token: { type: string }
+                                    token:
+                                        type: string
+                                        description: 'API-ключ, сразу готов к работе'
                                     pending:
                                         type: boolean
                                         description: 'Аккаунт ждёт подтверждения по почте'
                                     user: { $ref: '#/components/schemas/UserProfile' }
+                            examples:
+                                created:
+                                    summary: 'Аккаунт создан'
+                                    value:
+                                        message: 'Добро пожаловать, vantuz!'
+                                        token: 8Kq2wZr4Vn6XtY9bC1dF3gH5jL7mN0pQ
+                                        pending: false
+                                        user: { id: 1, login: vantuz }
                 403:
                     description: 'Регистрация закрыта'
                 422:
