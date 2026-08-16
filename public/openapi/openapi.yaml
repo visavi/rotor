@@ -2113,6 +2113,11 @@ paths:
                                                 description: 'Типы, принимающие обычные файлы (POST /files)'
                                                 items:
                                                     type: string
+                                            complaint:
+                                                type: array
+                                                description: 'Типы, на которые можно пожаловаться (POST /complaint)'
+                                                items:
+                                                    type: string
     /user:
         get:
             tags:
@@ -2476,6 +2481,127 @@ paths:
                                     message: { type: string }
                 422:
                     description: 'Фото не загружено'
+    /users:
+        get:
+            tags:
+                - Пользователи
+            summary: 'Рейтинг пользователей'
+            description: 'Открыт гостю, как и на сайте'
+            operationId: getUsers
+            security: []
+            parameters:
+                -
+                    name: type
+                    in: query
+                    schema:
+                        type: string
+                        enum:
+                            - users
+                            - admins
+                            - birthdays
+                        default: users
+                    description: 'Все, администрация или именинники сегодня'
+                -
+                    name: user
+                    in: query
+                    schema:
+                        type: string
+                    description: 'Поиск по логину или имени'
+                -
+                    name: sort
+                    in: query
+                    schema:
+                        type: string
+                        enum:
+                            - point
+                            - rating
+                            - money
+                            - created
+                            - updated
+                        default: point
+                -
+                    $ref: '#/components/parameters/Order'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/User' }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+    /users/search:
+        get:
+            tags:
+                - Пользователи
+            summary: 'Подсказка логинов для упоминаний'
+            description: 'Запрос короче двух символов возвращает пустой список'
+            operationId: searchUsers
+            security: []
+            parameters:
+                -
+                    name: query
+                    in: query
+                    required: true
+                    schema:
+                        type: string
+                        minLength: 2
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/Author' }
+    /online:
+        get:
+            tags:
+                - Пользователи
+            summary: 'Кто сейчас на сайте'
+            description: 'Гостей видно только счётчиком: кроме ip о них ничего не известно'
+            operationId: getOnline
+            security: []
+            parameters:
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/Author' }
+                                    meta:
+                                        type: object
+                                        properties:
+                                            current_page: { type: integer }
+                                            last_page: { type: integer }
+                                            per_page: { type: integer }
+                                            total: { type: integer }
+                                            users:
+                                                type: integer
+                                                description: 'Пользователей на сайте'
+                                            guests:
+                                                type: integer
+                                                description: 'Гостей на сайте'
     '/users/{login}':
         get:
             tags:
@@ -2602,6 +2728,69 @@ paths:
                     description: 'Пользователь не найден'
                 422:
                     description: 'Ошибка валидации (флуд, игнор-лист, нельзя себе)'
+        delete:
+            tags:
+                - Сообщения
+            summary: 'Удаление переписки'
+            description: 'Пока есть непрочитанные сообщения, удалять нельзя — иначе письмо исчезнет, не дойдя до адресата'
+            operationId: deleteTalk
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+            responses:
+                200:
+                    description: 'Переписка удалена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                404:
+                    description: 'Пользователь не найден или переписки нет'
+                422:
+                    description: 'Есть непрочитанные сообщения'
+    /complaint:
+        post:
+            tags:
+                - Жалобы
+            summary: 'Жалоба на запись'
+            description: |
+                Жалоба уходит администрации. Повторная жалоба на ту же запись не принимается,
+                неважно от кого она пришла. Допустимые значения type приходят в /config (types.complaint).
+            operationId: complaint
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - type
+                                - id
+                            properties:
+                                type: { type: string }
+                                id: { type: integer, minimum: 1 }
+                                page:
+                                    type: integer
+                                    description: 'Страница записи, если раздел её использует в ссылке'
+            responses:
+                201:
+                    description: 'Жалоба отправлена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    success: { type: boolean }
+                                    message: { type: string }
+                422:
+                    description: 'Запись не найдена или жалоба уже отправлена'
     /messages/new:
         get:
             tags:
@@ -2622,6 +2811,107 @@ paths:
                     description: 'Api token missing'
                 401:
                     description: Unauthorized
+    /rules:
+        get:
+            tags:
+                - Страницы
+            summary: 'Правила сайта'
+            description: 'Текст в HTML, %SITENAME% уже заменён на название сайта. Без правил приходит null.'
+            operationId: getRules
+            security: []
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    text: { type: string, nullable: true }
+    /stickers:
+        get:
+            tags:
+                - Страницы
+            summary: 'Стикеры по категориям'
+            description: 'Нужны редактору сообщений: код подставляется в текст, картинка показывается в списке'
+            operationId: getStickers
+            security: []
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id: { type: integer }
+                                                name: { type: string }
+                                                stickers:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            code: { type: string }
+                                                            url: { type: string, format: uri }
+    /statuses:
+        get:
+            tags:
+                - Страницы
+            summary: 'Статусы пользователей'
+            description: 'Пороги баллов, с которых открывается статус'
+            operationId: getStatuses
+            security: []
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                name: { type: string }
+                                                color: { type: string, nullable: true }
+                                                point: { type: integer }
+                                                topoint: { type: integer }
+    '/pages/{page}':
+        get:
+            tags:
+                - Страницы
+            summary: 'Статичная страница сайта'
+            description: 'Содержимое верстают на сайте, поэтому приходит готовым HTML. Без параметра отдаётся index.'
+            operationId: getPage
+            security: []
+            parameters:
+                -
+                    name: page
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+                        default: index
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    slug: { type: string }
+                                    html: { type: string }
+                404:
+                    description: 'Страница не найдена'
     /forums:
         get:
             tags:

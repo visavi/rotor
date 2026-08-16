@@ -16,6 +16,7 @@ use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\CommentService;
+use App\Services\ComplaintService;
 use App\Services\FeedService;
 use App\Services\FileService;
 use App\Services\RatingService;
@@ -283,6 +284,53 @@ class ApiController extends Controller
     }
 
     /**
+     * Удаляет переписку с пользователем
+     */
+    public function deleteTalk(string $login): JsonResponse
+    {
+        $user = getUser();
+        $author = getUserByLogin($login);
+
+        if (! $author) {
+            abort(404, __('validator.user'));
+        }
+
+        // Непрочитанные удалять нельзя: иначе сообщение исчезнет, не дойдя до адресата
+        if ($user->newprivat) {
+            abort(422, __('messages.unread_messages'));
+        }
+
+        $deleted = Dialogue::query()
+            ->where('user_id', $user->id)
+            ->where('author_id', $author->id)
+            ->get()
+            ->each(static fn (Dialogue $dialogue) => $dialogue->delete())
+            ->count();
+
+        if (! $deleted) {
+            abort(404, __('messages.empty_dialogue'));
+        }
+
+        return response()->json(['message' => __('messages.success_deleted')]);
+    }
+
+    /**
+     * Жалоба на запись
+     */
+    public function complaint(Request $request, ComplaintService $complaint): JsonResponse
+    {
+        $validated = $request->validate([
+            'type' => ['required', 'string', 'in:' . implode(',', ComplaintService::types())],
+            'id'   => ['required', 'integer', 'min:1'],
+            'page' => ['nullable'],
+        ]);
+
+        $result = $complaint->create($validated['type'], (int) $validated['id'], $request->input('page'));
+
+        return response()->json($result, $result['success'] ? 201 : 422);
+    }
+
+    /**
      * Api новых сообщений
      */
     public function newMessages(): JsonResponse
@@ -324,11 +372,12 @@ class ApiController extends Controller
         // Значения параметра type в разных ручках: набор зависит от того,
         // какие модули установлены, поэтому клиент берёт их отсюда, а не хардкодит
         $types = [
-            'search'  => SearchService::types(),
-            'comment' => $this->labeled(CommentService::types()),
-            'rating'  => RatingService::types(),
-            'media'   => FileService::mediaTypes(),
-            'file'    => FileService::fileTypes(),
+            'search'    => SearchService::types(),
+            'comment'   => $this->labeled(CommentService::types()),
+            'rating'    => RatingService::types(),
+            'media'     => FileService::mediaTypes(),
+            'file'      => FileService::fileTypes(),
+            'complaint' => ComplaintService::types(),
         ];
 
         $data = Cache::remember('apiConfig', 600, static fn () => [

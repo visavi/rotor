@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Message;
-use App\Models\Spam;
 use App\Models\Sticker;
+use App\Services\ComplaintService;
 use App\Services\FileService;
 use App\Services\RatingService;
-use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,54 +18,19 @@ class AjaxController extends Controller
     /**
      * Отправляет жалобу на сообщение
      */
-    public function complaint(Request $request, Validator $validator): JsonResponse
+    public function complaint(Request $request, ComplaintService $complaint): JsonResponse
     {
-        $path = null;
-        $model = false;
-        $id = int($request->input('id'));
-        $type = $request->input('type');
-        $page = $request->input('page');
+        $result = $complaint->create(
+            (string) $request->input('type'),
+            int($request->input('id')),
+            $request->input('page'),
+        );
 
-        switch ($type) {
-            case Message::$morphName:
-                $model = Message::query()->find($id);
-                break;
-
-            case Comment::$morphName:
-                $model = Comment::query()->find($id);
-                $path = $model?->getViewUrl(false);
-                break;
-
-            default:
-                if (isset(Registry::$complaintTypes[$type])) {
-                    $result = (Registry::$complaintTypes[$type])($id, $page);
-                    $model = $result['model'] ?? null;
-                    $path = $result['path'] ?? null;
-                }
-                break;
+        if (! $result['success']) {
+            return response()->json(['success' => false, 'message' => $result['message']]);
         }
 
-        $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
-
-        $validator
-            ->true($model, __('main.message_not_found'))
-            ->false($spam, __('ajax.complaint_already_sent'));
-
-        if ($validator->isValid()) {
-            Spam::query()->create([
-                'relate_type' => $type,
-                'relate_id'   => $model->id,
-                'user_id'     => getUser('id'),
-                'path'        => $path,
-            ]);
-
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**

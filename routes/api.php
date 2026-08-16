@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AccountApiController;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\CommentApiController;
 use App\Http\Controllers\Api\FileApiController;
+use App\Http\Controllers\Api\PageApiController;
+use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +37,20 @@ Route::controller(AuthApiController::class)->group(function () {
     Route::get('/captcha', 'captcha');
     Route::post('/register', 'register')->middleware('throttle:api-auth');
     Route::post('/recovery', 'recovery')->middleware('throttle:api-auth');
+});
+
+// Списки пользователей и статичные страницы открыты, как и на сайте
+Route::controller(UserApiController::class)->group(function () {
+    Route::get('/users', 'index');
+    Route::get('/users/search', 'search');
+    Route::get('/online', 'online');
+});
+
+Route::controller(PageApiController::class)->group(function () {
+    Route::get('/rules', 'rules');
+    Route::get('/stickers', 'stickers');
+    Route::get('/statuses', 'statuses');
+    Route::get('/pages/{page?}', 'page')->where('page', '[\w\-]+');
 });
 
 // Чтение комментария открыто, как и страница записи
@@ -76,5 +92,7 @@ Route::controller(ApiController::class)
         Route::get('/talk/{login}', 'talk');
         Route::get('/messages/new', 'newMessages');
         Route::post('/talk/{login}', 'createTalk');
+        Route::delete('/talk/{login}', 'deleteTalk');
         Route::post('/rating', 'rating');
+        Route::post('/complaint', 'complaint');
     });
