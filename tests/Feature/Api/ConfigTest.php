@@ -26,7 +26,8 @@ class ConfigTest extends TestCase
             ->assertJsonStructure([
                 'site',
                 'upload',
-                'types' => ['search', 'comment', 'rating', 'media', 'file'],
+                'account' => ['login_min', 'password_min', 'captcha_type', 'confirm_email'],
+                'types'   => ['search', 'comment', 'rating', 'media', 'file'],
             ]);
 
         // Комментарии и личные сообщения принимают файлы в любой сборке

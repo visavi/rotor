@@ -8,13 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Models\BlackList;
 use App\Models\Flood;
 use App\Models\User;
-use App\Support\Registry;
+use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -38,7 +37,7 @@ class UserController extends Controller
     /**
      * Registration
      */
-    public function register(Request $request, Validator $validator): View|RedirectResponse
+    public function register(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
     {
         if (getUser()) {
             abort(403, __('users.already_registered'));
@@ -54,78 +53,15 @@ class UserController extends Controller
                 $password = $request->input('password');
                 $password2 = $request->input('password2');
                 $email = strtolower((string) $request->input('email'));
-                $domain = Str::substr(strrchr($email, '@'), 1);
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
-                $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                    ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
-                    ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
-                    ->email($email, ['email' => __('validator.email')])
-                    ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
-                    ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
-                    ->equal($password, $password2, ['password2' => __('users.passwords_different')])
-                    ->false(ctype_digit($login), ['login' => __('users.field_characters_requirements')])
-                    ->false(ctype_digit($password), ['password' => __('users.field_characters_requirements')])
-                    ->false(substr_count($login, '-') > 2, ['login' => __('users.login_hyphens_requirements')]);
+                $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
 
-                if (! empty($login)) {
-                    // Проверка логина на существование
-                    $checkLogin = User::query()->where('login', $login)->exists();
-                    $validator->false($checkLogin, ['login' => __('users.login_already_exists')]);
-
-                    // Проверка логина в черном списке
-                    $validator->false(BlackList::isBlacklisted('login', strtolower($login)), ['login' => __('users.login_is_blacklisted')]);
-                }
-
-                // Проверка email на существование
-                $checkMail = User::query()->where('email', $email)->exists();
-                $validator->false($checkMail, ['email' => __('users.email_already_exists')]);
-
-                // Проверка домена от email и email в черном списке
-                $validator
-                    ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')])
-                    ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
-
-                // Подтверждение регистрации
-                $confirmToken = null;
-                $confirmUrl = null;
-                if (setting('regkeys')) {
-                    $confirmToken = Str::random(32);
-                    $confirmUrl = route('confirm', ['token' => $confirmToken]);
-                }
+                $userService->validateRegistration($validator, $login, $password, $password2, $email);
 
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
-                    $user = User::query()->create([
-                        'login'         => $login,
-                        'password'      => Hash::make($password),
-                        'email'         => $email,
-                        'level'         => setting('regkeys') ? User::PENDED : User::USER,
-                        'gender'        => $gender,
-                        'themes'        => setting('themes'),
-                        'point'         => 0,
-                        'language'      => setting('language'),
-                        'money'         => setting('registermoney'),
-                        'subscribe'     => Str::random(32),
-                        'confirm_token' => $confirmToken,
-                        'updated_at'    => now(),
-                    ]);
-
-                    // ----- Уведомление в приват ----//
-                    $textNotice = textNotice('register', ['username' => $login]);
-                    $user->sendMessage(null, $textNotice);
-
-                    // --- Уведомление о регистрации на email ---//
-                    $subject = 'Регистрация на ' . setting('title');
-                    $data = [
-                        'to'         => $email,
-                        'subject'    => $subject,
-                        'login'      => $login,
-                        'password'   => $password,
-                        'confirmUrl' => $confirmUrl,
-                    ];
-
-                    sendMail('mailer.register', $data);
+                    $user = $userService->register($login, $password, $email, $gender);
 
                     Auth::login($user, true);
 
@@ -225,51 +161,17 @@ class UserController extends Controller
     /**
      * Profile editing
      */
-    public function profile(Request $request, Validator $validator): View|RedirectResponse
+    public function profile(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         if ($request->isMethod('post')) {
-            $info = $request->input('info');
-            $name = $request->input('name');
-            $country = $request->input('country');
-            $city = $request->input('city');
-            $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
-            $site = $request->input('site');
-            $birthday = $request->input('birthday');
-            $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-
-            $validator
-                ->url($site, ['site' => __('validator.site')], false)
-                ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
-                ->phone($phone, ['phone' => __('validator.phone')], false)
-                ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')])
-                ->length($name, 3, 20, ['name' => __('users.name_short_or_long')], false);
-
-            foreach (Registry::$onProfileValidate as $handler) {
-                $handler($user, $request, $validator, true);
-            }
+            $data = $userService->validateProfile($validator, $user, $request);
 
             if ($validator->isValid()) {
-                $country = Str::substr($country, 0, 30);
-                $city = Str::substr($city, 0, 50);
-
-                $user->update([
-                    'name'     => $name,
-                    'gender'   => $gender,
-                    'country'  => $country,
-                    'city'     => $city,
-                    'phone'    => $phone,
-                    'site'     => $site,
-                    'birthday' => $birthday,
-                    'info'     => $info,
-                ]);
-
-                foreach (Registry::$onProfileSave as $handler) {
-                    $handler($user, $request);
-                }
+                $userService->saveProfile($user, $data, $request);
 
                 return redirect('profile')
                     ->with('success', __('users.profile_success_changed'));
@@ -368,7 +270,7 @@ class UserController extends Controller
     /**
      * Settings
      */
-    public function setting(Request $request, Validator $validator): View|RedirectResponse
+    public function setting(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
@@ -379,31 +281,10 @@ class UserController extends Controller
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {
-            $themes = $request->input('themes');
-            $timezone = $request->input('timezone', 0);
-            $language = $request->input('language');
-            $notifyMention = $request->input('notify_mention') ? 1 : 0;
-            $notifyReply = $request->input('notify_reply') ? 1 : 0;
-            $notifyComment = $request->input('notify_comment') ? 1 : 0;
-            $subscribe = $request->input('subscribe') ? Str::random(32) : null;
-
-            $validator
-                ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => __('users.theme_invalid')])
-                ->true(in_array($themes, $setting['themes'], true) || empty($themes), ['themes' => __('users.theme_not_installed')])
-                ->regex($language, '|^[a-z]+$|', ['language' => __('users.language_invalid')])
-                ->in($language, $setting['languages'], ['language' => __('users.language_not_installed')])
-                ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => __('users.timezone_invalid')]);
+            $data = $userService->validateSettings($validator, $request);
 
             if ($validator->isValid()) {
-                $user->update([
-                    'themes'         => $themes,
-                    'timezone'       => $timezone,
-                    'notify_mention' => $notifyMention,
-                    'notify_reply'   => $notifyReply,
-                    'notify_comment' => $notifyComment,
-                    'subscribe'      => $subscribe,
-                    'language'       => $language,
-                ]);
+                $user->update($data);
 
                 return redirect('settings')
                     ->with('success', __('users.settings_success_changed'));

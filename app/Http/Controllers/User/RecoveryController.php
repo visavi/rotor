@@ -7,6 +7,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use App\Models\User;
+use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class RecoveryController extends Controller
     /**
      * Восстановление пароля
      */
-    public function recovery(Request $request, Validator $validator): View|RedirectResponse
+    public function recovery(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
     {
         if (getUser()) {
             return redirect('/')->with('danger', __('main.already_authorized'));
@@ -34,36 +35,12 @@ class RecoveryController extends Controller
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
 
-            PasswordReset::query()
-                ->where('created_at', '<', now()->subHour())
-                ->delete();
-
-            $reset = PasswordReset::query()->where('email', $user->email)->first();
-            if ($reset) {
+            if ($userService->hasPendingRecovery($user)) {
                 $validator->addError(['user' => __('mails.password_recovery_time')]);
             }
 
             if ($validator->isValid()) {
-                $token = Str::random(32);
-
-                PasswordReset::query()->create([
-                    'email'      => $user->email,
-                    'token'      => $token,
-                    'created_at' => now(),
-                ]);
-
-                route('restore', ['token' => $token]);
-
-                // Инструкция по восстановлению пароля на email
-                $subject = 'Восстановление пароля на ' . setting('title');
-                $data = [
-                    'to'       => $user->email,
-                    'subject'  => $subject,
-                    'username' => $user->getName(),
-                    'resetUrl' => route('restore', ['token' => $token]),
-                ];
-
-                sendMail('mailer.recovery', $data);
+                $userService->requestRecovery($user);
 
                 return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
             }

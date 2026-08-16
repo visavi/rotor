@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AccountApiController;
+use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\CommentApiController;
 use App\Http\Controllers\Api\FileApiController;
 use App\Http\Controllers\ApiController;
@@ -28,6 +30,13 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('/search', 'search');
 });
 
+// Регистрация и восстановление доступны гостю, там своя защита — капча и лимит запросов
+Route::controller(AuthApiController::class)->group(function () {
+    Route::get('/captcha', 'captcha');
+    Route::post('/register', 'register')->middleware('throttle:api-auth');
+    Route::post('/recovery', 'recovery')->middleware('throttle:api-auth');
+});
+
 // Чтение комментария открыто, как и страница записи
 Route::get('/comments/{id}', [CommentApiController::class, 'show'])->whereNumber('id');
 
@@ -40,6 +49,23 @@ Route::middleware('check.token')->group(function () {
     Route::post('/files', [FileApiController::class, 'store']);
     Route::delete('/files/{id}', [FileApiController::class, 'destroy'])->whereNumber('id');
 });
+
+Route::controller(AccountApiController::class)
+    ->middleware('check.token')
+    ->prefix('user')
+    ->group(function () {
+        Route::patch('/', 'profile');
+        Route::get('/settings', 'settings');
+        Route::patch('/settings', 'updateSettings');
+        Route::post('/password', 'password');
+        Route::post('/email', 'email');
+        Route::post('/verify', 'verify');
+        Route::post('/status', 'status');
+        Route::post('/color', 'color');
+        Route::post('/apikey', 'apikey');
+        Route::post('/photo', 'photo');
+        Route::delete('/photo', 'deletePhoto');
+    });
 
 Route::controller(ApiController::class)
     ->middleware('check.token')

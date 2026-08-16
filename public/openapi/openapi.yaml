@@ -1344,6 +1344,155 @@ paths:
                     description: 'Ошибка валидации'
                 429:
                     description: 'Превышен лимит попыток авторизации (10 в минуту с одного ip)'
+    /captcha:
+        get:
+            tags:
+                - Капча
+            summary: 'Задание капчи'
+            description: |
+                Нужна везде, где форма защищена от ботов: регистрация, восстановление пароля,
+                повторное письмо с подтверждением. Тип капчи задаётся настройками сайта.
+
+                Для graphical и animated приходит картинка в data-URI и одноразовый ключ:
+                его вместе с разгадкой (protect) нужно отправить с формой, срок жизни — expires_in секунд.
+                Ключ одноразовый — на каждую форму берите новое задание.
+
+                Для recaptcha_v2 и recaptcha_v3 приходит site_key, а в поле protect уходит токен от Google.
+                Тип none означает, что капча отключена и поля можно не отправлять.
+            operationId: getCaptcha
+            security: []
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    type:
+                                        type: string
+                                        enum:
+                                            - graphical
+                                            - animated
+                                            - recaptcha_v2
+                                            - recaptcha_v3
+                                            - none
+                                    key:
+                                        type: string
+                                        description: 'Одноразовый ключ задания (только для картинки)'
+                                    image:
+                                        type: string
+                                        description: 'Картинка data-URI (только для картинки)'
+                                    expires_in:
+                                        type: integer
+                                        description: 'Срок жизни задания в секундах'
+                                    site_key:
+                                        type: string
+                                        description: 'Публичный ключ reCAPTCHA'
+    /register:
+        post:
+            tags:
+                - Авторизация
+            summary: Регистрация
+            description: |
+                Возвращает готовый токен — отдельно авторизовываться не нужно.
+
+                Если на сайте включено подтверждение регистрации, аккаунт приходит с pending: true:
+                до перехода по ссылке из письма писать на сайте нельзя, повторить письмо можно через /user/verify.
+            operationId: register
+            security: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - login
+                                - password
+                                - email
+                            properties:
+                                login:
+                                    type: string
+                                    minLength: 3
+                                    maxLength: 20
+                                    pattern: '^[a-z0-9][a-z0-9\-]+$'
+                                password:
+                                    type: string
+                                    format: password
+                                    minLength: 6
+                                    maxLength: 20
+                                password2:
+                                    type: string
+                                    format: password
+                                    description: 'Повтор пароля, по умолчанию равен password'
+                                email:
+                                    type: string
+                                    format: email
+                                gender:
+                                    type: string
+                                    enum: ['М', 'Ж']
+                                captcha_key:
+                                    type: string
+                                    description: 'Ключ задания из /captcha'
+                                protect:
+                                    type: string
+                                    description: 'Разгадка капчи или токен reCAPTCHA'
+            responses:
+                201:
+                    description: 'Аккаунт создан'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    token: { type: string }
+                                    pending:
+                                        type: boolean
+                                        description: 'Аккаунт ждёт подтверждения по почте'
+                                    user: { $ref: '#/components/schemas/UserProfile' }
+                403:
+                    description: 'Регистрация закрыта'
+                422:
+                    description: 'Ошибка валидации'
+                429:
+                    description: 'Превышен лимит попыток (10 в минуту с одного ip)'
+    /recovery:
+        post:
+            tags:
+                - Авторизация
+            summary: 'Восстановление пароля'
+            description: 'Отправляет на почту ссылку восстановления. Ссылка открывается на сайте, новый пароль приходит письмом. Повторная заявка принимается через час.'
+            operationId: recovery
+            security: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - user
+                            properties:
+                                user:
+                                    type: string
+                                    description: 'Логин или email'
+                                captcha_key: { type: string }
+                                protect: { type: string }
+            responses:
+                200:
+                    description: 'Письмо отправлено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Ошибка валидации, пользователь не найден или заявка уже отправлена'
+                429:
+                    description: 'Превышен лимит попыток (10 в минуту с одного ip)'
     /feed:
         get:
             tags:
@@ -1858,12 +2007,38 @@ paths:
                                                 description: 'Максимальное количество файлов за раз'
                                             max_file_size:
                                                 type: integer
-                                                description: 'Максимальный размер файла в килобайтах'
+                                                description: 'Максимальный размер файла в байтах'
                                             extensions:
                                                 type: array
                                                 items:
                                                     type: string
                                                 description: 'Разрешённые расширения файлов'
+                                    account:
+                                        type: object
+                                        description: 'Требования форм регистрации и аккаунта'
+                                        properties:
+                                            login_min: { type: integer }
+                                            login_max: { type: integer }
+                                            password_min: { type: integer }
+                                            password_max: { type: integer }
+                                            captcha_type:
+                                                type: string
+                                                description: 'Тип капчи, задание приходит в /captcha'
+                                            confirm_email:
+                                                type: boolean
+                                                description: 'Регистрация требует подтверждения по почте'
+                                            status_point:
+                                                type: integer
+                                                description: 'Баллов для смены статуса'
+                                            status_money:
+                                                type: integer
+                                                description: 'Стоимость смены статуса'
+                                            color_point:
+                                                type: integer
+                                                description: 'Баллов для смены цвета'
+                                            color_money:
+                                                type: integer
+                                                description: 'Стоимость смены цвета'
                                     forum:
                                         type: object
                                         properties:
@@ -1957,6 +2132,350 @@ paths:
                     description: 'Api token missing'
                 401:
                     description: Unauthorized
+        patch:
+            tags:
+                - Аккаунт
+            summary: 'Изменение профиля'
+            description: 'Поля профиля, добавленные модулями, принимаются вместе с остальными'
+            operationId: updateProfile
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    minLength: 3
+                                    maxLength: 20
+                                gender:
+                                    type: string
+                                    enum: ['М', 'Ж']
+                                country: { type: string, maxLength: 30 }
+                                city: { type: string, maxLength: 50 }
+                                phone: { type: string }
+                                site: { type: string, format: uri }
+                                birthday:
+                                    type: string
+                                    description: 'Дата рождения в формате дд.мм.гггг'
+                                info: { type: string, maxLength: 1000 }
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data: { $ref: '#/components/schemas/UserProfile' }
+                422:
+                    description: 'Ошибка валидации'
+    /user/settings:
+        get:
+            tags:
+                - Аккаунт
+            summary: 'Настройки аккаунта'
+            description: 'Вместе с текущими значениями приходит список доступных тем, языков и часовых поясов'
+            operationId: getSettings
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: object
+                                        properties:
+                                            themes: { type: string, nullable: true }
+                                            language: { type: string }
+                                            timezone: { type: integer }
+                                            notify_mention: { type: boolean }
+                                            notify_reply: { type: boolean }
+                                            notify_comment: { type: boolean }
+                                            subscribe:
+                                                type: boolean
+                                                description: 'Подписка на рассылку'
+                                    available:
+                                        type: object
+                                        properties:
+                                            themes: { type: array, items: { type: string } }
+                                            languages: { type: array, items: { type: string } }
+                                            timezones: { type: array, items: { type: integer } }
+        patch:
+            tags:
+                - Аккаунт
+            summary: 'Изменение настроек'
+            operationId: updateSettings
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - language
+                            properties:
+                                themes:
+                                    type: string
+                                    description: 'Тема оформления из available.themes'
+                                language: { type: string }
+                                timezone: { type: integer, minimum: -12, maximum: 12 }
+                                notify_mention: { type: boolean }
+                                notify_reply: { type: boolean }
+                                notify_comment: { type: boolean }
+                                subscribe: { type: boolean }
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Ошибка валидации'
+    /user/password:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Смена пароля'
+            description: 'Токен остаётся прежним — приложение не разлогинивается'
+            operationId: changePassword
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - old_password
+                                - new_password
+                                - confirm_password
+                            properties:
+                                old_password: { type: string, format: password }
+                                new_password:
+                                    type: string
+                                    format: password
+                                    minLength: 6
+                                    maxLength: 20
+                                confirm_password: { type: string, format: password }
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Ошибка валидации'
+    /user/email:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Заявка на смену почты'
+            description: 'Подтверждение уходит письмом на новый адрес, ссылка открывается на сайте. Повторная заявка принимается через час.'
+            operationId: changeEmail
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - email
+                                - password
+                            properties:
+                                email: { type: string, format: email }
+                                password:
+                                    type: string
+                                    format: password
+                                    description: 'Текущий пароль'
+            responses:
+                200:
+                    description: 'Письмо отправлено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Ошибка валидации или заявка уже отправлена'
+    /user/verify:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Повторное письмо с подтверждением регистрации'
+            description: 'Доступно, пока аккаунт не подтверждён. Почту можно заодно изменить, если при регистрации ошиблись.'
+            operationId: verifyAccount
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                    description: 'По умолчанию — текущая почта'
+                                captcha_key: { type: string }
+                                protect: { type: string }
+            responses:
+                200:
+                    description: 'Письмо отправлено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                403:
+                    description: 'Подтверждение отключено или аккаунт уже подтверждён'
+                422:
+                    description: 'Ошибка валидации'
+    /user/status:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Смена статуса'
+            description: 'Стоит баллов и денег по настройкам сайта, пустое значение снимает статус'
+            operationId: changeStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    minLength: 3
+                                    maxLength: 25
+                                    nullable: true
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Не хватает баллов или денег, либо ошибка валидации'
+    /user/color:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Смена цвета никнейма'
+            operationId: changeColor
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                color:
+                                    type: string
+                                    pattern: '^#[A-Fa-f0-9]{6}$'
+                                    nullable: true
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Не хватает баллов или денег, либо ошибка валидации'
+    /user/apikey:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Перевыпуск или удаление токена'
+            description: 'После вызова старый токен перестаёт работать: сохраните новый из ответа. С action=delete доступ к API закрывается.'
+            operationId: changeApikey
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                action:
+                                    type: string
+                                    enum:
+                                        - create
+                                        - change
+                                        - delete
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    token:
+                                        type: string
+                                        nullable: true
+                                        description: 'Новый токен, при удалении — null'
+    /user/photo:
+        post:
+            tags:
+                - Аккаунт
+            summary: 'Загрузка фото и аватара'
+            description: 'Аватар нарезается из фото автоматически, старые файлы удаляются'
+            operationId: uploadPhoto
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - photo
+                            properties:
+                                photo:
+                                    type: string
+                                    format: binary
+                                    description: 'Изображение не меньше 100×100'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    avatar: { type: string, format: uri }
+                                    picture: { type: string, format: uri }
+                422:
+                    description: 'Ошибка валидации'
+        delete:
+            tags:
+                - Аккаунт
+            summary: 'Удаление фото и аватара'
+            operationId: deletePhoto
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                422:
+                    description: 'Фото не загружено'
     '/users/{login}':
         get:
             tags:

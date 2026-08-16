@@ -76,8 +76,10 @@ class UpgradeServiceTest extends TestCase
 
     public function testOutdatedModulesListedForNextMajorOnly(): void
     {
-        // Модуль есть на диске, его requires относится к текущему мажору
-        Module::query()->create(['name' => 'Forum', 'version' => '1.0.10', 'active' => 1]);
+        // Модуль кладётся на диск сам: в репозитории ядра modules пуст
+        $this->fakeModule('UpgradeCheck', ROTOR_VERSION);
+
+        Module::query()->create(['name' => 'UpgradeCheck', 'version' => '1.0.0', 'active' => 1]);
 
         $this->assertSame([], $this->upgrade->outdatedModules('v' . $this->nextMinor()));
 
@@ -86,6 +88,35 @@ class UpgradeServiceTest extends TestCase
         $this->assertCount(1, $outdated);
         // requires модуля отстаёт от целевого мажора — этим он и попал в список
         $this->assertTrue(version_compare($outdated[0]['requires'], $this->nextMajor(), '<'));
+    }
+
+    public function testModuleReadyForNextMajorIsNotListed(): void
+    {
+        $this->fakeModule('UpgradeReady', $this->nextMajor());
+
+        Module::query()->create(['name' => 'UpgradeReady', 'version' => '2.0.0', 'active' => 1]);
+
+        $this->assertSame([], $this->upgrade->outdatedModules('v' . $this->nextMajor()));
+    }
+
+    /**
+     * Модуль на диске, который удалится после теста
+     */
+    private function fakeModule(string $name, string $requires): void
+    {
+        $path = base_path('modules/' . $name);
+
+        mkdir($path);
+        file_put_contents($path . '/module.php', sprintf(
+            "<?php\n\nreturn ['name' => '%s', 'version' => '1.0.0', 'requires' => '%s'];\n",
+            $name,
+            $requires,
+        ));
+
+        $this->beforeApplicationDestroyed(static function () use ($path): void {
+            unlink($path . '/module.php');
+            rmdir($path);
+        });
     }
 
     public function testUnknownModuleDirectoryIsSkipped(): void

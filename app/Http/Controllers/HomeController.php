@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ban;
+use App\Services\CaptchaService;
 use App\Services\FeedService;
 use App\Services\SearchService;
 use App\Support\Validator;
@@ -12,10 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Mobicms\Captcha\Image as MobicmsCaptcha;
 use Symfony\Component\HttpFoundation\Response;
-use Visavi\Captcha\CaptchaBuilder as AnimatedCaptchaBuilder;
-use Visavi\Captcha\PhraseBuilder as AnimatedPhraseBuilder;
 
 class HomeController extends Controller
 {
@@ -114,28 +112,14 @@ class HomeController extends Controller
     /**
      * Защитная картинка
      */
-    public function captcha(Request $request): Response
+    public function captcha(Request $request, CaptchaService $service): Response
     {
-        if (setting('captcha_type') === 'animated') {
-            $phrase = new AnimatedPhraseBuilder();
-            $phrase = $phrase->getPhrase(setting('captcha_maxlength'), setting('captcha_symbols'));
+        $captcha = $service->build();
 
-            $captcha = new AnimatedCaptchaBuilder($phrase);
-            $captcha = $captcha->render();
-        } else {
-            $captcha = new MobicmsCaptcha();
-            $captcha->imageWidth = 180;
-            $captcha->imageHeight = 50;
-            $captcha->lengthMax = setting('captcha_maxlength');
-            $captcha->characterSet = (string) setting('captcha_symbols');
-            $phrase = $captcha->getCode();
-            $captcha = $captcha->build();
-        }
+        $request->session()->put('protect', $captcha['phrase']);
 
-        $request->session()->put('protect', $phrase);
-
-        return response($captcha)
-            ->header('Content-Type', setting('captcha_type') === 'animated' ? 'image/gif' : 'image/png')
+        return response($captcha['image'])
+            ->header('Content-Type', $captcha['mime'])
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->header('Pragma', 'no-cache')
             ->header('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT');

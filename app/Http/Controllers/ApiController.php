@@ -261,7 +261,7 @@ class ApiController extends Controller
                 },
             ],
             'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*' => ['file', 'max:' . setting('filesize'), 'mimes:' . setting('file_extensions')],
+            'files.*' => ['file', 'max:' . FileService::maxFileSize(), 'mimes:' . setting('file_extensions')],
         ]);
 
         $text = antimat($validated['text']);
@@ -348,6 +348,19 @@ class ApiController extends Controller
             'message' => [
                 'text_min' => setting('comment_text_min'),
                 'text_max' => setting('comment_text_max'),
+            ],
+            // Формы регистрации и аккаунта: длины полей зашиты в ядре, цены — в настройках
+            'account' => [
+                'login_min'     => 3,
+                'login_max'     => 20,
+                'password_min'  => 6,
+                'password_max'  => 20,
+                'captcha_type'  => setting('captcha_type'),
+                'confirm_email' => (bool) setting('regkeys'),
+                'status_point'  => setting('editstatuspoint'),
+                'status_money'  => setting('editstatusmoney'),
+                'color_point'   => setting('editcolorpoint'),
+                'color_money'   => setting('editcolormoney'),
             ],
         ]);
 

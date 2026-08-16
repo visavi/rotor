@@ -126,8 +126,18 @@ class FileService
 
         return [
             'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*' => ['file', 'max:' . setting('filesize'), 'mimes:' . setting($extensions)],
+            'files.*' => ['file', 'max:' . self::maxFileSize(), 'mimes:' . setting($extensions)],
         ];
+    }
+
+    /**
+     * Предельный размер файла в килобайтах
+     *
+     * Настройка хранится в байтах, а правило max у Laravel считает килобайты
+     */
+    public static function maxFileSize(): int
+    {
+        return (int) (setting('filesize') / 1024);
     }
 
     /**

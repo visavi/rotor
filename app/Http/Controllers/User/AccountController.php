@@ -8,12 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Models\BlackList;
 use App\Models\EmailChange;
 use App\Models\User;
+use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -34,31 +34,15 @@ class AccountController extends Controller
     /**
      * Initialize email change
      */
-    public function changeMail(Request $request, Validator $validator): RedirectResponse
+    public function changeMail(Request $request, Validator $validator, UserService $userService): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         $email = strtolower((string) $request->input('email'));
-        $password = $request->input('password');
 
-        $validator
-            ->notEqual($email, $user->email, ['email' => __('users.email_different')])
-            ->email($email, ['email' => __('validator.email')])
-            ->true(Hash::check($password, $user->password), ['password' => __('users.password_not_different')]);
-
-        $isEmailExists = User::query()->where('email', $email)->exists();
-        $validator->false($isEmailExists, ['email' => __('users.email_already_exists')]);
-
-        $validator->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
-
-        EmailChange::query()
-            ->where('created_at', '<', now()->subHour())
-            ->delete();
-
-        $emailChange = EmailChange::query()->where('user_id', $user->id)->first();
-        $validator->empty($emailChange, __('users.confirm_already_sent'));
+        $userService->validateEmailChange($validator, $user, $email, $request->input('password'));
 
         if (! $validator->isValid()) {
             return redirect('accounts')
@@ -66,25 +50,7 @@ class AccountController extends Controller
                 ->withErrors($validator->getErrors());
         }
 
-        $token = Str::random(32);
-        $changeUrl = route('accounts.edit-mail', ['token' => $token]);
-
-        $subject = 'Изменение email на ' . setting('title');
-        $data = [
-            'to'        => $email,
-            'subject'   => $subject,
-            'username'  => $user->getName(),
-            'changeUrl' => $changeUrl,
-        ];
-
-        sendMail('mailer.change_mail', $data);
-
-        EmailChange::query()->create([
-            'user_id'    => $user->id,
-            'email'      => $email,
-            'token'      => $token,
-            'created_at' => now(),
-        ]);
+        $userService->requestEmailChange($user, $email);
 
         return redirect('accounts')
             ->with('success', __('users.confirm_success_sent'));
@@ -207,43 +173,26 @@ class AccountController extends Controller
     /**
      * Password change
      */
-    public function editPassword(Request $request, Validator $validator): RedirectResponse
+    public function editPassword(Request $request, Validator $validator, UserService $userService): RedirectResponse
     {
         if (! $user = getUser()) {
             abort(403, __('main.not_authorized'));
         }
 
         $newPassword = $request->input('new_password');
-        $confirmPassword = $request->input('confirm_password');
-        $password = $request->input('old_password');
 
-        $validator
-            ->true(Hash::check($password, $user->password), ['old_password' => __('users.password_not_different')])
-            ->false(Hash::check($newPassword, $user->password), ['old_password' => __('users.password_different')])
-            ->length($newPassword, 6, 20, ['new_password' => __('users.password_length_requirements')])
-            ->notEqual($user->login, $newPassword, ['new_password' => __('users.login_different')])
-            ->equal($newPassword, $confirmPassword, ['confirm_password' => __('users.passwords_different')]);
-
-        if (ctype_digit($newPassword)) {
-            $validator->addError(['new_password' => __('users.field_characters_requirements')]);
-        }
+        $userService->validatePassword(
+            $validator,
+            $user,
+            $request->input('old_password'),
+            $newPassword,
+            $request->input('confirm_password'),
+        );
 
         if ($validator->isValid()) {
-            $user->update([
-                'password' => Hash::make($newPassword),
-            ]);
+            $userService->changePassword($user, $newPassword);
 
             $request->session()->regenerate();
-
-            $subject = 'Изменение пароля на ' . setting('title');
-            $data = [
-                'to'       => $user->email,
-                'subject'  => $subject,
-                'username' => $user->getName(),
-                'password' => $newPassword,
-            ];
-
-            sendMail('mailer.change_password', $data);
 
             return redirect('/')->with('success', __('users.password_success_changed'));
         }

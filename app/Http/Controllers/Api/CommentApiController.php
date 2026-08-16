@@ -9,6 +9,7 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Services\CommentService;
+use App\Services\FileService;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -64,7 +65,7 @@ class CommentApiController extends Controller
             ],
             'parent_id' => ['nullable', 'integer', 'min:1'],
             'files'     => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*'   => ['file', 'max:' . setting('filesize'), 'mimes:' . setting('file_extensions')],
+            'files.*'   => ['file', 'max:' . FileService::maxFileSize(), 'mimes:' . setting('file_extensions')],
         ]);
 
         $model = $this->findRecord($validated['type'], (int) $validated['id']);
