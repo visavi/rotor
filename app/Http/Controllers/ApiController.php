@@ -365,6 +365,53 @@ class ApiController extends Controller
     }
 
     /**
+     * Статистика сайта
+     *
+     * Токен необязателен: с ним добавляется блок про самого пользователя
+     */
+    public function stats(): JsonResponse
+    {
+        $data = Cache::remember('apiStats', 300, static function () {
+            $users = User::query()->count();
+            $today = User::query()->where('created_at', '>', now()->subDay())->count();
+
+            return [
+                'users' => [
+                    'total'  => $users,
+                    'today'  => $today,
+                    'admins' => User::query()->whereIn('level', User::ADMIN_GROUPS)->count(),
+                ],
+            ];
+        });
+
+        // Онлайн живёт своим кэшем на минуту — в общую выборку его класть нельзя
+        [$usersOnline, $guests, $total] = statsOnline();
+
+        $data['online'] = [
+            'users'  => $usersOnline,
+            'guests' => $guests,
+            'total'  => $total,
+        ];
+
+        // Счётчики разделов приходят от модулей: ядро о них не знает
+        $data['sections'] = Cache::remember(
+            'apiStatsSections',
+            300,
+            static fn () => array_map(static fn (callable $handler): int => (int) $handler(), Registry::$stats),
+        );
+
+        if ($user = getUser()) {
+            $data['user'] = [
+                'new_messages' => (int) $user->newprivat,
+                'point'        => $user->point,
+                'money'        => $user->money,
+            ];
+        }
+
+        return response()->json($data);
+    }
+
+    /**
      * Api конфигурации
      */
     public function config(): JsonResponse

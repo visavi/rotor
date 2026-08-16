@@ -1344,6 +1344,54 @@ paths:
                     description: 'Ошибка валидации'
                 429:
                     description: 'Превышен лимит попыток авторизации (10 в минуту с одного ip)'
+    /stats:
+        get:
+            tags:
+                - Конфигурация
+            summary: 'Статистика сайта'
+            description: |
+                Токен не обязателен. С токеном добавляется блок user — непрочитанные сообщения, баллы и деньги.
+
+                Счётчики разделов приходят от модулей, поэтому набор ключей в sections зависит от сборки.
+                Значения кешируются на пять минут, онлайн — на минуту.
+            operationId: getStats
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    users:
+                                        type: object
+                                        properties:
+                                            total: { type: integer }
+                                            today:
+                                                type: integer
+                                                description: 'Зарегистрировались за сутки'
+                                            admins: { type: integer }
+                                    online:
+                                        type: object
+                                        properties:
+                                            users: { type: integer }
+                                            guests: { type: integer }
+                                            total: { type: integer }
+                                    sections:
+                                        type: object
+                                        description: 'Счётчики разделов: ключ — тип раздела, значение — количество записей'
+                                        additionalProperties: { type: integer }
+                                    user:
+                                        type: object
+                                        description: 'Только с токеном'
+                                        properties:
+                                            new_messages: { type: integer }
+                                            point: { type: integer }
+                                            money: { type: integer }
     /captcha:
         get:
             tags:

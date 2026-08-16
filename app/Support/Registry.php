@@ -22,6 +22,7 @@ class Registry
     public static array $feeds = [];
     public static array $search = [];
     public static array $apiConfig = [];
+    public static array $stats = [];
 
     /**
      * Регистрирует обработчик жалобы на контент типа $type
@@ -160,6 +161,17 @@ class Registry
     public static function apiConfig(string $section, array $settings): void
     {
         static::$apiConfig[$section] = $settings;
+    }
+
+    /**
+     * Регистрирует счётчик раздела для /api/stats
+     *
+     * Колбэк вида fn(): int — сколько записей в разделе. Ядро о разделах модулей
+     * не знает, поэтому счётчик приходит от самого модуля
+     */
+    public static function stat(string $section, callable $handler): void
+    {
+        static::$stats[$section] = $handler;
     }
 
     /**

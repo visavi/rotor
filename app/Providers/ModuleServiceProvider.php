@@ -120,6 +120,11 @@ class ModuleServiceProvider extends ServiceProvider
                         if (! empty($config['spam'])) {
                             Registry::spamType($morphName);
                         }
+
+                        // Счётчик раздела для /api/stats: считаются все записи модели
+                        if (! empty($config['stat'])) {
+                            Registry::stat($morphName, static fn (): int => $model::query()->count());
+                        }
                     }
 
                     // Секции модуля в /api/config
