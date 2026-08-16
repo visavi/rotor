@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Http\Middleware\CheckInstallSite;
+use App\Providers\ModuleServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 
@@ -42,6 +43,12 @@ abstract class ModuleTestCase extends TestCase
             require $routesFile;
             $this->app['router']->getRoutes()->refreshNameLookups();
             $this->app['router']->getRoutes()->refreshActionLookups();
+        }
+
+        // Морф-типы, секции /api/config и счётчики — те же, что на работающем сайте
+        $configFile = base_path("modules/{$name}/module.php");
+        if (file_exists($configFile)) {
+            ModuleServiceProvider::registerModuleConfig(include $configFile);
         }
     }
 }

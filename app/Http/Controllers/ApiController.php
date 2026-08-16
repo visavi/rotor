@@ -367,7 +367,7 @@ class ApiController extends Controller
     /**
      * Статистика сайта
      *
-     * Токен необязателен: с ним добавляется блок про самого пользователя
+     * Только общие счётчики: свои баллы приходят в /user, непрочитанные — в /messages/new
      */
     public function stats(): JsonResponse
     {
@@ -399,14 +399,6 @@ class ApiController extends Controller
             300,
             static fn () => array_map(static fn (callable $handler): int => (int) $handler(), Registry::$stats),
         );
-
-        if ($user = getUser()) {
-            $data['user'] = [
-                'new_messages' => (int) $user->newprivat,
-                'point'        => $user->point,
-                'money'        => $user->money,
-            ];
-        }
 
         return response()->json($data);
     }

@@ -89,48 +89,7 @@ class ModuleServiceProvider extends ServiceProvider
                 if ($files['module'] ?? false) {
                     $moduleConfig = include $base . '/module.php';
 
-                    // Регистрация моделей и их возможностей
-                    foreach ($moduleConfig['models'] ?? [] as $model => $config) {
-                        /** @var class-string $model */
-                        $morphName = $model::$morphName;
-                        Relation::morphMap([$morphName => $model]);
-
-                        if ($search = $config['search'] ?? null) {
-                            Registry::search($model, $search['view'], $search['with'] ?? []);
-                        }
-
-                        if ($feed = $config['feed'] ?? null) {
-                            Registry::feed($model, $feed);
-                        }
-
-                        match ($config['upload'] ?? null) {
-                            'media' => Registry::mediaType($morphName),
-                            'file'  => Registry::fileType($morphName),
-                            default => null,
-                        };
-
-                        if (! empty($config['rating'])) {
-                            Registry::ratingType($morphName);
-                        }
-
-                        if ($label = $config['label'] ?? null) {
-                            Registry::label($morphName, $label);
-                        }
-
-                        if (! empty($config['spam'])) {
-                            Registry::spamType($morphName);
-                        }
-
-                        // Счётчик раздела для /api/stats: считаются все записи модели
-                        if (! empty($config['stat'])) {
-                            Registry::stat($morphName, static fn (): int => $model::query()->count());
-                        }
-                    }
-
-                    // Секции модуля в /api/config
-                    foreach ($moduleConfig['api'] ?? [] as $section => $settings) {
-                        Registry::apiConfig($section, $settings);
-                    }
+                    self::registerModuleConfig($moduleConfig);
 
                     // Регистрация наблюдателей
                     foreach ($moduleConfig['observers'] ?? [] as $modelClass => $observerClass) {
@@ -162,6 +121,59 @@ class ModuleServiceProvider extends ServiceProvider
                     report($e);
                 }
             }
+        }
+    }
+
+    /**
+     * Регистрирует в ядре то, что модуль объявил в module.php
+     *
+     * Вынесено отдельно, чтобы тесты модуля видели те же морф-типы, секции
+     * и счётчики, что и работающий сайт
+     *
+     * @param array<string, mixed> $moduleConfig
+     */
+    public static function registerModuleConfig(array $moduleConfig): void
+    {
+        foreach ($moduleConfig['models'] ?? [] as $model => $config) {
+            /** @var class-string $model */
+            $morphName = $model::$morphName;
+            Relation::morphMap([$morphName => $model]);
+
+            if ($search = $config['search'] ?? null) {
+                Registry::search($model, $search['view'], $search['with'] ?? []);
+            }
+
+            if ($feed = $config['feed'] ?? null) {
+                Registry::feed($model, $feed);
+            }
+
+            match ($config['upload'] ?? null) {
+                'media' => Registry::mediaType($morphName),
+                'file'  => Registry::fileType($morphName),
+                default => null,
+            };
+
+            if (! empty($config['rating'])) {
+                Registry::ratingType($morphName);
+            }
+
+            if ($label = $config['label'] ?? null) {
+                Registry::label($morphName, $label);
+            }
+
+            if (! empty($config['spam'])) {
+                Registry::spamType($morphName);
+            }
+
+            // Счётчик раздела для /api/stats: считаются все записи модели
+            if (! empty($config['stat'])) {
+                Registry::stat($morphName, static fn (): int => $model::query()->count());
+            }
+        }
+
+        // Секции модуля в /api/config
+        foreach ($moduleConfig['api'] ?? [] as $section => $settings) {
+            Registry::apiConfig($section, $settings);
         }
     }
 }

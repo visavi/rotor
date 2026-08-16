@@ -274,6 +274,55 @@ components:
                 created_at:
                     type: string
                     format: date-time
+        GuestbookPost:
+            type: object
+            properties:
+                id: { type: integer }
+                text: { type: string }
+                url: { type: string, format: uri }
+                user:
+                    description: 'Автор; у гостевых сообщений — null'
+                    oneOf:
+                        - { $ref: '#/components/schemas/Author' }
+                        - { type: 'null' }
+                guest_name:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Имя гостя, если сообщение оставлено без входа'
+                media:
+                    type: array
+                    items: { $ref: '#/components/schemas/File' }
+                files:
+                    type: array
+                    items: { $ref: '#/components/schemas/File' }
+                reply:
+                    type:
+                        - string
+                        - 'null'
+                    description: 'Ответ администрации'
+                edited_by:
+                    description: 'Кто правил сообщение'
+                    oneOf:
+                        - { $ref: '#/components/schemas/Author' }
+                        - { type: 'null' }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+        WallPost:
+            type: object
+            properties:
+                id: { type: integer }
+                text: { type: string }
+                url: { type: string, format: uri }
+                user:
+                    allOf:
+                        - { $ref: '#/components/schemas/Author' }
+                    description: 'Хозяин стены'
+                author:
+                    allOf:
+                        - { $ref: '#/components/schemas/Author' }
+                    description: 'Кто оставил запись'
+                created_at: { type: string, format: date-time }
         Photo:
             type: object
             properties:
@@ -1350,15 +1399,13 @@ paths:
                 - Конфигурация
             summary: 'Статистика сайта'
             description: |
-                Токен не обязателен. С токеном добавляется блок user — непрочитанные сообщения, баллы и деньги.
+                Общие счётчики, от пользователя не зависят: непрочитанные сообщения приходят
+                в /messages/new, свои баллы и деньги — в /user.
 
                 Счётчики разделов приходят от модулей, поэтому набор ключей в sections зависит от сборки.
                 Значения кешируются на пять минут, онлайн — на минуту.
             operationId: getStats
-            security:
-                -
-                    BearerToken: {  }
-                - {}
+            security: []
             responses:
                 200:
                     description: OK
@@ -1385,13 +1432,6 @@ paths:
                                         type: object
                                         description: 'Счётчики разделов: ключ — тип раздела, значение — количество записей'
                                         additionalProperties: { type: integer }
-                                    user:
-                                        type: object
-                                        description: 'Только с токеном'
-                                        properties:
-                                            new_messages: { type: integer }
-                                            point: { type: integer }
-                                            money: { type: integer }
     /captcha:
         get:
             tags:
@@ -2169,8 +2209,9 @@ paths:
     /user:
         get:
             tags:
-                - Пользователи
-            summary: 'Профиль текущего пользователя'
+                - Аккаунт
+            summary: 'Свой профиль'
+            description: 'Профиль владельца токена; чужие профили — в GET /users/{login}'
             operationId: getUser
             responses:
                 200:
@@ -3769,7 +3810,7 @@ paths:
                                             meta: { $ref: '#/components/schemas/PaginationMeta' }
                 404:
                     description: 'Новость не найдена'
-    '/articles/{slug}':
+    '/articles/{id}':
         get:
             tags:
                 - Блоги
@@ -3784,11 +3825,12 @@ paths:
                 - {}
             parameters:
                 -
-                    name: slug
+                    name: id
                     in: path
                     required: true
                     schema:
                         type: string
+                    description: 'Id статьи или слаг из ссылки'
                 -
                     $ref: '#/components/parameters/PerPage'
                 -
@@ -3813,12 +3855,11 @@ paths:
                                             meta: { $ref: '#/components/schemas/PaginationMeta' }
                 404:
                     description: 'Статья не найдена'
-    '/articles/{id}':
         patch:
             tags:
                 - Блоги
             summary: 'Редактирование своей статьи'
-            description: 'Требует токен. publish переводит черновик в публикацию. Обращение по id, а не по слагу — слаг может измениться'
+            description: 'Требует токен. publish переводит черновик в публикацию. Здесь принимается только id — слаг может измениться вместе с заголовком'
             operationId: updateArticle
             parameters:
                 -
@@ -4257,3 +4298,515 @@ paths:
                     description: 'У записи есть комментарии'
                 429:
                     description: 'Превышен общий лимит запросов'
+    /guestbook:
+        get:
+            tags:
+                - 'Гостевая книга'
+            summary: 'Сообщения гостевой'
+            description: 'Опубликованные сообщения, свежие первыми. Токен не нужен.'
+            operationId: getGuestbook
+            security: []
+            parameters:
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/GuestbookPost' }
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+        post:
+            tags:
+                - 'Гостевая книга'
+            summary: 'Добавить сообщение'
+            description: |
+                С токеном сообщение публикуется сразу и приносит баллы по настройкам сайта.
+
+                Без токена запись принимается, только если гостевые сообщения открыты настройкой:
+                тогда нужна капча (GET /captcha), ссылки в тексте не принимаются, а при включённой
+                модерации сообщение ждёт проверки администрации.
+            operationId: storeGuestbookPost
+            security:
+                -
+                    BearerToken: {  }
+                - {}
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            required:
+                                - text
+                            properties:
+                                text: { type: string }
+                                guest_name:
+                                    type: string
+                                    minLength: 3
+                                    maxLength: 20
+                                    description: 'Имя гостя, только без токена'
+                                captcha_key: { type: string }
+                                protect: { type: string }
+                                'files[]':
+                                    type: array
+                                    items: { type: string, format: binary }
+                                    description: 'Фото и видео (необязательно)'
+            responses:
+                201:
+                    description: 'Сообщение добавлено'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    post: { $ref: '#/components/schemas/GuestbookPost' }
+                403:
+                    description: 'Гостевые сообщения закрыты'
+                422:
+                    description: 'Ошибка валидации, капча или флуд'
+    '/guestbook/{id}':
+        patch:
+            tags:
+                - 'Гостевая книга'
+            summary: 'Правка своего сообщения'
+            description: 'Открыта первые десять минут после публикации, как и на сайте'
+            operationId: updateGuestbookPost
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - text
+                            properties:
+                                text: { type: string }
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    post: { $ref: '#/components/schemas/GuestbookPost' }
+                404:
+                    description: 'Сообщение не найдено или принадлежит другому пользователю'
+                422:
+                    description: 'Время правки вышло или ошибка валидации'
+    '/walls/{login}':
+        get:
+            tags:
+                - 'Стена сообщений'
+            summary: 'Записи на стене пользователя'
+            operationId: getWall
+            security: []
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items: { $ref: '#/components/schemas/WallPost' }
+                                    user:
+                                        allOf:
+                                            - { $ref: '#/components/schemas/Author' }
+                                        description: 'Хозяин стены'
+                                    links: { $ref: '#/components/schemas/PaginationLinks' }
+                                    meta: { $ref: '#/components/schemas/PaginationMeta' }
+                404:
+                    description: 'Пользователь не найден'
+        post:
+            tags:
+                - 'Стена сообщений'
+            summary: 'Написать на стену'
+            description: 'Длина текста берётся из настроек комментариев'
+            operationId: storeWallPost
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - text
+                            properties:
+                                text: { type: string }
+            responses:
+                201:
+                    description: 'Запись добавлена'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    post: { $ref: '#/components/schemas/WallPost' }
+                404:
+                    description: 'Пользователь не найден'
+                422:
+                    description: 'Ошибка валидации или флуд'
+    '/walls/{login}/{id}':
+        delete:
+            tags:
+                - 'Стена сообщений'
+            summary: 'Удалить запись со стены'
+            description: 'Чистит стену её хозяин, чужие записи удаляет только администрация'
+            operationId: deleteWallPost
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                403:
+                    description: 'Чужая стена'
+                404:
+                    description: 'Запись не найдена'
+    /notebook:
+        get:
+            tags:
+                - Блокнот
+            summary: 'Своя заметка'
+            description: 'Заметка одна на пользователя; пока её нет, приходят пустые поля'
+            operationId: getNotebook
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: object
+                                        properties:
+                                            text: { type: string, nullable: true }
+                                            created_at: { type: string, format: date-time, nullable: true }
+                                            updated_at: { type: string, format: date-time, nullable: true }
+        patch:
+            tags:
+                - Блокнот
+            summary: 'Сохранить заметку'
+            operationId: updateNotebook
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                text: { type: string, maxLength: 10000, nullable: true }
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    data:
+                                        type: object
+                                        properties:
+                                            text: { type: string, nullable: true }
+                                            created_at: { type: string, format: date-time, nullable: true }
+                                            updated_at: { type: string, format: date-time, nullable: true }
+                422:
+                    description: 'Ошибка валидации'
+    /transfers:
+        get:
+            tags:
+                - Переводы
+            summary: 'Свои переводы'
+            description: 'И отправленные, и полученные; направление — в поле type'
+            operationId: getTransfers
+            parameters:
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+                -
+                    $ref: '#/components/parameters/Order'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id: { type: integer }
+                                                type:
+                                                    type: string
+                                                    enum:
+                                                        - in
+                                                        - out
+                                                user:
+                                                    type: string
+                                                    description: 'Логин второй стороны перевода'
+                                                total: { type: integer }
+                                                text: { type: string }
+                                                created_at: { type: string, format: date-time }
+                                    meta:
+                                        type: object
+                                        properties:
+                                            current_page: { type: integer }
+                                            last_page: { type: integer }
+                                            per_page: { type: integer }
+                                            total: { type: integer }
+        post:
+            tags:
+                - Переводы
+            summary: 'Перевести деньги'
+            description: 'Порог баллов для переводов приходит в /config (transfer.point). Получателю уходит уведомление в личные сообщения.'
+            operationId: storeTransfer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - user
+                                - money
+                            properties:
+                                user:
+                                    type: string
+                                    description: 'Логин получателя'
+                                money: { type: integer, minimum: 1 }
+                                text:
+                                    type: string
+                                    description: 'Комментарий к переводу'
+            responses:
+                201:
+                    description: 'Перевод выполнен'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    money:
+                                        type: integer
+                                        description: 'Остаток на своём счету'
+                422:
+                    description: 'Не хватает денег или баллов, получатель не найден, перевод самому себе'
+    /gifts:
+        get:
+            tags:
+                - Подарки
+            summary: 'Каталог подарков'
+            operationId: getGifts
+            security: []
+            parameters:
+                -
+                    $ref: '#/components/parameters/PerPage'
+                -
+                    $ref: '#/components/parameters/Page'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id: { type: integer }
+                                                name: { type: string }
+                                                url: { type: string, format: uri }
+                                                price: { type: integer }
+                                    meta:
+                                        type: object
+                                        properties:
+                                            current_page: { type: integer }
+                                            last_page: { type: integer }
+                                            per_page: { type: integer }
+                                            total: { type: integer }
+                                            days:
+                                                type: integer
+                                                description: 'Через сколько дней подарок пропадёт из профиля'
+    '/gifts/{login}':
+        get:
+            tags:
+                - Подарки
+            summary: 'Подарки пользователя'
+            description: 'Просроченные подарки не приходят, как и в профиле на сайте'
+            operationId: getUserGifts
+            security: []
+            parameters:
+                -
+                    name: login
+                    in: path
+                    required: true
+                    schema:
+                        type: string
+                        pattern: '^[\w\-]+$'
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    data:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id: { type: integer }
+                                                name: { type: string }
+                                                url: { type: string, format: uri }
+                                                text: { type: string }
+                                                sender: { $ref: '#/components/schemas/Author' }
+                                                created_at: { type: string, format: date-time }
+                                                expires_at: { type: string, format: date-time }
+                                    user: { $ref: '#/components/schemas/Author' }
+                404:
+                    description: 'Пользователь не найден'
+    '/gifts/{id}/send':
+        post:
+            tags:
+                - Подарки
+            summary: 'Отправить подарок'
+            description: 'Стоимость списывается со счёта, получателю уходит уведомление в личные сообщения'
+            operationId: sendGift
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+                    schema:
+                        type: integer
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - user
+                            properties:
+                                user:
+                                    type: string
+                                    description: 'Логин получателя'
+                                text: { type: string, maxLength: 1000 }
+            responses:
+                201:
+                    description: 'Подарок отправлен'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message: { type: string }
+                                    money:
+                                        type: integer
+                                        description: 'Остаток на своём счету'
+                404:
+                    description: 'Подарок или получатель не найден'
+                422:
+                    description: 'Не хватает денег'
+    /currency:
+        get:
+            tags:
+                - 'Курсы валют'
+            summary: 'Курсы валют ЦБ'
+            description: 'Отдаётся то, что уже лежит в кэше сайта — к ЦБ ходит сам сайт раз в час, а не каждый клиент'
+            operationId: getCurrency
+            security: []
+            responses:
+                200:
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    date: { type: string, format: date-time }
+                                    data:
+                                        type: object
+                                        description: 'Ключ — код валюты (USD, EUR, …)'
+                                        additionalProperties:
+                                            type: object
+                                            properties:
+                                                name: { type: string }
+                                                nominal: { type: integer }
+                                                value: { type: number }
+                                                previous: { type: number }
+                503:
+                    description: 'Курсы недоступны'

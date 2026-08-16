@@ -30,8 +30,8 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('/feed', 'feed')->middleware('check.token.optional');
     // Поиск открыт и не зависит от пользователя, токен не нужен
     Route::get('/search', 'search');
-    // С токеном в статистике появляется блок про самого пользователя
-    Route::get('/stats', 'stats')->middleware('check.token.optional');
+    // Статистика общая для всех, от пользователя не зависит
+    Route::get('/stats', 'stats');
 });
 
 // Регистрация и восстановление доступны гостю, там своя защита — капча и лимит запросов

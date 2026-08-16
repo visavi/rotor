@@ -38,8 +38,6 @@ class StatsTest extends TestCase
 
         $this->assertSame(2, $response->json('users.total'));
         $this->assertSame(2, $response->json('users.today'));
-        // Гостю блок про пользователя не положен
-        $this->assertArrayNotHasKey('user', $response->json());
     }
 
     public function testAdminsAreCounted(): void
@@ -89,17 +87,13 @@ class StatsTest extends TestCase
             ->assertJsonPath('sections.demo', 42);
     }
 
-    public function testUserBlockNeedsToken(): void
+    public function testStatsDoNotDependOnUser(): void
     {
-        $user = User::factory()->create([
-            'apikey'    => Str::random(32),
-            'newprivat' => 3,
-            'point'     => 100,
-        ]);
+        $user = User::factory()->create(['apikey' => Str::random(32), 'newprivat' => 3]);
 
+        // Своё в статистику не попадает: непрочитанные приходят в /messages/new, баллы — в /user
         $this->getJson('/api/stats', ['Authorization' => 'Bearer ' . $user->apikey])
             ->assertOk()
-            ->assertJsonPath('user.new_messages', 3)
-            ->assertJsonPath('user.point', 100);
+            ->assertJsonMissingPath('user');
     }
 }
