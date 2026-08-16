@@ -18,14 +18,14 @@ class SpecTest extends TestCase
 
     public function testSectionsOfDisabledModulesAreHidden(): void
     {
-        // Модулей в тестах нет, значит и разделов в доке быть не должно
+        // Разделы описывают сами модули, в ядре их путей нет
         $paths = $this->getJson('/api/openapi.json')->assertOk()->json('paths');
 
         $this->assertArrayNotHasKey('/forums', $paths);
         $this->assertArrayNotHasKey('/news', $paths);
     }
 
-    public function testUnusedSchemasAreRemoved(): void
+    public function testCoreKeepsOnlyItsOwnSchemas(): void
     {
         $schemas = $this->getJson('/api/openapi.json')->assertOk()->json('components.schemas');
 

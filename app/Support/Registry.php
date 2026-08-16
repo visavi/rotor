@@ -25,6 +25,21 @@ class Registry
     public static array $stats = [];
 
     /**
+     * Очищает реестр
+     *
+     * Нужен тестам: обработчики модулей живут в статике весь процесс,
+     * иначе хуки одного модуля срабатывают в тестах другого
+     */
+    public static function flush(): void
+    {
+        foreach (get_class_vars(static::class) as $property => $value) {
+            if (is_array($value)) {
+                static::$$property = [];
+            }
+        }
+    }
+
+    /**
      * Регистрирует обработчик жалобы на контент типа $type
      */
     public static function complaint(string $type, callable $handler): void

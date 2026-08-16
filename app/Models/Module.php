@@ -341,6 +341,7 @@ class Module extends Model
             'routes'     => file_exists($base . 'routes.php'),
             'middleware' => file_exists($base . 'middleware.php'),
             'module'     => file_exists($base . 'module.php'),
+            'openapi'    => file_exists($base . 'openapi.json'),
             'commands'   => array_map(
                 static fn ($file) => 'Modules\\' . $name . '\\Console\\' . basename($file, '.php'),
                 glob($base . 'Console/*.php') ?: []

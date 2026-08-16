@@ -4,6 +4,8 @@ namespace Tests;
 
 use App\Http\Middleware\CheckInstallSite;
 use App\Providers\ModuleServiceProvider;
+use App\Support\Hook;
+use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 
@@ -36,6 +38,22 @@ abstract class ModuleTestCase extends TestCase
         $langPath = base_path("modules/{$name}/resources/lang");
         if (is_dir($langPath)) {
             $this->app['translator']->addNamespace($key, $langPath);
+        }
+
+        // Функции переобъявить нельзя, поэтому хелперы грузятся один раз на процесс
+        $helpersFile = base_path("modules/{$name}/helpers.php");
+        if (file_exists($helpersFile)) {
+            require_once $helpersFile;
+        }
+
+        // Хуки живут в статике весь прогон: чужие убираем, свои ставим заново,
+        // иначе шаблоны соседнего модуля подмешаются в этот тест
+        Hook::flush();
+        Registry::flush();
+
+        $hooksFile = base_path("modules/{$name}/hooks.php");
+        if (file_exists($hooksFile)) {
+            require $hooksFile;
         }
 
         $routesFile = base_path("modules/{$name}/routes.php");

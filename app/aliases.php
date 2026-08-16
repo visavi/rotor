@@ -26,3 +26,11 @@ spl_autoload_register(static function (string $class): void {
         class_alias($target, $class);
     }
 });
+
+/*
+| Проверяя тип аргумента, PHP автозагрузчик не зовёт: объект другого класса —
+| сразу TypeError. Поэтому ленивого моста мало там, где ядро передаёт готовый
+| объект в колбэк модуля (`Registry::onProfileValidate` и подобные) — если
+| колбэк объявлен со старым именем, вызов упадёт. Такие классы объявляем сразу.
+*/
+class_alias(App\Support\Validator::class, 'App\Classes\Validator');

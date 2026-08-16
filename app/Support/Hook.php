@@ -20,6 +20,18 @@ class Hook
     }
 
     /**
+     * Убирает все хуки
+     *
+     * Нужен тестам: хуки живут в статике весь процесс, иначе шаблоны
+     * одного модуля подмешиваются в тесты другого
+     */
+    public static function flush(): void
+    {
+        self::$hooks = [];
+        self::$dirty = [];
+    }
+
+    /**
      * Добавляет хук
      *
      * Принимает строку/Stringable или callable вида fn(mixed $args = null): string|Stringable|null.
