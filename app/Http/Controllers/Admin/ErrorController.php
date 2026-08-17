@@ -31,7 +31,6 @@ class ErrorController extends AdminController
             419 => 419,
             429 => 429,
             500 => 500,
-            503 => 503,
             666 => __('admin.errors.autobans'),
         ];
 

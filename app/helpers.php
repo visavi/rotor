@@ -596,7 +596,8 @@ function refreshCaches(): void
  */
 function saveErrorLog(int $code, ?string $message = null): void
 {
-    $errorCodes = [400, 401, 403, 404, 405, 419, 429, 500, 503, 666];
+    // 503 не пишем: закрытие сайта отдаёт готовый ответ, а не исключение
+    $errorCodes = [400, 401, 403, 404, 405, 419, 429, 500, 666];
 
     if (setting('errorlog') && in_array($code, $errorCodes, true)) {
         Error::query()->create([
