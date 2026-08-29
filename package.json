@@ -28,7 +28,6 @@
         "@tiptap/suggestion": "^3.22.3",
         "bootstrap": "^5.3.8",
         "bootstrap5-tags": "^1.7.16",
-        "chartist": "^1.5.0",
         "notyf": "^3.10.0"
     },
     "devDependencies": {

@@ -45,7 +45,7 @@
 }
 [data-bs-theme=dark] .app-sidebar__footer { border-top-color: #2d2d4e; }
 
-.app-menu { @extend .list-unstyled; margin-bottom: 0; }
+.app-menu { padding-left: 0; list-style: none; margin-bottom: 0; }
 
 .menu-item {
   position: relative;
@@ -83,7 +83,7 @@
 }
 [data-bs-theme=dark] .treeview.is-expanded [data-bs-toggle='treeview'] { background-color: rgba(67,56,202,0.2); color: #818cf8; border-right-color: #818cf8; }
 
-.treeview-menu { @extend .list-unstyled; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background-color: #fafafa; }
+.treeview-menu { padding-left: 0; list-style: none; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background-color: #fafafa; }
 [data-bs-theme=dark] .treeview-menu { background-color: rgba(0,0,0,0.1); }
 
 .treeview-item {

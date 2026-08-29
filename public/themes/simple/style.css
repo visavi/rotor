@@ -1,0 +1,354 @@
+/*
+ * Тема Simple — обычный CSS, без сборки.
+ * Правится прямо здесь: перезагрузил страницу и увидел результат.
+ *
+ * Порядок подключения в layout.blade.php:
+ *   bootstrap.min.css → vendor.scss (FontAwesome + main.css ядра) → style.css
+ * Здесь переопределяем переменные Bootstrap и описываем свою вёрстку шапки и подвала.
+ */
+
+/* --- Палитра (светлая тема) --------------------------------------------- */
+:root,
+[data-bs-theme="light"] {
+    --bs-primary: #b4531f;
+    --bs-primary-rgb: 180, 83, 31;
+    --bs-link-color: #b4531f;
+    --bs-link-color-rgb: 180, 83, 31;
+    --bs-link-hover-color: #8c3f16;
+    --bs-border-radius: 0;
+
+    --simple-page-bg: #faf7f2;
+    --simple-header-bg: #f3ece0;
+    --simple-block-bg: #ffffff;
+    --simple-line: #e2dbd0;
+    --simple-muted: #7c7469;
+
+    /* Фон подсветки кода — остальные --base-* приходят из /assets/css/main.css */
+    --base-bg: #f2efe9;
+    --base-color: #1c1a17;
+}
+
+/* --- Палитра (тёмная тема) ---------------------------------------------- */
+[data-bs-theme="dark"] {
+    --bs-primary: #e08a4f;
+    --bs-primary-rgb: 224, 138, 79;
+    --bs-link-color: #e08a4f;
+    --bs-link-color-rgb: 224, 138, 79;
+    --bs-link-hover-color: #f0a874;
+
+    --simple-page-bg: #171614;
+    --simple-header-bg: #201d19;
+    --simple-block-bg: #24211d;
+    --simple-line: #35322d;
+    --simple-muted: #9a9288;
+
+    --base-bg: #22201d;
+}
+
+body {
+    background: var(--simple-page-bg);
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Общая колонка страницы: шапка, контент и подвал выровнены по одной ширине */
+.wrap {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/*
+ * Bootstrap запекает цвета компонентов при компиляции, поэтому одной
+ * --bs-primary мало: кнопкам, вкладкам и пагинации цвет задаём явно.
+ */
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-link-hover-color);
+    --bs-btn-hover-border-color: var(--bs-link-hover-color);
+    --bs-btn-active-bg: var(--bs-link-hover-color);
+    --bs-btn-active-border-color: var(--bs-link-hover-color);
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-primary);
+}
+
+.pagination {
+    --bs-pagination-color: var(--bs-link-color);
+    --bs-pagination-active-bg: var(--bs-primary);
+    --bs-pagination-active-border-color: var(--bs-primary);
+    --bs-pagination-hover-color: var(--bs-link-hover-color);
+}
+
+.bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+/* Ядро (/assets/css/main.css) даёт дефолты .btn-adaptive, .bg-adaptive и --base-*,
+   теме остаётся только то, что она меняет под себя */
+.badge.menu-badge {
+    color: var(--bs-primary);
+    background-color: rgba(var(--bs-primary-rgb), 0.12);
+    border: 0;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+/* --- Шапка --------------------------------------------------------------- */
+.site-header {
+    background: var(--simple-header-bg);
+    border-bottom: 1px solid var(--simple-line);
+    margin-bottom: 1.5rem;
+}
+
+.site-header__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1rem;
+}
+
+.site-logo {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+.site-logo:hover {
+    color: var(--bs-primary);
+}
+
+.site-header__user {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-left: auto;
+    font-size: 0.9375rem;
+}
+
+.site-header__user a {
+    color: var(--simple-muted);
+    text-decoration: none;
+}
+
+.site-header__user a:hover {
+    color: var(--bs-primary);
+}
+
+.site-menu-toggle {
+    display: none;
+    order: 3;
+    background: none;
+    border: 0;
+    font-size: 1.25rem;
+    color: var(--bs-body-color);
+}
+
+/* Меню — строка ссылок, без фонов и кнопок */
+.site-nav .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1.25rem;
+    padding-bottom: 0.875rem;
+    font-size: 0.9375rem;
+}
+
+.site-nav a {
+    color: var(--bs-body-color);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.site-nav a:hover {
+    color: var(--bs-primary);
+}
+
+.site-search {
+    margin-left: auto;
+}
+
+.site-search input {
+    width: 10rem;
+    padding: 0.125rem 0.5rem;
+    background: transparent;
+    border: 1px solid var(--simple-line);
+    color: inherit;
+}
+
+/* Пункты меню из хука sidebarMenu приходят в разметке сайдбара (.menu-item) —
+   приводим их к виду обычных текстовых ссылок */
+.site-nav .menu-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+.site-nav li {
+    display: inline;
+    list-style: none;
+}
+
+.site-nav .menu-icon {
+    display: none;
+}
+
+
+
+/* --- Контент ------------------------------------------------------------- */
+.app-content {
+    min-height: 60vh;
+    padding-bottom: 2rem;
+}
+
+/* Блок остаётся блочным: вьюхи ядра кладут в @section('header')
+   кнопки с .float-end, а во flex-контейнере float не работает */
+.app-title {
+    margin-bottom: 1.25rem;
+}
+
+.app-title::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.app-title h1 {
+    display: inline-block;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.75rem;
+    margin: 0 1rem 0 0;
+    vertical-align: middle;
+}
+
+.app-title .breadcrumb {
+    display: inline-flex;
+    margin: 0;
+    font-size: 0.8125rem;
+    vertical-align: middle;
+}
+
+/* Блоки ядра (.section и др. описаны в /assets/css/main.css).
+   Ядро вешает на них .shadow — тень убираем, блок выделяем фоном и рамкой */
+.section {
+    padding: 1rem 1.25rem;
+    background: var(--simple-block-bg);
+    border: 1px solid var(--simple-line);
+    box-shadow: none !important;
+}
+
+.card {
+    border-color: var(--simple-line);
+}
+
+/* --- Подвал -------------------------------------------------------------- */
+.site-footer {
+    border-top: 1px solid var(--simple-line);
+    padding: 1.25rem 0;
+    font-size: 0.875rem;
+    color: var(--simple-muted);
+}
+
+.site-footer a {
+    color: var(--simple-muted);
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: var(--bs-primary);
+}
+
+.site-footer__links li {
+    display: inline;
+    list-style: none;
+}
+
+.site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    padding-bottom: 0.75rem;
+}
+
+.site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+}
+
+.site-footer__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+}
+
+/* --- Кнопка «наверх» -----------------------------------------------------
+   Ядро рисует её иконкой через .scrollup:before, размеров у элемента нет —
+   поэтому красим текст, а не фон */
+.scrollup {
+    color: var(--bs-primary);
+}
+
+/* --- Мобильные ----------------------------------------------------------- */
+@media (max-width: 767px) {
+    .site-menu-toggle {
+        display: block;
+        order: 0;
+        margin-left: auto;
+    }
+
+    .site-header__user {
+        order: 1;
+        width: 100%;
+        margin-left: 0;
+        font-size: 0.875rem;
+    }
+
+    .site-nav {
+        display: none;
+    }
+
+    .site-nav.is-open {
+        display: block;
+    }
+
+    .site-nav .wrap {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .site-search {
+        margin-left: 0;
+    }
+}

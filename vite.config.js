@@ -44,8 +44,8 @@ export default defineConfig({
                 'resources/themes/fresh/js/app.js',
                 'resources/themes/nordic/js/app.js',
                 'resources/themes/newspaper/js/app.js',
-                'public/assets/css/chartist.css',
-                'public/assets/js/chartist.js',
+                'resources/css/bootstrap.scss',
+                'resources/js/main.js',
             ],
             refresh: true,
         }),
@@ -53,8 +53,8 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            js: path.resolve(__dirname, 'public/assets/js'),
-            css: path.resolve(__dirname, 'public/assets/css'),
+            js: path.resolve(__dirname, 'resources/js'),
+            css: path.resolve(__dirname, 'resources/css'),
             themes: path.resolve(__dirname, 'resources/themes'),
             fa: path.resolve(__dirname, 'node_modules/@fortawesome/fontawesome-free'),
         },

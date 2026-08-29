@@ -1,0 +1,22 @@
+//
+// Ванильный Bootstrap для тем без собственной сборки
+//
+// Темы со сборкой импортируют bootstrap сами в своём app.scss — им предшествуют
+// scss-переменные темы ($primary и др.), поэтому этот файл им не подходит.
+//
+// Здесь заданы только те переменные, которые одинаковы во всех темах проекта,
+// то есть являются его общей типографикой, а не оформлением конкретной темы
+//
+
+$font-size-base: 0.9rem;
+$small-font-size: 0.8em;
+$link-decoration: none;
+$link-hover-decoration: underline;
+$dropdown-padding-y: 0;
+$dropdown-spacer: 0;
+$input-btn-focus-width: 0;
+
+@import 'bootstrap/scss/bootstrap';
+
+// Стили bootstrap5-tags (используется в формах ядра) — зависят от переменных Bootstrap
+@import 'bootstrap5-tags/tags';

@@ -14,6 +14,7 @@
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">
     <link rel="apple-touch-icon" href="/assets/img/images/apple-touch-icon.png">
     @translation
+    @vite('resources/css/bootstrap.scss')
     @vite('resources/themes/vendor.scss')
     @vite('resources/themes/motor/js/app.js')
     @stack('styles')

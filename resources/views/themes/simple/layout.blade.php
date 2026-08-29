@@ -1,10 +1,16 @@
+{{--
+    Тема Simple — пример самодостаточной темы.
+
+    Не требует npm и сборки: свои стили лежат обычными файлами в public/themes/simple,
+    а общие библиотеки (Bootstrap JS, FontAwesome, fancybox, tiptap, notyf) берутся
+    из общих сборок ядра — resources/themes/vendor.scss и resources/themes/app.js.
+--}}
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#2e8cc2">
+    <meta name="theme-color" content="#0d7a5f">
     <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="image" content="{{ asset('/assets/img/images/icon.png') }}">
@@ -18,16 +24,17 @@
     @translation
     @vite('resources/css/bootstrap.scss')
     @vite('resources/themes/vendor.scss')
-    @vite('resources/themes/default/js/app.js')
+    @vite('resources/js/main.js')
+    <link rel="stylesheet" href="{{ asset('/themes/simple/style.css') }}">
+    <script src="{{ asset('/themes/simple/app.js') }}" defer></script>
     @stack('styles')
     @hook('head')
 </head>
 <body class="app">
 
 @yield('navbar')
-@yield('sidebar')
 
-<main class="app-content">
+<main class="app-content wrap">
     @yield('titlebar')
     @yield('flash')
 
@@ -41,7 +48,7 @@
     @hook('advertBottom')
 </main>
 
-@include('themes/default/footer')
+@include('themes/simple/footer')
 @stack('scripts')
 <div class="scrollup"></div>
 @hook('footer')

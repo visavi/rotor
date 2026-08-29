@@ -1,54 +1,6 @@
-
-:root,
-[data-bs-theme=light] {
-    --base-bg: #f2f2f2;
-    --base-color: #000;
-    --base-tag: #00f;
-    --base-emphasis: #a8a8a2;
-    --base-number: #f92672;
-    --base-code: green;
-    --base-attr: #00f;
-    --base-symbol: #66d9ef;
-    --base-class: #a31515;
-    --base-str: #d14;
-    --base-comment: #75715e;
-    --base-doc: grey;
-    --base-fun: #dc322f;
-    --base-atv: #d44950;
-    --base-dec: #75715e;
-}
-[data-bs-theme=dark] {
-    --base-bg: #282c34;
-    --base-color: #f8f8f2;
-    --base-tag: #66d9ef;
-    --base-emphasis: #a8a8a2;
-    --base-number: #ae81ff;
-    --base-code: #a6e22e;
-    --base-attr: #f92672;
-    --base-symbol: #66d9ef;
-    --base-class: #f8f8f2;
-    --base-str: #e6db74;
-    --base-comment: #75715e;
-    --base-doc: grey;
-    --base-fun: #dc322f;
-    --base-atv: #d44950;
-    --base-dec: #75715e;
-}
-
 //
 // Application Variables
 //-----------------------------------------------------
-
-// Primary font
-$body-font: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-//
-// Background color
-//
-$body-bg: #fff;
-$body-bg-dark: #2b3035;
-
-$app-bg: #f1f4f5;
 
 // Primary color is the main color of the application which is used
 // for navbar, active links and primary button.
@@ -78,55 +30,110 @@ $sidebar-color: #1e272e;
 // dark  : #222d32
 // light : #f8f8f8
 
-// Sidebar accent varible is used to determine the color of the links
-// of the sidebar. The allowed values are 'light' or 'dark' only
-$sidebar-accent: dark;
-
-// The following varibles indecate sidebar link color
-// and link hover color when using a dark sidebar color
-$sidebar-dark-color: #fff;
-$sidebar-dark-link-color: #fff;
-
-// The following varibles indecate sidebar link color
-// and link hover color when using a light sidebar color
-$sidebar-light-color: #000;
-$sidebar-light-link-color: #333;
-
 //
-// Customize bootstrap variables to match
-// look and feel of the theme
-//-----------------------------------------------------
+// Настройки Bootstrap через CSS-переменные
+//
+// Тема не компилирует Bootstrap: он приходит общим файлом resources/css/bootstrap.scss,
+// поэтому всё, что раньше задавалось scss-переменными до его импорта
+// ($primary, $btn-border-radius и т.п.), задаётся здесь.
+// Темы mobile, motor и fresh наследуют эти значения, импортируя файл целиком
+//
 
-$primary: $primary-color;
+:root {
+    // Основной цвет
+    --bs-primary: #297dad;
+    --bs-primary-rgb: 41, 125, 173;
+    --bs-link-color: #297dad;
+    --bs-link-color-rgb: 41, 125, 173;
+    --bs-link-hover-color: #1f6086;
 
-// Customize typographic styles
-$font-size-base: 0.9rem;
-$small-font-size: 0.8em;
-$font-family-sans-serif: $body-font;
-$link-color: $primary-color;
-$link-decoration: none;
-$link-hover-decoration: underline;
-$headings-font-weight: bold;
+    // $body-bg
+    --bs-body-bg: #fff;
 
-// Customize Dropdown styles
-$dropdown-padding-y: 0;
-$dropdown-spacer: 0;
-$dropdown-border-width: 0;
-$dropdown-item-padding-y: 8px;
-$dropdown-item-padding-x: 20px;
+    // Шапка и сайдбар. Светлый сайдбар получается переопределением
+    // этих переменных — пересобирать тему для этого не нужно
+    --navbar-bg: #{$navbar-color};
+    --navbar-logo-bg: #{darken($navbar-color, 5%)};
+    --navbar-search-bg: #{darken($navbar-color, 10)};
+    --sidebar-bg: #{$sidebar-color};
+    --sidebar-color: #fff;
+    --sidebar-link-color: #fff;
+    --sidebar-link-active-color: #fff;
+    --sidebar-hover-bg: #{darken($sidebar-color, 7)};
+    --sidebar-treeview-bg: #{lighten($sidebar-color, 4)};
 
-// Customize button styles
-$btn-border-radius: 3px;
-$btn-border-radius-lg: 3px;
-$btn-border-radius-sm: 3px;
-$btn-font-weight: 700;
-$btn-transition: box-shadow 0.3s cubic-bezier(0.35, 0, 0.25, 1), transform 0.2s cubic-bezier(0.35, 0, 0.25, 1), background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    // Типографика
+    --bs-body-font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bs-body-font-size: 0.9rem;
+}
 
-// Custmize form component styles
-$input-border-radius: 4px;
-$input-border-radius-lg: 4px;
-$input-border-radius-sm: 4px;
-$input-focus-border-color: $primary-color;
-$input-btn-border-width: 2px;
-$input-btn-focus-box-shadow: none;
-$input-btn-focus-width: 0;
+// $body-bg-dark
+[data-bs-theme="dark"] {
+    --bs-body-bg: #2b3035;
+}
+
+// $headings-font-weight: bold
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+// Кнопки: $btn-border-radius, $btn-font-weight, $btn-transition, $input-btn-border-width
+.btn {
+    --bs-btn-border-radius: 3px;
+    --bs-btn-font-weight: 700;
+    --bs-btn-border-width: 2px;
+
+    transition: box-shadow 0.3s cubic-bezier(0.35, 0, 0.25, 1), transform 0.2s cubic-bezier(0.35, 0, 0.25, 1), background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-link-hover-color);
+    --bs-btn-hover-border-color: var(--bs-link-hover-color);
+    --bs-btn-active-bg: var(--bs-link-hover-color);
+    --bs-btn-active-border-color: var(--bs-link-hover-color);
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+
+// Выпадающие меню: $dropdown-item-padding-*
+.dropdown-menu {
+    --bs-dropdown-border-width: 0;
+    --bs-dropdown-link-active-bg: var(--bs-primary);
+    --bs-dropdown-item-padding-y: 8px;
+    --bs-dropdown-item-padding-x: 20px;
+}
+
+// Поля ввода: $input-border-radius, $input-btn-border-width, $input-focus-*
+.form-control,
+.form-select {
+    border-width: 2px;
+    border-radius: 4px;
+
+    &:focus {
+        border-color: var(--bs-primary);
+        box-shadow: none;
+    }
+}
+
+// Ссылки и активные элементы навигации
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-primary);
+}
+
+.pagination {
+    --bs-pagination-color: var(--bs-link-color);
+    --bs-pagination-active-bg: var(--bs-primary);
+    --bs-pagination-active-border-color: var(--bs-primary);
+    --bs-pagination-hover-color: var(--bs-link-hover-color);
+}

@@ -1,8 +1,10 @@
 // Newspaper theme — print aesthetic, right sidebar
 
+// Bootstrap и bootstrap5-tags приходят общим файлом resources/css/bootstrap.scss,
+// он подключается в layout темы
+
 // Theme essentials
 @import 'themes/newspaper/sass/variables';
-@import 'bootstrap/scss/bootstrap';
 
 // Layout
 @import 'themes/newspaper/sass/main';
@@ -83,10 +85,8 @@
   &:focus { border-color: $ink-red; box-shadow: none; }
 }
 
-
 // Sidebar search — desktop hidden, mobile visible
 .paper-sidebar-search-section { @media(min-width: 768px) { display: none; } }
 
 // Scrollup — позиция с учётом sidebar
 .scrollup { right: 20px; }
-@import 'bootstrap5-tags/tags';

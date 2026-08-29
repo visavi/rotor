@@ -1,8 +1,10 @@
 // Nordic theme — clean indigo, right sidebar
 
+// Bootstrap и bootstrap5-tags приходят общим файлом resources/css/bootstrap.scss,
+// он подключается в layout темы
+
 // Theme essentials
 @import 'themes/nordic/sass/variables';
-@import 'bootstrap/scss/bootstrap';
 
 // Layout
 @import 'themes/nordic/sass/main';
@@ -55,11 +57,9 @@
 
 // Icons & libraries
 
-
 // Sidebar search — скрыть на десктопе
 .search-sidebar { @media(min-width: 768px) { display: none !important; } }
 
 // Pagination disabled
 .page-item.disabled .page-link { color: #9ca3af; background-color: #f5f3ff; border-color: #e2e8f0; }
 [data-bs-theme=dark] .page-item.disabled .page-link { color: #4b5563; background-color: #1a1a2e; border-color: #2d2d4e; }
-@import 'bootstrap5-tags/tags';

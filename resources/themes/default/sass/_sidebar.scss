@@ -9,8 +9,8 @@
   width: $sidebar-width;
   overflow: auto;
   z-index: 10;
-  background-color: $sidebar-color;
-  color: $sidebar-dark-color;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-color);
   box-shadow: 0 8px 17px rgba(0, 0, 0, 0.2);
   transition: left 0.3s ease,
   width 0.3s ease;
@@ -58,14 +58,15 @@
   margin: 0 10px;
   padding: 10px 5px;
   border-top: 1px solid rgba(0,0,0, 0.25);
-  color: #fff;
+  color: var(--sidebar-color);
   a:not(.btn) {
-    color: #fff;
+    color: var(--sidebar-link-color);
   }
 }
 
 .app-menu {
-  @extend .list-unstyled;
+  padding-left: 0;
+  list-style: none;
   margin-bottom: 0;
 }
 
@@ -77,16 +78,14 @@
   border-left: 3px solid transparent;
   transition: border-left-color 0.3s ease,
   background-color 0.3s ease;
-  @if $sidebar-accent == dark { color: $sidebar-dark-link-color }
-  @if $sidebar-accent == light { color: $sidebar-light-link-color }
+  color: var(--sidebar-link-color);
   &.active,
   &:hover,
   &:focus {
-    background: darken($sidebar-color, 7);
+    background: var(--sidebar-hover-bg);
     border-left-color: $primary-color;
     text-decoration: none;
-    @if $sidebar-accent == dark { color: $sidebar-dark-link-color }
-    @if $sidebar-accent == light { color: $primary-color }
+    color: var(--sidebar-link-active-color);
   }
 }
 
@@ -107,7 +106,7 @@
   &.is-expanded {
     [data-bs-toggle='treeview'] {
       border-left-color: $primary-color;
-      background: darken($sidebar-color, 7);
+      background: var(--sidebar-hover-bg);
     }
     .treeview-menu { max-height: 100vh; }
     .treeview-indicator { transform: rotate(180deg); }
@@ -115,16 +114,12 @@
 }
 
 .treeview-menu {
-  @extend .list-unstyled;
+  padding-left: 0;
+  list-style: none;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
-  @if $sidebar-accent == dark {
-    background: lighten($sidebar-color, 4)
-  }
-  @if $sidebar-accent == light {
-    background: darken($sidebar-color, 4)
-  }
+  background: var(--sidebar-treeview-bg);
 }
 
 .treeview-item {
@@ -132,15 +127,13 @@
   align-items: center;
   padding: 5px 5px 5px 20px;
   font-size: 1em;
-  @if $sidebar-accent == dark { color: $sidebar-dark-link-color }
-  @if $sidebar-accent == light { color: $sidebar-light-link-color }
+  color: var(--sidebar-link-color);
   &.active,
   &:hover,
   &:focus {
-    background: darken($sidebar-color, 7);
+    background: var(--sidebar-hover-bg);
     text-decoration: none;
-    @if $sidebar-accent == dark { color: $sidebar-dark-link-color }
-    @if $sidebar-accent == light { color: $primary-color }
+    color: var(--sidebar-link-active-color);
   }
   .icon { margin-right: 5px; }
 }

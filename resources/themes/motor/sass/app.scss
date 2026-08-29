@@ -1,14 +1,10 @@
-// This files are essential for the theme
-@import 'themes/default/sass/variables';
+// Bootstrap и bootstrap5-tags приходят общим файлом resources/css/bootstrap.scss,
+// он подключается в layout темы
 
-$dropdown-border-width: 1px;
-
-@import 'bootstrap/scss/bootstrap';
+// Настройки Bootstrap через CSS-переменные
+@import 'themes/motor/sass/variables';
 
 @import 'themes/default/sass/component/badge';
 @import 'themes/default/sass/component/button';
 
-
 @import 'style';
-
-@import 'bootstrap5-tags/tags';

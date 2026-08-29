@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+// Bootstrap и bootstrap5-tags приходят общим файлом resources/css/bootstrap.scss,
+// он подключается в layout темы
+
 // Theme essentials
 @import 'themes/fresh/sass/variables';
-@import 'bootstrap/scss/bootstrap';
 
 // Layout
 @import 'themes/fresh/sass/main';
@@ -16,4 +18,3 @@
 @import 'themes/default/sass/component/button';
 
 // Icons & libraries
-@import 'bootstrap5-tags/tags';

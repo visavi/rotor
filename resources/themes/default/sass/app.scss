@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700,700i&display=swap');
 
+// Bootstrap и bootstrap5-tags приходят общим файлом resources/css/bootstrap.scss,
+// он подключается в layout темы
+
 // This files are essential for the theme
 @import 'themes/default/sass/variables';
-@import 'bootstrap/scss/bootstrap';
 
 // This styles are essential for theme
 @import 'themes/default/sass/main';
@@ -18,7 +20,3 @@
 @import 'themes/default/sass/component/button';
 @import 'themes/default/sass/component/app-title';
 @import 'themes/default/sass/component/widgets';
-
-
-
-@import 'bootstrap5-tags/tags';

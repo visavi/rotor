@@ -13,7 +13,7 @@
             <div class="paper-footer-col">
                 <h5>{{ __('index.users') }}</h5>
                 <ul>
-                    <li><a class="footer-item" href="{{ route('users.index') }}">{{ __('index.users') }}</a> <span class="paper-count">{{ statsUsers() }}</span></li>
+                    <li><a class="footer-item" href="{{ route('users.index') }}">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span></li>
                     @hook('footerColumnMiddle')
                 </ul>
             </div>

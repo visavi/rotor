@@ -41,63 +41,123 @@ $app-width: 1200px;
 // Sidebar
 $sidebar-width: 260px;
 $header-height: 85px;   // masthead + nav
-$navbar-height: $header-height;
 
 // Navbar masthead
-$navbar-color: #1a1a1a;
 
 // Sidebar — paper color
 $sidebar-color: $paper-cream;
-$sidebar-accent: light;
 $sidebar-light-color: $ink-black;
-$sidebar-light-link-color: $ink-dark;
 
-// Bootstrap overrides — serif, classic feel
-$primary: $primary-color;
+//
+// Настройки Bootstrap для темы newspaper через CSS-переменные
+//
+// Тема не компилирует Bootstrap — он приходит общим файлом resources/css/bootstrap.scss,
+// поэтому всё, что раньше задавалось scss-переменными до его импорта, задаётся здесь
+//
 
-$font-size-base: 0.9rem;
-$small-font-size: 0.8em;
-$font-family-sans-serif: $body-font;
-$link-color: $ink-red;
-$link-decoration: none;
-$link-hover-decoration: underline;
-$headings-font-weight: bold;
+:root {
+    // $primary / $link-color — краска газетных чернил
+    --bs-primary: #{$primary-color};
+    --bs-primary-rgb: 139, 0, 0;
+    --bs-link-color: #{$ink-red};
+    --bs-link-color-rgb: 139, 0, 0;
+    --bs-link-hover-color: #6f0000;
 
-$dropdown-padding-y: 0;
-$dropdown-spacer: 0;
-$dropdown-border-width: 1px;
-$dropdown-border-color: $paper-border;
-$dropdown-item-padding-y: 7px;
-$dropdown-item-padding-x: 16px;
-$dropdown-bg: $paper-cream;
-$dropdown-link-color: $ink-dark;
-$dropdown-link-hover-bg: #ede8de;
-$dropdown-link-hover-color: $ink-black;
+    // $body-bg, $font-family-sans-serif
+    --bs-body-bg: #{$body-bg};
+    --bs-body-font-family: #{$body-font};
 
-$btn-border-radius: 2px;
-$btn-border-radius-lg: 2px;
-$btn-border-radius-sm: 2px;
-$btn-font-weight: bold;
-$font-family-sans-serif: $body-font;
+    // $border-radius
+    --bs-border-radius: 2px;
+    --bs-border-radius-lg: 2px;
+    --bs-border-radius-sm: 1px;
+}
 
-$input-border-radius: 2px;
-$input-border-radius-lg: 2px;
-$input-border-radius-sm: 2px;
-$input-bg: #fff;
-$input-color: $ink-black;
-$input-border-color: $paper-border;
-$input-focus-border-color: $ink-red;
-$input-btn-border-width: 1px;
-$input-btn-focus-box-shadow: none;
-$input-btn-focus-width: 0;
+// $headings-font-weight: bold
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
 
-$border-radius: 2px;
-$border-radius-lg: 2px;
-$border-radius-sm: 1px;
+// $btn-*
+.btn {
+    --bs-btn-border-radius: 2px;
+    --bs-btn-border-width: 1px;
+    --bs-btn-font-weight: bold;
+}
 
-$card-bg: #fff;
-$card-border-color: $paper-border;
-$card-border-radius: 2px;
+.btn-lg,
+.btn-sm {
+    --bs-btn-border-radius: 2px;
+}
 
-$table-bg: #fff;
-$table-border-color: $paper-border;
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-link-hover-color);
+    --bs-btn-hover-border-color: var(--bs-link-hover-color);
+    --bs-btn-active-bg: var(--bs-link-hover-color);
+    --bs-btn-active-border-color: var(--bs-link-hover-color);
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: var(--bs-primary);
+    --bs-btn-hover-border-color: var(--bs-primary);
+    --bs-btn-active-bg: var(--bs-primary);
+    --bs-btn-active-border-color: var(--bs-primary);
+}
+
+// $dropdown-* — кремовая бумага с тонкой рамкой
+.dropdown-menu {
+    --bs-dropdown-border-width: 1px;
+    --bs-dropdown-border-color: #{$paper-border};
+    --bs-dropdown-bg: #{$paper-cream};
+    --bs-dropdown-link-active-bg: var(--bs-primary);
+    --bs-dropdown-item-padding-y: 7px;
+    --bs-dropdown-item-padding-x: 16px;
+    --bs-dropdown-link-color: #{$ink-dark};
+    --bs-dropdown-link-hover-bg: #ede8de;
+    --bs-dropdown-link-hover-color: #{$ink-black};
+}
+
+// $input-*
+.form-control,
+.form-select {
+    background-color: #fff;
+    color: $ink-black;
+    border-color: $paper-border;
+    border-width: 1px;
+    border-radius: 2px;
+
+    &:focus {
+        border-color: $ink-red;
+        box-shadow: none;
+    }
+}
+
+// $card-*
+.card {
+    --bs-card-bg: #fff;
+    --bs-card-border-color: #{$paper-border};
+    --bs-card-border-radius: 2px;
+}
+
+// $table-*
+.table {
+    --bs-table-bg: #fff;
+    --bs-table-border-color: #{$paper-border};
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--bs-primary);
+}
+
+.pagination {
+    --bs-pagination-color: var(--bs-link-color);
+    --bs-pagination-active-bg: var(--bs-primary);
+    --bs-pagination-active-border-color: var(--bs-primary);
+    --bs-pagination-hover-color: var(--bs-link-hover-color);
+}

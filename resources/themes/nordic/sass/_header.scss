@@ -35,7 +35,8 @@
 }
 
 .app-nav {
-  @extend .list-unstyled;
+  padding-left: 0;
+  list-style: none;
   display: flex;
   margin-bottom: 0;
   margin-left: auto;
@@ -133,6 +134,6 @@
   &:hover { background-color: var(--bs-tertiary-bg); text-decoration: none; color: inherit; }
 }
 .app-notification__author { margin-bottom: 0; line-height: 1.2; font-weight: 500; }
-.app-notification__meta { @extend .text-muted; @extend .small; margin-bottom: 0; }
+.app-notification__meta { color: var(--bs-secondary-color); font-size: 0.875em; margin-bottom: 0; }
 .app-notification__icon { padding-right: 10px; }
 .app-notification__cnt { padding: 5px; margin-left: auto; }

@@ -7,7 +7,7 @@
   height: 50px;
   max-width: inherit;
   display: flex;
-  background-color: $navbar-color;
+  background-color: var(--navbar-bg);
   z-index: 1030;
   @media print { display: none; }
 }
@@ -27,12 +27,7 @@
     flex: 0 0 auto;
     display: block;
     width: $sidebar-width;
-    @if $sidebar-accent == dark {
-      background-color: darken( $navbar-color, 5% );
-    }
-    @if $sidebar-accent == light {
-      background-color: lighten( $navbar-color, 5% );
-    }
+    background-color: var(--navbar-logo-bg);
   }
   @media(max-width: 320px) {
     display: none;
@@ -53,7 +48,7 @@
   &:focus,
   &:hover {
     color: #fff;
-    background-color: darken($navbar-color, 10);
+    background-color: var(--navbar-search-bg);
     text-decoration: none;
   }
 }
@@ -68,7 +63,8 @@
 }
 
 .app-nav {
-  @extend .list-unstyled;
+  padding-left: 0;
+  list-style: none;
   display: flex;
   margin-bottom: 0;
   margin-left: auto;
@@ -179,4 +175,4 @@
 }
 
 .app-notification__author { line-height: 1.2; }
-.app-notification__meta { @extend .text-muted; @extend .small; }
+.app-notification__meta { color: var(--bs-secondary-color); font-size: 0.875em; }

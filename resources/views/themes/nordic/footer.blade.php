@@ -12,7 +12,7 @@
         <div class="col-sm">
             <h5>{{ __('index.users') }}</h5>
             <ul class="nav flex-column">
-                <li><a class="footer-item" href="{{ route('users.index') }}">{{ __('index.users') }}</a></li>
+                <li><a class="footer-item" href="{{ route('users.index') }}">{{ __('index.users') }}</a> <span class="badge bg-adaptive">{{ statsUsers() }}</span></li>
                 @hook('footerColumnMiddle')
             </ul>
         </div>

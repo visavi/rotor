@@ -166,7 +166,8 @@
 }
 
 .paper-nav__list {
-  @extend .list-unstyled;
+  padding-left: 0;
+  list-style: none;
   display: flex;
   margin: 0;
   white-space: nowrap;
@@ -218,6 +219,6 @@
   &:hover { background-color: #ede8de; text-decoration: none; color: $ink-black; }
 }
 .app-notification__author { margin-bottom: 0; line-height: 1.2; font-family: $ui-font; }
-.app-notification__meta { @extend .small; margin-bottom: 0; color: $ink-gray; }
+.app-notification__meta { font-size: 0.875em; margin-bottom: 0; color: $ink-gray; }
 .app-notification__icon { padding-right: 10px; }
 .app-notification__cnt { padding: 5px; margin-left: auto; }

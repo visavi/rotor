@@ -42,7 +42,8 @@
 }
 
 .app-nav {
-  @extend .list-unstyled;
+  padding-left: 0;
+  list-style: none;
   display: flex;
   margin-bottom: 0;
   margin-left: auto;
@@ -167,7 +168,7 @@
 }
 
 .app-notification__author { line-height: 1.2; }
-.app-notification__meta { @extend .text-muted; @extend .small; }
+.app-notification__meta { color: var(--bs-secondary-color); font-size: 0.875em; }
 
 /*----- Component: Horizontal Menu ----- */
 

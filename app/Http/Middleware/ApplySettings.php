@@ -38,10 +38,16 @@ class ApplySettings
         }
 
         App::setLocale($language);
-        View::addNamespace('theme', resource_path('views/themes/' . $theme));
+
+        // replaceNamespace, а не addNamespace: последний накапливает пути, и внутри
+        // одного процесса (тесты, octane) остаётся тема, отрендеренная первой.
+        // flush() по той же причине сбрасывает кеш уже найденных шаблонов
+        $finder = app('view')->getFinder();
+        $finder->flush();
+
+        View::replaceNamespace('theme', resource_path('views/themes/' . $theme));
 
         // Позволяет переопределять страницы для определенной темы
-        $finder = app('view')->getFinder();
         if ($finder instanceof FileViewFinder) {
             foreach ($finder->getHints() as $namespace => $paths) {
                 $override = resource_path('views/themes/' . $theme . '/views/' . $namespace);
