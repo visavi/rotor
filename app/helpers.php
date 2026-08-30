@@ -32,7 +32,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '14.3.0';
+const ROTOR_VERSION = '14.4.0';
 
 /**
  * @deprecated Мост совместимости для модулей, не обновлённых на datetime. Будет удалён в 15.0
