@@ -1,7 +1,0 @@
-// Переменные вёрстки и настройки Bootstrap наследуются от темы default
-@import 'themes/default/sass/variables';
-
-// $dropdown-border-width: 1px — отличие motor от остальных тем семейства
-.dropdown-menu {
-    --bs-dropdown-border-width: 1px;
-}

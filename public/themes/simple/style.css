@@ -224,6 +224,53 @@ body {
 
 
 
+/* Пункты с вложенным меню (модули отдают их разметкой сайдбара):
+   на десктопе показываем выпадающим списком по наведению */
+.site-nav li.treeview {
+    position: relative;
+}
+
+.site-nav .treeview-indicator {
+    font-size: 0.7em;
+    opacity: 0.5;
+}
+
+.site-nav .treeview-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    min-width: 13rem;
+    margin: 0;
+    padding: 0.25rem 0;
+    background: var(--simple-block-bg);
+    border: 1px solid var(--simple-line);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.site-nav li.treeview:hover .treeview-menu,
+.site-nav li.treeview:focus-within .treeview-menu {
+    display: block;
+}
+
+.site-nav .treeview-item {
+    display: block;
+    padding: 0.3rem 0.9rem;
+    white-space: nowrap;
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+
+.site-nav .treeview-item:hover,
+.site-nav .treeview-item.active {
+    color: var(--bs-primary);
+}
+
+.site-nav .treeview-item .icon {
+    display: none;
+}
+
 /* --- Контент ------------------------------------------------------------- */
 .app-content {
     min-height: 60vh;
@@ -287,16 +334,41 @@ body {
     color: var(--bs-primary);
 }
 
-.site-footer__links li {
-    display: inline;
+.site-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding-bottom: 1.25rem;
+}
+
+.site-footer h6 {
+    margin-bottom: 0.5rem;
+    color: var(--bs-body-color);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.site-footer ul {
+    margin: 0;
+    padding: 0;
     list-style: none;
 }
 
-.site-footer__links {
+.site-footer li {
+    padding: 0.125rem 0;
+}
+
+/* Счётчик — виджет с таблицей и графиком, ему нужна своя строка.
+   Пустой блок (счётчик не установлен) не должен занимать место */
+.site-footer__counter {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.25rem;
     padding-bottom: 0.75rem;
+}
+
+.site-footer__counter:empty {
+    display: none;
 }
 
 .site-footer__bottom {
@@ -304,6 +376,8 @@ body {
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
     align-items: center;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--simple-line);
 }
 
 .site-footer__meta {
@@ -311,6 +385,11 @@ body {
     align-items: center;
     gap: 0.75rem;
     margin-left: auto;
+}
+
+/* showOnline() добавляет <br>, во flex-строке он лишний */
+.site-footer__meta br {
+    display: none;
 }
 
 /* --- Кнопка «наверх» -----------------------------------------------------
@@ -350,5 +429,25 @@ body {
 
     .site-search {
         margin-left: 0;
+    }
+
+    /* В мобильном меню вложенные пункты показываем обычным списком */
+    .site-nav .treeview-menu {
+        display: block;
+        position: static;
+        min-width: 0;
+        padding: 0 0 0 1rem;
+        background: none;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .site-nav .treeview-indicator {
+        display: none;
+    }
+
+    .site-footer__cols {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
 }

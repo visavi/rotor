@@ -1,3 +1,9 @@
+// В default у выпадающих меню рамки нет — на тёмном сайдбаре она не нужна.
+// Здесь фон светлый, без рамки меню сливается со страницей
+.dropdown-menu {
+    --bs-dropdown-border-width: 1px;
+}
+
 body {
     margin-top : 0;
     font-size : 14px;
