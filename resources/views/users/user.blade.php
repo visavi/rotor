@@ -94,10 +94,10 @@
 
             <div class="col-md-6">
                 @if (!empty($user->picture) && file_exists(public_path($user->picture)))
-                    <a href="{{ $user->picture }}" data-fancybox="gallery">
-                        <img src="{{ $user->picture }}" alt="{{ $user->getName() }}" class="float-end img-fluid rounded"></a>
+                    <a href="{{ $user->picture }}" data-fancybox="gallery" class="d-block text-center float-md-end">
+                        <img src="{{ $user->picture }}" alt="{{ $user->getName() }}" class="img-fluid rounded"></a>
                 @else
-                    <img src="/assets/img/images/photo.svg" alt="Photo" class="float-end img-fluid rounded">
+                    <img src="/assets/img/images/photo.svg" alt="Photo" class="d-block mx-auto float-md-end img-fluid rounded">
                 @endif
             </div>
             <div class="col-md-12 mt-3">
@@ -113,7 +113,7 @@
         </div>
     </div>
 
-<div class="alert alert-info mb-3">
+    <?php ob_start(); ?>
         @hook('userActionStart', $user)
 
         @if (!empty($user->site))
@@ -144,5 +144,10 @@
             @endif
         @endif
         @hook('userActionEnd', $user)
-    </div>
+    <?php $actions = ob_get_clean(); ?>
+
+    {{-- Блок состоит из хуков и ссылок для авторизованных, у гостя он пустой --}}
+    @if (trim(strip_tags($actions)))
+        <div class="alert alert-info mb-3">{!! $actions !!}</div>
+    @endif
 @stop

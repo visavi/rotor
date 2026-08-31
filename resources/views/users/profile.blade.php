@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <div class="float-end">
+                        <div class="text-center float-md-end">
                             @if ($user->picture && file_exists(public_path($user->picture)))
                                 <a href="{{ getUser('picture') }}" data-fancybox="gallery">
                                     <img src="{{ getUser('picture') }}" alt="{{ $user->login }}" class="img-fluid rounded">

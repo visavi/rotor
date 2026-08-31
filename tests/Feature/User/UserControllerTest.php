@@ -44,6 +44,26 @@ class UserControllerTest extends TestCase
             ->assertSee($user->login);
     }
 
+    public function testProfileActionsAreHiddenFromGuest(): void
+    {
+        $user = $this->makeUser(['site' => '']);
+
+        // Плашка действий состоит из хуков и ссылок для авторизованных — гостю показывать нечего
+        $this->get('/users/' . $user->login)
+            ->assertOk()
+            ->assertDontSee('alert-info');
+    }
+
+    public function testProfileActionsAreShownToOwner(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($user)
+            ->get('/users/' . $user->login)
+            ->assertOk()
+            ->assertSee('alert-info');
+    }
+
     public function testProfilePageOfMissingUserReturns404(): void
     {
         $this->get('/users/nobody')->assertNotFound();
