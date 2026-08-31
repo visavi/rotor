@@ -1143,9 +1143,18 @@
                                         },
                                         "sections": {
                                             "type": "object",
-                                            "description": "Счётчики разделов: ключ — тип раздела, значение — количество записей",
+                                            "description": "Счётчики разделов: ключ — тип раздела, значение — количество записей всего и за сутки",
                                             "additionalProperties": {
-                                                "type": "integer"
+                                                "type": "object",
+                                                "properties": {
+                                                    "total": {
+                                                        "type": "integer"
+                                                    },
+                                                    "today": {
+                                                        "type": "integer",
+                                                        "description": "Добавлено за сутки"
+                                                    }
+                                                }
                                             }
                                         }
                                     }

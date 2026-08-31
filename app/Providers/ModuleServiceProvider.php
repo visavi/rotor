@@ -161,9 +161,20 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             // Счётчик раздела для /api/stats: true считает все записи модели,
-            // замыкание нужно разделам, где часть записей скрыта модерацией
+            // замыкание нужно разделам, где часть записей скрыта модерацией.
+            // Массив ['total' => fn, 'today' => fn] — когда своя выборка нужна и за сутки
             if ($stat = $config['stat'] ?? null) {
-                Registry::stat($morphName, is_callable($stat) ? $stat : static fn (): int => $model::query()->count());
+                $total = static fn (): int => $model::query()->count();
+                $today = static fn (): int => $model::query()->where('created_at', '>', now()->subDay())->count();
+
+                if (is_array($stat)) {
+                    $total = $stat['total'] ?? $total;
+                    $today = $stat['today'] ?? $today;
+                } elseif (is_callable($stat)) {
+                    $total = $stat;
+                }
+
+                Registry::stat($morphName, $total, $today);
             }
         }
 

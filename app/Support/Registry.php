@@ -181,12 +181,12 @@ class Registry
     /**
      * Регистрирует счётчик раздела для /api/stats
      *
-     * Колбэк вида fn(): int — сколько записей в разделе. Ядро о разделах модулей
-     * не знает, поэтому счётчик приходит от самого модуля
+     * Колбэки вида fn(): int — всего записей и сколько из них за сутки. Ядро о
+     * разделах модулей не знает, поэтому счётчики приходят от самого модуля
      */
-    public static function stat(string $section, callable $handler): void
+    public static function stat(string $section, callable $handler, ?callable $today = null): void
     {
-        static::$stats[$section] = $handler;
+        static::$stats[$section] = ['total' => $handler, 'today' => $today];
     }
 
     /**

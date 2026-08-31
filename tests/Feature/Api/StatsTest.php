@@ -79,12 +79,23 @@ class StatsTest extends TestCase
 
     public function testSectionCounterComesFromModule(): void
     {
-        // Ядро о разделах модулей не знает — счётчик приходит от самого модуля
+        // Ядро о разделах модулей не знает — счётчики приходят от самого модуля
+        Registry::stat('demo', static fn (): int => 42, static fn (): int => 7);
+
+        $this->getJson('/api/stats')
+            ->assertOk()
+            ->assertJsonPath('sections.demo.total', 42)
+            ->assertJsonPath('sections.demo.today', 7);
+    }
+
+    public function testSectionWithoutDailyCounter(): void
+    {
         Registry::stat('demo', static fn (): int => 42);
 
         $this->getJson('/api/stats')
             ->assertOk()
-            ->assertJsonPath('sections.demo', 42);
+            ->assertJsonPath('sections.demo.total', 42)
+            ->assertJsonPath('sections.demo.today', 0);
     }
 
     public function testStatsDoNotDependOnUser(): void

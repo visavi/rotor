@@ -404,11 +404,13 @@ class ApiController extends Controller
         ];
 
         // Счётчики разделов приходят от модулей: ядро о них не знает
-        $data['sections'] = Cache::remember(
-            'apiStatsSections',
-            300,
-            static fn () => array_map(static fn (callable $handler): int => (int) $handler(), Registry::$stats),
-        );
+        $data['sections'] = Cache::remember('apiStatsSections', 300, static fn () => array_map(
+            static fn (array $handlers): array => [
+                'total' => (int) $handlers['total'](),
+                'today' => isset($handlers['today']) ? (int) $handlers['today']() : 0,
+            ],
+            Registry::$stats,
+        ));
 
         return response()->json($data);
     }
