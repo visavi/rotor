@@ -51,6 +51,19 @@ body {
     line-height: 1.6;
 }
 
+/* Заголовки Bootstrap для этой темы великоваты — своя шкала поспокойнее */
+h1, .h1 {
+    font-size: 1.625rem;
+}
+
+h2, .h2 {
+    font-size: 1.375rem;
+}
+
+h3, .h3 {
+    font-size: 1.1875rem;
+}
+
 /* Общая колонка страницы: шапка, контент и подвал выровнены по одной ширине */
 .wrap {
     width: 100%;
@@ -318,7 +331,7 @@ body {
 .app-title h1 {
     display: inline-block;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     margin: 0 1rem 0 0;
     vertical-align: middle;
 }
