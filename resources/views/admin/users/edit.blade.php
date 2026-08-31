@@ -1,4 +1,5 @@
 @extends('layout')
+@use('App\Services\UserService')
 @use('App\Support\Hook')
 
 @section('title', __('users.edit_user') . ' ' . $user->getName())
@@ -67,7 +68,7 @@
 
             <div class="mb-3{{ hasError('email') }}">
                 <label for="email" class="form-label">{{ __('users.email') }}:</label>
-                <input type="text" class="form-control" id="email" name="email" maxlength="50" value="{{ old('email', $user->email) }}" required>
+                <input type="text" class="form-control" id="email" name="email" maxlength="50" value="{{ old('email', $user->email) }}"{{ UserService::isEmailRequired() ? ' required' : '' }}>
                 <div class="invalid-feedback">{{ textError('email') }}</div>
             </div>
 

@@ -6,6 +6,7 @@ use App\Models\BlackList;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\CaptchaService;
+use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
@@ -20,7 +21,7 @@ class AuthTest extends TestCase
 
         $this->overrideSetting('app_installed', 1);
         $this->overrideSetting('openreg', 1);
-        $this->overrideSetting('regkeys', 0);
+        $this->overrideSetting('email_mode', UserService::EMAIL_REQUIRED);
         $this->overrideSetting('captcha_type', 'graphical');
     }
 
@@ -53,7 +54,7 @@ class AuthTest extends TestCase
 
     public function testRegisterMarksAccountPendingWithConfirmation(): void
     {
-        $this->overrideSetting('regkeys', 1);
+        $this->overrideSetting('email_mode', UserService::EMAIL_CONFIRM);
 
         $this->postJson('/api/register', $this->payload())
             ->assertStatus(201)
@@ -127,6 +128,29 @@ class AuthTest extends TestCase
         $this->postJson('/api/recovery', ['user' => $user->login] + $this->captcha())
             ->assertStatus(422)
             ->assertJsonValidationErrors('user');
+    }
+
+    public function testRecoveryWithoutEmail(): void
+    {
+        $user = User::factory()->create(['email' => null]);
+
+        $this->postJson('/api/recovery', ['user' => $user->login] + $this->captcha())
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('user');
+
+        $this->assertDatabaseCount('password_resets', 0);
+    }
+
+    public function testRegisterWithoutEmailWhenOptional(): void
+    {
+        $this->overrideSetting('email_mode', UserService::EMAIL_OPTIONAL);
+
+        $payload = $this->payload();
+        $payload['email'] = '';
+
+        $this->postJson('/api/register', $payload)->assertCreated();
+
+        $this->assertNull(User::query()->where('login', 'newuser')->value('email'));
     }
 
     public function testRecoveryForUnknownUser(): void

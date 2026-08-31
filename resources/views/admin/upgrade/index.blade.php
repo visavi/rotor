@@ -324,5 +324,16 @@ function runMigrations() {
 
     runNext();
 }
+
+// Открываем нужную вкладку по хешу: с дашборда сюда ведёт ссылка прямо на миграции.
+// Ждём DOMContentLoaded — модульный bootstrap вешает обработчик вкладок позже этого скрипта
+document.addEventListener('DOMContentLoaded', () => {
+    if (! window.location.hash) {
+        return;
+    }
+
+    // Через click(), а не Tab API: bootstrap собран модулем и в глобальную область не вынесен
+    document.querySelector('[data-bs-target="' + window.location.hash + '"]')?.click();
+});
 </script>
 @endpush

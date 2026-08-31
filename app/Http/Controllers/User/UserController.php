@@ -52,7 +52,10 @@ class UserController extends Controller
                 $login = (string) $request->input('login');
                 $password = $request->input('password');
                 $password2 = $request->input('password2');
-                $email = strtolower((string) $request->input('email'));
+                // При скрытом поле присланный адрес игнорируем — его легко подсунуть POST-ом
+                $email = UserService::isEmailHidden()
+                    ? ''
+                    : strtolower((string) $request->input('email'));
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
@@ -194,7 +197,7 @@ class UserController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        if (! setting('regkeys')) {
+        if (! UserService::isEmailConfirm()) {
             abort(200, __('users.confirm_registration_disabled'));
         }
 

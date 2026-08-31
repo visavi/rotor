@@ -8,6 +8,7 @@ use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
 use App\Models\User;
+use App\Services\UserService;
 use App\Support\Registry;
 use App\Support\Restatement;
 use App\Support\Validator;
@@ -92,7 +93,7 @@ class UserController extends AdminController
             $validator
                 ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
                 ->length($password, 6, 20, __('users.password_length_requirements'), false)
-                ->email($email, ['email' => __('validator.email')])
+                ->email($email, ['email' => __('validator.email')], UserService::isEmailRequired())
                 ->phone($phone, ['phone' => __('validator.phone')], false)
                 ->url($site, ['site' => __('validator.url')], false)
                 ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
@@ -122,7 +123,7 @@ class UserController extends AdminController
                 $user->update([
                     'password'  => $password,
                     'level'     => $level,
-                    'email'     => $email,
+                    'email'     => $email ?: null,
                     'name'      => $name,
                     'country'   => $country,
                     'city'      => $city,
@@ -190,7 +191,7 @@ class UserController extends AdminController
                     );
                 }
 
-                if ($mailblack) {
+                if ($mailblack && $user->email) {
                     BlackList::query()->firstOrCreate(
                         ['type' => 'email', 'value' => $user->email],
                         ['user_id' => getUser('id')],

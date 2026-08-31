@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use App\Services\UserService;
 use App\Support\Registry;
 use App\Traits\SearchableTrait;
 use App\Traits\SortableTrait;
@@ -34,7 +35,7 @@ use Illuminate\Support\Str;
  * @property int                  $id
  * @property string               $login
  * @property string               $password
- * @property string               $email
+ * @property string|null          $email
  * @property string               $level
  * @property string               $name
  * @property string               $country
@@ -566,7 +567,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function isPended(): bool
     {
-        return setting('regkeys') && $this->level === self::PENDED;
+        return UserService::isEmailConfirm() && $this->level === self::PENDED;
     }
 
     /**

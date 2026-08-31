@@ -22,6 +22,7 @@ use App\Services\FeedService;
 use App\Services\FileService;
 use App\Services\RatingService;
 use App\Services\SearchService;
+use App\Services\UserService;
 use App\Support\Registry;
 use Closure;
 use Illuminate\Database\Query\JoinClause;
@@ -448,16 +449,18 @@ class ApiController extends Controller
             ],
             // Формы регистрации и аккаунта: длины полей зашиты в ядре, цены — в настройках
             'account' => [
-                'login_min'     => 3,
-                'login_max'     => 20,
-                'password_min'  => 6,
-                'password_max'  => 20,
-                'captcha_type'  => setting('captcha_type'),
-                'confirm_email' => (bool) setting('regkeys'),
-                'status_point'  => setting('editstatuspoint'),
-                'status_money'  => setting('editstatusmoney'),
-                'color_point'   => setting('editcolorpoint'),
-                'color_money'   => setting('editcolormoney'),
+                'login_min'      => 3,
+                'login_max'      => 20,
+                'password_min'   => 6,
+                'password_max'   => 20,
+                'captcha_type'   => setting('captcha_type'),
+                'confirm_email'  => UserService::isEmailConfirm(),
+                'email_required' => UserService::isEmailRequired(),
+                'email_hidden'   => UserService::isEmailHidden(),
+                'status_point'   => setting('editstatuspoint'),
+                'status_money'   => setting('editstatusmoney'),
+                'color_point'    => setting('editcolorpoint'),
+                'color_money'    => setting('editcolormoney'),
             ],
         ]);
 

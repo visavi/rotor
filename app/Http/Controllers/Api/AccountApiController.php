@@ -134,7 +134,7 @@ class AccountApiController extends Controller
     {
         $user = getUser();
 
-        if (! setting('regkeys')) {
+        if (! UserService::isEmailConfirm()) {
             abort(403, __('users.confirm_registration_disabled'));
         }
 

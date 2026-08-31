@@ -112,11 +112,20 @@
         <label class="form-check-label" for="openreg">{{ __('settings.registration_allow') }}</label>
     </div>
 
-    <div class="form-check mb-3">
-        <input type="hidden" value="0" name="sets[regkeys]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[regkeys]" id="regkeys"{{ old('sets.regkeys', $settings['regkeys']) ? ' checked' : '' }}>
-        <label class="form-check-label" for="regkeys">{{ __('settings.registration_confirm') }}</label>
+    <div class="mb-3">
+        <label for="email_mode" class="form-label">{{ __('settings.registration_email_mode') }}:</label>
+        <select class="form-select" id="email_mode" name="sets[email_mode]">
+            @foreach ($emailModes as $key => $title)
+                <?php $selected = ($key === old('sets.email_mode', $settings['email_mode'])) ? ' selected' : ''; ?>
+                <option value="{{ $key }}"{{ $selected }}>{{ $title }}</option>
+            @endforeach
+        </select>
+        <div class="invalid-feedback">{{ textError('sets[email_mode]') }}</div>
     </div>
+
+    <p class="text-muted fst-italic">
+        {{ __('settings.registration_email_mode_hint') }}
+    </p>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

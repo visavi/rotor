@@ -44,7 +44,10 @@ class AuthApiController extends Controller
         }
 
         $login = (string) $request->input('login');
-        $email = strtolower((string) $request->input('email'));
+        // При скрытом поле присланный адрес игнорируем — его легко подсунуть запросом
+        $email = UserService::isEmailHidden()
+            ? ''
+            : strtolower((string) $request->input('email'));
         $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
         $validator->true($captcha->verify($request), ['protect' => __('validator.captcha')]);
@@ -90,6 +93,9 @@ class AuthApiController extends Controller
         $validator->notEmpty($user, ['user' => __('validator.user')]);
 
         if ($user) {
+            // Без почты письмо со ссылкой отправить некуда
+            $validator->notEmpty($user->email, ['user' => __('users.email_not_attached')]);
+
             // Повторная заявка принимается только через час, как и на сайте
             $validator->false($userService->hasPendingRecovery($user), ['user' => __('mails.password_recovery_time')]);
         }

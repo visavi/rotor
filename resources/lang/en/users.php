@@ -133,6 +133,8 @@ return [
     'email_already_exists'          => 'The email address you entered is already in use on the system!',
     'domain_is_blacklisted'         => 'The domain from your email address is blacklisted!',
     'email_is_blacklisted'          => 'The email address you entered is blacklisted!',
+    'email_not_attached'            => 'There is no email attached to your account, password recovery is unavailable!',
+    'email_optional_hint'           => 'Without an email you cannot recover your password, you can attach it later in the account settings',
     'photo_success_uploaded'        => 'Photo uploaded successfully!',
     'photo_not_exist'               => 'This photo does not exist!',
     'photo_success_deleted'         => 'Photo successfully deleted!',

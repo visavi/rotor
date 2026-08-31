@@ -1,4 +1,5 @@
 @extends('layout')
+@use('App\Services\UserService')
 
 @section('title', __('index.register'))
 
@@ -14,7 +15,7 @@
 @section('content')
     @hook('loginButtons')
 
-    @if (setting('regkeys'))
+    @if (UserService::isEmailConfirm())
         <div class="alert alert-warning">
             <i class="fa fa-pencil-alt text-muted"></i>
             <b>{{ __('users.confirm_registration') }}</b><br>
@@ -45,11 +46,17 @@
                 <div class="invalid-feedback">{{ textError('password2') }}</div>
             </div>
 
-            <div class="mb-3{{ hasError('email') }}">
-                <label for="inputEmail" class="form-label">{{ __('users.email') }}:</label>
-                <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ old('email') }}" required>
-                <div class="invalid-feedback">{{ textError('email') }}</div>
-            </div>
+            @unless (UserService::isEmailHidden())
+                <?php $emailRequired = UserService::isEmailRequired(); ?>
+                <div class="mb-3{{ hasError('email') }}">
+                    <label for="inputEmail" class="form-label">{{ __('users.email') }}:</label>
+                    <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ old('email') }}"{{ $emailRequired ? ' required' : '' }}>
+                    <div class="invalid-feedback">{{ textError('email') }}</div>
+                    @if (! $emailRequired)
+                        <span class="text-muted fst-italic">{{ __('users.email_optional_hint') }}</span>
+                    @endif
+                </div>
+            @endunless
 
             <?php $inputGender = old('gender', 'male'); ?>
             Пол:

@@ -22,6 +22,54 @@ use Illuminate\Support\Str;
  */
 class UserService
 {
+    /** Поле почты при регистрации не показывается */
+    public const string EMAIL_HIDDEN = 'hidden';
+
+    /** Почту можно не указывать */
+    public const string EMAIL_OPTIONAL = 'optional';
+
+    /** Почта обязательна */
+    public const string EMAIL_REQUIRED = 'required';
+
+    /** Почта обязательна, аккаунт ждёт подтверждения по письму */
+    public const string EMAIL_CONFIRM = 'confirm';
+
+    /**
+     * Режим почты при регистрации
+     */
+    public static function emailMode(): string
+    {
+        $mode = (string) setting('email_mode');
+        $modes = [self::EMAIL_HIDDEN, self::EMAIL_OPTIONAL, self::EMAIL_REQUIRED, self::EMAIL_CONFIRM];
+
+        // Неизвестное значение считаем обязательной почтой — безопасный дефолт
+        return in_array($mode, $modes, true) ? $mode : self::EMAIL_REQUIRED;
+    }
+
+    /**
+     * Поле почты скрыто, аккаунт заводится без адреса
+     */
+    public static function isEmailHidden(): bool
+    {
+        return self::emailMode() === self::EMAIL_HIDDEN;
+    }
+
+    /**
+     * Почта обязательна: подтверждение без адреса невозможно, поэтому входит сюда же
+     */
+    public static function isEmailRequired(): bool
+    {
+        return in_array(self::emailMode(), [self::EMAIL_REQUIRED, self::EMAIL_CONFIRM], true);
+    }
+
+    /**
+     * Регистрацию нужно подтвердить письмом
+     */
+    public static function isEmailConfirm(): bool
+    {
+        return self::emailMode() === self::EMAIL_CONFIRM;
+    }
+
     /**
      * Проверка данных регистрации
      */
@@ -37,7 +85,7 @@ class UserService
         $validator
             ->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
             ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
-            ->email($email, ['email' => __('validator.email')])
+            ->email($email, ['email' => __('validator.email')], self::isEmailRequired())
             ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
             ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
             ->equal($password, $password2, ['password2' => __('users.passwords_different')])
@@ -52,12 +100,15 @@ class UserService
             $validator->false(BlackList::isBlacklisted('login', strtolower($login)), ['login' => __('users.login_is_blacklisted')]);
         }
 
-        $checkMail = User::query()->where('email', $email)->exists();
-        $validator->false($checkMail, ['email' => __('users.email_already_exists')]);
+        // Пустая почта разрешена настройкой: занятость и чёрные списки проверять нечему
+        if ($email !== '') {
+            $checkMail = User::query()->where('email', $email)->exists();
+            $validator->false($checkMail, ['email' => __('users.email_already_exists')]);
 
-        $validator
-            ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')])
-            ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
+            $validator
+                ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')])
+                ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')]);
+        }
     }
 
     /**
@@ -66,14 +117,15 @@ class UserService
     public function register(string $login, string $password, string $email, string $gender): User
     {
         // Ссылка подтверждения ведёт на сайт: письмо открывают в браузере, а не в приложении
-        $confirmToken = setting('regkeys') ? Str::random(32) : null;
+        $confirmToken = self::isEmailConfirm() ? Str::random(32) : null;
         $confirmUrl = $confirmToken ? route('confirm', ['token' => $confirmToken]) : null;
 
+        // Пустую строку в email хранить нельзя: уникальный индекс пропускает только NULL
         $user = User::query()->create([
             'login'         => $login,
             'password'      => Hash::make($password),
-            'email'         => $email,
-            'level'         => setting('regkeys') ? User::PENDED : User::USER,
+            'email'         => $email ?: null,
+            'level'         => self::isEmailConfirm() ? User::PENDED : User::USER,
             'gender'        => $gender,
             'themes'        => setting('themes'),
             'point'         => 0,
@@ -86,13 +138,15 @@ class UserService
 
         $user->sendMessage(null, textNotice('register', ['username' => $login]));
 
-        sendMail('mailer.register', [
-            'to'         => $email,
-            'subject'    => 'Регистрация на ' . setting('title'),
-            'login'      => $login,
-            'password'   => $password,
-            'confirmUrl' => $confirmUrl,
-        ]);
+        if ($email !== '') {
+            sendMail('mailer.register', [
+                'to'         => $email,
+                'subject'    => 'Регистрация на ' . setting('title'),
+                'login'      => $login,
+                'password'   => $password,
+                'confirmUrl' => $confirmUrl,
+            ]);
+        }
 
         return $user;
     }
@@ -206,12 +260,14 @@ class UserService
     {
         $user->update(['password' => Hash::make($password)]);
 
-        sendMail('mailer.change_password', [
-            'to'       => $user->email,
-            'subject'  => 'Изменение пароля на ' . setting('title'),
-            'username' => $user->getName(),
-            'password' => $password,
-        ]);
+        if ($user->email) {
+            sendMail('mailer.change_password', [
+                'to'       => $user->email,
+                'subject'  => 'Изменение пароля на ' . setting('title'),
+                'username' => $user->getName(),
+                'password' => $password,
+            ]);
+        }
     }
 
     /**

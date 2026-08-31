@@ -13,7 +13,7 @@ return new class extends Migration {
                 $table->increments('id');
                 $table->string('login', 20);
                 $table->string('password', 128);
-                $table->string('email', 100);
+                $table->string('email', 100)->nullable();
                 $table->string('level', 20)->default(User::PENDED);
                 $table->string('name', 20)->nullable();
                 $table->string('country', 30)->nullable();

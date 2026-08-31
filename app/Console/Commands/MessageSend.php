@@ -33,7 +33,7 @@ class MessageSend extends Command
             foreach ($queues as $queue) {
                 $user = User::query()->find($queue->user_id);
 
-                if ($user) {
+                if ($user && $user->email) {
                     $data = [
                         'to'          => $user->email,
                         'subject'     => $queue->subject,

@@ -4,6 +4,7 @@ namespace Tests\Feature\User;
 
 use App\Models\BlackList;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -297,7 +298,7 @@ class UserControllerTest extends TestCase
 
     public function testVerifyResendsConfirmation(): void
     {
-        $this->overrideSetting('regkeys', 1);
+        $this->overrideSetting('email_mode', UserService::EMAIL_CONFIRM);
 
         $user = $this->makeUser(['level' => User::PENDED]);
 
@@ -316,7 +317,7 @@ class UserControllerTest extends TestCase
 
     public function testVerifyWithExistingEmailFails(): void
     {
-        $this->overrideSetting('regkeys', 1);
+        $this->overrideSetting('email_mode', UserService::EMAIL_CONFIRM);
 
         $this->makeUser(['login' => 'other_user', 'email' => 'taken@example.com']);
         $user = $this->makeUser(['level' => User::PENDED]);

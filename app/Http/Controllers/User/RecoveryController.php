@@ -35,6 +35,11 @@ class RecoveryController extends Controller
 
             $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
 
+            // Без почты письмо со ссылкой отправить некуда
+            if (! $user->email) {
+                $validator->addError(['user' => __('users.email_not_attached')]);
+            }
+
             if ($userService->hasPendingRecovery($user)) {
                 $validator->addError(['user' => __('mails.password_recovery_time')]);
             }

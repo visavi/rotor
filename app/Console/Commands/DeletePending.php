@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -23,7 +24,7 @@ class DeletePending extends Command
      */
     public function handle(): int
     {
-        if (setting('regkeys')) {
+        if (UserService::isEmailConfirm()) {
             $users = User::query()
                 ->where('level', User::PENDED)
                 ->where('created_at', '<', now()->subDay())

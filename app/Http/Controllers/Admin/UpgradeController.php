@@ -26,7 +26,7 @@ class UpgradeController extends AdminController
      */
     public function index(GithubService $githubService): View
     {
-        $pendingMigrations = $this->migrations->getPendingMigrations($this->migrationPaths());
+        $pendingMigrations = $this->migrations->getPendingMigrations($this->migrations->paths());
         $newReleases = $this->upgrade->getNewReleases($githubService);
 
         // Резолвим архив, который реально скачается (upgrade/full), чтобы кнопка
@@ -174,7 +174,7 @@ class UpgradeController extends AdminController
         ini_set('max_execution_time', 0);
         set_time_limit(0);
 
-        $pending = $this->migrations->getPendingMigrations($this->migrationPaths());
+        $pending = $this->migrations->getPendingMigrations($this->migrations->paths());
 
         if (empty($pending)) {
             refreshCaches();
@@ -205,13 +205,5 @@ class UpgradeController extends AdminController
             'output'    => $output,
             'remaining' => $remaining,
         ]);
-    }
-
-    /**
-     * Пути к папкам с миграциями
-     */
-    private function migrationPaths(): array
-    {
-        return [database_path('migrations'), database_path('upgrades')];
     }
 }

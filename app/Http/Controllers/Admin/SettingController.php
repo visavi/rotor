@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Setting;
+use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -70,6 +71,13 @@ class SettingController extends AdminController
             'recaptcha_v3' => 'Recaptcha v3',
         ];
 
+        $emailModes = [
+            UserService::EMAIL_HIDDEN   => __('settings.email_mode_hidden'),
+            UserService::EMAIL_OPTIONAL => __('settings.email_mode_optional'),
+            UserService::EMAIL_REQUIRED => __('settings.email_mode_required'),
+            UserService::EMAIL_CONFIRM  => __('settings.email_mode_confirm'),
+        ];
+
         $slugs = [
             '%id%'             => 'id',
             '%id%-%slug%'      => 'id-slug',
@@ -78,6 +86,6 @@ class SettingController extends AdminController
 
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/settings/index', compact('settings', 'act', 'statsite', 'protects', 'slugs'));
+        return view('admin/settings/index', compact('settings', 'act', 'statsite', 'protects', 'slugs', 'emailModes'));
     }
 }

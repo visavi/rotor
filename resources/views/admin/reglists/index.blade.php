@@ -1,4 +1,5 @@
 @extends('layout')
+@use('App\Services\UserService')
 
 @section('title', __('index.pending_list'))
 
@@ -16,7 +17,7 @@
     <div class="mb-3 fw-bold">
         <i class="fa fa-exclamation-circle"></i>
 
-        @if (setting('regkeys'))
+        @if (UserService::isEmailConfirm())
             <span class="text-success">{{ __('admin.reglists.enabled') }}</span>
         @else
             <span class="text-danger">{{ __('admin.reglists.disabled') }}</span>

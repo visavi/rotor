@@ -28,10 +28,17 @@
         @endif
     </div>
 
+    @if ($pendingMigrations > 0)
+        <div class="alert alert-warning">
+            <i class="fa fa-database"></i>
+            <a href="{{ route('admin.upgrade.index') }}#tab-db">{{ __('admin.upgrade.pending', ['count' => $pendingMigrations]) }}</a>
+        </div>
+    @endif
+
     @if ($modulesUpdates > 0)
         <div class="alert alert-warning">
             <i class="fas fa-puzzle-piece"></i>
-            {{ __('admin.modules.updates_available', ['count' => $modulesUpdates]) }}
+            <a href="{{ route('admin.modules.index') }}">{{ __('admin.modules.updates_available', ['count' => $modulesUpdates]) }}</a>
         </div>
     @endif
     @hook('adminHeader')

@@ -28,6 +28,7 @@ class AddBirthdays extends Command
             ->where('point', '>', 0)
             ->whereIn('level', User::USER_GROUPS)
             ->whereRaw('substr(birthday, 1, 5) = ?', now()->format('d.m'))
+            ->whereNotNull('email')
             ->whereNotNull('subscribe')
             ->get();
 

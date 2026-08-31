@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\BlackList;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -148,9 +149,86 @@ class RegisterTest extends TestCase
         $this->assertGuest();
     }
 
-    public function testRegisterWithRegkeysRequiresConfirmation(): void
+    public function testRegisterWithoutEmailWhenOptional(): void
     {
-        $this->overrideSetting('regkeys', 1);
+        $this->overrideSetting('email_mode', UserService::EMAIL_OPTIONAL);
+
+        $response = $this->register(['email' => '']);
+
+        $response->assertRedirect('/');
+
+        $user = User::query()->where('login', 'newuser')->first();
+        $this->assertNotNull($user);
+        // Пустая строка сломала бы уникальный индекс на втором таком аккаунте
+        $this->assertNull($user->email);
+        $this->assertSame(User::USER, $user->level);
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function testSecondRegisterWithoutEmailAllowed(): void
+    {
+        $this->overrideSetting('email_mode', UserService::EMAIL_OPTIONAL);
+
+        User::factory()->create(['email' => null]);
+
+        $this->register(['email' => '']);
+
+        $this->assertDatabaseCount('users', 2);
+        $this->assertNotNull(User::query()->where('login', 'newuser')->first());
+    }
+
+    public function testRegisterWithoutEmailRejectedWhenRequired(): void
+    {
+        $response = $this->register(['email' => '']);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors('email');
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    public function testRegisterWithoutEmailRejectedWithConfirmation(): void
+    {
+        // Подтверждать регистрацию нечем: режим подтверждения требует адрес
+        $this->overrideSetting('email_mode', UserService::EMAIL_CONFIRM);
+
+        $response = $this->register(['email' => '']);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors('email');
+        $this->assertDatabaseCount('users', 0);
+        $this->assertGuest();
+    }
+
+    public function testRecoveryWithoutEmailRejected(): void
+    {
+        $user = User::factory()->create(['email' => null]);
+
+        $response = $this->withSession(['protect' => 'abc12'])
+            ->post('/recovery', ['user' => $user->login, 'protect' => 'abc12']);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors('user');
+        $this->assertDatabaseCount('password_resets', 0);
+    }
+
+    public function testHiddenEmailFieldIsNotShownAndInputIgnored(): void
+    {
+        $this->overrideSetting('email_mode', UserService::EMAIL_HIDDEN);
+
+        $this->get('/register')->assertDontSee('name="email"', false);
+
+        // Скрытое поле не значит «принимаем из запроса» — адрес легко подсунуть POST-ом
+        $this->register(['email' => 'sneaky@example.com']);
+
+        $user = User::query()->where('login', 'newuser')->first();
+        $this->assertNotNull($user);
+        $this->assertNull($user->email);
+    }
+
+    public function testRegisterWithConfirmationRequiresConfirmation(): void
+    {
+        $this->overrideSetting('email_mode', UserService::EMAIL_CONFIRM);
 
         $this->register();
 

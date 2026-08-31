@@ -8,6 +8,14 @@ use Symfony\Component\Console\Output\BufferedOutput;
 
 class MigrationService
 {
+    /**
+     * Каталоги миграций: свежая установка и обновления работающих сайтов
+     */
+    public function paths(): array
+    {
+        return [database_path('migrations'), database_path('upgrades')];
+    }
+
     public function getPendingMigrations(array $paths): array
     {
         $migrator = app('migrator');
@@ -34,7 +42,7 @@ class MigrationService
 
     public function findFile(string $name): ?string
     {
-        foreach ([database_path('migrations'), database_path('upgrades')] as $path) {
+        foreach ($this->paths() as $path) {
             $file = $path . '/' . $name . '.php';
             if (file_exists($file)) {
                 return $file;
