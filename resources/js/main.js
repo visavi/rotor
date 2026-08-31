@@ -87,6 +87,17 @@ function applyMask(el, mask) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Алерты с data-autohide гаснут сами, наведение мыши откладывает закрытие
+    document.querySelectorAll('.alert[data-autohide]').forEach(el => {
+        const delay = parseInt(el.dataset.autohide, 10) || 5000
+        let timer = setTimeout(() => bootstrap.Alert.getOrCreateInstance(el).close(), delay)
+
+        el.addEventListener('mouseenter', () => clearTimeout(timer))
+        el.addEventListener('mouseleave', () => {
+            timer = setTimeout(() => bootstrap.Alert.getOrCreateInstance(el).close(), delay)
+        })
+    })
+
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el))
 
     const popovers = document.querySelectorAll('[data-bs-toggle="popover"]')

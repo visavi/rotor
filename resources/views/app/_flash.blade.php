@@ -16,7 +16,10 @@
 @endif
 
 @foreach ($grouped as $status => $items)
-    <div class="alert alert-{{ $status }} alert-dismissible fade show" role="alert">
+    {{-- Успех и подсказки закрываются сами, ошибки и предупреждения ждут пользователя --}}
+    <?php $autohide = in_array($status, ['success', 'info'], true) ? ' data-autohide="5000"' : ''; ?>
+
+    <div class="alert alert-{{ $status }} alert-dismissible fade show" role="alert"{!! $autohide !!}>
         @foreach ($items as $message)
             <div>{{ $message }}</div>
         @endforeach
