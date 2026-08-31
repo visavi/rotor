@@ -16,14 +16,18 @@
 
             @if ($user = getUser())
                 @if (isAdmin() && statsSpam())
-                    <a href="{{ route('admin.spam.index') }}" aria-label="{{ __('index.complains') }}">
-                        <i class="far fa-bell"></i> {{ statsSpam() }}
+                    <a class="site-header__badged" href="{{ route('admin.spam.index') }}" aria-label="{{ __('index.complains') }}">
+                        <i class="far fa-bell"></i>
+                        <span class="site-badge">{{ statsSpam() }}</span>
                     </a>
                 @endif
 
                 @if ($user->isActive())
-                    <a href="{{ route('messages.index') }}" aria-label="{{ __('index.mails') }}">
-                        <i class="far fa-envelope"></i>@if ($user->newprivat) {{ $user->newprivat }} @endif
+                    <a class="site-header__badged" href="{{ route('messages.index') }}" aria-label="{{ __('index.mails') }}">
+                        <i class="far fa-envelope"></i>
+                        @if ($user->newprivat)
+                            <span class="site-badge">{{ $user->newprivat }}</span>
+                        @endif
                     </a>
                 @endif
 
