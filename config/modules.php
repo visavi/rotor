@@ -46,15 +46,24 @@ return [
     |
     | Официальные реестры, добавляются сидером при установке движка.
     |
+    | Адреса переопределяются через env — на случай зеркала там, где GitHub
+    | недоступен. Читаются только сидером, то есть при установке
+    |
     */
 
     'default_registries' => [
         [
-            'url'  => 'https://github.com/visavi/rotor-modules/releases/download/registry/registry.json',
+            'url'  => env(
+                'ROTOR_MODULES_REGISTRY',
+                'https://github.com/visavi/rotor-modules/releases/download/registry/registry.json',
+            ),
             'name' => 'Official Rotor Modules',
         ],
         [
-            'url'  => 'https://github.com/visavi/rotor-languages/releases/download/registry/registry.json',
+            'url'  => env(
+                'ROTOR_LANGUAGES_REGISTRY',
+                'https://github.com/visavi/rotor-languages/releases/download/registry/registry.json',
+            ),
             'name' => 'Official Rotor Languages',
         ],
     ],

@@ -52,7 +52,9 @@ class ModuleRegistry extends Model
         }
 
         try {
-            $response = Http::timeout(10)->get($this->url);
+            $response = Http::timeout(10)
+                ->withHeaders(['User-Agent' => 'Rotor/' . ROTOR_VERSION])
+                ->get($this->url);
 
             if (! $response->ok()) {
                 return $this->markFailed();

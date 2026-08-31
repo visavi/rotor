@@ -27,6 +27,21 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Источник обновлений
+    |--------------------------------------------------------------------------
+    |
+    | Откуда движок берёт список релизов и коммитов. По умолчанию GitHub API.
+    | Если GitHub недоступен, укажите адрес зеркала — каталог с файлами
+    | releases и commits, например https://visavi.net/downloads/rotor/
+    |
+    */
+
+    'rotor' => [
+        'url' => env('ROTOR_UPDATES_URL', 'https://api.github.com/repos/visavi/rotor/'),
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

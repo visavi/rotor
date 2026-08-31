@@ -9,8 +9,35 @@ use Throwable;
 
 class GithubService
 {
-    protected string $baseUrl = 'https://api.github.com/repos/visavi/rotor/';
+    protected string $baseUrl;
     protected int $defaultCacheTtl = 3600;
+
+    /** Достучались ли до источника в этом запросе (null — не ходили, хватило кеша) */
+    protected ?bool $available = null;
+
+    public function __construct()
+    {
+        // Адрес настраиваемый: там, где GitHub недоступен, сайт смотрит на зеркало
+        $this->baseUrl = rtrim((string) config('services.rotor.url'), '/') . '/';
+    }
+
+    /**
+     * Отвечает, доступен ли источник обновлений
+     *
+     * null — за данными не ходили, хватило кеша
+     */
+    public function isAvailable(): ?bool
+    {
+        return $this->available;
+    }
+
+    /**
+     * Возвращает адрес источника обновлений
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
 
     /**
      * Получает последние коммиты
@@ -106,7 +133,9 @@ class GithubService
     protected function fetchGitHubData(string $endpoint, array $params = []): array
     {
         $headers = [
-            'Accept' => 'application/vnd.github+json',
+            'Accept'     => 'application/vnd.github+json',
+            // GitHub требует User-Agent, а зеркала обычно режут безликие http-клиенты
+            'User-Agent' => 'Rotor/' . ROTOR_VERSION,
         ];
 
         try {
@@ -122,8 +151,12 @@ class GithubService
                 );
             }
 
+            $this->available = true;
+
             return $response->json() ?? [];
         } catch (Throwable) {
+            $this->available = false;
+
             return [];
         }
     }
