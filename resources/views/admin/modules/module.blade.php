@@ -41,7 +41,7 @@
 @stop
 
 @section('content')
-    <h3>{{ $moduleConfig['description'] }}</h3>
+    <p class="lead">{{ $moduleConfig['description'] }}</p>
 
     @if (isset($moduleConfig['info']))
         <div class="mb-3">
