@@ -133,7 +133,7 @@ class GithubService
     protected function fetchGitHubData(string $endpoint, array $params = []): array
     {
         $headers = [
-            'Accept'     => 'application/vnd.github+json',
+            'Accept' => 'application/vnd.github+json',
             // GitHub требует User-Agent, а зеркала обычно режут безликие http-клиенты
             'User-Agent' => 'Rotor/' . ROTOR_VERSION,
         ];

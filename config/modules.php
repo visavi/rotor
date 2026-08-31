@@ -53,14 +53,14 @@ return [
 
     'default_registries' => [
         [
-            'url'  => env(
+            'url' => env(
                 'ROTOR_MODULES_REGISTRY',
                 'https://github.com/visavi/rotor-modules/releases/download/registry/registry.json',
             ),
             'name' => 'Official Rotor Modules',
         ],
         [
-            'url'  => env(
+            'url' => env(
                 'ROTOR_LANGUAGES_REGISTRY',
                 'https://github.com/visavi/rotor-languages/releases/download/registry/registry.json',
             ),
