@@ -6,6 +6,7 @@ use App\Models\Module;
 use App\Support\Registry;
 use App\Support\Restatement;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
@@ -161,20 +162,15 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             // Счётчик раздела для /api/stats: true считает все записи модели,
-            // замыкание нужно разделам, где часть записей скрыта модерацией.
-            // Массив ['total' => fn, 'today' => fn] — когда своя выборка нужна и за сутки
+            // замыкание возвращает свою выборку — разделам, где часть записей скрыта модерацией
             if ($stat = $config['stat'] ?? null) {
-                $total = static fn (): int => $model::query()->count();
-                $today = static fn (): int => $model::query()->where('created_at', '>', now()->subDay())->count();
+                $query = is_callable($stat) ? $stat : static fn (): Builder => $model::query();
 
-                if (is_array($stat)) {
-                    $total = $stat['total'] ?? $total;
-                    $today = $stat['today'] ?? $today;
-                } elseif (is_callable($stat)) {
-                    $total = $stat;
-                }
-
-                Registry::stat($morphName, $total, $today);
+                Registry::stat(
+                    $morphName,
+                    static fn (): int => $query()->count(),
+                    static fn (): int => $query()->where('created_at', '>', now()->subDay())->count(),
+                );
             }
         }
 
