@@ -162,6 +162,12 @@ body {
     color: var(--bs-primary);
 }
 
+/* Иконки приходят из разных мест с разными классами fa — размер задаём здесь одним правилом */
+.site-header__user i {
+    font-size: 1.0625rem;
+    vertical-align: -0.05em;
+}
+
 .site-menu-toggle {
     display: none;
     order: 3;
@@ -403,14 +409,14 @@ body {
 @media (max-width: 767px) {
     .site-menu-toggle {
         display: block;
-        order: 0;
-        margin-left: auto;
+        order: 2;
+        margin-left: 0.5rem;
     }
 
+    /* Иконки остаются справа: если строка не вмещает их, переносятся целым блоком к правому краю */
     .site-header__user {
         order: 1;
-        width: 100%;
-        margin-left: 0;
+        margin-left: auto;
         font-size: 0.875rem;
     }
 
@@ -431,19 +437,43 @@ body {
         margin-left: 0;
     }
 
-    /* В мобильном меню вложенные пункты показываем обычным списком */
-    .site-nav .treeview-menu {
+    /* В мобильном меню пункты идут столбцом, наведения нет — подменю раскрывается тапом по стрелке */
+    .site-nav li {
+        display: block;
+        width: 100%;
+    }
+
+    .site-nav li.treeview:hover .treeview-menu,
+    .site-nav li.treeview:focus-within .treeview-menu {
+        display: none;
+    }
+
+    .site-nav li.treeview.is-open .treeview-menu {
         display: block;
         position: static;
         min-width: 0;
-        padding: 0 0 0 1rem;
+        margin: 0.25rem 0 0.5rem;
+        padding: 0 0 0 0.75rem;
         background: none;
         border: 0;
+        border-left: 1px solid var(--simple-line);
         box-shadow: none;
     }
 
+    /* Стрелка — единственная кнопка раскрытия, ей нужна нормальная зона нажатия */
     .site-nav .treeview-indicator {
-        display: none;
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        margin-left: 0.25rem;
+        opacity: 0.7;
+    }
+
+    .site-nav li.treeview.is-open .treeview-indicator {
+        transform: rotate(180deg);
+    }
+
+    .site-nav .treeview-item {
+        padding: 0.3rem 0;
     }
 
     .site-footer__cols {

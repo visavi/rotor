@@ -10,6 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
         menu?.classList.toggle('is-open')
     })
 
+    // На мобильном подменю раскрывается тапом по стрелке: сам пункт остаётся ссылкой на раздел
+    menu?.addEventListener('click', event => {
+        const indicator = event.target.closest('.treeview-indicator')
+        if (! indicator || ! window.matchMedia('(max-width: 767px)').matches) return
+
+        event.preventDefault()
+        indicator.closest('.treeview')?.classList.toggle('is-open')
+    })
+
     // Ядро само переключает тему по клику на [data-bs-theme-value],
     // здесь только инвертируем значение, чтобы одна кнопка работала в обе стороны
     document.querySelectorAll('[data-bs-theme-value]').forEach(el => {

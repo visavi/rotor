@@ -8,6 +8,12 @@
         <div class="site-header__user">
             @hook('navbarStart')
 
+            {{-- Ядро (main.js) слушает клик по [data-bs-theme-value] и меняет иконку #theme-icon-active,
+                 а app.js темы после клика инвертирует значение атрибута --}}
+            <a href="#" data-bs-theme-value="{{ request()->cookie('theme') === 'dark' ? 'light' : 'dark' }}" aria-label="Theme">
+                <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }}" id="theme-icon-active"></i>
+            </a>
+
             @if ($user = getUser())
                 @if (isAdmin() && statsSpam())
                     <a href="{{ route('admin.spam.index') }}" aria-label="{{ __('index.complains') }}">
@@ -45,11 +51,6 @@
                 <a href="{{ route('register') }}">{{ __('index.register') }}</a>
             @endif
 
-            {{-- Ядро (main.js) слушает клик по [data-bs-theme-value] и меняет иконку #theme-icon-active,
-                 а app.js темы после клика инвертирует значение атрибута --}}
-            <a href="#" data-bs-theme-value="{{ request()->cookie('theme') === 'dark' ? 'light' : 'dark' }}" aria-label="Theme">
-                <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
-            </a>
             @hook('navbarEnd')
         </div>
     </div>
