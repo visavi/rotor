@@ -32,7 +32,12 @@
                 @endif
 
                 <span class="dropdown">
-                    <a href="#" data-bs-toggle="dropdown">{{ $user->getName() }} <i class="fas fa-caret-down"></i></a>
+                    {{-- На узком экране вместо имени иконка: строка шапки не должна переноситься --}}
+                    <a href="#" data-bs-toggle="dropdown" aria-label="{{ $user->getName() }}">
+                        <i class="far fa-user d-md-none"></i>
+                        <span class="d-none d-md-inline">{{ $user->getName() }}</span>
+                        <i class="fas fa-caret-down"></i>
+                    </a>
                     <span class="dropdown-menu dropdown-menu-end">
                         @hook('navbarMenuStart')
                         <a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a>

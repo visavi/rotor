@@ -10,13 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
         menu?.classList.toggle('is-open')
     })
 
-    // На мобильном подменю раскрывается тапом по стрелке: сам пункт остаётся ссылкой на раздел
+    // На мобильном пункт с подменю раскрывает его целиком — и название, и стрелка
     menu?.addEventListener('click', event => {
-        const indicator = event.target.closest('.treeview-indicator')
-        if (! indicator || ! window.matchMedia('(max-width: 767px)').matches) return
+        const toggle = event.target.closest('[data-bs-toggle="treeview"], .treeview-indicator')
+        if (! toggle || ! window.matchMedia('(max-width: 767px)').matches) return
 
         event.preventDefault()
-        indicator.closest('.treeview')?.classList.toggle('is-open')
+        toggle.closest('.treeview')?.classList.toggle('is-open')
     })
 
     // Ядро само переключает тему по клику на [data-bs-theme-value],

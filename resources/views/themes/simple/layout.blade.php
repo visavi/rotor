@@ -25,8 +25,10 @@
     @vite('resources/css/bootstrap.scss')
     @vite('resources/themes/vendor.scss')
     @vite('resources/js/main.js')
-    <link rel="stylesheet" href="{{ asset('/themes/simple/style.css') }}">
-    <script src="{{ asset('/themes/simple/app.js') }}" defer></script>
+    {{-- Тема не собирается, хеша в имени нет — версию берём из времени правки файла,
+         иначе правленые стили не долетают до тех, у кого статика закеширована --}}
+    <link rel="stylesheet" href="{{ asset('/themes/simple/style.css') }}?v={{ filemtime(public_path('themes/simple/style.css')) }}">
+    <script src="{{ asset('/themes/simple/app.js') }}?v={{ filemtime(public_path('themes/simple/app.js')) }}" defer></script>
     @stack('styles')
     @hook('head')
 </head>

@@ -51,19 +51,6 @@ body {
     line-height: 1.6;
 }
 
-/* Заголовки Bootstrap для этой темы великоваты — своя шкала поспокойнее */
-h1, .h1 {
-    font-size: 1.625rem;
-}
-
-h2, .h2 {
-    font-size: 1.375rem;
-}
-
-h3, .h3 {
-    font-size: 1.1875rem;
-}
-
 /* Общая колонка страницы: шапка, контент и подвал выровнены по одной ширине */
 .wrap {
     width: 100%;
@@ -331,7 +318,7 @@ h3, .h3 {
 .app-title h1 {
     display: inline-block;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin: 0 1rem 0 0;
     vertical-align: middle;
 }
@@ -446,9 +433,23 @@ h3, .h3 {
         margin-left: 0.5rem;
     }
 
-    /* Иконки остаются справа: если строка не вмещает их, переносятся целым блоком к правому краю */
+    /* Шапка держится одной строкой: логотип ужимается, иконки и бургер остаются справа */
+    .site-header__top {
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+    }
+
+    .site-logo {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     .site-header__user {
         order: 1;
+        flex-wrap: nowrap;
+        gap: 0.75rem;
         margin-left: auto;
         font-size: 0.875rem;
     }
@@ -512,5 +513,22 @@ h3, .h3 {
     .site-footer__cols {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    /* На узком экране заголовки Bootstrap занимают половину высоты — своя шкала поспокойнее */
+    h1, .h1 {
+        font-size: 1.625rem;
+    }
+
+    h2, .h2 {
+        font-size: 1.375rem;
+    }
+
+    h3, .h3 {
+        font-size: 1.1875rem;
+    }
+
+    .app-title h1 {
+        font-size: 1.5rem;
     }
 }
