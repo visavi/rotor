@@ -71,8 +71,8 @@
 
 .menu-icon { flex: 0 0 auto; margin-right: 10px; color: #9ca3af; width: 16px; text-align: center; .menu-item.active &, .menu-item:hover & { color: $primary-color; } }
 .menu-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; margin-right: 4px; font-size: 0.875rem; font-weight: 500; }
-.menu-badge { background-color: #ede9fe !important; color: $primary-color !important; font-size: 0.7rem; font-weight: 600; }
-[data-bs-theme="dark"] .menu-badge { background-color: rgba(67,56,202,0.2) !important; color: #818cf8 !important; }
+.badge.menu-badge { background-color: #ede9fe; color: $primary-color; font-size: 0.7rem; font-weight: 600; }
+[data-bs-theme="dark"] .badge.menu-badge { background-color: rgba(67,56,202,0.2); color: #818cf8; }
 
 .treeview {
   &.is-expanded {

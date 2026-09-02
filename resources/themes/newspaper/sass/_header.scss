@@ -31,9 +31,6 @@
   @media(max-width: 767px) { display: none; }
 }
 
-.paper-issue {
-  a { color: $ink-gray; &:hover { color: $ink-red; } }
-}
 
 .paper-title {
   flex: 1 1 auto;
@@ -43,10 +40,10 @@
   color: $ink-black;
   text-align: center;
   letter-spacing: -0.02em;
-  text-decoration: none !important;
+  text-decoration: none;
   line-height: 1;
 
-  &:hover { color: $ink-red; }
+  &:hover { color: $ink-red; text-decoration: none; }
 
   @media(max-width: 767px) {
     font-size: 22px;
@@ -184,13 +181,13 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: #d0c8ba;
-    text-decoration: none !important;
+    text-decoration: none;
     border-bottom: none;
     cursor: pointer;
-    &:hover, &.active { color: #fff !important; background-color: $ink-red; }
+    &:hover, &.active { color: #fff; background-color: $ink-red; text-decoration: none; }
   }
-  li.is-expanded > .menu-item { color: #fff !important; background-color: $ink-red; }
-  .menu-icon, .treeview-indicator, .treeview-menu, .menu-badge { display: none !important; }
+  li.is-expanded > .menu-item { color: #fff; background-color: $ink-red; }
+  .menu-icon, .treeview-indicator, .treeview-menu, .menu-badge { display: none; }
 }
 
 // Notification styles (reuse for paper context)
@@ -200,7 +197,7 @@
   border-radius: 2px;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
   background-color: $paper-cream;
-  &.dropdown-menu { margin-top: 2px !important; }
+  &.dropdown-menu { margin-top: 2px; }
 }
 .app-notification__title {
   padding: 8px 16px;

@@ -58,14 +58,14 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-size: 0.78rem;
-  border-radius: 2px !important;
+  border-radius: 2px;
 }
 
 .btn-primary {
-  background-color: $ink-black !important;
-  border-color: $ink-black !important;
-  color: #fff !important;
-  &:hover { background-color: $ink-red !important; border-color: $ink-red !important; }
+  background-color: $ink-black;
+  border-color: $ink-black;
+  color: #fff;
+  &:hover { background-color: $ink-red; border-color: $ink-red; }
 }
 
 // Pagination

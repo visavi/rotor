@@ -22,7 +22,7 @@
 
   &.active,
   &:hover {
-    border-radius: 0 !important;
+    border-radius: 0;
   }
   &:hover:not(.active) {
     background-color: var(--base-bg);

@@ -78,12 +78,13 @@
   line-height: 20px;
   color: #fff;
   transition: background-color 0.3s ease;
-  text-decoration: none !important;
+  text-decoration: none;
   white-space: nowrap;
   &:hover,
   &:focus {
     background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
+    text-decoration: none;
   }
   @media(max-width: 767px) {
       padding: 15px 8px;
@@ -128,7 +129,7 @@
 .app-notification {
   min-width: 270px;
   &.dropdown-menu {
-    margin-top: -2px !important;
+    margin-top: -2px;
   }
 }
 .app-notification__title {

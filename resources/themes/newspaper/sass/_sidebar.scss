@@ -42,7 +42,7 @@
   li:last-child > .menu-item { border-bottom: none; }
 }
 
-.menu-badge { font-family: $ui-font; font-size: 0.72rem !important; color: #fff !important; background-color: $ink-red !important; padding: 1px 5px !important; border-radius: 10px !important; border: none !important; line-height: inherit !important; flex-shrink: 0; }
+.badge.menu-badge { font-family: $ui-font; font-size: 0.72rem; color: #fff; background-color: $ink-red; padding: 1px 5px; border-radius: 10px; border: none; line-height: inherit; flex-shrink: 0; }
 
 .menu-item {
   display: flex;

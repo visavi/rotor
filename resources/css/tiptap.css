@@ -149,8 +149,8 @@
 }
 
 .tiptap-color-reset {
-    background: var(--bs-body-bg) !important;
-    border-color: var(--bs-border-color) !important;
+    background: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
     position: relative;
     overflow: hidden;
 }
@@ -356,7 +356,7 @@ blockquote {
     border-left: 5px solid;
     border-color: rgba(var(--bs-primary-rgb), 0.5);
     font-style: italic;
-    margin: 0.5rem 0 !important;
+    margin: 0.5rem 0;
 }
 
 blockquote p,
@@ -593,18 +593,18 @@ a.user:hover {
 /* ── Reply form editor wrap ───────────────────────────────────────────────── */
 
 .reply-editor-wrap .tiptap-wrapper {
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .reply-editor-wrap .tiptap-wrapper:focus-within {
-    border: none !important;
-    box-shadow: none !important;
+    border: none;
+    box-shadow: none;
 }
 
 .reply-editor-wrap:focus-within {
-    border-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary);
     box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
 }
 

@@ -37,7 +37,7 @@ a:hover { color: darken($ink-red, 15%); }
   }
   @media(max-width: 767px) {
     .app-sidebar {
-      position: fixed !important;
+      position: fixed;
       right: -$sidebar-width;
       top: $header-height;
       height: calc(100% - #{$header-height});

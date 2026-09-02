@@ -58,7 +58,7 @@
 // Icons & libraries
 
 // Sidebar search — скрыть на десктопе
-.search-sidebar { @media(min-width: 768px) { display: none !important; } }
+.app-sidebar .search-sidebar { @media(min-width: 768px) { display: none; } }
 
 // Pagination disabled
 .page-item.disabled .page-link { color: #9ca3af; background-color: #f5f3ff; border-color: #e2e8f0; }

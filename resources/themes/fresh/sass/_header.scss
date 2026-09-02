@@ -56,13 +56,14 @@
   line-height: 20px;
   color: rgba(255, 255, 255, 0.85);
   transition: background-color 0.2s ease, color 0.2s ease;
-  text-decoration: none !important;
+  text-decoration: none;
   white-space: nowrap;
 
   &:hover,
   &:focus {
     background: rgba(255, 255, 255, 0.08);
     color: #fff;
+    text-decoration: none;
   }
 
   @media(max-width: 767px) {
@@ -120,7 +121,7 @@
 .app-notification {
   min-width: 270px;
   &.dropdown-menu {
-    margin-top: -2px !important;
+    margin-top: -2px;
   }
 }
 .app-notification__title {
@@ -258,7 +259,7 @@
   .menu-label {
     white-space: nowrap;
   }
-  .treeview-menu, .treeview-indicator { display: none !important; }
+  .treeview-menu, .treeview-indicator { display: none; }
   li.is-expanded > .menu-item { background-color: rgba($primary-color, 0.2); color: #fff; border-bottom-color: $primary-color; }
 }
 
@@ -291,7 +292,7 @@
   color: rgba(255, 255, 255, 0.75);
   font-size: 0.85rem;
   white-space: nowrap;
-  text-decoration: none !important;
+  text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
   border-bottom: 2px solid transparent;
 
@@ -309,6 +310,7 @@
     background-color: rgba(255, 255, 255, 0.07);
     color: #fff;
     border-bottom-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
   }
 
   &.active {

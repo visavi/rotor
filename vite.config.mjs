@@ -12,13 +12,13 @@ function langPlugin() {
     return {
         name: 'build-lang',
         closeBundle() {
-            const outDir = path.resolve(__dirname, 'public/build/lang');
+            const outDir = path.resolve(import.meta.dirname, 'public/build/lang');
             fs.mkdirSync(outDir, { recursive: true });
 
-            const manifestPath = path.resolve(__dirname, 'public/build/manifest.json');
+            const manifestPath = path.resolve(import.meta.dirname, 'public/build/manifest.json');
             const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
-            for (const file of fs.globSync(path.resolve(__dirname, 'resources/lang/*/main.json'))) {
+            for (const file of fs.globSync(path.resolve(import.meta.dirname, 'resources/lang/*/main.json'))) {
                 const locale = path.basename(path.dirname(file));
                 const json = fs.readFileSync(file, 'utf-8').trim();
                 const hash = createHash('sha256').update(json).digest('hex').slice(0, 8);
@@ -53,10 +53,10 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            js: path.resolve(__dirname, 'resources/js'),
-            css: path.resolve(__dirname, 'resources/css'),
-            themes: path.resolve(__dirname, 'resources/themes'),
-            fa: path.resolve(__dirname, 'node_modules/@fortawesome/fontawesome-free'),
+            js: path.resolve(import.meta.dirname, 'resources/js'),
+            css: path.resolve(import.meta.dirname, 'resources/css'),
+            themes: path.resolve(import.meta.dirname, 'resources/themes'),
+            fa: path.resolve(import.meta.dirname, 'node_modules/@fortawesome/fontawesome-free'),
         },
     },
     css: {

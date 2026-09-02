@@ -28,8 +28,8 @@
   letter-spacing: -0.02em;
   line-height: $navbar-height;
   white-space: nowrap;
-  text-decoration: none !important;
-  &:hover { color: #c7d2fe; }
+  text-decoration: none;
+  &:hover { color: #c7d2fe; text-decoration: none; }
 
   @media(max-width: 320px) { display: none; }
 }
@@ -50,9 +50,9 @@
   line-height: 24px;
   color: #c7d2fe;
   transition: color 0.15s ease, background-color 0.15s ease;
-  text-decoration: none !important;
+  text-decoration: none;
   white-space: nowrap;
-  &:hover, &:focus { color: #fff; background-color: rgba(255,255,255,0.08); }
+  &:hover, &:focus { color: #fff; background-color: rgba(255,255,255,0.08); text-decoration: none; }
   @media(max-width: 767px) { padding: 16px 8px; }
 }
 
@@ -107,7 +107,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   overflow: hidden;
-  &.dropdown-menu { margin-top: -2px !important; }
+  &.dropdown-menu { margin-top: -2px; }
 }
 
 .app-notification__title {
