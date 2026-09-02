@@ -32,7 +32,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '14.4.0';
+const ROTOR_VERSION = '14.5.0';
 
 /**
  * @deprecated Мост совместимости для модулей, не обновлённых на datetime. Будет удалён в 15.0
@@ -394,7 +394,7 @@ function icons(string $ext): HtmlString
 /**
  * Возвращает обрезанную строку с удалением перевода строки
  */
-function truncateDescription(HtmlString|string $value, int $words = 20, string $end = ''): string
+function truncateDescription(HtmlString|string|null $value, int $words = 20, string $end = ''): string
 {
     $value = preg_replace('/<[^>]+>/', ' ', (string) $value);
     $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');

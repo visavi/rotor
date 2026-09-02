@@ -50,4 +50,15 @@ trait FileableTrait
     {
         return $this->getMedia()->reject(fn (File $f) => str_contains($this->text ?? '', $f->path));
     }
+
+    /**
+     * Возвращает ссылку на первую картинку записи для og:image
+     *
+     * Пустая строка, а не null: значение уходит в однострочный @section,
+     * а он на null открывает буфер вывода и не закрывает его
+     */
+    public function getOgImage(): string
+    {
+        return $this->getMedia()->first(static fn (File $f) => $f->isImage())?->getUrl() ?? '';
+    }
 }

@@ -7,6 +7,7 @@
     <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">
     <meta name="image" content="{{ asset('/assets/img/images/icon.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @include('app/_meta_og')
     <title>@yield('title') - {{ setting('title') }}</title>
     <link rel="canonical" href="@yield('canonical', request()->url())">
     <link rel="icon" href="/favicon.ico">
