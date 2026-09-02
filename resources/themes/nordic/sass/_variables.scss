@@ -1,6 +1,6 @@
 
 :root,
-[data-bs-theme=light] {
+[data-bs-theme="light"] {
     --base-bg: #f1f5f9;
     --base-color: #000;
     --base-tag: #4338ca;
@@ -17,7 +17,7 @@
     --base-atv: #dc2626;
     --base-dec: #7c3aed;
 }
-[data-bs-theme=dark] {
+[data-bs-theme="dark"] {
     --base-bg: #1e1b4b;
     --base-color: #e0e7ff;
     --base-tag: #818cf8;

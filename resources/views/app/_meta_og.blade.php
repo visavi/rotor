@@ -8,7 +8,7 @@
     $ogTitle = trim($__env->yieldContent('title')) ?: setting('title');
     $ogDescription = trim($__env->yieldContent('description')) ?: setting('description');
     $ogUrl = trim($__env->yieldContent('canonical')) ?: request()->url();
-    $ogImage = trim($__env->yieldContent('image')) ?: '/assets/img/images/icon.png';
+    $ogImage = trim($__env->yieldContent('image')) ?: '/assets/img/images/icon512.png';
     $ogType = trim($__env->yieldContent('og_type')) ?: 'website';
 @endphp
     <meta property="og:site_name" content="{{ setting('title') }}">

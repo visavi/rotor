@@ -42,7 +42,7 @@
 
   p { margin-bottom: 0; font-style: normal; color: #6b7280; font-size: 0.85rem; }
 }
-[data-bs-theme=dark] .app-title {
+[data-bs-theme="dark"] .app-title {
   border-bottom-color: #2d2d4e;
   h1 { color: #e0e7ff; }
 }
@@ -62,4 +62,4 @@
 
 // Pagination disabled
 .page-item.disabled .page-link { color: #9ca3af; background-color: #f5f3ff; border-color: #e2e8f0; }
-[data-bs-theme=dark] .page-item.disabled .page-link { color: #4b5563; background-color: #1a1a2e; border-color: #2d2d4e; }
+[data-bs-theme="dark"] .page-item.disabled .page-link { color: #4b5563; background-color: #1a1a2e; border-color: #2d2d4e; }

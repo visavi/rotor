@@ -55,7 +55,7 @@ h3 { font-size: 17px; font-weight: 600; }
   align-items: stretch;
   background-color: $sidebar-color;
 }
-[data-bs-theme=dark] .app-body { background-color: #1a1a2e; }
+[data-bs-theme="dark"] .app-body { background-color: #1a1a2e; }
 
 .app-content {
   flex: 1 1 auto;
@@ -78,10 +78,10 @@ h3 { font-size: 17px; font-weight: 600; }
 .line-head { padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; }
 
 .card { border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
-[data-bs-theme=dark] .card { border-color: #374151; }
+[data-bs-theme="dark"] .card { border-color: #374151; }
 
 .table { border-color: #e2e8f0; thead th { border-bottom: 2px solid $primary-color; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; } }
-[data-bs-theme=dark] .table { border-color: #374151; }
+[data-bs-theme="dark"] .table { border-color: #374151; }
 
 :focus-visible { outline: 2px solid $primary-color; outline-offset: 2px; box-shadow: none; }
 

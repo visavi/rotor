@@ -14,7 +14,7 @@
   border-bottom: 1px solid rgba(255,255,255,0.08);
   @media print { display: none; }
 }
-[data-bs-theme=dark] .app-header {
+[data-bs-theme="dark"] .app-header {
   background-color: #0f0e2a;
   border-bottom-color: rgba(255,255,255,0.06);
 }

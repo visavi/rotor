@@ -12,7 +12,7 @@
   a { font-size: 0.85rem; color: #6b7280; &:hover { color: $primary-color; } }
 }
 
-[data-bs-theme=dark] .app-footer {
+[data-bs-theme="dark"] .app-footer {
   border-top-color: #2d2d4e;
   h5 { color: #c7d2fe; }
   a { color: #9ca3af; &:hover { color: #818cf8; } }
