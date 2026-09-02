@@ -23,6 +23,13 @@
     --simple-line: #e2dbd0;
     --simple-muted: #7c7469;
 
+    /* Поверхности и рамки Bootstrap — иначе компоненты ядра (редактор, выпадающие
+       меню, модалки) красятся стоковой палитрой и не совпадают с блоками темы */
+    --bs-body-bg: var(--simple-block-bg);
+    --bs-border-color: var(--simple-line);
+    --bs-tertiary-bg: #f6f1e9;
+    --bs-secondary-bg: #f1e9db;
+
     /* Фон подсветки кода — остальные --base-* приходят из /assets/css/main.css */
     --base-bg: #f2efe9;
     --base-color: #1c1a17;
@@ -41,6 +48,11 @@
     --simple-block-bg: #24211d;
     --simple-line: #35322d;
     --simple-muted: #9a9288;
+
+    --bs-body-bg: var(--simple-block-bg);
+    --bs-border-color: var(--simple-line);
+    --bs-tertiary-bg: #2f2b25;
+    --bs-secondary-bg: #332f29;
 
     --base-bg: #22201d;
     /* Без него сюда протекает светлый --base-color из :root выше — текст сливается с фоном */
