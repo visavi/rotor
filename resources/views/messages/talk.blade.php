@@ -36,7 +36,7 @@
                         {{ dateFixed($data->created_at) }}
 
                         @if ($data->type === $data::IN)
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @else
                             <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>
                         @endif

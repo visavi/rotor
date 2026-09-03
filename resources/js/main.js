@@ -492,63 +492,6 @@ window.confirmAction = function (el) {
 }
 
 /* Отправка жалобы на спам */
-window.sendComplaint = function (el) {
-    confirm(__('confirm_complain_submit'), function (result) {
-        if (!result) return
-
-        ajax({
-            data: { id: el.dataset.id, type: el.dataset.type, page: el.dataset.page },
-            dataType: 'json', type: 'post', url: '/ajax/complaint',
-            success: function (data) {
-                if (!data.success) { notyf.error(data.message); return }
-
-                el.classList.add('text-muted', 'pe-none')
-                el.querySelector('i').className = 'fa fa-check'
-                notyf.success(__('complain_submitted'))
-            }
-        })
-    })
-
-    return false
-}
-
-/* Добавление или удаление закладок */
-window.bookmark = function (el) {
-    ajax({
-        data: { tid: el.dataset.tid },
-        dataType: 'json', type: 'post', url: '/forums/bookmarks/perform',
-        success: function (data) {
-            if (!data.success) { notyf.error(data.message); return }
-
-            notyf.success(data.message)
-            el.textContent = data.type === 'added' ? el.dataset.from : el.dataset.to
-        }
-    })
-
-    return false
-}
-
-/* Удаление записей */
-window.deletePost = function (el) {
-    confirm(__('confirm_message_delete'), function (result) {
-        if (!result) return
-
-        ajax({
-            url: el.getAttribute('href'), type: 'delete', dataType: 'json',
-            success: function (data) {
-                if (data.success) {
-                    notyf.success(data.message)
-                    el.closest('.section').style.display = 'none'
-                } else {
-                    notyf.error(data.message)
-                }
-            }
-        })
-    })
-
-    return false
-}
-
 /* Редактирование комментария в модальном окне */
 window.openEditModal = function (el) {
     const id      = el.dataset.id
@@ -646,114 +589,6 @@ document.getElementById('editCommentForm')?.addEventListener('submit', function 
 })
 
 /* Удаление комментариев */
-window.deleteComment = function (el) {
-    const item = el.closest('.comment-item, .section')
-
-    confirm(__('confirm_message_delete'), function (result) {
-        if (!result) return
-
-        ajax({
-            dataType: 'json', type: 'delete', url: '/comments/' + el.dataset.id,
-            success: function (data) {
-                if (data.success) {
-                    notyf.success(__('message_deleted'))
-                    if (item) {
-                        const content = item.querySelector('.comment-content')
-                        if (content) content.innerHTML = '<div class="comment-removed text-muted fst-italic small mb-2">' + __('comment_removed') + '</div>'
-                    }
-                } else {
-                    notyf.error(data.message)
-                }
-            }
-        })
-    })
-
-    return false
-}
-
-/* Изменение рейтинга */
-window.changeRating = function (el) {
-    ajax({
-        data: { id: el.dataset.id, type: el.dataset.type, vote: el.dataset.vote },
-        dataType: 'json', type: 'post', url: '/ajax/rating',
-        success: function (data) {
-            if (data.success) {
-                const ratingBlock = el.closest('.js-rating')
-                ratingBlock?.querySelectorAll('a').forEach(a => a.classList.remove('active'))
-                if (!data.cancel) el.classList.add('active')
-                const rating = ratingBlock?.querySelector('.rating-value')
-                if (rating) rating.innerHTML = data.rating
-            } else if (data.message) {
-                notyf.error(data.message)
-            }
-        }
-    })
-
-    return false
-}
-
-/* Удаляет запись из истории рейтинга */
-window.deleteRating = function (el) {
-    confirm(__('confirm_message_delete'), function (result) {
-        if (!result) return
-
-        ajax({
-            data: { id: el.dataset.id },
-            dataType: 'json', type: 'post', url: '/ratings/delete',
-            success: (data) => {
-                if (data.success) {
-                    notyf.success(__('record_deleted'))
-                    el.closest('.section').style.display = 'none'
-                } else {
-                    notyf.error(data.message)
-                }
-            }
-        })
-    })
-
-    return false
-}
-
-/* Удаляет запись из списка жалоб */
-window.deleteSpam = function (el) {
-    ajax({
-        data: { id: el.dataset.id },
-        dataType: 'json', type: 'post', url: '/admin/spam/delete',
-        success: function (data) {
-            if (data.success) {
-                notyf.success(__('record_deleted'))
-                el.closest('.section').style.display = 'none'
-            } else {
-                notyf.error(data.message)
-            }
-        }
-    })
-
-    return false
-}
-
-/* Удаляет запись со стены сообщений */
-window.deleteWall = function (el) {
-    confirm(__('confirm_message_delete'), function (result) {
-        if (!result) return
-
-        ajax({
-            data: { id: el.dataset.id, login: el.dataset.login },
-            dataType: 'json', type: 'post', url: '/walls/' + el.dataset.login + '/delete',
-            success: function (data) {
-                if (data.success) {
-                    notyf.success(__('record_deleted'))
-                    el.closest('.section').style.display = 'none'
-                } else {
-                    notyf.error(data.message)
-                }
-            }
-        })
-    })
-
-    return false
-}
-
 /* Копирует текст в буфер обмена */
 window.copyToClipboard = function (el) {
     const container = el.closest('.input-group') ?? el.parentElement
@@ -1133,3 +968,119 @@ if (feedContainer && feedSentinel) {
 
     if (getNextUrl()) loader.before(createLoadMoreButton())
 }
+
+
+/* Декларативный ajax
+ *
+ * Разметка вместо своего обработчика на каждый случай: форма или ссылка
+ * с data-ajax уходит запросом, а ответ вида {success, message, html}
+ * применяется к странице. Слушатели висят на document, поэтому работают
+ * и для узлов, добавленных позже — подгруженной ленты, модалок.
+ *
+ * data-ajax          включает перехват (submit у формы, click у остальных)
+ * data-ajax-url      адрес запроса; форма берёт action, ссылка — href
+ * data-ajax-method   метод; форма берёт method, остальные — post
+ * data-ajax-replace  куда положить html из ответа: self или селектор элемента выше по дереву
+ * data-ajax-swap     outer — заменить найденный элемент целиком, а не его содержимое
+ * data-ajax-icon     новые классы иконки внутри элемента, когда результат известен заранее
+ * data-ajax-remove   что убрать со страницы при успехе (тот же поиск, что у replace)
+ * data-ajax-confirm  спросить перед отправкой; пустой атрибут — стандартный текст про удаление
+ *
+ * Остальные data-атрибуты не-формы уходят в тело запроса.
+ */
+const ajaxReserved = ['ajax', 'ajaxUrl', 'ajaxMethod', 'ajaxReplace', 'ajaxSwap', 'ajaxIcon', 'ajaxRemove', 'ajaxConfirm', 'ajaxLoading']
+
+function ajaxElement(el, selector) {
+    if (!selector) return null
+
+    return selector === 'self' ? el : el.closest(selector)
+}
+
+function ajaxPayload(el) {
+    if (el.matches('form')) return new FormData(el)
+
+    const data = {}
+    for (const [key, value] of Object.entries(el.dataset)) {
+        if (!ajaxReserved.includes(key)) data[key] = value
+    }
+
+    return data
+}
+
+function ajaxSend(el) {
+    const url = el.dataset.ajaxUrl || el.getAttribute('action') || el.getAttribute('href')
+
+    // Пока запрос в пути, повторные клики игнорируются
+    if (!url || el.dataset.ajaxLoading) return
+
+    const method = el.dataset.ajaxMethod || (el.matches('form') ? el.method : 'post')
+    // Данные собираются до блокировки: отключённые поля в FormData не попадают
+    const data = ajaxPayload(el)
+    // У кнопки без type submit подразумевается, поэтому ловится и она
+    const button = el.matches('form') ? el.querySelector('[type="submit"], button:not([type])') : null
+
+    el.dataset.ajaxLoading = '1'
+    if (button) button.disabled = true
+
+    ajax({
+        url, data, type: method, dataType: 'json',
+        complete: () => {
+            delete el.dataset.ajaxLoading
+            if (button) button.disabled = false
+        },
+        error: () => notyf.error(__('request_failed')),
+        success: (response) => {
+            // Молча выходим, если сервер отклонил запрос без пояснения
+            if (!response.success) {
+                if (response.message) notyf.error(response.message)
+                return
+            }
+
+            if (response.message) notyf.success(response.message)
+
+            const replace = ajaxElement(el, el.dataset.ajaxReplace)
+
+            if (replace && response.html !== undefined) {
+                // outer позволяет вьюхе отдавать блок вместе с его обёрткой
+                if (el.dataset.ajaxSwap === 'outer') {
+                    replace.outerHTML = response.html
+                } else {
+                    replace.innerHTML = response.html
+                }
+            }
+
+            if (el.dataset.ajaxIcon) {
+                const icon = el.querySelector('i')
+                if (icon) icon.className = el.dataset.ajaxIcon
+            }
+
+            ajaxElement(el, el.dataset.ajaxRemove)?.remove()
+
+            if (response.redirect) window.location.href = response.redirect
+        }
+    })
+}
+
+function ajaxHandle(el, event) {
+    event.preventDefault()
+
+    if (!('ajaxConfirm' in el.dataset)) {
+        ajaxSend(el)
+        return
+    }
+
+    // Пустой data-ajax-confirm — спросить обычным текстом про удаление записи
+    const message = el.dataset.ajaxConfirm || __('confirm_message_delete')
+
+    confirm(message, (result) => { if (result) ajaxSend(el) })
+}
+
+document.addEventListener('submit', function (event) {
+    const form = event.target.closest('form[data-ajax]')
+    if (form) ajaxHandle(form, event)
+})
+
+document.addEventListener('click', function (event) {
+    const el = event.target.closest('[data-ajax]:not(form)')
+    if (el) ajaxHandle(el, event)
+})

@@ -26,11 +26,7 @@ class AjaxController extends Controller
             $request->input('page'),
         );
 
-        if (! $result['success']) {
-            return response()->json(['success' => false, 'message' => $result['message']]);
-        }
-
-        return response()->json(['success' => true]);
+        return response()->json($result);
     }
 
     /**
@@ -45,11 +41,18 @@ class AjaxController extends Controller
             $request->input('vote'),
         );
 
-        if (isset($result['rating'])) {
-            $result['rating'] = formatNum($result['rating'])->toHtml();
+        if (! $result['success']) {
+            return response()->json(['success' => false, 'message' => $result['message'] ?? null]);
         }
 
-        return response()->json($result);
+        // Блок рейтинга перерисовывает сервер: стрелки и значение приходят готовыми
+        return response()->json([
+            'success' => true,
+            'html'    => (string) view('app/_rating', [
+                'model' => $result['post'],
+                'vote'  => $result['vote'],
+            ]),
+        ]);
     }
 
     /**

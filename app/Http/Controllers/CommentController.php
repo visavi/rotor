@@ -103,6 +103,12 @@ class CommentController extends Controller
 
         $softDeleted = $this->comments->delete($comment);
 
-        return response()->json(['success' => true, 'soft_deleted' => $softDeleted]);
+        return response()->json([
+            'success'      => true,
+            'soft_deleted' => $softDeleted,
+            'message'      => __('main.record_deleted_success'),
+            // Место комментария занимает заглушка там, где список её показывает
+            'html' => (string) view('app/_comment_removed'),
+        ]);
     }
 }

@@ -76,6 +76,7 @@ return [
     'cancel'            => 'Cancel',
     'send'              => 'Send',
     'confirm'           => 'Confirm',
+    'confirm_complaint'           => 'Do you really want to send a complaint?',
     'last_comments'     => 'Last comments',
     'continue'          => 'Continue',
     'copy'              => 'Copy',

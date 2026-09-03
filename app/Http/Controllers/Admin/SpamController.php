@@ -98,7 +98,10 @@ class SpamController extends AdminController
                 $spam->delete();
             }
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'message' => __('main.record_deleted_success'),
+            ]);
         }
 
         return response()->json([

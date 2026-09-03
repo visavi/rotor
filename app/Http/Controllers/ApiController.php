@@ -137,7 +137,16 @@ class ApiController extends Controller
             $request->input('vote'),
         );
 
-        return response()->json($result, $result['success'] ? 200 : 422);
+        if (! $result['success']) {
+            return response()->json(['success' => false, 'message' => $result['message'] ?? null], 422);
+        }
+
+        // Клиенту API нужны числа, а не разметка сайта
+        return response()->json([
+            'success' => true,
+            'cancel'  => $result['cancel'],
+            'rating'  => (int) $result['post']->getAttribute('rating'),
+        ]);
     }
 
     /**

@@ -3,8 +3,8 @@
     "validator": {
         "empty_field": "Поле обов'язкове для заповнення!"
     },
-    "confirm_complain_submit": "Ви дійсно хочете відправити траур?",
-    "complain_submitted": "Жалоба успішно відправлена!",
+    "confirm_complain_submit": "Ви дійсно хочете відправити скаргу?",
+    "complain_submitted": "Скаргу успішно відправлено!",
     "confirm_message_delete": "Ви дійсно хочете видалити запис?",
     "confirm_file_delete": "Ви хочете видалити файл?",
     "confirm_discard_changes": "Зміни не збережено. Закрити?",
@@ -13,6 +13,7 @@
     "record_deleted": "Запис успішно видалено!",
     "comment_edited": "Коментар успішно змінено!",
     "copied": "Скопійовано!",
+    "request_failed": "Не вдалося виконати запит!",
     "buttons": {
         "ok": "OK",
         "cancel": "Скасування",

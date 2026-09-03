@@ -34,7 +34,7 @@
         <div id="comment-body-{{ $comment->id }}" class="comment-body mt-1{{ $collapsed ? ' d-none' : '' }}">
             <div class="comment-content">
             @if ($comment->deleted_at)
-                <div class="comment-removed text-muted fst-italic small mb-2">{{ __('main.comment_removed') }}</div>
+                @include('app/_comment_removed')
             @else
                 <div class="section-message mb-2">
                     {{ $comment->getText() }}
@@ -88,14 +88,14 @@
                                     @endif
                                 @else
                                     <li>
-                                        <a class="dropdown-item" href="#" onclick="return sendComplaint(this)" data-type="{{ $comment->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
+                                        <a class="dropdown-item" href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fas fa-check fa-fw me-1" data-type="{{ $comment->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
                                             <i class="fas fa-flag fa-fw me-1"></i> {{ __('main.complain') }}
                                         </a>
                                     </li>
                                 @endif
                                 @if (isAdmin())
                                     <li>
-                                        <a class="dropdown-item text-danger" href="#" onclick="return deleteComment(this)" data-id="{{ $comment->id }}">
+                                        <a class="dropdown-item text-danger" href="#" data-ajax data-ajax-url="{{ url('comments/' . $comment->id) }}" data-ajax-method="delete" data-ajax-confirm data-ajax-replace=".comment-content">
                                             <i class="fas fa-trash fa-fw me-1"></i> {{ __('main.delete') }}
                                         </a>
                                     </li>

@@ -25,7 +25,10 @@ class RatingService
     /**
      * Голосует за запись
      *
-     * @return array{success: bool, message?: string, cancel?: bool, rating?: int}
+     * Возвращает результат голосования, а не готовый ответ: форму ответа
+     * выбирает вызывающий — сайту нужен перерисованный блок, API — числа
+     *
+     * @return array{success: bool, message?: string, cancel?: bool, post?: Model, vote?: string|null}
      */
     public function vote(User $user, ?string $type, int $id, ?string $vote): array
     {
@@ -77,7 +80,9 @@ class RatingService
         return [
             'success' => true,
             'cancel'  => $isCancel,
-            'rating'  => (int) $post->getAttribute('rating'),
+            'post'    => $post,
+            // Голос после операции: повторный клик по своей стрелке его снимает
+            'vote' => $isCancel ? null : $vote,
         ];
     }
 
