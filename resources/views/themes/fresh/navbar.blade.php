@@ -49,12 +49,10 @@
                 <li class="dropdown js-messages-block">
                     <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">
                         <i class="far fa-envelope fa-lg"></i>
-                        @if ($user->newprivat)
-                            <span class="badge bg-notify">{{ $user->newprivat }}</span>
-                        @endif
+                        <span class="badge bg-notify js-message-count">{{ $user->newprivat ?: '' }}</span>
                     </a>
                     <ul class="app-notification dropdown-menu dropdown-menu-end">
-                        <li class="app-notification__title">{{ __('messages.new_messages') }}: <span>{{ $user->newprivat }}</span></li>
+                        <li class="app-notification__title">{{ __('messages.new_messages') }}</li>
                         <div class="app-notification__content js-messages"></div>
                         <li class="app-notification__footer"><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }}</a></li>
                     </ul>

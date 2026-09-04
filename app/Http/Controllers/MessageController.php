@@ -112,6 +112,8 @@ class MessageController extends Controller
             ->orderBy('created_at')
             ->get();
 
+        $this->user->updatePrivate();
+
         $countMessages = $this->user->newprivat;
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 

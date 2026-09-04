@@ -18,12 +18,12 @@
                 <div class="dropdown paper-user">
                     <a href="#" class="paper-user__link" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i> {{ $user->login }}
-                        @if ($user->newprivat)<span class="badge bg-danger">{{ $user->newprivat }}</span>@endif
+                        <span class="badge bg-danger js-message-count">{{ $user->newprivat ?: '' }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end paper-dropdown">
                         @hook('navbarMenuStart')
                         @if ($user->isActive())
-                            <li><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }}@if ($user->newprivat) <span class="badge bg-danger">{{ $user->newprivat }}</span>@endif</a></li>
+                            <li><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }} <span class="badge bg-danger js-message-count">{{ $user->newprivat ?: '' }}</span></a></li>
                             <li><hr class="dropdown-divider"></li>
                         @endif
                         <li><a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a></li>

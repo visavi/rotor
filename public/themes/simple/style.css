@@ -188,6 +188,10 @@ body {
     display: inline-block;
 }
 
+.site-badge:empty {
+    display: none;
+}
+
 .site-badge {
     position: absolute;
     top: -0.45rem;

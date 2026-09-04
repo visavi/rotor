@@ -765,11 +765,9 @@ window.showQueries = function () {
 
 /* Update message count */
 window.updateMessageCount = function (newCount) {
-    const data = JSON.parse(localStorage.getItem('messageData') || '{}')
-    data.countMessages = parseInt(newCount) || 0
-    localStorage.setItem('messageData', JSON.stringify(data))
-    localStorage.setItem('messageCount', newCount)
-    window.dispatchEvent(new Event('storage'))
+    const count = parseInt(newCount) || 0
+
+    document.querySelectorAll('.js-message-count').forEach(el => el.textContent = count || '')
 }
 
 /* Get new messages */
@@ -778,9 +776,6 @@ window.getNewMessages = function () {
     if (newMessagesLoading) return false
     newMessagesLoading = true
 
-    const notifyItem = document.querySelector('.js-messages-block .app-nav__item')
-    const badge = notifyItem?.querySelector('.badge')
-    const titleSpan = document.querySelector('.app-notification__title span')
     const messagesList = document.querySelector('.js-messages-block .js-messages')
 
     ajax({
@@ -792,25 +787,12 @@ window.getNewMessages = function () {
         },
         success(data) {
             if (!data?.success) {
-                badge?.remove()
-                if (titleSpan) titleSpan.textContent = 0
+                updateMessageCount(0)
                 return
             }
 
-            const count = data.countMessages
+            updateMessageCount(data.countMessages)
 
-            if (badge) {
-                badge.textContent = count
-            } else if (notifyItem) {
-                const newBadge = document.createElement('span')
-                newBadge.className = 'badge bg-notify'
-                newBadge.textContent = count
-                notifyItem.append(newBadge)
-            }
-
-            updateMessageCount(count)
-
-            if (titleSpan) titleSpan.textContent = count
             if (messagesList) {
                 messagesList.innerHTML = ''
                 messagesList.insertAdjacentHTML('beforeend', data.dialogues)
