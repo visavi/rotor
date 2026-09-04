@@ -12,7 +12,13 @@ class ModuleControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    private const FIXTURE = 'TestFixture';
+
+    private const FIXTURE_VERSION = '1.2.3';
+
     private User $boss;
+
+    private string $fixturePath;
 
     protected function setUp(): void
     {
@@ -21,22 +27,38 @@ class ModuleControllerTest extends TestCase
         $this->overrideSetting('app_installed', 1);
 
         $this->boss = User::factory()->boss()->create(['login' => 'boss_module']);
+
+        // Модули лежат вне репозитория (modules/.gitignore), в CI каталог пуст —
+        // список строится по диску, поэтому тест кладёт туда свой модуль
+        $this->fixturePath = base_path('modules/' . self::FIXTURE);
+
+        if (! is_dir($this->fixturePath)) {
+            mkdir($this->fixturePath, 0755, true);
+        }
+
+        file_put_contents($this->fixturePath . '/module.php', sprintf(
+            "<?php\n\nreturn [\n    'name' => 'Модуль-фикстура',\n    'version' => '%s',\n    'description' => '',\n    'author' => '',\n];\n",
+            self::FIXTURE_VERSION,
+        ));
     }
 
-    public function testIndexFallsBackToFileDate(): void
+    protected function tearDown(): void
     {
-        $response = $this->actingAs($this->boss)->get(route('admin.modules.index'));
+        if (is_dir($this->fixturePath)) {
+            @unlink($this->fixturePath . '/module.php');
+            @rmdir($this->fixturePath);
+        }
 
-        $response->assertOk();
-        // Реестр молчит — дата берётся с диска (mtime module.php), она есть у всех
-        $response->assertSee('data-released="' . date('Y-m-d', (int) filemtime(base_path('modules/Blog/module.php'))) . '"', false);
-        $response->assertSee('<option value="released">', false);
+        parent::tearDown();
     }
 
-    public function testIndexTakesReleaseDateFromRegistry(): void
+    private function fixtureFileDate(): string
     {
-        $config = include base_path('modules/Blog/module.php');
+        return date('Y-m-d', (int) filemtime($this->fixturePath . '/module.php'));
+    }
 
+    private function fakeRegistry(string $version, ?string $releasedAt): void
+    {
         ModuleRegistry::query()->truncate();
 
         Http::fake([
@@ -44,10 +66,14 @@ class ModuleControllerTest extends TestCase
                 'name'    => 'Test Registry',
                 'modules' => [
                     [
-                        'module'   => 'Blog',
-                        'name'     => 'Блог',
+                        'module'   => self::FIXTURE,
+                        'name'     => 'Модуль-фикстура',
                         'versions' => [
-                            ['version' => $config['version'], 'requires' => '', 'released_at' => '2020-01-02'],
+                            array_filter([
+                                'version'     => $version,
+                                'requires'    => '',
+                                'released_at' => $releasedAt,
+                            ], static fn ($value) => $value !== null),
                         ],
                     ],
                 ],
@@ -55,6 +81,21 @@ class ModuleControllerTest extends TestCase
         ]);
 
         ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+    }
+
+    public function testIndexFallsBackToFileDate(): void
+    {
+        $response = $this->actingAs($this->boss)->get(route('admin.modules.index'));
+
+        $response->assertOk();
+        // Реестр молчит — дата берётся с диска (mtime module.php)
+        $response->assertSee('data-released="' . $this->fixtureFileDate() . '"', false);
+        $response->assertSee('<option value="released">', false);
+    }
+
+    public function testIndexTakesReleaseDateFromRegistry(): void
+    {
+        $this->fakeRegistry(self::FIXTURE_VERSION, '2020-01-02');
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.index'));
 
@@ -65,31 +106,14 @@ class ModuleControllerTest extends TestCase
 
     public function testIndexIgnoresRegistryDateOfOtherVersion(): void
     {
-        ModuleRegistry::query()->truncate();
-
-        Http::fake([
-            '*' => Http::response([
-                'name'    => 'Test Registry',
-                'modules' => [
-                    [
-                        'module' => 'Blog',
-                        'name'   => 'Блог',
-                        // Версия, которой на диске нет: её дата к карточке не относится
-                        'versions' => [
-                            ['version' => '999.0.0', 'requires' => '', 'released_at' => '2020-01-02'],
-                        ],
-                    ],
-                ],
-            ]),
-        ]);
-
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        // Версии, которой на диске нет: её дата к карточке не относится
+        $this->fakeRegistry('999.0.0', '2020-01-02');
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.index'));
 
         $response->assertOk();
         $response->assertDontSee('data-released="2020-01-02"', false);
-        $response->assertSee('data-released="' . date('Y-m-d', (int) filemtime(base_path('modules/Blog/module.php'))) . '"', false);
+        $response->assertSee('data-released="' . $this->fixtureFileDate() . '"', false);
     }
 
     public function testMarketplaceShowsReleaseDate(): void
@@ -101,7 +125,7 @@ class ModuleControllerTest extends TestCase
                 'name'    => 'Test Registry',
                 'modules' => [
                     [
-                        'module'   => 'Nonexistent',
+                        'module'   => 'Dated',
                         'name'     => 'Модуль с датой',
                         'versions' => [
                             ['version' => '1.0.0', 'requires' => '', 'released_at' => '2020-01-02'],
