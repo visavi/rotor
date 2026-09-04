@@ -32,7 +32,7 @@
 
                 <div class="section-body border-top">
                     @if ($data->message)
-                        <div class="mb-1 text-danger">
+                        <div class="mb-1 text-{{ $data->code === 666 ? 'success' : 'danger' }}">
                             {{ $data->message }}
                         </div>
                     @endif

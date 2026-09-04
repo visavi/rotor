@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Ban;
+use App\Models\Error;
 use App\Services\CaptchaService;
 use App\Services\FeedService;
 use App\Services\SearchService;
@@ -101,12 +102,31 @@ class HomeController extends Controller
         ) {
             $ban->delete();
             clearCache('ipBan');
+            $this->markUnbanned();
 
             return redirect('/')
                 ->with('success', __('pages.ip_success_unbanned'));
         }
 
         return response()->view('pages/ipban', compact('ban'), 429);
+    }
+
+    /**
+     * Отмечает разбан в логе автобанов: автобан пишет запись 666, и без пометки
+     * по логу не отличить ip, который отсидел бан, от того, что сидит до сих пор
+     */
+    private function markUnbanned(): void
+    {
+        $error = Error::query()
+            ->where('code', 666)
+            ->where('ip', getIp())
+            ->latest('created_at')
+            ->first();
+
+        $error?->update([
+            // original: дата уходит в лог навсегда, «сегодня» назавтра соврёт
+            'message' => __('pages.ip_unbanned_log', ['date' => dateFixed(now(), original: true)]),
+        ]);
     }
 
     /**

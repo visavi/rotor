@@ -3,24 +3,28 @@
 @section('title', __('pages.banned'))
 
 @section('content')
-    <h1>{{ __('pages.banned') }}</h1>
+    <div class="container my-4" style="max-width: 720px;">
+        <h1 class="h3 mb-3">{{ __('pages.banned') }}</h1>
 
-    {!! __('pages.banned_text') !!}<br>
-
-    @if (! $ban->user_id)
-        @if ($ban->created_at->lt(now()->subMinute()))
-            <div class="section-form mb-3 shadow">
-                <form method="post">
-                    {{ getCaptcha() }}
-                    <button class="btn btn-primary">{{ __('main.confirm') }}</button>
-                </form>
+        <div class="section mb-3 shadow">
+            <div class="section-body">
+                {!! __('pages.banned_text') !!}
             </div>
-        @else
-            {!! __('pages.banned_wait') !!}
+        </div>
 
-            <div class="mt-3">
-                <button class="btn btn-secondary" disabled>{{ __('main.confirm') }}</button>
+        @if (! $ban->user_id)
+            <div class="section-form mb-3 shadow">
+                @if ($ban->created_at->lt(now()->subMinute()))
+                    <form method="post">
+                        {{ getCaptcha() }}
+                        <button class="btn btn-primary">{{ __('main.confirm') }}</button>
+                    </form>
+                @else
+                    <div class="mb-3">{!! __('pages.banned_wait') !!}</div>
+
+                    <button class="btn btn-secondary" disabled>{{ __('main.confirm') }}</button>
+                @endif
             </div>
         @endif
-    @endif
+    </div>
 @stop

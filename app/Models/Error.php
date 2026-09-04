@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string          $request
  * @property string          $referer
  * @property int             $user_id
- * @property string          $message
+ * @property ?string         $message
  * @property string          $ip
  * @property string          $brow
  * @property CarbonImmutable $created_at

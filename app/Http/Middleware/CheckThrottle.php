@@ -16,6 +16,12 @@ class CheckThrottle
     {
         $ip = getIp();
 
+        // Админов не трогает ни бан, ни автоблокировка: isBanned() их и так
+        // пропускал, а счётчик запросов — нет, и панель ловила автобан
+        if (isAdmin()) {
+            return $next($request);
+        }
+
         // Проверка на бан
         if ($this->isBanned($request, $ip)) {
             return redirect()->route('ipban')
@@ -29,7 +35,9 @@ class CheckThrottle
         }
 
         $key = 'throttle_' . $ip;
-        $requests = Cache::add($key, 0, 60) ? 1 : Cache::increment($key);
+        // add() кладёт сразу единицу: с нуля счётчик отставал на запрос,
+        // и лимит срабатывал на два позже настроенного
+        $requests = Cache::add($key, 1, 60) ? 1 : Cache::increment($key);
 
         /* Автоматическая блокировка */
         if ($requests > $limit) {
@@ -63,7 +71,7 @@ class CheckThrottle
      */
     private function isBanned(Request $request, string $ip): bool
     {
-        if (isAdmin() || $request->is('ipban', 'captcha')) {
+        if ($request->is('ipban', 'captcha')) {
             return false;
         }
 

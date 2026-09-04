@@ -94,4 +94,5 @@ return [
     'empty_rules' => 'Правила сайту ще не встановлені!',
 
     'ip_success_unbanned' => 'IP успішно розбанений!',
+    'ip_unbanned_log'     => 'Розбанений :date',
 ];

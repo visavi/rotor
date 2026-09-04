@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Ban;
+use App\Models\Error;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -63,6 +64,36 @@ class HomeControllerTest extends TestCase
         $this->assertDatabaseMissing('ban', ['id' => $ban->id]);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testIpbanSelfUnbanMarksLatestAutobanLog(): void
+    {
+        Ban::query()->create([
+            'ip'         => '127.0.0.1',
+            'user_id'    => 0,
+            'created_at' => now()->subHour(),
+        ]);
+
+        $old = Error::query()->create([
+            'code'       => 666,
+            'ip'         => '127.0.0.1',
+            'created_at' => now()->subDay(),
+        ]);
+
+        $latest = Error::query()->create([
+            'code'       => 666,
+            'ip'         => '127.0.0.1',
+            'created_at' => now()->subHour(),
+        ]);
+
+        $this->post('/ipban')->assertRedirect('/');
+
+        $this->assertSame(
+            __('pages.ip_unbanned_log', ['date' => dateFixed(now(), original: true)]),
+            $latest->fresh()->message,
+        );
+
+        $this->assertNull($old->fresh()->message);
     }
 
     public function testIpbanCannotSelfUnbanWhenBannedByAdmin(): void

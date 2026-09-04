@@ -94,4 +94,5 @@ return [
     'empty_rules' => 'Site rules have not yet been established!',
 
     'ip_success_unbanned' => 'IP successfully unbanned!',
+    'ip_unbanned_log'     => 'Unbanned :date',
 ];
