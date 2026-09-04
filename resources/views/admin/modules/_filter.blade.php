@@ -71,6 +71,17 @@
 
                 const mode = sort.value;
                 const sorted = cards.slice().sort((a, b) => {
+                    if (mode === 'released') {
+                        // Без даты (релиз до появления поля) — в конец, там по названию
+                        const da = a.dataset.released || '';
+                        const db = b.dataset.released || '';
+                        if (da === '' || db === '') {
+                            return da === db
+                                ? (a.dataset.name || '').localeCompare(b.dataset.name || '')
+                                : (da === '' ? 1 : -1);
+                        }
+                        return db.localeCompare(da);
+                    }
                     if (mode === 'version') {
                         return (b.dataset.version || '').localeCompare(a.dataset.version || '', undefined, { numeric: true });
                     }

@@ -26,11 +26,27 @@ class ModuleController extends AdminController
             $moduleInstall[$module->name] = $module;
         }
 
+        $registryModules = ModuleRegistry::getAvailableModules();
+
         $moduleNames = [];
         $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR);
         foreach ($modulesLoaded as $module) {
             if (file_exists($module . '/module.php')) {
-                $moduleNames[basename($module)] = include $module . '/module.php';
+                $name = basename($module);
+                $config = include $module . '/module.php';
+
+                // Дата релиза берётся из реестра, но только если он описывает ровно ту
+                // версию, что показана в карточке — иначе датой обновления Форума 1.1
+                // стал бы релиз ещё не установленной 1.2. Для своих модулей и для
+                // отставших версий остаётся дата файлов на диске: когда распаковали
+                $shownVersion = $moduleInstall[$name]->version ?? ($config['version'] ?? null);
+                $config['released_at'] = ($registryModules[$name]['version'] ?? null) === $shownVersion
+                    ? ($registryModules[$name]['released_at'] ?? null)
+                    : null;
+
+                $config['released_at'] ??= date('Y-m-d', (int) filemtime($module . '/module.php'));
+
+                $moduleNames[$name] = $config;
             }
         }
 
@@ -42,7 +58,6 @@ class ModuleController extends AdminController
             'not-installed' => count($moduleNames) - count($installed),
         ];
 
-        $registryModules = ModuleRegistry::getAvailableModules();
         $failedModules = ModuleServiceProvider::$failed;
 
         return view('admin/modules/index', compact('moduleInstall', 'moduleNames', 'counts', 'registryModules', 'failedModules'));

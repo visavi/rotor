@@ -43,6 +43,7 @@
                     <option value="name">{{ __('main.sort') }}: {{ __('main.title') }}</option>
                     <option value="status">{{ __('main.sort') }}: {{ __('main.status') }}</option>
                     <option value="version">{{ __('main.sort') }}: {{ __('main.version') }}</option>
+                    <option value="released">{{ __('main.sort') }}: {{ __('main.date') }}</option>
                 </select>
             </div>
         </div>
@@ -65,6 +66,7 @@
                      data-search="{{ $searchText }}"
                      data-name="{{ mb_strtolower($moduleConfig['name'] ?? $name) }}"
                      data-version="{{ $sortVersion }}"
+                     data-released="{{ $moduleConfig['released_at'] }}"
                      data-sort-status="{{ $sortStatus }}">
                     <div class="section-title">
                         <i class="fas fa-cube {{ $isActive ? 'text-success' : 'text-muted' }}"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
@@ -92,7 +94,11 @@
                             <span class="badge bg-danger">{{ __('main.not_installed') }}</span><br>
                         @endif
                         {{ $moduleConfig['description'] ?? '' }}<br>
-                        {{ __('main.version') }}: {{ $moduleInstall[$name]->version ?? ($moduleConfig['version'] ?? '') }}<br>
+                        {{ __('main.version') }}: {{ $moduleInstall[$name]->version ?? ($moduleConfig['version'] ?? '') }}
+                        @if ($moduleConfig['released_at'])
+                            <small class="text-muted">({{ date('d.m.Y', strtotime($moduleConfig['released_at'])) }})</small>
+                        @endif
+                        <br>
                         {{ __('main.author') }}: {{ $moduleConfig['author'] ?? '' }} <a href="{{ $moduleConfig['homepage'] ?? '' }}">{{ $moduleConfig['homepage'] ?? '' }}</a>
                     </div>
                 </div>

@@ -65,7 +65,9 @@ class ModuleRegistry extends Command
             'modules' => array_values($modules),
         ];
 
-        $json = json_encode($registry, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        // Компактный вывод: реестр качают клиенты, а GitHub отдаёт его без gzip —
+        // отступы стоили бы трети веса файла. Читать глазами — через `jq .`
+        $json = json_encode($registry, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         if ($output = $this->option('output')) {
             file_put_contents($output, $json . "\n");
@@ -120,6 +122,14 @@ class ModuleRegistry extends Command
             'download_url' => $this->downloadUrl($name, $version),
         ];
 
+        // Дата релиза ставится один раз — в прогон, который впервые увидел версию.
+        // Уже накопленная версия свою дату сохраняет, а вышедшая до появления поля
+        // так и остаётся без неё: пересборка не выдаёт старые релизы за свежие
+        $released = $this->releasedAt($existing['versions'] ?? [], $version);
+        if ($released !== null) {
+            $entry['released_at'] = $released;
+        }
+
         if ($changelog = $this->changelog($dir, $version)) {
             $entry['changelog'] = $changelog;
         }
@@ -142,6 +152,23 @@ class ModuleRegistry extends Command
             'homepage'    => (string) ($config['homepage'] ?? ''),
             'versions'    => $this->pruneShadowed($versions),
         ];
+    }
+
+    /**
+     * Дата релиза версии: у новой — момент сборки, у накопленной — её прежняя
+     * дата (null, если версия вышла до появления поля)
+     *
+     * @param array<int, array<string, mixed>> $versions
+     */
+    private function releasedAt(array $versions, string $version): ?string
+    {
+        foreach ($versions as $existing) {
+            if (($existing['version'] ?? null) === $version) {
+                return isset($existing['released_at']) ? (string) $existing['released_at'] : null;
+            }
+        }
+
+        return now()->toDateString();
     }
 
     /**

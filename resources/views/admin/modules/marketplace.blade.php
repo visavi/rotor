@@ -40,6 +40,7 @@
                     <option value="name">{{ __('main.sort') }}: {{ __('main.title') }}</option>
                     <option value="status">{{ __('main.sort') }}: {{ __('main.status') }}</option>
                     <option value="version">{{ __('main.sort') }}: {{ __('main.version') }}</option>
+                    <option value="released">{{ __('main.sort') }}: {{ __('main.date') }}</option>
                 </select>
             </div>
         </div>
@@ -62,6 +63,7 @@
                  data-search="{{ $searchText }}"
                  data-name="{{ mb_strtolower($info['name'] ?? $name) }}"
                  data-version="{{ $info['version'] ?? '0' }}"
+                 data-released="{{ $info['released_at'] ?? '' }}"
                  data-sort-status="{{ $sortStatus }}">
                 <div class="section-title d-flex align-items-center justify-content-between gap-2">
                     <div class="text-break" style="min-width: 0">
@@ -125,7 +127,11 @@
                     @endif
                     <br>
                     {{ $info['description'] ?? '' }}<br>
-                    {{ __('main.version') }}: {{ $info['version'] ?? '—' }}<br>
+                    {{ __('main.version') }}: {{ $info['version'] ?? '—' }}
+                    @if (! empty($info['released_at']))
+                        <small class="text-muted">({{ date('d.m.Y', strtotime($info['released_at'])) }})</small>
+                    @endif
+                    <br>
                     {{ __('main.author') }}: {{ $info['author'] ?? '—' }}
                     @if (! empty($info['homepage']))
                         <a href="{{ $info['homepage'] }}">{{ $info['homepage'] }}</a>
