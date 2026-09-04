@@ -55,7 +55,9 @@ return new class extends Migration {
         $this->addTempColumns('spam', 'dateTime', ['created_at_dt']);
         $this->convert('spam', 'created_at_dt', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
         Schema::table('spam', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('spam', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('spam', fn (Blueprint $table) => $table->renameColumn('created_at_dt', 'created_at'));
@@ -74,7 +76,9 @@ return new class extends Migration {
         $this->addTempColumns('spam', 'integer', ['created_at_int']);
         $this->convert('spam', 'created_at_int', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
         Schema::table('spam', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('spam', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('spam', fn (Blueprint $table) => $table->renameColumn('created_at_int', 'created_at'));

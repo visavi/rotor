@@ -61,7 +61,9 @@ return new class extends Migration {
             'timebonus_dt'  => $toDt($r->timebonus),
         ]);
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('users', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn(['created_at', 'updated_at', 'timeban', 'timebonus']);
         });
         Schema::table('users', function (Blueprint $table) {
@@ -90,7 +92,9 @@ return new class extends Migration {
             'timebonus_int'  => $toInt($r->timebonus),
         ]);
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('users', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn(['created_at', 'updated_at', 'timeban', 'timebonus']);
         });
         Schema::table('users', function (Blueprint $table) {

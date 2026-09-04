@@ -55,7 +55,9 @@ return new class extends Migration {
         $this->addTempColumns('files', 'dateTime', ['created_at_dt']);
         $this->convert('files', 'created_at_dt', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
         Schema::table('files', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('files', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('files', fn (Blueprint $table) => $table->renameColumn('created_at_dt', 'created_at'));
@@ -74,7 +76,9 @@ return new class extends Migration {
         $this->addTempColumns('files', 'integer', ['created_at_int']);
         $this->convert('files', 'created_at_int', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
         Schema::table('files', function (Blueprint $table) {
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('files', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('files', fn (Blueprint $table) => $table->renameColumn('created_at_int', 'created_at'));

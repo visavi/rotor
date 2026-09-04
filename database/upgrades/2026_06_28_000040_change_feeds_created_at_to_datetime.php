@@ -55,8 +55,12 @@ return new class extends Migration {
         $this->addTempColumns('feeds', 'dateTime', ['created_at_dt']);
         $this->convert('feeds', 'created_at_dt', ['created_at'], static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
         Schema::table('feeds', function (Blueprint $table) {
-            $table->dropIndex(['relate_type', 'created_at']);
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('feeds', ['relate_type', 'created_at'])) {
+                $table->dropIndex(['relate_type', 'created_at']);
+            }
+            if (Schema::hasIndex('feeds', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('feeds', fn (Blueprint $table) => $table->renameColumn('created_at_dt', 'created_at'));
@@ -78,8 +82,12 @@ return new class extends Migration {
         Schema::table('feeds', fn (Blueprint $table) => $table->unsignedInteger('created_at_int')->nullable());
         $this->convert('feeds', 'created_at_int', ['created_at'], static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
         Schema::table('feeds', function (Blueprint $table) {
-            $table->dropIndex(['relate_type', 'created_at']);
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('feeds', ['relate_type', 'created_at'])) {
+                $table->dropIndex(['relate_type', 'created_at']);
+            }
+            if (Schema::hasIndex('feeds', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('feeds', fn (Blueprint $table) => $table->renameColumn('created_at_int', 'created_at'));

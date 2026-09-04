@@ -58,8 +58,12 @@ return new class extends Migration {
             'deleted_at_dt' => $toDt($r->deleted_at),
         ]);
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropIndex(['rating', 'created_at']);
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('comments', ['rating', 'created_at'])) {
+                $table->dropIndex(['rating', 'created_at']);
+            }
+            if (Schema::hasIndex('comments', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn(['created_at', 'deleted_at']);
         });
         Schema::table('comments', function (Blueprint $table) {
@@ -88,8 +92,12 @@ return new class extends Migration {
             'deleted_at_int' => $toInt($r->deleted_at),
         ]);
         Schema::table('comments', function (Blueprint $table) {
-            $table->dropIndex(['rating', 'created_at']);
-            $table->dropIndex(['created_at']);
+            if (Schema::hasIndex('comments', ['rating', 'created_at'])) {
+                $table->dropIndex(['rating', 'created_at']);
+            }
+            if (Schema::hasIndex('comments', ['created_at'])) {
+                $table->dropIndex(['created_at']);
+            }
             $table->dropColumn(['created_at', 'deleted_at']);
         });
         Schema::table('comments', function (Blueprint $table) {

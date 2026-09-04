@@ -55,7 +55,9 @@ return new class extends Migration {
         $this->addTempColumns('dialogues', 'dateTime', ['created_at_dt']);
         $this->convert('dialogues', 'created_at_dt', static fn ($r) => ['created_at_dt' => $toDt($r->created_at)]);
         Schema::table('dialogues', function (Blueprint $table) {
-            $table->dropIndex(['message_id', 'created_at']);
+            if (Schema::hasIndex('dialogues', ['message_id', 'created_at'])) {
+                $table->dropIndex(['message_id', 'created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('dialogues', fn (Blueprint $table) => $table->renameColumn('created_at_dt', 'created_at'));
@@ -74,7 +76,9 @@ return new class extends Migration {
         $this->addTempColumns('dialogues', 'integer', ['created_at_int']);
         $this->convert('dialogues', 'created_at_int', static fn ($r) => ['created_at_int' => $toInt($r->created_at)]);
         Schema::table('dialogues', function (Blueprint $table) {
-            $table->dropIndex(['message_id', 'created_at']);
+            if (Schema::hasIndex('dialogues', ['message_id', 'created_at'])) {
+                $table->dropIndex(['message_id', 'created_at']);
+            }
             $table->dropColumn('created_at');
         });
         Schema::table('dialogues', fn (Blueprint $table) => $table->renameColumn('created_at_int', 'created_at'));
