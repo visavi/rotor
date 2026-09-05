@@ -69,7 +69,8 @@ class MetrikaService
     /**
      * Обновляет время визита пользователя и запись в онлайне
      *
-     * @param  string|null  $uid  Идентификатор визита, по умолчанию считается от ip и браузера
+     * @param string|null $uid Идентификатор визита, по умолчанию считается от ip и браузера
+     *
      * @return bool Признак нового хоста
      */
     private function touchVisit(?User $user, ?string $uid = null): bool

@@ -855,20 +855,27 @@ function getIp(): string
  */
 function getBrowser(): string
 {
-    static $userAgent = null;
+    static $browsers = [];
 
-    if ($userAgent !== null) {
-        return $userAgent;
+    $agent = (string) request()->userAgent();
+
+    if (isset($browsers[$agent])) {
+        return $browsers[$agent];
     }
 
-    $browser = new Browser();
+    $browser = new Browser($agent);
     $name = $browser->getBrowser();
     $parts = explode('.', $browser->getVersion(), 3);
     $version = implode('.', array_slice($parts, 0, 2));
 
     $result = $version === Browser::VERSION_UNKNOWN ? $name : $name . ' ' . $version;
 
-    return $userAgent = mb_substr($result, 0, 25, 'utf-8');
+    // Мобильные клиенты и прочие агенты парсер не знает, показываем их как есть
+    if ($name === Browser::BROWSER_UNKNOWN && $agent !== '') {
+        $result = $agent;
+    }
+
+    return $browsers[$agent] = mb_substr($result, 0, 25, 'utf-8');
 }
 
 /**

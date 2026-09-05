@@ -557,6 +557,42 @@ class HelperTest extends TestCase
         self::assertLessThanOrEqual(25, mb_strlen($browser));
     }
 
+    public function testGetBrowserDetectsKnownBrowser(): void
+    {
+        $this->setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+
+        self::assertSame('Chrome 120.0', getBrowser());
+    }
+
+    public function testGetBrowserShowsUnknownAgentAsIs(): void
+    {
+        $this->setUserAgent('VisaviClient');
+
+        self::assertSame('VisaviClient', getBrowser());
+    }
+
+    public function testGetBrowserWithEmptyAgent(): void
+    {
+        $this->setUserAgent('');
+
+        self::assertSame('unknown', getBrowser());
+    }
+
+    public function testGetBrowserIsTrimmed(): void
+    {
+        $this->setUserAgent(str_repeat('LongClientName', 5));
+
+        self::assertSame(25, mb_strlen(getBrowser()));
+    }
+
+    /**
+     * Подменяет агента в текущем запросе
+     */
+    private function setUserAgent(string $agent): void
+    {
+        request()->headers->set('User-Agent', $agent);
+    }
+
     public function testIsAdmin(): void
     {
         self::assertFalse(isAdmin());
