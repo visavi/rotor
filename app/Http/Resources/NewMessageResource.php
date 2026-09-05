@@ -15,6 +15,9 @@ class NewMessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            // Автор объектом; у системных сообщений и удалённых пользователей его нет,
+            // тогда клиенту остаются login/name
+            'user'            => $this->author->exists ? AuthorResource::make($this->author) : null,
             'login'           => $this->author->exists ? $this->author->login : (string) $this->author_id,
             'name'            => $this->author_id ? $this->author->getName() : __('messages.system'),
             'count'           => (int) $this->getAttribute('cnt'),

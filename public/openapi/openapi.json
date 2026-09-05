@@ -531,13 +531,26 @@
                     "id": {
                         "type": "integer"
                     },
+                    "user": {
+                        "description": "Автор; null у системных сообщений и удалённых пользователей — тогда остаются login/name",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Author"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
                     "login": {
                         "type": "string",
-                        "description": "Логин собеседника"
+                        "description": "Устарело, используйте user.login (у системных сообщений и удалённых пользователей user отсутствует — тогда только это поле)",
+                        "deprecated": true
                     },
                     "name": {
                         "type": "string",
-                        "description": "Имя собеседника"
+                        "description": "Устарело, используйте user.name (у системных сообщений и удалённых пользователей user отсутствует — тогда только это поле)",
+                        "deprecated": true
                     },
                     "text": {
                         "type": "string",
@@ -576,13 +589,26 @@
                     "id": {
                         "type": "integer"
                     },
+                    "user": {
+                        "description": "Автор; null у системных сообщений и удалённых пользователей — тогда остаются login/name",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Author"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
                     "login": {
                         "type": "string",
-                        "description": "Логин отправителя"
+                        "description": "Устарело, используйте user.login (у системных сообщений и удалённых пользователей user отсутствует — тогда только это поле)",
+                        "deprecated": true
                     },
                     "name": {
                         "type": "string",
-                        "description": "Имя отправителя"
+                        "description": "Устарело, используйте user.name (у системных сообщений и удалённых пользователей user отсутствует — тогда только это поле)",
+                        "deprecated": true
                     },
                     "text": {
                         "type": "string"
@@ -614,11 +640,26 @@
             "NewMessage": {
                 "type": "object",
                 "properties": {
+                    "user": {
+                        "description": "Автор; null у системных сообщений и удалённых пользователей — тогда остаются login/name",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/Author"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
                     "login": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Устарело, используйте user.login (у системных сообщений и удалённых пользователей user отсутствует — тогда только это поле)",
+                        "deprecated": true
                     },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Устарело, используйте user.name (у системных сообщений и удалённых пользователей user отсутствует — тогда только это поле)",
+                        "deprecated": true
                     },
                     "count": {
                         "type": "integer",

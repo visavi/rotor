@@ -15,6 +15,9 @@ class DialogueResource extends JsonResource
     {
         return [
             'id'             => $this->id,
+            // Автор объектом; у системных сообщений и удалённых пользователей его нет,
+            // тогда клиенту остаются login/name
+            'user'           => $this->author->exists ? AuthorResource::make($this->author) : null,
             'login'          => $this->author->exists ? $this->author->login : (string) $this->author_id,
             'name'           => $this->author_id ? $this->author->getName() : __('messages.system'),
             'text'           => absolutizeUrls($this->text),

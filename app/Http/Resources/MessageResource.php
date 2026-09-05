@@ -18,6 +18,9 @@ class MessageResource extends JsonResource
 
         return [
             'id'             => $this->id,
+            // Автор объектом; у системных сообщений и удалённых пользователей его нет,
+            // тогда клиенту остаются login/name
+            'user'           => $sender->exists ? AuthorResource::make($sender) : null,
             'login'          => $sender->exists ? $sender->login : (string) $this->author_id,
             'name'           => $this->author_id ? $sender->getName() : __('messages.system'),
             'text'           => absolutizeUrls($this->text),
