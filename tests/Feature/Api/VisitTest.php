@@ -96,6 +96,27 @@ class VisitTest extends TestCase
         $this->assertTrue($this->user->fresh()->updated_at->isYesterday());
     }
 
+    public function testUsersBehindSameIpDoNotOverwriteEachOther(): void
+    {
+        $other = User::factory()->create(['apikey' => Str::random(32)]);
+
+        // Один ip провайдера и неопознанный клиент api — uid не должен совпасть
+        $this->getJson('/api/user', $this->headers())->assertOk();
+        $this->getJson('/api/user', ['Authorization' => 'Bearer ' . $other->apikey])->assertOk();
+
+        $this->assertDatabaseCount('online', 2);
+        $this->assertDatabaseHas('online', ['user_id' => $this->user->id]);
+        $this->assertDatabaseHas('online', ['user_id' => $other->id]);
+    }
+
+    public function testBackgroundPollingDoesNotSaveVisit(): void
+    {
+        $this->getJson('/api/messages/new', $this->headers())->assertOk();
+
+        $this->assertDatabaseCount('online', 0);
+        $this->assertTrue($this->user->fresh()->updated_at->isYesterday());
+    }
+
     public function testStaleOnlineRecordsAreCleaned(): void
     {
         Online::query()->create([

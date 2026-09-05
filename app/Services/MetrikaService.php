@@ -13,6 +13,13 @@ use PDOException;
 class MetrikaService
 {
     /**
+     * Пути, которые клиенты api опрашивают в фоне — визит по ним не сохраняется
+     */
+    private const array BACKGROUND_PATHS = [
+        'api/messages/new',
+    ];
+
+    /**
      * Сохраняет статистику
      */
     public function saveStatistic(): void
@@ -43,25 +50,33 @@ class MetrikaService
      */
     public function saveVisit(User $user): void
     {
+        // Фоновый опрос клиента не означает, что человек за экраном
+        if (request()->is(...self::BACKGROUND_PATHS)) {
+            return;
+        }
+
         // Троттлинг, чтобы не писать в базу на каждый запрос api
         if (! Cache::add('visit_' . $user->id, true, 30)) {
             return;
         }
 
         $this->cleanupOnline();
-        $this->touchVisit($user);
+        // Клиенты api не опознаются парсером браузеров, и за общим ip провайдера
+        // разные пользователи получили бы один uid, затирая друг друга в онлайне
+        $this->touchVisit($user, md5('api' . $user->id));
     }
 
     /**
      * Обновляет время визита пользователя и запись в онлайне
      *
+     * @param  string|null  $uid  Идентификатор визита, по умолчанию считается от ip и браузера
      * @return bool Признак нового хоста
      */
-    private function touchVisit(?User $user): bool
+    private function touchVisit(?User $user, ?string $uid = null): bool
     {
         $ip = getIp();
         $brow = getBrowser();
-        $uid = md5($ip . $brow);
+        $uid ??= md5($ip . $brow);
 
         $user?->update(['updated_at' => now()]);
 
