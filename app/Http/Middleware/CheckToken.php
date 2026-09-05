@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\User;
+use App\Services\MetrikaService;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,8 @@ class CheckToken
         }
 
         auth()->setUser($user);
+
+        (new MetrikaService())->saveVisit($user);
 
         return $next($request);
     }
