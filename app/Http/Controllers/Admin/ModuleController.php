@@ -128,6 +128,16 @@ class ModuleController extends AdminController
 
         $registryInfo = ModuleRegistry::getAvailableModules()[$moduleName] ?? null;
 
+        // Дата релиза берётся из реестра, но только если он описывает ровно ту
+        // версию, что стоит на сайте — иначе датой установленной 1.1 стал бы
+        // релиз ещё не поставленной 1.2. Иначе дата файла: когда распаковали
+        $shownVersion = $module->version ?? ($moduleConfig['version'] ?? null);
+        $moduleConfig['released_at'] = ($registryInfo['version'] ?? null) === $shownVersion
+            ? ($registryInfo['released_at'] ?? null)
+            : null;
+
+        $moduleConfig['released_at'] ??= date('Y-m-d', (int) filemtime($modulePath . '/module.php'));
+
         return view('admin/modules/module', compact('module', 'moduleConfig', 'moduleName', 'registryInfo'));
     }
 

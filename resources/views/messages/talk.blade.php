@@ -32,10 +32,14 @@
                         @endunless
                     </div>
 
-                    <div class="section-date text-muted fst-italic small">
+                    <div class="section-date text-muted fst-italic small" data-date="{{ dateFixed($data->created_at, original: true) }}">
                         {{ dateFixed($data->created_at) }}
 
                         @if ($data->type === $data::IN)
+                            @if ($user->exists)
+                                <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                            @endif
+
                             <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         @else
                             <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>

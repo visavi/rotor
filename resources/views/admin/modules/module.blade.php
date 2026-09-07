@@ -56,8 +56,16 @@
             $hasUpdate        = $registryVersion && version_compare($registryVersion, $installedVersion, '>');
         @endphp
         {{ __('main.version') }}: {{ $installedVersion }}
+        @if ($moduleConfig['released_at'])
+            <small class="text-muted">({{ date('d.m.Y', strtotime($moduleConfig['released_at'])) }})</small>
+        @endif
         @if ($hasUpdate)
-            <span class="badge bg-info ms-1">{{ __('main.update_available') }}: {{ $registryVersion }}</span>
+            <span class="badge bg-info ms-1">
+                {{ __('main.update_available') }}: {{ $registryVersion }}
+                @if (! empty($registryInfo['released_at']))
+                    ({{ date('d.m.Y', strtotime($registryInfo['released_at'])) }})
+                @endif
+            </span>
         @endif
         <br>
         {{ __('main.author') }}: {{ $moduleConfig['author'] }} <a href="{{ $moduleConfig['homepage'] }}">{{ $moduleConfig['homepage'] }}</a><br>
