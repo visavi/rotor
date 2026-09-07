@@ -159,20 +159,34 @@ class ModuleController extends AdminController
 
         $moduleConfig = include $modulePath . '/module.php';
 
-        $requires = $moduleConfig['requires'] ?? null;
-        if ($requires && version_compare(ROTOR_VERSION, $requires, '<')) {
+        if ($requires = $this->incompatibleWith($moduleConfig)) {
             return redirect('admin/modules/module?module=' . $moduleName)
                 ->with('danger', __('admin.modules.requires') . ' ' . $requires . '!');
         }
 
+        $result = $this->applyModule($module, $moduleConfig, (bool) $enable, (bool) $update);
+
+        return redirect('admin/modules/module?module=' . $moduleName)
+            ->with('success', $result);
+    }
+
+    /**
+     * Раскладывает файлы модуля и фиксирует его состояние в БД
+     */
+    private function applyModule(Module $module, array $moduleConfig, bool $enable, bool $update): string
+    {
         // Файлы на диск кладём только для активного модуля: свежая установка,
         // включение или обновление уже активного. Обновление выключенного модуля
-        // лишь повышает версию — его файлы не должны возвращаться на диск.
+        // не должно возвращать его файлы в public.
         if (! $module->exists || $enable || $module->active) {
             $module->createSymlink();
             $module->publish();
-            $module->migrate();
         }
+
+        // Миграции применяем и выключенному: его таблицы при выключении остаются
+        // (rollback только при полном удалении), а версия в БД поднимается в любом
+        // случае — схема не должна отставать от того, что записано как версия
+        $module->migrate();
 
         $result = __('admin.modules.module_success_installed');
 
@@ -204,8 +218,17 @@ class ModuleController extends AdminController
         // После syncAll — пересборка увидит роуты нового модуля
         refreshCaches();
 
-        return redirect('admin/modules/module?module=' . $moduleName)
-            ->with('success', $result);
+        return $result;
+    }
+
+    /**
+     * Возвращает требуемую версию движка, если модуль с ней несовместим
+     */
+    private function incompatibleWith(array $moduleConfig): ?string
+    {
+        $requires = $moduleConfig['requires'] ?? null;
+
+        return $requires && version_compare(ROTOR_VERSION, $requires, '<') ? $requires : null;
     }
 
     /**
@@ -219,9 +242,19 @@ class ModuleController extends AdminController
         $modules = Module::query()->get()->keyBy('name');
         $moduleNames = [];
 
+        // Версии с диска: распакованный, но ещё не применённый релиз незачем
+        // предлагать скачать заново — его хватает применить на странице модуля
+        $localVersions = [];
+
         $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR);
         foreach ($modulesLoaded as $module) {
-            $moduleNames[] = basename($module);
+            $name = basename($module);
+            $moduleNames[] = $name;
+
+            if (file_exists($module . '/module.php')) {
+                $config = include $module . '/module.php';
+                $localVersions[$name] = $config['version'] ?? null;
+            }
         }
 
         $counts = ['all' => count($available), 'installed' => 0, 'disabled' => 0, 'not-installed' => 0];
@@ -236,7 +269,7 @@ class ModuleController extends AdminController
             }
         }
 
-        return view('admin/modules/marketplace', compact('available', 'modules', 'moduleNames', 'counts'));
+        return view('admin/modules/marketplace', compact('available', 'modules', 'moduleNames', 'localVersions', 'counts'));
     }
 
     /**
@@ -264,8 +297,14 @@ class ModuleController extends AdminController
                 ->with('danger', $e->getMessage());
         }
 
+        // Ручная заливка уже установленного модуля — единственный случай, когда
+        // версию применяет админ: подсказываем про «Применить обновление»
+        $extracted = Module::query()->where('name', $moduleName)->exists()
+            ? __('admin.modules.update_extracted')
+            : __('admin.modules.upload_success_extracted');
+
         return redirect('/admin/modules/module?module=' . $moduleName)
-            ->with('success', __('admin.modules.upload_success_extracted'));
+            ->with('success', $extracted);
     }
 
     /**
@@ -347,14 +386,24 @@ class ModuleController extends AdminController
                 ->with('danger', $e->getMessage());
         }
 
-        // Для уже установленного модуля распаковка — лишь первый шаг обновления:
-        // подсказываем, что версия применится по кнопке «Применить обновление»
-        $extracted = Module::query()->where('name', $moduleName)->exists()
-            ? __('admin.modules.update_extracted')
-            : __('admin.modules.upload_success_extracted');
+        $module = Module::query()->firstOrNew(['name' => $moduleName]);
+        $moduleConfig = include base_path('modules/' . $moduleName . '/module.php');
+
+        // Несовместимую версию не применяем, но файлы уже распакованы: модуль
+        // остаётся в промежуточном состоянии, о чём и говорит сообщение
+        if ($requires = $this->incompatibleWith($moduleConfig)) {
+            return redirect('/admin/modules/module?module=' . $moduleName)
+                ->with('danger', __('admin.modules.requires') . ' ' . $requires . '! ' . __('admin.modules.update_extracted'));
+        }
+
+        // Кнопка в каталоге называется «Установить» и «Обновить» — она это и делает.
+        // Для обновления применить обязательно: распаковка уже заменила код
+        // работающего модуля, без миграций сайт остался бы на новой версии со
+        // старой схемой БД
+        $result = $this->applyModule($module, $moduleConfig, false, true);
 
         return redirect('/admin/modules/module?module=' . $moduleName)
-            ->with('success', $extracted);
+            ->with('success', $result);
     }
 
     /**

@@ -117,7 +117,7 @@ return [
         'upload_invalid_file'          => 'Invalid file!',
         'upload_success_extracted'     => 'Module successfully extracted!',
         'update_download'              => 'Download update',
-        'update_apply'                 => 'Apply update',
+        'update_to'                    => 'Update to :version',
         'update_extracted'             => 'Update downloaded. Click «Apply update» to install!',
         'download_invalid_url'         => 'Invalid URL!',
         'download_failed'              => 'Failed to download archive!',

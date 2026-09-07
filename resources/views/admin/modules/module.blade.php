@@ -52,8 +52,12 @@
     <p>
         @php
             $installedVersion = $module->version ?? $moduleConfig['version'];
+            $diskVersion      = $moduleConfig['version'];
             $registryVersion  = $registryInfo['version'] ?? null;
-            $hasUpdate        = $registryVersion && version_compare($registryVersion, $installedVersion, '>');
+            // Обновление предлагаем от версии на диске, а не от записанной в БД:
+            // распакованный, но ещё не применённый релиз незачем качать заново
+            $pendingVersion   = version_compare($diskVersion, $installedVersion, '>') ? $diskVersion : $installedVersion;
+            $hasUpdate        = $registryVersion && version_compare($registryVersion, $pendingVersion, '>');
         @endphp
         {{ __('main.version') }}: {{ $installedVersion }}
         @if ($moduleConfig['released_at'])
@@ -172,12 +176,22 @@
     <br>
     @if ($module)
         <div class="d-flex flex-wrap gap-2">
-            @if (version_compare($moduleConfig['version'], $module->version, '>'))
+            {{-- Кнопка обновления всегда одна. Сначала применяем то, что уже лежит
+                 на диске: пока версия в БД отстаёт от файлов, модуль работает на
+                 новом коде со старой схемой, и закрыть это надо без сети. Версия
+                 из реестра предложится следующим шагом --}}
+            @if (version_compare($diskVersion, $module->version, '>'))
                 <form action="{{ route('admin.modules.install') }}" method="post">
                     @csrf
                     <input type="hidden" name="module" value="{{ $moduleName }}">
                     <input type="hidden" name="update" value="1">
-                    <button class="btn btn-info"><i class="fas fa-arrow-up"></i> {{ __('admin.modules.update_apply') }}</button>
+                    <button class="btn btn-info"><i class="fas fa-arrow-up"></i> {{ __('admin.modules.update_to', ['version' => $diskVersion]) }}</button>
+                </form>
+            @elseif ($hasUpdate && ! empty($registryInfo['download_url']))
+                <form action="{{ route('admin.modules.download') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="url" value="{{ $registryInfo['download_url'] }}">
+                    <button class="btn btn-info"><i class="fas fa-cloud-download-alt"></i> {{ __('admin.modules.update_to', ['version' => $registryVersion]) }}</button>
                 </form>
             @endif
 

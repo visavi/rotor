@@ -51,7 +51,13 @@
                 $installed   = $modules->has($name);
                 $isActive    = $installed && $modules[$name]->active;
                 $localExists = in_array($name, $moduleNames, true);
-                $hasUpdate   = $installed && isset($info['version']) && version_compare($info['version'], $modules[$name]->version, '>');
+                $diskVersion = $localVersions[$name] ?? null;
+                // Обновление считаем от версии на диске: она же и применяется
+                $pendingVersion = $installed && $diskVersion && version_compare($diskVersion, $modules[$name]->version, '>')
+                    ? $diskVersion
+                    : ($installed ? $modules[$name]->version : null);
+                $hasUpdate   = $installed && isset($info['version']) && version_compare($info['version'], $pendingVersion, '>');
+                $needsApply  = $installed && $diskVersion && version_compare($diskVersion, $modules[$name]->version, '>');
                 $requires    = $info['requires'] ?? null;
                 $compatible  = ! $requires || version_compare(ROTOR_VERSION, $requires, '>=');
                 $searchText  = mb_strtolower(trim(($info['name'] ?? $name) . ' ' . $name . ' ' . ($info['description'] ?? '') . ' ' . ($info['author'] ?? '')));
@@ -86,18 +92,31 @@
                                     <i class="fas fa-download"></i> {{ __('main.install') }}
                                 </button>
                             </form>
+                        @elseif ($needsApply)
+                            <form action="{{ route('admin.modules.install') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="module" value="{{ $name }}">
+                                <input type="hidden" name="update" value="1">
+                                <button class="btn btn-sm btn-info text-nowrap">
+                                    <i class="fas fa-arrow-up"></i> {{ __('admin.modules.update_to', ['version' => $diskVersion]) }}
+                                </button>
+                            </form>
                         @elseif ($hasUpdate)
                             <form action="{{ route('admin.modules.download') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="url" value="{{ $info['download_url'] ?? '' }}">
                                 <button class="btn btn-sm btn-info text-nowrap" {{ empty($info['download_url']) ? 'disabled' : '' }}>
-                                    <i class="fas fa-download"></i> {{ __('admin.modules.update_download') }}
+                                    <i class="fas fa-cloud-download-alt"></i> {{ __('admin.modules.update_to', ['version' => $info['version']]) }}
                                 </button>
                             </form>
                         @elseif (! $installed)
-                            <a href="/admin/modules/module?module={{ $name }}" class="btn btn-sm btn-success text-nowrap">
-                                <i class="fas fa-plug"></i> {{ __('main.install') }}
-                            </a>
+                            <form action="{{ route('admin.modules.install') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="module" value="{{ $name }}">
+                                <button class="btn btn-sm btn-success text-nowrap">
+                                    <i class="fas fa-plug"></i> {{ __('main.install') }}
+                                </button>
+                            </form>
                         @endif
                     </div>
                 </div>
@@ -116,7 +135,7 @@
                         @if ($installed && $localExists && ! $isActive)
                             <span class="badge bg-warning text-dark">{{ __('main.disabled') }}</span>
                         @endif
-                        @if ($hasUpdate)
+                        @if ($hasUpdate || $needsApply)
                             <span class="badge bg-info">{{ __('main.update_available') }}</span>
                         @endif
                         @if (! empty($info['conflict']))

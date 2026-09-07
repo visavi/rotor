@@ -14,7 +14,7 @@ class DialogueResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'             => $this->id,
+            'id' => $this->id,
             // Автор объектом; у системных сообщений и удалённых пользователей его нет,
             // тогда клиенту остаются login/name
             'user'           => $this->author->exists ? AuthorResource::make($this->author) : null,

@@ -17,7 +17,7 @@ class MessageResource extends JsonResource
         $sender = $type === Message::IN ? $this->author : $this->user;
 
         return [
-            'id'             => $this->id,
+            'id' => $this->id,
             // Автор объектом; у системных сообщений и удалённых пользователей его нет,
             // тогда клиенту остаются login/name
             'user'           => $sender->exists ? AuthorResource::make($sender) : null,

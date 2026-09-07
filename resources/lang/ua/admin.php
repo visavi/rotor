@@ -116,7 +116,7 @@ return [
         'upload_invalid_file'          => 'Некоректний файл!',
         'upload_success_extracted'     => 'Модуль успішно розпаковано!',
         'update_download'              => 'Завантажити оновлення',
-        'update_apply'                 => 'Застосувати оновлення',
+        'update_to'                    => 'Оновити до :version',
         'update_extracted'             => 'Оновлення завантажено. Натисніть «Застосувати оновлення», щоб встановити!',
         'download_invalid_url'         => 'Некоректний URL!',
         'download_failed'              => 'Не вдалося завантажити архів!',

@@ -117,7 +117,7 @@ return [
         'upload_invalid_file'          => 'Некорректный файл!',
         'upload_success_extracted'     => 'Модуль успешно распакован!',
         'update_download'              => 'Скачать обновление',
-        'update_apply'                 => 'Применить обновление',
+        'update_to'                    => 'Обновить до :version',
         'update_extracted'             => 'Обновление скачано. Нажмите «Применить обновление», чтобы установить!',
         'download_invalid_url'         => 'Некорректный URL!',
         'download_failed'              => 'Не удалось скачать архив!',
