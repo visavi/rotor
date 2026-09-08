@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Illuminate\Foundation\Application;
 use RuntimeException;
 
@@ -11,6 +12,12 @@ trait CreatesApplication
     public function createApplication(): Application
     {
         $app = require __DIR__ . '/../bootstrap/app.php';
+
+        // Правку надо внести до старта провайдеров: ModuleServiceProvider::boot()
+        // читает список модулей из БД и тем самым создаёт соединение
+        $app->afterBootstrapping(LoadConfiguration::class, function (Application $app): void {
+            $this->forceTestDatabase($app);
+        });
 
         $app->make(Kernel::class)->bootstrap();
 
@@ -24,6 +31,29 @@ trait CreatesApplication
         }
 
         return $app;
+    }
+
+    /**
+     * Принудительно уводит соединение на тестовую базу
+     *
+     * DB_DATABASE из phpunit.xml применяется только когда Laravel читает env().
+     * При закэшированном конфиге (bootstrap/cache/config.php) движок берёт готовый
+     * массив, env() не вызывает, и прогон уходит на боевую базу. Правка загруженного
+     * конфига работает в обоих случаях.
+     *
+     * purge() здесь не нужен и вреден: соединение к этому моменту ещё не создано,
+     * а переподключение посреди загрузки ломает откат транзакций RefreshDatabase.
+     */
+    private function forceTestDatabase(Application $app): void
+    {
+        $key = 'database.connections.' . $app['config']->get('database.default') . '.database';
+        $database = (string) $app['config']->get($key);
+
+        if ($database === '' || $database === ':memory:' || str_contains($database, 'test')) {
+            return;
+        }
+
+        $app['config']->set($key, $database . '_test');
     }
 
     /**

@@ -13,6 +13,9 @@ return [
     */
 
     'paths' => [
+        // Правки владельца сайта: файл здесь перебивает одноимённый в ядре,
+        // а обновление ядра каталог не трогает (UpgradeService::$excluded)
+        resource_path('custom/views'),
         resource_path('views'),
     ],
 

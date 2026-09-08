@@ -20,6 +20,7 @@ class UpgradeService
         'public/uploads',
         'modules',
         'app/hooks.php',
+        'resources/custom',
     ];
 
     private array $writableDirs = [

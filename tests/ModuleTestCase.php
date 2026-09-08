@@ -8,6 +8,7 @@ use App\Support\Hook;
 use App\Support\Registry;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 abstract class ModuleTestCase extends TestCase
@@ -26,10 +27,50 @@ abstract class ModuleTestCase extends TestCase
         $this->registerModuleResources();
     }
 
+    /**
+     * Переопределения config.php модуля для конкретного теста
+     *
+     * Применяются до подключения хелперов, хуков и маршрутов — как и в провайдере,
+     * иначе код модуля увидел бы значения по умолчанию
+     *
+     * @return array<string, mixed>
+     */
+    protected function moduleConfig(): array
+    {
+        return [];
+    }
+
+    /**
+     * Удаляет временный каталог теста
+     *
+     * Тесты чистят пути, которые в бою указывают на рабочие данные, поэтому
+     * удаление за пределами storage/framework/testing считаем ошибкой теста
+     */
+    protected function deleteTestingDirectory(string $path): void
+    {
+        $testing = storage_path('framework/testing');
+
+        if (! str_starts_with($path, $testing)) {
+            $this->fail("Refusing to delete a non-testing directory: {$path}");
+        }
+
+        File::deleteDirectory($path);
+    }
+
     private function registerModuleResources(): void
     {
         $name = $this->moduleName;
         $key = Str::snake($name);
+
+        // config.php модуля в провайдере уезжает в Config::set($moduleKey, ...),
+        // здесь то же самое и в том же порядке: без него config('<module>.*') в тестах пуст
+        $moduleConfig = base_path("modules/{$name}/config.php");
+        $values = file_exists($moduleConfig) ? include $moduleConfig : [];
+        $values = is_array($values) ? array_merge($values, $this->moduleConfig()) : $this->moduleConfig();
+
+        if ($values) {
+            config()->set($key, $values);
+        }
 
         $viewsPath = base_path("modules/{$name}/resources/views");
         if (is_dir($viewsPath)) {

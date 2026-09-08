@@ -59,6 +59,13 @@ class ModuleServiceProvider extends ServiceProvider
                     $this->loadTranslationsFrom($base . '/resources/lang', $moduleKey);
                 }
 
+                // Конфиг ставится до кода модуля: хелперы, хуки, маршруты и прослойка
+                // читают config('<module>.*') уже на подключении, и с пустым конфигом
+                // молча уходили бы на значения по умолчанию
+                if ($data['config'] ?? false) {
+                    Config::set($moduleKey, $data['config']);
+                }
+
                 if ($files['helpers'] ?? false) {
                     include_once $base . '/helpers.php';
                 }
@@ -69,10 +76,6 @@ class ModuleServiceProvider extends ServiceProvider
 
                 if ($files['routes'] ?? false) {
                     $this->loadRoutesFrom($base . '/routes.php');
-                }
-
-                if ($data['config'] ?? false) {
-                    Config::set($moduleKey, $data['config']);
                 }
 
                 if ($files['middleware'] ?? false) {

@@ -2,8 +2,7 @@
 
 return [
     'antimat' => [
-        'text' => '
-        All words from the list will be replaced by ***<br>
+        'text' => 'All words from the list will be replaced by ***<br>
         To delete a word, click on it, you can add a word in the form below<br>',
         'words'         => 'Word list',
         'total_words'   => 'Total words',
