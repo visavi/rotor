@@ -89,6 +89,7 @@ return [
         'middleware'                   => 'Middleware',
         'empty_modules'                => 'Modules not loaded yet!',
         'confirm_delete'               => 'Do you really want to remove the module?',
+        'confirm_delete_data'          => 'The module tables with all their records and its settings will be deleted. The data cannot be restored. Continue?',
         'hint'                         => 'Attention! When you remove the module, all migrations and changes to the database will be deleted',
         'module_not_found'             => 'This module was not found!',
         'module_success_installed'     => 'Module successfully installed!',

@@ -212,7 +212,7 @@
             @endif
 
             <form action="{{ route('admin.modules.uninstall') }}" method="post"
-                  onsubmit="return confirm('{{ __('admin.modules.confirm_delete') }}')">
+                  onsubmit="return confirm('{{ __('admin.modules.confirm_delete') }}') && confirm('{{ __('admin.modules.confirm_delete_data') }}')">
                 @csrf
                 <input type="hidden" name="module" value="{{ $moduleName }}">
                 <button class="btn btn-danger">{{ __('main.delete') }}</button>
