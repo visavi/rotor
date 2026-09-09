@@ -3,8 +3,8 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
-use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use RuntimeException;
 
 trait CreatesApplication
