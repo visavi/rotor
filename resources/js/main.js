@@ -194,6 +194,14 @@ document.addEventListener('DOMContentLoaded', function () {
         allowClear: true,
         suggestionsThreshold: 2,
         max: 10,
+        // Ищем и по логину, и по имени, иначе список фильтруется только по логину
+        searchFields: ['login', 'name'],
+        // В подсказках показываем «логин — имя», как в упоминаниях tiptap
+        onRenderItem: (item, label, inst) => {
+            const text = item.name && item.name !== item.login ? `${item.login} — ${item.name}` : item.login
+
+            return inst.config('sanitizer')(text)
+        },
     })
 
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {})
