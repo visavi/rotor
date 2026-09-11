@@ -995,8 +995,15 @@ function ajaxElement(el, selector) {
     return selector === 'self' ? el : el.closest(selector)
 }
 
-function ajaxPayload(el) {
-    if (el.matches('form')) return new FormData(el)
+function ajaxPayload(el, submitter) {
+    if (el.matches('form')) {
+        const data = new FormData(el)
+        // Кнопка, которой отправили форму, в FormData сама не попадает,
+        // а формы с несколькими кнопками шлют выбор именно в ней
+        if (submitter?.name) data.append(submitter.name, submitter.value)
+
+        return data
+    }
 
     const data = {}
     for (const [key, value] of Object.entries(el.dataset)) {
@@ -1006,7 +1013,7 @@ function ajaxPayload(el) {
     return data
 }
 
-function ajaxSend(el) {
+function ajaxSend(el, submitter) {
     const url = el.dataset.ajaxUrl || el.getAttribute('action') || el.getAttribute('href')
 
     // Пока запрос в пути, повторные клики игнорируются
@@ -1014,7 +1021,7 @@ function ajaxSend(el) {
 
     const method = el.dataset.ajaxMethod || (el.matches('form') ? el.method : 'post')
     // Данные собираются до блокировки: отключённые поля в FormData не попадают
-    const data = ajaxPayload(el)
+    const data = ajaxPayload(el, submitter)
     // У кнопки без type submit подразумевается, поэтому ловится и она
     const button = el.matches('form') ? el.querySelector('[type="submit"], button:not([type])') : null
 
@@ -1064,14 +1071,14 @@ function ajaxHandle(el, event) {
     event.preventDefault()
 
     if (!('ajaxConfirm' in el.dataset)) {
-        ajaxSend(el)
+        ajaxSend(el, event.submitter)
         return
     }
 
     // Пустой data-ajax-confirm — спросить обычным текстом про удаление записи
     const message = el.dataset.ajaxConfirm || __('confirm_message_delete')
 
-    confirm(message, (result) => { if (result) ajaxSend(el) })
+    confirm(message, (result) => { if (result) ajaxSend(el, event.submitter) })
 }
 
 document.addEventListener('submit', function (event) {
