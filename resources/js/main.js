@@ -50,16 +50,25 @@ function initShortView(container = document) {
 function ajax({ url, type = 'GET', data = null, dataType = 'json', beforeSend, complete, success, error }) {
     if (beforeSend) beforeSend()
 
+    const method = type.toUpperCase()
+
     const options = {
-        method: type.toUpperCase(),
+        method,
         headers: {
             'X-CSRF-TOKEN': csrfToken,
             'X-Requested-With': 'XMLHttpRequest',
         }
     }
 
+    let target = url
+
     if (data) {
-        if (data instanceof FormData) {
+        if (method === 'GET' || method === 'HEAD') {
+            // Запрос с телом fetch отклоняет, поэтому данные уходят в адрес
+            const query = new URLSearchParams(data instanceof FormData ? [...data.entries()] : data).toString()
+
+            if (query) target += (url.includes('?') ? '&' : '?') + query
+        } else if (data instanceof FormData) {
             options.body = data
         } else {
             options.headers['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -67,7 +76,7 @@ function ajax({ url, type = 'GET', data = null, dataType = 'json', beforeSend, c
         }
     }
 
-    fetch(url, options)
+    fetch(target, options)
         .then(res => dataType === 'json' ? res.json() : res.text())
         .then(responseData => { if (success) success(responseData) })
         .catch(err => { if (error) error(null, err.message, err) })
