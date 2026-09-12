@@ -834,11 +834,11 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     activeButtons.push({ el: tableDd._dropdownBtn, getActive: () => editor.isActive('table') })
     sep()
 
-    const linkBtn = btn('fa-link', __('editor.link'), () => {
+    const linkBtn = btn('fa-link', __('editor.link'), async () => {
         const existing = editor.getAttributes('link').href || ''
         const { from, to } = editor.state.selection
         const selected = editor.state.doc.textBetween(from, to, '')
-        const url = prompt(__('editor.url_link') + ':', existing || selected)
+        const url = await window.askValue(__('editor.url_link') + ':', existing || selected)
         if (!validateUrl(url)) return
         if (selected || existing) {
             editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: null }).run()
@@ -850,7 +850,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     }, () => editor.isActive('link'))
 
     btn('fa-image', __('editor.image'), async () => {
-        const url = prompt(__('editor.url_image') + ':')
+        const url = await window.askValue(__('editor.url_image') + ':')
         if (!validateUrl(url)) return
 
         const imagePattern = /\.(jpe?g|png|gif|webp|bmp|svg)(\?.*)?$/i
@@ -883,24 +883,24 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         })
     }
 
-    btn('fa-play-circle', __('editor.video'), () => {
-        const url = prompt(__('editor.url_video') + ':')
+    btn('fa-play-circle', __('editor.video'), async () => {
+        const url = await window.askValue(__('editor.url_video') + ':')
         if (!validateUrl(url)) return
         editor.chain().focus().insertVideo(url).run()
     })
 
-    btn('fa-music', __('editor.audio'), () => {
-        const url = prompt(__('editor.url_audio') + ':')
+    btn('fa-music', __('editor.audio'), async () => {
+        const url = await window.askValue(__('editor.url_audio') + ':')
         if (!validateUrl(url)) return
         editor.chain().focus().insertAudio(url).run()
     })
     sep()
 
-    btn('fa-plus-square', __('editor.spoiler'), () => {
+    btn('fa-plus-square', __('editor.spoiler'), async () => {
         if (editor.isActive('spoiler')) {
             editor.chain().focus().lift('spoiler').run()
         } else {
-            const title = prompt(__('editor.spoiler_title') + ':', __('editor.spoiler'))
+            const title = await window.askValue(__('editor.spoiler_title') + ':', __('editor.spoiler'))
             if (title !== null) editor.chain().focus().insertSpoiler(title || __('editor.spoiler')).run()
         }
     }, () => editor.isActive('spoiler'))
@@ -909,11 +909,11 @@ function buildToolbar(editor, textarea, uploadImageFn) {
             ? editor.chain().focus().lift('hide').run()
             : editor.chain().focus().insertHide().run(),
         () => editor.isActive('hide'))
-    btn('fa-quote-right', __('editor.quote'), () => {
+    btn('fa-quote-right', __('editor.quote'), async () => {
         if (editor.isActive('blockquote')) {
             editor.chain().focus().toggleBlockquote().run()
         } else {
-            const author = prompt(__('editor.quote_author') + ':')
+            const author = await window.askValue(__('editor.quote_author') + ':')
             if (author !== null) editor.chain().focus().toggleBlockquote(author || null).run()
         }
     }, () => editor.isActive('blockquote'))

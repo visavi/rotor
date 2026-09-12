@@ -6,6 +6,7 @@
     "confirm_complain_submit": "Вы действительно хотите отправить жалобу?",
     "complain_submitted": "Жалоба успешно отправлена!",
     "confirm_message_delete": "Вы действительно хотите удалить запись?",
+    "confirm_action": "Вы уверены?",
     "confirm_file_delete": "Вы действительно хотите удалить файл?",
     "confirm_discard_changes": "Изменения не сохранены. Закрыть?",
     "message_deleted": "Сообщение успешно удалено!",

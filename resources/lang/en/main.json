@@ -6,6 +6,7 @@
     "confirm_complain_submit": "Do you really want to send a complaint?",
     "complain_submitted": "Complaint successfully sent!",
     "confirm_message_delete": "Are you sure you want to delete the record?",
+    "confirm_action": "Are you sure?",
     "confirm_file_delete": "Are you sure you want to delete the file?",
     "confirm_discard_changes": "Changes are not saved. Close?",
     "message_deleted": "Message successfully deleted!",

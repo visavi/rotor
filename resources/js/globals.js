@@ -1,3 +1,6 @@
+// Сторонние библиотеки в одном месте: настроенные экземпляры отдаются экспортом,
+// в window их выставляет main.js — там же, где остальные публичные функции
+
 import { Fancybox } from '@fancyapps/ui';
 import { Carousel } from '@fancyapps/ui/dist/carousel/carousel.js';
 import { Arrows } from '@fancyapps/ui/dist/carousel/carousel.arrows.js';
@@ -17,8 +20,12 @@ const notyf = new Notyf({
     ],
 });
 
-window.fancybox = Fancybox;
-window.fancyCarousel = Carousel;
-window.fancyCarouselPlugins = { Arrows, Dots };
-window.tags = Tags;
-window.notyf = notyf;
+const fancyCarouselPlugins = { Arrows, Dots };
+
+export {
+    notyf,
+    Tags as tags,
+    Fancybox as fancybox,
+    Carousel as fancyCarousel,
+    fancyCarouselPlugins,
+};
