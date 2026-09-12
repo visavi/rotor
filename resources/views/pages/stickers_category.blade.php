@@ -13,24 +13,26 @@
 @stop
 
 @section('content')
-    <div class="container section mb-3 shadow">
-        @if ($stickers->isNotEmpty())
-            <div class="row">
-                @foreach ($stickers as $sticker)
-                    <div class="col-md-3 col-sm-6">
-                        <img src="{{ $sticker->name }}" alt="{{ $sticker->code }}" class="img-fluid"><br>
-                        <b>{{ $sticker->code }}</b>
-                    </div>
-                @endforeach
-            </div>
+    @if ($stickers->isNotEmpty())
+        <div class="section mb-3 shadow">
+            <div class="section-body">
+                <div class="sticker-grid">
+                    @foreach ($stickers as $sticker)
+                        <span class="sticker-item">
+                            <img src="{{ $sticker->name }}" alt="{{ $sticker->code }}" loading="lazy">
+                            <b>{{ $sticker->code }}</b>
+                        </span>
+                    @endforeach
+                </div>
 
-            {{ $stickers->links() }}
+                {{ $stickers->links() }}
 
-            <div class="mb-3">
-                {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b>
+                <div class="text-muted">
+                    {{ __('stickers.total_stickers') }}: <b>{{ $stickers->total() }}</b>
+                </div>
             </div>
-        @else
-            {{ showError(__('stickers.empty_stickers')) }}
-        @endif
-    </div>
+        </div>
+    @else
+        {{ showError(__('stickers.empty_stickers')) }}
+    @endif
 @stop

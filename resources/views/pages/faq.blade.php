@@ -11,91 +11,107 @@
     </nav>
 @stop
 
+@php
+// Возможности, открывающиеся при наборе актива: показываются только настроенные
+$abilities = collect([
+    ['point' => setting('rekuserpoint'),     'text' => __('pages.faq_active_text1')],
+    ['point' => setting('privatprotect'),    'text' => __('pages.faq_active_text2')],
+    ['point' => setting('addofferspoint'),   'text' => __('pages.faq_active_text3')],
+    ['point' => setting('sendmoneypoint'),   'text' => __('pages.faq_active_text5')],
+    ['point' => setting('editratingpoint'),  'text' => __('pages.faq_active_text6')],
+    ['point' => setting('editforumpoint'),   'text' => __('pages.faq_active_text7')],
+    ['point' => setting('advertpoint'),      'text' => __('pages.faq_active_text8')],
+    ['point' => setting('editcolorpoint'),   'text' => __('pages.faq_active_text4')],
+    ['point' => setting('editstatuspoint'),  'text' => __('pages.faq_active_text10')],
+])->filter(fn ($item) => $item['point'])->sortBy('point');
+
+// Начисления за действия: строка показывается, если задан актив или деньги
+$rewards = collect([
+    ['point' => setting('comment_point'),   'money' => setting('comment_money'),   'text' => __('pages.faq_money_comment')],
+    ['point' => setting('guestbook_point'), 'money' => setting('guestbook_money'), 'text' => __('pages.faq_money_guestbook')],
+    ['point' => setting('down_point'),      'money' => setting('down_money'),      'text' => __('pages.faq_money_down')],
+    ['point' => setting('blog_point'),      'money' => setting('blog_money'),      'text' => __('pages.faq_money_blog')],
+    ['point' => setting('forum_point'),     'money' => setting('forum_money'),     'text' => __('pages.faq_money_forum')],
+    ['point' => 0,                          'money' => setting('registermoney'),   'text' => __('pages.faq_money_register')],
+    ['point' => 0,                          'money' => setting('bonusmoney'),      'text' => __('pages.faq_money_bonus')],
+])->filter(fn ($item) => $item['point'] || $item['money']);
+
+$questions = [
+    'why_register',
+    'how_is_registration',
+    'why_do_you_need_status_and_reputation',
+    'what_will_give_me_status',
+    'how_can_i_help_site',
+    'did_not_find_answer',
+];
+@endphp
+
 @section('content')
-    {!! __('pages.why_register') !!}<br>
+    @if ($abilities->isNotEmpty())
+        <div class="section mb-3 shadow">
+            <div class="section-title"><i class="fas fa-unlock-keyhole"></i> {{ __('pages.faq_active') }}</div>
 
-    <h3 class="my-3">{{ __('pages.faq_active') }}:</h3>
+            <div class="section-body">
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <tbody>
+                            @foreach ($abilities as $ability)
+                                <tr>
+                                    <td class="text-nowrap"><span class="badge bg-adaptive">{{ plural($ability['point'], setting('scorename')) }}</span></td>
+                                    <td class="w-100">{{ $ability['text'] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-    @if (setting('rekuserpoint'))
-        <b>{{ plural(setting('rekuserpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text1') }}<br>
+                <div class="text-muted mt-2">{{ __('pages.faq_active_text9') }}</div>
+            </div>
+        </div>
     @endif
 
-    @if (setting('privatprotect'))
-        <b>{{ plural(setting('privatprotect'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text2') }}<br>
+    @if ($rewards->isNotEmpty())
+        <div class="section mb-3 shadow">
+            <div class="section-title"><i class="fas fa-coins"></i> {{ __('pages.faq_money') }}</div>
+
+            <div class="section-body">
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <tbody>
+                            @foreach ($rewards as $reward)
+                                <tr>
+                                    <td class="w-100">{{ $reward['text'] }}</td>
+                                    <td class="text-nowrap text-end">
+                                        @if ($reward['point'])
+                                            <span class="badge bg-adaptive">+{{ plural((int) $reward['point'], setting('scorename')) }}</span>
+                                        @endif
+
+                                        @if ($reward['money'])
+                                            <span class="badge bg-adaptive">+{{ plural((int) $reward['money'], setting('moneyname')) }}</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     @endif
 
-    @if (setting('addofferspoint'))
-        <b>{{ plural(setting('addofferspoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text3') }}<br>
-    @endif
+    <div class="accordion mb-3" id="faqAccordion">
+        @foreach ($questions as $index => $question)
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button{{ $index ? ' collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-{{ $index }}">
+                        {{ __('pages.' . $question . '_title') }}
+                    </button>
+                </h2>
 
-    @if (setting('sendmoneypoint'))
-        <b>{{ plural(setting('sendmoneypoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text5') }}<br>
-    @endif
-
-    @if (setting('editratingpoint'))
-        <b>{{ plural(setting('editratingpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text6') }}<br>
-    @endif
-
-    @if (setting('editforumpoint'))
-        <b>{{ plural(setting('editforumpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text7') }}<br>
-    @endif
-
-    @if (setting('advertpoint'))
-        <b>{{ plural(setting('advertpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text8') }}<br>
-    @endif
-
-    @if (setting('editcolorpoint'))
-        <b>{{ plural(setting('editcolorpoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text4') }}<br>
-    @endif
-
-    @if (setting('editstatuspoint'))
-        <b>{{ plural(setting('editstatuspoint'), setting('scorename')) }}</b> - {{ __('pages.faq_active_text10') }}<br>
-    @endif
-
-    <h3 class="my-3">{{ __('pages.faq_money') }}</h3>
-
-    @if (setting('comment_point') || setting('comment_money'))
-        {{ __('pages.faq_money_comment') }} -
-        <b>{{ plural((int) setting('comment_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('comment_money'), setting('moneyname')) }}</b><br>
-    @endif
-
-    @if (setting('guestbook_point') || setting('guestbook_money'))
-        {{ __('pages.faq_money_guestbook') }} -
-        <b>{{ plural((int) setting('guestbook_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('guestbook_money'), setting('moneyname')) }}</b><br>
-    @endif
-
-    @if (setting('down_point') || setting('down_money'))
-        {{ __('pages.faq_money_down') }} -
-        <b>{{ plural((int) setting('down_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('down_money'), setting('moneyname')) }}</b><br>
-    @endif
-
-    @if (setting('blog_point') || setting('blog_money'))
-        {{ __('pages.faq_money_blog') }} -
-        <b>{{ plural((int) setting('blog_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('blog_money'), setting('moneyname')) }}</b><br>
-    @endif
-
-    @if (setting('forum_point') || setting('forum_money'))
-        {{ __('pages.faq_money_forum') }} -
-        <b>{{ plural((int) setting('forum_point'), setting('scorename')) }}</b> и <b>{{ plural((int) setting('forum_money'), setting('moneyname')) }}</b><br>
-    @endif
-
-    @if (setting('registermoney'))
-        {{ __('pages.faq_money_register') }} -
-        <b>{{ plural(setting('registermoney'), setting('moneyname')) }}</b><br>
-    @endif
-
-    @if (setting('bonusmoney'))
-        {{ __('pages.faq_money_bonus') }} -
-        <b>{{ plural(setting('bonusmoney'), setting('moneyname')) }}</b><br>
-    @endif
-
-    <br>
-
-    {{ __('pages.faq_active_text9') }}<br><br>
-
-    {!! __('pages.how_is_registration') !!}<br>
-    {!! __('pages.why_do_you_need_status_and_reputation') !!}<br>
-    {!! __('pages.what_will_give_me_status') !!}<br>
-    {!! __('pages.how_can_i_help_site') !!}<br>
-    {!! __('pages.did_not_find_answer') !!}<br>
+                <div id="faq-{{ $index }}" class="accordion-collapse collapse{{ $index ? '' : ' show' }}" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">{!! __('pages.' . $question) !!}</div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 @stop

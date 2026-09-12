@@ -11,27 +11,64 @@
     </nav>
 @stop
 
+@php
+$point = getUser('point') ?? 0;
+// Статусы отсортированы по убыванию: текущий — первый, до которого набран актив
+$current = getUser() ? $statuses->first(fn ($status) => $point >= $status->topoint) : null;
+$next = $current ? $statuses->last(fn ($status) => $status->topoint > $point) : null;
+@endphp
+
 @section('content')
-    {{ __('statuses.status_text1') }}<br>
-    {{ __('statuses.status_text2') }}<br>
-    {{ __('statuses.status_text3') }}<br><br>
+    <div class="section mb-3 shadow">
+        <div class="section-body text-muted">
+            {{ __('statuses.status_text1') }}<br>
+            {{ __('statuses.status_text2') }}<br>
+            {{ __('statuses.status_text3') }}
+        </div>
+    </div>
+
+    @if ($next)
+        @php
+        $from = $current->topoint;
+        $percent = min(100, (int) round(($point - $from) / max(1, $next->topoint - $from) * 100));
+        @endphp
+
+        <div class="section mb-3 shadow">
+            <div class="section-body">
+                <div class="d-flex justify-content-between mb-1">
+                    <span>{{ __('statuses.next_status') }}: <b @style(['color: ' . $next->color => $next->color])>{{ $next->name }}</b></span>
+                    <span class="text-muted">{{ plural($next->topoint - $point, setting('scorename')) }}</span>
+                </div>
+
+                <div class="progress" style="height: .5rem">
+                    <div class="progress-bar" style="width: {{ $percent }}%"></div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @if ($statuses->isNotEmpty())
-        @foreach ($statuses as $status)
-            <i class="fa fa-user-circle"></i>
+        <div class="status-list mb-3">
+            @foreach ($statuses as $status)
+                <div class="status-row{{ $current && $current->is($status) ? ' is-current' : '' }}">
+                    <i class="fas fa-award status-row-icon" @style(['color: ' . $status->color => $status->color])></i>
 
-            @if ($status->color)
-                <b><span style="color:{{ $status->color }}">{{ $status->name }}</span></b> — {{ plural($status->topoint, setting('scorename')) }}<br>
-            @else
-                <b>{{ $status->name }}</b> — {{ plural($status->topoint, setting('scorename')) }}<br>
-            @endif
-        @endforeach
+                    <span class="status-row-name" @style(['color: ' . $status->color => $status->color])>{{ $status->name }}</span>
 
-        <br>
+                    @if ($current && $current->is($status))
+                        <span class="badge bg-primary">{{ __('statuses.your_status') }}</span>
+                    @endif
+
+                    <span class="status-row-point">{{ plural($status->topoint, setting('scorename')) }}</span>
+                </div>
+            @endforeach
+        </div>
     @else
         {{ showError(__('statuses.empty_statuses')) }}
     @endif
 
-    {{ __('statuses.status_text4') }}<br>
-    {{ __('statuses.status_text5') }}<br><br>
+    <div class="text-muted">
+        {{ __('statuses.status_text4') }}<br>
+        {{ __('statuses.status_text5') }}
+    </div>
 @stop

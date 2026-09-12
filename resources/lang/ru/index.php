@@ -28,10 +28,15 @@ return [
 
     'information'   => 'Информация',
     'site_rules'    => 'Правила сайта',
+    'site_rules_desc' => 'Что можно и чего нельзя на сайте',
     'stickers_help' => 'Справка по стикерам',
+    'stickers_help_desc' => 'Как вставлять стикеры в сообщения',
     'faq'           => 'FAQ',
+    'faq_desc' => 'Ответы на частые вопросы',
     'api_interface' => 'API интерфейс',
+    'api_interface_desc' => 'Доступ к данным сайта из своих программ',
     'user_statuses' => 'Статусы пользователей',
+    'user_statuses_desc' => 'За что даются статусы и звания',
 
     'my_account'        => 'Моя анкета',
     'my_profile'        => 'Мой профиль',

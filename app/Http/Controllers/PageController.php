@@ -55,7 +55,16 @@ class PageController extends Controller
             ->orderBy('sc.id')
             ->get();
 
-        return view('pages/stickers', compact('categories'));
+        // Превью для плиток: несколько стикеров каждой категории одним запросом
+        $previews = Sticker::query()
+            ->select('category_id', 'name')
+            ->whereIn('category_id', $categories->pluck('id'))
+            ->orderBy(DB::raw('CHAR_LENGTH(code)'))
+            ->get()
+            ->groupBy('category_id')
+            ->map(static fn ($stickers) => $stickers->take(5));
+
+        return view('pages/stickers', compact('categories', 'previews'));
     }
 
     /**

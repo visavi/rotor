@@ -1001,3 +1001,189 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 .markdown-body :last-child {
     margin-bottom: 0;
 }
+
+/* Плитки со ссылками на справочные страницы */
+.info-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: .75rem;
+}
+
+.info-tile {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .85rem 1rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: .65rem;
+    background: var(--bs-body-bg);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+
+.info-tile:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 .35rem .85rem rgba(var(--bs-body-color-rgb), .08);
+    transform: translateY(-2px);
+    /* Тема подчёркивает ссылки при наведении — плитке это не нужно */
+    color: inherit;
+    text-decoration: none;
+}
+
+.info-tile-icon {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: .55rem;
+    background: rgba(var(--bs-primary-rgb), .12);
+    color: var(--bs-primary);
+    font-size: 1.15rem;
+}
+
+.info-tile-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.info-tile-title {
+    font-weight: 600;
+}
+
+.info-tile-text {
+    color: var(--bs-secondary-color);
+    font-size: .85rem;
+}
+
+.info-tile-arrow {
+    margin-left: auto;
+    color: var(--bs-secondary-color);
+    font-size: .8rem;
+    transition: transform .15s;
+}
+
+.info-tile:hover .info-tile-arrow {
+    transform: translateX(3px);
+    color: var(--bs-primary);
+}
+
+/* Список статусов */
+.status-list {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .85rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: .5rem;
+    background: var(--bs-body-bg);
+}
+
+.status-row.is-current {
+    border-color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), .07);
+}
+
+.status-row-icon {
+    color: var(--bs-secondary-color);
+}
+
+.status-row-name {
+    font-weight: 600;
+}
+
+.status-row-point {
+    margin-left: auto;
+    color: var(--bs-secondary-color);
+    font-size: .85rem;
+    text-align: right;
+}
+
+/* Категории стикеров */
+.sticker-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: .75rem;
+}
+
+.sticker-category {
+    display: block;
+    padding: .85rem 1rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: .65rem;
+    background: var(--bs-body-bg);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+
+.sticker-category:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 .35rem .85rem rgba(var(--bs-body-color-rgb), .08);
+    transform: translateY(-2px);
+    color: inherit;
+    text-decoration: none;
+}
+
+.sticker-category-title {
+    display: block;
+    font-weight: 600;
+}
+
+.sticker-category-preview {
+    display: flex;
+    gap: .35rem;
+    align-items: center;
+    margin-top: .5rem;
+    min-height: 1.5rem;
+}
+
+/* Бокс одинаковый, но мелкие смайлы в нём не растягиваются */
+.sticker-category-preview img {
+    max-width: 1.75rem;
+    max-height: 1.75rem;
+    width: auto;
+    height: auto;
+}
+
+/* Сетка стикеров категории */
+.sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+.sticker-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    padding: .65rem .35rem;
+    border: 1px solid transparent;
+    border-radius: .5rem;
+    text-align: center;
+}
+
+.sticker-item img {
+    max-width: 100%;
+    max-height: 4rem;
+    width: auto;
+    height: auto;
+}
+
+.sticker-item b {
+    color: var(--bs-secondary-color);
+    font-size: .8rem;
+    word-break: break-all;
+}

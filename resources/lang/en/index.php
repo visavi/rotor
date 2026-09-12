@@ -28,10 +28,15 @@ return [
 
     'information'   => 'Information',
     'site_rules'    => 'Site rules',
+    'site_rules_desc' => 'What is allowed on the site and what is not',
     'stickers_help' => 'Stickers help',
+    'stickers_help_desc' => 'How to insert stickers into messages',
     'faq'           => 'FAQ',
+    'faq_desc' => 'Answers to frequently asked questions',
     'api_interface' => 'Api interface',
+    'api_interface_desc' => 'Access to site data from your own apps',
     'user_statuses' => 'User statuses',
+    'user_statuses_desc' => 'How statuses and ranks are earned',
 
     'my_account'        => 'My account',
     'my_profile'        => 'My profile',

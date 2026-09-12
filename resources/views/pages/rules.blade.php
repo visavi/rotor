@@ -13,7 +13,9 @@
 
 @section('content')
     @if ($rules)
-        {{ renderHtml($rules->text) }}
+        <div class="section mb-3 shadow">
+            <div class="section-body section-message">{{ renderHtml($rules->text) }}</div>
+        </div>
     @else
         {{ showError(__('pages.empty_rules')) }}
     @endif

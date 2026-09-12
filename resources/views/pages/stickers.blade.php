@@ -13,13 +13,21 @@
 
 @section('content')
     @if ($categories->isNotEmpty())
-        @foreach ($categories as $category)
-            <div class="section mb-3 shadow">
-                <div class="section-title">
-                    <i class="far fa-smile"></i> <a href="/stickers/{{ $category->id }}">{{ $category->name }}</a> <span class="badge bg-adaptive">{{ $category->cnt }}</span>
-                </div>
-            </div>
-        @endforeach
+        <div class="sticker-categories">
+            @foreach ($categories as $category)
+                <a class="sticker-category" href="/stickers/{{ $category->id }}">
+                    <span class="sticker-category-title">
+                        {{ $category->name }} <span class="badge bg-adaptive">{{ $category->cnt }}</span>
+                    </span>
+
+                    <span class="sticker-category-preview">
+                        @foreach ($previews[$category->id] ?? [] as $sticker)
+                            <img src="{{ $sticker->name }}" alt="" loading="lazy">
+                        @endforeach
+                    </span>
+                </a>
+            @endforeach
+        </div>
     @else
         {{ showError(__('stickers.empty_categories')) }}
     @endif
