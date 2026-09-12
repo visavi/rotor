@@ -1,5 +1,4 @@
-<?php $cursor = config('app.debug') ? 'pointer' : 'default'; ?>
-<div class="performance" onclick="return showQueries();" style="cursor: {{ $cursor }}">
+<div class="performance"@if (config('app.debug')) data-bs-toggle="collapse" data-bs-target=".js-queries" style="cursor: pointer"@endif>
     <ul class="list-inline">
         <li class="list-inline-item" data-bs-toggle="tooltip" title="{{ __('index.db_queries') }}"><i class="fas fa-database"></i> {{ count($queries) }}</li>
 
@@ -16,7 +15,7 @@
     </ul>
 
 @if (config('app.debug'))
-<pre class="code text-start js-queries" style="display: none">
+<pre class="code text-start collapse js-queries">
 @foreach ($queries as $key => $query)
 {{ $query['query'] }} ({{ number_format($query['time'] / 1000, 4) }} {{ __('index.seconds') }})
 @endforeach

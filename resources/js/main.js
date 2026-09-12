@@ -1,7 +1,8 @@
 import * as bootstrap from 'bootstrap'
 import { __ } from './translate.js'
-import { ajax, csrfToken } from './ajax.js'
+import { ajax } from './ajax.js'
 import { confirm } from './dialogs.js'
+import { renderFile } from './attachments.js'
 import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
 import './prettify.js'
@@ -10,12 +11,15 @@ import './prettify.js'
 // notyf.error(...) прямо на странице. Остальные библиотеки нужны только здесь
 window.notyf = notyf
 
+// Высота липкой шапки — на неё сдвигается скролл к якорю, иначе цель уходит под шапку
 function getNavbarHeight() {
     let max = 0
     document.querySelectorAll('.app-header, .app-topnav').forEach(el => {
         max = Math.max(max, el.getBoundingClientRect().bottom)
     })
     if (!max) {
+        // Сторонняя тема без классов ядра: шапкой считается широкий fixed-блок,
+        // прижатый к верху; условия отсекают кнопку «наверх», сайдбар и модалки
         document.querySelectorAll('body > *, body > * > *').forEach(el => {
             if (window.getComputedStyle(el).position === 'fixed') {
                 const rect = el.getBoundingClientRect()
@@ -30,6 +34,11 @@ function getNavbarHeight() {
     return max
 }
 
+// Прокрутка к элементу с поправкой на липкую шапку
+function scrollToElement(el, behavior = 'smooth') {
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - getNavbarHeight(), behavior })
+}
+
 function initShortView(container = document) {
     container.querySelectorAll('.section-content.short-view:not(.clamped):not(.expanded)').forEach(function (el) {
         const hiddenPixels = el.scrollHeight - el.clientHeight
@@ -38,7 +47,7 @@ function initShortView(container = document) {
             const btn = document.createElement('button')
             btn.type = 'button'
             btn.className = 'btn btn-sm btn-adaptive mt-2'
-            btn.textContent = 'Показать полностью'
+            btn.textContent = __('buttons.show_full')
             btn.addEventListener('click', function () {
                 el.classList.add('expanded')
                 el.classList.remove('clamped')
@@ -76,15 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el))
-
-    const popovers = document.querySelectorAll('[data-bs-toggle="popover"]')
-    popovers.forEach(el => new bootstrap.Popover(el))
-
-    document.body.addEventListener('click', function (e) {
-        if (!e.target.closest('[data-bs-toggle="popover"]') && !e.target.closest('.popover')) {
-            popovers.forEach(el => bootstrap.Popover.getInstance(el)?.hide())
-        }
-    })
 
     const colorpicker = document.querySelector('.colorpicker')
     const colorpickerAddon = document.querySelector('.colorpicker-addon')
@@ -132,18 +132,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         setTimeout(function () {
             const target = document.querySelector(initialHash)
-            if (target) {
-                const navbarHeight = getNavbarHeight()
-                window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'instant' })
-            }
+            if (target) scrollToElement(target, 'instant')
         }, 100)
     } else if (new URLSearchParams(location.search).has('page')) {
         const commentsEl = document.querySelector('#comments')
         if (commentsEl) {
-            setTimeout(function () {
-                const navbarHeight = getNavbarHeight()
-                window.scrollTo({ top: commentsEl.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'instant' })
-            }, 100)
+            setTimeout(() => scrollToElement(commentsEl, 'instant'), 100)
         }
     }
 
@@ -219,22 +213,25 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 })
 
-/* Показ формы загрузки файла */
-window.showAttachForm = function () {
-    const btn = document.querySelector('.js-attach-button')
-    const form = document.querySelector('.js-attach-form')
-    if (btn) btn.style.display = 'none'
-    if (form) form.style.display = 'block'
-    return false
-}
+/* Раскрытие скрытого блока по ссылке: data-reveal — что показать,
+ * data-reveal-hide — что убрать (обычно саму ссылку с обёрткой) */
+document.addEventListener('click', function (e) {
+    const el = e.target.closest('[data-reveal]')
+    if (!el) return
+
+    e.preventDefault()
+
+    const target = document.querySelector(el.dataset.reveal)
+    if (target) target.style.display = 'block'
+
+    const hide = el.dataset.revealHide ? document.querySelector(el.dataset.revealHide) : null
+    if (hide) hide.style.display = 'none'
+})
 
 /* Переход к форме ввода */
 window.postJump = function () {
     const form = document.querySelector('.section-form')
-    if (form) {
-        const navbarHeight = getNavbarHeight()
-        window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - navbarHeight, behavior: 'smooth' })
-    }
+    if (form) scrollToElement(form)
 }
 
 /* Сворачивание/разворачивание */
@@ -256,6 +253,21 @@ window.toggleComment = function (id) {
     }
 }
 
+/* Редактор для поля, созданного после загрузки страницы: tiptap подключается
+ * чанком по требованию, повторный вызов отдаёт уже готовый экземпляр */
+async function ensureEditor(textarea) {
+    const id = textarea?.id
+    if (!id) return null
+
+    if (!window._tiptapEditors?.[id]) {
+        textarea.classList.add('tiptap')
+        const { initEditors } = await import('./tiptap.js')
+        initEditors([textarea])
+    }
+
+    return window._tiptapEditors?.[id] ?? null
+}
+
 /* Открыть форму ответа под комментарием */
 window.openReplyForm = function (id, callback) {
     document.querySelectorAll('.reply-form').forEach(function (f) {
@@ -266,22 +278,10 @@ window.openReplyForm = function (id, callback) {
 
     form.classList.remove('d-none')
 
-    const textarea = form.querySelector('textarea')
-    const editorId = textarea?.id
-
-    if (textarea && editorId && !window._tiptapEditors?.[editorId]) {
-        textarea.classList.add('tiptap')
-        import('./tiptap.js').then(({ initEditors }) => {
-            initEditors([textarea])
-            const ed = window._tiptapEditors?.[editorId]
-            ed?.commands.focus()
-            callback?.(ed)
-        })
-    } else {
-        const ed = window._tiptapEditors?.[editorId]
-        ed?.commands.focus()
-        callback?.(ed)
-    }
+    ensureEditor(form.querySelector('textarea')).then(editor => {
+        editor?.commands.focus()
+        callback?.(editor)
+    })
 
     return false
 }
@@ -309,38 +309,24 @@ document.addEventListener('submit', function (e) {
     const submitBtn = form.querySelector('button[type="submit"], button:not([type="button"])')
     if (submitBtn) submitBtn.disabled = true
 
-    fetch(form.action, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-        body: new FormData(form),
-    })
-        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d } }) })
-        .then(function ({ ok, data }) {
-            if (ok) {
-                const hash = data.redirect.includes('#') ? data.redirect.split('#')[1] : ''
-                window.location.hash = hash
+    ajax({
+        url: form.action, type: 'POST', data: new FormData(form),
+        // Ответ приходит адресом записи при успехе и списком ошибок при отказе
+        success: function (data) {
+            if (data.redirect) {
+                window.location.hash = data.redirect.includes('#') ? data.redirect.split('#')[1] : ''
                 window.location.reload()
-            } else {
-                const msg = Object.values(data.errors || {}).flat().join(', ')
-                if (errorEl) errorEl.textContent = msg
-                if (submitBtn) submitBtn.disabled = false
-            }
-        })
-        .catch(function () {
-            if (submitBtn) submitBtn.disabled = false
-        })
-})
 
-/* Схлопывание/разворачивание ветки комментариев */
-document.addEventListener('click', function (e) {
-    const btn = e.target.closest('.comment-collapse-btn')
-    if (!btn) return
-    const id = btn.dataset.id
-    const children = document.getElementById('comment-children-' + id)
-    if (!children) return
-    const icon = btn.querySelector('i')
-    const collapsed = children.classList.toggle('d-none')
-    icon.className = collapsed ? 'fa fa-plus text-muted' : 'fa fa-minus text-muted'
+                return
+            }
+
+            if (errorEl) errorEl.textContent = Object.values(data.errors || {}).flat().join(', ')
+            if (submitBtn) submitBtn.disabled = false
+        },
+        error: function () {
+            if (submitBtn) submitBtn.disabled = false
+        },
+    })
 })
 
 /* Переключение языка (ajax, без перезагрузки на /language) */
@@ -411,21 +397,28 @@ function doInsertQuote (editor, authorEl, author, date, message) {
     }
 }
 
+/* Автор, дата и текст записи для цитаты; вложенные цитаты в текст не попадают */
+function extractQuote(root) {
+    const authorEl = root?.querySelector('.section-author')
+    const dateEl   = root?.querySelector('.section-date')
+    const clone    = root?.querySelector('.section-message')?.cloneNode(true)
+    clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
+
+    return {
+        authorEl,
+        author:  authorEl?.dataset.login || authorEl?.textContent.trim() || null,
+        date:    (dateEl?.dataset.date || dateEl?.textContent || '').trim(),
+        message: clone?.textContent.trim() || '',
+    }
+}
+
 window.postQuote = function (el) {
     const commentItem = el.closest('.comment-item')
 
     if (commentItem) {
-        const id       = commentItem.dataset.id
-        const rcRight  = el.closest('.comment-right')
-        const authorEl = rcRight?.querySelector('.section-author')
-        const author   = authorEl?.dataset.login || authorEl?.textContent.trim() || null
-        const dateEl   = rcRight?.querySelector('.section-date')
-        const date     = (dateEl?.dataset.date || dateEl?.textContent || '').trim()
-        const clone    = rcRight?.querySelector('.section-message')?.cloneNode(true)
-        clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
-        const message  = clone?.textContent.trim() || ''
+        const { authorEl, author, date, message } = extractQuote(el.closest('.comment-right'))
 
-        openReplyForm(id, function (editor) {
+        openReplyForm(commentItem.dataset.id, function (editor) {
             if (editor) doInsertQuote(editor, authorEl, author, date, message)
         })
         return false
@@ -433,24 +426,14 @@ window.postQuote = function (el) {
 
     postJump()
 
-    const post     = el.closest('.section')
-    const authorEl = post?.querySelector('.section-author')
-    const author   = authorEl?.dataset.login || authorEl?.textContent.trim() || null
-    const dateEl   = post?.querySelector('.section-date')
-    const date     = (dateEl?.dataset.date || dateEl?.textContent || '').trim()
-    const clone    = post?.querySelector('.section-message')?.cloneNode(true)
-    const editor   = window._tiptapActiveEditor
-
+    const editor = window._tiptapActiveEditor
     if (!editor) return false
 
-    clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
-    const message = clone?.textContent.trim() || ''
-
+    const { authorEl, author, date, message } = extractQuote(el.closest('.section'))
     doInsertQuote(editor, authorEl, author, date, message)
     return false
 }
 
-/* Отправка жалобы на спам */
 /* Редактирование комментария в модальном окне */
 window.openEditModal = function (el) {
     const id      = el.dataset.id
@@ -467,41 +450,30 @@ window.openEditModal = function (el) {
     const filesContainer = modalEl.querySelector('.js-files')
     if (filesContainer) filesContainer.innerHTML = ''
 
-    const dataPromise = fetch(baseUrl + '/' + id, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken }
-    }).then(r => r.json()).then(data => {
-        const scope = modalEl.querySelector('form')
-        data.files?.forEach(file => {
-            const templateEl = scope?.querySelector(file.isImage ? '.js-image-template' : '.js-file-template')
-            const template = templateEl?.cloneNode(true)
-            if (!template) return
-            if (file.isImage) {
-                template.querySelector('img')?.setAttribute('src', file.path)
-            } else {
-                const link = template.querySelector('.js-file-link')
-                if (link) { link.href = file.path; link.textContent = file.name }
-                const sizeEl = template.querySelector('.js-file-size')
-                if (sizeEl) sizeEl.textContent = file.size
-            }
-            template.querySelector('.js-file-delete')?.setAttribute('data-id', file.id)
-            filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
+    const dataPromise = new Promise(resolve => {
+        ajax({
+            url: baseUrl + '/' + id,
+            success: (data) => {
+                const scope = modalEl.querySelector('form')
+
+                data.files?.forEach(file => renderFile(scope, filesContainer, file))
+
+                resolve(data.text || '')
+            },
+            error: () => resolve(''),
         })
-        return data.text || ''
     })
 
     const onShown = async () => {
         modalEl.removeEventListener('shown.bs.modal', onShown)
 
         const text = await dataPromise
+        const created = !window._tiptapEditors?.['edit-comment-msg']
+        const editor = await ensureEditor(msgEl)
 
-        if (!window._tiptapEditors?.['edit-comment-msg'] && msgEl) {
-            msgEl.classList.add('tiptap')
-            const { initEditors } = await import('./tiptap.js')
-            initEditors([msgEl])
-            await new Promise(resolve => requestAnimationFrame(resolve))
-        }
+        // Свежему редактору нужен кадр на вёрстку, иначе setContent не отрисуется
+        if (created) await new Promise(resolve => requestAnimationFrame(resolve))
 
-        const editor = window._tiptapEditors?.['edit-comment-msg']
         if (editor) {
             editor.commands.setContent(text, true)
             editor.resetChanged()
@@ -546,11 +518,11 @@ document.getElementById('editCommentForm')?.addEventListener('submit', function 
             } else {
                 notyf.error(data.message)
             }
-        }
+        },
+        error: () => notyf.error(__('request_failed')),
     })
 })
 
-/* Удаление комментариев */
 /* Копирует текст в буфер обмена */
 window.copyToClipboard = function (el) {
     const container = el.closest('.input-group') ?? el.parentElement
@@ -628,34 +600,9 @@ window.submitFile = function (el) {
         success: function (data) {
             if (!data.success) { notyf.error(data.message); return }
 
-            const isMedia = data.type === 'image' || data.type === 'video'
-            const templateEl = scope.querySelector(isMedia ? '.js-image-template' : '.js-file-template')
-            const template = templateEl?.cloneNode(true)
-
-            if (data.type === 'image') {
-                template?.querySelector('img')?.setAttribute('src', data.path)
-            } else if (data.type === 'video') {
-                const img = template?.querySelector('img')
-                if (img) {
-                    const wrap = img.parentElement
-                    const video = document.createElement('video')
-                    video.src = data.path
-                    video.className = img.className
-                    video.preload = 'metadata'
-                    img.replaceWith(video)
-                    wrap?.insertAdjacentHTML('beforeend', '<span class="slide-play-icon">▶</span>')
-                }
-            } else {
-                const link = template?.querySelector('.js-file-link')
-                if (link) { link.href = data.path; link.textContent = data.name }
-                const sizeEl = template?.querySelector('.js-file-size')
-                if (sizeEl) sizeEl.textContent = data.size
-            }
-
-            template?.querySelector('a')?.setAttribute('data-id', data.id)
-            if (template) filesContainer?.insertAdjacentHTML('beforeend', template.innerHTML)
+            renderFile(scope, filesContainer, data)
         },
-        error: (_, textStatus) => notyf.error('Ошибка загрузки файла: ' + textStatus)
+        error: (_, textStatus) => notyf.error(__('file_upload_failed') + ' ' + textStatus)
     })
 
     el.value = ''
@@ -702,27 +649,11 @@ window.deleteFile = function (el) {
                 if (data.path) cutMedia(data.path)
                 el.closest('.js-file').style.display = 'none'
             },
-            error: (_, textStatus) => notyf.error('Ошибка удаления файла: ' + textStatus)
+            error: (_, textStatus) => notyf.error(__('file_delete_failed') + ' ' + textStatus)
         })
     })
 
     return false
-}
-
-/* Показывает форму для повторной отправки кода подтверждения */
-window.resendingCode = function () {
-    const link = document.querySelector('.js-resending-link')
-    const form = document.querySelector('.js-resending-form')
-    if (link) link.style.display = 'none'
-    if (form) form.style.display = 'block'
-    return false
-}
-
-/* Показывает панель с запросами */
-window.showQueries = function () {
-    const el = document.querySelector('.js-queries')
-    if (!el) return
-    el.style.display = getComputedStyle(el).display === 'none' ? '' : 'none'
 }
 
 /* Update message count */
@@ -798,11 +729,8 @@ window.initSlideThumbImage = function (el) {
             `</a>`
     }
 
-    slider?.querySelectorAll('.slide-thumb-image').forEach(img => img.classList.remove('active'))
-    slider?.querySelectorAll('.slide-thumb-video').forEach(v => v.classList.remove('active'))
-
-    const thumb = el.querySelector('.slide-thumb-image, .slide-thumb-video')
-    thumb?.classList.add('active')
+    slider?.querySelectorAll('.slide-thumb-image, .slide-thumb-video').forEach(t => t.classList.remove('active'))
+    el.querySelector('.slide-thumb-image, .slide-thumb-video')?.classList.add('active')
 
     return false
 }
@@ -863,7 +791,7 @@ if (feedContainer && feedSentinel) {
         btn.type = 'button'
         btn.className = 'btn btn-primary d-block mx-auto my-3'
         btn.textContent = __('buttons.load_more')
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
             const nextUrl = getNextUrl()
             if (!nextUrl || loading) return
 
@@ -871,22 +799,27 @@ if (feedContainer && feedSentinel) {
             btn.remove()
             loader.classList.remove('d-none')
 
-            try {
-                const response = await fetch(nextUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                const html     = await response.text()
-                const temp     = document.createElement('div')
-                temp.innerHTML = html
+            ajax({
+                url: nextUrl, dataType: 'text',
+                complete: () => {
+                    loading = false
+                    loader.classList.add('d-none')
+                },
+                success: (html) => {
+                    const temp = document.createElement('div')
+                    temp.innerHTML = html
 
-                if (temp.querySelector('.feed-pagination')?.dataset.empty === '1') return
+                    // Пустая страница приходит с признаком в пагинации: кнопку не возвращаем
+                    if (temp.querySelector('.feed-pagination')?.dataset.empty === '1') {
+                        return
+                    }
 
-                feedContainer.append(...temp.children)
-                setTimeout(initShortView, 100)
+                    feedContainer.append(...temp.children)
+                    setTimeout(initShortView, 100)
 
-                if (getNextUrl()) loader.before(createLoadMoreButton())
-            } finally {
-                loading = false
-                loader.classList.add('d-none')
-            }
+                    if (getNextUrl()) loader.before(createLoadMoreButton())
+                },
+            })
         })
         return btn
     }

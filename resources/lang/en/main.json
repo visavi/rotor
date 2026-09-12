@@ -15,10 +15,13 @@
     "comment_edited": "Comment successfully updated!",
     "copied": "Copied!",
     "request_failed": "Request failed!",
+    "file_upload_failed": "File upload error:",
+    "file_delete_failed": "File deletion error:",
     "buttons": {
         "ok": "OK",
         "cancel": "Cancel",
-        "load_more": "Load more"
+        "load_more": "Load more",
+        "show_full": "Show in full"
     },
     "editor": {
         "bold": "Bold (Ctrl+B)",
@@ -41,6 +44,7 @@
         "ordered_list": "Ordered list",
         "link": "Link",
         "url_link": "Link URL",
+        "link_text": "Link text",
         "image": "Image",
         "url_image": "Image URL",
         "image_not_found": "Direct image link not found",
@@ -73,8 +77,6 @@
         "table_col_before": "Column left",
         "table_col_after": "Column right",
         "table_col_delete": "Delete column",
-        "table_delete": "Delete table",
-        "link_remove": "Remove link",
-        "link_open": "Open in new tab"
+        "table_delete": "Delete table"
     }
 }

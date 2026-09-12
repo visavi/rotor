@@ -17,6 +17,8 @@ export function ajax({ url, type = 'GET', data = null, dataType = 'json', before
         headers: {
             'X-CSRF-TOKEN': csrfToken,
             'X-Requested-With': 'XMLHttpRequest',
+            // Без Accept контроллеры с wantsJson() отвечают редиректом, а не json
+            'Accept': dataType === 'json' ? 'application/json' : '*/*',
         }
     }
 

@@ -11,6 +11,9 @@ import { Mention } from '@tiptap/extension-mention'
 import FileHandler from '@tiptap/extension-file-handler'
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
 import { __ } from './translate.js'
+import { notyf } from './globals.js'
+import { csrfToken } from './ajax.js'
+import { renderFile } from './attachments.js'
 
 // Ссылка: inclusive=false чтобы пробел после ссылки не входил в неё
 const CustomLink = Link.extend({
@@ -354,10 +357,64 @@ function fixNewlines(html) {
 function validateUrl(url) {
     if (!url) return false
     if (!/^https?:\/\//i.test(url)) {
-        alert(__('editor.invalid_url'))
+        notyf.error(__('editor.invalid_url'))
         return false
     }
     return true
+}
+
+const linkMark = href => ({ type: 'link', attrs: { href, target: null } })
+
+/* Новая ссылка: один вопрос — адрес; текстом становится выделение или сам адрес */
+async function insertLink(editor) {
+    const { from, to } = editor.state.selection
+    const selected = editor.state.doc.textBetween(from, to, '')
+    const url = await window.askValue(__('editor.url_link') + ':', selected)
+
+    if (url === null || !validateUrl(url)) return
+
+    if (selected) {
+        editor.chain().focus().setLink(linkMark(url).attrs).run()
+    } else {
+        editor.chain().focus().insertContent({ type: 'text', text: url, marks: [linkMark(url)] }).run()
+    }
+}
+
+/* Существующая ссылка: адрес и текст. Пустой адрес снимает ссылку, отмена ничего не меняет */
+async function editLink(editor) {
+    const href = editor.getAttributes('link').href || ''
+
+    // Выделяем всю ссылку, чтобы взять её текст и потом заменить целиком
+    editor.chain().focus().extendMarkRange('link').run()
+    const { from, to } = editor.state.selection
+    const text = editor.state.doc.textBetween(from, to, '')
+
+    const values = await window.askValues('', [
+        { label: __('editor.url_link') + ':', value: href },
+        { label: __('editor.link_text') + ':', value: text },
+    ])
+
+    if (values === null) return
+
+    const [url, newText] = values
+
+    if (url === '') {
+        editor.chain().focus().unsetLink().run()
+        return
+    }
+
+    if (!validateUrl(url)) return
+
+    // Текст не менялся — только адрес, чтобы не потерять форматирование внутри ссылки
+    if (!newText || newText === text) {
+        editor.chain().focus().setLink(linkMark(url).attrs).run()
+    } else {
+        editor.chain().focus().insertContent({ type: 'text', text: newText, marks: [linkMark(url)] }).run()
+    }
+}
+
+function promptLink(editor) {
+    return editor.isActive('link') ? editLink(editor) : insertLink(editor)
 }
 
 function positionDropdown(btn, menu) {
@@ -372,29 +429,8 @@ function positionDropdown(btn, menu) {
 
 // ─── Toolbar ──────────────────────────────────────────────────────────────────
 
-const COLORS = [
-    { color: '#6b7280' },
-    { color: '#f59e0b' },
-    { color: '#f97316' },
-    { color: '#ef4444' },
-    { color: '#3b82f6' },
-    { color: '#8b5cf6' },
-    { color: '#22c55e' },
-    { color: '#ec4899' },
-    { color: '#06b6d4' },
-]
-
-const BG_COLORS = [
-    { color: '#6b7280' },
-    { color: '#ca8a04' },
-    { color: '#ea580c' },
-    { color: '#dc2626' },
-    { color: '#2563eb' },
-    { color: '#7c3aed' },
-    { color: '#16a34a' },
-    { color: '#db2777' },
-    { color: '#0891b2' },
-]
+const COLORS    = ['#6b7280', '#f59e0b', '#f97316', '#ef4444', '#3b82f6', '#8b5cf6', '#22c55e', '#ec4899', '#06b6d4']
+const BG_COLORS = ['#6b7280', '#ca8a04', '#ea580c', '#dc2626', '#2563eb', '#7c3aed', '#16a34a', '#db2777', '#0891b2']
 
 const SIZES = [
     { get label() { return __('editor.size_xs') }, value: '0.7em'  },
@@ -404,10 +440,28 @@ const SIZES = [
     { get label() { return __('editor.size_xl') }, value: '1.6em'  },
 ]
 
-document.addEventListener('click', () => {
-    document.querySelectorAll('.tiptap-dropdown-menu.is-open')
-        .forEach(m => m.classList.remove('is-open'))
-})
+function closeDropdowns() {
+    document.querySelectorAll('.tiptap-dropdown-menu.is-open').forEach(m => m.classList.remove('is-open'))
+}
+
+// Кнопка тулбара/меню: mousedown вместо click, чтобы редактор не терял фокус
+function iconButton(icon, title, action, className = 'tiptap-btn') {
+    const el = document.createElement('button')
+    el.type = 'button'
+    el.className = className
+    el.title = title
+    el.innerHTML = `<i class="fas ${icon}"></i>`
+    el.addEventListener('mousedown', e => { e.preventDefault(); action() })
+    return el
+}
+
+function menuItem(icon, title, action) {
+    const el = iconButton(icon, title, action, 'tiptap-menu-item')
+    el.insertAdjacentText('beforeend', ' ' + title)
+    return el
+}
+
+document.addEventListener('click', closeDropdowns)
 
 document.addEventListener('scroll', (e) => {
     document.querySelectorAll('.tiptap-dropdown-menu.is-open').forEach(m => {
@@ -531,8 +585,7 @@ function makeStickerPicker(editor) {
     btn.addEventListener('click', e => {
         e.stopPropagation()
         const wasOpen = panel.classList.contains('is-open')
-        document.querySelectorAll('.tiptap-dropdown-menu.is-open')
-            .forEach(m => m.classList.remove('is-open'))
+        closeDropdowns()
         if (!wasOpen) { panel._anchorBtn = btn; panel._reposition = positionPanel; openPanel() }
     })
 
@@ -561,7 +614,7 @@ function makeDropdown(icon, title, items, extraClass = '') {
     btn.addEventListener('click', e => {
         e.stopPropagation()
         const wasOpen = menu.classList.contains('is-open')
-        document.querySelectorAll('.tiptap-dropdown-menu.is-open').forEach(m => m.classList.remove('is-open'))
+        closeDropdowns()
         if (!wasOpen) { positionMenu(); menu._anchorBtn = btn; menu.classList.add('is-open') }
     })
 
@@ -600,36 +653,30 @@ const suggestion = {
             })
         }
 
+        function apply(props) {
+            command = props.command
+            items = props.items
+            selectedIndex = 0
+
+            const rect = props.clientRect()
+            el.style.top = rect.bottom + 'px'
+            el.style.left = rect.left + 'px'
+
+            render()
+        }
+
         return {
             onStart(props) {
-                command = props.command
-                items = props.items
-                selectedIndex = 0
-
                 el = document.createElement('div')
                 el.className = 'mention-dropdown'
                 el.style.display = 'none'
+                el.style.position = 'fixed'
                 document.body.appendChild(el)
 
-                const rect = props.clientRect()
-                el.style.position = 'fixed'
-                el.style.top = rect.bottom + 'px'
-                el.style.left = rect.left + 'px'
-
-                render()
+                apply(props)
             },
 
-            onUpdate(props) {
-                command = props.command
-                items = props.items
-                selectedIndex = 0
-
-                const rect = props.clientRect()
-                el.style.top = rect.bottom + 'px'
-                el.style.left = rect.left + 'px'
-
-                render()
-            },
+            onUpdate: apply,
 
             onKeyDown(props) {
                 if (props.event.key === 'ArrowDown') {
@@ -670,12 +717,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     const activeButtons = []
 
     function btn(icon, title, action, getActive = null) {
-        const el = document.createElement('button')
-        el.type = 'button'
-        el.className = 'tiptap-btn'
-        el.title = title
-        el.innerHTML = `<i class="fas ${icon}"></i>`
-        el.addEventListener('mousedown', e => { e.preventDefault(); action() })
+        const el = iconButton(icon, title, action)
         if (getActive) activeButtons.push({ el, getActive })
         bar.appendChild(el)
         return el
@@ -695,59 +737,48 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     btn('fa-strikethrough', __('editor.strike'),    () => editor.chain().focus().toggleStrike().run(),   () => editor.isActive('strike'))
     sep()
 
-    const resetSwatch = document.createElement('button')
-    resetSwatch.type = 'button'
-    resetSwatch.className = 'tiptap-color-swatch tiptap-color-reset'
-    resetSwatch.title = __('editor.reset_color')
-    resetSwatch.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().unsetColor().run() })
+    // Палитра: свотчи, свой цвет и сброс. set/unset — команды редактора, attr — что подсвечивать
+    function colorDropdown({ icon, title, colors, customTitle, resetTitle, set, unset, attr }) {
+        const swatches = colors.map(color => {
+            const el = document.createElement('button')
+            el.type = 'button'
+            el.className = 'tiptap-color-swatch'
+            el.title = color
+            el.style.background = color
+            el.addEventListener('mousedown', e => { e.preventDefault(); set(color) })
+            return el
+        })
 
-    const customColorInput = document.createElement('input')
-    customColorInput.type = 'color'
-    customColorInput.title = __('editor.custom_color')
-    customColorInput.className = 'tiptap-color-custom'
-    customColorInput.addEventListener('input', () => {
-        editor.chain().focus().setColor(customColorInput.value).run()
+        const custom = document.createElement('input')
+        custom.type = 'color'
+        custom.title = customTitle
+        custom.className = 'tiptap-color-custom'
+        custom.addEventListener('input', () => set(custom.value))
+
+        const reset = document.createElement('button')
+        reset.type = 'button'
+        reset.className = 'tiptap-color-swatch tiptap-color-reset'
+        reset.title = resetTitle
+        reset.addEventListener('mousedown', e => { e.preventDefault(); unset() })
+
+        const dd = makeDropdown(icon, title, [...swatches, custom, reset], 'tiptap-colors-menu')
+        dropdown(dd)
+        activeButtons.push({ el: dd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle')[attr] })
+    }
+
+    colorDropdown({
+        icon: 'fa-palette', title: __('editor.color'), colors: COLORS,
+        customTitle: __('editor.custom_color'), resetTitle: __('editor.reset_color'), attr: 'color',
+        set: color => editor.chain().focus().setColor(color).run(),
+        unset: () => editor.chain().focus().unsetColor().run(),
     })
 
-    const colorSwatches = [...COLORS.map(({ color }) => {
-        const el = document.createElement('button')
-        el.type = 'button'
-        el.className = 'tiptap-color-swatch'
-        el.title = color
-        el.style.background = color
-        el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setColor(color).run() })
-        return el
-    }), customColorInput, resetSwatch]
-    const colorDd = makeDropdown('fa-palette', __('editor.color'), colorSwatches, 'tiptap-colors-menu')
-    dropdown(colorDd)
-    activeButtons.push({ el: colorDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').color })
-
-    const resetBgSwatch = document.createElement('button')
-    resetBgSwatch.type = 'button'
-    resetBgSwatch.className = 'tiptap-color-swatch tiptap-color-reset'
-    resetBgSwatch.title = __('editor.reset_bg')
-    resetBgSwatch.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().unsetHighlight().run() })
-
-    const customBgInput = document.createElement('input')
-    customBgInput.type = 'color'
-    customBgInput.title = __('editor.custom_bg')
-    customBgInput.className = 'tiptap-color-custom'
-    customBgInput.addEventListener('input', () => {
-        editor.chain().focus().setHighlight({ color: customBgInput.value }).run()
+    colorDropdown({
+        icon: 'fa-fill-drip', title: __('editor.bg_color'), colors: BG_COLORS,
+        customTitle: __('editor.custom_bg'), resetTitle: __('editor.reset_bg'), attr: 'backgroundColor',
+        set: color => editor.chain().focus().setHighlight({ color }).run(),
+        unset: () => editor.chain().focus().unsetHighlight().run(),
     })
-
-    const bgSwatches = [...BG_COLORS.map(({ color }) => {
-        const el = document.createElement('button')
-        el.type = 'button'
-        el.className = 'tiptap-color-swatch'
-        el.title = color
-        el.style.background = color
-        el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setHighlight({ color }).run() })
-        return el
-    }), customBgInput, resetBgSwatch]
-    const bgDd = makeDropdown('fa-fill-drip', __('editor.bg_color'), bgSwatches, 'tiptap-colors-menu')
-    dropdown(bgDd)
-    activeButtons.push({ el: bgDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').backgroundColor })
 
     const sizeItems = SIZES.map(({ label, value }) => {
         const el = document.createElement('button')
@@ -770,14 +801,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         { icon: 'fa-align-left',   title: __('editor.align_left'),   align: 'left'   },
         { icon: 'fa-align-center', title: __('editor.align_center'), align: 'center' },
         { icon: 'fa-align-right',  title: __('editor.align_right'),  align: 'right'  },
-    ].map(({ icon, title, align }) => {
-        const el = document.createElement('button')
-        el.type = 'button'
-        el.className = 'tiptap-menu-item'
-        el.innerHTML = `<i class="fas ${icon}"></i> ${title}`
-        el.addEventListener('mousedown', e => { e.preventDefault(); editor.chain().focus().setTextAlign(align).run() })
-        return el
-    })
+    ].map(({ icon, title, align }) => menuItem(icon, title, () => editor.chain().focus().setTextAlign(align).run()))
     const alignDd = makeDropdown('fa-align-left', __('editor.alignment'), alignItems)
     dropdown(alignDd)
     activeButtons.push({ el: alignDd._dropdownBtn, getActive: () =>
@@ -787,14 +811,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     const listItems = [
         { icon: 'fa-list-ul', title: __('editor.bullet_list'),  action: () => editor.chain().focus().toggleBulletList().run()  },
         { icon: 'fa-list-ol', title: __('editor.ordered_list'), action: () => editor.chain().focus().toggleOrderedList().run() },
-    ].map(({ icon, title, action }) => {
-        const el = document.createElement('button')
-        el.type = 'button'
-        el.className = 'tiptap-menu-item'
-        el.innerHTML = `<i class="fas ${icon}"></i> ${title}`
-        el.addEventListener('mousedown', e => { e.preventDefault(); action() })
-        return el
-    })
+    ].map(({ icon, title, action }) => menuItem(icon, title, action))
     const listDd = makeDropdown('fa-list-ul', __('editor.lists'), listItems)
     dropdown(listDd)
     activeButtons.push({ el: listDd._dropdownBtn, getActive: () =>
@@ -807,47 +824,25 @@ function buildToolbar(editor, textarea, uploadImageFn) {
         return el
     }
 
-    function tableMenuItem(icon, title, action) {
-        const el = document.createElement('button')
-        el.type = 'button'
-        el.className = 'tiptap-menu-item'
-        el.innerHTML = `<i class="fas ${icon}"></i> ${title}`
-        el.addEventListener('mousedown', e => { e.preventDefault(); action() })
-        return el
-    }
-
     const tableMenuItems = [
-        tableMenuItem('fa-table',          __('editor.table_insert'),         () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()),
+        menuItem('fa-table',          __('editor.table_insert'),         () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()),
         makeMenuSep(),
-        tableMenuItem('fa-arrow-up',       __('editor.table_row_before'),     () => editor.chain().focus().addRowBefore().run()),
-        tableMenuItem('fa-arrow-down',     __('editor.table_row_after'),      () => editor.chain().focus().addRowAfter().run()),
-        tableMenuItem('fa-trash-alt',      __('editor.table_row_delete'),     () => editor.chain().focus().deleteRow().run()),
+        menuItem('fa-arrow-up',       __('editor.table_row_before'),     () => editor.chain().focus().addRowBefore().run()),
+        menuItem('fa-arrow-down',     __('editor.table_row_after'),      () => editor.chain().focus().addRowAfter().run()),
+        menuItem('fa-trash-alt',      __('editor.table_row_delete'),     () => editor.chain().focus().deleteRow().run()),
         makeMenuSep(),
-        tableMenuItem('fa-arrow-left',     __('editor.table_col_before'),     () => editor.chain().focus().addColumnBefore().run()),
-        tableMenuItem('fa-arrow-right',    __('editor.table_col_after'),      () => editor.chain().focus().addColumnAfter().run()),
-        tableMenuItem('fa-trash-alt',      __('editor.table_col_delete'),     () => editor.chain().focus().deleteColumn().run()),
+        menuItem('fa-arrow-left',     __('editor.table_col_before'),     () => editor.chain().focus().addColumnBefore().run()),
+        menuItem('fa-arrow-right',    __('editor.table_col_after'),      () => editor.chain().focus().addColumnAfter().run()),
+        menuItem('fa-trash-alt',      __('editor.table_col_delete'),     () => editor.chain().focus().deleteColumn().run()),
         makeMenuSep(),
-        tableMenuItem('fa-times-circle',   __('editor.table_delete'),         () => editor.chain().focus().deleteTable().run()),
+        menuItem('fa-times-circle',   __('editor.table_delete'),         () => editor.chain().focus().deleteTable().run()),
     ]
     const tableDd = makeDropdown('fa-table', __('editor.table'), tableMenuItems)
     dropdown(tableDd)
     activeButtons.push({ el: tableDd._dropdownBtn, getActive: () => editor.isActive('table') })
     sep()
 
-    const linkBtn = btn('fa-link', __('editor.link'), async () => {
-        const existing = editor.getAttributes('link').href || ''
-        const { from, to } = editor.state.selection
-        const selected = editor.state.doc.textBetween(from, to, '')
-        const url = await window.askValue(__('editor.url_link') + ':', existing || selected)
-        if (!validateUrl(url)) return
-        if (selected || existing) {
-            editor.chain().focus().extendMarkRange('link').setLink({ href: url, target: null }).run()
-        } else {
-            editor.chain().focus()
-                .insertContent(`<a href="${url}">${url}</a>`)
-                .run()
-        }
-    }, () => editor.isActive('link'))
+    btn('fa-link', __('editor.link'), () => promptLink(editor), () => editor.isActive('link'))
 
     btn('fa-image', __('editor.image'), async () => {
         const url = await window.askValue(__('editor.url_image') + ':')
@@ -945,90 +940,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     editor.on('selectionUpdate', updateActive)
     editor.on('transaction', updateActive)
 
-    return { bar, linkBtn }
-}
-
-// ─── Link bubble ──────────────────────────────────────────────────────────────
-
-function makeEditorBubble(editor, linkBtn) {
-    const bubble = document.createElement('div')
-    bubble.className = 'tiptap-link-bubble'
-    bubble.style.display = 'none'
-    document.body.appendChild(bubble)
-
-    const input = document.createElement('input')
-    input.type = 'url'
-    input.className = 'tiptap-link-bubble-input'
-    input.placeholder = 'https://'
-
-    function applyUrl() {
-        const url = input.value.trim()
-        if (!url) { input.value = editor.getAttributes('link').href || ''; return }
-        if (!validateUrl(url)) { input.value = editor.getAttributes('link').href || ''; return }
-        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
-    }
-
-    input.addEventListener('keydown', e => {
-        if (e.key === 'Enter')  { e.preventDefault(); applyUrl() }
-        if (e.key === 'Escape') { e.preventDefault(); input.value = editor.getAttributes('link').href || ''; editor.commands.focus() }
-    })
-    input.addEventListener('mousedown', e => e.stopPropagation())
-    input.addEventListener('blur', applyUrl)
-
-    function makeBtn(icon, title, action) {
-        const b = document.createElement('button')
-        b.type = 'button'
-        b.title = title
-        b.innerHTML = `<i class="fas ${icon}"></i>`
-        b.addEventListener('mousedown', e => { e.preventDefault(); action() })
-        return b
-    }
-
-    bubble.appendChild(input)
-    bubble.appendChild(makeBtn('fa-external-link-alt', __('editor.link_open'), () => {
-        const href = editor.getAttributes('link').href
-        if (href) window.open(href, '_blank', 'noopener,noreferrer')
-    }))
-    bubble.appendChild(makeBtn('fa-link-slash', __('editor.link_remove'), () => {
-        editor.chain().focus().extendMarkRange('link').unsetLink().run()
-    }))
-
-    let hideTimer = null
-
-    function show() {
-        clearTimeout(hideTimer)
-        if (document.activeElement !== input) {
-            input.value = editor.getAttributes('link').href || ''
-        }
-
-        const rect = linkBtn.getBoundingClientRect()
-        bubble.style.display = 'flex'
-        bubble.style.top  = (rect.bottom + window.scrollY + 4) + 'px'
-        bubble.style.left = '0px'
-
-        requestAnimationFrame(() => {
-            const bw = bubble.getBoundingClientRect().width
-            let left = rect.left + window.scrollX + rect.width / 2 - bw / 2
-            const overflow = left + bw - window.innerWidth + 8
-            if (overflow > 0) left -= overflow
-            bubble.style.left = Math.max(8, left) + 'px'
-        })
-    }
-
-    function hide() { bubble.style.display = 'none' }
-
-    function update() {
-        if (editor.isActive('link') && editor.state.selection.empty) show()
-        else hide()
-    }
-
-    editor.on('selectionUpdate', update)
-    editor.on('blur', ({ event }) => {
-        if (bubble.contains(event?.relatedTarget)) return
-        hideTimer = setTimeout(hide, 150)
-    })
-    editor.on('focus', () => { clearTimeout(hideTimer); update() })
-    document.addEventListener('scroll', () => { if (bubble.style.display !== 'none') update() }, true)
+    return bar
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
@@ -1082,8 +994,6 @@ function initEditor(textarea) {
         if (type) formData.append('type', type)
         if (id) formData.append('id', id)
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
-
         try {
             const response = await fetch('/ajax/file/upload', {
                 method: 'POST',
@@ -1094,42 +1004,14 @@ function initEditor(textarea) {
             const data = await response.json()
 
             if (data.success && data.path) {
-                const isVideo = data.type === 'video'
-                const src = data.source || data.path
+                editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
+                    type: data.type === 'video' ? 'video' : 'image',
+                    attrs: { src: data.source || data.path },
+                }).run()
 
-                if (isVideo) {
-                    editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
-                        type: 'video',
-                        attrs: { src },
-                    }).run()
-                } else {
-                    editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
-                        type: 'image',
-                        attrs: { src },
-                    }).run()
-                }
-
+                // Файл попадает и в список вложений под формой
                 const scope = textarea.closest('form') ?? document
-                const templateEl = scope.querySelector('.js-image-template')
-                const template = templateEl?.cloneNode(true)
-                if (template) {
-                    if (isVideo) {
-                        const img = template.querySelector('img')
-                        if (img) {
-                            const video = document.createElement('video')
-                            video.src = data.path
-                            video.className = img.className
-                            video.preload = 'metadata'
-                            const imgParent = img.parentElement
-                            img.replaceWith(video)
-                            imgParent?.insertAdjacentHTML('beforeend', '<span class="slide-play-icon">▶</span>')
-                        }
-                    } else {
-                        template.querySelector('img')?.setAttribute('src', data.path)
-                    }
-                    template.querySelector('a')?.setAttribute('data-id', data.id)
-                    scope.querySelector('.js-files')?.insertAdjacentHTML('beforeend', template.innerHTML)
-                }
+                renderFile(scope, scope.querySelector('.js-files'), data)
             } else {
                 notyf.error(data.message || __('editor.upload_failed'))
             }
@@ -1142,6 +1024,29 @@ function initEditor(textarea) {
     const editor = new Editor({
         element: editorEl,
         editorProps: {
+            // Клик по ссылке открывает диалог правки. У ссылок pointer-events: none,
+            // поэтому event.target — абзац, и попадание проверяется по геометрии.
+            // Выделение здесь ещё старое: ProseMirror переставит курсор только после
+            // обработчика, поэтому ссылка ищется по позиции клика, а курсор ставится вручную
+            handleClick(view, pos, event) {
+                const { clientX: x, clientY: y } = event
+                const hit = [...view.dom.querySelectorAll('a:not(.user)')].some(a =>
+                    [...a.getClientRects()].some(r => x >= r.left && x <= r.right && y >= r.top && y <= r.bottom)
+                )
+                if (!hit) return false
+
+                const isLink = mark => mark.type.name === 'link'
+                const $pos = view.state.doc.resolve(pos)
+                // На левой границе marks() пуст (inclusive: false) — сдвигаемся на символ внутрь
+                const inside = $pos.marks().some(isLink) ? pos : $pos.nodeAfter?.marks.some(isLink) ? pos + 1 : null
+                if (inside === null) return false
+
+                editor.commands.setTextSelection(inside)
+                editLink(editor)
+
+                // true — курсор уже поставлен, иначе ProseMirror сбросит выделение
+                return true
+            },
             transformPastedText(text) {
                 return text
                     .split('\n')
@@ -1263,8 +1168,6 @@ function initEditor(textarea) {
     editor.resetChanged  = () => { isChanged = false }
     editor.getIsChanged  = () => isChanged
 
-
-
     window.addEventListener('beforeunload', e => {
         if (isChanged && !editor.isEmpty) { e.preventDefault(); return e.returnValue = '' }
     })
@@ -1281,7 +1184,6 @@ function initEditor(textarea) {
         if (e.target === editorEl) editor.commands.focus('end')
     })
 
-
     window._tiptapActiveEditor = editor
     editor.on('focus', () => { window._tiptapActiveEditor = editor })
 
@@ -1290,9 +1192,7 @@ function initEditor(textarea) {
         window._tiptapEditors[textarea.id] = editor
     }
 
-    const { bar: toolbar, linkBtn } = buildToolbar(editor, textarea, uploadImage)
-    wrapper.insertBefore(toolbar, editorEl)
-    makeEditorBubble(editor, linkBtn)
+    wrapper.insertBefore(buildToolbar(editor, textarea, uploadImage), editorEl)
 
     function getCharCount() {
         let count = editor.storage.characterCount.characters()

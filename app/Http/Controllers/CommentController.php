@@ -31,13 +31,17 @@ class CommentController extends Controller
             return response()->json(['files' => [], 'text' => '']);
         }
 
+        // Форма ответа та же, что у /ajax/file/upload: модалка рисует оба одним кодом
         $files = $comment->files->map(fn (File $file) => [
-            'id'      => $file->id,
-            'path'    => $file->path,
-            'name'    => $file->name,
-            'size'    => formatSize($file->size),
-            'isImage' => $file->isImage(),
-            'type'    => Comment::$morphName,
+            'id'   => $file->id,
+            'path' => $file->path,
+            'name' => $file->name,
+            'size' => formatSize($file->size),
+            'type' => match (true) {
+                $file->isImage() => 'image',
+                $file->isVideo() => 'video',
+                default          => 'file',
+            },
         ]);
 
         return response()->json(['files' => $files, 'text' => $comment->text]);

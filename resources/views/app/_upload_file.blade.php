@@ -5,7 +5,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
 
 @if (! $display)
     <span class="float-end js-attach-button">
-        <a href="#" onclick="return showAttachForm();">{{ __('main.attach_files') }}</a>
+        <a href="#" data-reveal=".js-attach-form" data-reveal-hide=".js-attach-button">{{ __('main.attach_files') }}</a>
     </span>
 @endif
 

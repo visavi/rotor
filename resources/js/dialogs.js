@@ -22,7 +22,10 @@ ${extra}
 // Кнопки подписываются при каждом показе: переводы подключаются директивой
 // @translation и на момент создания диалога могут быть ещё не готовы
 function open(el, message) {
-    el.querySelector('.confirm-message').textContent = message
+    const messageEl = el.querySelector('.confirm-message')
+    messageEl.textContent = message
+    // Диалог с подписанными полями обходится без заголовка
+    messageEl.hidden = !message
     el.querySelector('.js-confirm-ok').textContent = __('buttons.ok')
     el.querySelector('.js-confirm-cancel').textContent = __('buttons.cancel')
     el.showModal()
@@ -38,28 +41,52 @@ function confirm(message, callback) {
     open(confirmDialogEl, message)
 }
 
-/* Запрос значения: callback получает строку или null, если отменили */
-const promptDialogEl = makeDialog('<input type="text" class="form-control mb-3 js-prompt-input">')
+/* Запрос значений: fields — [{ label, value }], callback получает массив строк
+ * в том же порядке или null, если отменили */
+const promptDialogEl = makeDialog('<div class="js-prompt-fields"></div>')
 
-function prompt(message, value, callback) {
-    const input = promptDialogEl.querySelector('.js-prompt-input')
+function promptFields(message, fields, callback) {
+    const wrap = promptDialogEl.querySelector('.js-prompt-fields')
     const ok = promptDialogEl.querySelector('.js-confirm-ok')
 
-    input.value = value
+    wrap.innerHTML = ''
 
-    ok.onclick = () => { promptDialogEl.close(); callback(input.value) }
+    const inputs = fields.map(({ label, value }) => {
+        if (label) {
+            const labelEl = document.createElement('label')
+            labelEl.className = 'form-label mb-1'
+            labelEl.textContent = label
+            wrap.appendChild(labelEl)
+        }
+
+        const input = document.createElement('input')
+        input.type = 'text'
+        input.className = 'form-control mb-3'
+        input.value = value ?? ''
+
+        // Enter в поле равносилен кнопке ОК: без этого форма диалога отправляет страницу
+        input.onkeydown = (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault()
+                ok.click()
+            }
+        }
+
+        wrap.appendChild(input)
+
+        return input
+    })
+
+    ok.onclick = () => { promptDialogEl.close(); callback(inputs.map(input => input.value)) }
     promptDialogEl.querySelector('.js-confirm-cancel').onclick = () => { promptDialogEl.close(); callback(null) }
 
-    // Enter в поле равносилен кнопке ОК: без этого форма диалога отправляет страницу
-    input.onkeydown = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault()
-            ok.click()
-        }
-    }
-
     open(promptDialogEl, message)
-    input.select()
+    inputs[0]?.select()
+}
+
+/* Запрос одного значения: callback получает строку или null, если отменили */
+function prompt(message, value, callback) {
+    promptFields(message, [{ value }], values => callback(values ? values[0] : null))
 }
 
 /* Подтверждение перед отправкой формы или переходом по ссылке */
@@ -120,7 +147,8 @@ window.promptAction = function (el) {
     return false
 }
 
-/* Запрос значения промисом: строка или null, если отменили */
+/* Запрос значений промисом: строка (askValue) или массив строк (askValues), null при отмене */
 window.askValue = (message, value = '') => new Promise((resolve) => prompt(message, value, resolve))
+window.askValues = (message, fields) => new Promise((resolve) => promptFields(message, fields, resolve))
 
 export { confirm, prompt }

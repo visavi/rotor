@@ -23,7 +23,7 @@ $files ??= $model->files;
 <div class="js-image-template d-none">
     <span class="js-file">
         <span class="thumbnail-wrap"><img src="" alt="" class="thumbnail"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
+        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>
 

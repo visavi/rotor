@@ -40,7 +40,7 @@
 
     @if (! $checkEmail)
         <div class="js-resending-link my-3">
-            <a href="#" class="btn btn-primary" onclick="return resendingCode();"><i class="fas fa-redo"></i> {{ __('users.resend_code') }}</a>
+            <a href="#" class="btn btn-primary" data-reveal=".js-resending-form" data-reveal-hide=".js-resending-link"><i class="fas fa-redo"></i> {{ __('users.resend_code') }}</a>
         </div>
     @endif
 
