@@ -58,6 +58,9 @@
     content: "\f0c9";
     font-size: 21px;
   }
+
+  // На узких экранах бургер слева от логотипа, на десктопе — справа
+  @media(max-width: 767px) { order: -1; }
   // Сайдбар без меню с иконками не сворачивается — сворачивать нечего
   body:not(:has(.app-sidebar .menu-icon)) & {
     @media(min-width: 768px) { display: none; }
