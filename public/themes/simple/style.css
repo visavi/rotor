@@ -357,6 +357,15 @@ body {
     box-shadow: none !important;
 }
 
+/* Облака диалога: рамка секции рвала бы хвостик — выделяем только фоном.
+   Фон берем из --talk-bg, иначе заливка .section перекрыла бы цвет хвостика */
+.talk-bubble {
+    --talk-bg: var(--simple-block-bg);
+    border: 0;
+    padding: .5rem .75rem;
+    background: var(--talk-bg);
+}
+
 .card {
     border-color: var(--simple-line);
 }

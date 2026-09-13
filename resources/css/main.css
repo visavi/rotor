@@ -1418,17 +1418,16 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 
 /* Список диалогов: строка на собеседника */
-.dialogue-list {
-    /* Вертикальный падинг отдан строкам, иначе края секции остаются без подсветки */
-    padding-block: 0;
+/* .section.dialogue-list, а не просто класс: темы переопределяют падинг секции */
+.section.dialogue-list {
+    /* Отступы отданы строкам, иначе края секции остаются без подсветки */
+    padding: 0;
 }
 
 .dialogue-row {
     display: flex;
     align-items: flex-start;
     gap: .75rem;
-    /* Отрицательные поля гасят падинг секции: подсветка и разделитель во всю ширину */
-    margin: 0 -15px;
     padding: .75rem 15px;
     cursor: pointer;
 }
