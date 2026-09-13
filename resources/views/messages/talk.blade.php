@@ -22,45 +22,45 @@
                     $author = $incoming ? $data->author : $data->user;
                 @endphp
 
-                {{-- Разметка секции сохранена: на неё опирается цитирование --}}
+                {{-- Классы section-author / section-date / section-message нужны цитированию --}}
                 <div class="talk-row{{ $incoming ? '' : ' is-own' }}">
-                    <div class="section shadow talk-bubble">
-                        <div class="user-avatar">
-                            {{ $author->getAvatar() }}
-                            {{ $author->getOnline() }}
+                    <div class="talk-avatar">
+                        {{ $author->getAvatar() }}
+                        {{ $author->getOnline() }}
+                    </div>
+
+                    <div class="section talk-bubble">
+                        <div class="talk-head">
+                            {{ $author->getProfile() }}
+
+                            @unless ($data->reading)
+                                <span class="badge bg-info">{{ __('messages.new') }}</span>
+                            @endunless
                         </div>
 
-                        <div class="section-user d-flex align-items-start">
-                            <div class="flex-grow-1">
-                                {{ $author->getProfile() }}
+                        <div class="section-message">
+                            {{ $data->getText() }}
+                        </div>
 
-                                @unless ($data->reading)
-                                    <span class="badge bg-info">{{ __('messages.new') }}</span>
-                                @endunless
-                            </div>
+                        @include('app/_media_viewer', ['model' => $data])
 
-                            <div class="section-date text-muted fst-italic small" data-date="{{ dateFixed($data->created_at, original: true) }}">
-                                {{ dateFixed($data->created_at) }}
-
-                                @if ($incoming)
-                                    @if ($user->exists)
-                                        <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
-                                    @endif
-
-                                    <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                                @else
-                                    <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"
-                                       title="{{ $data->recipient_read === 0 ? __('messages.sent') : __('messages.read') }}"></i>
+                        <div class="talk-meta">
+                            @if ($incoming)
+                                @if ($user->exists)
+                                    <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
                                 @endif
-                            </div>
-                        </div>
 
-                        <div class="section-body border-top">
-                            <div class="section-message">
-                                {{ $data->getText() }}
-                            </div>
+                                <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                            @endif
 
-                            @include('app/_media_viewer', ['model' => $data])
+                            <span class="section-date text-muted fst-italic" data-date="{{ dateFixed($data->created_at, original: true) }}">
+                                {{ dateFixed($data->created_at) }}
+                            </span>
+
+                            @unless ($incoming)
+                                <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"
+                                   title="{{ $data->recipient_read === 0 ? __('messages.sent') : __('messages.read') }}"></i>
+                            @endunless
                         </div>
                     </div>
                 </div>
