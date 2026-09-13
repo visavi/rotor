@@ -67,6 +67,12 @@
   }
 }
 
+// Меню шапки позиционируются статично (data-bs-display="static"):
+// не съезжают при скролле и прилипают к шапке без зазора
+.app-header .dropdown-menu {
+  --bs-dropdown-spacer: 0;
+}
+
 .app-nav {
   padding-left: 0;
   list-style: none;
@@ -133,9 +139,6 @@
 
 .app-notification {
   min-width: 270px;
-  &.dropdown-menu {
-    margin-top: -2px;
-  }
 }
 .app-notification__title {
   padding: 8px 20px;
