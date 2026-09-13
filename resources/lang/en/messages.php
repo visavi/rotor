@@ -4,6 +4,8 @@ return [
     'delete_confirm'      => 'Do you really want to delete messages?',
     'system'              => 'System',
     'new'                 => 'New',
+    'sent'                => 'Sent',
+    'read'                => 'Read',
     'notifications'       => 'Notifications',
     'empty_notifications' => 'No notifications!',
     'delete_talk'         => 'Delete talk',

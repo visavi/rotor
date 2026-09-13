@@ -1298,3 +1298,50 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
     gap: .5rem 1.5rem;
     margin-bottom: 1rem;
 }
+
+/* Результаты поиска: превью короче, чем в ленте — на странице их много */
+.search-results .section-content.short-view:not(.expanded) {
+    max-height: 180px;
+}
+
+/* Диалог: входящие слева, свои справа */
+.talk-row {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+.talk-row.is-own {
+    flex-direction: row-reverse;
+}
+
+.talk-row .user-avatar {
+    float: none;
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.talk-bubble {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 42rem;
+    margin: 0;
+}
+
+.talk-row.is-own .talk-bubble {
+    background: rgba(var(--bs-primary-rgb), .06);
+    border-color: rgba(var(--bs-primary-rgb), .25);
+}
+
+/* Список диалогов: превью письма в несколько строк */
+.dialogue-preview {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.message-block {
+    cursor: pointer;
+}

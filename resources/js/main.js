@@ -213,6 +213,16 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 })
 
+/* Карточка целиком ведёт по адресу: data-href на блоке.
+ * Ссылки и кнопки внутри работают как обычно */
+document.addEventListener('click', function (e) {
+    const block = e.target.closest('[data-href]')
+
+    if (block && ! e.target.closest('a, button, input, label')) {
+        window.location = block.dataset.href
+    }
+})
+
 /* Раскрытие скрытого блока по ссылке: data-reveal — что показать,
  * data-reveal-hide — что убрать (обычно саму ссылку с обёрткой) */
 document.addEventListener('click', function (e) {

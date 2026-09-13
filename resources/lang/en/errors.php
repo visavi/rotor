@@ -6,6 +6,7 @@ return [
     'to_main'             => 'To main',
     'unauthorized'        => 'Unauthorized!',
     'forbidden'           => 'Access denied!',
+    'bad_request'         => 'Bad request',
     'not_found'           => 'This page does not exist!',
     'method_not_allowed'  => 'The passed HTTP method is not supported on this page!',
     'page_expired'        => 'Session expired!',

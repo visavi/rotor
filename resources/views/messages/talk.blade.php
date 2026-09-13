@@ -15,51 +15,66 @@
 @section('content')
 
     @if ($messages->isNotEmpty())
-        @foreach ($messages as $data)
-            <?php $author = $data->type === $data::IN ? $data->author : $data->user; ?>
-            <div class="section mb-3 shadow">
-                <div class="user-avatar">
-                    {{ $author->getAvatar() }}
-                    {{ $author->getOnline() }}
-                </div>
+        <div class="talk mb-3">
+            @foreach ($messages as $data)
+                @php
+                    $incoming = $data->type === $data::IN;
+                    $author = $incoming ? $data->author : $data->user;
+                @endphp
 
-                <div class="section-user d-flex align-items-start">
-                    <div class="flex-grow-1">
-                        {{ $author->getProfile() }}
-
-                        @unless ($data->reading)
-                            <span class="badge bg-info">{{ __('messages.new') }}</span>
-                        @endunless
+                {{-- Разметка секции сохранена: на неё опирается цитирование --}}
+                <div class="talk-row{{ $incoming ? '' : ' is-own' }}">
+                    <div class="user-avatar">
+                        {{ $author->getAvatar() }}
+                        {{ $author->getOnline() }}
                     </div>
 
-                    <div class="section-date text-muted fst-italic small" data-date="{{ dateFixed($data->created_at, original: true) }}">
-                        {{ dateFixed($data->created_at) }}
+                    <div class="section shadow talk-bubble">
+                        <div class="section-user d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                {{ $author->getProfile() }}
 
-                        @if ($data->type === $data::IN)
-                            @if ($user->exists)
-                                <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
-                            @endif
+                                @unless ($data->reading)
+                                    <span class="badge bg-info">{{ __('messages.new') }}</span>
+                                @endunless
+                            </div>
 
-                            <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                        @else
-                            <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>
-                        @endif
+                            <div class="section-date text-muted fst-italic small" data-date="{{ dateFixed($data->created_at, original: true) }}">
+                                {{ dateFixed($data->created_at) }}
+
+                                @if ($incoming)
+                                    @if ($user->exists)
+                                        <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                    @endif
+
+                                    <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                @else
+                                    <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"
+                                       title="{{ $data->recipient_read === 0 ? __('messages.sent') : __('messages.read') }}"></i>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="section-body border-top">
+                            <div class="section-message">
+                                {{ $data->getText() }}
+                            </div>
+
+                            @include('app/_media_viewer', ['model' => $data])
+                        </div>
                     </div>
                 </div>
-
-                <div class="section-body border-top">
-                    <div class="section-message">
-                        {{ $data->getText() }}
-                    </div>
-
-                    @include('app/_media_viewer', ['model' => $data])
-                </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
 
         {{ $messages->links() }}
     @else
-        {{ showError(__('messages.empty_dialogue')) }}
+        <div class="section mb-3 shadow">
+            <div class="section-body d-flex flex-column align-items-center text-muted py-4">
+                <i class="far fa-comments fa-2x mb-2"></i>
+                {{ __('messages.empty_dialogue') }}
+            </div>
+        </div>
     @endif
 
     @if ($user->exists)
@@ -87,20 +102,20 @@
         </div>
     @endif
 
-    <div class="mb-3">
-        {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <span class="text-muted">
+            {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+            <a class="ms-3" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+        </span>
+
+        @if ($messages->isNotEmpty())
+            <form action="/messages/delete/{{ $user->id }}" method="post" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>
+            </form>
+        @endif
     </div>
-
-    @if ($messages->isNotEmpty())
-        <i class="fa fa-times"></i>
-        <form action="/messages/delete/{{ $user->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-link p-0">{{ __('messages.delete_talk') }}</button>
-        </form><br>
-    @endif
-
-    <i class="fa fa-search"></i> <a href="/users">{{ __('index.user_search') }}</a><br>
 @stop
 
 @push('scripts')

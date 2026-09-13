@@ -16,7 +16,7 @@ return [
     'status_text3'   => 'Asset is the sum of posts on the forum, guest, in comments, etc.',
     'status_text4'   => 'Some statuses may be highlighted in certain colors',
     'status_text5'   => 'The site administration may assign special statuses to the most active users',
-    'next_status' => 'Next status',
-    'your_status' => 'Your status',
+    'next_status'    => 'Next status',
+    'your_status'    => 'Your status',
     'empty_statuses' => 'Statuses not yet assigned!',
 ];

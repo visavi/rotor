@@ -53,15 +53,18 @@
     @endif
 
     @if ($posts->isNotEmpty())
-        @foreach($posts as $post)
-            @php
-                $post = $post->relate;
-            @endphp
+        {{-- Обёртка укорачивает превью найденного: шаблоны результатов приходят и из модулей --}}
+        <div class="search-results">
+            @foreach($posts as $post)
+                @php
+                    $post = $post->relate;
+                @endphp
 
-            @if ($post)
-                @includeIf(\App\Support\Registry::$search[$post->getMorphClass()]['view'] ?? 'search._' . $post->getMorphClass())
-            @endif
-        @endforeach
+                @if ($post)
+                    @includeIf(\App\Support\Registry::$search[$post->getMorphClass()]['view'] ?? 'search._' . $post->getMorphClass())
+                @endif
+            @endforeach
+        </div>
 
         {{ $posts->links() }}
     @endif

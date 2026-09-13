@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="section-body border-top">
-                    <div class="section-message" style="display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden">
+                    <div class="section-message dialogue-preview">
                         {{ $data->getText() }}
                     </div>
                 </div>
@@ -59,19 +59,13 @@
 
         {{ $messages->links() }}
     @else
-        {{ showError(__('main.empty_messages')) }}
+        <div class="section mb-3 shadow">
+            <div class="section-body d-flex flex-column align-items-center text-muted py-4">
+                <i class="far fa-envelope fa-2x mb-2"></i>
+                {{ __('main.empty_messages') }}
+            </div>
+        </div>
     @endif
 
-    <i class="fa fa-search"></i> <a href="/users">{{ __('index.user_search') }}</a><br>
+    <a href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
 @stop
-
-@push('scripts')
-    <script type="module">
-        document.querySelectorAll('.message-block').forEach(function (block) {
-            block.addEventListener('click', function () {
-                window.location = block.dataset.href;
-            });
-            block.querySelectorAll('a').forEach(a => a.addEventListener('click', e => e.stopPropagation()));
-        });
-    </script>
-@endpush
