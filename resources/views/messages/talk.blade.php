@@ -15,7 +15,7 @@
 @section('content')
 
     @if ($messages->isNotEmpty())
-        <div class="talk mb-3">
+        <div class="mb-3">
             @foreach ($messages as $data)
                 @php
                     $incoming = $data->type === $data::IN;
@@ -31,11 +31,23 @@
 
                     <div class="section talk-bubble">
                         <div class="talk-head">
-                            {{ $author->getProfile() }}
+                            <span class="talk-name">
+                                {{ $author->getProfile() }}
 
-                            @unless ($data->reading)
-                                <span class="badge bg-info">{{ __('messages.new') }}</span>
-                            @endunless
+                                @unless ($data->reading)
+                                    <span class="badge bg-info">{{ __('messages.new') }}</span>
+                                @endunless
+                            </span>
+
+                            @if ($incoming)
+                                <span class="talk-actions">
+                                    @if ($user->exists)
+                                        <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                    @endif
+
+                                    <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
+                                </span>
+                            @endif
                         </div>
 
                         <div class="section-message">
@@ -45,14 +57,6 @@
                         @include('app/_media_viewer', ['model' => $data])
 
                         <div class="talk-meta">
-                            @if ($incoming)
-                                @if ($user->exists)
-                                    <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
-                                @endif
-
-                                <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
-                            @endif
-
                             <span class="section-date text-muted fst-italic" data-date="{{ dateFixed($data->created_at, original: true) }}">
                                 {{ dateFixed($data->created_at) }}
                             </span>

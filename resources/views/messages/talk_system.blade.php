@@ -14,7 +14,7 @@
 
 @section('content')
     @if ($messages->isNotEmpty())
-        <div class="talk mb-3">
+        <div class="mb-3">
             @foreach ($messages as $data)
                 <div class="talk-row">
                     <div class="talk-avatar">

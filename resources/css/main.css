@@ -1298,7 +1298,7 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 .talk-row {
     display: flex;
     align-items: flex-end;
-    gap: .5rem;
+    gap: 1rem;
     margin-bottom: .75rem;
 }
 
@@ -1332,13 +1332,16 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 
 .talk-bubble {
+    --talk-bg: var(--base-bg);
+    position: relative;
+    /* section режет переполнение, а хвостик выходит за край */
+    overflow: visible;
     max-width: 70%;
     min-width: 0;
     margin: 0;
     padding: .5rem .75rem;
     border-radius: 1rem;
-    border-bottom-left-radius: .25rem;
-    background: var(--base-bg);
+    background: var(--talk-bg);
 }
 
 @media (max-width: 768px) {
@@ -1347,15 +1350,58 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
     }
 }
 
+/* Угол со стороны хвоста прямой, иначе облако и хвост не срастаются */
+.talk-row:not(.is-own) .talk-bubble {
+    border-bottom-left-radius: 0;
+}
+
 .talk-row.is-own .talk-bubble {
-    background: rgba(var(--bs-primary-rgb), .12);
-    border-radius: 1rem;
-    border-bottom-right-radius: .25rem;
+    /* непрозрачный цвет: сквозь полупрозрачный просвечивал бы хвостик */
+    --talk-bg: color-mix(in srgb, var(--bs-primary) 12%, var(--bs-body-bg));
+    border-bottom-right-radius: 0;
+}
+
+/*
+ * Хвостик: прямоугольник цвета облака, из которого маской вырезана дуга.
+ * Маска, а не заливка фоном страницы: тогда хвост не зависит от того,
+ * что под ним — тема, подсветка строки или что-то еще
+ */
+.talk-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 14px;
+    height: 16px;
+    background: var(--talk-bg);
+}
+
+.talk-row:not(.is-own) .talk-bubble::after {
+    left: -14px;
+    -webkit-mask: radial-gradient(circle at 0 0, transparent 14px, #000 14px);
+    mask: radial-gradient(circle at 0 0, transparent 14px, #000 14px);
+}
+
+.talk-row.is-own .talk-bubble::after {
+    right: -14px;
+    -webkit-mask: radial-gradient(circle at 100% 0, transparent 14px, #000 14px);
+    mask: radial-gradient(circle at 100% 0, transparent 14px, #000 14px);
 }
 
 .talk-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
     font-size: .9rem;
     margin-bottom: .15rem;
+}
+
+/* Цитата и жалоба — в правом верхнем углу облака */
+.talk-actions {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
 }
 
 .talk-meta {
