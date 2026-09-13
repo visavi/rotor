@@ -1379,7 +1379,7 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 
 .dialogue-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: .75rem;
     /* Отрицательные поля гасят падинг секции: подсветка и разделитель во всю ширину */
     margin: 0 -15px;
@@ -1430,11 +1430,24 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 .dialogue-date {
     flex: 0 0 auto;
     white-space: nowrap;
+    /* Размер как у даты в диалоге (.talk-meta) */
+    font-size: .8rem;
 }
 
-/* Превью письма — одной строкой */
+/* Превью письма: html как есть, но не выше трех строк */
 .dialogue-preview {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+}
+
+.dialogue-preview p:last-child {
+    margin-bottom: 0;
+}
+
+/* Картинки и стикеры не должны растягивать строку */
+.dialogue-preview img {
+    max-height: 60px;
+    width: auto;
 }

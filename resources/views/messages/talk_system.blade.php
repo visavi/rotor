@@ -14,51 +14,58 @@
 
 @section('content')
     @if ($messages->isNotEmpty())
-        @foreach ($messages as $data)
-            <div class="section mb-3 shadow">
-                <div class="user-avatar">
-                    <span class="avatar-default avatar-guest rounded-circle"><i class="fas fa-headset"></i></span>
-                    <div class="user-status bg-success" title="Online"></div>
-                </div>
-
-                <div class="section-user d-flex align-items-start">
-                    <div class="flex-grow-1">
-                        <b>{{ __('messages.system') }}</b>
-
-                        @unless ($data->reading)
-                            <span class="badge bg-info">{{ __('messages.new') }}</span>
-                        @endunless
+        <div class="talk mb-3">
+            @foreach ($messages as $data)
+                <div class="talk-row">
+                    <div class="talk-avatar">
+                        <span class="avatar-default avatar-guest rounded-circle"><i class="fas fa-headset"></i></span>
                     </div>
 
-                    <div class="section-date text-muted fst-italic small">
-                        {{ dateFixed($data->created_at) }}
+                    <div class="section talk-bubble">
+                        <div class="talk-head">
+                            <b>{{ __('messages.system') }}</b>
+
+                            @unless ($data->reading)
+                                <span class="badge bg-info">{{ __('messages.new') }}</span>
+                            @endunless
+                        </div>
+
+                        <div class="section-message">
+                            {{ $data->getText() }}
+                        </div>
+
+                        <div class="talk-meta">
+                            <span class="section-date text-muted fst-italic">{{ dateFixed($data->created_at) }}</span>
+                        </div>
                     </div>
                 </div>
-
-                <div class="section-body border-top">
-                    <div class="section-message">
-                        {{ $data->getText() }}
-                    </div>
-                </div>
-            </div>
-        @endforeach
-
-        {{ $messages->links() }}
-
-        <div class="mb-3">
-            {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+            @endforeach
         </div>
 
-        <form action="/messages/delete/0" method="post" class="d-inline">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-link p-0"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>
-        </form><br>
+        {{ $messages->links() }}
     @else
-        {{ showError(__('messages.empty_notifications')) }}
+        <div class="section mb-3 shadow">
+            <div class="section-body d-flex flex-column align-items-center text-muted py-4">
+                <i class="far fa-bell fa-2x mb-2"></i>
+                {{ __('messages.empty_notifications') }}
+            </div>
+        </div>
     @endif
 
-    <i class="fa fa-search"></i> <a href="/users">{{ __('index.user_search') }}</a><br>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+        <span class="text-muted">
+            {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+            <a class="ms-3" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+        </span>
+
+        @if ($messages->isNotEmpty())
+            <form action="/messages/delete/0" method="post" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>
+            </form>
+        @endif
+    </div>
 @stop
 
 @push('scripts')

@@ -34,17 +34,17 @@
                                 <b>{{ __('messages.system') }}</b>
                             @endif
 
-                            <span class="dialogue-date text-muted fst-italic small">
-                                @if ($data->type === $data::OUT)
-                                    <i class="fas fa-xs {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>
-                                @endif
-
+                            <span class="dialogue-date text-muted fst-italic">
                                 {{ dateFixed($data->created_at) }}
+
+                                @if ($data->type === $data::OUT)
+                                    <i class="fas {{ $data->recipient_read === 0 ? 'fa-check' : 'fa-check-double' }} text-success"></i>
+                                @endif
                             </span>
                         </div>
 
                         <div class="dialogue-preview text-muted">
-                            {{ truncateDescription($data->getText(), 30, '...') }}
+                            {{ $data->getText() }}
 
                             @unless ($data->all_reading)
                                 <span class="badge bg-info">{{ __('messages.new') }}</span>
