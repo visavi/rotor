@@ -24,12 +24,12 @@
 
                 {{-- Разметка секции сохранена: на неё опирается цитирование --}}
                 <div class="talk-row{{ $incoming ? '' : ' is-own' }}">
-                    <div class="user-avatar">
-                        {{ $author->getAvatar() }}
-                        {{ $author->getOnline() }}
-                    </div>
-
                     <div class="section shadow talk-bubble">
+                        <div class="user-avatar">
+                            {{ $author->getAvatar() }}
+                            {{ $author->getOnline() }}
+                        </div>
+
                         <div class="section-user d-flex align-items-start">
                             <div class="flex-grow-1">
                                 {{ $author->getProfile() }}

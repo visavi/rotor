@@ -71,6 +71,7 @@ Route::controller(AjaxController::class)
         Route::post('/file/upload', 'uploadFile');
         Route::post('/file/delete', 'deleteFile');
         Route::post('/set-theme', 'setTheme')->withoutMiddleware('check.user');
+        Route::post('/set-sidebar', 'setSidebar')->withoutMiddleware('check.user');
     });
 
 Route::controller(CommentController::class)

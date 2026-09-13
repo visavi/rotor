@@ -159,6 +159,23 @@ class AjaxController extends Controller
     }
 
     /**
+     * Set sidebar state
+     */
+    public function setSidebar(Request $request): JsonResponse
+    {
+        cookie()->queue(
+            cookie()->forever(
+                'sidebar',
+                $request->input('sidebar') === 'mini' ? 'mini' : 'full',
+            )
+        );
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
      * Set theme
      */
     public function setTheme(Request $request): JsonResponse

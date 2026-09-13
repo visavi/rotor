@@ -34,8 +34,6 @@ h3 {
 }
 
 .app {
-  // On large devices make sidebar visible by default
-  // adding sidenav-toggled class will close sidebar
   background-color: var(--base-bg);
   max-width: $app-width;
   margin-left: auto;
@@ -44,12 +42,83 @@ h3 {
   flex-direction: column;
   height: 100%;
 
+  // On large devices sidebar collapses to a rail of icons.
+  // Режим включается, только если в сайдбаре меню с иконками: страница,
+  // подменившая сайдбар своей версткой, остается во всю ширину
   @media(min-width: 768px) {
-    &.sidenav-toggled {
-      .app-content { margin-left: 0; }
-      .app-footer { margin-left: 0; }
-      .app-sidebar { left: -$sidebar-width; }
-      .app-sidebar__overlay { visibility: hidden; }
+    &.sidebar-mini:has(.app-sidebar .menu-icon) {
+      .app-content { margin-left: $sidebar-mini-width; }
+
+      // overflow: visible — иначе всплывающие подписи обрежутся полосой
+      .app-sidebar {
+        width: $sidebar-mini-width;
+        overflow: visible;
+      }
+
+      .menu-label,
+      .menu-badge,
+      .treeview-indicator,
+      .treeview-menu,
+      .app-sidebar__footer {
+        display: none;
+      }
+
+      .menu-item {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .menu-icon {
+        margin-right: 0;
+        // Без подписи строка была бы ниже — держим высоту как в развернутом виде
+        line-height: 22px;
+      }
+
+      // Аватар не должен вылезать за узкую полосу
+      .app-sidebar__user-avatar {
+        margin-right: 0;
+
+        .avatar-default {
+          width: 36px;
+          height: 36px;
+          font-size: 24px;
+        }
+      }
+
+      // При наведении сбоку всплывает название пункта и его подменю
+      .app-menu > li {
+        position: relative;
+
+        &:hover {
+          .menu-label {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            height: 100%;
+            width: $sidebar-flyout-width;
+            padding: 0 15px;
+            background: var(--sidebar-hover-bg);
+            color: var(--sidebar-link-active-color);
+            z-index: 11;
+          }
+
+          .treeview-menu {
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 100%;
+            width: $sidebar-flyout-width;
+            max-height: none;
+            overflow: visible;
+            box-shadow: 0 8px 17px rgba(0, 0, 0, 0.3);
+            z-index: 11;
+          }
+        }
+      }
     }
   }
   // On small devices make sidebar collapsed by default

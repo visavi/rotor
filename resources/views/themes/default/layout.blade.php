@@ -23,7 +23,7 @@
     @stack('styles')
     @hook('head')
 </head>
-<body class="app">
+<body @class(['app', 'sidebar-mini' => request()->cookie('sidebar') === 'mini']) data-sidebar-mini>
 
 @yield('navbar')
 @yield('sidebar')

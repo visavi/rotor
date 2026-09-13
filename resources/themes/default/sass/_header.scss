@@ -58,8 +58,10 @@
     content: "\f0c9";
     font-size: 21px;
   }
-  order: -1;
-  @media(min-width: 768px) { display: none; }
+  // Сайдбар без меню с иконками не сворачивается — сворачивать нечего
+  body:not(:has(.app-sidebar .menu-icon)) & {
+    @media(min-width: 768px) { display: none; }
+  }
 }
 
 .app-nav {

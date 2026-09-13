@@ -8,6 +8,10 @@
 
   @media(min-width: 768px) {
     margin-left: $sidebar-width;
+
+    .sidebar-mini & {
+      margin-left: $sidebar-mini-width;
+    }
   }
 
   @media (max-width: 768px) {

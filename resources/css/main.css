@@ -1307,25 +1307,20 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 /* Диалог: входящие слева, свои справа */
 .talk-row {
     display: flex;
-    align-items: flex-start;
-    gap: .5rem;
     margin-bottom: 1rem;
 }
 
-.talk-row.is-own {
-    flex-direction: row-reverse;
+.talk-row:last-child {
+    margin-bottom: 0;
 }
 
-.talk-row .user-avatar {
-    float: none;
-    flex: 0 0 auto;
-    margin: 0;
+.talk-row.is-own {
+    justify-content: flex-end;
 }
 
 .talk-bubble {
-    flex: 1 1 auto;
     min-width: 0;
-    max-width: 42rem;
+    max-width: 85%;
     margin: 0;
 }
 
@@ -1334,14 +1329,17 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
     border-color: rgba(var(--bs-primary-rgb), .25);
 }
 
-.talk-row:last-child {
-    margin-bottom: 0;
+/* В своих сообщениях аватар зеркалим вправо */
+.talk-row.is-own .user-avatar {
+    float: right;
+    margin-right: 0;
+    margin-left: 14px;
 }
 
-/* Аватар вынесен из секции — резерв высоты под него не нужен */
-.talk-bubble .section-user,
-.message-block .section-user {
-    min-height: 0;
+@media (max-width: 768px) {
+    .talk-row.is-own .user-avatar {
+        margin-left: 10px;
+    }
 }
 
 .talk-bubble .section-message:last-child,
