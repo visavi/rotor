@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -24,7 +25,9 @@ class FileController extends Controller
 
         $page = Str::contains($page, '/') ? $page : $page . '/index';
 
-        if (! file_exists(resource_path('views/files/' . $page . '.blade.php'))) {
+        // Поиск через вьюхи, а не по файлу: страницу можно положить
+        // в resources/custom/views — её не затрёт обновление ядра
+        if (! ViewFacade::exists('files/' . $page)) {
             abort(404);
         }
 

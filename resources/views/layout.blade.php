@@ -24,6 +24,10 @@
     @includeIf('theme::sidebar')
 @stop
 
+@section('footer')
+    @includeIf('theme::footer')
+@stop
+
 @push('scripts')
     @include('app/_language_modal')
     @includeWhen(getUser(), 'app/_comment_edit_modal')

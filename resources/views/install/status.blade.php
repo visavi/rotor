@@ -1,4 +1,4 @@
-@extends('layout_simple')
+@extends('install/layout')
 
 @section('title', $isUpdate ? __('install.step2_update') : __('install.step2_install'))
 

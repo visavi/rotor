@@ -1,4 +1,4 @@
-@extends('layout_simple')
+@extends('install/layout')
 
 @section('title', ($isUpdate ? __('install.update') : __('install.install')) . ' Rotor')
 

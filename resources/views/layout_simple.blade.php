@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="description" content="@yield('description', setting('description'))">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title') - {{ setting('title') }}</title>
-    @vite('resources/css/bootstrap.scss')
-    @vite('resources/themes/vendor.scss')
-    @vite('resources/themes/default/js/app.js')
-    @stack('styles')
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="container mt-3 px-0">
-            @include('app/_flash')
-        </div>
-        @yield('content')
-    </div>
-    @stack('scripts')
-</body>
-</html>
+{{-- Страница без обвязки: шапка, меню и футер гасятся, но оформление берётся
+     из макета активной темы — свои стили тема подключает сама --}}
+@extends('theme::layout')
+
+@section('navbar')@stop
+@section('sidebar')@stop
+@section('titlebar')@stop
+@section('footer')@stop
+
+@section('flash')
+    @include('app/_flash')
+@stop

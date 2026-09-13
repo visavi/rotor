@@ -93,6 +93,9 @@ return [
 
     'login_or_username'   => 'Логін або ім’я користувача',
     'theme'               => 'Тема',
+    'photo' => 'Фотографія',
+    'notifications' => 'Сповіщення',
+    'appearance' => 'Оформлення',
     'language'            => 'Мова',
     'time_shifting'       => 'Тимчасовий зсув',
     'notify_comment'      => 'Сповіщати про коментарі до моїх записів',

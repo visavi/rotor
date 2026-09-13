@@ -24,9 +24,31 @@
     </nav>
 @stop
 
+@php
+use Illuminate\Support\Str;
+
+$hasPicture = $user->picture && file_exists(public_path($user->picture));
+
+// plural() отдаёт «511 баллов» одной строкой, плитке нужно число и слово раздельно
+$point = plural($user->point, setting('scorename'));
+$money = plural($user->money, setting('moneyname'));
+
+// Поля анкеты: пустые не показываются, поэтому собираются заранее
+$fields = array_filter([
+    __('users.gender')            => $user->gender === 'male' ? __('main.male') : __('main.female'),
+    __('users.country')           => $user->country,
+    __('users.city')              => $user->city,
+    __('users.birthday')          => $user->birthday,
+    __('users.phone')             => $user->phone ? new Illuminate\Support\HtmlString('<a href="tel:' . e($user->phone) . '">' . e($user->phone) . '</a>') : null,
+    __('users.theme')             => $user->themes,
+    __('main.registration_date')  => dateFixed($user->created_at, 'd.m.Y'),
+    __('users.last_visit')        => $user->getVisit(),
+]);
+@endphp
+
 @section('content')
     @if ($user->level === 'pended')
-        <div class="p-1 my-1 bg-danger text-white">
+        <div class="alert alert-danger">
             <i class="fas fa-exclamation-triangle"></i>
             {{ __('users.user_not_active') }}
         </div>
@@ -42,81 +64,80 @@
         </div>
     @endif
 
-    @if (in_array($user->level, $adminGroups, true))
-        <div class="alert alert-info">{{ __('users.position') }}: <b>{{ $user->getLevel() }}</b></div>
-    @endif
-
-    <div class="container-fluid mb-3">
-        <div class="row">
-            <div class="col-md-6">
-                @hook('userStart', $user)
-                {{ __('users.status') }}: <b><a href="/statusfaq">{{ $user->getStatus() }}</a></b><br>
-
-                {{ $user->getGender() }}
-                {{ __('users.gender') }}:
-                {{ $user->gender === 'male' ? __('main.male') : __('main.female') }}<br>
-
-                {{ __('users.login') }}: <b>{{ $user->login }}</b><br>
-
-                @if (! empty($user->name))
-                    {{ __('users.name') }}: <b>{{ $user->name }}<br></b>
-                @endif
-
-                @if (! empty($user->country))
-                    {{ __('users.country') }}: <b>{{ $user->country }}<br></b>
-                @endif
-
-                @if (! empty($user->city))
-                    {{ __('users.city') }}: {{ $user->city }}<br>
-                @endif
-
-                @if (! empty($user->birthday))
-                    {{ __('users.birthday') }}: {{ $user->birthday }}<br>
-                @endif
-
-                @if (! empty($user->phone))
-                    {{ __('users.phone') }}: <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a><br>
-                @endif
-
-                {{ __('users.assets') }}: {{ plural($user->point, setting('scorename')) }}<br>
-                {{ __('users.moneys') }}: {{ plural($user->money, setting('moneyname')) }}<br>
-
-                @if ($user->themes)
-                    {{ __('users.theme') }}: {{ $user->themes }}<br>
-                @endif
-                {{ __('main.registration_date') }}: {{ dateFixed($user->created_at, 'd.m.Y') }}<br>
-
-                {{ __('users.last_visit') }}: {{ $user->getVisit() }}<br>
-
-                @hook('userFields', $user)
-                @hook('userEnd', $user)
-            </div>
-
-            <div class="col-md-6">
-                @if (!empty($user->picture) && file_exists(public_path($user->picture)))
-                    <a href="{{ $user->picture }}" data-fancybox="gallery" class="d-block text-center float-md-end">
-                        <img src="{{ $user->picture }}" alt="{{ $user->getName() }}" class="img-fluid rounded"></a>
+    <div class="section mb-3 shadow">
+        <div class="section-body profile-header">
+            <div class="profile-avatar">
+                @if ($hasPicture)
+                    <a href="{{ $user->picture }}" data-fancybox="gallery">
+                        <img src="{{ $user->picture }}" alt="{{ $user->getName() }}">
+                    </a>
                 @else
-                    <img src="/assets/img/images/photo.svg" alt="Photo" class="d-block mx-auto float-md-end img-fluid rounded">
+                    <img src="/assets/img/images/photo.svg" alt="Photo">
                 @endif
             </div>
-            <div class="col-md-12 mt-3">
-                @if (!empty($user->info))
-                    <div class="alert alert-warning">
-                        <b>{{ __('users.about') }}:</b><br>
-                        {{ $user->getInfo() }}
-                    </div>
-                @endif
 
-                <ul class="list-inline mb-0">@hook('userProfileLinks', $user)</ul>
+            <div class="profile-summary">
+                <div class="profile-name">
+                    {{ $user->getName() }}
+
+                    @if ($user->isOnline())
+                        <span class="badge bg-success">{{ __('main.online') }}</span>
+                    @endif
+                </div>
+
+                <div class="profile-badges">
+                    <a class="badge bg-adaptive" href="/statusfaq">{{ $user->getStatus() }}</a>
+
+                    @if (in_array($user->level, $adminGroups, true))
+                        <span class="badge bg-info">{{ $user->getLevel() }}</span>
+                    @endif
+                </div>
+
+                <div class="profile-stats">
+                    <span class="profile-stat">
+                        <b>{{ Str::beforeLast($point, ' ') }}</b>
+                        <small>{{ Str::afterLast($point, ' ') }}</small>
+                    </span>
+
+                    <span class="profile-stat">
+                        <b>{{ Str::beforeLast($money, ' ') }}</b>
+                        <small>{{ Str::afterLast($money, ' ') }}</small>
+                    </span>
+                </div>
+
             </div>
         </div>
     </div>
 
+    <div class="section mb-3 shadow">
+        <div class="section-body">
+            @hook('userStart', $user)
+
+            <dl class="profile-fields">
+                @foreach ($fields as $label => $value)
+                    <dt>{{ $label }}</dt>
+                    <dd>{!! $value !!}</dd>
+                @endforeach
+            </dl>
+
+            @hook('userFields', $user)
+            @hook('userEnd', $user)
+        </div>
+    </div>
+
+    @if ($user->info)
+        <div class="section mb-3 shadow">
+            <div class="section-title"><i class="fas fa-circle-info"></i> {{ __('users.about') }}</div>
+            <div class="section-body section-message">{{ $user->getInfo() }}</div>
+        </div>
+    @endif
+
+    <ul class="list-inline mb-3">@hook('userProfileLinks', $user)</ul>
+
     <?php ob_start(); ?>
         @hook('userActionStart', $user)
 
-        @if (!empty($user->site))
+        @if ($user->site)
             <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->getName() }}</a><br>
         @endif
         @hook('userActionMiddle', $user)
@@ -146,8 +167,11 @@
         @hook('userActionEnd', $user)
     <?php $actions = ob_get_clean(); ?>
 
-    {{-- Блок состоит из хуков и ссылок для авторизованных, у гостя он пустой --}}
+    {{-- Блок состоит из хуков и ссылок для авторизованных, у гостя он пустой.
+         Разметка строками «иконка + ссылка», как её отдают модули --}}
     @if (trim(strip_tags($actions)))
-        <div class="alert alert-info mb-3">{!! $actions !!}</div>
+        <div class="section mb-3 shadow">
+            <div class="section-body profile-actions">{!! $actions !!}</div>
+        </div>
     @endif
 @stop

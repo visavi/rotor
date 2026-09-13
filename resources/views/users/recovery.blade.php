@@ -13,6 +13,8 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fas fa-unlock-keyhole"></i> {{ __('mails.password_recovery') }}</div>
+
         <form method="post" action="{{ route('recovery') }}">
             @csrf
             <div class="mb-3{{ hasError('user') }}">
@@ -27,14 +29,19 @@
         </form>
     </div>
 
+    <div class="text-muted mb-3">
+        {{ __('mails.recovery_text2') }}<br>
+        {{ __('mails.recovery_text3') }}<br>
+        {{ __('mails.recovery_text4') }}
+    </div>
+
     <p class="text-muted fst-italic">
         {{ __('mails.recovery_text1') }}
         <a href="/mails">{{ __('index.mails') }}</a>
     </p>
 
-    <p>
-        {{ __('mails.recovery_text2') }}<br>
-        {{ __('mails.recovery_text3') }}<br>
-        {{ __('mails.recovery_text4') }}<br>
-    </p>
+    <div class="auth-links">
+        <a href="{{ route('login') }}"><i class="fas fa-right-to-bracket"></i> {{ __('index.login') }}</a>
+        <a href="{{ route('register') }}"><i class="fa-solid fa-pen-to-square"></i> {{ __('index.register') }}</a>
+    </div>
 @stop

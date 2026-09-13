@@ -46,7 +46,7 @@
 @yield('sidebar')
 </div>
 
-@include('themes/newspaper/footer')
+@yield('footer')
 <div class="scrollup"></div>
 
 </div>

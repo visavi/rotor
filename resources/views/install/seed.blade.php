@@ -1,4 +1,4 @@
-@extends('layout_simple')
+@extends('install/layout')
 
 @section('title', __('install.step3_install'))
 

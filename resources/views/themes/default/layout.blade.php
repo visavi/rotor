@@ -42,7 +42,7 @@
     @hook('advertBottom')
 </main>
 
-@include('themes/default/footer')
+@yield('footer')
 @stack('scripts')
 <div class="scrollup"></div>
 @hook('footer')

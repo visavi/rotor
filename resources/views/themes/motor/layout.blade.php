@@ -84,11 +84,7 @@
                 </div>
             </div>
 
-            <div class="footer">
-                <div class="footer-text">
-                    {{ setting('copy') }}
-                </div>
-            </div>
+            @yield('footer')
             <div class="panelBot"></div>
         </div>
     </div>

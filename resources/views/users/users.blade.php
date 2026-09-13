@@ -50,26 +50,35 @@
 
     @if ($users->isNotEmpty())
         @foreach ($users as $key => $data)
-            <div class="section mb-3 shadow">
-                <div class="user-avatar">
-                    {{ $data->getAvatar() }}
-                    {{ $data->getOnline() }}
-                </div>
-
-                <div class="section-user d-flex align-items-start">
-                    <div class="flex-grow-1">
-                        {{ $users->firstItem() + $key }}.
-                        {{ $data->getProfile() }}<br>
-                        <small class="fst-italic">{{ $data->getStatus() }}</small>
+            <div class="section mb-3 shadow user-card">
+                <div class="user-card-head">
+                    <div class="user-avatar">
+                        {{ $data->getAvatar() }}
+                        {{ $data->getOnline() }}
                     </div>
+
+                    <div class="user-card-title">
+                        <div>
+                            <span class="text-muted">{{ $users->firstItem() + $key }}.</span>
+                            {{ $data->getProfile() }}
+                        </div>
+
+                        <small class="text-muted">{{ $data->getStatus() }}</small>
+                    </div>
+
+                    @if (getUser() && $data->id !== getUser('id'))
+                        <a class="btn btn-sm btn-adaptive" href="/messages/talk/{{ $data->login }}" data-bs-toggle="tooltip" title="{{ __('users.send_message') }}">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    @endif
                 </div>
 
-                <div class="section-body border-top">
-                    {{ __('users.assets') }}: {{ plural($data->point, setting('scorename')) }}<br>
-                    {{ __('users.reputation') }}: {{ formatNum($data->rating) }}<br>
-                    {{ __('users.moneys') }}: {{ plural($data->money, setting('moneyname')) }}<br>
-                    {{ __('main.registration_date') }}: {{ dateFixed($data->created_at, 'd.m.Y') }}<br>
-                    {{ __('users.last_visit') }}: {{ $data->getVisit() }}
+                <div class="section-body border-top user-card-stats">
+                    <span><i class="fas fa-bolt"></i> {{ plural($data->point, setting('scorename')) }}</span>
+                    <span><i class="fas fa-star"></i> {{ formatNum($data->rating) }}</span>
+                    <span><i class="fas fa-coins"></i> {{ plural($data->money, setting('moneyname')) }}</span>
+                    <span data-bs-toggle="tooltip" title="{{ __('main.registration_date') }}"><i class="fas fa-calendar-plus"></i> {{ dateFixed($data->created_at, 'd.m.Y') }}</span>
+                    <span data-bs-toggle="tooltip" title="{{ __('users.last_visit') }}"><i class="fas fa-clock"></i> {{ $data->getVisit() }}</span>
                 </div>
             </div>
         @endforeach

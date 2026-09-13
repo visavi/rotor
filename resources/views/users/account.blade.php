@@ -13,9 +13,9 @@
 @stop
 
 @section('content')
-    <h3>{{ __('users.change_email') }}</h3>
-
     <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fas fa-envelope"></i> {{ __('users.change_email') }}</div>
+
         <form method="post" action="{{ route('accounts.change-mail') }}">
             @csrf
             <div class="mb-3{{ hasError('email') }}">
@@ -36,11 +36,10 @@
         <span class="text-muted fst-italic">{{ __('users.email_confirm_condition') }}</span>
     </div>
 
+    <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fas fa-award"></i> {{ __('users.status_change') }}</div>
 
-    <h3>{{ __('users.status_change') }}</h3>
-
-    @if ($user->point >= setting('editstatuspoint'))
-        <div class="section-form mb-3 shadow">
+        @if ($user->point >= setting('editstatuspoint'))
             <form method="post" action="/accounts/editstatus">
                 @csrf
                 <label for="status" class="form-label">{{ __('users.personal_status') }}:</label>
@@ -54,19 +53,18 @@
             @if (setting('editstatusmoney'))
                 <span class="text-muted fst-italic">{{ __('main.cost') }}: {{ plural(setting('editstatusmoney'), setting('moneyname')) }}</span>
             @endif
+        @else
+            <div class="alert alert-warning mb-0">
+                <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+                {{ __('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))]) }}
+            </div>
+        @endif
+    </div>
 
-        </div>
-    @else
-        <div class="alert alert-warning">
-            <i class="fa-solid fa-circle-exclamation fa-lg"></i>
-            {{ __('users.status_change_condition', ['point' => plural(setting('editstatuspoint'), setting('scorename'))]) }}
-        </div>
-    @endif
+    <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fas fa-palette"></i> {{ __('users.color_change') }}</div>
 
-    <h3>{{ __('users.color_change') }}</h3>
-
-    @if ($user->point >= setting('editcolorpoint'))
-        <div class="section-form mb-3 shadow">
+        @if ($user->point >= setting('editcolorpoint'))
             <form method="post" action="/accounts/editcolor">
                 @csrf
                 <?php $color = old('color', $user->color); ?>
@@ -84,18 +82,17 @@
             @if (setting('editcolormoney'))
                 <span class="text-muted fst-italic">{{ __('main.cost') }}: {{ plural(setting('editcolormoney'), setting('moneyname')) }}</span>
             @endif
-
-        </div>
-    @else
-        <div class="alert alert-warning">
-            <i class="fa-solid fa-circle-exclamation fa-lg"></i>
-            {{ __('users.color_change_condition', ['point' => plural(setting('editcolorpoint'), setting('scorename'))]) }}
-        </div>
-    @endif
-
-    <h3>{{ __('users.change_password') }}</h3>
+        @else
+            <div class="alert alert-warning mb-0">
+                <i class="fa-solid fa-circle-exclamation fa-lg"></i>
+                {{ __('users.color_change_condition', ['point' => plural(setting('editcolorpoint'), setting('scorename'))]) }}
+            </div>
+        @endif
+    </div>
 
     <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fas fa-key"></i> {{ __('users.change_password') }}</div>
+
         <form method="post" action="/accounts/editpassword">
             @csrf
             <div class="mb-3{{ hasError('new_password') }}">
@@ -120,9 +117,9 @@
         </form>
     </div>
 
-    <h3>{{ __('users.your_token') }}</h3>
-
     <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fas fa-code"></i> {{ __('users.your_token') }}</div>
+
         <form method="post" action="/accounts/apikey">
             @csrf
             @if ($user->apikey)

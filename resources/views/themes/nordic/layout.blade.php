@@ -45,7 +45,7 @@
 @yield('sidebar')
 </div>
 
-@include('themes/nordic/footer')
+@yield('footer')
 @stack('scripts')
 <div class="scrollup"></div>
 @hook('footer')

@@ -93,6 +93,9 @@ return [
 
     'login_or_username'   => 'Login or username',
     'theme'               => 'Theme',
+    'photo' => 'Photo',
+    'notifications' => 'Notifications',
+    'appearance' => 'Appearance',
     'language'            => 'Language',
     'time_shifting'       => 'Time shifting',
     'notify_comment'      => 'Notify about comments on my posts',

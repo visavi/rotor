@@ -48,10 +48,10 @@ class UserControllerTest extends TestCase
     {
         $user = $this->makeUser(['site' => '']);
 
-        // Плашка действий состоит из хуков и ссылок для авторизованных — гостю показывать нечего
+        // Блок действий состоит из хуков и ссылок для авторизованных — гостю показывать нечего
         $this->get('/users/' . $user->login)
             ->assertOk()
-            ->assertDontSee('alert-info');
+            ->assertDontSee('profile-actions');
     }
 
     public function testProfileActionsAreShownToOwner(): void
@@ -61,7 +61,7 @@ class UserControllerTest extends TestCase
         $this->actingAs($user)
             ->get('/users/' . $user->login)
             ->assertOk()
-            ->assertSee('alert-info');
+            ->assertSee('profile-actions');
     }
 
     public function testProfilePageOfMissingUserReturns404(): void

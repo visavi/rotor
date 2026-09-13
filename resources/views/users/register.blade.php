@@ -24,6 +24,8 @@
     @endif
 
     <div class="section-form mb-3 shadow">
+        <div class="section-title"><i class="fa-solid fa-pen-to-square"></i> {{ __('index.register') }}</div>
+
         <form action="/register" method="post">
             @csrf
             <div class="mb-3{{ hasError('login') }}">
@@ -59,16 +61,21 @@
             @endunless
 
             <?php $inputGender = old('gender', 'male'); ?>
-            Пол:
             <div class="mb-3{{ hasError('gender') }}">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
-                    <label class="form-check-label" for="inputGenderMale">{{ __('main.male') }}</label>
+                <label class="form-label">{{ __('users.gender') }}:</label>
+
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
+                        <label class="form-check-label" for="inputGenderMale"><i class="fa fa-male"></i> {{ __('main.male') }}</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
+                        <label class="form-check-label" for="inputGenderFemale"><i class="fa fa-female"></i> {{ __('main.female') }}</label>
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
-                    <label class="form-check-label" for="inputGenderFemale">{{ __('main.female') }}</label>
-                </div>
+
                 <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
@@ -78,5 +85,10 @@
         </form>
     </div>
 
-    {!! __('users.register_text') !!}<br>
+    <p class="text-muted">{!! __('users.register_text') !!}</p>
+
+    <div class="auth-links">
+        <a href="{{ route('login') }}"><i class="fas fa-right-to-bracket"></i> {{ __('index.login') }}</a>
+        <a href="{{ route('recovery') }}"><i class="fa-solid fa-unlock-keyhole"></i> {{ __('users.forgot_password') }}</a>
+    </div>
 @stop

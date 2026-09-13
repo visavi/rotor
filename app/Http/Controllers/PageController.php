@@ -9,6 +9,7 @@ use App\Models\Status;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
 class PageController extends Controller
@@ -18,9 +19,11 @@ class PageController extends Controller
      */
     public function index(string $page = 'index'): View
     {
+        // Поиск через вьюхи, а не по файлу: страницу можно положить
+        // в resources/custom/views — её не затрёт обновление ядра
         if (
             ! preg_match('|^[a-z0-9_\-]+$|i', $page)
-            || ! file_exists(resource_path('views/main/' . $page . '.blade.php'))
+            || ! ViewFacade::exists('main/' . $page)
         ) {
             abort(404);
         }
