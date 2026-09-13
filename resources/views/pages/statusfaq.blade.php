@@ -13,9 +13,9 @@
 
 @php
 $point = getUser('point') ?? 0;
-// Статусы отсортированы по убыванию: текущий — первый, до которого набран актив
-$current = getUser() ? $statuses->first(fn ($status) => $point >= $status->topoint) : null;
-$next = $current ? $statuses->last(fn ($status) => $status->topoint > $point) : null;
+// Статус определяется диапазоном topoint..point — так же, как в User::getStatuses()
+$current = getUser() ? $statuses->first(fn ($status) => $point >= $status->topoint && $point <= $status->point) : null;
+$next = getUser() ? $statuses->last(fn ($status) => $status->topoint > $point) : null;
 @endphp
 
 @section('content')
@@ -29,7 +29,7 @@ $next = $current ? $statuses->last(fn ($status) => $status->topoint > $point) : 
 
     @if ($next)
         @php
-        $from = $current->topoint;
+        $from = $current->topoint ?? 0;
         $percent = min(100, (int) round(($point - $from) / max(1, $next->topoint - $from) * 100));
         @endphp
 
@@ -37,11 +37,15 @@ $next = $current ? $statuses->last(fn ($status) => $status->topoint > $point) : 
             <div class="section-body">
                 <div class="d-flex justify-content-between mb-1">
                     <span>{{ __('statuses.next_status') }}: <b @style(['color: ' . $next->color => $next->color])>{{ $next->name }}</b></span>
-                    <span class="text-muted">{{ plural($next->topoint - $point, setting('scorename')) }}</span>
+                    <span class="text-muted">{{ __('statuses.your_points') }}: {{ plural($point, setting('scorename')) }}</span>
                 </div>
 
                 <div class="progress" style="height: .5rem">
                     <div class="progress-bar" style="width: {{ $percent }}%"></div>
+                </div>
+
+                <div class="text-muted small mt-1">
+                    {{ __('statuses.points_left') }}: {{ plural($next->topoint - $point, setting('scorename')) }}
                 </div>
             </div>
         </div>

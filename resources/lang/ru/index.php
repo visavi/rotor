@@ -37,8 +37,8 @@ return [
     'api_interface_desc' => 'Доступ к данным сайта из своих программ',
     'user_statuses'      => 'Статусы пользователей',
     'user_statuses_desc' => 'За что даются статусы и звания',
-    'own_pages'          => 'Свои страницы',
-    'own_pages_desc'     => 'Как добавить на сайт свою страницу',
+    'files_section'      => 'Файлы',
+    'files_section_desc' => 'Раздел файлов сайта',
 
     'my_account'        => 'Моя анкета',
     'my_profile'        => 'Мой профиль',

@@ -37,8 +37,8 @@ return [
     'api_interface_desc' => 'Access to site data from your own apps',
     'user_statuses'      => 'User statuses',
     'user_statuses_desc' => 'How statuses and ranks are earned',
-    'own_pages'          => 'Custom pages',
-    'own_pages_desc'     => 'How to add your own page to the site',
+    'files_section'      => 'Files',
+    'files_section_desc' => 'Site files section',
 
     'my_account'        => 'My account',
     'my_profile'        => 'My profile',

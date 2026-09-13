@@ -18,5 +18,7 @@ return [
     'status_text5'   => 'The site administration may assign special statuses to the most active users',
     'next_status'    => 'Next status',
     'your_status'    => 'Your status',
+    'points_left'    => 'Points left',
+    'your_points'    => 'Your points',
     'empty_statuses' => 'Statuses not yet assigned!',
 ];

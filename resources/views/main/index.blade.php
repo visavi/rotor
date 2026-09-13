@@ -16,7 +16,7 @@ $tiles = [
     ['url' => '/faq',       'icon' => 'fa-circle-question','title' => __('index.faq'),           'text' => __('index.faq_desc')],
     ['url' => '/api',       'icon' => 'fa-code',           'title' => __('index.api_interface'), 'text' => __('index.api_interface_desc')],
     ['url' => '/statusfaq', 'icon' => 'fa-award',          'title' => __('index.user_statuses'), 'text' => __('index.user_statuses_desc')],
-    ['url' => '/files',     'icon' => 'fa-file-code',      'title' => __('index.own_pages'),     'text' => __('index.own_pages_desc')],
+    ['url' => '/files',     'icon' => 'fa-file-code',      'title' => __('index.files_section'), 'text' => __('index.files_section_desc')],
 ];
 @endphp
 

@@ -1334,6 +1334,21 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
     border-color: rgba(var(--bs-primary-rgb), .25);
 }
 
+.talk-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Аватар вынесен из секции — резерв высоты под него не нужен */
+.talk-bubble .section-user,
+.message-block .section-user {
+    min-height: 0;
+}
+
+.talk-bubble .section-message:last-child,
+.message-block .section-message {
+    margin-bottom: 0;
+}
+
 /* Список диалогов: превью письма в несколько строк */
 .dialogue-preview {
     display: -webkit-box;
