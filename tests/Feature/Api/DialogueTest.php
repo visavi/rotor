@@ -58,6 +58,33 @@ class DialogueTest extends TestCase
         ]);
     }
 
+    public function testMessagesSurviveRecipientDeletion(): void
+    {
+        $message = $this->user->sendMessage($this->author, 'Привет');
+
+        $this->user->delete();
+
+        // У второй стороны переписка и текст сообщения остаются
+        $this->assertDatabaseHas('messages', ['id' => $message->id]);
+        $this->assertDatabaseHas('dialogues', [
+            'message_id' => $message->id,
+            'user_id'    => $this->author->id,
+        ]);
+        $this->assertDatabaseMissing('dialogues', ['user_id' => $this->user->id]);
+    }
+
+    public function testMessageIsRemovedWithLastParticipant(): void
+    {
+        $message = $this->user->sendMessage($this->author, 'Привет');
+
+        $this->user->delete();
+        $this->author->delete();
+
+        // Последний участник ушел — текст больше никому не нужен
+        $this->assertDatabaseMissing('messages', ['id' => $message->id]);
+        $this->assertDatabaseMissing('dialogues', ['message_id' => $message->id]);
+    }
+
     public function testEmptyDialogueIsNotFound(): void
     {
         $this->deleteJson('/api/talk/' . $this->author->login, [], $this->headers())

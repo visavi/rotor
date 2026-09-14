@@ -522,8 +522,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             deleteFile(public_path($this->picture));
             deleteFile(public_path($this->avatar));
 
-            Message::query()->where('user_id', $this->id)->delete();
-            Dialogue::query()->where('user_id', $this->id)->delete();
+            // Текст сообщения удаляется вместе с последним диалогом, у второй стороны переписка остается
+            Dialogue::query()
+                ->where('user_id', $this->id)
+                ->lazyById()
+                ->each(static fn (Dialogue $dialogue) => $dialogue->delete());
+
             Banhist::query()->where('user_id', $this->id)->delete();
 
             foreach (Registry::$onDeleteUser as $callback) {
