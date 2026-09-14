@@ -1179,11 +1179,6 @@ function initEditor(textarea) {
             .replace(/(<p><\/p>)+$/, '')           // убираем пустые p в конце
     })
 
-    // Клик по пустой области контейнера (ниже контента) ставит курсор в конец
-    editorEl.addEventListener('click', e => {
-        if (e.target === editorEl) editor.commands.focus('end')
-    })
-
     window._tiptapActiveEditor = editor
     editor.on('focus', () => { window._tiptapActiveEditor = editor })
 
