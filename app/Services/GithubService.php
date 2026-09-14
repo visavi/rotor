@@ -114,10 +114,27 @@ class GithubService
 
     /**
      * Запрашивает данные и кладёт в кэш вместе с меткой времени
+     *
+     * Сбой источника не затирает накопленное: пустой список выглядел бы так,
+     * будто релизов нет вовсе. Метку времени при этом двигаем, иначе каждый
+     * запрос уходил бы в недоступный GitHub
      */
     protected function store(string $key, callable $fetcher): array
     {
         $data = $fetcher();
+
+        if (! $data && $this->available === false) {
+            $cached = Cache::get($key);
+
+            // Холодный кэш: сохранять нечего, пусть следующий запрос попробует снова
+            if (! is_array($cached) || ! $cached['data']) {
+                return [];
+            }
+
+            Cache::forever($key, ['data' => $cached['data'], 'cached_at' => now()->getTimestamp()]);
+
+            return $cached['data'];
+        }
 
         Cache::forever($key, [
             'data'      => $data,
