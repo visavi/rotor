@@ -10,6 +10,7 @@ import { CharacterCount } from '@tiptap/extension-character-count'
 import { Mention } from '@tiptap/extension-mention'
 import FileHandler from '@tiptap/extension-file-handler'
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
+import { TextSelection } from '@tiptap/pm/state'
 import { __ } from './translate.js'
 import { notyf } from './globals.js'
 import { csrfToken } from './ajax.js'
@@ -352,6 +353,152 @@ function fixNewlines(html) {
     return html.replace(/(<p\b[^>]*>)([\s\S]*?)(<\/p>)/g, (_, open, content, close) =>
         open + content.replace(/\n/g, '<br>') + close
     )
+}
+
+// В скрытую textarea уходит то, что уйдёт в базу. getHTML() отдаёт цвета как rgb(),
+// переносы из блоков кода — как \n, а пустые абзацы копятся по краям: onCreate
+// добивает ими документ вокруг картинок и видео, иначе некуда поставить курсор.
+function serializeToTextarea(editor, textarea) {
+    textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
+        .replace(/(<p><\/p>)+/g, '<p></p>')
+        .replace(/^(<p><\/p>)+|(<p><\/p>)+$/g, '')
+}
+
+// Абзац с переносами строк (Shift-Enter) — единый блок, поэтому список оборачивает
+// его целиком, куда бы ни попало выделение. Перед включением списка режем такие
+// абзацы по <br>: выделенные строки становятся отдельными абзацами (будущими
+// пунктами), невыделенные склеиваются обратно через <br>, чтобы текст не менялся.
+function splitHardBreaks(editor) {
+    const { state } = editor
+    const { doc, selection, schema } = state
+    const { hardBreak, paragraph } = schema.nodes
+    if (!hardBreak || editor.isActive('listItem')) return
+
+    const targets = []
+    doc.nodesBetween(selection.from, selection.to, (node, pos) => {
+        if (node.type === paragraph && node.content.content.some(child => child.type === hardBreak)) {
+            targets.push({ pos, node })
+        }
+    })
+    if (!targets.length) return
+
+    let tr = state.tr
+    let delta = 0
+    let selFrom = null
+    let selTo = null
+
+    targets.forEach(({ pos, node }) => {
+        // Абзацы идут по порядку, поэтому сдвиг от предыдущих замен копим в delta
+        const at = pos + delta
+        const nodes = []
+        let cursor = at
+        let buffer = []
+        let line = []
+        let start = pos + 1
+        let offset = start
+
+        const add = (content, isSelected) => {
+            const created = paragraph.create(node.attrs, content)
+            nodes.push(created)
+            if (isSelected) {
+                selFrom ??= cursor + 1
+                selTo = cursor + created.nodeSize - 1
+            }
+            cursor += created.nodeSize
+        }
+
+        // Невыделенные строки копятся в buffer и уходят одним абзацем, склеенные через <br>
+        const flush = () => {
+            if (buffer.length) {
+                add(buffer)
+                buffer = []
+            }
+        }
+
+        const emit = () => {
+            if (offset >= selection.from && start <= selection.to) {
+                flush()
+                add(line, true)
+            } else {
+                if (buffer.length) buffer.push(hardBreak.create())
+                buffer.push(...line)
+            }
+            line = []
+        }
+
+        node.content.forEach(child => {
+            if (child.type === hardBreak) {
+                emit()
+                offset += child.nodeSize
+                start = offset
+            } else {
+                line.push(child)
+                offset += child.nodeSize
+            }
+        })
+        emit()
+        flush()
+
+        tr = tr.replaceWith(at, at + node.nodeSize, nodes)
+        delta = cursor - (pos + node.nodeSize)
+    })
+
+    // Внутри разрезанных абзацев берём границы новых, а концы выделения, попавшие
+    // в соседние нетронутые абзацы, переносим через mapping — иначе список достанется
+    // только новым абзацам, а захваченные соседи останутся вне его
+    if (selFrom !== null) {
+        const inTargets = at => targets.some(({ pos, node }) => at > pos && at < pos + node.nodeSize)
+        tr = tr.setSelection(TextSelection.create(
+            tr.doc,
+            inTargets(selection.from) ? selFrom : tr.mapping.map(selection.from),
+            inTargets(selection.to) ? selTo : tr.mapping.map(selection.to),
+        ))
+    }
+
+    editor.view.dispatch(tr)
+}
+
+// Вставка чистится не жёстче серверного санитайзера (App\Support\HtmlSanitizer):
+// оставляем ровно то, что он и так пропустит и что умеют прочитать наши узлы.
+// Без этого цитирование своих же сообщений теряло цвет, выравнивание,
+// упоминания, стикеры, спойлеры и видео — они опознаются по class и style.
+// Значения проверяем, а не только имена свойств: всё, что проходит вставку,
+// должно быть воспроизводимо кнопками. Иначе со стороннего сайта приедет
+// font-size: 400px или прозрачный цвет, которых в меню нет.
+const PASTE_COLOR = /^(#[0-9a-f]{3}|#[0-9a-f]{6}|rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\))$/i
+
+const isPasteColor = value => PASTE_COLOR.test(value)
+const isPasteSize = value => SIZES.some(size => size.value === value)
+// Значения выравнивания проверяет сам TextAlign по своему списку alignments
+const isPasteAlign = () => true
+
+const PASTE_STYLES = {
+    span: { 'color': isPasteColor, 'background-color': isPasteColor, 'font-size': isPasteSize },
+    p:    { 'text-align': isPasteAlign },
+}
+
+const PASTE_CLASSES = {
+    a:       ['user'],
+    img:     ['sticker'],
+    details: ['spoiler'],
+    div:     ['hidden', 'video'],
+    video:   ['video'],
+}
+
+function cleanPastedAttrs(el) {
+    const tag = el.tagName.toLowerCase()
+
+    const classes = (PASTE_CLASSES[tag] || []).filter(name => el.classList.contains(name))
+    const styles = Object.entries(PASTE_STYLES[tag] || {}).flatMap(([name, isValid]) => {
+        const value = el.style.getPropertyValue(name).trim()
+        return value && isValid(value) ? [[name, value]] : []
+    })
+
+    el.removeAttribute('class')
+    el.removeAttribute('style')
+
+    if (classes.length) el.setAttribute('class', classes.join(' '))
+    styles.forEach(([name, value]) => el.style.setProperty(name, value))
 }
 
 function validateUrl(url) {
@@ -797,6 +944,16 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     activeButtons.push({ el: sizeDd._dropdownBtn, getActive: () => !!editor.getAttributes('textStyle').fontSize })
     sep()
 
+    const listItems = [
+        { icon: 'fa-list-ul', title: __('editor.bullet_list'),  action: () => { splitHardBreaks(editor); editor.chain().focus().toggleBulletList().run()  } },
+        { icon: 'fa-list-ol', title: __('editor.ordered_list'), action: () => { splitHardBreaks(editor); editor.chain().focus().toggleOrderedList().run() } },
+    ].map(({ icon, title, action }) => menuItem(icon, title, action))
+    const listDd = makeDropdown('fa-list-ul', __('editor.lists'), listItems)
+    dropdown(listDd)
+    activeButtons.push({ el: listDd._dropdownBtn, getActive: () =>
+        editor.isActive('bulletList') || editor.isActive('orderedList')
+    })
+
     const alignItems = [
         { icon: 'fa-align-left',   title: __('editor.align_left'),   align: 'left'   },
         { icon: 'fa-align-center', title: __('editor.align_center'), align: 'center' },
@@ -806,16 +963,6 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     dropdown(alignDd)
     activeButtons.push({ el: alignDd._dropdownBtn, getActive: () =>
         editor.isActive({ textAlign: 'center' }) || editor.isActive({ textAlign: 'right' })
-    })
-
-    const listItems = [
-        { icon: 'fa-list-ul', title: __('editor.bullet_list'),  action: () => editor.chain().focus().toggleBulletList().run()  },
-        { icon: 'fa-list-ol', title: __('editor.ordered_list'), action: () => editor.chain().focus().toggleOrderedList().run() },
-    ].map(({ icon, title, action }) => menuItem(icon, title, action))
-    const listDd = makeDropdown('fa-list-ul', __('editor.lists'), listItems)
-    dropdown(listDd)
-    activeButtons.push({ el: listDd._dropdownBtn, getActive: () =>
-        editor.isActive('bulletList') || editor.isActive('orderedList')
     })
 
     function makeMenuSep() {
@@ -1056,10 +1203,7 @@ function initEditor(textarea) {
             },
             transformPastedHTML(html) {
                 const doc = new DOMParser().parseFromString(html, 'text/html')
-                doc.querySelectorAll('*').forEach(el => {
-                    el.removeAttribute('class')
-                    el.removeAttribute('style')
-                })
+                doc.querySelectorAll('*').forEach(cleanPastedAttrs)
                 // Убираем последовательные пустые параграфы
                 let prevEmpty = false
                 doc.body.querySelectorAll('p').forEach(p => {
@@ -1136,14 +1280,14 @@ function initEditor(textarea) {
         ],
         content: textarea.value || '',
         onUpdate({ editor }) {
-            textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
+            serializeToTextarea(editor, textarea)
             if (ready) {
                 isChanged = true
                 updateCounter()
             }
         },
         onCreate({ editor }) {
-            textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
+            serializeToTextarea(editor, textarea)
             // Если документ начинается или заканчивается атомарным узлом —
             // добавляем пустые параграфы, иначе некуда поставить курсор
             const { state } = editor
@@ -1171,13 +1315,7 @@ function initEditor(textarea) {
     window.addEventListener('beforeunload', e => {
         if (isChanged && !editor.isEmpty) { e.preventDefault(); return e.returnValue = '' }
     })
-    textarea.closest('form')?.addEventListener('submit', () => {
-        isChanged = false
-        textarea.value = textarea.value
-            .replace(/(<p><\/p>)+/g, '<p></p>')  // схлопываем несколько пустых p в один
-            .replace(/^(<p><\/p>)+/, '')           // убираем пустые p в начале
-            .replace(/(<p><\/p>)+$/, '')           // убираем пустые p в конце
-    })
+    textarea.closest('form')?.addEventListener('submit', () => { isChanged = false })
 
     window._tiptapActiveEditor = editor
     editor.on('focus', () => { window._tiptapActiveEditor = editor })
