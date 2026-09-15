@@ -32,9 +32,15 @@ trait UploadTrait
             $imageManager = app(ImageManager::class);
             $image = $imageManager->decode($file);
 
-            if ($image->width() <= 100 && $image->height() <= 100) {
-                $file->move(public_path($this->uploadPath), $filename);
-            } elseif ($image->isAnimated() && $image->width() <= setting('screensize') && $image->height() <= setting('screensize')) {
+            $fitsScreen = $image->width() <= setting('screensize') && $image->height() <= setting('screensize');
+
+            // Лишнее пересохранение портит jpeg, поэтому подходящий по размеру файл
+            // кладём как есть. Анимация не переживает пересохранение в любом случае,
+            // а остальным картинкам оно нужно только ради водяного знака
+            $keepOriginal = ($image->width() <= 100 && $image->height() <= 100)
+                || ($fitsScreen && ($image->isAnimated() || ! setting('copyfoto')));
+
+            if ($keepOriginal) {
                 $file->move(public_path($this->uploadPath), $filename);
             } else {
                 $image->scaleDown(setting('screensize'), setting('screensize'));

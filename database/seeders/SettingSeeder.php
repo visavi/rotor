@@ -74,7 +74,7 @@ class SettingSeeder extends Seeder
             ['name' => 'recaptcha_private', 'value' => ''],
             ['name' => 'recaptcha_public', 'value' => ''],
             ['name' => 'scorename', 'value' => __('seeds.settings.scorename')],
-            ['name' => 'screensize', 'value' => 1000],
+            ['name' => 'screensize', 'value' => 1500],
             ['name' => 'sendmailpacket', 'value' => 3],
             ['name' => 'sendprivatmailday', 'value' => 3],
             ['name' => 'slug_template', 'value' => '%id%'],
