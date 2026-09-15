@@ -4,40 +4,29 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\FileViewFinder;
 use Throwable;
 
-class ApplySettings
+class ApplyTheme
 {
     /**
-     * Handle an incoming request.
+     * Подключает тему пользователя и каталоги переопределений шаблонов
      */
     public function handle(Request $request, Closure $next)
     {
         try {
             $user = auth()->user();
         } catch (Throwable) {
+            // На неустановленном сайте таблицы пользователей ещё нет
             $user = null;
         }
 
-        $language = $user->language ?? setting('language', config('app.locale'));
         $theme = $user->themes ?? setting('themes', 'default');
-
-        if ($request->session()->has('language')) {
-            $language = $request->session()->get('language');
-        }
-
-        if (! file_exists(resource_path('lang/' . $language))) {
-            $language = setting('language', config('app.locale'));
-        }
 
         if (! file_exists(resource_path('views/themes/' . $theme))) {
             $theme = setting('themes', 'default');
         }
-
-        App::setLocale($language);
 
         // replaceNamespace, а не addNamespace: последний накапливает пути, и внутри
         // одного процесса (тесты, octane) остаётся тема, отрендеренная первой.

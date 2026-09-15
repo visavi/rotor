@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use App\Support\Registry;
 use App\Traits\ConvertVideoTrait;
 use App\Traits\FileableTrait;
 use App\Traits\UploadTrait;
@@ -131,7 +132,16 @@ class Message extends Model
             ]);
         }
 
-        $user->increment('newprivat');
+        // Пришло новое письмо — значит напоминание на почту снова уместно.
+        // Раньше флаг сбрасывала починка счётчика, и он взводился даже когда
+        // человек всё прочитал, а счётчик просто уменьшился
+        if ($user->sendprivatmail) {
+            $user->update(['sendprivatmail' => 0]);
+        }
+
+        foreach (Registry::$onSendMessage as $handler) {
+            $handler($message, $user);
+        }
 
         return $message;
     }

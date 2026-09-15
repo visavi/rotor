@@ -49,7 +49,7 @@
                 <li class="dropdown js-messages-block">
                     <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">
                         <i class="far fa-envelope fa-lg"></i>
-                        <span class="badge bg-notify js-message-count">{{ $user->newprivat ?: '' }}</span>
+                        <span class="badge bg-notify js-message-count">{{ $user->getCountNewMessages() ?: '' }}</span>
                     </a>
                     <ul class="app-notification dropdown-menu dropdown-menu-end">
                         <li class="app-notification__title">{{ __('messages.new_messages') }}</li>

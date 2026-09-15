@@ -13,11 +13,21 @@ use PDOException;
 class MetrikaService
 {
     /**
-     * Пути, которые клиенты api опрашивают в фоне — визит по ним не сохраняется
+     * Пути, которые клиенты опрашивают в фоне — визит по ним не сохраняется
      */
     private const array BACKGROUND_PATHS = [
         'api/messages/new',
     ];
+
+    /**
+     * Фоновые пути ядра вместе с объявленными модулями
+     *
+     * @return array<int, string>
+     */
+    public static function backgroundPaths(): array
+    {
+        return [...self::BACKGROUND_PATHS, ...Registry::$backgroundPaths];
+    }
 
     /**
      * Сохраняет статистику
@@ -51,7 +61,7 @@ class MetrikaService
     public function saveVisit(User $user): void
     {
         // Фоновый опрос клиента не означает, что человек за экраном
-        if (request()->is(...self::BACKGROUND_PATHS)) {
+        if (request()->is(...self::backgroundPaths())) {
             return;
         }
 

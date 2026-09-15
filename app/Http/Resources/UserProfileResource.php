@@ -16,7 +16,7 @@ class UserProfileResource extends UserResource
             'email'     => $this->email,
             'phone'     => $this->phone,
             'allprivat' => $this->getCountMessages(),
-            'newprivat' => $this->newprivat,
+            'newprivat' => $this->getCountNewMessages(),
         ]);
     }
 }

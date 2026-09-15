@@ -16,6 +16,8 @@ class Registry
     public static array $onDeleteUser = [];
     public static array $onAdminDeleteUser = [];
     public static array $onSaveStatistic = [];
+    public static array $onSendMessage = [];
+    public static array $backgroundPaths = [];
     public static array $onAdminLog = [];
     public static array $onProfileValidate = [];
     public static array $onProfileSave = [];
@@ -119,6 +121,28 @@ class Registry
     public static function onSaveStatistic(callable $handler): void
     {
         static::$onSaveStatistic[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк на отправку приватного сообщения
+     *
+     * Колбэк вида fn(Message $message, User $user): void, где $user — получатель.
+     * Вызывается после создания диалогов и увеличения счётчика непрочитанных
+     */
+    public static function onSendMessage(callable $handler): void
+    {
+        static::$onSendMessage[] = $handler;
+    }
+
+    /**
+     * Помечает пути как фоновые
+     *
+     * Клиент опрашивает их сам, без участия человека, поэтому визит по ним
+     * не сохраняется и пользователь не поднимается в онлайне
+     */
+    public static function backgroundPath(string ...$paths): void
+    {
+        static::$backgroundPaths = [...static::$backgroundPaths, ...$paths];
     }
 
     /**

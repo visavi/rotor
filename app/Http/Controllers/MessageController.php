@@ -112,9 +112,7 @@ class MessageController extends Controller
             ->orderBy('created_at')
             ->get();
 
-        $this->user->updatePrivate();
-
-        $countMessages = $this->user->newprivat;
+        $countMessages = $this->user->getCountNewMessages();
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
         return view($view, compact('messages', 'user', 'files', 'countMessages'));
@@ -178,7 +176,7 @@ class MessageController extends Controller
 
         $validator
             ->notEmpty($dialogues->count(), ['user' => __('messages.empty_dialogue')])
-            ->empty(getUser('newprivat'), __('messages.unread_messages'));
+            ->empty($this->user->getCountNewMessages(), __('messages.unread_messages'));
 
         if (! $validator->isValid()) {
             return redirect('messages?page=' . $page)

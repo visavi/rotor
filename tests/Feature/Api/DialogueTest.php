@@ -97,15 +97,13 @@ class DialogueTest extends TestCase
     }
 
     /**
-     * Отмечает переписку прочитанной и обнуляет счётчик у получателя
+     * Отмечает переписку прочитанной: счётчик непрочитанных считается по диалогам
      */
     private function markAsRead(): void
     {
         Dialogue::query()
             ->where('user_id', $this->user->id)
             ->update(['reading' => 1]);
-
-        $this->user->update(['newprivat' => 0]);
     }
 
     private function headers(): array

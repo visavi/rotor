@@ -100,7 +100,7 @@ class StatsTest extends TestCase
 
     public function testStatsDoNotDependOnUser(): void
     {
-        $user = User::factory()->create(['apikey' => Str::random(32), 'newprivat' => 3]);
+        $user = User::factory()->create(['apikey' => Str::random(32)]);
 
         // Своё в статистику не попадает: непрочитанные приходят в /messages/new, баллы — в /user
         $this->getJson('/api/stats', ['Authorization' => 'Bearer ' . $user->apikey])

@@ -315,7 +315,7 @@ class ApiController extends Controller
         }
 
         // Непрочитанные удалять нельзя: иначе сообщение исчезнет, не дойдя до адресата
-        if ($user->newprivat) {
+        if ($user->getCountNewMessages()) {
             abort(422, __('messages.unread_messages'));
         }
 

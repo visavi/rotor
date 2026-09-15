@@ -15,15 +15,16 @@
             </ul>
 
             @if ($user = getUser())
+                @php($unread = $user->getCountNewMessages())
                 <div class="dropdown paper-user">
                     <a href="#" class="paper-user__link" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i> {{ $user->login }}
-                        <span class="badge bg-danger js-message-count">{{ $user->newprivat ?: '' }}</span>
+                        <span class="badge bg-danger js-message-count">{{ $unread ?: '' }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end paper-dropdown">
                         @hook('navbarMenuStart')
                         @if ($user->isActive())
-                            <li><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }} <span class="badge bg-danger js-message-count">{{ $user->newprivat ?: '' }}</span></a></li>
+                            <li><a class="dropdown-item" href="{{ route('messages.index') }}">{{ __('messages.all_messages') }} <span class="badge bg-danger js-message-count">{{ $unread ?: '' }}</span></a></li>
                             <li><hr class="dropdown-divider"></li>
                         @endif
                         <li><a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a></li>

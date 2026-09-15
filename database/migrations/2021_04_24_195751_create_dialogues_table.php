@@ -20,6 +20,9 @@ return new class extends Migration {
 
                 $table->index(['user_id', 'author_id']);
                 $table->index(['message_id', 'created_at']);
+
+                // Счётчик непрочитанных считается по этому индексу, не заглядывая в таблицу
+                $table->index(['user_id', 'reading']);
             });
         }
     }

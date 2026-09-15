@@ -24,7 +24,6 @@ return new class extends Migration {
                 $table->string('phone', 15)->nullable();
                 $table->enum('gender', [User::MALE, User::FEMALE]);
                 $table->string('birthday', 10)->nullable();
-                $table->integer('newprivat')->default(0);
                 $table->string('themes', 20)->nullable();
                 $table->string('timezone', 3)->default('0');
                 $table->integer('point')->default(0);

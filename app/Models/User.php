@@ -20,10 +20,12 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
@@ -32,21 +34,21 @@ use Illuminate\Support\Str;
 /**
  * Class User
  *
- * @property int                  $id
- * @property string               $login
- * @property string               $password
- * @property string|null          $email
- * @property string               $level
- * @property string               $name
- * @property string               $country
- * @property string               $city
- * @property string               $language
- * @property string               $info
- * @property string               $site
- * @property string               $phone
- * @property string               $gender
- * @property string               $birthday
- * @property int                  $newprivat
+ * @property int         $id
+ * @property string      $login
+ * @property string      $password
+ * @property string|null $email
+ * @property string      $level
+ * @property string      $name
+ * @property string      $country
+ * @property string      $city
+ * @property string      $language
+ * @property string      $info
+ * @property string      $site
+ * @property string      $phone
+ * @property string      $gender
+ * @property string      $birthday
+ * @property-read Collection<Dialogue> $dialogues
  * @property string               $themes
  * @property string               $timezone
  * @property int                  $point
@@ -231,6 +233,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function online(): BelongsTo
     {
         return $this->belongsTo(Online::class, 'id', 'user_id')->withDefault();
+    }
+
+    /**
+     * Связь с личными сообщениями пользователя
+     */
+    public function dialogues(): HasMany
+    {
+        return $this->hasMany(Dialogue::class, 'user_id');
     }
 
     /**
@@ -514,6 +524,29 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * Возвращает количество непрочитанных сообщений
+     *
+     * Раньше это была колонка users.newprivat: её увеличивали при отправке, но
+     * не убавляли при прочтении, и счётчик расходился с диалогами в обе стороны.
+     * Считается по индексу (user_id, reading), подсчёт идёт внутри индекса.
+     *
+     * Результат намеренно не запоминается: кеш пришлось бы сбрасывать руками
+     * после каждой отметки о прочтении, а это ровно тот способ разойтись
+     * с данными, ради которого колонку и убрали.
+     *
+     * Метод, а не свойство: на каждое обращение уходит запрос, и в коде это
+     * должно быть видно. В выборках не работает — фильтровать и сортировать
+     * только через whereHas('dialogues'), как в команде add:subscribers
+     */
+    public function getCountNewMessages(): int
+    {
+        return Dialogue::query()
+            ->where('user_id', $this->id)
+            ->where('reading', 0)
+            ->count();
+    }
+
+    /**
      * Удаляет записи пользователя из всех таблиц
      */
     public function delete(): ?bool
@@ -536,26 +569,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
             return parent::delete();
         });
-    }
-
-    /**
-     * Updates count messages
-     */
-    public function updatePrivate(): void
-    {
-        if ($this->newprivat) {
-            $countDialogues = Dialogue::query()
-                ->where('user_id', $this->id)
-                ->where('reading', 0)
-                ->count();
-
-            if ($countDialogues !== $this->newprivat) {
-                $this->update([
-                    'newprivat'      => $countDialogues,
-                    'sendprivatmail' => 0,
-                ]);
-            }
-        }
     }
 
     /**

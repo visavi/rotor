@@ -40,7 +40,7 @@
                         </ul>
                         @if (($user = getUser()) && $user->isActive())
                             <div>
-                                <a class="d-flex align-items-center gap-1" href="{{ route('messages.index') }}" aria-label="{{ __('index.private_message') }}"><i class="far fa-envelope fa-lg"></i><span class="badge rounded-pill bg-danger js-message-count">{{ $user->newprivat ?: '' }}</span></a>
+                                <a class="d-flex align-items-center gap-1" href="{{ route('messages.index') }}" aria-label="{{ __('index.private_message') }}"><i class="far fa-envelope fa-lg"></i><span class="badge rounded-pill bg-danger js-message-count">{{ $user->getCountNewMessages() ?: '' }}</span></a>
                             </div>
                         @endif
                         <div>

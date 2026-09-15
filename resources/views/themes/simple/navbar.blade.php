@@ -25,7 +25,7 @@
                 @if ($user->isActive())
                     <a class="site-header__badged" href="{{ route('messages.index') }}" aria-label="{{ __('index.mails') }}">
                         <i class="far fa-envelope"></i>
-                        <span class="site-badge js-message-count">{{ $user->newprivat ?: '' }}</span>
+                        <span class="site-badge js-message-count">{{ $user->getCountNewMessages() ?: '' }}</span>
                     </a>
                 @endif
 

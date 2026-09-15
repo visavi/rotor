@@ -13,7 +13,13 @@ class SaveStatistic
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->isMethod('GET') && ! $request->ajax() && ! $request->expectsJson()) {
+        // Фоновый опрос клиента не означает, что человек за экраном: помимо
+        // ajax отсеиваем пути, которые модули объявили фоновыми явно
+        $background = $request->ajax()
+            || $request->expectsJson()
+            || $request->is(...MetrikaService::backgroundPaths());
+
+        if ($request->isMethod('GET') && ! $background) {
             (new MetrikaService())->saveStatistic();
         }
 

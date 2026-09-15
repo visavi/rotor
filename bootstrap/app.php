@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminLogger;
-use App\Http\Middleware\ApplySettings;
+use App\Http\Middleware\ApplyTheme;
 use App\Http\Middleware\CheckAccessSite;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckInstallSite;
@@ -10,7 +10,9 @@ use App\Http\Middleware\CheckToken;
 use App\Http\Middleware\CheckTokenOptional;
 use App\Http\Middleware\CheckUser;
 use App\Http\Middleware\CheckUserState;
+use App\Http\Middleware\GrantDailyBonus;
 use App\Http\Middleware\SaveStatistic;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -40,7 +42,8 @@ return Application::configure(basePath: dirname(__DIR__))
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
-            ApplySettings::class,
+            SetLocale::class,
+            ApplyTheme::class,
         ]);
 
         $middleware->group('web', [
@@ -48,6 +51,7 @@ return Application::configure(basePath: dirname(__DIR__))
             CheckThrottle::class,
             CheckAccessSite::class,
             CheckUserState::class,
+            GrantDailyBonus::class,
             SaveStatistic::class,
 
             ShareErrorsFromSession::class,
