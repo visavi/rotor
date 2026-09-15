@@ -49,6 +49,9 @@
   margin-bottom: 0;
   margin-left: auto;
   align-items: stretch;
+  // Шапка центрирует детей, поэтому список сам тянемся на её высоту —
+  // иначе подсветка пунктов вырождается в полоску, а меню открываются выше
+  height: 100%;
 }
 
 .app-nav__item {
@@ -123,11 +126,16 @@
   }
 }
 
+// Меню шапки прилипают к её нижнему краю: у Bootstrap по умолчанию
+// остаётся отступ в 2px, из-за которого видна щель
+.app-header .dropdown-menu {
+  --bs-dropdown-spacer: 0;
+  // Светлая рамка меню на тёмной шапке читается как щель
+  border-top: 0;
+}
+
 .app-notification {
   min-width: 270px;
-  &.dropdown-menu {
-    margin-top: -2px;
-  }
 }
 .app-notification__title {
   padding: 8px 20px;

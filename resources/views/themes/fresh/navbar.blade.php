@@ -47,7 +47,7 @@
 
             @if ($user->isActive())
                 <li class="dropdown js-messages-block">
-                    <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Show notifications">
+                    <a class="app-nav__item" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Show notifications">
                         <i class="far fa-envelope fa-lg"></i>
                         <span class="badge bg-notify js-message-count">{{ $user->getCountNewMessages() ?: '' }}</span>
                     </a>
@@ -62,7 +62,7 @@
 
             <!-- User Menu -->
             <li class="dropdown">
-                <a class="app-nav__item" href="#" data-bs-toggle="dropdown" aria-label="Open Profile Menu">
+                <a class="app-nav__item" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Open Profile Menu">
                     <i class="far fa-user fa-lg"></i>
                 </a>
                 <ul class="app-notification dropdown-menu dropdown-menu-end">

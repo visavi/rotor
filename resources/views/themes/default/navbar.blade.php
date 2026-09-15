@@ -1,6 +1,6 @@
 <!-- Navbar-->
 <header class="app-header">
-    <a class="app-header__logo" href="{{ route('home') }}"><span>{{ setting('title') }}</span></a>
+    <a class="app-header__logo" href="{{ route('home') }}">{{ setting('title') }}</a>
 
     <!-- Sidebar toggle button-->
     <a class="app-icon icon-toggle" href="#" data-bs-toggle="sidebar" aria-label="Show Sidebar"></a>

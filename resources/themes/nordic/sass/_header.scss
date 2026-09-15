@@ -44,6 +44,9 @@
   flex: 1 0 auto;
   justify-content: flex-end;
   align-items: stretch;
+  // Шапка центрирует детей, поэтому список сам тянемся на её высоту —
+  // иначе подсветка пунктов вырождается в полоску, а меню открываются выше
+  height: 100%;
 }
 
 .app-nav__item {
@@ -66,6 +69,7 @@
 .icon-toggle {
   &:before { content: "\f0c9"; font: var(--fa-font-solid); font-size: 1.125rem; }
   order: 10;
+  align-self: stretch;
   padding: 0 18px;
   color: #c7d2fe;
   text-decoration: none;
@@ -107,12 +111,17 @@
   &:hover { color: #fff; }
 }
 
+// Меню шапки прилипают к её нижнему краю: у Bootstrap по умолчанию
+// остаётся отступ в 2px, из-за которого видна щель
+.app-header .dropdown-menu {
+  --bs-dropdown-spacer: 0;
+}
+
 .app-notification {
   min-width: 270px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   overflow: hidden;
-  &.dropdown-menu { margin-top: -2px; }
 }
 
 .app-notification__title {
