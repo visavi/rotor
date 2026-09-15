@@ -76,7 +76,8 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  &:hover { color: #fff; background-color: rgba(255,255,255,0.08); }
+  // text-decoration сбрасываем и в hover: у Bootstrap a:hover специфичнее класса
+  &:hover { color: #fff; background-color: rgba(255,255,255,0.08); text-decoration: none; }
   @media(min-width: 768px) { display: none; }
 }
 

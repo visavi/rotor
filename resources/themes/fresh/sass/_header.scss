@@ -130,8 +130,6 @@
 // остаётся отступ в 2px, из-за которого видна щель
 .app-header .dropdown-menu {
   --bs-dropdown-spacer: 0;
-  // Светлая рамка меню на тёмной шапке читается как щель
-  border-top: 0;
 }
 
 .app-notification {
