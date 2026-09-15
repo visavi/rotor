@@ -38,6 +38,14 @@ class NewMessagesTest extends TestCase
         $this->assertSame(1, $this->user->getCountNewMessages());
     }
 
+    public function testDeprecatedPropertyStillWorks(): void
+    {
+        $this->user->sendMessage($this->author, 'Письмо');
+
+        // Мост для сторонних тем: до 15.0 свойство обязано совпадать с методом
+        $this->assertSame($this->user->getCountNewMessages(), $this->user->newprivat);
+    }
+
     public function testThemesRenderTheCount(): void
     {
         $this->user->sendMessage($this->author, 'Письмо');

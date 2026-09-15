@@ -17,6 +17,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,21 +35,20 @@ use Illuminate\Support\Str;
 /**
  * Class User
  *
- * @property int         $id
- * @property string      $login
- * @property string      $password
- * @property string|null $email
- * @property string      $level
- * @property string      $name
- * @property string      $country
- * @property string      $city
- * @property string      $language
- * @property string      $info
- * @property string      $site
- * @property string      $phone
- * @property string      $gender
- * @property string      $birthday
- * @property-read Collection<Dialogue> $dialogues
+ * @property int                  $id
+ * @property string               $login
+ * @property string               $password
+ * @property string|null          $email
+ * @property string               $level
+ * @property string               $name
+ * @property string               $country
+ * @property string               $city
+ * @property string               $language
+ * @property string               $info
+ * @property string               $site
+ * @property string               $phone
+ * @property string               $gender
+ * @property string               $birthday
  * @property string               $themes
  * @property string               $timezone
  * @property int                  $point
@@ -73,6 +73,8 @@ use Illuminate\Support\Str;
  * @property CarbonImmutable|null $timebonus
  * @property CarbonImmutable|null $updated_at
  * @property CarbonImmutable      $created_at
+ * @property-read Collection<Dialogue> $dialogues
+ * @property-read int $newprivat устарело, будет удалено в 15.0
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -544,6 +546,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             ->where('user_id', $this->id)
             ->where('reading', 0)
             ->count();
+    }
+
+    /**
+     * Количество непрочитанных сообщений в виде свойства
+     *
+     * До 14.6 это была колонка, и `$user->newprivat` стоит в сторонних темах
+     * и переопределениях из resources/custom/views. Мост оставлен, чтобы
+     * обновление в пределах 14.x не гасило бейдж в чужой вёрстке молча.
+     *
+     * @deprecated будет удалено в 15.0, пользоваться getCountNewMessages()
+     */
+    protected function newprivat(): Attribute
+    {
+        return Attribute::get(fn (): int => $this->getCountNewMessages());
     }
 
     /**
