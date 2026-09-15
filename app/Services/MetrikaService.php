@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\Online;
 use App\Models\User;
 use App\Support\Registry;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use PDOException;
 
@@ -27,6 +28,16 @@ class MetrikaService
     public static function backgroundPaths(): array
     {
         return [...self::BACKGROUND_PATHS, ...Registry::$backgroundPaths];
+    }
+
+    /**
+     * Фоновый запрос клиента: за экраном никого нет, показывать и считать нечего
+     */
+    public static function isBackground(Request $request): bool
+    {
+        return $request->ajax()
+            || $request->expectsJson()
+            || $request->is(...self::backgroundPaths());
     }
 
     /**

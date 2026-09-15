@@ -2,15 +2,16 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
-use App\Services\MetrikaService;
+use App\Traits\AuthenticatesToken;
 use Closure;
 use Illuminate\Http\Request;
 
 class CheckToken
 {
+    use AuthenticatesToken;
+
     /**
-     * Handle an incoming request.
+     * Пропускает только запросы с валидным токеном
      */
     public function handle(Request $request, Closure $next)
     {
@@ -20,17 +21,7 @@ class CheckToken
             abort(400, 'Api token missing');
         }
 
-        if (! $user = User::query()->where('apikey', $token)->first()) {
-            abort(401, 'Unauthorized');
-        }
-
-        if ($user->level === User::BANNED) {
-            abort(403, 'User banned');
-        }
-
-        auth()->setUser($user);
-
-        (new MetrikaService())->saveVisit($user);
+        $this->authenticateToken($token);
 
         return $next($request);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\MetrikaService;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -12,10 +13,9 @@ class GrantDailyBonus
      */
     public function handle(Request $request, Closure $next)
     {
-        // Фоновый запрос клиента не означает, что человек за экраном:
-        // уведомление ушло бы во флеш-сессию, которую никто не увидит,
+        // Уведомление о бонусе ушло бы во флеш-сессию, которую никто не увидит,
         // а повторно за сутки бонус уже не начислится
-        if ($request->ajax() || $request->expectsJson()) {
+        if (MetrikaService::isBackground($request)) {
             return $next($request);
         }
 

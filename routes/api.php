@@ -54,7 +54,6 @@ Route::controller(PageApiController::class)->group(function () {
     Route::get('/rules', 'rules');
     Route::get('/stickers', 'stickers');
     Route::get('/statuses', 'statuses');
-    Route::get('/pages/{page?}', 'page')->where('page', '[\w\-]+');
 });
 
 // Чтение комментария открыто, как и страница записи

@@ -9,17 +9,11 @@ use Illuminate\Http\Request;
 class SaveStatistic
 {
     /**
-     * Handle an incoming request.
+     * Пишет визит, пропуская фоновые запросы клиента
      */
     public function handle(Request $request, Closure $next)
     {
-        // Фоновый опрос клиента не означает, что человек за экраном: помимо
-        // ajax отсеиваем пути, которые модули объявили фоновыми явно
-        $background = $request->ajax()
-            || $request->expectsJson()
-            || $request->is(...MetrikaService::backgroundPaths());
-
-        if ($request->isMethod('GET') && ! $background) {
+        if ($request->isMethod('GET') && ! MetrikaService::isBackground($request)) {
             (new MetrikaService())->saveStatistic();
         }
 

@@ -23,16 +23,25 @@ class SetLocale
 
         $language = $user->language ?? setting('language', config('app.locale'));
 
-        if ($request->session()->has('language')) {
+        // На api сессия не стартует, язык берётся из профиля
+        if ($request->hasSession() && $request->session()->has('language')) {
             $language = $request->session()->get('language');
         }
 
-        if (! file_exists(resource_path('lang/' . $language))) {
+        self::apply($language);
+
+        return $next($request);
+    }
+
+    /**
+     * Ставит язык, откатываясь на язык сайта, если каталога переводов нет
+     */
+    public static function apply(?string $language): void
+    {
+        if (! $language || ! file_exists(resource_path('lang/' . $language))) {
             $language = setting('language', config('app.locale'));
         }
 
         App::setLocale($language);
-
-        return $next($request);
     }
 }

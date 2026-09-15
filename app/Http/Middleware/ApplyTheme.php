@@ -15,6 +15,13 @@ class ApplyTheme
      */
     public function handle(Request $request, Closure $next)
     {
+        // Api шаблонов не рендерит, ошибки отдаёт json — перенастраивать
+        // finder на каждый запрос там незачем. Стек остаётся глобальным:
+        // страница 404 для неизвестного URL рендерится до групповых middleware
+        if ($request->is('api/*')) {
+            return $next($request);
+        }
+
         try {
             $user = auth()->user();
         } catch (Throwable) {

@@ -58,9 +58,13 @@ jobs:
           patch="$(echo "${GITHUB_REF_NAME#v}" | cut -d. -f3)"
           [ "${patch:-0}" != "0" ] && echo "upgrade=true" >> "$GITHUB_OUTPUT" || echo "upgrade=false" >> "$GITHUB_OUTPUT"
 
+      # Установщик из upgrade-архива вырезан: после установки его удаляют,
+      # а обновление возвращало файл обратно и админка снова требовала его убрать
       - name: Create Upgrade Archive
         if: steps.relkind.outputs.upgrade == 'true'
-        run: cp release.zip release_upgrade.zip && zip -d release_upgrade.zip 'vendor/*'
+        run: >
+          cp release.zip release_upgrade.zip &&
+          zip -d release_upgrade.zip 'vendor/*' 'app/Http/Controllers/InstallController.php'
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2

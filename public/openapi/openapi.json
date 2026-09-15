@@ -3664,52 +3664,6 @@
                     }
                 }
             }
-        },
-        "/pages/{page}": {
-            "get": {
-                "tags": [
-                    "Страницы"
-                ],
-                "summary": "Статичная страница сайта",
-                "description": "Содержимое верстают на сайте, поэтому приходит готовым HTML. Без параметра отдаётся index.",
-                "operationId": "getPage",
-                "security": [],
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "pattern": "^[\\w\\-]+$",
-                            "default": "index"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "slug": {
-                                            "type": "string"
-                                        },
-                                        "html": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Страница не найдена"
-                    }
-                }
-            }
         }
     }
 }

@@ -17,26 +17,6 @@ use Illuminate\Support\Facades\DB;
 class PageApiController extends Controller
 {
     /**
-     * Страница из resources/views/main
-     *
-     * Содержимое верстают на сайте, поэтому приходит готовым HTML
-     */
-    public function page(string $page = 'index'): JsonResponse
-    {
-        if (
-            ! preg_match('|^[a-z0-9_\-]+$|i', $page)
-            || ! file_exists(resource_path('views/main/' . $page . '.blade.php'))
-        ) {
-            abort(404, __('main.record_not_found'));
-        }
-
-        return response()->json([
-            'slug' => $page,
-            'html' => trim(view('main/' . $page)->render()),
-        ]);
-    }
-
-    /**
      * Правила сайта
      */
     public function rules(): JsonResponse

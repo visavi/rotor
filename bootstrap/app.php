@@ -13,6 +13,7 @@ use App\Http\Middleware\CheckUserState;
 use App\Http\Middleware\GrantDailyBonus;
 use App\Http\Middleware\SaveStatistic;
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\StartWebSession;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -23,7 +24,6 @@ use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -41,7 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append([
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
-            StartSession::class,
+            StartWebSession::class,
             SetLocale::class,
             ApplyTheme::class,
         ]);

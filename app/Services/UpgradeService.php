@@ -16,11 +16,12 @@ class UpgradeService
 {
     private array $excluded = [
         '.env',
+        'modules',
         'storage',
         'public/uploads',
-        'modules',
-        'app/hooks.php',
         'resources/custom',
+        'app/hooks.php',
+        'app/Http/Controllers/InstallController.php',
     ];
 
     private array $writableDirs = [

@@ -20,19 +20,6 @@ class PageTest extends TestCase
         $this->overrideSetting('app_installed', 1);
     }
 
-    public function testPageReturnsRenderedHtml(): void
-    {
-        $this->getJson('/api/pages')
-            ->assertOk()
-            ->assertJsonPath('slug', 'index')
-            ->assertJsonStructure(['slug', 'html']);
-    }
-
-    public function testUnknownPageIsNotFound(): void
-    {
-        $this->getJson('/api/pages/nosuchpage')->assertStatus(404);
-    }
-
     public function testRulesReturnText(): void
     {
         Rule::query()->delete();

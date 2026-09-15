@@ -2,13 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
-use App\Services\MetrikaService;
+use App\Traits\AuthenticatesToken;
 use Closure;
 use Illuminate\Http\Request;
 
 class CheckTokenOptional
 {
+    use AuthenticatesToken;
+
     /**
      * Авторизует по токену, если он передан. Без токена запрос выполняется как гостевой
      */
@@ -16,21 +17,9 @@ class CheckTokenOptional
     {
         $token = $request->bearerToken();
 
-        if (! $token) {
-            return $next($request);
+        if ($token) {
+            $this->authenticateToken($token);
         }
-
-        if (! $user = User::query()->where('apikey', $token)->first()) {
-            abort(401, 'Unauthorized');
-        }
-
-        if ($user->level === User::BANNED) {
-            abort(403, 'User banned');
-        }
-
-        auth()->setUser($user);
-
-        (new MetrikaService())->saveVisit($user);
 
         return $next($request);
     }
