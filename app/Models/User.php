@@ -551,7 +551,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Количество непрочитанных сообщений в виде свойства
      *
-     * До 14.6 это была колонка, и `$user->newprivat` стоит в сторонних темах
+     * До 14.7 это была колонка, и `$user->newprivat` стоит в сторонних темах
      * и переопределениях из resources/custom/views. Мост оставлен, чтобы
      * обновление в пределах 14.x не гасило бейдж в чужой вёрстке молча.
      *
