@@ -7,10 +7,10 @@
   transition: margin-left 0.3s ease;
 
   @media(min-width: 768px) {
-    margin-left: $sidebar-width;
+    margin-left: var(--sidebar-width);
 
     .sidebar-mini & {
-      margin-left: $sidebar-mini-width;
+      margin-left: var(--sidebar-mini-width);
     }
   }
 

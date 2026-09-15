@@ -39,8 +39,6 @@ $primary-color: #8B0000;
 $app-width: 1200px;
 
 // Sidebar
-$sidebar-width: 260px;
-$header-height: 85px;   // masthead + nav
 
 // Navbar masthead
 
@@ -62,6 +60,15 @@ $sidebar-light-color: $ink-black;
     --bs-link-color: #{$ink-red};
     --bs-link-color-rgb: 139, 0, 0;
     --bs-link-hover-color: #6f0000;
+
+    // Высота шапки (masthead + меню) и ширина сайдбара
+    // Высота шапки = masthead + меню (всё в rem, растёт со шрифтом)
+    // плюс 4px рамок: двойная снизу и разделительная между блоками.
+    // Значение подобрано по факту, иначе сайдбар и контент отъезжают вниз
+    --header-height: calc(5.045rem + 4px);
+    // Ширина ограничена долей экрана, иначе на узком телефоне при крупном
+    // шрифте сайдбар оказался бы шире вьюпорта
+    --sidebar-width: min(16.25rem, 85vw);
 
     // $body-bg, $font-family-sans-serif
     --bs-body-bg: #{$body-bg};

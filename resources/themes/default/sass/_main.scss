@@ -10,12 +10,12 @@ html {
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 400;
 }
 
 h3 {
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 400;
 }
 
@@ -47,11 +47,11 @@ h3 {
   // подменившая сайдбар своей версткой, остается во всю ширину
   @media(min-width: 768px) {
     &.sidebar-mini:has(.app-sidebar .menu-icon) {
-      .app-content { margin-left: $sidebar-mini-width; }
+      .app-content { margin-left: var(--sidebar-mini-width); }
 
       // overflow: visible — иначе всплывающие подписи обрежутся полосой
       .app-sidebar {
-        width: $sidebar-mini-width;
+        width: var(--sidebar-mini-width);
         overflow: visible;
       }
 
@@ -80,9 +80,9 @@ h3 {
         margin-right: 0;
 
         .avatar-default {
-          width: 36px;
-          height: 36px;
-          font-size: 24px;
+          width: 2.25rem;
+          height: 2.25rem;
+          font-size: 1.5rem;
         }
       }
 
@@ -125,7 +125,7 @@ h3 {
   // adding sidenav-toggled class will open sidebar
   @media(max-width: 767px) {
     overflow-x: hidden;
-    .app-sidebar { left: -$sidebar-width; }
+    .app-sidebar { left: calc(-1 * var(--sidebar-width)); }
     .app-sidebar__overlay { visibility: hidden; }
     &.sidenav-toggled {
       .app-content { margin-left: 0; }
@@ -137,12 +137,12 @@ h3 {
 
 .app-content {
   flex: 1 0 auto;
-  margin-top: 50px;
+  margin-top: var(--header-height);
   padding: 30px;
   background-color: var(--bs-body-bg);
   transition: margin-left 0.3s ease;
   @media(min-width: 768px) {
-    margin-left: $sidebar-width;
+    margin-left: var(--sidebar-width);
   }
   @media(max-width: 767px) {
     min-width: 100%;

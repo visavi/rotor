@@ -6,8 +6,8 @@
 
 html, body { height: 100%; }
 
-h2 { font-size: 20px; font-weight: 600; }
-h3 { font-size: 17px; font-weight: 600; }
+h2 { font-size: 1.25rem; font-weight: 600; }
+h3 { font-size: 1.0625rem; font-weight: 600; }
 
 .post-title { color: inherit; }
 .post-title:hover, .post-title:focus { text-decoration: none; color: inherit; }
@@ -34,9 +34,9 @@ h3 { font-size: 17px; font-weight: 600; }
     overflow-x: hidden;
     .app-sidebar {
       position: fixed;
-      right: -$sidebar-width;
-      top: $navbar-height;
-      height: calc(100% - #{$navbar-height});
+      right: calc(-1 * var(--sidebar-width));
+      top: var(--navbar-height);
+      height: calc(100% - var(--navbar-height));
       z-index: 100;
       transition: right 0.25s ease;
     }
@@ -51,7 +51,7 @@ h3 { font-size: 17px; font-weight: 600; }
 .app-body {
   display: flex;
   flex: 1 0 auto;
-  margin-top: $navbar-height;
+  margin-top: var(--navbar-height);
   align-items: stretch;
   background-color: $sidebar-color;
 }
@@ -90,8 +90,8 @@ h3 { font-size: 17px; font-weight: 600; }
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 36px;
-  height: 36px;
+  width: 2.25rem;
+  height: 2.25rem;
   background: $primary-color;
   border-radius: 50%;
   color: #fff;
@@ -105,5 +105,5 @@ h3 { font-size: 17px; font-weight: 600; }
   pointer-events: none;
   transition: opacity 0.3s ease;
   &:hover { background: darken($primary-color, 10%); }
-  &:before { font-size: 20px; }
+  &:before { font-size: 1.25rem; }
 }

@@ -1,12 +1,12 @@
 // Nordic Right Sidebar — sticky, in document flow
 
 .app-sidebar {
-  flex: 0 0 $sidebar-width;
-  width: $sidebar-width;
-  min-width: $sidebar-width;
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   position: sticky;
-  top: $navbar-height;
-  max-height: calc(100vh - #{$navbar-height});
+  top: var(--navbar-height);
+  max-height: calc(100vh - var(--navbar-height));
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $sidebar-color;
@@ -25,7 +25,7 @@
 .app-sidebar__overlay {
   @media(max-width: 767px) {
     position: fixed;
-    top: $navbar-height; left: 0; bottom: 0; right: 0;
+    top: var(--navbar-height); left: 0; bottom: 0; right: 0;
     z-index: 99;
     background: rgba(0,0,0,0.5);
   }

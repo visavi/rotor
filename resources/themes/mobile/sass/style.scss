@@ -1,7 +1,7 @@
 body, td, tr {
     text-decoration: none;
     font-family: verdana, arial, helvetica, sans-serif;
-    font-size: 13px;
+    font-size: 0.8125rem;
     cursor: default;
 }
 
@@ -15,16 +15,16 @@ body {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin-bottom: 0;
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
 h3 {
-    font-size: 17px;
+    font-size: 1.0625rem;
 }
 
 h1 small {
@@ -100,7 +100,7 @@ a:hover {
 legend {
     color: #ccc;
     width: 100%;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: bold;
     border-bottom: solid 1px #f7f7f7;
     padding-bottom: 5px;
@@ -117,14 +117,14 @@ form {
 
 textarea {
     width: 100%;
-    font-size: 13px;
+    font-size: 0.8125rem;
     padding: 5px;
 }
 
 table {
     margin: 1px 0;
     padding: 1px;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .a {
@@ -133,7 +133,7 @@ table {
     border: 1px solid #ccc;
 }
 .b {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #888888;
     border: 1px solid #ccc;
     background: #eee repeating-linear-gradient(-45deg, #eeeeee, #eeeeee 3px, #f2f2f2 3px, #f2f2f2 4px);
@@ -143,7 +143,7 @@ table {
 }
 
 .b .float-end i {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #9d9d9d;
 }
 

@@ -17,12 +17,6 @@ $primary-color: #297dad;
 // ------- App Width --------
 $app-width: 1200px;
 
-// ------- Sidebar Width --------
-$sidebar-width: 260px;
-
-// ------- Sidebar Width (collapsed, icons only) --------
-$sidebar-mini-width: 50px;
-
 // ------- Width of hover popups next to the collapsed sidebar --------
 $sidebar-flyout-width: 210px;
 
@@ -58,6 +52,16 @@ $sidebar-color: #1e272e;
 
     // Шапка и сайдбар. Светлый сайдбар получается переопределением
     // этих переменных — пересобирать тему для этого не нужно
+    // Высота шапки. От неё считаются отступы контента и сайдбара,
+    // поэтому менять достаточно здесь
+    --header-height: 3.125rem;
+
+    // Ширина сайдбара: обычного и свёрнутого до иконок
+    // Ширина ограничена долей экрана, иначе на узком телефоне при крупном
+    // шрифте сайдбар оказался бы шире вьюпорта
+    --sidebar-width: min(16.25rem, 85vw);
+    --sidebar-mini-width: 3.125rem;
+
     --navbar-bg: #{$navbar-color};
     --navbar-logo-bg: #{darken($navbar-color, 5%)};
     --navbar-search-bg: #{darken($navbar-color, 10)};

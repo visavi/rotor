@@ -43,10 +43,6 @@ $primary-color: #4338ca;
 // App width
 $app-width: 1280px;
 
-// Sidebar
-$sidebar-width: 260px;
-$navbar-height: 56px;
-
 // Navbar — deep indigo
 $navbar-color: #1e1b4b;
 
@@ -71,6 +67,12 @@ $sidebar-light-link-color: #374151;
     --bs-link-color: #4338ca;
     --bs-link-color-rgb: 67, 56, 202;
     --bs-link-hover-color: #3730a3;
+
+    // Высота шапки и ширина сайдбара: от них считаются отступы контента
+    --navbar-height: 3.5rem;
+    // Ширина ограничена долей экрана, иначе на узком телефоне при крупном
+    // шрифте сайдбар оказался бы шире вьюпорта
+    --sidebar-width: min(16.25rem, 85vw);
 
     // $body-bg, $font-family-sans-serif
     --bs-body-bg: #ffffff;

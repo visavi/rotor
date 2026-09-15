@@ -13,11 +13,6 @@ $primary-color: #27ae60;
 // ------- App Width --------
 $app-width: 1280px;
 
-// ------- Header Height --------
-$header-height: 50px;
-$topnav-height: 44px;
-$total-top-offset: $header-height + $topnav-height;
-
 // Background color of top header
 $navbar-color: #1a252f;
 
@@ -34,6 +29,10 @@ $topnav-active: $primary-color;
     --bs-link-color: #27ae60;
     --bs-link-color-rgb: 39, 174, 96;
     --bs-link-hover-color: #1e8449;
+
+    // Высота шапки и горизонтального меню: от них считается отступ контента
+    --header-height: 3.125rem;
+    --topnav-height: 2.75rem;
 
     --bs-body-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }

@@ -6,14 +6,14 @@
 
 body {
     margin-top : 0;
-    font-size : 14px;
+    font-size : 0.875rem;
     color : #5c5c5c;
     background: linear-gradient(to bottom, #c0c0c0, #f0f0f0) top / 100% 150px no-repeat, #f0f0f0;
     line-height: 1.3;
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
     margin-bottom: 0;
 }
 
@@ -25,11 +25,11 @@ h1 small {
 }
 
 h2 {
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 h3 {
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 p {
@@ -96,7 +96,7 @@ a {
     color : #5c5c5c;
     padding : 0 3px;
     font-weight : bold;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 .menu a:hover {
     text-decoration : underline;
@@ -168,7 +168,7 @@ input {
 
 .b .float-end i {
     color: #9d9d9d;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 hr {
@@ -178,7 +178,7 @@ hr {
 textarea {
     background-color: #fff;
     width : 100%;
-    font-size : 13px;
+    font-size : 0.8125rem;
     padding : 5px;
     color:#666;
     border:1px solid #ccc;

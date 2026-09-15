@@ -9,8 +9,8 @@ html { height: 100%; }
 body { background-color: $body-bg; color: $ink-black; }
 
 h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; color: $ink-black; }
-h2 { font-size: 22px; font-weight: 700; border-bottom: 2px solid $ink-red; padding-bottom: 4px; margin-bottom: 12px; }
-h3 { font-size: 18px; font-weight: 700; }
+h2 { font-size: 1.375rem; font-weight: 700; border-bottom: 2px solid $ink-red; padding-bottom: 4px; margin-bottom: 12px; }
+h3 { font-size: 1.125rem; font-weight: 700; }
 
 a { color: $ink-red; }
 a:hover { color: darken($ink-red, 15%); }
@@ -38,9 +38,9 @@ a:hover { color: darken($ink-red, 15%); }
   @media(max-width: 767px) {
     .app-sidebar {
       position: fixed;
-      right: -$sidebar-width;
-      top: $header-height;
-      height: calc(100% - #{$header-height});
+      right: calc(-1 * var(--sidebar-width));
+      top: var(--header-height);
+      height: calc(100% - var(--header-height));
       z-index: 100;
       transition: right 0.3s ease;
     }
@@ -55,11 +55,13 @@ a:hover { color: darken($ink-red, 15%); }
 .app-body {
   display: flex;
   flex: 1 0 auto;
-  margin-top: $header-height;
+  margin-top: var(--header-height);
   align-items: stretch;
   background-color: $sidebar-color;
   border-right: 1px solid $paper-border;
-  @media(max-width: 767px) { margin-top: 80px; }
+  // На узких экранах шапка ниже (поиск скрыт), но отступ по-прежнему считается
+  // от её реальной высоты, а не фиксированным числом
+  @media(max-width: 767px) { margin-top: var(--header-height); }
 }
 
 .app-content {
@@ -84,6 +86,6 @@ a:hover { color: darken($ink-red, 15%); }
 .card { border: 1px solid $paper-border; border-radius: 2px; background-color: #fff; }
 .table { border-color: $paper-border; font-size: 0.85rem; thead th { background-color: $ink-black; color: #fff; font-family: $ui-font; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 0; } td, th { border-color: $paper-border; } }
 blockquote { border-left: 4px solid $ink-red; padding-left: 16px; font-style: italic; color: $ink-gray; }
-.code { font-size: 12px; }
+.code { font-size: 0.75rem; }
 hr { border-color: $paper-border; opacity: 1; margin: 16px 0; }
 :focus-visible { outline: 2px solid $ink-red; outline-offset: 1px; box-shadow: none; }

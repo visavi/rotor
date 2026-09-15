@@ -1,12 +1,12 @@
 // Newspaper Right Sidebar — sticky, in document flow
 
 .app-sidebar {
-  flex: 0 0 $sidebar-width;
-  width: $sidebar-width;
-  min-width: $sidebar-width;
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   position: sticky;
-  top: $header-height;
-  max-height: calc(100vh - #{$header-height});
+  top: var(--header-height);
+  max-height: calc(100vh - var(--header-height));
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $sidebar-color;
@@ -21,7 +21,7 @@
 .app-sidebar__overlay {
   @media(max-width: 767px) {
     position: fixed;
-    top: $header-height; left: 0; bottom: 0; right: 0;
+    top: var(--header-height); left: 0; bottom: 0; right: 0;
     z-index: 99;
     background: rgba(26,26,26,0.6);
   }
