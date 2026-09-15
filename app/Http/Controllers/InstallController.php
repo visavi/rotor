@@ -11,11 +11,11 @@ use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -31,7 +31,9 @@ class InstallController extends Controller
     ) {
         $lang = $request->input('lang', 'ru');
 
-        Lang::setLocale($lang);
+        // App, а не Lang: второй переключает только переводчик, и <html lang>
+        // с языком, поставленным middleware по Accept-Language, расходился с текстами
+        App::setLocale($lang);
 
         view()->share('lang', $lang);
     }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Http\Middleware\SetLocale;
 use App\Models\User;
 use App\Services\MetrikaService;
+use App\Support\Locale;
 
 trait AuthenticatesToken
 {
@@ -25,9 +25,8 @@ trait AuthenticatesToken
 
         auth()->setUser($user);
 
-        // Глобальный SetLocale отработал до авторизации по токену и видел гостя,
-        // поэтому язык профиля проставляется здесь
-        SetLocale::apply($user->language);
+        // Язык профиля важнее Accept-Language, который поставила группа api
+        Locale::apply($user->language);
 
         (new MetrikaService())->saveVisit($user);
     }

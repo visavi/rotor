@@ -2,15 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Locale;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Throwable;
 
 class SetLocale
 {
     /**
-     * Выбирает язык: выбор в сессии, затем язык профиля, затем язык сайта
+     * Язык посетителя: явный выбор на сайте, затем профиль, затем язык браузера.
+     * Без всего этого — язык сайта из настроек
      */
     public function handle(Request $request, Closure $next)
     {
@@ -21,27 +22,17 @@ class SetLocale
             $user = null;
         }
 
-        $language = $user->language ?? setting('language', config('app.locale'));
+        $language = Locale::fromRequest($request);
 
-        // На api сессия не стартует, язык берётся из профиля
+        // Клиент api без сессии: ему остаются профиль и заголовок
         if ($request->hasSession() && $request->session()->has('language')) {
             $language = $request->session()->get('language');
+        } elseif ($user) {
+            $language = $user->language;
         }
 
-        self::apply($language);
+        Locale::apply($language);
 
         return $next($request);
-    }
-
-    /**
-     * Ставит язык, откатываясь на язык сайта, если каталога переводов нет
-     */
-    public static function apply(?string $language): void
-    {
-        if (! $language || ! file_exists(resource_path('lang/' . $language))) {
-            $language = setting('language', config('app.locale'));
-        }
-
-        App::setLocale($language);
     }
 }

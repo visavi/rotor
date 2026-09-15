@@ -14,6 +14,12 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
+     * Symfony подставляет тестовым запросам Accept-Language: en-us — клиент api
+     * получал бы английский. Пустой заголовок = запрос без него, как у реального клиента
+     */
+    protected $serverVariables = ['HTTP_ACCEPT_LANGUAGE' => ''];
+
+    /**
      * Сидер прогоняется один раз внутри migrate:fresh (RefreshDatabase), а не в
      * каждом тесте. Иначе truncate() в сидерах даёт неявный COMMIT, рвёт per-test
      * транзакцию и заставляет migrate:fresh повторяться на каждом тесте.
