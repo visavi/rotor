@@ -32,15 +32,15 @@
     @if ($registries->isNotEmpty())
         @foreach ($registries as $registry)
             <div class="section mb-3 shadow">
-                <div class="section-title d-flex align-items-center justify-content-between">
-                    <div>
+                <div class="section-title d-flex align-items-center justify-content-between gap-2">
+                    <div class="text-break" style="min-width: 0">
                         <i class="fas fa-database {{ $registry->active ? 'text-success' : 'text-muted' }}"></i>
                         <span class="fw-bold">{{ $registry->name ?: $registry->url }}</span>
                         @if ($registry->name)
                             <br><small class="text-muted">{{ $registry->url }}</small>
                         @endif
                     </div>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-shrink-0">
                         <form action="{{ route('admin.registries.refresh', $registry->id) }}" method="post">
                             @csrf
                             <button class="btn btn-sm btn-outline-secondary" title="{{ __('main.refresh') }}">
@@ -49,7 +49,7 @@
                         </form>
                         <form action="{{ route('admin.registries.toggle', $registry->id) }}" method="post">
                             @csrf
-                            <button class="btn btn-sm {{ $registry->active ? 'btn-outline-warning' : 'btn-outline-success' }}">
+                            <button class="btn btn-sm text-nowrap {{ $registry->active ? 'btn-outline-warning' : 'btn-outline-success' }}">
                                 {{ $registry->active ? __('main.disable') : __('main.enable') }}
                             </button>
                         </form>
