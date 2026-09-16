@@ -445,7 +445,10 @@ blockquote::before {
 }
 
 /* Images */
-.image {
+/* Второй селектор — страховка для картинок мимо редактора (импорт, старые записи,
+   свой HTML): класс .image ставит только tiptap, ограничения нужны и без него */
+.image,
+.section-message img:not(.sticker):not(.avatar) {
     max-width: min(600px, 100%);
     max-height: 450px;
     height: auto;

@@ -30,6 +30,18 @@ class CommentObserver
         cache()->increment('feed_version');
     }
 
+    /**
+     * Лента кеширует сами модели, поэтому правка текста иначе висит до конца TTL.
+     * Служебные апдейты (рейтинг, модерация) кеш не роняют, как и правки при
+     * выключенных в ленте комментариях: строка в feeds пишется независимо от настройки
+     */
+    public function updated(Comment $comment): void
+    {
+        if ($comment->wasChanged('text') && setting('feed_comments_show')) {
+            cache()->increment('feed_version');
+        }
+    }
+
     public function deleted(Comment $comment): void
     {
         Feed::query()

@@ -533,10 +533,15 @@ textarea.form-control {
     }
 }
 
+/* Высоту обрезки читает JS из переменной, поэтому она одна для темы и скрипта */
 .section-content.short-view {
-    overflow: hidden;
+    --short-view-max: 500px;
     position: relative;
-    max-height: 500px;
+}
+
+.section-content.short-view.clamped {
+    overflow: hidden;
+    max-height: var(--short-view-max);
 }
 
 .section-content.short-view.clamped::after {
@@ -552,15 +557,6 @@ textarea.form-control {
         transparent 100%
     );
     pointer-events: none;
-}
-
-.section-content.short-view:not(.clamped)::after,
-.section-content.short-view.expanded::after {
-    display: none;
-}
-
-.section-content.short-view.expanded {
-    max-height: none;
 }
 
 
@@ -1290,8 +1286,8 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 
 /* Результаты поиска: превью короче, чем в ленте — на странице их много */
-.search-results .section-content.short-view:not(.expanded) {
-    max-height: 180px;
+.search-results .section-content.short-view {
+    --short-view-max: 180px;
 }
 
 /* Диалог: входящие слева, свои справа */

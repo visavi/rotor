@@ -39,24 +39,77 @@ function scrollToElement(el, behavior = 'smooth') {
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - getNavbarHeight(), behavior })
 }
 
-function initShortView(container = document) {
-    container.querySelectorAll('.section-content.short-view:not(.clamped):not(.expanded)').forEach(function (el) {
-        const hiddenPixels = el.scrollHeight - el.clientHeight
-        if (hiddenPixels > 100) {
-            el.classList.add('clamped')
-            const btn = document.createElement('button')
-            btn.type = 'button'
-            btn.className = 'btn btn-sm btn-adaptive mt-2'
-            btn.textContent = __('buttons.show_full')
-            btn.addEventListener('click', function () {
-                el.classList.add('expanded')
-                el.classList.remove('clamped')
-                btn.remove()
-            })
-            el.after(btn)
-        } else if (hiddenPixels > 0) {
-            el.classList.remove('short-view')
+// Длинные тексты сворачиваются до --short-view-max, но кнопка нужна только когда
+// скрыто заметно много. Высота блока меняется после разметки (картинки, шрифты,
+// поворот экрана), поэтому решение пересматривает ResizeObserver, а не таймер
+const shortViewObserver = new ResizeObserver(entries => {
+    entries.forEach(entry => queueShortView(entry.target))
+})
+
+const shortViewQueue = new Set()
+let shortViewFrame = null
+
+// Пачка картинок догружается лавиной — пересчитываем одним проходом.
+// Таймер, а не requestAnimationFrame: в фоновой вкладке кадры не идут,
+// и пост оставался бы обрезанным без кнопки до переключения на вкладку
+function queueShortView(el) {
+    shortViewQueue.add(el)
+    if (shortViewFrame) {
+        return
+    }
+
+    shortViewFrame = setTimeout(() => {
+        shortViewFrame = null
+        const queue = [...shortViewQueue]
+        shortViewQueue.clear()
+        queue.forEach(updateShortView)
+    }, 50)
+}
+
+function createShortViewButton(el) {
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'btn btn-sm btn-adaptive mt-2 short-view-toggle'
+    btn.textContent = __('buttons.show_full')
+    btn.addEventListener('click', function () {
+        el.classList.add('expanded')
+        el.classList.remove('clamped')
+        shortViewObserver.unobserve(el)
+        btn.remove()
+    })
+
+    return btn
+}
+
+function updateShortView(el) {
+    if (!el.isConnected || el.classList.contains('expanded')) {
+        return
+    }
+
+    // scrollHeight отдаёт полную высоту содержимого и в свёрнутом виде
+    const maxHeight = parseFloat(getComputedStyle(el).getPropertyValue('--short-view-max')) || 0
+    const btn = el.nextElementSibling?.classList.contains('short-view-toggle') ? el.nextElementSibling : null
+
+    if (maxHeight && el.scrollHeight - maxHeight > 100) {
+        el.classList.add('clamped')
+        if (!btn) {
+            el.after(createShortViewButton(el))
         }
+    } else {
+        el.classList.remove('clamped')
+        btn?.remove()
+    }
+}
+
+function initShortView(container = document) {
+    container.querySelectorAll('.section-content.short-view:not(.expanded)').forEach(function (el) {
+        if (el.dataset.shortView) {
+            return
+        }
+
+        el.dataset.shortView = '1'
+        shortViewObserver.observe(el)
+        updateShortView(el)
     })
 }
 
@@ -141,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    setTimeout(initShortView, 300)
+    initShortView()
 
     prettyPrint()
 
@@ -825,7 +878,7 @@ if (feedContainer && feedSentinel) {
                     }
 
                     feedContainer.append(...temp.children)
-                    setTimeout(initShortView, 100)
+                    initShortView(feedContainer)
 
                     if (getNextUrl()) loader.before(createLoadMoreButton())
                 },
