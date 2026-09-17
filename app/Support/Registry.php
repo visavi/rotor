@@ -25,6 +25,7 @@ class Registry
     public static array $search = [];
     public static array $apiConfig = [];
     public static array $stats = [];
+    public static array $widgets = [];
 
     /**
      * Очищает реестр
@@ -211,6 +212,29 @@ class Registry
     public static function stat(string $section, callable $handler, ?callable $today = null): void
     {
         static::$stats[$section] = ['total' => $handler, 'today' => $today];
+    }
+
+    /**
+     * Регистрирует виджет на главной странице админки
+     *
+     * Колбэк вида fn(int $days): ?array получает глубину графика и возвращает
+     * ['label' => string, 'value' => int, 'series' => int[]] и по желанию
+     * ['previous' => int, 'icon' => string, 'color' => string,
+     *  'type' => 'line'|'bar', 'url' => ?string, 'level' => User::EDITOR]
+     * либо null, если выводить нечего. Значение, ряд и итог прошлого периода
+     * отдаёт DashboardService::trend($query, $days). Период приходит
+     * аргументом, а не берётся из константы: так модуль переживёт смену
+     * глубины графиков. Вызывается лениво: маршрутов и переводов в момент
+     * загрузки модуля ещё нет
+     *
+     * Уровень отсекает виджет от админов ниже рангом, по умолчанию editor.
+     * Порядок и видимость админ меняет в панели; priority задаёт лишь место
+     * виджета, пока его не настроили. Колбэк, бросивший исключение, теряет
+     * свой виджет, но не роняет панель
+     */
+    public static function widget(string $key, callable $widget, int $priority = 0): void
+    {
+        static::$widgets[$key] = ['handler' => $widget, 'priority' => $priority];
     }
 
     /**

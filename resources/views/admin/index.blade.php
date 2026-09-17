@@ -43,6 +43,16 @@
     @endif
     @hook('adminHeader')
 
+    @if ($widgets)
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-3">
+            @foreach ($widgets as $widget)
+                <div class="col">
+                    <x-stat-tile :widget="$widget" />
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     <div class="section mb-3 shadow">
         <div class="section-title"><i class="fa fa-cog fa-lg"></i> {{ __('main.editor') }}</div>
         <div class="section-body">
@@ -161,6 +171,12 @@
                         <a href="/admin/settings" class="app-tile">
                             <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-sliders-h"></i></div>
                             <div class="app-tile-label">{{ __('index.site_settings') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ route('admin.widgets.index') }}" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6610f2"><i class="fas fa-chart-line"></i></div>
+                            <div class="app-tile-label">{{ __('index.widgets') }}</div>
                         </a>
                     </div>
                     <div class="col">

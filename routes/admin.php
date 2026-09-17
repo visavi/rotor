@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\StatusController;
 use App\Http\Controllers\Admin\StickerController;
 use App\Http\Controllers\Admin\UpgradeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\WidgetController;
 use Illuminate\Support\Facades\Route;
 
 /* Админ-панель */
@@ -158,6 +159,15 @@ Route::middleware(['check.admin', 'admin.logger'])
 
             /* Настройки */
             Route::match(['get', 'post'], '/settings', [SettingController::class, 'index']);
+
+            /* Виджеты панели */
+            Route::controller(WidgetController::class)
+                ->prefix('widgets')
+                ->name('widgets.')
+                ->group(function () {
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/', 'update')->name('update');
+                });
 
             /* Пользователи */
             Route::controller(AdminUserController::class)

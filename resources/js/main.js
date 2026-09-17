@@ -5,6 +5,7 @@ import { confirm } from './dialogs.js'
 import { renderFile } from './attachments.js'
 import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
+import './sortable-list.js'
 import './prettify.js'
 
 // Уведомления зовут из разметки: inline-скрипты шаблонов и модулей делают

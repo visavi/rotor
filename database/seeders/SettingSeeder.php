@@ -35,6 +35,7 @@ class SettingSeeder extends Seeder
             ['name' => 'copy', 'value' => '© Copyright Visavi.net'],
             ['name' => 'copyfoto', 'value' => 1],
             ['name' => 'currency', 'value' => __('seeds.settings.currency')],
+            ['name' => 'dashboard_widgets', 'value' => ''],
             ['name' => 'deleted_user', 'value' => __('seeds.settings.deleted_user')],
             ['name' => 'description', 'value' => __('seeds.settings.description')],
             ['name' => 'doslimit', 'value' => 0],
