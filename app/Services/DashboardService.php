@@ -15,7 +15,7 @@ use Throwable;
 class DashboardService
 {
     /** Глубина графиков в днях */
-    public const DAYS = 14;
+    public const DAYS = 7;
 
     /** Сколько живёт кэш виджетов */
     public const TTL = 600;
@@ -26,6 +26,7 @@ class DashboardService
     /** Чем добираются необязательные ключи виджета */
     private const DEFAULTS = [
         'previous' => 0,
+        'days'     => null,
         'icon'     => 'fas fa-chart-line',
         'color'    => '#0d6efd',
         'type'     => 'line',
@@ -124,7 +125,12 @@ class DashboardService
             return null;
         }
 
-        return self::withDiff($widget + self::DEFAULTS);
+        $widget += self::DEFAULTS;
+
+        // Виджет вправе жить своим периодом — плитка подписывает именно его
+        $widget['days'] ??= self::days();
+
+        return self::withDiff($widget);
     }
 
     /**

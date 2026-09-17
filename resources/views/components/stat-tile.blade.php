@@ -14,7 +14,7 @@
 
     <div class="stat-tile-value">
         {{ number_format($widget['value'], 0, '.', ' ') }}
-        <span class="stat-tile-period">{{ __('index.widget_period', ['days' => App\Services\DashboardService::days()]) }}</span>
+        <span class="stat-tile-period">{{ __('index.widget_period', ['days' => $widget['days']]) }}</span>
     </div>
 
     @isset($widget['diff'])

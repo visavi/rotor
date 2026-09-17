@@ -264,6 +264,24 @@ class DashboardWidgetTest extends TestCase
         $this->assertSame(3, $this->widget('Без аргумента')['value']);
     }
 
+    public function testWidgetKeepsOwnPeriod(): void
+    {
+        Registry::widget('monthly', static fn (): array => [
+            'label'  => 'Месячный виджет',
+            'value'  => 1,
+            'series' => [1],
+            'days'   => 30,
+        ]);
+
+        // Свой период не затирается общим и попадает в подпись плитки
+        $this->assertSame(30, $this->widget('Месячный виджет')['days']);
+
+        $this->actingAs($this->admin)
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee(__('index.widget_period', ['days' => 30]));
+    }
+
     /**
      * Возвращает виджет по его названию
      *

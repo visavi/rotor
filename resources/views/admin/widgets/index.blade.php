@@ -26,10 +26,6 @@
                 <div data-sortable data-sortable-target="#widgets-order">
                     @foreach ($widgets as $key => $widget)
                         <div class="d-flex align-items-center gap-2 border-bottom py-2" data-key="{{ $key }}">
-                            <span class="sortable-handle text-muted" data-sortable-handle title="{{ __('index.widgets_drag') }}">
-                                <i class="fas fa-grip-vertical"></i>
-                            </span>
-
                             <div class="form-check mb-0">
                                 <input class="form-check-input" type="checkbox" name="widgets[]" value="{{ $key }}"
                                        id="widget-{{ $key }}" @checked($settings[$key] ?? true)>
@@ -41,6 +37,10 @@
                                     {{ $widget['label'] }}
                                 </label>
                             </div>
+
+                            <span class="sortable-handle text-muted ms-auto" data-sortable-handle title="{{ __('index.widgets_drag') }}">
+                                <i class="fas fa-grip-vertical"></i>
+                            </span>
                         </div>
                     @endforeach
                 </div>
