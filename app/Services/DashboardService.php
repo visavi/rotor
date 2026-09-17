@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Comment;
+use App\Models\Error;
 use App\Models\User;
 use App\Support\Registry;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -32,6 +33,7 @@ class DashboardService
         'type'     => 'line',
         'url'      => null,
         'level'    => User::EDITOR,
+        'inverse'  => false,
     ];
 
     /**
@@ -100,6 +102,7 @@ class DashboardService
         $handlers = [
             'registrations' => ['handler' => $this->registrations(...), 'priority' => 0],
             'comments'      => ['handler' => $this->comments(...), 'priority' => 0],
+            'errors'        => ['handler' => $this->errors(...), 'priority' => 0],
             ...Registry::$widgets,
         ];
 
@@ -129,6 +132,8 @@ class DashboardService
 
         // Виджет вправе жить своим периодом — плитка подписывает именно его
         $widget['days'] ??= self::days();
+
+        $widget['series'] = self::normalize($widget['series'], $widget['color']);
 
         return self::withDiff($widget);
     }
@@ -223,12 +228,12 @@ class DashboardService
      *
      * @return array{value: int, series: array<int, int>, previous: int}
      */
-    public static function trend(Builder $query, ?int $days = null, string $column = 'created_at'): array
+    public static function trend(Builder $query, ?int $days = null, string $column = 'created_at', ?string $sum = null): array
     {
         $days ??= self::days();
 
         // Оба периода берутся одним запросом: с прошлым сравнивают все виджеты
-        $series = self::dailySeries($query, $days * 2, $column);
+        $series = self::dailySeries($query, $days * 2, $column, $sum);
 
         $previous = array_slice($series, 0, $days);
         $current = array_slice($series, $days);
@@ -241,16 +246,81 @@ class DashboardService
     }
 
     /**
+     * Виджет ошибок: не найдено, запрещено и автобаны в одной плитке
+     *
+     * @return array<string, mixed>
+     */
+    private function errors(int $days): array
+    {
+        return [
+            'label' => __('index.widget_errors'),
+            'icon'  => 'fas fa-bug',
+            'color' => '#dc3545',
+            'type'  => 'line',
+            'url'   => route('admin.errors.index'),
+            'level' => User::ADMIN,
+            // Рост ошибок — плохая новость, поэтому окраска процента обратная
+            'inverse' => true,
+            ...self::trends([
+                ['label' => '404', 'color' => '#dc3545', 'query' => Error::query()->where('code', 404)],
+                ['label' => '403', 'color' => '#fd7e14', 'query' => Error::query()->where('code', 403)],
+                // 666 — код автобанов, своей таблицы у них нет
+                ['label' => __('admin.errors.autobans'), 'color' => '#6f42c1', 'query' => Error::query()->where('code', 666)],
+            ], $days),
+        ];
+    }
+
+    /**
+     * Готовит данные графика из нескольких источников
+     *
+     * Итог виджета — сумма источников, каждый рисуется своей линией и попадает
+     * в легенду. Источник: ['label' => string, 'color' => string,
+     * 'query' => Builder, 'sum' => ?string]
+     *
+     * @param array<int, array<string, mixed>> $sources
+     *
+     * @return array{value: int, series: array<int, array<string, mixed>>, previous: int}
+     */
+    public static function trends(array $sources, ?int $days = null): array
+    {
+        $days ??= self::days();
+
+        $value = 0;
+        $previous = 0;
+        $series = [];
+
+        foreach ($sources as $source) {
+            $trend = self::trend($source['query'], $days, $source['column'] ?? 'created_at', $source['sum'] ?? null);
+
+            $value += $trend['value'];
+            $previous += $trend['previous'];
+
+            $series[] = [
+                'label'  => $source['label'],
+                'color'  => $source['color'],
+                'values' => $trend['series'],
+            ];
+        }
+
+        return compact('value', 'series', 'previous');
+    }
+
+    /**
      * Считает количество записей по дням
      *
      * Дни без записей заполняются нулями, иначе график сжимается и врёт
      *
+     * Столбец $sum суммирует значения вместо подсчёта записей — так считаются
+     * деньги. Имена столбцов приходят из кода модуля, не от пользователя
+     *
      * @return array<string, int> ['Y-m-d' => count]
      */
-    public static function dailySeries(Builder $query, int $days, string $column = 'created_at'): array
+    public static function dailySeries(Builder $query, int $days, string $column = 'created_at', ?string $sum = null): array
     {
+        $total = $sum ? 'COALESCE(SUM(' . $sum . '), 0)' : 'COUNT(*)';
+
         $rows = $query
-            ->selectRaw('DATE(' . $column . ') AS day, COUNT(*) AS total')
+            ->selectRaw('DATE(' . $column . ') AS day, ' . $total . ' AS total')
             ->where($column, '>=', now()->subDays($days - 1)->startOfDay())
             ->groupBy(DB::raw('DATE(' . $column . ')'))
             ->pluck('total', 'day')
@@ -277,6 +347,25 @@ class DashboardService
         }
 
         return $dates;
+    }
+
+    /**
+     * Приводит ряд к списку серий
+     *
+     * Виджет с одной метрикой отдаёт плоский массив чисел, совмещённый —
+     * готовые серии. Компонент работает только со вторым видом
+     *
+     * @param array<int, mixed> $series
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private static function normalize(array $series, string $color): array
+    {
+        if (isset($series[0]) && is_array($series[0])) {
+            return $series;
+        }
+
+        return [['label' => null, 'color' => $color, 'values' => array_values($series)]];
     }
 
     /**

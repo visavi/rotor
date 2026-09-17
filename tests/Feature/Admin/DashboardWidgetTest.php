@@ -62,7 +62,7 @@ class DashboardWidgetTest extends TestCase
 
         // Админ из setUp плюс один свежий пользователь, старый за период не попадает
         $this->assertSame(2, $widget['value']);
-        $this->assertCount(DashboardService::days(), $widget['series']);
+        $this->assertCount(DashboardService::days(), $widget['series'][0]['values']);
     }
 
     public function testCommentsWidgetCountsPeriod(): void
@@ -181,7 +181,7 @@ class DashboardWidgetTest extends TestCase
 
     public function testSettingLimitsAndOrdersWidgets(): void
     {
-        $this->overrideSetting(DashboardService::SETTING, 'comments,registrations,-counter');
+        $this->overrideSetting(DashboardService::SETTING, 'comments,registrations,-errors');
 
         $labels = array_column(app(DashboardService::class)->widgets(), 'label');
 
@@ -216,10 +216,11 @@ class DashboardWidgetTest extends TestCase
             ->assertRedirect(route('admin.widgets.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseHas('settings', [
-            'name'  => DashboardService::SETTING,
-            'value' => 'registrations,comments',
-        ]);
+        // Выбранные идут в заданном порядке, остальные известные — следом, с минусом
+        $value = (string) Setting::query()->where('name', DashboardService::SETTING)->value('value');
+
+        $this->assertStringStartsWith('registrations,comments', $value);
+        $this->assertStringContainsString('-errors', $value);
     }
 
     public function testWidgetSettingsPageIgnoresUnknownKeys(): void
@@ -280,6 +281,71 @@ class DashboardWidgetTest extends TestCase
             ->get('/admin')
             ->assertOk()
             ->assertSee(__('index.widget_period', ['days' => 30]));
+    }
+
+    public function testFlatSeriesBecomesSingleLine(): void
+    {
+        Registry::widget('flat', static fn (): array => [
+            'label'  => 'Плоский ряд',
+            'value'  => 6,
+            'series' => [1, 2, 3],
+            'color'  => '#123456',
+        ]);
+
+        $series = $this->widget('Плоский ряд')['series'];
+
+        // Массив чисел приводится к одной серии цвета виджета
+        $this->assertCount(1, $series);
+        $this->assertSame([1, 2, 3], $series[0]['values']);
+        $this->assertSame('#123456', $series[0]['color']);
+    }
+
+    public function testCombinedWidgetSumsSources(): void
+    {
+        $this->makeComment(now());
+        $this->makeComment(now());
+
+        $sources = [
+            ['label' => 'Комментарии', 'color' => '#111', 'query' => Comment::query()],
+            ['label' => 'Пользователи', 'color' => '#222', 'query' => User::query()],
+        ];
+
+        $trend = DashboardService::trends($sources, DashboardService::days());
+
+        // Итог виджета — сумма источников, каждый остаётся отдельной серией
+        $this->assertSame(3, $trend['value']);
+        $this->assertCount(2, $trend['series']);
+        $this->assertSame('Комментарии', $trend['series'][0]['label']);
+    }
+
+    public function testInverseWidgetPaintsGrowthAsBad(): void
+    {
+        Registry::widget('bad', static fn (): array => [
+            'label'    => 'Плохая метрика',
+            'value'    => 10,
+            'previous' => 5,
+            'series'   => [1, 2],
+            'inverse'  => true,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get('/admin')
+            ->assertOk()
+            // Рост плохой метрики окрашен красным, а не зелёным
+            ->assertSee('stat-tile-diff text-danger', false);
+    }
+
+    public function testTrendCanSumColumnInsteadOfCounting(): void
+    {
+        User::factory()->create(['created_at' => now(), 'point' => 30]);
+        User::factory()->create(['created_at' => now(), 'point' => 12]);
+
+        $counted = DashboardService::trend(User::query());
+        $summed = DashboardService::trend(User::query(), sum: 'point');
+
+        // Один и тот же запрос считает записи либо суммирует столбец
+        $this->assertSame(3, $counted['value']);
+        $this->assertSame(42, $summed['value']);
     }
 
     /**

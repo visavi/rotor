@@ -1528,3 +1528,5 @@ a.stat-tile:hover {
 .sortable-handle { cursor: grab; touch-action: none; }
 .sortable-handle:active { cursor: grabbing; }
 .sortable-ghost { opacity: .4; }
+.stat-tile-legend { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: var(--bs-secondary-color); }
+.stat-tile-legend i { font-size: .5rem; vertical-align: middle; }

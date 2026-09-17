@@ -18,12 +18,22 @@
     </div>
 
     @isset($widget['diff'])
-        <div class="stat-tile-diff {{ $widget['diff'] >= 0 ? 'text-success' : 'text-danger' }}"
+        @php $good = $widget['inverse'] ? $widget['diff'] <= 0 : $widget['diff'] >= 0; @endphp
+
+        <div class="stat-tile-diff {{ $good ? 'text-success' : 'text-danger' }}"
              title="{{ __('index.widget_previous', ['value' => $widget['previous']]) }}">
             <i class="fas fa-caret-{{ $widget['diff'] >= 0 ? 'up' : 'down' }}"></i>
             {{ abs($widget['diff']) }}%
         </div>
     @endisset
 
-    <x-sparkline :values="$widget['series']" :color="$widget['color']" :type="$widget['type']" />
+    <x-sparkline :series="$widget['series']" :type="$widget['type']" />
+
+    @if (count($widget['series']) > 1)
+        <div class="stat-tile-legend">
+            @foreach ($widget['series'] as $line)
+                <span><i class="fas fa-circle" style="color: {{ $line['color'] }}"></i> {{ $line['label'] }}</span>
+            @endforeach
+        </div>
+    @endif
 </{{ $tag }}>

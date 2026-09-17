@@ -71,6 +71,7 @@ return [
     'widgets_help'         => 'Check the widgets shown on the dashboard and drag them into the order you need. Widgets of a new module appear at the end of the list.',
     'widgets_drag'         => 'Drag to reorder',
     'widgets_saved'        => 'Widget settings saved!',
+    'widget_errors'        => 'Errors',
     'widget_registrations' => 'Registrations',
     'widget_period'        => 'in :days days',
     'widget_comments'      => 'Comments',
