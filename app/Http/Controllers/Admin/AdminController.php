@@ -45,13 +45,13 @@ class AdminController extends Controller
         // Планировщик чинит только владелец — остальным о кроне знать незачем.
         // Шаблону нужен и факт остановки, и время последнего запуска, поэтому
         // сервис отдаётся целиком, а не парой переменных
-        $stalledSchedule = isAdmin(User::BOSS) && $schedule->isStalled() ? $schedule : null;
+        $scheduleStalled = isAdmin(User::BOSS) && $schedule->isStalled() ? $schedule : null;
 
         // Почту настраивает владелец — остальным о поломке отправки знать незачем
         $mailFailure = isAdmin(User::BOSS) ? $mail->lastFailure() : null;
 
-        // Очередь чинит владелец — остальным о воркере знать незачем
-        $stalledQueue = isAdmin(User::BOSS) && $queue->isStalled()
+        // Очередь чинит владелец — остальным о ней знать незачем
+        $queuePending = isAdmin(User::BOSS) && $queue->isStalled()
             ? $queue->pendingCount()
             : 0;
 
@@ -61,9 +61,9 @@ class AdminController extends Controller
             'modulesUpdates',
             'pendingMigrations',
             'widgets',
-            'stalledSchedule',
+            'scheduleStalled',
             'mailFailure',
-            'stalledQueue',
+            'queuePending',
         ));
     }
 }

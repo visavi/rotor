@@ -73,7 +73,7 @@ return [
     'mail_failed'          => 'Emails are not being sent',
     'mail_failed_time'     => 'Last error: :date',
     'queue_stalled'        => 'The job queue is not being processed',
-    'queue_pending'        => 'Jobs waiting in queue: :count',
+    'queue_pending'        => 'Jobs waiting in queue: :count. Check whether the scheduler is running',
     'widgets'              => 'Dashboard widgets',
     'widgets_help'         => 'Check the widgets shown on the dashboard and drag them into the order you need. Widgets of a new module appear at the end of the list.',
     'widgets_drag'         => 'Drag to reorder',

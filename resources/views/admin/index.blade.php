@@ -35,11 +35,11 @@
         </div>
     @endif
 
-    @if ($stalledSchedule)
+    @if ($scheduleStalled)
         <div class="alert alert-warning">
             <div><i class="fa fa-clock"></i> <b>{{ __('index.schedule_stalled') }}</b></div>
             <div class="small">
-                @if ($lastRun = $stalledSchedule->lastRun())
+                @if ($lastRun = $scheduleStalled->lastRun())
                     {{ __('index.schedule_last_run', ['date' => dateFixed($lastRun)]) }}
                 @else
                     {{ __('index.schedule_never') }}
@@ -49,11 +49,10 @@
         </div>
     @endif
 
-    @if ($stalledQueue > 0)
+    @if ($queuePending > 0)
         <div class="alert alert-warning">
             <div><i class="fa fa-layer-group"></i> <b>{{ __('index.queue_stalled') }}</b></div>
-            <div class="small">{{ __('index.queue_pending', ['count' => $stalledQueue]) }}</div>
-            <code class="d-block mt-1 user-select-all">php {{ base_path('artisan') }} queue:work --stop-when-empty</code>
+            <div class="small">{{ __('index.queue_pending', ['count' => $queuePending]) }}</div>
         </div>
     @endif
 
