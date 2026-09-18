@@ -49,6 +49,16 @@
         </div>
     @endif
 
+    @if ($mailFailure)
+        <div class="alert alert-warning">
+            <div><i class="fa fa-envelope"></i> <b>{{ __('index.mail_failed') }}</b></div>
+            @if ($mailFailure['time'])
+                <div class="small">{{ __('index.mail_failed_time', ['date' => dateFixed($mailFailure['time'])]) }}</div>
+            @endif
+            <code class="d-block mt-1 user-select-all">{{ $mailFailure['message'] }}</code>
+        </div>
+    @endif
+
     @if ($modulesUpdates > 0)
         <div class="alert alert-warning">
             <i class="fas fa-puzzle-piece"></i>

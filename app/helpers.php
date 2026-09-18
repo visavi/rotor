@@ -13,10 +13,10 @@ use App\Models\Sticker;
 use App\Models\User;
 use App\Services\CloudFlareService;
 use App\Services\HtmlRenderer;
+use App\Services\MailService;
 use App\Support\Hook;
 use cbschuld\Browser;
 use Illuminate\Container\Container;
-use Illuminate\Mail\Message;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -744,33 +743,13 @@ function textError(string $field): ?string
 
 /**
  * Отправляет уведомления на email
+ *
+ * @deprecated Мост совместимости для модулей. Будет удалён в 15.0,
+ *             пользоваться app(MailService::class)->send()
  */
 function sendMail(string $view, array $data): bool
 {
-    try {
-        Mail::send($view, $data, static function (Message $message) use ($data) {
-            $message->subject($data['subject'])
-                ->to($data['to'])
-                ->from(config('mail.from.address'), config('mail.from.name'));
-
-            if (isset($data['from'])) {
-                [$fromEmail, $fromName] = $data['from'];
-                $message->replyTo($fromEmail, $fromName);
-            }
-
-            if (isset($data['unsubscribe'])) {
-                $headers = $message->getHeaders();
-                $headers->addTextHeader(
-                    'List-Unsubscribe',
-                    '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>'
-                );
-            }
-        });
-    } catch (Exception) {
-        return false;
-    }
-
-    return true;
+    return app(MailService::class)->send($view, $data);
 }
 
 /**

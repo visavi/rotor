@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Mailing;
 use App\Models\User;
+use App\Services\MailService;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -22,7 +23,7 @@ class MessageSend extends Command
     /**
      * Рассылает письма
      */
-    public function handle(): int
+    public function handle(MailService $mail): int
     {
         $queues = Mailing::query()
             ->where('sent', 0)
@@ -41,7 +42,7 @@ class MessageSend extends Command
                         'unsubscribe' => $user->subscribe,
                     ];
 
-                    sendMail('mailer.default', $data);
+                    $mail->send('mailer.default', $data);
                 }
 
                 $queue->update([

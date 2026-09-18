@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\MailService;
 use App\Support\HtmlSanitizer;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
@@ -16,7 +17,7 @@ class MailController extends Controller
     /**
      * Главная страница
      */
-    public function index(Request $request, Validator $validator): View|RedirectResponse
+    public function index(Request $request, Validator $validator, MailService $mail): View|RedirectResponse
     {
         if ($request->isMethod('post')) {
             $message = $request->input('message');
@@ -50,7 +51,7 @@ class MailController extends Controller
                     'from'    => [$email, $name],
                 ];
 
-                $send = sendMail('mailer.default', $data);
+                $send = $mail->send('mailer.default', $data);
 
                 return $send
                     ? redirect('/mails')->with('success', __('mails.success_sent'))

@@ -9,6 +9,7 @@ use App\Models\Module;
 use App\Models\User;
 use App\Services\DashboardService;
 use App\Services\GithubService;
+use App\Services\MailService;
 use App\Services\MigrationService;
 use App\Services\ScheduleService;
 use Illuminate\View\View;
@@ -23,6 +24,7 @@ class AdminController extends Controller
         MigrationService $migrations,
         DashboardService $dashboard,
         ScheduleService $schedule,
+        MailService $mail,
     ): View {
         $existBoss = User::query()
             ->where('level', User::BOSS)
@@ -43,6 +45,9 @@ class AdminController extends Controller
         // сервис отдаётся целиком, а не парой переменных
         $stalledSchedule = isAdmin(User::BOSS) && $schedule->isStalled() ? $schedule : null;
 
+        // Почту настраивает владелец — остальным о поломке отправки знать незачем
+        $mailFailure = isAdmin(User::BOSS) ? $mail->lastFailure() : null;
+
         return view('admin/index', compact(
             'existBoss',
             'hasNewVersion',
@@ -50,6 +55,7 @@ class AdminController extends Controller
             'pendingMigrations',
             'widgets',
             'stalledSchedule',
+            'mailFailure',
         ));
     }
 }

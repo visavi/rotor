@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BlackList;
 use App\Models\Flood;
 use App\Models\User;
+use App\Services\MailService;
 use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
@@ -191,7 +192,7 @@ class UserController extends Controller
     /**
      * Verify registration
      */
-    public function verify(Request $request, Validator $validator): View|RedirectResponse
+    public function verify(Request $request, Validator $validator, MailService $mail): View|RedirectResponse
     {
         if (! $user = $request->user()) {
             abort(403, __('main.not_authorized'));
@@ -238,7 +239,7 @@ class UserController extends Controller
                     'confirmUrl' => $confirmUrl,
                 ];
 
-                sendMail('mailer.register', $data);
+                $mail->send('mailer.register', $data);
 
                 return redirect()->route('verify')
                     ->with('success', __('users.confirm_code_success_sent'));

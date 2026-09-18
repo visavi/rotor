@@ -7,6 +7,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use App\Models\User;
+use App\Services\MailService;
 use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
@@ -61,7 +62,7 @@ class RecoveryController extends Controller
     /**
      * Восстановление пароля
      */
-    public function restore(string $token): View|RedirectResponse
+    public function restore(string $token, MailService $mail): View|RedirectResponse
     {
         if (getUser()) {
             return redirect('/')->with('danger', __('mails.already_authorized'));
@@ -93,7 +94,7 @@ class RecoveryController extends Controller
             'login'    => $user->login,
             'password' => $password,
         ];
-        sendMail('mailer.restore', $data);
+        $mail->send('mailer.restore', $data);
 
         Auth::login($user, true);
 

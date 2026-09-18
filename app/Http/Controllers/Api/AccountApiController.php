@@ -10,6 +10,7 @@ use App\Models\BlackList;
 use App\Models\User;
 use App\Services\CaptchaService;
 use App\Services\FileService;
+use App\Services\MailService;
 use App\Services\UserService;
 use App\Support\Validator;
 use App\Traits\HandlesApiValidation;
@@ -130,7 +131,7 @@ class AccountApiController extends Controller
     /**
      * Повторная отправка письма с подтверждением регистрации
      */
-    public function verify(Request $request, Validator $validator, CaptchaService $captcha): JsonResponse
+    public function verify(Request $request, Validator $validator, CaptchaService $captcha, MailService $mail): JsonResponse
     {
         $user = getUser();
 
@@ -164,7 +165,7 @@ class AccountApiController extends Controller
             'confirm_token' => $token,
         ]);
 
-        sendMail('mailer.register', [
+        $mail->send('mailer.register', [
             'to'         => $email,
             'subject'    => 'Регистрация на ' . setting('title'),
             'login'      => $user->login,

@@ -34,6 +34,10 @@ class UserService
     /** Почта обязательна, аккаунт ждёт подтверждения по письму */
     public const string EMAIL_CONFIRM = 'confirm';
 
+    public function __construct(private readonly MailService $mail)
+    {
+    }
+
     /**
      * Режим почты при регистрации
      */
@@ -139,7 +143,7 @@ class UserService
         $user->sendMessage(null, textNotice('register', ['username' => $login]));
 
         if ($email !== '') {
-            sendMail('mailer.register', [
+            $this->mail->send('mailer.register', [
                 'to'         => $email,
                 'subject'    => 'Регистрация на ' . setting('title'),
                 'login'      => $login,
@@ -261,7 +265,7 @@ class UserService
         $user->update(['password' => Hash::make($password)]);
 
         if ($user->email) {
-            sendMail('mailer.change_password', [
+            $this->mail->send('mailer.change_password', [
                 'to'       => $user->email,
                 'subject'  => 'Изменение пароля на ' . setting('title'),
                 'username' => $user->getName(),
@@ -298,7 +302,7 @@ class UserService
     {
         $token = Str::random(32);
 
-        sendMail('mailer.change_mail', [
+        $this->mail->send('mailer.change_mail', [
             'to'        => $email,
             'subject'   => 'Изменение email на ' . setting('title'),
             'username'  => $user->getName(),
@@ -326,7 +330,7 @@ class UserService
             'created_at' => now(),
         ]);
 
-        sendMail('mailer.recovery', [
+        $this->mail->send('mailer.recovery', [
             'to'       => $user->email,
             'subject'  => 'Восстановление пароля на ' . setting('title'),
             'username' => $user->getName(),
