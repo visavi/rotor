@@ -28,10 +28,12 @@ host('production')
 
 // Tasks
 task('build', function () {
+    runLocally('npm ci');
     runLocally('npm run build');
     upload('public/build/', '{{release_path}}/public/build/');
 });
 
 before('deploy:success', artisan('module:sync'));
+after('deploy:success', 'artisan:queue:restart');
 after('deploy:update_code', 'build');
 after('deploy:failed', 'deploy:unlock');
