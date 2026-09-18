@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\QueueDrainer;
 use App\Support\Restatement;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -85,20 +84,6 @@ class AppServiceProvider extends ServiceProvider
         // Translation directive
         Blade::directive('translation', static function () {
             return '<?= translationScript(); ?>';
-        });
-
-        // Разгребание очереди силами веб-запроса — для установок без крона.
-        // Колбэк выполняется после отдачи ответа, пользователь его не ждёт
-        $this->app->terminating(static function () {
-            if (app()->runningInConsole()) {
-                return;
-            }
-
-            $drainer = app(QueueDrainer::class);
-
-            if ($drainer->shouldRun()) {
-                $drainer->drain();
-            }
         });
 
         /*if (app()->environment('production')) {
