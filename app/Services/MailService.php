@@ -16,30 +16,18 @@ class MailService
     /**
      * Ставит письмо в очередь
      *
-     * Письма всегда ложатся в таблицу, даже при QUEUE_CONNECTION=sync:
-     * разгребает их либо планировщик, либо пост-обработка запроса.
-     * Так повторы и failed_jobs работают одинаково у всех установок
+     * Соединение берётся из QUEUE_CONNECTION: при database письмо ждёт
+     * воркера и получает повторы, при sync уходит сразу в этом же запросе.
+     * Второе нужно там, где крон запускается раз в час: ждать доставки
+     * столько же пользователю нельзя
      */
     public function queue(string $view, array $data, int $delayMinutes = 0): void
     {
-        $job = SendMailJob::dispatch($view, $data)->onConnection($this->connection());
+        $job = SendMailJob::dispatch($view, $data);
 
         if ($delayMinutes > 0) {
             $job->delay(now()->addMinutes($delayMinutes));
         }
-    }
-
-    /**
-     * Соединение очереди для писем
-     *
-     * sync подменяется на database — синхронная отправка лишает повторов.
-     * Остальные драйверы уважаются: у кого redis, тот знает, что делает
-     */
-    public function connection(): string
-    {
-        $default = (string) config('queue.default');
-
-        return $default === 'sync' ? 'database' : $default;
     }
 
     /**

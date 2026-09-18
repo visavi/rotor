@@ -41,24 +41,22 @@ class SendMailJobTest extends TestCase
         (new SendMailJob('mailer.default', $data))->handle($mail);
     }
 
-    public function testMailAlwaysGoesToDatabaseConnection(): void
+    public function testSyncConnectionSendsImmediately(): void
     {
         config(['queue.default' => 'sync']);
 
-        Queue::fake();
+        // Настоящий queue(), подменена только сама отправка
+        $mail = $this->getMockBuilder(MailService::class)
+            ->onlyMethods(['sendOrFail'])
+            ->getMock();
 
-        app(MailService::class)->queue('mailer.default', ['to' => 'user@example.com']);
+        $mail->expects(self::once())->method('sendOrFail');
 
-        Queue::assertPushed(SendMailJob::class, static function (SendMailJob $job) {
-            return $job->connection === 'database';
-        });
-    }
+        $this->app->instance(MailService::class, $mail);
 
-    public function testCustomDriverIsRespected(): void
-    {
-        config(['queue.default' => 'redis']);
-
-        self::assertSame('redis', app(MailService::class)->connection());
+        // sync выполняет задачу на месте: у кого крон раз в час, тот выбирает
+        // мгновенную отправку сознательно
+        $mail->queue('mailer.default', ['to' => 'user@example.com']);
     }
 
     public function testRetryPolicy(): void

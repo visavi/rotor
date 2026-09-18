@@ -79,12 +79,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('add:subscribers')->hourly();
         $schedule->command('add:birthdays')->dailyAt('07:00');
 
-        // Воркер поднимается на минуту и выходит: очередь разгребается
-        $queueConnection = config('queue.default') === 'sync' ? 'database' : config('queue.default');
-
-        $schedule->command('queue:work ' . $queueConnection . ' --stop-when-empty --max-time=50')
+        // Воркер поднимается на минуту и выходит: очередь разгребается.
+        // При sync задача бессмысленна — письма уходят сразу, очереди нет
+        $schedule->command('queue:work --stop-when-empty --max-time=50')
             ->everyMinute()
-            ->withoutOverlapping();
+            ->withoutOverlapping()
+            ->skip(static fn () => config('queue.default') === 'sync');
 
         // Метка живого крона: по ней панель понимает, что планировщик запускается.
         // Раз в пять минут хватает — порог остановки втрое больше

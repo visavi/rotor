@@ -12,7 +12,7 @@ class QueueScheduleTest extends TestCase
         Artisan::call('schedule:list');
 
         self::assertStringContainsString(
-            'queue:work database --stop-when-empty',
+            'queue:work --stop-when-empty',
             Artisan::output(),
             'Задача queue:work не зарегистрирована в планировщике',
         );
