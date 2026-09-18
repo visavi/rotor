@@ -14,6 +14,7 @@ use App\Http\Middleware\GrantDailyBonus;
 use App\Http\Middleware\SaveStatistic;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\StartWebSession;
+use App\Services\ScheduleService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -78,6 +79,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('add:subscribers')->hourly();
         $schedule->command('add:birthdays')->dailyAt('07:00');
         $schedule->command('message:send')->everyMinute();
+
+        // Метка живого крона: по ней панель понимает, что планировщик запускается.
+        // Раз в пять минут хватает — порог остановки втрое больше
+        $schedule->call(static fn () => app(ScheduleService::class)->markRun())
+            ->everyFiveMinutes()
+            ->name('schedule-ping');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->reportable(function (Throwable $exception) {

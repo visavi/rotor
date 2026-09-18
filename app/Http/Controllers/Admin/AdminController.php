@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\DashboardService;
 use App\Services\GithubService;
 use App\Services\MigrationService;
+use App\Services\ScheduleService;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -17,8 +18,12 @@ class AdminController extends Controller
     /**
      * Главная страница
      */
-    public function main(GithubService $github, MigrationService $migrations, DashboardService $dashboard): View
-    {
+    public function main(
+        GithubService $github,
+        MigrationService $migrations,
+        DashboardService $dashboard,
+        ScheduleService $schedule,
+    ): View {
         $existBoss = User::query()
             ->where('level', User::BOSS)
             ->count();
@@ -33,6 +38,18 @@ class AdminController extends Controller
 
         $widgets = $dashboard->widgets();
 
-        return view('admin/index', compact('existBoss', 'hasNewVersion', 'modulesUpdates', 'pendingMigrations', 'widgets'));
+        // Планировщик чинит только владелец — остальным о кроне знать незачем.
+        // Шаблону нужен и факт остановки, и время последнего запуска, поэтому
+        // сервис отдаётся целиком, а не парой переменных
+        $stalledSchedule = isAdmin(User::BOSS) && $schedule->isStalled() ? $schedule : null;
+
+        return view('admin/index', compact(
+            'existBoss',
+            'hasNewVersion',
+            'modulesUpdates',
+            'pendingMigrations',
+            'widgets',
+            'stalledSchedule',
+        ));
     }
 }

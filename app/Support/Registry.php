@@ -221,9 +221,10 @@ class Registry
      * ['label' => string, 'value' => int, 'series' => int[]] и по желанию
      * ['previous' => int, 'icon' => string, 'color' => string,
      *  'type' => 'line'|'bar', 'url' => ?string, 'level' => User::EDITOR,
-     *  'days' => int, 'inverse' => bool]
+     *  'days' => int, 'inverse' => bool, 'unit' => ?string]
      * Ряд — массив чисел либо несколько серий от DashboardService::trends().
-     * inverse красит рост красным: для ошибок и жалоб рост — плохая новость
+     * inverse красит рост красным: для ошибок и жалоб рост — плохая новость.
+     * unit подписывает единицу измерения — рубли у денежных виджетов
      * либо null, если выводить нечего. Значение, ряд и итог прошлого периода
      * отдаёт DashboardService::trend($query, $days). Период приходит
      * аргументом, а не берётся из константы: так модуль переживёт смену

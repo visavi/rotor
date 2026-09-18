@@ -14,18 +14,25 @@
 
     <div class="stat-tile-value">
         {{ number_format($widget['value'], 0, '.', ' ') }}
-        <span class="stat-tile-period">{{ __('index.widget_period', ['days' => $widget['days']]) }}</span>
+        @isset($widget['unit'])
+            <span class="stat-tile-unit">{{ $widget['unit'] }}</span>
+        @endisset
     </div>
 
-    @isset($widget['diff'])
-        @php $good = $widget['inverse'] ? $widget['diff'] <= 0 : $widget['diff'] >= 0; @endphp
+    {{-- Период и рост в одной строке: длинное число с единицей не помещалось рядом --}}
+    <div class="stat-tile-meta">
+        <span class="stat-tile-period">{{ __('index.widget_period', ['days' => $widget['days']]) }}</span>
 
-        <div class="stat-tile-diff {{ $good ? 'text-success' : 'text-danger' }}"
-             title="{{ __('index.widget_previous', ['value' => $widget['previous']]) }}">
-            <i class="fas fa-caret-{{ $widget['diff'] >= 0 ? 'up' : 'down' }}"></i>
-            {{ abs($widget['diff']) }}%
-        </div>
-    @endisset
+        @isset($widget['diff'])
+            @php $good = $widget['inverse'] ? $widget['diff'] <= 0 : $widget['diff'] >= 0; @endphp
+
+            <span class="stat-tile-diff {{ $good ? 'text-success' : 'text-danger' }}"
+                  title="{{ __('index.widget_previous', ['value' => $widget['previous']]) }}">
+                <i class="fas fa-caret-{{ $widget['diff'] >= 0 ? 'up' : 'down' }}"></i>
+                {{ abs($widget['diff']) }}%
+            </span>
+        @endisset
+    </div>
 
     <x-sparkline :series="$widget['series']" :type="$widget['type']" />
 

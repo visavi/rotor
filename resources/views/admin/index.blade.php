@@ -35,6 +35,20 @@
         </div>
     @endif
 
+    @if ($stalledSchedule)
+        <div class="alert alert-warning">
+            <div><i class="fa fa-clock"></i> <b>{{ __('index.schedule_stalled') }}</b></div>
+            <div class="small">
+                @if ($lastRun = $stalledSchedule->lastRun())
+                    {{ __('index.schedule_last_run', ['date' => dateFixed($lastRun)]) }}
+                @else
+                    {{ __('index.schedule_never') }}
+                @endif
+            </div>
+            <code class="d-block mt-1 user-select-all">* * * * * php {{ base_path('artisan') }} schedule:run >> /dev/null 2>&1</code>
+        </div>
+    @endif
+
     @if ($modulesUpdates > 0)
         <div class="alert alert-warning">
             <i class="fas fa-puzzle-piece"></i>

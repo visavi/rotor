@@ -34,6 +34,7 @@ class DashboardService
         'url'      => null,
         'level'    => User::EDITOR,
         'inverse'  => false,
+        'unit'     => null,
     ];
 
     /**
