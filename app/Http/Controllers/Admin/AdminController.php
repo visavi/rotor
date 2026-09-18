@@ -11,6 +11,7 @@ use App\Services\DashboardService;
 use App\Services\GithubService;
 use App\Services\MailService;
 use App\Services\MigrationService;
+use App\Services\QueueService;
 use App\Services\ScheduleService;
 use Illuminate\View\View;
 
@@ -25,6 +26,7 @@ class AdminController extends Controller
         DashboardService $dashboard,
         ScheduleService $schedule,
         MailService $mail,
+        QueueService $queue,
     ): View {
         $existBoss = User::query()
             ->where('level', User::BOSS)
@@ -48,6 +50,11 @@ class AdminController extends Controller
         // Почту настраивает владелец — остальным о поломке отправки знать незачем
         $mailFailure = isAdmin(User::BOSS) ? $mail->lastFailure() : null;
 
+        // Очередь чинит владелец — остальным о воркере знать незачем
+        $stalledQueue = isAdmin(User::BOSS) && $queue->isStalled()
+            ? $queue->pendingCount()
+            : 0;
+
         return view('admin/index', compact(
             'existBoss',
             'hasNewVersion',
@@ -56,6 +63,7 @@ class AdminController extends Controller
             'widgets',
             'stalledSchedule',
             'mailFailure',
+            'stalledQueue',
         ));
     }
 }

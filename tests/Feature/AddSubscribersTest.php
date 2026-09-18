@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\Mailing;
+use App\Jobs\SendMailJob;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -21,6 +22,8 @@ class AddSubscribersTest extends TestCase
         $this->overrideSetting('app_installed', 1);
         $this->overrideSetting('sendprivatmailday', 3);
 
+        Queue::fake();
+
         $this->author = User::factory()->create();
     }
 
@@ -33,13 +36,12 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $mailing = Mailing::query()->where('user_id', $user->id)->first();
+        $data = $this->queuedFor($user);
 
-        $this->assertNotNull($mailing);
-        $this->assertSame('messages', $mailing->type);
+        $this->assertNotNull($data);
         // Число берётся withCount и должно совпадать с непрочитанными
-        $this->assertStringContainsString('2 непрочитанных сообщений', $mailing->subject);
-        $this->assertStringContainsString('(2 шт.)', $mailing->text);
+        $this->assertStringContainsString('2 непрочитанных сообщений', $data['subject']);
+        $this->assertStringContainsString('(2 шт.)', $data['text']);
         $this->assertSame(1, (int) $user->fresh()->sendprivatmail);
     }
 
@@ -58,8 +60,8 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertStringContainsString('(1 шт.)', Mailing::query()->where('user_id', $one->id)->value('text'));
-        $this->assertStringContainsString('(3 шт.)', Mailing::query()->where('user_id', $two->id)->value('text'));
+        $this->assertStringContainsString('(1 шт.)', $this->queuedFor($one)['text']);
+        $this->assertStringContainsString('(3 шт.)', $this->queuedFor($two)['text']);
     }
 
     public function testReadMessagesAreNotCounted(): void
@@ -72,7 +74,7 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertStringContainsString('(1 шт.)', Mailing::query()->where('user_id', $user->id)->value('text'));
+        $this->assertStringContainsString('(1 шт.)', $this->queuedFor($user)['text']);
     }
 
     public function testSkipsUserWithoutUnreadMessages(): void
@@ -84,7 +86,7 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertDatabaseMissing('mailings', ['user_id' => $user->id]);
+        $this->assertNull($this->queuedFor($user));
         $this->assertSame(0, (int) $user->fresh()->sendprivatmail);
     }
 
@@ -96,7 +98,7 @@ class AddSubscribersTest extends TestCase
         // updated_at свежее sendprivatmailday — пользователь заходил, письмо ни к чему
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertDatabaseMissing('mailings', ['user_id' => $user->id]);
+        $this->assertNull($this->queuedFor($user));
     }
 
     public function testSkipsUserWithoutSubscription(): void
@@ -108,7 +110,7 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertDatabaseMissing('mailings', ['user_id' => $user->id]);
+        $this->assertNull($this->queuedFor($user));
     }
 
     public function testSkipsAlreadyNotifiedUser(): void
@@ -120,7 +122,27 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertDatabaseMissing('mailings', ['user_id' => $user->id]);
+        $this->assertNull($this->queuedFor($user));
+    }
+
+    /**
+     * Данные письма, поставленного в очередь для пользователя
+     *
+     * @return array<string, mixed>|null
+     */
+    private function queuedFor(User $user): ?array
+    {
+        $found = null;
+
+        Queue::pushed(SendMailJob::class, static function (SendMailJob $job) use ($user, &$found) {
+            if ($job->data['to'] === $user->email) {
+                $found = $job->data;
+            }
+
+            return false;
+        });
+
+        return $found;
     }
 
     /**

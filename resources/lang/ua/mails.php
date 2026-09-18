@@ -14,7 +14,6 @@ return [
     'email_from_site'        => 'Лист із сайту :sitename',
     'name_short_or_long'     => 'Занадто коротке або довге ім\'я!',
     'success_sent'           => 'Лист успішно надіслано!',
-    'failed_sent'            => 'Не вдалося надіслати листа!',
     'password_recovery_time' => 'Відновлювати пароль можна не частіше ніж раз на годину!',
     'recovery_instructions'  => 'Інструкція відновлення пароля відправлена на :email',
     'password_not_recovery'  => 'Цей користувач не відновлював пароль!',

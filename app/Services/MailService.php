@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Jobs\SendMailJob;
 use Carbon\CarbonImmutable;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Log;
@@ -13,29 +14,64 @@ use Throwable;
 class MailService
 {
     /**
+     * Ставит письмо в очередь
+     *
+     * Письма всегда ложатся в таблицу, даже при QUEUE_CONNECTION=sync:
+     * разгребает их либо планировщик, либо пост-обработка запроса.
+     * Так повторы и failed_jobs работают одинаково у всех установок
+     */
+    public function queue(string $view, array $data, int $delayMinutes = 0): void
+    {
+        $job = SendMailJob::dispatch($view, $data)->onConnection($this->connection());
+
+        if ($delayMinutes > 0) {
+            $job->delay(now()->addMinutes($delayMinutes));
+        }
+    }
+
+    /**
+     * Соединение очереди для писем
+     *
+     * sync подменяется на database — синхронная отправка лишает повторов.
+     * Остальные драйверы уважаются: у кого redis, тот знает, что делает
+     */
+    public function connection(): string
+    {
+        $default = (string) config('queue.default');
+
+        return $default === 'sync' ? 'database' : $default;
+    }
+
+    /**
+     * Отправляет письмо, пробрасывая ошибку наружу
+     *
+     * @throws Throwable
+     */
+    public function sendOrFail(string $view, array $data): void
+    {
+        try {
+            $this->deliver($view, $data);
+        } catch (Throwable $e) {
+            Log::error('Mail send failed', [
+                'view'      => $view,
+                'to'        => $data['to'] ?? null,
+                'subject'   => $data['subject'] ?? null,
+                'exception' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+
+        $this->markSuccess();
+    }
+
+    /**
      * Отправляет уведомление на email
      */
     public function send(string $view, array $data): bool
     {
         try {
-            Mail::send($view, $data, static function (Message $message) use ($data) {
-                $message->subject($data['subject'])
-                    ->to($data['to'])
-                    ->from(config('mail.from.address'), config('mail.from.name'));
-
-                if (isset($data['from'])) {
-                    [$fromEmail, $fromName] = $data['from'];
-                    $message->replyTo($fromEmail, $fromName);
-                }
-
-                if (isset($data['unsubscribe'])) {
-                    $headers = $message->getHeaders();
-                    $headers->addTextHeader(
-                        'List-Unsubscribe',
-                        '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>'
-                    );
-                }
-            });
+            $this->deliver($view, $data);
         } catch (Throwable $e) {
             // Ошибка отправки только возвращалась флагом, и поломка почты
             // оставалась незаметной: пишем в лог и отмечаем для панели
@@ -54,6 +90,33 @@ class MailService
         $this->markSuccess();
 
         return true;
+    }
+
+    /**
+     * Собирает и отправляет письмо
+     *
+     * @throws Throwable
+     */
+    private function deliver(string $view, array $data): void
+    {
+        Mail::send($view, $data, static function (Message $message) use ($data) {
+            $message->subject($data['subject'])
+                ->to($data['to'])
+                ->from(config('mail.from.address'), config('mail.from.name'));
+
+            if (isset($data['from'])) {
+                [$fromEmail, $fromName] = $data['from'];
+                $message->replyTo($fromEmail, $fromName);
+            }
+
+            if (isset($data['unsubscribe'])) {
+                $headers = $message->getHeaders();
+                $headers->addTextHeader(
+                    'List-Unsubscribe',
+                    '<' . config('app.url') . '/unsubscribe?key=' . $data['unsubscribe'] . '>'
+                );
+            }
+        });
     }
 
     /**

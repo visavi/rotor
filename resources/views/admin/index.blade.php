@@ -49,6 +49,14 @@
         </div>
     @endif
 
+    @if ($stalledQueue > 0)
+        <div class="alert alert-warning">
+            <div><i class="fa fa-layer-group"></i> <b>{{ __('index.queue_stalled') }}</b></div>
+            <div class="small">{{ __('index.queue_pending', ['count' => $stalledQueue]) }}</div>
+            <code class="d-block mt-1 user-select-all">php {{ base_path('artisan') }} queue:work --stop-when-empty</code>
+        </div>
+    @endif
+
     @if ($mailFailure)
         <div class="alert alert-warning">
             <div><i class="fa fa-envelope"></i> <b>{{ __('index.mail_failed') }}</b></div>

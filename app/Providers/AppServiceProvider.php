@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\QueueDrainer;
 use App\Support\Restatement;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -38,6 +39,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Restatement::boot();
+
+        // migrate:fresh, migrate:refresh, migrate:reset и db:wipe на боевом
+        // не выполняются: одна опечатка в команде стоила бы всей базы
+        DB::prohibitDestructiveCommands($this->app->isProduction());
 
         // Overlay переводов: FileLoader сворачивает пути через array_replace_recursive,
         // побеждает последний. Покрывает и ядро (custom/lang/ru/index.php),
@@ -80,6 +85,20 @@ class AppServiceProvider extends ServiceProvider
         // Translation directive
         Blade::directive('translation', static function () {
             return '<?= translationScript(); ?>';
+        });
+
+        // Разгребание очереди силами веб-запроса — для установок без крона.
+        // Колбэк выполняется после отдачи ответа, пользователь его не ждёт
+        $this->app->terminating(static function () {
+            if (app()->runningInConsole()) {
+                return;
+            }
+
+            $drainer = app(QueueDrainer::class);
+
+            if ($drainer->shouldRun()) {
+                $drainer->drain();
+            }
         });
 
         /*if (app()->environment('production')) {

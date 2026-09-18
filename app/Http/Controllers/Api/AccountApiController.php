@@ -165,7 +165,7 @@ class AccountApiController extends Controller
             'confirm_token' => $token,
         ]);
 
-        $mail->send('mailer.register', [
+        $mail->queue('mailer.register', [
             'to'         => $email,
             'subject'    => 'Регистрация на ' . setting('title'),
             'login'      => $user->login,

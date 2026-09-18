@@ -143,7 +143,7 @@ class UserService
         $user->sendMessage(null, textNotice('register', ['username' => $login]));
 
         if ($email !== '') {
-            $this->mail->send('mailer.register', [
+            $this->mail->queue('mailer.register', [
                 'to'         => $email,
                 'subject'    => 'Регистрация на ' . setting('title'),
                 'login'      => $login,
@@ -265,7 +265,7 @@ class UserService
         $user->update(['password' => Hash::make($password)]);
 
         if ($user->email) {
-            $this->mail->send('mailer.change_password', [
+            $this->mail->queue('mailer.change_password', [
                 'to'       => $user->email,
                 'subject'  => 'Изменение пароля на ' . setting('title'),
                 'username' => $user->getName(),
@@ -302,7 +302,7 @@ class UserService
     {
         $token = Str::random(32);
 
-        $this->mail->send('mailer.change_mail', [
+        $this->mail->queue('mailer.change_mail', [
             'to'        => $email,
             'subject'   => 'Изменение email на ' . setting('title'),
             'username'  => $user->getName(),
@@ -330,7 +330,7 @@ class UserService
             'created_at' => now(),
         ]);
 
-        $this->mail->send('mailer.recovery', [
+        $this->mail->queue('mailer.recovery', [
             'to'       => $user->email,
             'subject'  => 'Восстановление пароля на ' . setting('title'),
             'username' => $user->getName(),

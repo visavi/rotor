@@ -48,6 +48,14 @@ services:
             timeout: 5s
             interval: 10s
             start_period: 30s
+    mailpit:
+        image: 'axllent/mailpit:latest'
+        ports:
+            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+        networks:
+            - sail
+        restart: unless-stopped
 networks:
     sail:
         driver: bridge

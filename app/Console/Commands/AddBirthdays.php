@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Mailing;
 use App\Models\User;
+use App\Services\MailService;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -32,19 +32,22 @@ class AddBirthdays extends Command
             ->whereNotNull('subscribe')
             ->get();
 
-        if ($deliveryUsers->isNotEmpty()) {
-            foreach ($deliveryUsers as $user) {
-                $subject = 'С днем рождения от ' . setting('title');
+        $mail = app(MailService::class);
+        $packet = max(1, (int) setting('sendmailpacket'));
 
-                $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title') . '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
+        foreach ($deliveryUsers->values() as $index => $user) {
+            $subject = 'С днем рождения от ' . setting('title');
 
-                Mailing::query()->create([
-                    'user_id' => $user->id,
-                    'type'    => 'birthdays',
-                    'subject' => $subject,
-                    'text'    => $text,
-                ]);
-            }
+            $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title') . '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
+
+            // Письма растаскиваются по минутам: суточный лимит релея
+            // не должен выгорать одним залпом
+            $mail->queue('mailer.default', [
+                'to'          => $user->email,
+                'subject'     => $subject,
+                'text'        => $text,
+                'unsubscribe' => $user->subscribe,
+            ], intdiv((int) $index, $packet));
         }
 
         $this->info('Birthdays successfully added.');

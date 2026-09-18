@@ -94,7 +94,7 @@ class RecoveryController extends Controller
             'login'    => $user->login,
             'password' => $password,
         ];
-        $mail->send('mailer.restore', $data);
+        $mail->queue('mailer.restore', $data);
 
         Auth::login($user, true);
 

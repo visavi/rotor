@@ -8,4 +8,5 @@
 /vendor
 composer.phar
 .env
+.env.testing
 .idea/

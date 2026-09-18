@@ -51,11 +51,9 @@ class MailController extends Controller
                     'from'    => [$email, $name],
                 ];
 
-                $send = $mail->send('mailer.default', $data);
+                $mail->queue('mailer.default', $data);
 
-                return $send
-                    ? redirect('/mails')->with('success', __('mails.success_sent'))
-                    : redirect('/mails')->with('danger', __('mails.failed_sent'));
+                return redirect('/mails')->with('success', __('mails.success_sent'));
             }
 
             return redirect('/mails')

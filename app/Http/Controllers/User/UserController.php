@@ -239,7 +239,7 @@ class UserController extends Controller
                     'confirmUrl' => $confirmUrl,
                 ];
 
-                $mail->send('mailer.register', $data);
+                $mail->queue('mailer.register', $data);
 
                 return redirect()->route('verify')
                     ->with('success', __('users.confirm_code_success_sent'));

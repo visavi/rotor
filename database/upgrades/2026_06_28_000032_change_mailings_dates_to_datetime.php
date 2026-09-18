@@ -45,6 +45,12 @@ return new class extends Migration {
 
     public function up(): void
     {
+        // Таблица снесена вместе с переездом рассылки в очередь —
+        // конвертировать нечего
+        if (! Schema::hasTable('mailings')) {
+            return;
+        }
+
         // Свежая схема уже создаёт колонки как datetime — конверсия не нужна
         if (Schema::getColumnType('mailings', 'created_at') === 'datetime') {
             return;
@@ -68,6 +74,10 @@ return new class extends Migration {
 
     public function down(): void
     {
+        if (! Schema::hasTable('mailings')) {
+            return;
+        }
+
         // Колонка уже int — откатывать нечего
         if (Schema::getColumnType('mailings', 'created_at') !== 'datetime') {
             return;
