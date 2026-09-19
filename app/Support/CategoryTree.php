@@ -55,6 +55,78 @@ class CategoryTree
     }
 
     /**
+     * Расставляет связь children по загруженному набору и возвращает корни
+     *
+     * Списки разделов показывают дерево целиком, и подгрузка детей на каждый
+     * узел означала бы запрос на строку. Набор приходит одним запросом, связи
+     * раздаются из памяти
+     *
+     * @template TModel of Model
+     *
+     * @param Collection<int, TModel> $categories
+     *
+     * @return Collection<int, TModel>
+     */
+    public static function nest(Collection $categories): Collection
+    {
+        $children = [];
+
+        foreach ($categories as $category) {
+            $children[(int) $category->getAttribute('parent_id')][] = $category;
+        }
+
+        foreach ($categories as $category) {
+            $id = (int) $category->getAttribute('id');
+
+            $category->setRelation('children', new Collection($children[$id] ?? []));
+        }
+
+        return new Collection($children[0] ?? []);
+    }
+
+    /**
+     * Проставляет каждому узлу суммы счётчиков по всему его поддереву
+     *
+     * Считается по уже загруженному набору, без запроса на узел. Раньше список
+     * складывал счётчик раздела с суммой прямых детей, и внуки терялись
+     *
+     * @template TModel of Model
+     *
+     * @param Collection<int, TModel> $categories
+     * @param array<string, string>   $fields     поле счётчика => атрибут с суммой
+     */
+    public static function totals(Collection $categories, array $fields): void
+    {
+        $parents = [];
+
+        foreach ($categories as $category) {
+            $parents[(int) $category->getAttribute('id')] = (int) $category->getAttribute('parent_id');
+        }
+
+        $limit = count($parents);
+
+        foreach ($fields as $field => $attribute) {
+            $sums = [];
+
+            foreach ($categories as $category) {
+                $value = (int) $category->getAttribute($field);
+                $id = (int) $category->getAttribute('id');
+
+                // Значение узла поднимается по цепочке предков. Шаги ограничены
+                // размером набора: кольцо в данных иначе крутило бы цикл вечно
+                for ($step = 0; $id !== 0 && $step <= $limit; $step++) {
+                    $sums[$id] = ($sums[$id] ?? 0) + $value;
+                    $id = $parents[$id] ?? 0;
+                }
+            }
+
+            foreach ($categories as $category) {
+                $category->setAttribute($attribute, $sums[(int) $category->getAttribute('id')] ?? 0);
+            }
+        }
+    }
+
+    /**
      * Сохраняет порядок и вложенность категорий
      *
      * Строка приходит от JS в виде id:parent_id через запятую, в порядке обхода

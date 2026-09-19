@@ -177,6 +177,14 @@ body.modal-open {
     z-index: 2;
 }
 
+/* Бейдж считает размер в em и внутри заголовка вырастал вместе с ним:
+   один и тот же NEW выглядел крупнее в списке файлов, чем в списке разделов.
+   Считаем от базового шрифта страницы, а не от увеличенного заголовка */
+.section-title .badge {
+    font-size: calc(.75 * var(--bs-body-font-size));
+    vertical-align: middle;
+}
+
 .section-form {
     background: var(--base-bg);
     padding: 15px;

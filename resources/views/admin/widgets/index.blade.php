@@ -35,7 +35,7 @@
                                       style="background: {{ $widget['color'] }}1a; color: {{ $widget['color'] }}">
                                     <i class="{{ $widget['icon'] }}"></i>
                                 </span>
-                                {{ $widget['label'] }}
+                                <span class="fw-bold">{{ $widget['label'] }}</span>
                             </label>
 
                             {{-- Чекбокс у правого края: слева ручка и название, справа переключатель --}}
