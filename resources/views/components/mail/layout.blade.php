@@ -47,13 +47,13 @@
             <table class="container" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px;">
 
                 <tr>
-                    <td class="masthead gutter" style="padding: 20px; background-color: #f6f7f9; border-bottom: 2px solid #0d6efd; border-radius: 10px 10px 0 0;">
+                    <td class="masthead gutter" style="padding: 20px; background-color: #f6f7f9; border-bottom: 2px solid #0d6efd;">
                         <a href="{{ config('app.url') }}" style="font-family: {{ $font }}; font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: #0d6efd; text-decoration: none;">{{ setting('title') }}</a>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="gutter text" style="padding: 28px 0; font-family: {{ $font }}; font-size: 15px; line-height: 1.6; color: #21262c;">
+                    <td class="gutter text" style="padding: 28px 20px; font-family: {{ $font }}; font-size: 15px; line-height: 1.6; color: #21262c;">
                         {{ $slot }}
 
                         @isset($subcopy)
@@ -72,7 +72,7 @@
                 </tr>
 
                 <tr>
-                    <td class="gutter divider" style="border-top: 1px solid #e9ecef; padding: 16px 0 28px;">
+                    <td class="gutter divider" style="border-top: 1px solid #e9ecef; padding: 16px 20px 28px;">
                         <a href="{{ config('app.url') }}" class="muted" style="font-family: {{ $font }}; font-size: 12px; line-height: 1.5; color: #8b949e; text-decoration: underline;">{{ setting('copy') }}</a>
                     </td>
                 </tr>
