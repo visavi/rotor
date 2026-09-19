@@ -1,0 +1,1 @@
+<h1 class="heading" style="margin: 0 0 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 22px; line-height: 1.35; font-weight: 700; letter-spacing: -0.2px; color: #21262c;">{{ $slot }}</h1>

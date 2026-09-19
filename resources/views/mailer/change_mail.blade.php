@@ -1,24 +1,18 @@
-@extends('mailer.layout')
+<x-mail.layout :subject="$subject" :preheader="__('mailer.change_mail_preheader')">
+    <x-mail.heading>{{ __('mailer.hello', ['username' => $username]) }}</x-mail.heading>
 
-@section('content')
-    <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                <div style="font-weight: bold; padding: 0 0 10px;">Здравствуйте, {{ $username }}</div>
-                <div>Вами была произведена операция по изменению адреса электронной почты</div>
+    <x-mail.text>{{ __('mailer.change_mail_intro') }}</x-mail.text>
 
-                <p>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты</p>
+    <x-mail.button :url="$changeUrl">{{ __('mailer.change_email') }}</x-mail.button>
 
-                <a href="{{ $changeUrl }}" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #337AB7; margin: 0; border-color: #337AB7; border-style: solid; border-width: 10px 20px;">{{ __('mailer.change_email') }}</a>
-                <p>
-                    {{ __('mailer.follow_link') }}:<br>
-                    <b>{{ $changeUrl }}</b>
-                </p>
+    <x-mail.text muted>
+        {{ __('mailer.change_mail_expires') }} {{ __('mailer.change_mail_auth_required') }}
+    </x-mail.text>
 
-                <div>Ссылка будет действительной в течение 1 часа</div>
-                <div>Для изменения адреса необходимо быть авторизованным на сайте</div>
-                <div>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо</div>
-            </td>
-        </tr>
-    </table>
-@stop
+    <x-mail.text muted>{{ __('mailer.ignore_if_not_you') }}</x-mail.text>
+
+    <x-slot:subcopy>
+        {{ __('mailer.follow_link') }}:<br>
+        <x-mail.link :url="$changeUrl">{{ $changeUrl }}</x-mail.link>
+    </x-slot:subcopy>
+</x-mail.layout>

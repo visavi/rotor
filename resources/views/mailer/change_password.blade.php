@@ -1,15 +1,11 @@
-@extends('mailer.layout')
+<x-mail.layout :subject="$subject" :preheader="__('mailer.change_password_preheader')">
+    <x-mail.heading>{{ __('mailer.hello', ['username' => $username]) }}</x-mail.heading>
 
-@section('content')
-    <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                <div style="font-weight: bold; padding: 0 0 10px;">Здравствуйте, {{ $username }}</div>
-                <div>Вами была произведена операция по изменению пароля</div>
-                <div style="padding: 0 0 10px;">Сохраните его в надежном месте</div>
+    <x-mail.text>{{ __('mailer.change_password_intro') }}</x-mail.text>
 
-                <div style="font-weight: bold;">Ваш новый пароль: {{ $password }}</div>
-            </td>
-        </tr>
-    </table>
-@stop
+    <x-mail.panel>
+        <strong>{{ __('mailer.new_password') }}:</strong> {{ $password }}
+    </x-mail.panel>
+
+    <x-mail.text muted>{{ __('mailer.keep_password_safe') }}</x-mail.text>
+</x-mail.layout>

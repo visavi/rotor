@@ -78,7 +78,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-3">
             @foreach ($widgets as $widget)
                 <div class="col">
-                    <x-stat-tile :widget="$widget" />
+                    <x-widget.tile :widget="$widget" />
                 </div>
             @endforeach
         </div>

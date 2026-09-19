@@ -1,19 +1,14 @@
-@extends('mailer.layout')
+<x-mail.layout :subject="$subject" :preheader="__('mailer.restore_preheader')">
+    <x-mail.heading>{{ __('mailer.hello', ['username' => $username]) }}</x-mail.heading>
 
-@section('content')
-    <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-        <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-            <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                <div style="font-weight: bold; padding: 0 0 10px;">Здравствуйте, {{ $username }}</div>
-                <div style="padding: 0 0 10px;">Ваши новые данные для входа на сайт <a href="{{ config('app.url') }}">{{ setting('title') }}</a></div>
+    <x-mail.text>
+        {{ __('mailer.restore_intro', ['site' => setting('title')]) }}
+    </x-mail.text>
 
-                <div style="font-weight: bold;">Логин: {{ $login }}</div>
-                <div style="font-weight: bold;">Пароль: {{ $password }}</div>
+    <x-mail.panel>
+        <strong>{{ __('mailer.login') }}:</strong> {{ $login }}<br>
+        <strong>{{ __('mailer.password') }}:</strong> {{ $password }}
+    </x-mail.panel>
 
-                <div style="padding: 10px 0 0;">Запомните и постарайтесь больше не забывать данные</div>
-                <div>Пароль вы сможете поменять в своем профиле</div>
-                <div>Всего наилучшего!</div>
-            </td>
-        </tr>
-    </table>
-@stop
+    <x-mail.text muted>{{ __('mailer.change_password_in_profile') }}</x-mail.text>
+</x-mail.layout>

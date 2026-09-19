@@ -9,6 +9,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 use Throwable;
 
 class MailService
@@ -81,13 +82,35 @@ class MailService
     }
 
     /**
+     * Шаблоны письма: HTML и текстовая версия рядом с ним
+     *
+     * Текст лежит в mailer/text с тем же именем. Без части text/plain
+     * спам-фильтры занижают рейтинг, а часть клиентов показывает пустоту
+     *
+     * @return array<string, string>
+     */
+    private function views(string $view): array
+    {
+        $views = ['html' => $view];
+        $text = preg_replace('#^mailer\\.#', 'mailer.text.', $view);
+
+        if ($text !== $view && View::exists($text)) {
+            $views['text'] = $text;
+        }
+
+        return $views;
+    }
+
+    /**
      * Собирает и отправляет письмо
      *
      * @throws Throwable
      */
     private function deliver(string $view, array $data): void
     {
-        Mail::send($view, $data, static function (Message $message) use ($data) {
+        $views = $this->views($view);
+
+        Mail::send($views, $data, static function (Message $message) use ($data) {
             $message->subject($data['subject'])
                 ->to($data['to'])
                 ->from(config('mail.from.address'), config('mail.from.name'));

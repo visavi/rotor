@@ -34,7 +34,7 @@
         @endisset
     </div>
 
-    <x-sparkline :series="$widget['series']" :type="$widget['type']" />
+    <x-widget.sparkline :series="$widget['series']" :type="$widget['type']" />
 
     @if (count($widget['series']) > 1)
         <div class="stat-tile-legend">
