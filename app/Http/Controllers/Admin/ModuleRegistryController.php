@@ -48,6 +48,14 @@ class ModuleRegistryController extends AdminController
     public function refresh(int $id): RedirectResponse
     {
         $registry = ModuleRegistry::query()->findOrFail($id);
+
+        // С очередью ответ приходит сразу, результат опроса появится на странице
+        // после прохода воркера. Без неё реестр опрашивается как прежде
+        if ($registry->queueFetch()) {
+            return redirect()->route('admin.registries.index')
+                ->with('success', __('admin.registries.registry_refresh_queued'));
+        }
+
         $registry->fetch(force: true);
 
         return $registry->fetchFailed

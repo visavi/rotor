@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Jobs\FetchRegistryJob;
 use App\Models\ModuleRegistry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class ModuleRegistryControllerTest extends TestCase
@@ -100,6 +102,46 @@ class ModuleRegistryControllerTest extends TestCase
         $this->assertDatabaseMissing('module_registries', ['id' => $registry->id]);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testRefreshQueuesJobWhenQueueConfigured(): void
+    {
+        Queue::fake();
+        config(['queue.default' => 'database']);
+
+        $registry = ModuleRegistry::query()->create([
+            'url'        => 'https://registry.example.com/modules.json',
+            'created_at' => now(),
+        ]);
+
+        $this->actingAs($this->boss)
+            ->post(route('admin.registries.refresh', $registry->id))
+            ->assertRedirect(route('admin.registries.index'))
+            ->assertSessionHas('success');
+
+        Queue::assertPushed(FetchRegistryJob::class, static fn (FetchRegistryJob $job) => $job->registryId === $registry->id);
+    }
+
+    public function testRefreshFetchesInlineWithoutQueue(): void
+    {
+        config(['queue.default' => 'sync']);
+
+        Http::fake([
+            '*' => Http::response(['name' => 'Тестовый реестр', 'modules' => []]),
+        ]);
+
+        $registry = ModuleRegistry::query()->create([
+            'url'        => 'https://registry.example.com/modules.json',
+            'created_at' => now(),
+        ]);
+
+        $this->actingAs($this->boss)
+            ->post(route('admin.registries.refresh', $registry->id))
+            ->assertRedirect(route('admin.registries.index'))
+            ->assertSessionHas('success');
+
+        $registry->refresh();
+        self::assertSame('Тестовый реестр', $registry->name);
     }
 
     public function testToggleRegistry(): void

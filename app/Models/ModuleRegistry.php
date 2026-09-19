@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Jobs\FetchRegistryJob;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
@@ -45,7 +46,11 @@ class ModuleRegistry extends Model
         // нового реестра и force
         if (! $force && $this->cached_at !== null) {
             if (! $this->cached_at->gt(now()->subSeconds($ttl))) {
-                dispatch(fn () => $this->fetch(true))->afterResponse();
+                // Без очереди опрос уходит в afterResponse: соединение уже закрыто,
+                // и ожидание достаётся не посетителю страницы
+                if (! $this->queueFetch()) {
+                    dispatch(fn () => $this->fetch(true))->afterResponse();
+                }
             }
 
             return $this->cached_data ?? [];
@@ -79,6 +84,25 @@ class ModuleRegistry extends Model
     }
 
     /**
+     * Ставит опрос реестра в очередь, если она настроена
+     *
+     * Реестр живёт за сетью: недоступный сервер держит запрос до десяти секунд
+     * таймаута, и на странице это ожидание ничем не оправдано
+     *
+     * @return bool false — очереди нет, опрашивать придётся вызывающему
+     */
+    public function queueFetch(): bool
+    {
+        if (config('queue.default') === 'sync') {
+            return false;
+        }
+
+        FetchRegistryJob::dispatch($this->id);
+
+        return true;
+    }
+
+    /**
      * Помечает реестр недоступным и продлевает кэш, чтобы не опрашивать его каждый запрос.
      */
     private function markFailed(): array
@@ -87,6 +111,22 @@ class ModuleRegistry extends Model
         $this->update(['cached_at' => now()]);
 
         return $this->cached_data ?? [];
+    }
+
+    /**
+     * Ставит в очередь опрос всех включённых реестров
+     *
+     * @return bool false — очереди нет, реестры придётся опрашивать по месту
+     */
+    public static function queueFetchAll(): bool
+    {
+        if (config('queue.default') === 'sync') {
+            return false;
+        }
+
+        self::query()->where('active', true)->get()->each->queueFetch();
+
+        return true;
     }
 
     /**

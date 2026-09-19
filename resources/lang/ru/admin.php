@@ -156,6 +156,7 @@ return [
         'registry_success_added'     => 'Реестр успешно добавлен!',
         'registry_success_deleted'   => 'Реестр успешно удалён!',
         'registry_success_refreshed' => 'Реестр успешно обновлён!',
+        'registry_refresh_queued'    => 'Обновление реестра поставлено в очередь!',
         'registry_fetch_failed'      => 'Не удалось обновить реестр!',
     ],
 

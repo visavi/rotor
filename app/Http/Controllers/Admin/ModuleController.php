@@ -234,9 +234,17 @@ class ModuleController extends AdminController
     /**
      * Каталог модулей из реестров
      */
-    public function marketplace(Request $request): View
+    public function marketplace(Request $request): View|RedirectResponse
     {
         $force = (bool) $request->input('refresh');
+
+        // Реестров может быть несколько, и каждый недоступный стоит десять секунд
+        // таймаута. С очередью страница открывается сразу, опрос идёт в фоне
+        if ($force && ModuleRegistry::queueFetchAll()) {
+            return redirect()->route('admin.modules.marketplace')
+                ->with('success', __('admin.registries.registry_refresh_queued'));
+        }
+
         $available = ModuleRegistry::getAvailableModules($force);
 
         $modules = Module::query()->get()->keyBy('name');

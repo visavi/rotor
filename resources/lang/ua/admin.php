@@ -155,6 +155,7 @@ return [
         'registry_success_added'     => 'Реєстр успішно додано!',
         'registry_success_deleted'   => 'Реєстр успішно видалено!',
         'registry_success_refreshed' => 'Реєстр успішно оновлено!',
+        'registry_refresh_queued'    => 'Оновлення реєстру поставлено в чергу!',
         'registry_fetch_failed'      => 'Не вдалося оновити реєстр!',
     ],
 

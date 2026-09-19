@@ -156,6 +156,7 @@ return [
         'registry_success_added'     => 'Registry successfully added!',
         'registry_success_deleted'   => 'Registry successfully deleted!',
         'registry_success_refreshed' => 'Registry successfully refreshed!',
+        'registry_refresh_queued'    => 'Registry refresh queued!',
         'registry_fetch_failed'      => 'Failed to update registry!',
     ],
 
