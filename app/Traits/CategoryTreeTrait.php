@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Support\CategoryTree;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,10 +29,7 @@ trait CategoryTreeTrait
             ->orderBy('sort')
             ->get();
 
-        $tree = $this->buildAllCategoriesTree($categories);
-        $flat = $this->buildAllCategoriesFlat($tree);
-
-        return Collection::make($flat);
+        return CategoryTree::flatten($categories);
     }
 
     /**
@@ -48,47 +46,5 @@ trait CategoryTreeTrait
         $tree[] = $category;
 
         return $tree;
-    }
-
-    /**
-     * Build all categories tree
-     *
-     * @param Collection<int, self> $categories
-     */
-    private function buildAllCategoriesTree(Collection $categories, int $parentId = 0, int $depth = 0): array
-    {
-        $tree = [];
-
-        foreach ($categories as $category) {
-            if ($category->parent_id === $parentId) {
-                $child = $this->buildAllCategoriesTree($categories, $category->id, $depth + 1);
-
-                $category->depth = $depth;
-
-                if ($child) {
-                    $category->child = $child;
-                }
-
-                $tree[] = $category;
-            }
-        }
-
-        return $tree;
-    }
-
-    /**
-     * Build all categories flat
-     */
-    private function buildAllCategoriesFlat(array $categories, array &$flat = []): array
-    {
-        foreach ($categories as $category) {
-            $flat[] = $category;
-
-            if (isset($category->child)) {
-                $this->buildAllCategoriesFlat($category->child, $flat);
-            }
-        }
-
-        return $flat;
     }
 }

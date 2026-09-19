@@ -25,22 +25,22 @@
 
                 <div data-sortable data-sortable-target="#widgets-order">
                     @foreach ($widgets as $key => $widget)
-                        <div class="d-flex align-items-center gap-2 border-bottom py-2" data-key="{{ $key }}">
-                            <div class="form-check mb-0">
-                                <input class="form-check-input" type="checkbox" name="widgets[]" value="{{ $key }}"
-                                       id="widget-{{ $key }}" @checked($settings[$key] ?? true)>
-                                <label class="form-check-label" for="widget-{{ $key }}">
-                                    <span class="stat-tile-icon d-inline-flex align-middle me-1"
-                                          style="background: {{ $widget['color'] }}1a; color: {{ $widget['color'] }}">
-                                        <i class="{{ $widget['icon'] }}"></i>
-                                    </span>
-                                    {{ $widget['label'] }}
-                                </label>
-                            </div>
-
-                            <span class="sortable-handle text-muted ms-auto" data-sortable-handle title="{{ __('index.widgets_drag') }}">
+                        <div class="sortable-row" data-key="{{ $key }}">
+                            <span class="sortable-handle text-muted" data-sortable-handle title="{{ __('index.widgets_drag') }}">
                                 <i class="fas fa-grip-vertical"></i>
                             </span>
+
+                            <label class="form-check-label d-flex align-items-center gap-1 mb-0" for="widget-{{ $key }}">
+                                <span class="stat-tile-icon d-inline-flex align-middle"
+                                      style="background: {{ $widget['color'] }}1a; color: {{ $widget['color'] }}">
+                                    <i class="{{ $widget['icon'] }}"></i>
+                                </span>
+                                {{ $widget['label'] }}
+                            </label>
+
+                            {{-- Чекбокс у правого края: слева ручка и название, справа переключатель --}}
+                            <input class="form-check-input ms-auto my-0 me-1" type="checkbox" name="widgets[]" value="{{ $key }}"
+                                   id="widget-{{ $key }}" @checked($settings[$key] ?? true)>
                         </div>
                     @endforeach
                 </div>

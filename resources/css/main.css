@@ -1529,6 +1529,23 @@ a.stat-tile:hover {
 .sortable-handle { cursor: grab; touch-action: none; }
 .sortable-handle:active { cursor: grabbing; }
 .sortable-ghost { opacity: .4; }
+.sortable-tree-list { list-style: none; padding-left: 0; margin: 0; }
+
+/* Строка перетаскиваемого списка — одна и та же и в дереве разделов, и в виджетах панели */
+.sortable-row { display: flex; align-items: center; gap: .5rem; padding: .5rem .5rem .5rem 0; border-bottom: 1px solid var(--bs-border-color); transition: background .12s; }
+/* Полупрозрачная накладка, а не переменная темы: --bs-tertiary-bg в тёмной теме
+   почти не отличается от подложки, и наведение там не читалось */
+.sortable-row:hover { background: rgba(128, 128, 128, .18); }
+.sortable-row:hover .sortable-handle { color: var(--bs-secondary-color) !important; }
+
+/* Вложенность — отступ строки, а не вложенный список: глубину задают горизонтальным
+   движением мыши. Шаг живёт здесь, JS читает его из этой же переменной */
+.sortable-tree-list { --depth-step: 24px; }
+.sortable-tree-item { padding-left: calc(var(--depth, 0) * var(--depth-step)); }
+
+/* Пока тащат, курсор над всем деревом ведёт себя как хватающая рука */
+.sortable-dragging { cursor: grabbing; }
+
 .stat-tile-legend { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: var(--bs-secondary-color); }
 .stat-tile-legend i { font-size: .5rem; vertical-align: middle; }
 .stat-tile-unit { font-size: .82rem; font-weight: 600; color: var(--bs-secondary-color); margin-left: .15rem; }

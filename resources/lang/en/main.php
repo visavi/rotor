@@ -68,6 +68,8 @@ return [
     'select_all'        => 'Select all',
     'add'               => 'Add',
     'save'              => 'Save',
+    'save_order'        => 'Save order',
+    'drag_reorder'      => 'Drag to reorder',
     'publish'           => 'Publish',
     'unpublish'         => 'Unpublish',
     'title'             => 'Title',
