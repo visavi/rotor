@@ -158,7 +158,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 });
 
             /* Настройки */
-            Route::match(['get', 'post'], '/settings', [SettingController::class, 'index']);
+            Route::match(['get', 'post'], '/settings', [SettingController::class, 'index'])->name('settings');
 
             /* Виджеты панели */
             Route::controller(WidgetController::class)

@@ -17,9 +17,9 @@
         <div class="invalid-feedback">{{ textError('sets[feed_cache_time]') }}</div>
     </div>
 
-    <div class="form-check mb-3">
+    <div class="form-check form-switch mb-3">
         <input type="hidden" value="0" name="sets[feed_comments_show]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[feed_comments_show]" id="feed_comments_show"{{ old('sets.feed_comments_show', $settings['feed_comments_show']) ? ' checked' : '' }}>
+        <input type="checkbox" role="switch" class="form-check-input" value="1" name="sets[feed_comments_show]" id="feed_comments_show"{{ old('sets.feed_comments_show', $settings['feed_comments_show']) ? ' checked' : '' }}>
         <label class="form-check-label" for="feed_comments_show">{{ __('settings.feed_comments_show') }}</label>
     </div>
 

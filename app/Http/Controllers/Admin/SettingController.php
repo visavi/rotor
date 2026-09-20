@@ -48,11 +48,11 @@ class SettingController extends AdminController
 
                 clearCache('settings');
 
-                return redirect('admin/settings?act=' . $act)
+                return redirect()->route('admin.settings', ['act' => $act])
                     ->with('success', __('settings.settings_success_saved'));
             }
 
-            return redirect('admin/settings?act=' . $act)
+            return redirect()->route('admin.settings', ['act' => $act])
                 ->withInput()
                 ->withErrors($validator->getErrors());
         }

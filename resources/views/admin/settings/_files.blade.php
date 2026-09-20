@@ -39,9 +39,9 @@
         <div class="invalid-feedback">{{ textError('sets[screensize]') }}</div>
     </div>
 
-    <div class="form-check mb-3">
+    <div class="form-check form-switch mb-3">
         <input type="hidden" value="0" name="sets[copyfoto]">
-        <input type="checkbox" class="form-check-input" value="1" name="sets[copyfoto]" id="copyfoto"{{ old('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
+        <input type="checkbox" role="switch" class="form-check-input" value="1" name="sets[copyfoto]" id="copyfoto"{{ old('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
         <label class="form-check-label" for="copyfoto">{{ __('settings.images_copyright') }}</label>
         <div class="form-text">{{ __('settings.images_copyright_hint') }} <code>public/assets/img/images/watermark.png</code></div>
         <img src="/assets/img/images/watermark.png" alt="watermark" class="d-block mt-2">
