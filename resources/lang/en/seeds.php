@@ -11,8 +11,8 @@ return [
         'default_status' => 'Spirit',
         'description'    => 'Short description of your site',
         'logos'          => 'Rotor Website',
-        'moneyname'      => 'coin, coins, coins',
-        'scorename'      => 'point, point, points',
+        'moneyname'      => 'coin,coins,coins',
+        'scorename'      => 'point,points,points',
     ],
 
     'statuses' => [

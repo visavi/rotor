@@ -24,14 +24,16 @@
 
     <div class="mb-3{{ hasError('sets[moneyname]') }}">
         <label for="moneyname" class="form-label">{{ __('settings.moneys') }}:</label>
-        <input type="text" class="form-control" id="moneyname" name="sets[moneyname]" maxlength="100" value="{{ old('sets.moneyname', $settings['moneyname']) }}" required>
+        <input type="text" class="form-control" id="moneyname" name="sets[moneyname]" maxlength="100" value="{{ old('sets.moneyname', $settings['moneyname']) }}" placeholder="{{ __('seeds.settings.moneyname') }}" required>
         <div class="invalid-feedback">{{ textError('sets[moneyname]') }}</div>
+        <div class="form-text">{{ __('settings.moneys_hint') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[scorename]') }}">
         <label for="scorename" class="form-label">{{ __('settings.points') }}:</label>
-        <input type="text" class="form-control" id="scorename" name="sets[scorename]" maxlength="100" value="{{ old('sets.scorename', $settings['scorename']) }}" required>
+        <input type="text" class="form-control" id="scorename" name="sets[scorename]" maxlength="100" value="{{ old('sets.scorename', $settings['scorename']) }}" placeholder="{{ __('seeds.settings.scorename') }}" required>
         <div class="invalid-feedback">{{ textError('sets[scorename]') }}</div>
+        <div class="form-text">{{ __('settings.points_hint') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[statusdef]') }}">

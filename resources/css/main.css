@@ -1557,3 +1557,18 @@ a.stat-tile:hover {
 .stat-tile-legend { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: var(--bs-secondary-color); }
 .stat-tile-legend i { font-size: .5rem; vertical-align: middle; }
 .stat-tile-unit { font-size: .82rem; font-weight: 600; color: var(--bs-secondary-color); margin-left: .15rem; }
+
+/* Панель разделов настроек: пунктов больше, чем влезает в экран, поэтому липнет
+   не сама панель, а её прокручиваемая копия высотой с окно — иначе sticky бесполезен,
+   элемент выше вьюпорта уезжает вверх как обычный блок */
+/* Перенос вбок при зажатой высоте: и у sticky-панели, и во время анимации collapse
+   пункты раскладываются в несколько столбцов, поэтому переносить нельзя нигде */
+.settings-nav { flex-wrap: nowrap; }
+
+@media (min-width: 768px) {
+    /* .section обрезает содержимое, а sticky не работает внутри предка с overflow */
+    .settings-nav-col { overflow: visible; }
+    .settings-nav { position: sticky; top: .5rem; max-height: calc(100vh - 1rem); overflow-x: hidden; overflow-y: auto; }
+    /* Пунктов три десятка — обычный padding делает список выше экрана */
+    .settings-nav .nav-link { padding-top: .3rem; padding-bottom: .3rem; }
+}

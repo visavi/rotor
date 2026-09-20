@@ -73,11 +73,8 @@
         </select>
 
         <div class="invalid-feedback">{{ textError('sets[language_fallback]') }}</div>
+        <div class="form-text">{{ __('settings.fallback_language_hint') }}</div>
     </div>
-
-    <p class="text-muted fst-italic">
-        {{ __('settings.fallback_language_hint') }}
-    </p>
 
     <?php $themes = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR)); ?>
     <?php $inputThemes = old('sets.themes', $settings['themes']); ?>
@@ -121,11 +118,8 @@
             @endforeach
         </select>
         <div class="invalid-feedback">{{ textError('sets[email_mode]') }}</div>
+        <div class="form-text">{{ __('settings.registration_email_mode_hint') }}</div>
     </div>
-
-    <p class="text-muted fst-italic">
-        {{ __('settings.registration_email_mode_hint') }}
-    </p>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>

@@ -219,6 +219,12 @@ class HelperTest extends TestCase
         self::assertSame('5 лет', plural(5, 'год,года,лет'));
     }
 
+    public function testPlural_trimsSpacesAroundForms(): void
+    {
+        self::assertSame('5 лет', plural(5, 'год, года, лет'));
+        self::assertSame('1 штука', plural(1, '  штука  '));
+    }
+
     public static function extensionProvider(): array
     {
         return [

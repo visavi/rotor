@@ -779,6 +779,8 @@ function plural(int $num, mixed $forms): string
         $forms = explode(',', $forms);
     }
 
+    $forms = array_map('trim', $forms);
+
     $formatted = number_format($num, 0, ',', "\u{202F}");
 
     $n = abs($num) % 100;

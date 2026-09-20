@@ -10,7 +10,7 @@
         <div class="invalid-feedback">{{ textError('sets[filesize]') }}</div>
 
         <input type="hidden" value="1048576" name="mods[filesize]">
-        <span class="text-muted fst-italic">{{ __('main.server_limit') }}: {{ min(ini_get('upload_max_filesize'), ini_get('post_max_size')) }}</span>
+        <div class="form-text">{{ __('main.server_limit') }}: {{ min(ini_get('upload_max_filesize'), ini_get('post_max_size')) }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[maxfiles]') }}">
@@ -23,12 +23,14 @@
         <label for="file_extensions" class="form-label">{{ __('main.valid_file_extensions') }}:</label>
         <textarea class="form-control" id="file_extensions" name="sets[file_extensions]" required>{{ old('sets.file_extensions', $settings['file_extensions']) }}</textarea>
         <div class="invalid-feedback">{{ textError('sets[file_extensions]') }}</div>
+        <div class="form-text">{{ __('settings.extensions_hint') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[media_extensions]') }}">
         <label for="media_extensions" class="form-label">{{ __('main.valid_media_extensions') }}:</label>
         <input type="text" class="form-control" id="media_extensions" name="sets[media_extensions]" value="{{ old('sets.media_extensions', $settings['media_extensions']) }}" required>
         <div class="invalid-feedback">{{ textError('sets[media_extensions]') }}</div>
+        <div class="form-text">{{ __('settings.extensions_hint') }}</div>
     </div>
 
     <div class="mb-3{{ hasError('sets[screensize]') }}">
@@ -41,19 +43,16 @@
         <input type="hidden" value="0" name="sets[copyfoto]">
         <input type="checkbox" class="form-check-input" value="1" name="sets[copyfoto]" id="copyfoto"{{ old('sets.copyfoto', $settings['copyfoto']) ? ' checked' : '' }}>
         <label class="form-check-label" for="copyfoto">{{ __('settings.images_copyright') }}</label>
+        <div class="form-text">{{ __('settings.images_copyright_hint') }} <code>public/assets/img/images/watermark.png</code></div>
+        <img src="/assets/img/images/watermark.png" alt="watermark" class="d-block mt-2">
     </div>
-
-    <img src="/assets/img/images/watermark.png" alt="watermark" title="{{ config('app.url') }}/assets/img/images/watermark.png"><br>
-
 
     <div class="mb-3{{ hasError('sets[archive_file_path]') }}">
         <label for="archive_file_path" class="form-label">{{ __('settings.archive_file_path') }}:</label>
         <input type="hidden" name="opt[archive_file_path]" value="1">
         <input type="text" class="form-control" id="archive_file_path" name="sets[archive_file_path]" value="{{ old('sets.archive_file_path', $settings['archive_file_path']) }}">
         <div class="invalid-feedback">{{ textError('sets[archive_file_path]') }}</div>
-        <p class="text-muted fst-italic">
-            {{ __('settings.archive_file_path_hint') }}
-        </p>
+        <div class="form-text">{{ __('settings.archive_file_path_hint') }}</div>
     </div>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>

@@ -33,6 +33,7 @@ return [
 
     'images_reduction_size'  => 'Reducing photos when uploading',
     'images_copyright'       => 'Copyright overlay',
+    'images_copyright_hint'  => 'The watermark is taken from the file:',
     'archive_file_path'      => 'The path to the file to add to the archive',
     'archive_file_path_hint' => 'The file must be in the public directory (Example: /test.txt)',
 
@@ -72,6 +73,11 @@ return [
     'unscannable_ext' => 'Unscannable extensions (separated by commas)',
     'moneys'          => 'Game Currency Name',
     'points'          => 'Name of points',
+
+    'moneys_hint'     => 'Three forms separated by commas: coin,coins,coins',
+    'points_hint'     => 'Three forms separated by commas: point,points,points',
+    'extensions_hint' => 'Comma-separated extensions, without dots and spaces',
+
     'default_status'  => 'Default Status',
     'guestsuser'      => 'Unauthorized user',
     'deleted_user'    => 'Deleted user',

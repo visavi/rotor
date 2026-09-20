@@ -22,11 +22,8 @@
         <div class="invalid-feedback">{{ textError('sets[timeonline]') }}</div>
 
         <input type="hidden" value="60" name="mods[timeonline]">
+        <div class="form-text">{{ __('settings.online_time_hint') }}</div>
     </div>
-
-    <p class="text-muted fst-italic">
-        {{ __('settings.online_time_hint') }}
-    </p>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>
 </form>
