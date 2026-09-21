@@ -1,0 +1,11 @@
+<?php
+
+if (! function_exists('stats{{ module }}')) {
+    /**
+     * Счётчик записей модуля для бокового меню
+     */
+    function stats{{ module }}(): string
+    {
+        return '';
+    }
+}

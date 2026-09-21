@@ -1,0 +1,53 @@
+{
+    "paths": {
+        "/{{ modelTable }}": {
+            "get": {
+                "tags": [
+                    "{{ moduleTitle }}"
+                ],
+                "summary": "Список записей",
+                "operationId": "get{{ module }}Items",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/PerPage"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/{{ modelTable }}/{id}": {
+            "get": {
+                "tags": [
+                    "{{ moduleTitle }}"
+                ],
+                "summary": "Просмотр записи",
+                "operationId": "get{{ module }}Item",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        }
+    }
+}

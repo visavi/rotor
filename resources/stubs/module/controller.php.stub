@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\{{ module }}\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\View\View;
+
+class {{ module }}Controller extends Controller
+{
+    /**
+     * Главная страница модуля
+     */
+    public function index(): View
+    {
+        return view('{{ moduleKey }}::index');
+    }
+}

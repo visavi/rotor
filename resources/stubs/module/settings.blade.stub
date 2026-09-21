@@ -1,0 +1,31 @@
+@extends('admin/settings/layout')
+
+@section('title', __('{{ moduleKey }}::{{ moduleKey }}.settings'))
+
+@section('breadcrumb')
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.modules.index') }}">{{ __('index.modules') }}</a></li>
+            <li class="breadcrumb-item active">{{ __('{{ moduleKey }}::{{ moduleKey }}.settings') }}</li>
+        </ol>
+    </nav>
+@stop
+
+@section('header')
+    <h1>{{ __('{{ moduleKey }}::{{ moduleKey }}.settings') }}</h1>
+@stop
+
+@section('settings')
+    <form method="post" action="{{ route('{{ moduleRoute }}.settings.update') }}">
+        @csrf
+        <div class="mb-3{{ hasError('sets[{{ moduleKey }}_per_page]') }}">
+            <label for="{{ moduleKey }}_per_page" class="form-label">{{ __('{{ moduleKey }}::{{ moduleKey }}.settings_per_page') }}:</label>
+            <input type="number" class="form-control" id="{{ moduleKey }}_per_page" name="sets[{{ moduleKey }}_per_page]" maxlength="3" value="{{ old('sets.{{ moduleKey }}_per_page', $settings['{{ moduleKey }}_per_page'] ?? 10) }}" required>
+            <div class="invalid-feedback">{{ textError('sets[{{ moduleKey }}_per_page]') }}</div>
+        </div>
+
+        <button class="btn btn-primary">{{ __('main.save') }}</button>
+    </form>
+@stop

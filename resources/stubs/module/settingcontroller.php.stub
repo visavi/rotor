@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\{{ module }}\Http\Controllers\Admin;
+
+use App\Http\Controllers\Admin\ModuleSettingController;
+
+class {{ module }}SettingController extends ModuleSettingController
+{
+    protected string $view = '{{ moduleKey }}::admin/settings/_{{ moduleKey }}';
+
+    protected string $route = '{{ moduleRoute }}.settings';
+}

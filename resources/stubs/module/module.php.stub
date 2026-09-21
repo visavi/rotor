@@ -1,0 +1,11 @@
+<?php
+{{ modelUse }}
+return [
+    'name'        => '{{ moduleTitle }}',
+    'description' => '',
+    'version'     => '1.0.0',
+    'requires'    => '{{ requires }}',
+    'author'      => '',
+    'email'       => '',
+    'homepage'    => '',
+{{ models }}{{ actions }}];

@@ -1,0 +1,9 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+{{ adminRoutesUse }}{{ apiRoutesUse }}use Modules\{{ module }}\Http\Controllers\{{ module }}Controller;
+
+Route::middleware('web')->group(function () {
+    Route::get('/{{ moduleRoute }}', [{{ module }}Controller::class, 'index'])->name('{{ moduleRoute }}.index');
+});
+{{ adminRoutes }}{{ apiRoutes }}

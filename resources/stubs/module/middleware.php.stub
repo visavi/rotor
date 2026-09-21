@@ -1,0 +1,6 @@
+<?php
+
+return [
+    // 'aliases' => ['{{ moduleKey }}' => \Modules\{{ module }}\Http\Middleware\Example::class],
+    // 'web'     => [\Modules\{{ module }}\Http\Middleware\Example::class],
+];

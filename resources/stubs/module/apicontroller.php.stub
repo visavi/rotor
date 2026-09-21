@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\{{ module }}\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Traits\HandlesApiPagination;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\{{ module }}\Http\Resources\{{ model }}Resource;
+use Modules\{{ module }}\Models\{{ model }};
+
+class {{ module }}ApiController extends Controller
+{
+    use HandlesApiPagination;
+
+    /**
+     * Список записей
+     */
+    public function index(Request $request): JsonResource
+    {
+        $items = {{ model }}::query()
+            ->orderByDesc('created_at')
+            ->with('user')
+            ->paginate($this->apiPerPage($request));
+
+        return {{ model }}Resource::collection($items);
+    }
+
+    /**
+     * Просмотр записи
+     */
+    public function view(int $id): JsonResource
+    {
+        $item = {{ model }}::query()->with('user')->findOrFail($id);
+
+        return {{ model }}Resource::make($item);
+    }
+}

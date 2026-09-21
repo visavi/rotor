@@ -1,0 +1,15 @@
+<?php
+
+namespace Modules\{{ module }}\Tests\Feature;
+
+use Tests\ModuleTestCase;
+
+class {{ module }}SmokeTest extends ModuleTestCase
+{
+    protected string $moduleName = '{{ module }}';
+
+    public function testIndexPageOpens(): void
+    {
+        $this->get('/{{ moduleRoute }}')->assertOk();
+    }
+}
