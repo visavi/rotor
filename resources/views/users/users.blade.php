@@ -75,8 +75,11 @@
 
                 <div class="section-body border-top user-card-stats">
                     <span><i class="fas fa-bolt"></i> {{ plural($data->point, setting('scorename')) }}</span>
-                    <span><i class="fas fa-star"></i> {{ formatNum($data->rating) }}</span>
                     <span><i class="fas fa-coins"></i> {{ plural($data->money, setting('moneyname')) }}</span>
+
+                    {{-- Метрики модулей идут за метриками ядра, до дат --}}
+                    @hook('userCardStats', $data)
+
                     <span data-bs-toggle="tooltip" title="{{ __('main.registration_date') }}"><i class="fas fa-calendar-plus"></i> {{ dateFixed($data->created_at, 'd.m.Y') }}</span>
                     <span data-bs-toggle="tooltip" title="{{ __('users.last_visit') }}"><i class="fas fa-clock"></i> {{ $data->getVisit() }}</span>
                 </div>

@@ -78,11 +78,11 @@ class AccountApiController extends Controller
     {
         $user = getUser();
 
-        $data = $userService->validateSettings($validator, $request);
+        $data = $userService->validateSettings($validator, $user, $request);
 
         $this->throwIfInvalid($validator);
 
-        $user->update($data);
+        $userService->saveSettings($user, $data, $request);
 
         return response()->json(['message' => __('users.settings_success_changed')]);
     }

@@ -79,6 +79,9 @@
                 <div class="invalid-feedback">{{ textError('gender') }}</div>
             </div>
 
+            {{-- Поля модулей: проверяет Registry::onRegisterValidate, сохраняет onRegisterSave --}}
+            @hook('registerFields')
+
             {{ getCaptcha() }}
 
             <button class="btn btn-primary">{{ __('index.register') }}</button>

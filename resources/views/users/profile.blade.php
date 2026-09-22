@@ -77,6 +77,7 @@ $inputGender  = old('gender', $user->gender);
                 <div class="col-md-6 mb-3{{ hasError('phone') }}">
                     <label for="inputPhone" class="form-label">{{ __('users.phone') }}:</label>
                     <input class="phone form-control" id="inputPhone" name="phone" placeholder="+7 ___ ___-__-__" maxlength="18" value="{{ old('phone', $user->phone) }}">
+                    <div class="form-text">{{ __('users.phone_hidden') }}</div>
                     <div class="invalid-feedback">{{ textError('phone') }}</div>
                 </div>
 

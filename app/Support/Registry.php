@@ -21,6 +21,10 @@ class Registry
     public static array $onAdminLog = [];
     public static array $onProfileValidate = [];
     public static array $onProfileSave = [];
+    public static array $onSettingsValidate = [];
+    public static array $onSettingsSave = [];
+    public static array $onRegisterValidate = [];
+    public static array $onRegisterSave = [];
     public static array $feeds = [];
     public static array $search = [];
     public static array $apiConfig = [];
@@ -175,6 +179,46 @@ class Registry
     public static function onProfileSave(callable $handler): void
     {
         static::$onProfileSave[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк валидации при сохранении настроек пользователя
+     *
+     * Колбэк вида fn(User $user, Request $request, Validator $validator): void
+     */
+    public static function onSettingsValidate(callable $handler): void
+    {
+        static::$onSettingsValidate[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк сохранения настроек пользователя
+     *
+     * Колбэк вида fn(User $user, Request $request): void — вызывается после успешной валидации
+     */
+    public static function onSettingsSave(callable $handler): void
+    {
+        static::$onSettingsSave[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк валидации полей модуля при регистрации
+     *
+     * Колбэк вида fn(Request $request, Validator $validator): void — пользователя ещё нет
+     */
+    public static function onRegisterValidate(callable $handler): void
+    {
+        static::$onRegisterValidate[] = $handler;
+    }
+
+    /**
+     * Регистрирует колбэк сохранения полей модуля после регистрации
+     *
+     * Колбэк вида fn(User $user, Request $request): void — пользователь уже создан
+     */
+    public static function onRegisterSave(callable $handler): void
+    {
+        static::$onRegisterSave[] = $handler;
     }
 
     /**

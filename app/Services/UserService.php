@@ -210,7 +210,7 @@ class UserService
      *
      * @return array<string, mixed> поля для сохранения
      */
-    public function validateSettings(Validator $validator, Request $request): array
+    public function validateSettings(Validator $validator, User $user, Request $request): array
     {
         $themes = $request->input('themes');
         $timezone = $request->input('timezone', 0);
@@ -223,6 +223,10 @@ class UserService
             ->in($language, getAvailableLanguages(), ['language' => __('users.language_not_installed')])
             ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => __('users.timezone_invalid')]);
 
+        foreach (Registry::$onSettingsValidate as $handler) {
+            $handler($user, $request, $validator);
+        }
+
         return [
             'themes'         => $themes,
             'timezone'       => $timezone,
@@ -233,6 +237,20 @@ class UserService
             'subscribe' => $request->input('subscribe') ? Str::random(32) : null,
             'language'  => $language,
         ];
+    }
+
+    /**
+     * Сохранение настроек с полями модулей
+     *
+     * @param array<string, mixed> $data
+     */
+    public function saveSettings(User $user, array $data, Request $request): void
+    {
+        $user->update($data);
+
+        foreach (Registry::$onSettingsSave as $handler) {
+            $handler($user, $request);
+        }
     }
 
     /**

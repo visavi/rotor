@@ -1221,6 +1221,11 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
     margin-top: .75rem;
 }
 
+a.profile-stat,
+a.profile-stat:hover {
+    text-decoration: none;
+}
+
 .profile-stat b {
     font-size: 1.1rem;
 }
@@ -1246,17 +1251,70 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 .profile-fields dd {
     margin: 0;
     font-weight: 600;
+    /* Значение может быть ссылкой или длинным словом без пробелов — оно не должно рвать сетку */
+    overflow-wrap: anywhere;
+}
+
+/* Многострочные поля приходят абзацами: полужирный на целом рассказе о себе выглядит криком */
+.profile-fields dd p {
+    font-weight: 400;
+    margin-bottom: .35rem;
+}
+
+.profile-fields dd p:last-child {
+    margin-bottom: 0;
 }
 
 /* Строки «иконка + ссылка»: разметку задают и ядро, и модули через хуки */
-.profile-actions i {
+.profile-action {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    /* Отрицательные поля съедают паддинг секции (15px), чтобы подсветка шла до её краёв */
+    margin: 0 -15px;
+    padding: .4rem 15px;
+    border-bottom: 1px solid var(--bs-border-color);
+    text-decoration: none;
+    transition: background-color .15s ease;
+}
+
+.profile-action:last-child {
+    border-bottom: 0;
+}
+
+/* text-decoration сбрасывается и в hover: у Bootstrap a:hover специфичнее класса */
+.profile-action:hover {
+    background: var(--bs-tertiary-bg);
+    text-decoration: none;
+}
+
+.profile-action:hover i {
+    color: var(--bs-primary);
+}
+
+.profile-action i {
     width: 1.25rem;
     color: var(--bs-secondary-color);
     text-align: center;
 }
 
-.profile-actions a {
-    line-height: 1.9;
+/* Счётчик и стрелка прижаты к правому краю строки */
+.profile-action .badge {
+    margin-left: auto;
+}
+
+.profile-action::after {
+    content: "\f054";
+    margin-left: auto;
+    font-family: "Font Awesome 7 Free";
+    font-weight: 900;
+    font-size: .7rem;
+    color: var(--bs-secondary-color);
+}
+
+/* Со счётчиком край строки занимает он, стрелке остаётся отступ от него */
+.profile-action:has(.badge)::after {
+    margin-left: .5rem;
 }
 
 /* Карточка пользователя в списке */
@@ -1571,4 +1629,117 @@ a.stat-tile:hover {
     .settings-nav { position: sticky; top: .5rem; max-height: calc(100vh - 1rem); overflow-x: hidden; overflow-y: auto; }
     /* Пунктов три десятка — обычный padding делает список выше экрана */
     .settings-nav .nav-link { padding-top: .3rem; padding-bottom: .3rem; }
+}
+
+/* Разделы с активностью пользователя в анкете */
+.profile-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: .75rem;
+}
+
+.profile-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .85rem .5rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.profile-link:hover {
+    background: var(--bs-tertiary-bg);
+    border-color: var(--bs-primary);
+    transform: translateY(-2px);
+}
+
+.profile-link:hover .profile-link-main i {
+    color: var(--bs-primary);
+}
+
+.profile-link-main,
+.profile-link-main:hover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .25rem;
+    /* при наведении подсвечивается вся карточка, подчёркивание тут лишнее */
+    text-decoration: none;
+}
+
+.profile-link-main i {
+    font-size: 1.25rem;
+    color: var(--bs-secondary-color);
+}
+
+.profile-link-count {
+    font-size: 1.15rem;
+}
+
+.profile-link-extra,
+.profile-link-extra:hover {
+    text-decoration: none;
+    margin-top: .35rem;
+    /* Вторая ссылка карточки — овалом: иначе её не отличить от подписи.
+       Рамка, а не фон: под ней меняется подложка, когда карточка подсвечена */
+    padding: .1rem .5rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 2rem;
+    font-size: .8125rem;
+    color: var(--bs-secondary-color);
+    transition: border-color .15s ease, color .15s ease;
+}
+
+.profile-link-extra:hover {
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+.profile-link-extra-count::before {
+    content: " · ";
+}
+
+
+/* Блок репутации в анкете: итог, доля плюсов, полоса и голосование */
+.profile-rating-head {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .5rem;
+}
+
+.profile-rating-total {
+    font-size: 1.35rem;
+}
+
+.profile-rating-vote {
+    display: flex;
+    gap: .35rem;
+}
+
+.profile-rating-bar {
+    height: .4rem;
+    border-radius: 2rem;
+    /* Красная подложка, зелёная доля поверх: две полосы одной */
+    background: var(--bs-danger);
+    overflow: hidden;
+}
+
+.profile-rating-bar span {
+    display: block;
+    height: 100%;
+    background: var(--bs-success);
+}
+
+.profile-rating-legend {
+    display: flex;
+    gap: .9rem;
+    margin-top: .4rem;
+    font-size: .8125rem;
+}
+
+.profile-rating-legend a,
+.profile-rating-legend a:hover {
+    text-decoration: none;
 }

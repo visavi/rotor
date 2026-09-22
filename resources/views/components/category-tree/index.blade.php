@@ -11,7 +11,7 @@
     // Деревьев на странице может быть несколько, общий id увёл бы их в одно поле
     $orderId = 'category-tree-order-' . uniqid();
 
-    $tree = view('components.category-tree-node', [
+    $tree = view('components.category-tree.node', [
         'items'    => $items,
         'row'      => $row,
         'sortable' => $sortable,

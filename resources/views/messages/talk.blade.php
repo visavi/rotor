@@ -14,6 +14,13 @@
 
 @section('content')
 
+    {{-- Действия над собеседником: подарок, перевод и прочее от модулей --}}
+    @if ($user->exists)
+        <x-section body-class="profile-actions">
+            @hook('messageActions', $user)
+        </x-section>
+    @endif
+
     @if ($messages->isNotEmpty())
         <div class="mb-3">
             @foreach ($messages as $data)
@@ -100,6 +107,9 @@
                 @if (getUser('point') < setting('privatprotect'))
                     {{ getCaptcha() }}
                 @endif
+
+                {{-- Кнопки модулей рядом с отправкой --}}
+                @hook('messageFormEnd', $user)
 
                 <button class="btn btn-primary">{{ __('main.write') }}</button>
             </form>

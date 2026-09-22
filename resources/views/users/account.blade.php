@@ -142,4 +142,7 @@
             {{ __('users.token_required') }} <a href="/api">{{ __('users.api_interface') }}</a>
         </span>
     </div>
+
+    {{-- Свои секции модулей: привязки, сессии и прочее, что относится к аккаунту --}}
+    @hook('accountSections', $user)
 @stop

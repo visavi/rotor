@@ -33,16 +33,32 @@ $hasPicture = $user->picture && file_exists(public_path($user->picture));
 $point = plural($user->point, setting('scorename'));
 $money = plural($user->money, setting('moneyname'));
 
-// Поля анкеты: пустые не показываются, поэтому собираются заранее
+// В базе лежит только сдвиг в часах, название пояса по нему не восстановить,
+// поэтому в анкете показывается местное время пользователя
+$localTime = now()->addHours((int) $user->timezone)->format('H:i');
+
+// Название языка берётся из его же переводов, как в модалке выбора языка.
+// Ключа может не быть — тогда остаётся код
+$language = (string) $user->language;
+$langName = __('main.lang', [], $language);
+$langName = $langName === 'main.lang' ? strtoupper($language) : $langName;
+
+// Поля анкеты: пустые не показываются, поэтому собираются заранее.
+// Список разбит надвое — между частями встают поля модулей: они продолжают
+// рассказ о человеке, а настройки отображения и даты замыкают список
 $fields = array_filter([
-    __('users.gender')            => $user->gender === 'male' ? __('main.male') : __('main.female'),
-    __('users.country')           => $user->country,
-    __('users.city')              => $user->city,
-    __('users.birthday')          => $user->birthday,
-    __('users.phone')             => $user->phone ? new Illuminate\Support\HtmlString('<a href="tel:' . e($user->phone) . '">' . e($user->phone) . '</a>') : null,
-    __('users.theme')             => $user->themes,
-    __('main.registration_date')  => dateFixed($user->created_at, 'd.m.Y'),
-    __('users.last_visit')        => $user->getVisit(),
+    __('users.gender')   => $user->gender === 'male' ? __('main.male') : __('main.female'),
+    __('users.country')  => $user->country,
+    __('users.city')     => $user->city,
+    __('users.birthday') => $user->birthday,
+]);
+
+$serviceFields = array_filter([
+    __('users.theme')            => $user->themes,
+    __('users.language')         => $language ? $langName : null,
+    __('users.local_time')       => $localTime,
+    __('main.registration_date') => dateFixed($user->created_at, 'd.m.Y'),
+    __('users.last_visit')       => $user->getVisit(),
 ]);
 @endphp
 
@@ -103,6 +119,9 @@ $fields = array_filter([
                         <b>{{ Str::beforeLast($money, ' ') }}</b>
                         <small>{{ Str::afterLast($money, ' ') }}</small>
                     </span>
+
+                    {{-- Метрики модулей идут теми же плитками (компонент profile-stat) --}}
+                    @hook('userStats', $user)
                 </div>
 
             </div>
@@ -118,9 +137,16 @@ $fields = array_filter([
                     <dt>{{ $label }}</dt>
                     <dd>{!! $value !!}</dd>
                 @endforeach
+
+                {{-- Поля модулей идут тем же списком: хук отдаёт пары компонентом profile.field --}}
+                @hook('userFields', $user)
+
+                @foreach ($serviceFields as $label => $value)
+                    <dt>{{ $label }}</dt>
+                    <dd>{!! $value !!}</dd>
+                @endforeach
             </dl>
 
-            @hook('userFields', $user)
             @hook('userEnd', $user)
         </div>
     </div>
@@ -132,46 +158,46 @@ $fields = array_filter([
         </div>
     @endif
 
-    <ul class="list-inline mb-3">@hook('userProfileLinks', $user)</ul>
+    {{-- Ссылки на разделы приходят из модулей карточками (компонент profile.link) --}}
+    <x-section :title="__('users.activity')" icon="fas fa-chart-simple" body-class="profile-links">
+        @hook('userProfileLinks', $user)
+    </x-section>
 
-    <?php ob_start(); ?>
+    {{-- Свои секции модулей: идут между разделами и блоком действий --}}
+    @hook('userSections', $user)
+
+    {{-- Блок состоит из хуков и ссылок для авторизованных, у гостя он пустой.
+         Строки рисует компонент profile.action, модули отдают его через хуки --}}
+    <x-section body-class="profile-actions">
         @hook('userActionStart', $user)
 
         @if ($user->site)
-            <i class="fa fa-home"></i> <a href="{{ $user->site }}">{{ __('users.go_website') }} {{ $user->getName() }}</a><br>
+            <x-profile.action icon="fa fa-home" :label="__('users.go_website') . ' ' . $user->getName()" :url="$user->site" />
         @endif
         @hook('userActionMiddle', $user)
 
         @if (getUser())
             @if ($user->login === getUser('login'))
                 @hook('userPersonalStart')
-                <i class="fa fa-user-circle"></i> <a href="/profile">{{ __('index.my_profile') }}</a><br>
-                <i class="fa fa-cog"></i> <a href="/accounts">{{ __('index.my_details') }}</a><br>
-                <i class="fa fa-wrench"></i> <a href="/settings">{{ __('index.my_settings') }}</a><br>
+                <x-profile.action icon="fa fa-user-circle" :label="__('index.my_profile')" url="/profile" />
+                <x-profile.action icon="fa fa-cog" :label="__('index.my_details')" url="/accounts" />
+                <x-profile.action icon="fa fa-wrench" :label="__('index.my_settings')" url="/settings" />
                 @hook('userPersonalEnd')
             @else
                 @hook('userNotPersonalStart', $user)
-                <i class="fa fa-envelope"></i> <a href="/messages/talk/{{ $user->login }}">{{ __('users.send_message') }}</a><br>
+                <x-profile.action icon="fa fa-envelope" :label="__('users.send_message')" url="/messages/talk/{{ $user->login }}" />
 
                 @if (isAdmin('moder'))
-                    <i class="fa fa-ban"></i> <a href="/admin/bans/edit?user={{ $user->login }}">{{ __('index.ban_unban') }}</a><br>
-                    <i class="fa fa-history"></i> <a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a><br>
+                    <x-profile.action icon="fa fa-ban" :label="__('index.ban_unban')" url="/admin/bans/edit?user={{ $user->login }}" />
+                    <x-profile.action icon="fa fa-history" :label="__('index.ban_history')" url="/admin/banhists/view?user={{ $user->login }}" />
                 @endif
 
                 @if (isAdmin('boss'))
-                    <i class="fa fa-wrench"></i> <a href="/admin/users/edit?user={{ $user->login }}">{{ __('main.edit') }}</a><br>
+                    <x-profile.action icon="fa fa-wrench" :label="__('main.edit')" url="/admin/users/edit?user={{ $user->login }}" />
                 @endif
                 @hook('userNotPersonalEnd', $user)
             @endif
         @endif
         @hook('userActionEnd', $user)
-    <?php $actions = ob_get_clean(); ?>
-
-    {{-- Блок состоит из хуков и ссылок для авторизованных, у гостя он пустой.
-         Разметка строками «иконка + ссылка», как её отдают модули --}}
-    @if (trim(strip_tags($actions)))
-        <div class="section mb-3 shadow">
-            <div class="section-body profile-actions">{!! $actions !!}</div>
-        </div>
-    @endif
+    </x-section>
 @stop

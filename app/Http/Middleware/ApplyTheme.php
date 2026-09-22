@@ -31,8 +31,13 @@ class ApplyTheme
 
         $theme = $user->themes ?? setting('themes', 'default');
 
-        if (! file_exists(resource_path('views/themes/' . $theme))) {
+        // Тему могли удалить с диска — откатываемся на общую, а если снесли и её, на default
+        if (! is_dir(resource_path('views/themes/' . $theme))) {
             $theme = setting('themes', 'default');
+
+            if (! is_dir(resource_path('views/themes/' . $theme))) {
+                $theme = 'default';
+            }
         }
 
         // replaceNamespace, а не addNamespace: последний накапливает пути, и внутри

@@ -10,6 +10,7 @@ use App\Models\Flood;
 use App\Models\User;
 use App\Services\MailService;
 use App\Services\UserService;
+use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -63,9 +64,17 @@ class UserController extends Controller
 
                 $userService->validateRegistration($validator, $login, $password, $password2, $email);
 
+                foreach (Registry::$onRegisterValidate as $handler) {
+                    $handler($request, $validator);
+                }
+
                 // Регистрация аккаунта
                 if ($validator->isValid()) {
                     $user = $userService->register($login, $password, $email, $gender);
+
+                    foreach (Registry::$onRegisterSave as $handler) {
+                        $handler($user, $request);
+                    }
 
                     Auth::login($user, true);
 
@@ -285,10 +294,10 @@ class UserController extends Controller
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {
-            $data = $userService->validateSettings($validator, $request);
+            $data = $userService->validateSettings($validator, $user, $request);
 
             if ($validator->isValid()) {
-                $user->update($data);
+                $userService->saveSettings($user, $data, $request);
 
                 return redirect('settings')
                     ->with('success', __('users.settings_success_changed'));

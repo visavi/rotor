@@ -86,6 +86,9 @@ $notifications = [
             @endforeach
         </div>
 
+        {{-- Настройки модулей: поля сохраняет Registry::onSettingsValidate/onSettingsSave --}}
+        @hook('settingsFields', $user)
+
         <button class="btn btn-primary">{{ __('main.change') }}</button>
     </form>
 @stop
