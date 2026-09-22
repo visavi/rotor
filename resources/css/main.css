@@ -1743,3 +1743,12 @@ a.stat-tile:hover {
 .profile-rating-legend a:hover {
     text-decoration: none;
 }
+
+/* Кнопка выбора цвета стоит в input-group рядом с текстовым полем: Bootstrap даёт ей
+   свой padding и высоту, из-за чего она выбивалась из ряда */
+.colorpicker-addon {
+    flex: 0 0 auto;
+    width: 3rem;
+    height: auto;
+    padding: .25rem;
+}

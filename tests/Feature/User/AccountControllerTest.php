@@ -35,16 +35,12 @@ class AccountControllerTest extends TestCase
         ]);
     }
 
-    public function testAccountPageIsShown(): void
+    public function testAccountPageRedirectsToSettings(): void
     {
+        // Страница объединена с настройками, старый адрес только перенаправляет
         $this->actingAs($this->user)
             ->get('/accounts')
-            ->assertOk();
-    }
-
-    public function testAccountPageRequiresAuth(): void
-    {
-        $this->get('/accounts')->assertForbidden();
+            ->assertRedirect('settings#tab-account');
     }
 
     public function testChangeMailCreatesRequest(): void
@@ -55,7 +51,7 @@ class AccountControllerTest extends TestCase
                 'password' => 'secret123',
             ]);
 
-        $response->assertRedirect('accounts');
+        $response->assertRedirect('settings#tab-account');
 
         $this->assertDatabaseHas('email_changes', [
             'user_id' => $this->user->id,
@@ -139,7 +135,7 @@ class AccountControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get('/accounts/editmail/token-for-test');
 
-        $response->assertRedirect(route('accounts.account'));
+        $response->assertRedirect('settings#tab-account');
 
         $this->user->refresh();
         $this->assertSame('new-account@example.com', $this->user->email);
@@ -156,7 +152,7 @@ class AccountControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->post('/accounts/editstatus', ['status' => 'Тестовый']);
 
-        $response->assertRedirect('accounts');
+        $response->assertRedirect('settings#tab-appearance');
 
         $this->user->refresh();
 
@@ -199,7 +195,7 @@ class AccountControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->post('/accounts/editcolor', ['color' => '#123456']);
 
-        $response->assertRedirect('accounts');
+        $response->assertRedirect('settings#tab-appearance');
 
         $this->user->refresh();
 
@@ -233,7 +229,7 @@ class AccountControllerTest extends TestCase
         $response = $this->actingAs($this->user)
             ->post('/accounts/apikey', ['action' => 'create']);
 
-        $response->assertRedirect('accounts');
+        $response->assertRedirect('settings#tab-api');
 
         $this->user->refresh();
         $this->assertSame(32, strlen((string) $this->user->apikey));

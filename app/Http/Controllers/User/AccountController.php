@@ -15,22 +15,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class AccountController extends Controller
 {
-    /**
-     * User data
-     */
-    public function account(): View
-    {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        return view('users/account', compact('user'));
-    }
-
     /**
      * Initialize email change
      */
@@ -45,14 +32,14 @@ class AccountController extends Controller
         $userService->validateEmailChange($validator, $user, $email, $request->input('password'));
 
         if (! $validator->isValid()) {
-            return redirect('accounts')
+            return redirect('settings#tab-account')
                 ->withInput()
                 ->withErrors($validator->getErrors());
         }
 
         $userService->requestEmailChange($user, $email);
 
-        return redirect('accounts')
+        return redirect('settings#tab-account')
             ->with('success', __('users.confirm_success_sent'));
     }
 
@@ -95,7 +82,7 @@ class AccountController extends Controller
             $flash = ['danger', $validator->getErrors()];
         }
 
-        return redirect()->route('accounts.account')
+        return redirect('settings#tab-account')
             ->with(...$flash);
     }
 
@@ -120,7 +107,7 @@ class AccountController extends Controller
             ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false);
 
         if (! $validator->isValid()) {
-            return redirect('accounts')
+            return redirect('settings#tab-appearance')
                 ->withInput()
                 ->withErrors($validator->getErrors());
         }
@@ -132,7 +119,7 @@ class AccountController extends Controller
 
         clearCache('status');
 
-        return redirect('accounts')
+        return redirect('settings#tab-appearance')
             ->with('success', __('users.status_success_changed'));
     }
 
@@ -156,7 +143,7 @@ class AccountController extends Controller
             ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
 
         if (! $validator->isValid()) {
-            return redirect('accounts')
+            return redirect('settings#tab-appearance')
                 ->withInput()
                 ->withErrors($validator->getErrors());
         }
@@ -166,7 +153,7 @@ class AccountController extends Controller
             'money' => DB::raw('money - ' . $cost),
         ]);
 
-        return redirect('accounts')
+        return redirect('settings#tab-appearance')
             ->with('success', __('users.color_success_changed'));
     }
 
@@ -197,7 +184,7 @@ class AccountController extends Controller
             return redirect('/')->with('success', __('users.password_success_changed'));
         }
 
-        return redirect('accounts')
+        return redirect('settings#tab-account')
             ->withErrors($validator->getErrors())
             ->withInput();
     }
@@ -227,7 +214,7 @@ class AccountController extends Controller
             'apikey' => $apiKey,
         ]);
 
-        return redirect('accounts')
+        return redirect('settings#tab-api')
             ->with('success', $message);
     }
 

@@ -29,7 +29,6 @@
                         @endif
                         <li><a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a></li>
                         <li><a class="dropdown-item" href="{{ route('profile') }}">{{ __('index.my_profile') }}</a></li>
-                        <li><a class="dropdown-item" href="{{ route('accounts.account') }}">{{ __('index.my_details') }}</a></li>
                         <li><a class="dropdown-item" href="{{ route('settings') }}">{{ __('index.my_settings') }}</a></li>
                         @hook('navbarMenuEnd')
                         <li><hr class="dropdown-divider"></li>

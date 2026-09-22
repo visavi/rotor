@@ -40,7 +40,6 @@
                         @hook('navbarMenuStart')
                         <a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a>
                         <a class="dropdown-item" href="{{ route('profile') }}">{{ __('index.my_profile') }}</a>
-                        <a class="dropdown-item" href="{{ route('accounts.account') }}">{{ __('index.my_details') }}</a>
                         <a class="dropdown-item" href="{{ route('settings') }}">{{ __('index.my_settings') }}</a>
                         @if (isAdmin())
                             <a class="dropdown-item" href="{{ route('admin.index') }}" rel="nofollow">{{ __('index.panel') }}</a>

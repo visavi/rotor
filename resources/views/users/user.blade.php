@@ -180,7 +180,6 @@ $serviceFields = array_filter([
             @if ($user->login === getUser('login'))
                 @hook('userPersonalStart')
                 <x-profile.action icon="fa fa-user-circle" :label="__('index.my_profile')" url="/profile" />
-                <x-profile.action icon="fa fa-cog" :label="__('index.my_details')" url="/accounts" />
                 <x-profile.action icon="fa fa-wrench" :label="__('index.my_settings')" url="/settings" />
                 @hook('userPersonalEnd')
             @else

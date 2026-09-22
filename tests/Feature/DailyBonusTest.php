@@ -96,7 +96,7 @@ class DailyBonusTest extends TestCase
 
         // Оба видны на странице, куда ведёт редирект
         $this->actingAs($user)
-            ->get('/accounts')
+            ->get('/settings')
             ->assertSee(__('users.token_success_created'))
             ->assertSee(__('main.daily_bonus', [
                 'money' => plural(setting('bonusmoney'), setting('moneyname')),

@@ -160,7 +160,8 @@ Route::controller(AccountController::class)
     ->prefix('accounts')
     ->name('accounts.')
     ->group(function () {
-        Route::get('/', 'account')->name('account');
+        // Страница объединена с настройками, адрес остаётся ради старых ссылок
+        Route::get('/', fn () => redirect('settings#tab-account'))->name('account');
         Route::post('/changemail', 'changeMail')->name('change-mail');
         Route::get('/editmail/{token}', 'editMail')->name('edit-mail');
         Route::post('/editstatus', 'editStatus')->name('edit-status');

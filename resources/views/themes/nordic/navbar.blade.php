@@ -68,7 +68,6 @@
                     @hook('navbarMenuStart')
                     <li><a class="dropdown-item" href="{{ route('users.user', ['login' => getUser('login')]) }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
                     <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>
-                    <li><a class="dropdown-item" href="{{ route('accounts.account') }}"><i class="fas fa-user-cog fa-lg"></i> {{ __('index.my_details') }}</a></li>
                     <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
                     @if (isAdmin())
                         <li><a class="dropdown-item" href="{{ route('admin.index') }}" rel="nofollow"><i class="fas fa-wrench fa-lg"></i> {{ __('index.panel') }}</a></li>

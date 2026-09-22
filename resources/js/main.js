@@ -140,6 +140,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el))
 
+    // Вкладки переживают перезагрузку: форма с ошибкой уводит на ту же страницу,
+    // и без этого пользователь оказался бы на первой вкладке, не увидев, где ошибка
+    const tabs = document.querySelectorAll('[data-tabs] [data-bs-toggle="tab"]')
+
+    if (tabs.length) {
+        const showTab = target => {
+            const trigger = [...tabs].find(tab => tab.dataset.bsTarget === target)
+
+            if (trigger) bootstrap.Tab.getOrCreateInstance(trigger).show()
+        }
+
+        // Ошибка валидации важнее сохранённой вкладки: открываем ту, где она случилась
+        const invalid = document.querySelector('[data-tabs] .tab-pane .is-invalid')
+
+        if (invalid) {
+            showTab('#' + invalid.closest('.tab-pane').id)
+        } else if (location.hash) {
+            showTab(location.hash)
+        }
+
+        // Адрес с вкладкой можно сохранить и переслать, история браузера не засоряется
+        tabs.forEach(tab => {
+            tab.addEventListener('shown.bs.tab', () => history.replaceState(null, '', tab.dataset.bsTarget))
+        })
+    }
+
     const colorpicker = document.querySelector('.colorpicker')
     const colorpickerAddon = document.querySelector('.colorpicker-addon')
     if (colorpicker && colorpickerAddon) {
