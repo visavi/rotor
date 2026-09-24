@@ -13,9 +13,9 @@
 
 @section('content')
     @if ($categories->isNotEmpty())
-        <div class="sticker-categories">
+        <div class="tile-grid">
             @foreach ($categories as $category)
-                <a class="sticker-category" href="/stickers/{{ $category->id }}">
+                <a class="tile sticker-category" href="/stickers/{{ $category->id }}">
                     <span class="sticker-category-title">
                         {{ $category->name }} <span class="badge bg-adaptive">{{ $category->cnt }}</span>
                     </span>

@@ -20,9 +20,9 @@ $tiles = [
 ];
 @endphp
 
-<div class="info-tiles">
+<div class="tile-grid">
     @foreach ($tiles as $tile)
-        <a class="info-tile" href="{{ $tile['url'] }}">
+        <a class="tile info-tile" href="{{ $tile['url'] }}">
             <span class="info-tile-icon"><i class="fas {{ $tile['icon'] }}"></i></span>
 
             <span class="info-tile-body">

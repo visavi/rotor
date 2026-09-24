@@ -12,7 +12,7 @@
 .code .pln { color: var(--base-code); }
 
 .code {
-  background: var(--base-bg);
+  background: var(--code-bg, var(--base-bg));
   color: var(--base-color);
   display: block;
   white-space: pre;

@@ -4,7 +4,7 @@
     $tag = $widget['url'] ? 'a' : 'div';
 @endphp
 
-<{{ $tag }} @if ($widget['url']) href="{{ $widget['url'] }}" @endif class="stat-tile shadow-sm">
+<{{ $tag }} @if ($widget['url']) href="{{ $widget['url'] }}" @endif class="tile stat-tile">
     <div class="stat-tile-head">
         <span class="stat-tile-icon" style="background: {{ $widget['color'] }}1a; color: {{ $widget['color'] }}">
             <i class="{{ $widget['icon'] }}"></i>

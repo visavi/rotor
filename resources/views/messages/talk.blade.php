@@ -14,12 +14,15 @@
 
 @section('content')
 
-    {{-- Действия над собеседником: подарок, перевод и прочее от модулей --}}
-    @if ($user->exists)
-        <x-section body-class="profile-actions">
+    {{-- Действия над собеседником одной строкой ссылок, как в теме форума: подарок,
+         перевод и прочее от модулей --}}
+    <div class="actions-inline d-flex flex-wrap align-items-center column-gap-3 row-gap-1 mb-2">
+        @if ($user->exists)
             @hook('messageActions', $user)
-        </x-section>
-    @endif
+        @endif
+
+        <a class="ms-auto d-inline-flex align-items-center gap-1" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+    </div>
 
     @if ($messages->isNotEmpty())
         <div class="mb-3">
@@ -78,7 +81,15 @@
             @endforeach
         </div>
 
-        {{ $messages->links() }}
+        {{-- Счётчик рядом со страницами: без пагинации он один прижат вправо.
+             Отступ снизу у счётчика тот же, что у списка страниц, — так они на одной линии --}}
+        <div class="d-flex flex-wrap align-items-center column-gap-2">
+            {{ $messages->links() }}
+
+            <span class="ms-auto mb-3 text-muted">
+                {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
+            </span>
+        </div>
     @else
         <div class="section mb-3 shadow">
             <div class="section-body d-flex flex-column align-items-center text-muted py-4">
@@ -116,20 +127,13 @@
         </div>
     @endif
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-        <span class="text-muted">
-            {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
-            <a class="ms-3" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
-        </span>
-
-        @if ($messages->isNotEmpty())
-            <form action="/messages/delete/{{ $user->id }}" method="post" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>
-            </form>
-        @endif
-    </div>
+    @if ($messages->isNotEmpty())
+        <form class="text-end mb-3" action="/messages/delete/{{ $user->id }}" method="post" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
+            @csrf
+            @method('DELETE')
+            <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>
+        </form>
+    @endif
 @stop
 
 @push('scripts')

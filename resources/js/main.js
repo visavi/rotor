@@ -35,9 +35,13 @@ function getNavbarHeight() {
     return max
 }
 
-// Прокрутка к элементу с поправкой на липкую шапку
+// Прокрутка к элементу с поправкой на липкую шапку. Свой scroll-margin-top цель
+// задаёт, когда над ней есть что показать — например переключатель вкладок
 function scrollToElement(el, behavior = 'smooth') {
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - getNavbarHeight(), behavior })
+    const margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0
+    const offset = Math.max(getNavbarHeight(), margin)
+
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior })
 }
 
 // Длинные тексты сворачиваются до --short-view-max, но кнопка нужна только когда
@@ -165,6 +169,18 @@ document.addEventListener('DOMContentLoaded', function () {
             tab.addEventListener('shown.bs.tab', () => history.replaceState(null, '', tab.dataset.bsTarget))
         })
     }
+
+    // Полоса вкладок на мобиле листается вбок: выбранная не должна остаться за краем.
+    // scrollIntoView не годится — он двигает и саму страницу
+    const revealTab = tab => {
+        const strip = tab.closest('.nav-tabs')
+        strip.scrollLeft = tab.offsetLeft - (strip.clientWidth - tab.offsetWidth) / 2
+    }
+
+    document.querySelectorAll('.nav-tabs .nav-link.active').forEach(revealTab)
+    document.querySelectorAll('.nav-tabs [data-bs-toggle="tab"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', () => revealTab(tab))
+    })
 
     const colorpicker = document.querySelector('.colorpicker')
     const colorpickerAddon = document.querySelector('.colorpicker-addon')

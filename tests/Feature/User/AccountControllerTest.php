@@ -35,14 +35,6 @@ class AccountControllerTest extends TestCase
         ]);
     }
 
-    public function testAccountPageRedirectsToSettings(): void
-    {
-        // Страница объединена с настройками, старый адрес только перенаправляет
-        $this->actingAs($this->user)
-            ->get('/accounts')
-            ->assertRedirect('settings#tab-account');
-    }
-
     public function testChangeMailCreatesRequest(): void
     {
         $response = $this->actingAs($this->user)

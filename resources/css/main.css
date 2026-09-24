@@ -4,10 +4,21 @@
  * это нужно и темам без сборки (см. resources/views/themes/simple).
  */
 
-/* Палитра подсветки кода для /assets/css/prettify.css */
+/* Подложка сайта: фон страницы под блоками, форм, облачков переписки.
+   Темы переопределяют; тема без своего значения берёт это */
 :root,
 [data-bs-theme="light"] {
     --base-bg: #f2f2f2;
+}
+
+[data-bs-theme="dark"] {
+    --base-bg: #282c34;
+}
+
+/* Палитра подсветки кода для resources/css/prettify.css. Фон кода — --code-bg,
+   без неё код лежит на подложке сайта */
+:root,
+[data-bs-theme="light"] {
     --base-color: #000;
     --base-tag: #00f;
     --base-emphasis: #a8a8a2;
@@ -25,7 +36,6 @@
 }
 
 [data-bs-theme="dark"] {
-    --base-bg: #282c34;
     --base-color: #f8f8f2;
     --base-tag: #66d9ef;
     --base-emphasis: #a8a8a2;
@@ -49,6 +59,15 @@
  */
 :root {
     --bs-focus-ring-color: rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Цвета голосования и подсветка строк/плиток при наведении. Подсветка — полупрозрачная
+   накладка, а не переменная темы: --bs-tertiary-bg в тёмной теме почти не отличается
+   от подложки, и наведение там не читалось */
+:root {
+    --rating-up: #78c062;
+    --rating-down: #f75c48;
+    --hover-bg: rgba(128, 128, 128, .15);
 }
 
 .form-check-input:checked,
@@ -196,10 +215,16 @@ body.modal-open {
     margin-bottom: 1.25rem;
 }
 
+/* Размер аватара задаёт --avatar-size на обёртке: от него считаются буква заглушки
+   и значок «онлайн». Без обёртки действует размер из :root */
+:root {
+    --avatar-size: 4rem;
+}
+
 .avatar-default {
-    height: 4rem;
-    width: 4rem;
-    font-size: 2.625rem;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    font-size: calc(var(--avatar-size) * .65);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -208,45 +233,37 @@ body.modal-open {
     color: #fff;
 }
 
-.avatar-mini > .avatar-default {
-    height: 2rem;
-    width: 2rem;
-    font-size: 1.3125rem;
+.avatar-mini {
+    --avatar-size: 2rem;
 }
 
-.avatar-micro > .avatar-default {
-    height: 1.25rem;
-    width: 1.25rem;
-    font-size: 0.875rem;
+.avatar-micro {
+    --avatar-size: 1.25rem;
 }
 
 .avatar-guest {
     background-color: #6aaab6;
-    line-height: 4rem;
-}
-
-@media (max-width: 768px) {
-    .avatar-guest {
-        line-height: 3rem;
-    }
+    line-height: var(--avatar-size);
 }
 
 .user-avatar {
-    width: 4rem;
-    height: 4rem;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
     float: left;
     margin-right: 14px;
 }
 
+/* Значок «онлайн» в правом нижнем углу аватара, у маленьких аватаров не мельче .875rem */
 .user-status {
-    width: 1.125rem;
-    height: 1.125rem;
+    --status-size: max(.875rem, calc(var(--avatar-size) * .28));
+    width: var(--status-size);
+    height: var(--status-size);
     position: relative;
     border-radius: 50%;
     z-index: 1;
-    border: 2px solid #fff;
-    left: 2.75rem;
-    bottom: 1.125rem;
+    border: 2px solid var(--bs-body-bg);
+    left: calc(var(--avatar-size) - var(--status-size));
+    bottom: var(--status-size);
 }
 
 @media (max-width: 768px) {
@@ -254,23 +271,12 @@ body.modal-open {
         margin: 0 -15px;
     }
 
+    :root {
+        --avatar-size: 3rem;
+    }
+
     .user-avatar {
-        width: 48px;
-        height: 48px;
         margin-right: 10px;
-    }
-
-    .user-status {
-        width: 0.875rem;
-        height: 0.875rem;
-        left: 2rem;
-        bottom: 0.875rem;
-    }
-
-    .avatar-default {
-        height: 3rem;
-        width: 3rem;
-        font-size: 2rem;
     }
 
     .section-user {
@@ -333,14 +339,14 @@ textarea.form-control {
 
 .post-rating-up.active {
     color: #fff;
-    background-color: #78c062;
+    background-color: var(--rating-up);
     display: inline-block;
     border-radius: 20px;
 }
 
 .post-rating-down.active {
     color: #fff;
-    background-color: #f75c48;
+    background-color: var(--rating-down);
     display: inline-block;
     border-radius: 20px;
 }
@@ -420,7 +426,7 @@ textarea.form-control {
     width: 100px;
     height: 100px;
     object-fit: cover;
-    border: 1px solid #ccc;
+    border: 1px solid var(--bs-border-color);
     border-radius: 3px;
     margin: 3px 0;
 }
@@ -448,7 +454,7 @@ textarea.form-control {
     width: 50px;
     height: 50px;
     object-fit: cover;
-    border: 1px solid #ccc;
+    border: 1px solid var(--bs-border-color);
     border-radius: 3px;
     cursor: pointer;
     transition: all 0.2s;
@@ -476,7 +482,7 @@ textarea.form-control {
     width: 50px;
     height: 50px;
     object-fit: cover;
-    border: 1px solid #ccc;
+    border: 1px solid var(--bs-border-color);
     border-radius: 3px;
     display: block;
     transition: transform 0.2s;
@@ -800,12 +806,12 @@ textarea.form-control {
 }
 
 .js-rating .post-rating-up:hover {
-    background-color: #78c062;
+    background-color: var(--rating-up);
     color: #fff;
 }
 
 .js-rating .post-rating-down:hover {
-    background-color: #f75c48;
+    background-color: var(--rating-down);
     color: #fff;
 }
 
@@ -830,7 +836,7 @@ textarea.form-control {
 
 .js-actions a:hover {
     color: var(--bs-body-color);
-    background: var(--bs-secondary-bg);
+    background: var(--hover-bg);
 }
 
 .comment-actions a,
@@ -856,7 +862,7 @@ textarea.form-control {
 .comment-actions a:hover,
 .comment-actions .comment-more-btn:hover {
     color: var(--bs-body-color);
-    background: var(--bs-secondary-bg);
+    background: var(--hover-bg);
 }
 
 .comment-more-dropdown .dropdown-item {
@@ -887,11 +893,8 @@ textarea.form-control {
         width: 15px;
     }
 
-    .comment-left .avatar-mini .avatar-default {
-        width: 1.25rem;
-        height: 1.25rem;
-        font-size: 0.8125rem;
-        min-width: 1.25rem;
+    .comment-left .avatar-mini {
+        --avatar-size: 1.25rem;
     }
 
     .comment-children .comment-left::before {
@@ -909,27 +912,68 @@ textarea.form-control {
     }
 }
 
+/* Плитка — карточка с рамкой, ссылка приподнимается при наведении. Раскладку внутри
+   задаёт свой класс рядом: app-tile, info-tile, stat-tile, sticker-category.
+   .app-tile — плитка и без .tile: её разметку строкой отдают хуки модулей */
+.tile,
+.app-tile {
+    border: 1px solid var(--bs-border-color);
+    border-radius: .5rem;
+    background: var(--bs-body-bg);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+
+/* Тема подчёркивает ссылки при наведении — плитке это не нужно */
+a.tile:hover,
+a.app-tile:hover {
+    border-color: var(--bs-primary);
+    box-shadow: 0 .35rem .85rem rgba(var(--bs-body-color-rgb), .08);
+    transform: translateY(-2px);
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Сетка плиток, сколько влезет в ширину */
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: .75rem;
+}
+
 .app-tile {
     display: flex;
     align-items: center;
     gap: .6rem;
-    padding: .75rem;
-    border-radius: .5rem;
-    border: 1px solid var(--bs-border-color);
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
-    text-decoration: none;
-    color: inherit;
     height: 100%;
+    padding: .75rem;
 }
-a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba(0,0,0,.15); color: inherit; text-decoration: none; }
+
 .app-tile-icon {
-    width: 36px; height: 36px; min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
     border-radius: .35rem;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: .85rem; flex-shrink: 0;
+    color: #fff;
+    font-size: .85rem;
 }
-.app-tile-label { font-size: .88rem; font-weight: 600; line-height: 1.3; display: flex; flex-direction: column; align-items: flex-start; }
-.app-tile-badge { margin-top: .2rem; }
+
+.app-tile-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: .88rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.app-tile-badge {
+    margin-top: .2rem;
+}
 
 /* Fancybox: компактные тёмные стрелки — единый вид в лайтбоксе и инлайн-карусели */
 .fancybox__container .f-button.is-arrow {
@@ -997,32 +1041,11 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 
 /* Плитки со ссылками на справочные страницы */
-.info-tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: .75rem;
-}
-
 .info-tile {
     display: flex;
     align-items: center;
     gap: .75rem;
     padding: .85rem 1rem;
-    border: 1px solid var(--bs-border-color);
-    border-radius: .65rem;
-    background: var(--bs-body-bg);
-    color: inherit;
-    text-decoration: none;
-    transition: border-color .15s, box-shadow .15s, transform .15s;
-}
-
-.info-tile:hover {
-    border-color: var(--bs-primary);
-    box-shadow: 0 .35rem .85rem rgba(var(--bs-body-color-rgb), .08);
-    transform: translateY(-2px);
-    /* Тема подчёркивает ссылки при наведении — плитке это не нужно */
-    color: inherit;
-    text-decoration: none;
 }
 
 .info-tile-icon {
@@ -1103,29 +1126,9 @@ a.app-tile:hover { background: rgba(128,128,128,.12); box-shadow: 0 2px 8px rgba
 }
 
 /* Категории стикеров */
-.sticker-categories {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: .75rem;
-}
-
 .sticker-category {
     display: block;
     padding: .85rem 1rem;
-    border: 1px solid var(--bs-border-color);
-    border-radius: .65rem;
-    background: var(--bs-body-bg);
-    color: inherit;
-    text-decoration: none;
-    transition: border-color .15s, box-shadow .15s, transform .15s;
-}
-
-.sticker-category:hover {
-    border-color: var(--bs-primary);
-    box-shadow: 0 .35rem .85rem rgba(var(--bs-body-color-rgb), .08);
-    transform: translateY(-2px);
-    color: inherit;
-    text-decoration: none;
 }
 
 .sticker-category-title {
@@ -1284,7 +1287,7 @@ a.profile-stat:hover {
 
 /* text-decoration сбрасывается и в hover: у Bootstrap a:hover специфичнее класса */
 .profile-action:hover {
-    background: var(--bs-tertiary-bg);
+    background: var(--hover-bg);
     text-decoration: none;
 }
 
@@ -1315,6 +1318,30 @@ a.profile-stat:hover {
 /* Со счётчиком край строки занимает он, стрелке остаётся отступ от него */
 .profile-action:has(.badge)::after {
     margin-left: .5rem;
+}
+
+/* Строки действий (profile.action) одной строкой ссылок — без рамок, подсветки и стрелки.
+   Контейнер задаёт раскладку: d-flex flex-wrap с отступами */
+.actions-inline .profile-action {
+    display: inline-flex;
+    gap: .25rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.actions-inline .profile-action:hover {
+    background: none;
+    text-decoration: underline;
+}
+
+.actions-inline .profile-action i {
+    width: auto;
+    color: inherit;
+}
+
+.actions-inline .profile-action::after {
+    content: none;
 }
 
 /* Карточка пользователя в списке */
@@ -1374,23 +1401,10 @@ a.profile-stat:hover {
 
 /* Аватар вне пузыря и мельче, чем в лентах */
 .talk-avatar {
+    --avatar-size: 2.5rem;
     flex: 0 0 auto;
-    width: 40px;
-    height: 40px;
-}
-
-.talk-avatar img,
-.talk-avatar .avatar-default {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.625rem;
-}
-
-.talk-avatar .user-status {
-    width: 0.875rem;
-    height: 0.875rem;
-    left: 1.625rem;
-    bottom: 0.875rem;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
 }
 
 .talk-bubble {
@@ -1499,27 +1513,14 @@ a.profile-stat:hover {
 }
 
 .dialogue-row:hover {
-    background: var(--base-bg);
+    background: var(--hover-bg);
 }
 
 .dialogue-avatar {
+    --avatar-size: 3rem;
     flex: 0 0 auto;
-    width: 48px;
-    height: 48px;
-}
-
-.dialogue-avatar img,
-.dialogue-avatar .avatar-default {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.875rem;
-}
-
-.dialogue-avatar .user-status {
-    width: 0.875rem;
-    height: 0.875rem;
-    left: 2.125rem;
-    bottom: 1rem;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
 }
 
 .dialogue-main {
@@ -1561,60 +1562,135 @@ a.profile-stat:hover {
 
 /* Плитки статистики на дашборде админки */
 .stat-tile {
-    padding: .85rem 1rem;
-    border-radius: .5rem;
-    border: 1px solid var(--bs-border-color);
-    background: var(--bs-body-bg);
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: .35rem;
-    color: inherit;
-    text-decoration: none;
+    height: 100%;
+    padding: .85rem 1rem;
 }
-a.stat-tile:hover {
-    color: inherit;
-    text-decoration: none;
-    border-color: var(--bs-secondary-color);
-    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+
+.stat-tile-head {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
-.stat-tile-head { display: flex; align-items: center; gap: .5rem; }
+
 .stat-tile-icon {
-    width: 30px; height: 30px; min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
     border-radius: .35rem;
-    display: flex; align-items: center; justify-content: center;
     font-size: .8rem;
 }
-.stat-tile-label { font-size: .8rem; color: var(--bs-secondary-color); font-weight: 600; }
-.stat-tile-value { font-size: 1.6rem; font-weight: 700; line-height: 1.1; }
-.stat-tile-diff { font-size: .75rem; font-weight: 600; margin-left: .25rem; white-space: nowrap; }
-.sparkline { width: 100%; height: 40px; display: block; margin-top: auto; }
-.stat-tile-period { font-size: .72rem; font-weight: 500; color: var(--bs-secondary-color); white-space: nowrap; }
-.stat-tile-meta { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; margin-top: -.2rem; }
-.stat-tile-diff { font-size: .78rem; font-weight: 600; white-space: nowrap; }
-.sortable-handle { cursor: grab; touch-action: none; }
-.sortable-handle:active { cursor: grabbing; }
-.sortable-ghost { opacity: .4; }
-.sortable-tree-list { list-style: none; padding-left: 0; margin: 0; }
 
-/* Строка перетаскиваемого списка — одна и та же и в дереве разделов, и в виджетах панели */
-.sortable-row { display: flex; align-items: center; gap: .5rem; padding: .5rem .5rem .5rem 0; border-bottom: 1px solid var(--bs-border-color); transition: background .12s; }
-/* Полупрозрачная накладка, а не переменная темы: --bs-tertiary-bg в тёмной теме
-   почти не отличается от подложки, и наведение там не читалось */
-.sortable-row:hover { background: rgba(128, 128, 128, .18); }
-.sortable-row:hover .sortable-handle { color: var(--bs-secondary-color) !important; }
+.stat-tile-label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+}
+
+.stat-tile-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.stat-tile-unit {
+    margin-left: .15rem;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--bs-secondary-color);
+}
+
+/* Период и рост в одной строке */
+.stat-tile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+    margin-top: -.2rem;
+}
+
+.stat-tile-period {
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--bs-secondary-color);
+    white-space: nowrap;
+}
+
+.stat-tile-diff {
+    font-size: .78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.stat-tile-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    font-size: .72rem;
+    color: var(--bs-secondary-color);
+}
+
+.stat-tile-legend i {
+    font-size: .5rem;
+    vertical-align: middle;
+}
+
+.sparkline {
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin-top: auto;
+}
+
+/* Перетаскиваемые списки: дерево разделов и виджеты панели */
+.sortable-handle {
+    cursor: grab;
+    touch-action: none;
+}
+
+.sortable-handle:active,
+.sortable-dragging {
+    cursor: grabbing;
+}
+
+.sortable-ghost {
+    opacity: .4;
+}
 
 /* Вложенность — отступ строки, а не вложенный список: глубину задают горизонтальным
    движением мыши. Шаг живёт здесь, JS читает его из этой же переменной */
-.sortable-tree-list { --depth-step: 24px; }
-.sortable-tree-item { padding-left: calc(var(--depth, 0) * var(--depth-step)); }
+.sortable-tree-list {
+    --depth-step: 24px;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
 
-/* Пока тащат, курсор над всем деревом ведёт себя как хватающая рука */
-.sortable-dragging { cursor: grabbing; }
+.sortable-tree-item {
+    padding-left: calc(var(--depth, 0) * var(--depth-step));
+}
 
-.stat-tile-legend { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: var(--bs-secondary-color); }
-.stat-tile-legend i { font-size: .5rem; vertical-align: middle; }
-.stat-tile-unit { font-size: .82rem; font-weight: 600; color: var(--bs-secondary-color); margin-left: .15rem; }
+.sortable-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .5rem .5rem 0;
+    border-bottom: 1px solid var(--bs-border-color);
+    transition: background .12s;
+}
+
+.sortable-row:hover {
+    background: var(--hover-bg);
+}
+
+.sortable-row:hover .sortable-handle {
+    color: var(--bs-secondary-color) !important;
+}
 
 /* Панель разделов настроек: пунктов больше, чем влезает в экран, поэтому липнет
    не сама панель, а её прокручиваемая копия высотой с окно — иначе sticky бесполезен,
@@ -1649,7 +1725,7 @@ a.stat-tile:hover {
 }
 
 .profile-link:hover {
-    background: var(--bs-tertiary-bg);
+    background: var(--hover-bg);
     border-color: var(--bs-primary);
     transform: translateY(-2px);
 }
@@ -1751,4 +1827,33 @@ a.stat-tile:hover {
     width: 3rem;
     height: auto;
     padding: .25rem;
+}
+
+/* Якорь вкладки ведёт к её панели, и браузер прокручивает страницу к ней, пряча заголовок
+   с сообщениями формы. Отступ заведомо больше любой страницы: вычитание уводит цель выше
+   нуля, и прокрутка упирается в верх — переход по такому якорю не двигает страницу вовсе */
+.tab-pane {
+    scroll-margin-top: 9999px;
+}
+
+/* На узком экране вкладки не переносятся, а листаются вбок одной строкой. Прокрутка
+   обрезает всё, что вылезает за края, поэтому линию под вкладками рисует тень внутри
+   полосы, а не рамка: иначе активная вкладка не перекрыла бы её своим фоном */
+.nav-tabs {
+    position: relative;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    border-bottom: 0;
+    box-shadow: inset 0 calc(-1 * var(--bs-nav-tabs-border-width)) var(--bs-nav-tabs-border-color);
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-tabs .nav-link {
+    margin-bottom: 0;
+    white-space: nowrap;
 }

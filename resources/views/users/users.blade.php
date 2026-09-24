@@ -67,7 +67,7 @@
                     </div>
 
                     @if (getUser() && $data->id !== getUser('id'))
-                        <a class="btn btn-sm btn-adaptive" href="/messages/talk/{{ $data->login }}" data-bs-toggle="tooltip" title="{{ __('users.send_message') }}">
+                        <a class="fs-5 p-2 text-muted" href="/messages/talk/{{ $data->login }}" data-bs-toggle="tooltip" title="{{ __('users.send_message') }}">
                             <i class="fas fa-envelope"></i>
                         </a>
                     @endif
