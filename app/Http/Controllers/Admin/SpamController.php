@@ -25,7 +25,7 @@ class SpamController extends AdminController
     {
         $moduleTypes = [];
         foreach (Registry::$spamTypes as $morphName) {
-            $moduleTypes[$morphName] = Registry::$labelTypes[$morphName] ?? $morphName;
+            $moduleTypes[$morphName] = Registry::label($morphName) ?? $morphName;
         }
 
         $this->types = array_merge([

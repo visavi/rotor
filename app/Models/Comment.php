@@ -235,6 +235,6 @@ class Comment extends Model
      */
     public function getRelateType(): string
     {
-        return Registry::$labelTypes[$this->relate_type] ?? $this->relate_type;
+        return Registry::label($this->relate_type) ?? $this->relate_type;
     }
 }

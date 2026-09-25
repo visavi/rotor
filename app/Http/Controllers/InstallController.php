@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\MigrationService;
+use App\Support\Locale;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -79,7 +80,7 @@ class InstallController extends Controller
         $dirs = [public_path('assets/modules'), base_path('bootstrap/cache'), base_path('modules')];
 
         $dirs = array_merge($storage, $uploads, $dirs);
-        $languages = getAvailableLanguages();
+        $languages = Locale::available();
 
         $isUpdate = $this->isUpdate();
         $database = $this->databaseChecks($versions);

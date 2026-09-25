@@ -10,6 +10,7 @@ use App\Models\Flood;
 use App\Models\User;
 use App\Services\MailService;
 use App\Services\UserService;
+use App\Support\Locale;
 use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
@@ -290,7 +291,7 @@ class UserController extends Controller
         }
 
         $setting['themes'] = getAvailableThemes();
-        $setting['languages'] = getAvailableLanguages();
+        $setting['languages'] = Locale::available();
         $setting['timezones'] = range(-12, 12);
 
         if ($request->isMethod('post')) {

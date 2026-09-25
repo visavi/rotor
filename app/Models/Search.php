@@ -63,7 +63,11 @@ class Search extends Model
             User::$morphName    => __('index.users'),
         ];
 
-        return array_merge($base, array_intersect_key(Registry::$labelTypes, Registry::$search));
+        foreach (array_intersect_key(Registry::$labels, Registry::$search) as $type => $label) {
+            $base[$type] = __($label);
+        }
+
+        return $base;
     }
 
     /**

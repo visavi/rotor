@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
                 <div class="list-group">
-                    @foreach (getAvailableLanguages() as $lang)
+                    @foreach (\App\Support\Locale::available() as $lang)
                         @php($name = __('main.lang', [], $lang))
                         <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center{{ $lang === app()->getLocale() ? ' active' : '' }}" data-lang="{{ $lang }}">
                             <span>

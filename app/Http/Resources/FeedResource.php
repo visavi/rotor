@@ -33,7 +33,7 @@ class FeedResource extends JsonResource
         return array_merge([
             'type'    => $type,
             'id'      => $post->getKey(),
-            'section' => Registry::$labelTypes[$type] ?? null,
+            'section' => Registry::label($type),
             'title'   => $this->resolveTitle($post, $config),
             // Ссылку и путь до раздела знает сама запись, лента их не конфигурирует
             'url'         => method_exists($post, 'getViewUrl') ? $post->getViewUrl() : null,

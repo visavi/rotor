@@ -8,6 +8,7 @@ use App\Models\BlackList;
 use App\Models\EmailChange;
 use App\Models\PasswordReset;
 use App\Models\User;
+use App\Support\Locale;
 use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\Request;
@@ -220,7 +221,7 @@ class UserService
             ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => __('users.theme_invalid')])
             ->true(in_array($themes, getAvailableThemes(), true) || empty($themes), ['themes' => __('users.theme_not_installed')])
             ->regex($language, '|^[a-z]+$|', ['language' => __('users.language_invalid')])
-            ->in($language, getAvailableLanguages(), ['language' => __('users.language_not_installed')])
+            ->in($language, Locale::available(), ['language' => __('users.language_not_installed')])
             ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => __('users.timezone_invalid')]);
 
         foreach (Registry::$onSettingsValidate as $handler) {

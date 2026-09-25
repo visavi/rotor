@@ -43,11 +43,6 @@ class AppServiceProvider extends ServiceProvider
         // не выполняются: одна опечатка в команде стоила бы всей базы
         DB::prohibitDestructiveCommands($this->app->isProduction());
 
-        // Overlay переводов: FileLoader сворачивает пути через array_replace_recursive,
-        // побеждает последний. Покрывает и ядро (custom/lang/ru/index.php),
-        // и модули (custom/lang/vendor/<namespace>/ru/<group>.php)
-        $this->app['translation.loader']->addPath(resource_path('custom/lang'));
-
         $this->configureRateLimiting();
 
         Route::pattern('id', '\d+');

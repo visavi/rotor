@@ -15,6 +15,7 @@ use App\Services\CloudFlareService;
 use App\Services\HtmlRenderer;
 use App\Services\MailService;
 use App\Support\Hook;
+use App\Support\Locale;
 use cbschuld\Browser;
 use Illuminate\Container\Container;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -1021,12 +1022,13 @@ function getAvailableThemes(): array
 
 /**
  * Возвращает список доступных языков
+ *
+ * @deprecated Мост совместимости для модулей и тем. Будет удалён в 15.0,
+ *             используйте App\Support\Locale::available()
  */
 function getAvailableLanguages(): array
 {
-    static $languages;
-
-    return $languages ??= array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR) ?: []);
+    return Locale::available();
 }
 
 /**
@@ -1040,7 +1042,8 @@ function translationScript(): string
         return '<script src="' . $src . '"></script>';
     }
 
-    $path = resource_path("lang/{$locale}/main.json");
+    // Язык из модуля Vite не собирает — берём main.json из его каталога
+    $path = Locale::path($locale) . '/main.json';
     $json = is_file($path) ? trim((string) file_get_contents($path)) : '{}';
 
     return '<script>window.translations = ' . $json . '</script>';

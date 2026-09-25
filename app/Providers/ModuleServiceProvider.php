@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Module;
+use App\Support\Locale;
 use App\Support\Registry;
 use App\Support\Restatement;
 use Illuminate\Console\Scheduling\Schedule;
@@ -39,6 +40,20 @@ class ModuleServiceProvider extends ServiceProvider
     {
         $modules = Module::getEnabledModules();
 
+        // Пути переводов ставятся до подключения module.php: он зовёт __() прямо
+        // при подключении, а загруженная группа кэшируется до конца запроса,
+        // и добавленный позже путь для неё уже не сработал бы
+        foreach ($modules as $module => $data) {
+            if (($data['files']['lang'] ?? false) && Module::isLanguage($module)) {
+                Locale::addPath(base_path('modules/' . $module . '/resources/lang'));
+            }
+        }
+
+        // Overlay переводов: FileLoader сворачивает пути через array_replace_recursive,
+        // побеждает последний. Покрывает ядро (custom/lang/ru/index.php), модули
+        // (custom/lang/vendor/<namespace>/ru/<group>.php) и модули-языки
+        $this->app['translation.loader']->addPath(resource_path('custom/lang'));
+
         foreach ($modules as $module => $data) {
             $base = base_path('modules/' . $module);
 
@@ -55,7 +70,7 @@ class ModuleServiceProvider extends ServiceProvider
                     $this->loadViewsFrom($base . '/resources/views', $moduleKey);
                 }
 
-                if ($files['lang'] ?? false) {
+                if (($files['lang'] ?? false) && ! Module::isLanguage($module)) {
                     $this->loadTranslationsFrom($base . '/resources/lang', $moduleKey);
                 }
 
@@ -157,7 +172,7 @@ class ModuleServiceProvider extends ServiceProvider
             }
 
             if ($label = $config['label'] ?? null) {
-                Registry::label($morphName, $label);
+                Registry::setLabel($morphName, $label);
             }
 
             if (! empty($config['spam'])) {

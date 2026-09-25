@@ -12,6 +12,7 @@ use App\Services\CaptchaService;
 use App\Services\FileService;
 use App\Services\MailService;
 use App\Services\UserService;
+use App\Support\Locale;
 use App\Support\Validator;
 use App\Traits\HandlesApiValidation;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +66,7 @@ class AccountApiController extends Controller
             // Списки зависят от установленных тем и языков, клиенту их взять больше негде
             'available' => [
                 'themes'    => array_values(getAvailableThemes()),
-                'languages' => array_values(getAvailableLanguages()),
+                'languages' => Locale::available(),
                 'timezones' => range(-12, 12),
             ],
         ]);

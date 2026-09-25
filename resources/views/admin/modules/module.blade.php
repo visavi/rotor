@@ -21,7 +21,7 @@
 
         @if (count($links) === 1)
             <div class="float-end">
-                <a class="btn btn-adaptive" href="{{ key($links) }}">{{ current($links) }}</a>
+                <a class="btn btn-adaptive" href="{{ key($links) }}">{{ __(current($links)) }}</a>
             </div>
         @else
             <div class="btn-group float-end">
@@ -30,7 +30,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     @foreach ($links as $url => $label)
-                        <a class="dropdown-item" href="{{ $url }}">{{ $label }}</a>
+                        <a class="dropdown-item" href="{{ $url }}">{{ __($label) }}</a>
                     @endforeach
                 </div>
             </div>

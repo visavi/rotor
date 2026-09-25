@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Support\Locale;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -25,24 +26,27 @@ class LangCompare extends Command
         $lang1 = $this->argument('lang1');
         $lang2 = $this->argument('lang2');
 
-        if (! file_exists(resource_path('lang/' . $lang1))) {
+        // Язык может лежать и в модуле-языке, не только в resources/lang
+        $path1 = Locale::path($lang1);
+        if (! $path1) {
             $this->error('Lang "' . $lang1 . '" not found');
 
             return 1;
         }
 
-        if (! file_exists(resource_path('lang/' . $lang2))) {
+        $path2 = Locale::path($lang2);
+        if (! $path2) {
             $this->error('Lang "' . $lang2 . '" not found');
 
             return 1;
         }
 
-        $langFiles = glob(resource_path('lang/' . $lang1 . '/*.php'));
+        $langFiles = glob($path1 . '/*.php') ?: [];
 
         foreach ($langFiles as $file) {
             $array1 = require $file;
 
-            $otherFile = str_replace('/' . $lang1 . '/', '/' . $lang2 . '/', $file);
+            $otherFile = $path2 . '/' . basename($file);
             if (file_exists($otherFile)) {
                 $array2 = require $otherFile;
 
@@ -77,7 +81,7 @@ class LangCompare extends Command
         $diff = array_diff_key($array1, $array2);
 
         foreach ($array1 as $k => $v) {
-            if (is_array($array1[$k]) && is_array($array2[$k])) {
+            if (is_array($v) && is_array($array2[$k] ?? null)) {
                 $diffRecursive = $this->arrayDiffKeyRecursive($array1[$k], $array2[$k]);
 
                 if ($diffRecursive) {

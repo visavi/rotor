@@ -499,7 +499,7 @@ class ApiController extends Controller
         $labels = [];
 
         foreach ($types as $type) {
-            $labels[$type] = Registry::$labelTypes[$type] ?? $type;
+            $labels[$type] = Registry::label($type) ?? $type;
         }
 
         return $labels;

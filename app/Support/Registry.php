@@ -6,30 +6,35 @@ namespace App\Support;
 
 class Registry
 {
+    // Morph-типы: название и что тип поддерживает
+    public static array $labels = [];
     public static array $complaintTypes = [];
     public static array $fileTypes = [];
-    public static array $labelTypes = [];
     public static array $mediaTypes = [];
     public static array $ratingTypes = [];
     public static array $spamTypes = [];
+
+    // Разделы ядра, в которые модуль встраивает свой контент
+    public static array $feeds = [];
+    public static array $search = [];
+    public static array $stats = [];
+    public static array $widgets = [];
+    public static array $apiConfig = [];
     public static array $sitemapPages = [];
-    public static array $onDeleteUser = [];
-    public static array $onAdminDeleteUser = [];
-    public static array $onSaveStatistic = [];
-    public static array $onSendMessage = [];
     public static array $backgroundPaths = [];
-    public static array $onAdminLog = [];
+
+    // Обработчики событий
+    public static array $onRegisterValidate = [];
+    public static array $onRegisterSave = [];
     public static array $onProfileValidate = [];
     public static array $onProfileSave = [];
     public static array $onSettingsValidate = [];
     public static array $onSettingsSave = [];
-    public static array $onRegisterValidate = [];
-    public static array $onRegisterSave = [];
-    public static array $feeds = [];
-    public static array $search = [];
-    public static array $apiConfig = [];
-    public static array $stats = [];
-    public static array $widgets = [];
+    public static array $onDeleteUser = [];
+    public static array $onAdminDeleteUser = [];
+    public static array $onSendMessage = [];
+    public static array $onSaveStatistic = [];
+    public static array $onAdminLog = [];
 
     /**
      * Очищает реестр
@@ -80,14 +85,34 @@ class Registry
 
     /**
      * Регистрирует отображаемое название для morph-типа
+     *
+     * Хранится ключ перевода, переводится при выводе: module.php подключается
+     * до выбора языка пользователя, и __() там вернул бы строку на языке сайта
      */
-    public static function label(string $morphName, string $label): void
+    public static function setLabel(string $morphName, string $label): void
     {
-        static::$labelTypes[$morphName] = $label;
+        static::$labels[$morphName] = $label;
     }
 
     /**
-     * Регистрирует тип как источник спама (метка в админке берётся из labelTypes)
+     * Отображаемое название morph-типа на текущем языке
+     */
+    public static function label(string $morphName): ?string
+    {
+        $label = static::$labels[$morphName] ?? null;
+        if ($label === null) {
+            return null;
+        }
+
+        // Старый модуль отдаёт готовый текст; совпав с именем файла
+        // переводов (users, main), он вернул бы из __() целый массив
+        $translated = __($label);
+
+        return is_string($translated) ? $translated : $label;
+    }
+
+    /**
+     * Регистрирует тип как источник спама (метка в админке берётся из labels)
      */
     public static function spamType(string $morphName): void
     {

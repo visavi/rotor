@@ -9,6 +9,7 @@ use App\Models\Error;
 use App\Services\CaptchaService;
 use App\Services\FeedService;
 use App\Services\SearchService;
+use App\Support\Locale;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -150,7 +151,7 @@ class HomeController extends Controller
      */
     public function language(string $lang, Request $request): JsonResponse
     {
-        $languages = getAvailableLanguages();
+        $languages = Locale::available();
 
         if (preg_match('/^[a-z]+$/', $lang) && in_array($lang, $languages, true)) {
             if ($user = $request->user()) {

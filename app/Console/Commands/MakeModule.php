@@ -217,7 +217,7 @@ class MakeModule extends Command
             '{{ actions }}' => <<<PHP
 
                     'actions' => [
-                        '/admin/{$route}-settings' => __('{$key}::{$key}.settings'),
+                        '/admin/{$route}-settings' => '{$key}::{$key}.settings',
                     ],
 
                 PHP,
@@ -294,7 +294,7 @@ class MakeModule extends Command
 
                 'models' => [
                     {$model}::class => [
-                        'label' => __('{$key}::{$key}.title'),
+                        'label' => '{$key}::{$key}.title',
                     ],
                 ],
 

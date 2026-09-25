@@ -211,6 +211,18 @@ class Module extends Model
     }
 
     /**
+     * Модуль-язык (Lang<Язык>): его resources/lang дополняет переводы ядра,
+     * а не уходит в собственный namespace
+     *
+     * Признак по имени, а не из module.php: переводы подключаются до
+     * его выполнения, иначе __() в чужих module.php закэширует группы без них
+     */
+    public static function isLanguage(string $name): bool
+    {
+        return (bool) preg_match('/^Lang[A-Z]/', $name);
+    }
+
+    /**
      * Получает название директории для симлинка
      */
     public function getLinkName(): string
