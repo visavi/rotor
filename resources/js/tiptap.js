@@ -10,11 +10,11 @@ import { CharacterCount } from '@tiptap/extension-character-count'
 import { Mention } from '@tiptap/extension-mention'
 import FileHandler from '@tiptap/extension-file-handler'
 import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
-import { TextSelection } from '@tiptap/pm/state'
+import { Selection, TextSelection } from '@tiptap/pm/state'
 import { __ } from './translate.js'
 import { notyf } from './globals.js'
 import { csrfToken } from './ajax.js'
-import { renderFile } from './attachments.js'
+import { renderFile, renderPending, takeAllowed } from './attachments.js'
 
 // Ссылка: inclusive=false чтобы пробел после ссылки не входил в неё
 const CustomLink = Link.extend({
@@ -91,8 +91,12 @@ const Blockquote = Node.create({
     },
     addCommands() {
         return {
-            toggleBlockquote: (author = null) => ({ commands }) =>
-                commands.toggleWrap(this.name, { author }),
+            // Не toggleWrap: он сверяет и атрибуты, и цитату с автором считал «другой»
+            // цитатой — повторное нажатие вкладывало в неё новую вместо снятия
+            toggleBlockquote: (author = null) => ({ editor, commands }) =>
+                editor.isActive(this.name)
+                    ? commands.command(({ tr }) => unwrapInTr(tr, this.name))
+                    : commands.wrapIn(this.name, { author }),
         }
     },
     addKeyboardShortcuts() {
@@ -313,9 +317,13 @@ const Spoiler = Node.create({
     },
     addCommands() {
         return {
-            insertSpoiler: title => ({ commands }) => commands.insertContent({
-                type: this.name, attrs: { title, open: true }, content: [{ type: 'paragraph' }],
-            }),
+            // Оборачивает строки выделения, без выделения — строку с курсором
+            // (на пустой строке это и есть пустой спойлер). Вставка — если обернуть нельзя
+            insertSpoiler: title => ({ state, commands }) =>
+                commands.wrapIn(this.name, { title, open: true })
+                || (state.selection.empty && commands.insertContent({
+                    type: this.name, attrs: { title, open: true }, content: [{ type: 'paragraph' }],
+                })),
         }
     },
 })
@@ -331,9 +339,10 @@ const Hide = Node.create({
     renderHTML() { return ['div', { class: 'hidden' }, 0] },
     addCommands() {
         return {
-            insertHide: () => ({ commands }) => commands.insertContent({
-                type: this.name, content: [{ type: 'paragraph' }],
-            }),
+            // Как у спойлера: строки выделения или строка с курсором
+            insertHide: () => ({ state, commands }) =>
+                commands.wrapIn(this.name)
+                || (state.selection.empty && commands.insertContent({ type: this.name, content: [{ type: 'paragraph' }] })),
         }
     },
 })
@@ -362,6 +371,96 @@ function serializeToTextarea(editor, textarea) {
     textarea.value = fixNewlines(rgbToHex(editor.getHTML()))
         .replace(/(<p><\/p>)+/g, '<p></p>')
         .replace(/^(<p><\/p>)+|(<p><\/p>)+$/g, '')
+}
+
+// Выделение мышью часто задевает край соседней строки: начинается в конце предыдущей
+// или кончается в начале следующей. Для блочных кнопок этот край ничего не значит,
+// а превращается в пустую строку в коде или в лишний абзац в цитате. Сдвигаем края
+// выделения к тексту, которого оно реально касается
+function trimBlockSelection(editor) {
+    const { state } = editor
+    const { empty } = state.selection
+    let { from, to } = state.selection
+
+    if (empty) return
+
+    const $from = state.doc.resolve(from)
+    if ($from.parent.isTextblock && $from.parentOffset === $from.parent.content.size) {
+        const next = Selection.findFrom(state.doc.resolve($from.after()), 1, true)
+        if (next && next.from < to) from = next.from
+    }
+
+    const $to = state.doc.resolve(to)
+    if ($to.parent.isTextblock && $to.parentOffset === 0) {
+        const prev = Selection.findFrom(state.doc.resolve($to.before()), -1, true)
+        if (prev && prev.to > from) to = prev.to
+    }
+
+    if (from !== state.selection.from || to !== state.selection.to) {
+        editor.commands.setTextSelection({ from, to })
+    }
+}
+
+// Цитата, спойлер и скрытый текст — контейнеры: повторное нажатие кнопки снимает
+// весь блок, а не выносит из него одну строку с курсором, как делает lift()
+function unwrapInTr(tr, typeName) {
+    const { $from } = tr.selection
+
+    for (let depth = $from.depth; depth > 0; depth--) {
+        const node = $from.node(depth)
+
+        if (node.type.name === typeName) {
+            const pos = $from.before(depth)
+            const { from, to } = tr.selection
+            tr.replaceWith(pos, pos + node.nodeSize, node.content)
+            // Замена целиком уводит курсор за блок — возвращаем его на то же место в тексте,
+            // сдвинув на снятый открывающий тег
+            tr.setSelection(TextSelection.create(tr.doc, from - 1, to - 1))
+
+            return true
+        }
+    }
+
+    return false
+}
+
+// Блок кода снимается обратно в строки-абзацы, какими он и собирался:
+// toggleCodeBlock склеил бы их в один абзац через переносы
+function unwrapCodeBlock(editor) {
+    return editor.chain().focus().command(({ tr, state }) => {
+        const { $from } = tr.selection
+        const node = $from.parent
+
+        if (node.type.name !== 'codeBlock') return false
+
+        const pos = $from.before()
+        const lines = node.textContent.split('\n')
+        const paragraphs = lines.map(line =>
+            state.schema.nodes.paragraph.create(null, line ? state.schema.text(line) : null))
+
+        // Позиция в тексте кода → та же позиция в получившихся абзацах:
+        // каждый \n превращается в границу абзацев, а она на одну позицию шире
+        const toDocPos = offset => {
+            let rest = offset
+            let docPos = pos + 1
+            for (const line of lines) {
+                if (rest <= line.length) return docPos + rest
+                rest -= line.length + 1
+                docPos += line.length + 2
+            }
+            return docPos
+        }
+        const { from, to } = tr.selection
+
+        tr.replaceWith(pos, pos + node.nodeSize, paragraphs)
+        tr.setSelection(TextSelection.create(tr.doc, toDocPos(from - pos - 1), toDocPos(to - pos - 1)))
+
+        return true
+    }).run()
+}
+
+function unwrapBlock(editor, typeName) {
+    return editor.chain().focus().command(({ tr }) => unwrapInTr(tr, typeName)).run()
 }
 
 // Абзац с переносами строк (Shift-Enter) — единый блок, поэтому список оборачивает
@@ -634,15 +733,6 @@ async function getStickerData() {
 }
 
 function makeStickerPicker(editor) {
-    const wrap = document.createElement('div')
-    wrap.className = 'tiptap-dropdown'
-
-    const btn = document.createElement('button')
-    btn.type = 'button'
-    btn.className = 'tiptap-btn'
-    btn.title = __('editor.sticker')
-    btn.innerHTML = '<i class="fas fa-smile"></i><i class="fas fa-chevron-down tiptap-dd-arrow"></i>'
-
     const panel = document.createElement('div')
     panel.className = 'tiptap-dropdown-menu tiptap-sticker-panel'
     document.body.appendChild(panel)
@@ -659,8 +749,7 @@ function makeStickerPicker(editor) {
             img.addEventListener('mousedown', e => {
                 e.preventDefault()
                 e.stopPropagation()
-                editor.chain().focus().insertSticker({ src: name, alt: code }).run()
-                editor.commands.insertContent(' ')
+                editor.chain().focus().insertSticker({ src: name, alt: code }).insertContent(' ').run()
                 panel.classList.remove('is-open')
             })
             grid.appendChild(img)
@@ -712,7 +801,7 @@ function makeStickerPicker(editor) {
 
     function positionPanel() {
         const vw   = window.innerWidth
-        const rect = btn.getBoundingClientRect()
+        const rect = panel._anchorBtn.getBoundingClientRect()
         // Горизонталь: ограничиваем ширину экраном и прижимаем влево если вылезает
         const panelWidth = Math.min(360, vw - 16)
         panel.style.width = panelWidth + 'px'
@@ -728,19 +817,15 @@ function makeStickerPicker(editor) {
         }
     }
 
-    btn.addEventListener('mousedown', e => e.preventDefault())
-    btn.addEventListener('click', e => {
-        e.stopPropagation()
-        const wasOpen = panel.classList.contains('is-open')
-        closeDropdowns()
-        if (!wasOpen) { panel._anchorBtn = btn; panel._reposition = positionPanel; openPanel() }
-    })
+    // Своё позиционирование: панель шире обычного меню и умеет открываться вверх
+    panel._reposition = positionPanel
 
-    wrap.appendChild(btn)
-    return wrap
+    return dropdownButton('fa-smile', __('editor.sticker'), panel, openPanel)
 }
 
-function makeDropdown(icon, title, items, extraClass = '') {
+// Кнопка выпадающего меню: клик закрывает остальные меню и открывает своё,
+// повторный — закрывает. open показывает меню, кнопка к этому времени — его якорь
+function dropdownButton(icon, title, menu, open) {
     const wrap = document.createElement('div')
     wrap.className = 'tiptap-dropdown'
 
@@ -750,19 +835,15 @@ function makeDropdown(icon, title, items, extraClass = '') {
     btn.title = title
     btn.innerHTML = `<i class="fas ${icon}"></i><i class="fas fa-chevron-down tiptap-dd-arrow"></i>`
 
-    const menu = document.createElement('div')
-    menu.className = 'tiptap-dropdown-menu' + (extraClass ? ' ' + extraClass : '')
-    items.forEach(item => menu.appendChild(item))
-    document.body.appendChild(menu)
-
-    function positionMenu() { positionDropdown(btn, menu) }
-
     btn.addEventListener('mousedown', e => e.preventDefault())
     btn.addEventListener('click', e => {
         e.stopPropagation()
         const wasOpen = menu.classList.contains('is-open')
         closeDropdowns()
-        if (!wasOpen) { positionMenu(); menu._anchorBtn = btn; menu.classList.add('is-open') }
+        if (!wasOpen) {
+            menu._anchorBtn = btn
+            open()
+        }
     })
 
     wrap.appendChild(btn)
@@ -770,15 +851,29 @@ function makeDropdown(icon, title, items, extraClass = '') {
     return wrap
 }
 
+function makeDropdown(icon, title, items, extraClass = '') {
+    const menu = document.createElement('div')
+    menu.className = 'tiptap-dropdown-menu' + (extraClass ? ' ' + extraClass : '')
+    items.forEach(item => menu.appendChild(item))
+    document.body.appendChild(menu)
+
+    return dropdownButton(icon, title, menu, () => {
+        positionDropdown(menu._anchorBtn, menu)
+        menu.classList.add('is-open')
+    })
+}
+
 // ─── Mention suggestion ───────────────────────────────────────────────────────
 
+// Устаревшие ответы плагин отбрасывает сам; signal отменяет и сами запросы,
+// а debounce не шлёт их на каждую букву
 const suggestion = {
     char: '@',
-    minLength: 2,
+    minQueryLength: 2,
+    debounce: 200,
 
-    items: async ({ query }) => {
-        if (query.length < 2) return []
-        const res = await fetch('/search-users?query=' + encodeURIComponent(query))
+    items: async ({ query, signal }) => {
+        const res = await fetch('/search-users?query=' + encodeURIComponent(query), { signal })
         return res.ok ? await res.json() : []
     },
 
@@ -857,7 +952,7 @@ const suggestion = {
     },
 }
 
-function buildToolbar(editor, textarea, uploadImageFn) {
+function buildToolbar(editor, textarea, uploadImagesFn) {
     const bar = document.createElement('div')
     bar.className = 'tiptap-toolbar'
 
@@ -1001,9 +1096,16 @@ function buildToolbar(editor, textarea, uploadImageFn) {
             return
         }
 
-        const data = await fetch('/ajax/resolve-image?url=' + encodeURIComponent(url)).then(r => r.json())
-        if (data.image) {
-            editor.chain().focus().setImage({ src: data.image }).run()
+        // Страница, а не картинка: сервер ищет на ней прямую ссылку. Сбой запроса —
+        // то же, что «не нашлось»: вставляем как есть и предупреждаем
+        let image = null
+        try {
+            const data = await fetch('/ajax/resolve-image?url=' + encodeURIComponent(url)).then(r => r.json())
+            image = data.image
+        } catch {}
+
+        if (image) {
+            editor.chain().focus().setImage({ src: image }).run()
         } else {
             editor.chain().focus().setImage({ src: url }).run()
             notyf.warning(__('editor.image_not_found'))
@@ -1016,11 +1118,8 @@ function buildToolbar(editor, textarea, uploadImageFn) {
             const input = document.createElement('input')
             input.type = 'file'
             input.accept = 'image/*,video/*'
-            input.onchange = async () => {
-                const file = input.files[0]
-                if (!file) return
-                await uploadImageFn(editor, file)
-            }
+            input.multiple = true
+            input.onchange = () => uploadImagesFn(editor, input.files)
             input.click()
         })
     }
@@ -1038,37 +1137,51 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     })
     sep()
 
-    btn('fa-plus-square', __('editor.spoiler'), async () => {
-        if (editor.isActive('spoiler')) {
-            editor.chain().focus().lift('spoiler').run()
-        } else {
-            const title = await window.askValue(__('editor.spoiler_title') + ':', __('editor.spoiler'))
-            if (title !== null) editor.chain().focus().insertSpoiler(title || __('editor.spoiler')).run()
-        }
-    }, () => editor.isActive('spoiler'))
-    btn('fa-eye-slash', __('editor.hide'),
-        () => editor.isActive('hide')
-            ? editor.chain().focus().lift('hide').run()
-            : editor.chain().focus().insertHide().run(),
-        () => editor.isActive('hide'))
-    btn('fa-quote-right', __('editor.quote'), async () => {
-        if (editor.isActive('blockquote')) {
-            editor.chain().focus().toggleBlockquote().run()
-        } else {
-            const author = await window.askValue(__('editor.quote_author') + ':')
-            if (author !== null) editor.chain().focus().toggleBlockquote(author || null).run()
-        }
-    }, () => editor.isActive('blockquote'))
+    // Блок-контейнер: внутри него кнопка снимает его целиком, иначе спрашивает
+    // (если нужно — отмена ничего не делает) и оборачивает строки выделения
+    function blockButton(icon, title, type, wrap, ask = null) {
+        btn(icon, title, async () => {
+            if (editor.isActive(type)) return unwrapBlock(editor, type)
+
+            const value = ask ? await ask() : ''
+            if (value === null) return
+
+            trimBlockSelection(editor)
+            wrap(value)
+        }, () => editor.isActive(type))
+    }
+
+    blockButton('fa-plus-square', __('editor.spoiler'), 'spoiler',
+        title => editor.chain().focus().insertSpoiler(title || __('editor.spoiler')).run(),
+        () => window.askValue(__('editor.spoiler_title') + ':', __('editor.spoiler')))
+    blockButton('fa-eye-slash', __('editor.hide'), 'hide',
+        () => editor.chain().focus().insertHide().run())
+    blockButton('fa-quote-right', __('editor.quote'), 'blockquote',
+        author => editor.chain().focus().toggleBlockquote(author || null).run(),
+        () => window.askValue(__('editor.quote_author') + ':'))
     btn('fa-code', __('editor.code_block'),
         () => {
             if (editor.isActive('codeBlock')) {
-                editor.chain().focus().toggleCodeBlock().run()
+                unwrapCodeBlock(editor)
             } else {
-                const { from, to } = editor.state.selection
-                const text = editor.state.doc.textBetween(from, to, '\n', '\n')
+                // Как цитата и спойлер — целыми строками, которых касается выделение,
+                // без выделения — строкой с курсором.
+                // Не setCodeBlock: он сделал бы из каждой строки отдельный блок кода
+                trimBlockSelection(editor)
+                const { $from, $to } = editor.state.selection
+                const range = $from.blockRange($to)
+                if (!range) return
+
+                const { doc, selection } = editor.state
+                const text = doc.textBetween(range.start, range.end, '\n', '\n')
+                // Каретка остаётся на том же месте текста, а не уезжает в конец блока
+                const offset = pos => doc.textBetween(range.start, pos, '\n', '\n').length
+                const from = range.start + 1 + offset(selection.from)
+                const to = range.start + 1 + offset(selection.to)
+
                 editor.chain().focus()
-                    .deleteSelection()
-                    .insertContentAt(editor.state.selection.from, { type: 'codeBlock', content: text ? [{ type: 'text', text }] : [] })
+                    .insertContentAt({ from: range.start, to: range.end }, { type: 'codeBlock', content: text ? [{ type: 'text', text }] : [] })
+                    .setTextSelection({ from, to })
                     .run()
             }
         },
@@ -1084,7 +1197,7 @@ function buildToolbar(editor, textarea, uploadImageFn) {
     function updateActive() {
         activeButtons.forEach(({ el, getActive }) => el.classList.toggle('is-active', getActive()))
     }
-    editor.on('selectionUpdate', updateActive)
+    // Смена выделения — тоже транзакция, отдельный selectionUpdate считал бы всё дважды
     editor.on('transaction', updateActive)
 
     return bar
@@ -1126,11 +1239,16 @@ function initEditor(textarea) {
     let ready = false
 
     // === Image Upload Helper ===
-    async function uploadImage(editor, file, pos = null) {
+    async function uploadImage(editor, file, pos, fail, pending) {
+        const failed = message => {
+            pending?.remove()
+            fail(message)
+            return null
+        }
+
         // Проверка типа файла
         if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-            notyf.error(__('editor.upload_failed') + ': неподдерживаемый формат')
-            return
+            return failed(__('editor.upload_failed') + ': ' + __('editor.unsupported_format'))
         }
 
         const formData = new FormData()
@@ -1151,19 +1269,50 @@ function initEditor(textarea) {
             const data = await response.json()
 
             if (data.success && data.path) {
+                const src = data.source || data.path
                 editor.chain().focus().insertContentAt(pos ?? editor.state.selection.from, {
                     type: data.type === 'video' ? 'video' : 'image',
-                    attrs: { src: data.source || data.path },
+                    attrs: { src },
                 }).run()
 
-                // Файл попадает и в список вложений под формой
+                // Файл попадает и в список вложений под формой — на место своей заглушки
                 const scope = textarea.closest('form') ?? document
-                renderFile(scope, scope.querySelector('.js-files'), data)
-            } else {
-                notyf.error(data.message || __('editor.upload_failed'))
+                renderFile(scope, scope.querySelector('.js-files'), data, pending)
+
+                // Позиция сразу за вставленным — туда встанет следующий файл пачки.
+                // Путь у каждой загрузки свой, по нему узел и находится
+                let next = null
+                editor.state.doc.descendants((node, at) => {
+                    if (node.attrs?.src === src) next = at + node.nodeSize
+                })
+                return next
             }
+
+            return failed(data.message || __('editor.upload_failed'))
         } catch (error) {
-            notyf.error(__('editor.upload_error'))
+            return failed(__('editor.upload_error'))
+        }
+    }
+
+    // Файлы уходят по очереди: сервер сверяет лимит maxfiles с уже загруженными,
+    // параллельные запросы проскочили бы проверку вместе. Первый встаёт в pos
+    // (точку броска) или под курсор, следующие — сразу за предыдущим.
+    // Одинаковая ошибка (лимит у оставшихся) — один раз
+    async function uploadImages(editor, files, pos = null) {
+        const shown = new Set()
+        const fail = message => {
+            if (!shown.has(message)) notyf.error(message)
+            shown.add(message)
+        }
+
+        // Заглушки со спиннером — в списке вложений под формой, по одной на файл
+        const scope = textarea.closest('form') ?? document
+        const queue = takeAllowed(scope, [...files], fail)
+            .map(file => [file, renderPending(scope.querySelector('.js-files'), file.name)])
+
+        let at = pos
+        for (const [file, pending] of queue) {
+            at = await uploadImage(editor, file, at, fail, pending) ?? at
         }
     }
     // ============================
@@ -1237,16 +1386,8 @@ function initEditor(textarea) {
             Image.configure({ inline: false, HTMLAttributes: { class: 'image' }, allowBase64: false }),
             FileHandler.configure({
                 allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/svg+xml', 'video/mp4', 'video/webm'],
-                onDrop: async (editor, files, pos) => {
-                    for (const file of files) {
-                        await uploadImage(editor, file, pos)
-                    }
-                },
-                onPaste: async (editor, files, htmlContent) => {
-                    for (const file of files) {
-                        await uploadImage(editor, file)
-                    }
-                },
+                onDrop: (editor, files, pos) => uploadImages(editor, files, pos),
+                onPaste: (editor, files) => uploadImages(editor, files),
             }),
             Placeholder.configure({ placeholder }),
             VideoFile,
@@ -1325,7 +1466,7 @@ function initEditor(textarea) {
         window._tiptapEditors[textarea.id] = editor
     }
 
-    wrapper.insertBefore(buildToolbar(editor, textarea, uploadImage), editorEl)
+    wrapper.insertBefore(buildToolbar(editor, textarea, uploadImages), editorEl)
 
     function getCharCount() {
         let count = editor.storage.characterCount.characters()

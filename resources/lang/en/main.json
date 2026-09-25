@@ -69,6 +69,7 @@
         "upload_failed": "Image upload failed",
         "upload_error": "Failed to upload image",
         "upload_image": "Upload image",
+        "unsupported_format": "Unsupported file format",
         "table": "Table",
         "table_insert": "Insert table (3×3)",
         "table_row_before": "Row above",

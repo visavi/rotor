@@ -2,7 +2,7 @@ import * as bootstrap from 'bootstrap'
 import { __ } from './translate.js'
 import { ajax } from './ajax.js'
 import { confirm } from './dialogs.js'
-import { renderFile } from './attachments.js'
+import { renderFile, renderPending, takeAllowed } from './attachments.js'
 import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
 import './sortable-list.js'
@@ -690,29 +690,46 @@ window.copyToClipboard = function (el) {
 }
 
 /* Загрузка файла */
-window.submitFile = function (el) {
-    const form = new FormData()
-    form.append('file', el.files[0])
-    form.append('id', el.dataset.id)
-    form.append('type', el.dataset.type)
-
+// Выбранные файлы уходят по очереди: сервер сверяет лимит maxfiles с уже
+// загруженными, и параллельные запросы проскочили бы проверку вместе.
+// У каждого файла своя заглушка со спиннером, пока он ждёт и грузится.
+// Одинаковая ошибка (лимит у всех оставшихся файлов) показывается один раз
+window.submitFile = async function (el) {
     const scope = el.closest('form') ?? document
     const filesContainer = scope.querySelector('.js-files')
+    const shown = new Set()
+    const fail = message => {
+        if (!shown.has(message)) notyf.error(message)
+        shown.add(message)
+    }
 
-    ajax({
-        data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
-        beforeSend: () => filesContainer?.insertAdjacentHTML('beforeend', '<i class="fas fa-spinner fa-spin fa-3x mx-3"></i>'),
-        complete: () => filesContainer?.querySelectorAll('.fa-spinner').forEach(s => s.remove()),
-        success: function (data) {
-            if (!data.success) { notyf.error(data.message); return }
+    const files = takeAllowed(scope, [...el.files], fail)
+    el.value = ''
 
-            renderFile(scope, filesContainer, data)
-        },
-        error: (_, textStatus) => notyf.error(__('file_upload_failed') + ' ' + textStatus)
+    const upload = (file, pending) => new Promise(resolve => {
+        const form = new FormData()
+        form.append('file', file)
+        form.append('id', el.dataset.id)
+        form.append('type', el.dataset.type)
+
+        const failed = message => {
+            pending?.remove()
+            fail(message)
+        }
+
+        ajax({
+            data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
+            success: data => data.success ? renderFile(scope, filesContainer, data, pending) : failed(data.message),
+            error: (_, textStatus) => failed(__('file_upload_failed') + ' ' + textStatus),
+            complete: resolve,
+        })
     })
 
-    el.value = ''
-    return false
+    const queue = files.map(file => [file, renderPending(filesContainer, file.name)])
+
+    for (const [file, pending] of queue) {
+        await upload(file, pending)
+    }
 }
 
 /* Удаление медиафайла (изображения или видео) из редактора */

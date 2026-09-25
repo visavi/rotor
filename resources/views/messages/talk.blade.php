@@ -23,6 +23,7 @@
 
         <a class="ms-auto d-inline-flex align-items-center gap-1" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
     </div>
+    <hr>
 
     @if ($messages->isNotEmpty())
         <div class="mb-3">

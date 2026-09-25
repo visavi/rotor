@@ -47,7 +47,7 @@ $display = $files->isNotEmpty() || ($showForm ?? false);
 
 <div class="mb-3 js-attach-form" style="display: {{ $display ? 'block' : 'none' }};">
     <label class="btn btn-sm btn-secondary mb-1">
-        <input type="file" name="file" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input type="file" name="file" multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_file') }}&hellip;
     </label>
 

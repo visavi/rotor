@@ -29,7 +29,7 @@ $files ??= $model->files;
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" accept="image/*,video/*" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input id="file" type="file" name="file" accept="image/*,video/*" multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>
