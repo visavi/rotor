@@ -143,12 +143,10 @@ trait HandlesComments
         $validator->empty($model->getAttribute('closed'), ['msg' => __('main.closed_comments')]);
 
         if ($validator->isValid()) {
-            $msg = antimat($msg);
-
             $comment = app(CommentService::class)->create(
                 $model,
                 $user,
-                $msg,
+                (string) $msg,
                 $request->input('parent_id') ? (int) $request->input('parent_id') : null,
                 route($viewRoute, $viewParams, false),
             );

@@ -43,7 +43,8 @@ class SettingController extends AdminController
                         $value *= $mods[$name];
                     }
 
-                    Setting::query()->where('name', $name)->update(['value' => $value]);
+                    // Пустое необязательное поле приходит null, а колонка value NOT NULL
+                    Setting::query()->where('name', $name)->update(['value' => (string) $value]);
                 }
 
                 clearCache('settings');

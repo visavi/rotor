@@ -158,4 +158,16 @@ class ModuleRegistryControllerTest extends TestCase
         $registry->refresh();
         $this->assertFalse((bool) $registry->active);
     }
+
+    public function testStoreWithEmptyUrlFails(): void
+    {
+        // Пустое поле приходит null (ConvertEmptyStringsToNull), раньше trim(null) давал 500
+        $response = $this->actingAs($this->boss)
+            ->post(route('admin.registries.store'), ['url' => '']);
+
+        $response->assertRedirect(route('admin.registries.index'));
+        $response->assertSessionHas('danger');
+
+        $this->assertSame($this->baseCount, ModuleRegistry::query()->count());
+    }
 }

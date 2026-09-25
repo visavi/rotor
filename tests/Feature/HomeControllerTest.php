@@ -77,12 +77,14 @@ class HomeControllerTest extends TestCase
         $old = Error::query()->create([
             'code'       => 666,
             'ip'         => '127.0.0.1',
+            'brow'       => 'Test',
             'created_at' => now()->subDay(),
         ]);
 
         $latest = Error::query()->create([
             'code'       => 666,
             'ip'         => '127.0.0.1',
+            'brow'       => 'Test',
             'created_at' => now()->subHour(),
         ]);
 

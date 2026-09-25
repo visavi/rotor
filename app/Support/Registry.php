@@ -22,6 +22,7 @@ class Registry
     public static array $apiConfig = [];
     public static array $sitemapPages = [];
     public static array $backgroundPaths = [];
+    public static array $textFilters = [];
 
     // Обработчики событий
     public static array $onRegisterValidate = [];
@@ -173,6 +174,35 @@ class Registry
     public static function backgroundPath(string ...$paths): void
     {
         static::$backgroundPaths = [...static::$backgroundPaths, ...$paths];
+    }
+
+    /**
+     * Регистрирует фильтр пользовательского текста
+     *
+     * Колбэк вида fn(string $text): string. Применяется при выводе: касты
+     * HtmlCast и TextCast зовут filterText() на каждое чтение атрибута,
+     * поэтому в базе остаётся оригинал и фильтр обратим. Колбэк должен быть
+     * дешёвым — данные для него кешировать
+     */
+    public static function textFilter(callable $filter): void
+    {
+        static::$textFilters[] = $filter;
+    }
+
+    /**
+     * Прогоняет текст через фильтры модулей в порядке регистрации
+     */
+    public static function filterText(string $text): string
+    {
+        if ($text === '') {
+            return $text;
+        }
+
+        foreach (static::$textFilters as $filter) {
+            $text = $filter($text);
+        }
+
+        return $text;
     }
 
     /**

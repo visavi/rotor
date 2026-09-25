@@ -1,19 +1,6 @@
 <?php
 
 return [
-    'antimat' => [
-        'text' => 'All words from the list will be replaced by ***<br>
-        To delete a word, click on it, you can add a word in the form below<br>',
-        'words'         => 'Word list',
-        'total_words'   => 'Total words',
-        'confirm_clear' => 'Are you sure you want to delete all words?',
-        'empty_words'   => 'No words yet!',
-        'enter_word'    => 'Enter the word',
-
-        'not_enter_word' => 'You have not entered the word for listing!',
-        'word_listed'    => 'The entered word is already in the list!',
-    ],
-
     'banhists' => [
         'history'       => 'History',
         'search_user'   => 'Search by user',

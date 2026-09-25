@@ -14,7 +14,7 @@ return new class extends Migration {
                 $table->integer('user_id');
                 $table->integer('send_user_id');
                 $table->enum('type', [Banhist::BAN, Banhist::UNBAN, Banhist::CHANGE]);
-                $table->text('reason');
+                $table->text('reason')->nullable();
                 $table->integer('term')->default(0);
                 $table->dateTime('created_at')->nullable();
                 $table->boolean('explain')->default(false);

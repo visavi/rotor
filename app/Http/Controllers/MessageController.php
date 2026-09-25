@@ -142,8 +142,7 @@ class MessageController extends Controller
         }
 
         if ($validator->isValid()) {
-            $msg = antimat($msg);
-            $message = $user->sendMessage($this->user, $msg);
+            $message = $user->sendMessage($this->user, (string) $msg);
 
             File::query()
                 ->where('relate_type', Message::$morphName)

@@ -116,7 +116,7 @@ class RegisterTest extends TestCase
     #[DataProvider('blacklistProvider')]
     public function testRegisterBlacklisted(string $type, string $value): void
     {
-        BlackList::query()->create(['type' => $type, 'value' => $value]);
+        BlackList::query()->create(['type' => $type, 'value' => $value, 'user_id' => 0]);
 
         $response = $this->register();
 

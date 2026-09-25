@@ -17,7 +17,7 @@ use Illuminate\Support\HtmlString;
  * @property int             $user_id
  * @property int             $send_user_id
  * @property string          $type
- * @property string          $reason
+ * @property string|null     $reason
  * @property int             $term
  * @property bool            $explain
  * @property CarbonImmutable $created_at
@@ -46,7 +46,7 @@ class Banhist extends Model
     {
         return [
             'user_id' => 'int',
-            'reason'  => HtmlCast::class,
+            'reason'  => HtmlCast::class . ':nullable',
         ];
     }
 

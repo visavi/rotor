@@ -59,7 +59,6 @@ return [
     'admin_chat'           => 'Адмін-чат',
     'banned_list'          => 'Забанені',
     'pending_list'         => 'Очікуючі',
-    'antimat'              => 'Антимат',
     'ip_ban'               => 'IP-бан',
     'errors'               => 'Помилки / Автобани',
     'stickers'             => 'Стікери',

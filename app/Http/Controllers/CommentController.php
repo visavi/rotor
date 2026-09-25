@@ -82,7 +82,7 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => current($validator->getErrors())]);
         }
 
-        $this->comments->update($comment, antimat($msg));
+        $this->comments->update($comment, (string) $msg);
 
         return response()->json([
             'success' => true,

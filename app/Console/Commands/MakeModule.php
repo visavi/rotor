@@ -196,7 +196,7 @@ class MakeModule extends Command
 
             '{{ adminRoutes }}' => <<<PHP
 
-                Route::middleware(['web', 'check.admin', 'admin.logger'])
+                Route::middleware(['web', 'check.admin:boss', 'admin.logger'])
                     ->prefix('admin')
                     ->controller({$name}SettingController::class)
                     ->name('{$route}.')

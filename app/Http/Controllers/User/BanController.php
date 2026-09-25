@@ -55,7 +55,7 @@ class BanController extends Controller
                 ->length($msg, 5, 1000, ['text' => __('validator.text')]);
 
             if ($validator->isValid()) {
-                $text = textNotice('explain', ['message' => antimat($msg)]);
+                $text = textNotice('explain', ['message' => $msg]);
 
                 foreach ($admins as $admin) {
                     $admin->sendMessage($user, $text, false);

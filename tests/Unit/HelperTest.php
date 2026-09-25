@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
-use App\Models\Antimat;
 use App\Models\BlackList;
 use App\Models\Notice;
 use App\Models\Online;
 use App\Models\User;
+use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Date;
@@ -117,13 +117,18 @@ class HelperTest extends TestCase
         self::assertSame($expected, formatTime($seconds));
     }
 
-    public function testAntimat(): void
+    public function testAntimatOnlyCastsToString(): void
     {
-        Antimat::query()->create(['string' => 'xxx']);
+        $filters = Registry::$textFilters;
+        Registry::textFilter(static fn (string $text): string => str_replace('x', '*', $text));
 
-        self::assertSame('test', antimat('test'));
-        self::assertSame('test***test', antimat('testxxxtest'));
-        self::assertSame('тест***тест***', antimat('тестxxxтестxxx'));
+        try {
+            // Фильтры применяются при выводе кастами, хелпер их не трогает
+            self::assertSame('axb', antimat('axb'));
+            self::assertSame('', antimat(null));
+        } finally {
+            Registry::$textFilters = $filters;
+        }
     }
 
     public static function hideMailProvider(): array
@@ -379,7 +384,6 @@ class HelperTest extends TestCase
         self::assertSame(DB::table('spam')->count(), statsSpam());
         self::assertSame(DB::table('banhist')->count(), statsBanHist());
         self::assertSame(DB::table('ban')->count(), statsIpBanned());
-        self::assertSame(DB::table('antimat')->count(), statsAntimat());
         self::assertSame(DB::table('stickers')->count(), statsStickers());
     }
 

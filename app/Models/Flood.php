@@ -7,6 +7,7 @@ namespace App\Models;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
  * Class Flood
@@ -87,7 +88,7 @@ class Flood extends Model
 
         $flood = self::query()
             ->where('uid', $this->getUid())
-            ->where('page', request()->getPathInfo())
+            ->where('page', $this->getPage())
             ->first();
 
         return $flood && $flood->attempts >= $attempts;
@@ -106,10 +107,20 @@ class Flood extends Model
 
         self::query()->updateOrCreate([
             'uid'  => $this->getUid(),
-            'page' => request()->getPathInfo(),
+            'page' => $this->getPage(),
         ], [
             'created_at' => now()->addSeconds($period),
         ])->increment('attempts');
+    }
+
+    /**
+     * Страница, на которой считаются попытки
+     *
+     * Путь обрезается по длине колонки: строгий MySQL длинное значение не пропустит
+     */
+    private function getPage(): string
+    {
+        return Str::substr(request()->getPathInfo(), 0, 191);
     }
 
     /**

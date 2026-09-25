@@ -11,7 +11,7 @@ return new class extends Migration {
             Schema::create('floods', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('uid', 32);
-                $table->string('page', 30);
+                $table->string('page', 191);
                 $table->integer('attempts')->default(0);
                 $table->dateTime('created_at')->nullable();
 

@@ -123,12 +123,6 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/antimat" class="app-tile">
-                            <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-filter"></i></div>
-                            <div class="app-tile-label">{{ __('index.antimat') }}<span class="badge bg-adaptive app-tile-badge">{{ statsAntimat() }}</span></div>
-                        </a>
-                    </div>
-                    <div class="col">
                         <a href="/admin/banhists" class="app-tile">
                             <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-history"></i></div>
                             <div class="app-tile-label">{{ __('index.ban_history') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBanHist() }}</span></div>

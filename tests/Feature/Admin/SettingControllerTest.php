@@ -85,6 +85,27 @@ class SettingControllerTest extends TestCase
         $response->assertSessionHasErrors('sets[title]');
     }
 
+    public function testSaveEmptyOptionalSetting(): void
+    {
+        $this->overrideSetting('archive_file_path', '/archive');
+
+        // Пустое поле приходит null (ConvertEmptyStringsToNull), а колонка value NOT NULL.
+        // Нестрогий MySQL молча пишет пустую строку, строгий (DB_STRICT в phpunit.xml) — падает
+        $response = $this->actingAs($this->boss)
+            ->post('/admin/settings?act=files', [
+                'sets' => ['archive_file_path' => ''],
+                'opt'  => ['archive_file_path' => 1],
+            ]);
+
+        $response->assertRedirect('admin/settings?act=files');
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('settings', [
+            'name'  => 'archive_file_path',
+            'value' => '',
+        ]);
+    }
+
     public function testSaveWithoutSetsFails(): void
     {
         $response = $this->actingAs($this->boss)

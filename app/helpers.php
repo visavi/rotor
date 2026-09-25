@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\BlackList;
@@ -187,11 +186,14 @@ function formatTime(int $time, int $crumbs = 2): string
 }
 
 /**
- * Очищает строку от мата по базе слов
+ * Приводит текст к строке
+ *
+ * @deprecated 15.0 Фильтры модулей (антимат) применяются при выводе кастами
+ *             HtmlCast и TextCast, вызывать хелпер не нужно
  */
 function antimat(?string $str): string
 {
-    return Antimat::replace((string) $str);
+    return (string) $str;
 }
 
 /**
@@ -321,14 +323,6 @@ function statsBlacklist(): string
     $list = $blacklist + ['login' => 0, 'email' => 0, 'domain' => 0];
 
     return $list['login'] . '/' . $list['email'] . '/' . $list['domain'];
-}
-
-/**
- * Возвращает количество записей в антимате
- */
-function statsAntimat(): int
-{
-    return Antimat::query()->count();
 }
 
 /**

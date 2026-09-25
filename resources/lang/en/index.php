@@ -59,7 +59,6 @@ return [
     'admin_chat'           => 'Admin chat',
     'banned_list'          => 'Banned',
     'pending_list'         => 'Awaiting',
-    'antimat'              => 'Antimat',
     'ip_ban'               => 'IP ban',
     'errors'               => 'Errors / Bans',
     'stickers'             => 'Stickers',

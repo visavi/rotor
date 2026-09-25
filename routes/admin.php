@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AntimatController;
 use App\Http\Controllers\Admin\BanController as AdminBanController;
 use App\Http\Controllers\Admin\BanhistController;
 use App\Http\Controllers\Admin\BanlistController;
@@ -61,16 +60,6 @@ Route::middleware(['check.admin', 'admin.logger'])
 
             /* Ожидающие */
             Route::match(['get', 'post'], '/reglists', [ReglistController::class, 'index']);
-
-            /* Антимат */
-            Route::controller(AntimatController::class)
-                ->prefix('antimat')
-                ->name('antimat.')
-                ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index')->name('index');
-                    Route::delete('/delete', 'delete')->name('delete');
-                    Route::post('/clear', 'clear')->name('clear');
-                });
 
             /* История банов */
             Route::controller(BanhistController::class)

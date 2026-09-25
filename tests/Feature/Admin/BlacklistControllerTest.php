@@ -190,4 +190,18 @@ class BlacklistControllerTest extends TestCase
 
         $this->assertDatabaseHas('blacklist', ['id' => $email->id]);
     }
+
+    public function testAddEmptyDomainFails(): void
+    {
+        // Пустое поле: parse_url() отдаёт false, раньше это был TypeError и 500
+        $before = BlackList::query()->where('type', 'domain')->count();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/blacklists?type=domain', ['value' => '']);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors('value');
+
+        $this->assertSame($before, BlackList::query()->where('type', 'domain')->count());
+    }
 }

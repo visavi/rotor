@@ -54,7 +54,8 @@ class BlacklistController extends AdminController
                 if (! preg_match('#^https?://#i', $value)) {
                     $value = 'https://' . $value;
                 }
-                $value = parse_url(strtolower($value), PHP_URL_HOST);
+                // Для строки без хоста parse_url() отдаёт false или null
+                $value = (string) parse_url(strtolower($value), PHP_URL_HOST);
 
                 $validator->regex($value, '#^[а-яa-z0-9_.-]+(\.[а-яa-z0-9/]+)+$#u', ['value' => __('validator.site')]);
             }

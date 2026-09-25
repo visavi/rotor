@@ -6,6 +6,7 @@ namespace App\Support;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CategoryTree
 {
@@ -181,16 +182,23 @@ class CategoryTree
         }
 
         $sort = 0;
+        $parentCases = '';
+        $sortCases = '';
 
-        $rows = [];
-
+        // Значения — целые после разбора строки выше, поэтому подставляются в SQL напрямую
         foreach ($parents as $id => $parentId) {
-            $rows[] = ['id' => $id, 'parent_id' => $parentId, 'sort' => ++$sort];
+            $parentCases .= ' WHEN ' . $id . ' THEN ' . $parentId;
+            $sortCases .= ' WHEN ' . $id . ' THEN ' . ++$sort;
         }
 
         // Одной командой, а не апдейтом на раздел: строка порядка приходит целиком,
-        // и на полусотне разделов это была полусотня запросов за нажатие кнопки
-        $model::query()->upsert($rows, ['id'], ['parent_id', 'sort']);
+        // и на полусотне разделов это была полусотня запросов за нажатие кнопки.
+        // Не upsert: INSERT ... ON DUPLICATE KEY в строгом MySQL требует все
+        // NOT NULL поля без умолчания, даже когда строка уже есть
+        $model::query()->whereKey(array_keys($parents))->update([
+            'parent_id' => DB::raw('CASE id' . $parentCases . ' END'),
+            'sort'      => DB::raw('CASE id' . $sortCases . ' END'),
+        ]);
     }
 
     /**

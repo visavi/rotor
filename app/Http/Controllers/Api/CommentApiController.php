@@ -82,7 +82,7 @@ class CommentApiController extends Controller
         $comment = $this->comments->create(
             $model,
             $user,
-            antimat($validated['text']),
+            $validated['text'],
             isset($validated['parent_id']) ? (int) $validated['parent_id'] : null,
         );
 
@@ -136,7 +136,7 @@ class CommentApiController extends Controller
             ],
         ]);
 
-        $this->comments->update($comment, antimat($validated['text']));
+        $this->comments->update($comment, $validated['text']);
 
         $comment->load(['user', 'files', 'parent' => static function ($query) {
             $query->withoutGlobalScope('active')->with('user');

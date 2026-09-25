@@ -180,7 +180,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected function casts(): array
     {
         return [
-            'info'       => HtmlCast::class,
+            'info'       => HtmlCast::class . ':nullable',
             'updated_at' => 'datetime',
             'timeban'    => 'datetime',
             'timebonus'  => 'datetime',

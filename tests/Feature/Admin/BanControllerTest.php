@@ -244,9 +244,11 @@ class BanControllerTest extends TestCase
         $this->assertSame(User::USER, $user->level);
         $this->assertNull($user->timeban);
 
+        // У разбана нет причины
         $this->assertDatabaseHas('banhist', [
             'user_id' => $user->id,
             'type'    => Banhist::UNBAN,
+            'reason'  => null,
         ]);
 
         $response->assertSessionHas('success');

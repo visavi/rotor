@@ -284,8 +284,7 @@ class ApiController extends Controller
             'files.*' => ['file', 'max:' . FileService::maxFileSize(), 'mimes:' . setting('file_extensions')],
         ]);
 
-        $text = antimat($validated['text']);
-        $message = $recipient->sendMessage($user, $text);
+        $message = $recipient->sendMessage($user, $validated['text']);
 
         foreach ($request->file('files', []) as $file) {
             $message->uploadFile($file);
