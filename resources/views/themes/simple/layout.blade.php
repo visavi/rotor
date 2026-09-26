@@ -9,6 +9,7 @@
 <html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
 <head>
     <meta charset="utf-8">
+    @include('app/_theme_detect')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0d7a5f">
     <meta name="generator" content="Rotor {{ ROTOR_VERSION }}">

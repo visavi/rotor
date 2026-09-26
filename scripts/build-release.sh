@@ -47,7 +47,7 @@ rm -rf \
   tests \
   package.json \
   package-lock.json \
-  vite.config.js \
+  vite.config.mjs \
   pint.json \
   phpstan.neon \
   phpunit.xml \
@@ -57,6 +57,7 @@ rm -rf \
   .gitattributes \
   deploy.php \
   docker-compose.yml \
+  AGENTS.md \
   scripts
 
 # Артефакты сборки

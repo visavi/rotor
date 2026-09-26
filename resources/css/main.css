@@ -1345,11 +1345,17 @@ a.profile-stat:hover {
 }
 
 /* Карточка пользователя в списке */
+/* Поля даёт сама .section, здесь только отступ до статистики — иначе аватар дальше от края, чем везде */
 .user-card-head {
     display: flex;
     align-items: center;
     gap: .75rem;
-    padding: .75rem 1rem;
+    padding-bottom: .75rem;
+}
+
+/* Отступ аватара остался от float-вёрстки, во флексе его заменяет gap */
+.user-card-head .user-avatar {
+    margin-right: 0;
 }
 
 .user-card-title {

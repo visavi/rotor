@@ -209,16 +209,37 @@ document.addEventListener('DOMContentLoaded', function () {
         getNewMessages()
     })
 
+    // Меняются только классы солнца и луны: размер иконки у каждой темы свой
+    function syncThemeIcon() {
+        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark'
+        const themeIcon = document.getElementById('theme-icon-active')
+        themeIcon?.classList.toggle('fa-moon', isDark)
+        themeIcon?.classList.toggle('fa-sun', !isDark)
+    }
+
     function setTheme(theme) {
         document.documentElement.setAttribute('data-bs-theme', theme)
-        const icon = theme === 'dark' ? 'fa-moon' : 'fa-sun'
-        const themeIcon = document.getElementById('theme-icon-active')
-        if (themeIcon) themeIcon.className = `fa-regular ${icon} fa-lg`
+        syncThemeIcon()
         ajax({ type: 'POST', url: '/ajax/set-theme', data: { theme } })
     }
 
+    // Без выбранной темы сервер рисует солнце, а системную тему выставил скрипт в head
+    syncThemeIcon()
+
+    document.querySelectorAll('[data-bs-theme-toggle]').forEach(el => {
+        el.addEventListener('click', event => {
+            event.preventDefault()
+            const current = document.documentElement.getAttribute('data-bs-theme')
+            setTheme(current === 'dark' ? 'light' : 'dark')
+        })
+    })
+
+    // Выбор конкретной темы — для сторонних тем с выпадающим меню
     document.querySelectorAll('[data-bs-theme-value]').forEach(el => {
-        el.addEventListener('click', () => setTheme(el.dataset.bsThemeValue))
+        el.addEventListener('click', event => {
+            event.preventDefault()
+            setTheme(el.dataset.bsThemeValue)
+        })
     })
 
     if (window.location.hash) {

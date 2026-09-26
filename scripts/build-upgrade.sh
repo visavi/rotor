@@ -51,7 +51,7 @@ done <<< "$files"
     tests \
     package.json \
     package-lock.json \
-    vite.config.js \
+    vite.config.mjs \
     pint.json \
     phpstan.neon \
     phpunit.xml \
@@ -61,6 +61,7 @@ done <<< "$files"
     .gitattributes \
     deploy.php \
     docker-compose.yml \
+    AGENTS.md \
     scripts )
 
 # public/build из текущего проекта (целиком — vite хеширует имена + manifest.json)

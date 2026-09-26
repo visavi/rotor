@@ -13,27 +13,12 @@
                 <button class="app-search__button"><i class="fa fa-search"></i></button>
             </form>
         </li>
-        @hook('navbarStart')
-
-        <li class="dropdown">
-            <a href="#" class="app-nav__item" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+        <li>
+            <a href="#" class="app-nav__item" data-bs-theme-toggle aria-label="{{ __('main.theme') }}">
                 <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" style="--bs-dropdown-min-width: 8rem;">
-                <li>
-                    <a type="button" class="dropdown-item" data-bs-theme-value="light">
-                        <i class="fa-regular fa-sun fa-lg"></i>
-                        {{ __('main.theme_light') }}
-                    </a>
-                </li>
-                <li>
-                    <a type="button" class="dropdown-item" data-bs-theme-value="dark">
-                        <i class="fa-regular fa-moon fa-lg"></i>
-                        {{ __('main.theme_dark') }}
-                    </a>
-                </li>
-            </ul>
         </li>
+        @hook('navbarStart')
 
         <!--Notification Menu-->
         @if ($user = getUser())

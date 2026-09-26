@@ -2,6 +2,7 @@
 <html lang="{{ app()->getLocale() }}" data-bs-theme="{{ request()->cookie('theme') ?? 'light' }}">
 <head>
     <meta charset="utf-8">
+    @include('app/_theme_detect')
     <meta name="description" content="@yield('description', setting('description'))">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">

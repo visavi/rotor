@@ -255,8 +255,7 @@ return [
     'directory_not_writable'     => 'Директорія недоступна для запису!',
     'closed_comments'            => 'Коментування закрите!',
 
-    'theme_light' => 'Світла',
-    'theme_dark'  => 'Темна',
+    'theme' => 'Тема оформлення',
 
     'online' => 'Онлайн',
 ];

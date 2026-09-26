@@ -48,7 +48,7 @@ jobs:
           -x 'package.json' -x 'package-lock.json' -x 'vite.config.mjs'
           -x 'pint.json' -x 'phpstan.neon' -x 'phpunit.xml' -x 'composer.lock'
           -x '.editorconfig' -x '.gitignore' -x '.gitattributes'
-          -x 'deploy.php' -x 'docker-compose.yml' -x 'scripts/*'
+          -x 'deploy.php' -x 'docker-compose.yml' -x 'scripts/*' -x 'AGENTS.md'
 
       # Upgrade-архив (без vendor) нужен только патч-релизу (третья цифра тега != 0):
       # на мажоре/миноре апдейтер его не выберет, не плодим лишний ассет.

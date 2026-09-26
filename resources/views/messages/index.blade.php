@@ -12,6 +12,10 @@
 @stop
 
 @section('content')
+    <div class="text-end mb-2">
+        <a class="d-inline-flex align-items-center gap-1" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+    </div>
+
     @if ($messages->isNotEmpty())
         <div class="section mb-3 shadow dialogue-list">
             @foreach ($messages as $data)
@@ -28,11 +32,14 @@
 
                     <div class="dialogue-main">
                         <div class="dialogue-head">
-                            @if ($data->author_id)
-                                {{ $data->author->getProfile() }}
-                            @else
-                                <b>{{ __('messages.system') }}</b>
-                            @endif
+                            {{-- Обёртка держит имя и значок роли одним флекс-элементом, иначе space-between уносит значок в центр --}}
+                            <span>
+                                @if ($data->author_id)
+                                    {{ $data->author->getProfile() }}
+                                @else
+                                    <b>{{ __('messages.system') }}</b>
+                                @endif
+                            </span>
 
                             <span class="dialogue-date text-muted fst-italic">
                                 {{ dateFixed($data->created_at) }}
@@ -64,6 +71,4 @@
             </div>
         </div>
     @endif
-
-    <a href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
 @stop

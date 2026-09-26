@@ -6,13 +6,10 @@
         <button class="site-menu-toggle" type="button" data-menu-toggle aria-label="Menu"><i class="fas fa-bars"></i></button>
 
         <div class="site-header__user">
-            @hook('navbarStart')
-
-            {{-- Ядро (main.js) слушает клик по [data-bs-theme-value] и меняет иконку #theme-icon-active,
-                 а app.js темы после клика инвертирует значение атрибута --}}
-            <a href="#" data-bs-theme-value="{{ request()->cookie('theme') === 'dark' ? 'light' : 'dark' }}" aria-label="Theme">
+            <a href="#" data-bs-theme-toggle aria-label="{{ __('main.theme') }}">
                 <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }}" id="theme-icon-active"></i>
             </a>
+            @hook('navbarStart')
 
             @if ($user = getUser())
                 @if (isAdmin() && statsSpam())
