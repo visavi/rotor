@@ -1677,7 +1677,9 @@ a.profile-stat:hover {
     list-style: none;
 }
 
-.sortable-tree-item {
+/* Строка дерева — это и .sortable-row, чей общий padding иначе затирает отступ:
+   специфичность выше, чтобы не зависеть от порядка правил в файле */
+.sortable-tree-list .sortable-tree-item {
     padding-left: calc(var(--depth, 0) * var(--depth-step));
 }
 
