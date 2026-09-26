@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Jobs\SendMailJob;
 use Carbon\CarbonImmutable;
 use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
@@ -21,13 +22,28 @@ class MailService
      * воркера и получает повторы, при sync уходит сразу в этом же запросе.
      * Второе нужно там, где крон запускается раз в час: ждать доставки
      * столько же пользователю нельзя
+     *
+     * Ошибка наружу не выходит: при sync сбой SMTP обрывал рассылку на первом
+     * плохом адресе и ронял форму в 500. Провал уже записан sendOrFail() и
+     * failed() задачи, при database сюда попадает только сбой постановки
      */
     public function queue(string $view, array $data, int $delayMinutes = 0): void
     {
-        $job = SendMailJob::dispatch($view, $data);
+        $job = new SendMailJob($view, $data);
 
         if ($delayMinutes > 0) {
             $job->delay(now()->addMinutes($delayMinutes));
+        }
+
+        try {
+            Bus::dispatch($job);
+        } catch (Throwable $e) {
+            Log::error('Mail queue failed', [
+                'view'      => $view,
+                'to'        => $data['to'] ?? null,
+                'subject'   => $data['subject'] ?? null,
+                'exception' => $e->getMessage(),
+            ]);
         }
     }
 
