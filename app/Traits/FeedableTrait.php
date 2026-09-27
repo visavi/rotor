@@ -42,6 +42,7 @@ trait FeedableTrait
                 'relate_id'   => $this->getKey(),
             ],
             [
+                'pinned'     => (bool) ($this->pinned ?? false),
                 'created_at' => $this->created_at,
             ]
         );

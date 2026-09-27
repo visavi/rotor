@@ -68,7 +68,7 @@ class ModuleController extends AdminController
      */
     public function module(Request $request): View
     {
-        $moduleName = (string) $request->input('module');
+        $moduleName = $request->string('module')->value();
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {

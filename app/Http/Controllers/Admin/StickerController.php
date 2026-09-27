@@ -10,7 +10,6 @@ use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class StickerController extends AdminController
@@ -153,7 +152,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code = Str::lower((string) $request->input('code'));
+            $code = $request->string('code')->lower()->value();
             $sticker = $request->file('sticker');
 
             $validator
@@ -213,7 +212,7 @@ class StickerController extends AdminController
         }
 
         if ($request->isMethod('post')) {
-            $code = Str::lower((string) $request->input('code'));
+            $code = $request->string('code')->lower()->value();
             $cid = int($request->input('cid'));
 
             $validator

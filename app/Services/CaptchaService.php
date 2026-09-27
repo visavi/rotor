@@ -90,8 +90,8 @@ class CaptchaService
             return captchaVerify();
         }
 
-        $key = (string) $request->input('captcha_key');
-        $code = (string) $request->input('protect');
+        $key = $request->string('captcha_key')->value();
+        $code = $request->string('protect')->value();
 
         if ($key === '' || $code === '') {
             return false;

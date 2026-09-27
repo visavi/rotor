@@ -94,7 +94,7 @@ class AccountApiController extends Controller
     public function password(Request $request, Validator $validator, UserService $userService): JsonResponse
     {
         $user = getUser();
-        $newPassword = (string) $request->input('new_password');
+        $newPassword = $request->string('new_password')->value();
 
         $userService->validatePassword(
             $validator,
@@ -118,7 +118,7 @@ class AccountApiController extends Controller
     public function email(Request $request, Validator $validator, UserService $userService): JsonResponse
     {
         $user = getUser();
-        $email = strtolower((string) $request->input('email'));
+        $email = $request->string('email')->lower()->value();
 
         $userService->validateEmailChange($validator, $user, $email, $request->input('password'));
 
@@ -144,7 +144,7 @@ class AccountApiController extends Controller
             abort(403, __('users.profile_not_confirmation'));
         }
 
-        $email = strtolower((string) $request->input('email', $user->email));
+        $email = $request->string('email', $user->email)->lower()->value();
         $domain = Str::substr(strrchr($email, '@') ?: '', 1);
 
         $validator

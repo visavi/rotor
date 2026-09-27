@@ -232,10 +232,10 @@ class InstallController extends Controller
         }
 
         $lang = $request->input('lang', 'ru');
-        $login = (string) $request->input('login');
+        $login = $request->string('login')->value();
         $password = $request->input('password');
         $password2 = $request->input('password2');
-        $email = strtolower((string) $request->input('email'));
+        $email = $request->string('email')->lower()->value();
 
         if ($request->isMethod('post')) {
             $validator->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])

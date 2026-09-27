@@ -43,11 +43,11 @@ class AuthApiController extends Controller
             abort(403, __('users.registration_suspended'));
         }
 
-        $login = (string) $request->input('login');
+        $login = $request->string('login')->value();
         // При скрытом поле присланный адрес игнорируем — его легко подсунуть запросом
         $email = UserService::isEmailHidden()
             ? ''
-            : strtolower((string) $request->input('email'));
+            : $request->string('email')->lower()->value();
         $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
         $validator->true($captcha->verify($request), ['protect' => __('validator.captcha')]);
@@ -62,7 +62,7 @@ class AuthApiController extends Controller
 
         $this->throwIfInvalid($validator);
 
-        $user = $userService->register($login, (string) $request->input('password'), $email, $gender);
+        $user = $userService->register($login, $request->string('password')->value(), $email, $gender);
 
         // Токен выдаётся сразу: иначе клиенту пришлось бы отдельно логиниться
         $user->update(['apikey' => Str::random(32)]);

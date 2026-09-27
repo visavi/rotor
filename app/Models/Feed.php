@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int             $id
  * @property string          $relate_type
  * @property int             $relate_id
+ * @property bool            $pinned
  * @property CarbonImmutable $created_at
  */
 class Feed extends Model
@@ -27,6 +28,7 @@ class Feed extends Model
     protected function casts(): array
     {
         return [
+            'pinned'     => 'boolean',
             'created_at' => 'datetime',
         ];
     }

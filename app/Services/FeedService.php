@@ -87,6 +87,7 @@ class FeedService
 
         $query = FeedModel::query()
             ->whereIn('relate_type', $enabledTypes)
+            ->orderByDesc('pinned')
             ->orderByDesc('created_at');
 
         // Отсекаем невидимые записи каждого типа прямо в запросе,

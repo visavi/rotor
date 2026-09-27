@@ -52,13 +52,13 @@ class UserController extends Controller
 
         if ($request->isMethod('post')) {
             if ($request->has(['login', 'password'])) {
-                $login = (string) $request->input('login');
+                $login = $request->string('login')->value();
                 $password = $request->input('password');
                 $password2 = $request->input('password2');
                 // При скрытом поле присланный адрес игнорируем — его легко подсунуть POST-ом
                 $email = UserService::isEmailHidden()
                     ? ''
-                    : strtolower((string) $request->input('email'));
+                    : $request->string('email')->lower()->value();
                 $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
 
                 $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
@@ -110,7 +110,7 @@ class UserController extends Controller
                 }
 
                 if ($validator->isValid()) {
-                    $login = Str::lower((string) $request->input('login'));
+                    $login = $request->string('login')->lower()->value();
                     $password = $request->input('password');
                     $remember = $request->boolean('remember');
 
@@ -218,7 +218,7 @@ class UserController extends Controller
 
         /* Повторная отправка */
         if ($request->has('email') && $request->isMethod('post')) {
-            $email = strtolower((string) $request->input('email'));
+            $email = $request->string('email')->lower()->value();
             $domain = Str::substr(strrchr($email, '@'), 1);
 
             $validator
@@ -317,7 +317,7 @@ class UserController extends Controller
      */
     public function checkLogin(Request $request, Validator $validator): JsonResponse
     {
-        $login = (string) $request->input('login');
+        $login = $request->string('login')->value();
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))
@@ -352,7 +352,7 @@ class UserController extends Controller
      */
     public function searchUsers(Request $request): JsonResponse
     {
-        $query = (string) $request->input('query', '');
+        $query = $request->string('query')->value();
 
         if (mb_strlen($query) < 2) {
             return response()->json();

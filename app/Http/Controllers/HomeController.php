@@ -57,7 +57,7 @@ class HomeController extends Controller
     public function search(Request $request, Validator $validator): View|RedirectResponse
     {
         $posts = paginate([], 10);
-        $query = SearchService::clean((string) $request->input('query', $request->input('q', '')));
+        $query = SearchService::clean($request->string('query', $request->input('q'))->value());
         $searchQuery = SearchService::terms($query);
 
         $types = SearchService::types();

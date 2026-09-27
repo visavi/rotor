@@ -53,7 +53,7 @@ class FileApiController extends Controller
 
         $result = $this->uploader->upload(
             $request->file('file'),
-            (string) $request->input('type'),
+            $request->string('type')->value(),
             $request->integer('id'),
             $validator,
         );
@@ -77,7 +77,7 @@ class FileApiController extends Controller
             'type' => ['required', 'string', 'in:' . implode(',', FileService::types())],
         ]);
 
-        $result = $this->uploader->remove($id, (string) $request->input('type'), $validator);
+        $result = $this->uploader->remove($id, $request->string('type')->value(), $validator);
 
         if (! $result['success']) {
             return response()->json(['message' => $result['message']], 422);

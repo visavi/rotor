@@ -31,7 +31,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\ViewErrorBag;
 use ReCaptcha\ReCaptcha;
 
-const ROTOR_VERSION = '14.7.0';
+const ROTOR_VERSION = '14.8.0';
 
 /**
  * @deprecated Мост совместимости для модулей, не обновлённых на datetime. Будет удалён в 15.0
@@ -654,7 +654,7 @@ function captchaVerify(): bool
     if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
         $sessionCode = (string) $request->session()->pull('protect');
 
-        return $sessionCode !== '' && strtolower((string) $request->input('protect')) === strtolower($sessionCode);
+        return $sessionCode !== '' && strtolower($request->string('protect')->value()) === strtolower($sessionCode);
     }
 
     return true;

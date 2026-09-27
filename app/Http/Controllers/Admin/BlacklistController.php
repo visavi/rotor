@@ -8,7 +8,6 @@ use App\Models\BlackList;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class BlacklistController extends AdminController
@@ -37,7 +36,7 @@ class BlacklistController extends AdminController
         $type = $this->type;
 
         if ($request->isMethod('post')) {
-            $value = Str::lower((string) $request->input('value'));
+            $value = $request->string('value')->lower()->value();
 
             $validator->length($value, 1, 100, ['value' => __('validator.text')]);
 

@@ -97,7 +97,7 @@ class UpgradeController extends AdminController
      */
     public function download(Request $request, GithubService $githubService): JsonResponse
     {
-        $tag = (string) $request->input('tag');
+        $tag = $request->string('tag')->value();
         $full = (bool) $request->input('full');
         $asset = $tag ? $this->upgrade->findAsset($githubService, $tag, $full) : null;
 
@@ -131,7 +131,7 @@ class UpgradeController extends AdminController
      */
     public function apply(Request $request): JsonResponse
     {
-        $tag = (string) $request->input('tag');
+        $tag = $request->string('tag')->value();
 
         if (! $tag) {
             return response()->json(['error' => __('admin.upgrade.invalid_params')], 422);

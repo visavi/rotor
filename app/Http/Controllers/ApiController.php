@@ -100,7 +100,7 @@ class ApiController extends Controller
      */
     public function search(Request $request): JsonResource
     {
-        $query = (string) $request->input('query', $request->input('q', ''));
+        $query = $request->string('query', $request->input('q'))->value();
         $terms = SearchService::terms($query);
         $type = SearchService::type($request->input('type'));
         $sort = SearchService::sort($request->input('sort'));

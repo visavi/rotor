@@ -12,10 +12,11 @@ return new class extends Migration {
                 $table->id();
                 $table->string('relate_type', 20);
                 $table->unsignedInteger('relate_id');
+                $table->boolean('pinned')->default(false);
                 $table->dateTime('created_at')->nullable();
 
                 $table->unique(['relate_type', 'relate_id']);
-                $table->index('created_at');
+                $table->index(['pinned', 'created_at']);
                 $table->index(['relate_type', 'created_at']);
             });
         }

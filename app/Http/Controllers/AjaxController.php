@@ -21,7 +21,7 @@ class AjaxController extends Controller
     public function complaint(Request $request, ComplaintService $complaint): JsonResponse
     {
         $result = $complaint->create(
-            (string) $request->input('type'),
+            $request->string('type')->value(),
             int($request->input('id')),
             $request->input('page'),
         );
@@ -62,7 +62,7 @@ class AjaxController extends Controller
     {
         $result = $uploader->upload(
             $request->file('file'),
-            (string) $request->input('type'),
+            $request->string('type')->value(),
             int($request->input('id')),
             $validator,
         );
@@ -101,7 +101,7 @@ class AjaxController extends Controller
     {
         $result = $uploader->remove(
             int($request->input('id')),
-            (string) $request->input('type'),
+            $request->string('type')->value(),
             $validator,
         );
 
@@ -137,7 +137,7 @@ class AjaxController extends Controller
      */
     public function resolveImage(Request $request): JsonResponse
     {
-        $url = filter_var((string) $request->input('url'), FILTER_VALIDATE_URL);
+        $url = filter_var($request->string('url')->value(), FILTER_VALIDATE_URL);
 
         if (! $url) {
             return response()->json(['image' => null]);

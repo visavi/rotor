@@ -27,7 +27,7 @@ class AccountController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $email = strtolower((string) $request->input('email'));
+        $email = $request->string('email')->lower()->value();
 
         $userService->validateEmailChange($validator, $user, $email, $request->input('password'));
 
@@ -223,7 +223,7 @@ class AccountController extends Controller
      */
     public function checkLogin(Request $request, Validator $validator): JsonResponse
     {
-        $login = (string) $request->input('login');
+        $login = $request->string('login')->value();
 
         $validator
             ->true($request->ajax(), __('validator.not_ajax'))

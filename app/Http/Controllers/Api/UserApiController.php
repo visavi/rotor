@@ -29,7 +29,7 @@ class UserApiController extends Controller
     public function index(Request $request): JsonResource
     {
         $type = $request->input('type', 'users');
-        $search = trim((string) $request->input('user', ''));
+        $search = $request->string('user')->trim()->value();
 
         // Сортировка та же, что на сайте: point, rating, money, created, updated
         [, $orderBy] = User::getSorting($request->input('sort', 'point'), $this->apiOrder($request, 'desc'));
@@ -57,7 +57,7 @@ class UserApiController extends Controller
      */
     public function search(Request $request): JsonResource
     {
-        $query = (string) $request->input('query', '');
+        $query = $request->string('query')->value();
 
         if (mb_strlen($query) < 2) {
             return AuthorResource::collection([]);

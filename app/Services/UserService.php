@@ -167,7 +167,7 @@ class UserService
         $name = $request->input('name');
         $site = $request->input('site');
         $birthday = $request->input('birthday');
-        $phone = preg_replace('/[^\d+]/', '', (string) $request->input('phone'));
+        $phone = preg_replace('/[^\d+]/', '', $request->string('phone')->value());
 
         $validator
             ->url($site, ['site' => __('validator.site')], false)
@@ -183,8 +183,8 @@ class UserService
         return [
             'name'     => $name,
             'gender'   => $request->input('gender') === User::MALE ? User::MALE : User::FEMALE,
-            'country'  => Str::substr((string) $request->input('country'), 0, 30),
-            'city'     => Str::substr((string) $request->input('city'), 0, 50),
+            'country'  => $request->string('country')->substr(0, 30)->value(),
+            'city'     => $request->string('city')->substr(0, 50)->value(),
             'phone'    => $phone,
             'site'     => $site,
             'birthday' => $birthday,

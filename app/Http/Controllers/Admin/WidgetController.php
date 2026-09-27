@@ -32,7 +32,7 @@ class WidgetController extends AdminController
         $enabled = (array) $request->input('widgets', []);
 
         // Порядок приходит строкой от Sortable; чужие ключи отсекаются, забытые уходят в конец
-        $order = array_intersect(explode(',', (string) $request->input('order')), $keys);
+        $order = array_intersect(explode(',', $request->string('order')->value()), $keys);
 
         $keys = [...$order, ...array_diff($keys, $order)];
 

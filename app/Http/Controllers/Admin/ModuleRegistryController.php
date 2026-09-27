@@ -20,7 +20,7 @@ class ModuleRegistryController extends AdminController
 
     public function store(Request $request): RedirectResponse
     {
-        $url = trim((string) $request->input('url'));
+        $url = $request->string('url')->trim()->value();
 
         if (! filter_var($url, FILTER_VALIDATE_URL)) {
             return redirect()->route('admin.registries.index')
