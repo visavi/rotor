@@ -5,35 +5,41 @@
 
         <button class="site-menu-toggle" type="button" data-menu-toggle aria-label="Menu"><i class="fas fa-bars"></i></button>
 
-        <div class="site-header__user">
-            <a href="#" data-bs-theme-toggle aria-label="{{ __('main.theme') }}">
-                <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }}" id="theme-icon-active"></i>
-            </a>
+        <ul class="site-header__user">
+            <li>
+                <a href="#" data-bs-theme-toggle aria-label="{{ __('main.theme') }}">
+                    <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }}" id="theme-icon-active"></i>
+                </a>
+            </li>
             @hook('navbarStart')
 
             @if ($user = getUser())
                 @if (isAdmin() && statsSpam())
-                    <a class="site-header__badged" href="{{ route('admin.spam.index') }}" aria-label="{{ __('index.complains') }}">
-                        <i class="far fa-bell"></i>
-                        <span class="site-badge">{{ statsSpam() }}</span>
-                    </a>
+                    <li>
+                        <a href="{{ route('admin.spam.index') }}" aria-label="{{ __('index.complains') }}">
+                            <i class="far fa-bell"></i>
+                            <span class="badge bg-notify">{{ statsSpam() }}</span>
+                        </a>
+                    </li>
                 @endif
 
                 @if ($user->isActive())
-                    <a class="site-header__badged" href="{{ route('messages.index') }}" aria-label="{{ __('index.mails') }}">
-                        <i class="far fa-envelope"></i>
-                        <span class="site-badge js-message-count">{{ $user->getCountNewMessages() ?: '' }}</span>
-                    </a>
+                    <li>
+                        <a href="{{ route('messages.index') }}" aria-label="{{ __('index.mails') }}">
+                            <i class="far fa-envelope"></i>
+                            <span class="badge bg-notify js-message-count">{{ $user->getCountNewMessages() ?: '' }}</span>
+                        </a>
+                    </li>
                 @endif
 
-                <span class="dropdown">
+                <li class="dropdown">
                     {{-- На узком экране вместо имени иконка: строка шапки не должна переноситься --}}
                     <a href="#" data-bs-toggle="dropdown" aria-label="{{ $user->getName() }}">
                         <i class="far fa-user d-md-none"></i>
                         <span class="d-none d-md-inline">{{ $user->getName() }}</span>
                         <i class="fas fa-caret-down"></i>
                     </a>
-                    <span class="dropdown-menu dropdown-menu-end">
+                    <div class="dropdown-menu dropdown-menu-end">
                         @hook('navbarMenuStart')
                         <a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}">{{ __('index.my_account') }}</a>
                         <a class="dropdown-item" href="{{ route('profile') }}">{{ __('index.my_profile') }}</a>
@@ -47,15 +53,15 @@
                             @csrf
                             <button class="btn btn-link dropdown-item">{{ __('index.logout') }}</button>
                         </form>
-                    </span>
-                </span>
+                    </div>
+                </li>
             @else
-                <a href="{{ route('login') }}">{{ __('index.login') }}</a>
-                <a href="{{ route('register') }}">{{ __('index.register') }}</a>
+                <li><a href="{{ route('login') }}">{{ __('index.login') }}</a></li>
+                <li><a href="{{ route('register') }}">{{ __('index.register') }}</a></li>
             @endif
 
             @hook('navbarEnd')
-        </div>
+        </ul>
     </div>
 
     <nav class="site-nav" data-menu>

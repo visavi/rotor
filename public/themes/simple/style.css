@@ -163,7 +163,9 @@ body {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem 1rem;
-    margin-left: auto;
+    margin: 0 0 0 auto;
+    padding: 0;
+    list-style: none;
     font-size: 0.9375rem;
 }
 
@@ -182,20 +184,18 @@ body {
     vertical-align: -0.05em;
 }
 
-/* Непрочитанные — красный кружок на углу иконки, как в остальных темах */
-.site-header__badged {
+/* Пункты темы и хуков модулей (navbarStart/navbarEnd) — одинаковые <li>.
+   Непрочитанные — .badge.bg-notify, как в разметке хуков: красный кружок на углу иконки */
+.site-header__user > li {
     position: relative;
-    display: inline-block;
 }
 
-.site-badge:empty {
-    display: none;
-}
-
-.site-badge {
+.site-header__user .bg-notify {
     position: absolute;
     top: -0.45rem;
+    right: auto;
     left: 60%;
+    margin: 0;
     min-width: 1.05rem;
     padding: 0 0.25rem;
     border-radius: 1rem;
