@@ -17,10 +17,8 @@
   min-width: 0;
   color: #fff;
   text-align: center;
-  padding: 0 15px;
+  padding: 0 10px;
   font-size: 1.625rem;
-  font-weight: 400;
-  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -32,10 +30,10 @@
   @supports not (align-content: center) {
     line-height: var(--header-height);
   }
+  // На десктопе название за бургером по ширине текста, длинное обрезается у поиска
   @media(min-width: 768px) {
-    flex: 0 0 auto;
-    width: var(--sidebar-width);
-    background-color: var(--navbar-logo-bg);
+    flex: 0 1 auto;
+    text-align: left;
   }
   @media(max-width: 320px) {
     display: none;
@@ -51,6 +49,7 @@
   // Флекс вместо line-height: иконка остаётся по центру шапки при любом размере шрифта
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 0 10px;
   color: #fff;
   transition: background-color 0.3s ease;
@@ -63,11 +62,20 @@
 }
 
 .icon-toggle {
-  // На узких экранах бургер слева от логотипа, на десктопе — справа
-  @media(max-width: 767px) { order: -1; }
-  // Сайдбар без меню с иконками не сворачивается — сворачивать нечего
-  body:not(:has(.app-sidebar .menu-icon)) & {
-    @media(min-width: 768px) { display: none; }
+  // Длинное название сжимается само, бургер не трогает
+  flex-shrink: 0;
+  // На десктопе шириной со свернутый сайдбар: бургер стоит над колонкой иконок
+  @media(min-width: 768px) {
+    width: var(--sidebar-mini-width);
+    padding: 0;
+  }
+}
+
+// Сайдбар без меню с иконками не сворачивается — бургер не нужен, название от края
+body:not(:has(.app-sidebar .menu-icon)) {
+  @media(min-width: 768px) {
+    .icon-toggle { display: none; }
+    .app-header__logo { padding-left: 15px; }
   }
 }
 
