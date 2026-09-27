@@ -17,7 +17,6 @@ docker compose exec rotor php artisan ...
 ## Тесты и проверки
 
 ```bash
-docker compose exec rotor php artisan route:clear             # кэш роутов ломает тесты модулей
 docker compose exec rotor php artisan test tests/Feature/HomeControllerTest.php
 docker compose exec rotor php artisan test --filter=testName
 docker compose exec rotor php artisan test modules/Forum      # один модуль
@@ -31,14 +30,10 @@ docker compose exec rotor ./vendor/bin/phpstan analyse <пути> --no-progress
 Чего не делать:
 
 - `php artisan ... --env=testing` — без `.env.testing` Laravel молча берёт `.env` и бьёт по рабочей базе. Тестовое окружение задаёт `phpunit.xml`.
-- `route:cache` / `config:cache` в dev — «Route ... not defined» в тестах модулей и уход тестов на рабочую базу. Увидел ошибку «Тесты подключены к базе «rotor»» — `config:clear`.
-- Два прогона тестов одновременно — база `rotor_test` одна, гонка даёт ложное «Table 'rotor_test.…' doesn't exist».
 - Записи в тестах создавать со всеми NOT NULL-полями: тесты идут в строгом MySQL (`DB_STRICT` в `phpunit.xml`), поле без значения и без `default` — ошибка 1364.
 - `truncate()` и DDL в тестах — неявный COMMIT переживает откат `RefreshDatabase`. Использовать `delete()`.
 
 Тест помечен risky «did not close its own output buffer» — однострочная `@section('name', $expr)` получила `null`. Завершать выражение `?? ''`.
-
-`pint` по каталогу `bootstrap/` «чинит» генерённые `bootstrap/cache/*.php` — это не ошибка, их не коммитить.
 
 ## Модули
 
@@ -49,7 +44,6 @@ docker compose exec rotor ./vendor/bin/phpstan analyse <пути> --no-progress
 - Правки модуля записывать в его `changelog.md` в раздел `## Unreleased`. Версию в `module.php` не поднимать — бамп собирает архив релиза.
 - Модуль выносится из ядра полным комплектом: настройки (контроллер, вид, миграция), переводы, хуки.
 - Настройки модулей — только boss: `ModuleSettingController::getMiddleware()` добавляет `check.admin:boss` поверх маршрута (сохранение пишет любые `sets[]`, включая ключи ядра). Сигнатуру `update(Request)` не менять — модули её переопределяют.
-- В шаблонах настроек модуля читать ключ как `$settings['key'] ?? ''` — иначе страница падает, если строки ещё нет.
 - Языковые модули называются `Lang<Язык>` (`LangGerman`): все модули лежат в одном плоском `modules/`, префикс защищает от коллизии id.
 
 ## Миграции ядра

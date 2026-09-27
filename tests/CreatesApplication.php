@@ -9,6 +9,13 @@ use RuntimeException;
 
 trait CreatesApplication
 {
+    /**
+     * Замок прогона: держится открытым до конца процесса
+     *
+     * @var resource|null
+     */
+    private static $runLock;
+
     public function createApplication(): Application
     {
         $app = require __DIR__ . '/../bootstrap/app.php';
@@ -22,6 +29,7 @@ trait CreatesApplication
         $app->make(Kernel::class)->bootstrap();
 
         $this->guardTestDatabase($app);
+        $this->acquireRunLock($app);
 
         // Регистрируем миграции модулей, чтобы migrate:fresh применял их в общем
         // прогоне RefreshDatabase один раз, а не в каждом тесте отдельно
@@ -36,10 +44,8 @@ trait CreatesApplication
     /**
      * Принудительно уводит соединение на тестовую базу
      *
-     * DB_DATABASE из phpunit.xml применяется только когда Laravel читает env().
-     * При закэшированном конфиге (bootstrap/cache/config.php) движок берёт готовый
-     * массив, env() не вызывает, и прогон уходит на боевую базу. Правка загруженного
-     * конфига работает в обоих случаях.
+     * Страховка к DB_DATABASE из phpunit.xml: если имя базы всё же пришло
+     * не тестовое, к нему дописывается _test.
      *
      * purge() здесь не нужен и вреден: соединение к этому моменту ещё не создано,
      * а переподключение посреди загрузки ломает откат транзакций RefreshDatabase.
@@ -59,17 +65,8 @@ trait CreatesApplication
     /**
      * Не даёт прогону тестов уйти на боевую базу
      *
-     * При закэшированном конфиге (bootstrap/cache/config.php) Laravel читает
-     * готовый массив и не вызывает env() — DB_DATABASE из phpunit.xml не
-     * применяется, и прогон молча уходит на боевую БД: migrate:fresh сносит её
-     * целиком, а truncate() в тестах даёт неявный COMMIT и переживает откат
-     * RefreshDatabase. Кэш возвращается сам при APP_ENV=production, потому что
-     * refreshCaches() после любого действия с модулем зовёт config:cache, —
-     * так что перед прогоном нужен config:clear.
-     *
-     * Переподключать соединение прямо здесь нельзя: purge() посреди загрузки
-     * приложения ломает откат транзакций RefreshDatabase, и тесты начинают
-     * оставлять данные друг другу.
+     * Последний рубеж после forceTestDatabase(): migrate:fresh в RefreshDatabase
+     * снёс бы боевую базу целиком.
      */
     private function guardTestDatabase(Application $app): void
     {
@@ -80,9 +77,32 @@ trait CreatesApplication
         }
 
         throw new RuntimeException(sprintf(
-            'Тесты подключены к базе «%s», а не к тестовой. Выполните php artisan config:clear: '
-            . 'при закэшированном конфиге DB_DATABASE из phpunit.xml не применяется.',
+            'Тесты подключены к базе «%s», а не к тестовой.',
             $database,
         ));
+    }
+
+    /**
+     * Не даёт запустить второй прогон, пока идёт первый
+     *
+     * Тестовая база одна на всех: migrate:fresh второго прогона сносит таблицы
+     * под первым, и тот падает ложным «Table ... doesn't exist». Замок снимает
+     * ОС при выходе процесса, в том числе убитого
+     */
+    private function acquireRunLock(Application $app): void
+    {
+        if (self::$runLock !== null) {
+            return;
+        }
+
+        $handle = fopen($app->storagePath('framework/testing/run.lock'), 'c');
+
+        if ($handle === false || ! flock($handle, LOCK_EX | LOCK_NB)) {
+            throw new RuntimeException(
+                'Тесты уже запущены в другом процессе: тестовая база одна на всех, дождитесь его завершения.'
+            );
+        }
+
+        self::$runLock = $handle;
     }
 }

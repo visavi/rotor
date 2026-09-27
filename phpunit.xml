@@ -12,7 +12,10 @@
   </testsuites>
   <coverage/>
   <php>
-    <env name="APP_ENV" value="testing"/>
+    <env name="APP_ENV" value="testing" force="true"/>
+    <!-- Кэш конфига и маршрутов в dev собран по боевой базе: тесты его не читают -->
+    <env name="APP_CONFIG_CACHE" value="bootstrap/cache/config-testing.php" force="true"/>
+    <env name="APP_ROUTES_CACHE" value="bootstrap/cache/routes-testing.php" force="true"/>
     <env name="BCRYPT_ROUNDS" value="4"/>
     <env name="CACHE_STORE" value="array"/>
     <env name="DB_DATABASE" value="rotor_test" force="true"/>
