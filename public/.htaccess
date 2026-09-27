@@ -12,6 +12,11 @@ AddDefaultCharset UTF-8
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Redirect /index.php/... and /public/... To Clean URL If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{THE_REQUEST} \s/+(?:index\.php|public)(?:/+([^?\s]*))?[?\s] [NC]
+    RewriteRule ^ /%1 [L,R=301,NE]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

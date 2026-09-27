@@ -40,6 +40,7 @@ class NormalizeUrlTest extends TestCase
             'закодированная точка'                => ['/index%2Ephp/forums', '/index.php', '/forums'],
             'закодированная буква'                => ['/%69ndex.php/forums', '/index.php', '/forums'],
             'закодированный скрипт в подкаталоге' => ['/sub/index%2Ephp/forums/', '/sub/index.php', '/sub/forums'],
+            'слэш при раскладке с public'         => ['/forums/', '/public/index.php', '/forums'],
         ];
     }
 
@@ -67,6 +68,10 @@ class NormalizeUrlTest extends TestCase
             'скрипт внутри пути'   => ['/forums/index.php', '/index.php'],
             // Без SCRIPT_NAME базовый адрес и имя скрипта оба пусты
             'без имени скрипта' => ['/forums', ''],
+            // Раскладка «всё в public_html»: скрипт /public/index.php, а в адресе /index.php —
+            // Symfony теряет путь, такой адрес закрывает правило в public/.htaccess
+            'скрипт вне адреса'       => ['/index.php/forums', '/public/index.php'],
+            'голый скрипт вне адреса' => ['/index.php', '/public/index.php'],
         ];
     }
 

@@ -25,6 +25,12 @@ class NormalizeUrl
         $script = $request->getScriptName();
         $requestUri = $request->getRequestUri();
 
+        // baseUrl не из адреса: раскладка «всё в public_html» с /index.php в адресе даёт /public/index.php,
+        // и Symfony теряет путь. Такой адрес уводит правило в public/.htaccess
+        if (! str_starts_with($requestUri, $baseUrl)) {
+            return $next($request);
+        }
+
         // Остаток исходного адреса без перекодирования: путь и строка запроса как пришли
         [$path, $query] = array_pad(explode('?', substr($requestUri, strlen($baseUrl)), 2), 2, null);
 
