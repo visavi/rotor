@@ -52,7 +52,6 @@
   display: flex;
   align-items: center;
   padding: 0 10px;
-  font: var(--fa-font-solid);
   color: #fff;
   transition: background-color 0.3s ease;
   &:focus,
@@ -64,11 +63,6 @@
 }
 
 .icon-toggle {
-  &:before {
-    content: "\f0c9";
-    font-size: 1.3125rem;
-  }
-
   // На узких экранах бургер слева от логотипа, на десктопе — справа
   @media(max-width: 767px) { order: -1; }
   // Сайдбар без меню с иконками не сворачивается — сворачивать нечего

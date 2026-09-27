@@ -1865,3 +1865,24 @@ a.profile-stat:hover {
     margin-bottom: 0;
     white-space: nowrap;
 }
+
+/* Бургер сайдбара: при открытом сайдбаре полоски складываются в крестик */
+.burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 18px;
+    height: 14px;
+    vertical-align: middle;
+}
+
+.burger span {
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transition: transform .25s, opacity .15s;
+}
+
+.sidenav-toggled .burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.sidenav-toggled .burger span:nth-child(2) { opacity: 0; }
+.sidenav-toggled .burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }

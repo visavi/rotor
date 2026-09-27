@@ -77,5 +77,5 @@
     </ul>
 
     <!-- Sidebar toggle for right sidebar -->
-    <a class="app-icon icon-toggle" href="#" data-bs-toggle="sidebar" aria-label="Toggle Sidebar"></a>
+    <a class="app-icon icon-toggle" href="#" data-bs-toggle="sidebar" aria-label="Toggle Sidebar"><span class="burger"><span></span><span></span><span></span></span></a>
 </header>

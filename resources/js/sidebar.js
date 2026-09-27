@@ -6,8 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const isMobile = () => window.matchMedia('(max-width: 767px)').matches
     // Тема поддерживает режим иконок, и в сайдбаре есть что сворачивать
     const hasMini = app?.hasAttribute('data-sidebar-mini') && document.querySelector('.app-sidebar .menu-icon')
+    const isOpen = () => app?.classList.contains('sidenav-toggled')
     const syncScrollLock = () => {
-        document.body.style.overflow = app?.classList.contains('sidenav-toggled') && isMobile() ? 'hidden' : ''
+        document.body.style.overflow = isOpen() && isMobile() ? 'hidden' : ''
+    }
+    const toggleSidebar = (open) => {
+        app?.classList.toggle('sidenav-toggled', open)
+        syncScrollLock()
     }
 
     document.querySelectorAll('[data-bs-toggle="sidebar"]').forEach(el => {
@@ -22,15 +27,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 return
             }
 
-            app?.classList.toggle('sidenav-toggled')
-            syncScrollLock()
+            toggleSidebar()
         })
     })
 
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && app?.classList.contains('sidenav-toggled') && isMobile()) {
-            app.classList.remove('sidenav-toggled')
-            syncScrollLock()
+        if (e.key === 'Escape' && isOpen() && isMobile()) {
+            toggleSidebar(false)
+        }
+    })
+
+    // Страница уходит в bfcache закрытой и без анимации, иначе «назад» вернет ее с открытым сайдбаром
+    window.addEventListener('pagehide', function () {
+        if (isOpen()) {
+            toggleSidebar(false)
+            document.getAnimations?.().forEach(a => a instanceof CSSTransition && a.finish())
         }
     })
 

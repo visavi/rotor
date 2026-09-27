@@ -44,7 +44,7 @@
                 <a class="paper-login-btn" href="{{ route('login') }}">{{ __('index.login') }}</a>
             @endif
             <a class="paper-sidebar-toggle" href="#" data-bs-toggle="sidebar" aria-label="Toggle Sidebar">
-                <i class="fas fa-bars"></i>
+                <span class="burger"><span></span><span></span><span></span></span>
             </a>
         </div>
     </div>
