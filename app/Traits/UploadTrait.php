@@ -63,8 +63,18 @@ trait UploadTrait
         $filesize = filesize($fullPath);
 
         if ($record) {
+            $relateId = $this->id ?? 0;
+
+            // Новый файл встаёт в конец: с нулём он обогнал бы уже переставленные.
+            // До создания записи файлы с relate_id = 0 у каждого пользователя свои
+            $sort = File::query()
+                ->where('relate_type', $this->getMorphClass())
+                ->where('relate_id', $relateId)
+                ->when(! $relateId, static fn ($query) => $query->where('user_id', getUser('id')))
+                ->max('sort');
+
             $upload = File::query()->create([
-                'relate_id'   => $this->id ?? 0,
+                'relate_id'   => $relateId,
                 'relate_type' => $this->getMorphClass(),
                 'path'        => $path,
                 'name'        => $basename,
@@ -72,6 +82,7 @@ trait UploadTrait
                 'extension'   => $extension,
                 'mime_type'   => $mimeType,
                 'user_id'     => getUser('id'),
+                'sort'        => (int) $sort + 1,
             ]);
         }
 

@@ -10,7 +10,6 @@ Rotor — модульная CMS на Laravel 13, PHP 8.3+. Ядро живёт 
 
 ```bash
 docker compose exec rotor php artisan ...
-docker compose exec rotor npm run build
 ```
 
 Статические инструменты (pint) можно гонять и на хосте.

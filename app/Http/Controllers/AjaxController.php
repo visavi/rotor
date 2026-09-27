@@ -109,6 +109,20 @@ class AjaxController extends Controller
     }
 
     /**
+     * Сохраняет порядок файлов: sort — id через запятую, как их пишет перетаскивание
+     */
+    public function sortFiles(Request $request, Validator $validator, FileService $uploader): JsonResponse
+    {
+        $result = $uploader->sort(
+            array_map(int(...), explode(',', $request->string('sort')->value())),
+            $request->string('type')->value(),
+            $validator,
+        );
+
+        return response()->json($result);
+    }
+
+    /**
      * Возвращает список стикеров
      */
     public function getStickers(): JsonResponse

@@ -33,7 +33,7 @@ class FileApiController extends Controller
             ->where('relate_type', $validated['type'])
             ->where('relate_id', (int) ($validated['id'] ?? 0))
             ->where('user_id', getUser('id'))
-            ->orderBy('created_at')
+            ->ordered()
             ->get();
 
         return FileResource::collection($files);

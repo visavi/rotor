@@ -109,7 +109,7 @@ class MessageController extends Controller
             ->where('relate_type', Message::$morphName)
             ->where('relate_id', 0)
             ->where('user_id', $this->user->id)
-            ->orderBy('created_at')
+            ->ordered()
             ->get();
 
         $countMessages = $this->user->getCountNewMessages();

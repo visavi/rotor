@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\DB;
  * @property string          $extension
  * @property string          $mime_type
  * @property int             $user_id
+ * @property int             $sort
  * @property CarbonImmutable $created_at
  * @property-read ?Model $relate
  */
@@ -48,7 +50,16 @@ class File extends Model
     {
         return [
             'user_id' => 'int',
+            'sort'    => 'int',
         ];
+    }
+
+    /**
+     * Порядок вложений: ручной, заданный перетаскиванием, затем порядок загрузки
+     */
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderBy('sort')->orderBy('id');
     }
 
     /**

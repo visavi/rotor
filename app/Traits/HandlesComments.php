@@ -75,7 +75,7 @@ trait HandlesComments
                 ->where('relate_type', Comment::$morphName)
                 ->where('relate_id', 0)
                 ->where('user_id', $user->id)
-                ->orderBy('created_at')
+                ->ordered()
                 ->get()
             : collect();
 

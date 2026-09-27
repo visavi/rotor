@@ -2,11 +2,12 @@
 $files ??= $model->files;
 @endphp
 
-<div class="js-files mb-3">
+{{-- Миниатюры перетаскиваются: порядок сразу уходит на сервер, форма записи его не несёт --}}
+<div class="js-files mb-3" data-sortable data-sortable-url="/ajax/file/sort?type={{ $model->getMorphClass() }}">
     @if ($files->isNotEmpty())
         @foreach ($files as $file)
-            <span class="js-file">
-                <span class="thumbnail-wrap">
+            <span class="js-file" data-key="{{ $file->id }}">
+                <span class="thumbnail-wrap sortable-handle" data-sortable-handle title="{{ __('main.drag_reorder') }}">
                     @if ($file->isVideo())
                         <video src="{{ $file->path }}" class="thumbnail" preload="metadata"></video>
                         <span class="slide-play-icon">▶</span>
@@ -22,7 +23,7 @@ $files ??= $model->files;
 
 <div class="js-image-template d-none">
     <span class="js-file">
-        <span class="thumbnail-wrap"><img src="" alt="" class="thumbnail"></span>
+        <span class="thumbnail-wrap sortable-handle" data-sortable-handle title="{{ __('main.drag_reorder') }}"><img src="" alt="" class="thumbnail"></span>
         <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>

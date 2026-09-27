@@ -1,4 +1,7 @@
 import Sortable from 'sortablejs'
+import { ajax } from './ajax.js'
+import { notyf } from './globals.js'
+import { __ } from './translate.js'
 
 /**
  * Общее для обоих режимов: тянем за ручку, призрак приглушаем,
@@ -16,22 +19,45 @@ const BASE_OPTIONS = {
  * Включает перетаскивание в списках [data-sortable]
  *
  * Порядок элементов пишется в поле, названное в data-sortable-target: форма
- * отправляет его строкой, поэтому лишних запросов при перетаскивании нет
+ * отправляет его строкой, поэтому лишних запросов при перетаскивании нет.
+ *
+ * Список без своей формы (вложения: они грузятся и удаляются мимо формы записи)
+ * задаёт data-sortable-url — туда после каждого переноса уходит POST с той же
+ * строкой в поле sort. Элементы добавляются в список и после загрузки страницы,
+ * поэтому порядок собирается в момент отправки
  */
 export function initSortable(lists) {
     lists.forEach(list => {
         const target = document.querySelector(list.dataset.sortableTarget)
+        const url = list.dataset.sortableUrl
+
+        const order = () => [...list.children]
+            .map(item => item.dataset.key)
+            .filter(Boolean)
+            .join(',')
 
         const save = () => {
-            if (!target) return
-
-            target.value = [...list.children]
-                .map(item => item.dataset.key)
-                .filter(Boolean)
-                .join(',')
+            if (target) target.value = order()
         }
 
-        Sortable.create(list, { ...BASE_OPTIONS, onEnd: save })
+        const send = () => {
+            if (!url) return
+
+            ajax({
+                url, type: 'post', dataType: 'json', data: { sort: order() },
+                success: data => { if (!data.success) notyf.error(data.message) },
+                error: () => notyf.error(__('request_failed')),
+            })
+        }
+
+        Sortable.create(list, {
+            ...BASE_OPTIONS,
+            onEnd: evt => {
+                save()
+
+                if (evt.oldIndex !== evt.newIndex) send()
+            },
+        })
 
         save()
     })

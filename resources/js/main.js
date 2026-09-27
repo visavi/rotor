@@ -791,7 +791,9 @@ window.deleteFile = function (el) {
             success: function (data) {
                 if (!data.success) { notyf.error(data.message); return }
                 if (data.path) cutMedia(data.path)
-                el.closest('.js-file').style.display = 'none'
+                // Удаляем, а не прячем: скрытый файл считался бы в лимите
+                // и уходил бы в порядок перетаскивания
+                el.closest('.js-file').remove()
             },
             error: (_, textStatus) => notyf.error(__('file_delete_failed') + ' ' + textStatus)
         })

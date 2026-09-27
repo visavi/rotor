@@ -77,6 +77,8 @@ export function renderFile(scope, container, file, pending = null) {
     }
 
     template.querySelector('.js-file-delete')?.setAttribute('data-id', file.id)
+    // Ключ для перетаскивания: по нему собирается порядок файлов
+    template.querySelector('.js-file')?.setAttribute('data-key', file.id)
 
     if (pending) {
         pending.insertAdjacentHTML('beforebegin', template.innerHTML)

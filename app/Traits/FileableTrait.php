@@ -18,7 +18,7 @@ trait FileableTrait
     public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'relate')
-            ->orderBy('created_at');
+            ->ordered();
     }
 
     /**

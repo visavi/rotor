@@ -12,6 +12,7 @@ use App\Support\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -199,6 +200,54 @@ class FileService
         $file->delete();
 
         return ['success' => true, 'path' => $file->path];
+    }
+
+    /**
+     * Сохраняет порядок вложений записи
+     *
+     * Файлы — одной записи (или одни ожидающие её, relate_id = 0), права — как на удаление
+     *
+     * @param array<int, int> $ids Id файлов в новом порядке
+     *
+     * @return array{success: bool, message?: string}
+     */
+    public function sort(array $ids, string $type, Validator $validator): array
+    {
+        if (! in_array($type, self::types(), true)) {
+            return ['success' => false, 'message' => 'Type invalid'];
+        }
+
+        $ids = array_values(array_unique(array_filter($ids)));
+
+        $files = File::query()
+            ->where('relate_type', $type)
+            ->whereKey($ids)
+            ->get(['id', 'relate_id', 'user_id']);
+
+        if (! $ids || $files->count() !== count($ids) || $files->pluck('relate_id')->unique()->count() !== 1) {
+            return ['success' => false, 'message' => 'File not found'];
+        }
+
+        $validator->true(
+            isAdmin() || $files->every(static fn (File $file) => $file->user_id === getUser('id')),
+            __('ajax.record_not_author')
+        );
+
+        if (! $validator->isValid()) {
+            return ['success' => false, 'message' => current($validator->getErrors())];
+        }
+
+        // Id — целые, проверенные запросом выше, поэтому подставляются в SQL напрямую.
+        // Не upsert: в строгом MySQL он требует все NOT NULL поля
+        $cases = '';
+
+        foreach ($ids as $index => $id) {
+            $cases .= ' WHEN ' . $id . ' THEN ' . ($index + 1);
+        }
+
+        File::query()->whereKey($ids)->update(['sort' => DB::raw('CASE id' . $cases . ' END')]);
+
+        return ['success' => true];
     }
 
     /**
