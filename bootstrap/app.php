@@ -11,10 +11,10 @@ use App\Http\Middleware\CheckTokenOptional;
 use App\Http\Middleware\CheckUser;
 use App\Http\Middleware\CheckUserState;
 use App\Http\Middleware\GrantDailyBonus;
+use App\Http\Middleware\NormalizeUrl;
 use App\Http\Middleware\SaveStatistic;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\StartWebSession;
-use App\Http\Middleware\StripIndexPhp;
 use App\Services\ScheduleService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -41,7 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->throttleApi();
 
         $middleware->append([
-            StripIndexPhp::class,
+            NormalizeUrl::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartWebSession::class,
