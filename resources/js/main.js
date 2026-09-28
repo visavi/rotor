@@ -209,6 +209,8 @@ document.addEventListener('DOMContentLoaded', function () {
         getNewMessages()
     })
 
+    // Для сторонних тем с одной иконкой #theme-icon-active. Темы ядра выводят
+    // солнце и луну сразу, а видимую выбирает CSS по data-bs-theme — без мигания.
     // Меняются только классы солнца и луны: размер иконки у каждой темы свой
     function syncThemeIcon() {
         const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark'
@@ -262,14 +264,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     prettyPrint()
 
+    // Свободный ввод с подсказками: адрес поиска и лимит задаются через data-server и data-max
     tags.init('.input-tag', {
         allowNew: true,
-        server: '/blogs/tags-search',
         liveServer: true,
         clearEnd: true,
         allowClear: true,
         suggestionsThreshold: 2,
-        max: 10,
         separator: [','],
         addOnBlur: true,
     })

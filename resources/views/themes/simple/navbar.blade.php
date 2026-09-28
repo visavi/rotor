@@ -8,7 +8,8 @@
         <ul class="site-header__user">
             <li>
                 <a href="#" data-bs-theme-toggle aria-label="{{ __('main.theme') }}">
-                    <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }}" id="theme-icon-active"></i>
+                    <i class="fa-regular fa-sun theme-icon-light"></i>
+                    <i class="fa-regular fa-moon theme-icon-dark"></i>
                 </a>
             </li>
             @hook('navbarStart')

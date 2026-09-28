@@ -15,7 +15,8 @@
         </li>
         <li>
             <a href="#" class="app-nav__item" data-bs-theme-toggle aria-label="{{ __('main.theme') }}">
-                <i class="fa-regular {{ request()->cookie('theme') === 'dark' ? 'fa-moon' : 'fa-sun' }} fa-lg" id="theme-icon-active"></i>
+                <i class="fa-regular fa-sun fa-lg theme-icon-light"></i>
+                <i class="fa-regular fa-moon fa-lg theme-icon-dark"></i>
             </a>
         </li>
         @hook('navbarStart')

@@ -557,25 +557,10 @@ function splitHardBreaks(editor) {
     editor.view.dispatch(tr)
 }
 
-// Вставка чистится не жёстче серверного санитайзера (App\Support\HtmlSanitizer):
-// оставляем ровно то, что он и так пропустит и что умеют прочитать наши узлы.
-// Без этого цитирование своих же сообщений теряло цвет, выравнивание,
-// упоминания, стикеры, спойлеры и видео — они опознаются по class и style.
-// Значения проверяем, а не только имена свойств: всё, что проходит вставку,
-// должно быть воспроизводимо кнопками. Иначе со стороннего сайта приедет
-// font-size: 400px или прозрачный цвет, которых в меню нет.
-const PASTE_COLOR = /^(#[0-9a-f]{3}|#[0-9a-f]{6}|rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\))$/i
-
-const isPasteColor = value => PASTE_COLOR.test(value)
-const isPasteSize = value => SIZES.some(size => size.value === value)
-// Значения выравнивания проверяет сам TextAlign по своему списку alignments
-const isPasteAlign = () => true
-
-const PASTE_STYLES = {
-    span: { 'color': isPasteColor, 'background-color': isPasteColor, 'font-size': isPasteSize },
-    p:    { 'text-align': isPasteAlign },
-}
-
+// При вставке оставляем только наши классы: по ним опознаются упоминания,
+// стикеры, спойлеры, скрытый текст и видео. style снимаем целиком — Chrome
+// при копировании переносит в него стили страницы-источника, и простой текст
+// приезжал чёрным на белом фоне или выровненным по ширине
 const PASTE_CLASSES = {
     a:       ['user'],
     img:     ['sticker'],
@@ -585,19 +570,12 @@ const PASTE_CLASSES = {
 }
 
 function cleanPastedAttrs(el) {
-    const tag = el.tagName.toLowerCase()
-
-    const classes = (PASTE_CLASSES[tag] || []).filter(name => el.classList.contains(name))
-    const styles = Object.entries(PASTE_STYLES[tag] || {}).flatMap(([name, isValid]) => {
-        const value = el.style.getPropertyValue(name).trim()
-        return value && isValid(value) ? [[name, value]] : []
-    })
+    const classes = (PASTE_CLASSES[el.tagName.toLowerCase()] || []).filter(name => el.classList.contains(name))
 
     el.removeAttribute('class')
     el.removeAttribute('style')
 
     if (classes.length) el.setAttribute('class', classes.join(' '))
-    styles.forEach(([name, value]) => el.style.setProperty(name, value))
 }
 
 function validateUrl(url) {
