@@ -33,6 +33,7 @@ task('build', function () {
     upload('public/build/', '{{release_path}}/public/build/');
 });
 
+after('artisan:migrate', artisan('module:migrate'));
 before('deploy:success', artisan('module:sync'));
 after('deploy:success', 'artisan:queue:restart');
 after('deploy:update_code', 'build');
