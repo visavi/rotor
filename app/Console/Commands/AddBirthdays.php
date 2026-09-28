@@ -35,17 +35,15 @@ class AddBirthdays extends Command
         $mail = app(MailService::class);
         $packet = max(1, (int) setting('sendmailpacket'));
 
+        $subject = __('mailer.birthday_subject', ['site' => setting('title')]);
+
         foreach ($deliveryUsers->values() as $index => $user) {
-            $subject = 'С днем рождения от ' . setting('title');
-
-            $text = 'Здравствуйте ' . e($user->getName()) . '!<br>Поздравляем Вас с Днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!<br><br>Администрация сайта ' . setting('title') . '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
-
             // Письма растаскиваются по минутам: суточный лимит релея
             // не должен выгорать одним залпом
-            $mail->queue('mailer.default', [
+            $mail->queue('mailer.birthday', [
                 'to'          => $user->email,
                 'subject'     => $subject,
-                'text'        => $text,
+                'username'    => $user->getName(),
                 'unsubscribe' => $user->subscribe,
             ], intdiv((int) $index, $packet));
         }

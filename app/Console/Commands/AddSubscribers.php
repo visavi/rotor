@@ -42,16 +42,13 @@ class AddSubscribers extends Command
             // Подсчёт стоит запроса, в письме число нужно дважды
             $unread = $user->getCountNewMessages();
 
-            $subject = $unread . ' непрочитанных сообщений на ' . setting('title');
-
-            $text = 'Здравствуйте ' . e($user->getName()) . '!<br>У вас имеются непрочитанные сообщения (' . $unread . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . config('app.url') . '/messages">' . config('app.url') . '/messages</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="' . config('app.url') . '/unsubscribe?key=' . $user->subscribe . '">откажитесь от подписки</a></small>';
-
             // Письма растаскиваются по минутам: суточный лимит релея
             // не должен выгорать одним залпом
-            $mail->queue('mailer.default', [
+            $mail->queue('mailer.unread', [
                 'to'          => $user->email,
-                'subject'     => $subject,
-                'text'        => $text,
+                'subject'     => __('mailer.unread_subject', ['site' => setting('title'), 'count' => $unread]),
+                'username'    => $user->getName(),
+                'count'       => $unread,
                 'unsubscribe' => $user->subscribe,
             ], intdiv((int) $index, $packet));
 

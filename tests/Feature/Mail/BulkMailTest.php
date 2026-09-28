@@ -23,9 +23,23 @@ class BulkMailTest extends TestCase
         $this->artisan('add:birthdays')->assertSuccessful();
 
         Queue::assertPushed(SendMailJob::class, static function (SendMailJob $job) {
-            return $job->data['to'] === 'birthday1@example.com'
+            return $job->view === 'mailer.birthday'
+                && $job->data['to'] === 'birthday1@example.com'
+                && $job->data['username'] === 'Birthday 1'
                 && $job->data['unsubscribe'] === 'key-1';
         });
+    }
+
+    public function testBirthdayMailRenders(): void
+    {
+        $data = ['subject' => 'Subject', 'username' => 'Birthday 1', 'unsubscribe' => 'key-1'];
+
+        foreach (['mailer.birthday', 'mailer.text.birthday'] as $view) {
+            $html = view($view, $data)->render();
+
+            $this->assertStringContainsString('Birthday 1', $html);
+            $this->assertStringContainsString(url('/unsubscribe?key=key-1'), $html);
+        }
     }
 
     public function testPacketSizeStaggersDelivery(): void
@@ -81,6 +95,7 @@ class BulkMailTest extends TestCase
     {
         User::factory()->create([
             'login'     => 'birthday_' . $index,
+            'name'      => 'Birthday ' . $index,
             'email'     => 'birthday' . $index . '@example.com',
             'birthday'  => now()->format('d.m.Y'),
             'point'     => 10,

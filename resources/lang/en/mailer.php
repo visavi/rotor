@@ -38,4 +38,17 @@ return [
     'restore_preheader'         => 'New credentials for the site',
     'change_password_preheader' => 'Your password has been changed',
     'change_mail_preheader'     => 'Confirm your new email address',
+
+    'birthday_subject'    => 'Happy birthday from :site',
+    'birthday_text'       => 'Happy birthday! We wish you happiness, health, new ideas, creative mood and lots of joy and laughter!',
+    'birthday_preheader'  => 'Happy birthday to you',
+    'site_administration' => ':site administration',
+
+    'unread_subject'   => 'Unread messages on :site (:count)',
+    'unread_intro'     => 'You have unread messages on :site: :count.',
+    'unread_preheader' => 'Someone wrote to you — messages are waiting',
+    'read_messages'    => 'Read messages',
+
+    'unsubscribe_hint' => "Don't want to receive such emails?",
+    'unsubscribe'      => 'Unsubscribe',
 ];

@@ -38,4 +38,17 @@ return [
     'restore_preheader'         => 'Новые данные для входа на сайт',
     'change_password_preheader' => 'Ваш пароль изменен',
     'change_mail_preheader'     => 'Подтвердите новый адрес электронной почты',
+
+    'birthday_subject'    => 'С днём рождения от :site',
+    'birthday_text'       => 'Поздравляем вас с днём рождения и желаем счастья, здоровья, новых идей, творческого настроения и побольше радости и смеха!',
+    'birthday_preheader'  => 'Поздравляем с днём рождения',
+    'site_administration' => 'Администрация сайта :site',
+
+    'unread_subject'   => 'Непрочитанные сообщения на :site (:count)',
+    'unread_intro'     => 'На сайте :site вас ждут непрочитанные сообщения: :count.',
+    'unread_preheader' => 'Вам написали — сообщения ждут ответа',
+    'read_messages'    => 'Прочитать сообщения',
+
+    'unsubscribe_hint' => 'Не хотите получать такие письма?',
+    'unsubscribe'      => 'Отписаться',
 ];

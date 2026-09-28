@@ -40,8 +40,8 @@ class AddSubscribersTest extends TestCase
 
         $this->assertNotNull($data);
         // Число берётся withCount и должно совпадать с непрочитанными
-        $this->assertStringContainsString('2 непрочитанных сообщений', $data['subject']);
-        $this->assertStringContainsString('(2 шт.)', $data['text']);
+        $this->assertSame(2, $data['count']);
+        $this->assertStringContainsString('(2)', $data['subject']);
         $this->assertSame(1, (int) $user->fresh()->sendprivatmail);
     }
 
@@ -60,8 +60,8 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertStringContainsString('(1 шт.)', $this->queuedFor($one)['text']);
-        $this->assertStringContainsString('(3 шт.)', $this->queuedFor($two)['text']);
+        $this->assertSame(1, $this->queuedFor($one)['count']);
+        $this->assertSame(3, $this->queuedFor($two)['count']);
     }
 
     public function testReadMessagesAreNotCounted(): void
@@ -74,7 +74,7 @@ class AddSubscribersTest extends TestCase
 
         $this->artisan('add:subscribers')->assertSuccessful();
 
-        $this->assertStringContainsString('(1 шт.)', $this->queuedFor($user)['text']);
+        $this->assertSame(1, $this->queuedFor($user)['count']);
     }
 
     public function testSkipsUserWithoutUnreadMessages(): void
@@ -130,6 +130,20 @@ class AddSubscribersTest extends TestCase
      *
      * @return array<string, mixed>|null
      */
+    public function testUnreadMailRenders(): void
+    {
+        $data = ['subject' => 'Subject', 'username' => 'Reader', 'count' => 7, 'unsubscribe' => 'key-1'];
+
+        foreach (['mailer.unread', 'mailer.text.unread'] as $view) {
+            $html = view($view, $data)->render();
+
+            $this->assertStringContainsString('Reader', $html);
+            $this->assertStringContainsString(': 7.', $html);
+            $this->assertStringContainsString(route('messages.index'), $html);
+            $this->assertStringContainsString(url('/unsubscribe?key=key-1'), $html);
+        }
+    }
+
     private function queuedFor(User $user): ?array
     {
         $found = null;
