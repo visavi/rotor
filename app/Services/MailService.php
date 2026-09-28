@@ -103,15 +103,18 @@ class MailService
      * Текст лежит в mailer/text с тем же именем. Без части text/plain
      * спам-фильтры занижают рейтинг, а часть клиентов показывает пустоту
      *
+     * Текст рендерится здесь и уходит готовой строкой: {{ }} в шаблоне
+     * экранирует для HTML, и имя с & в простом тексте пришло бы как &amp;
+     *
      * @return array<string, string>
      */
-    private function views(string $view): array
+    private function views(string $view, array $data): array
     {
         $views = ['html' => $view];
         $text = preg_replace('#^mailer\\.#', 'mailer.text.', $view);
 
         if ($text !== $view && View::exists($text)) {
-            $views['text'] = $text;
+            $views['raw'] = html_entity_decode(View::make($text, $data)->render(), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         }
 
         return $views;
@@ -124,7 +127,7 @@ class MailService
      */
     private function deliver(string $view, array $data): void
     {
-        $views = $this->views($view);
+        $views = $this->views($view, $data);
 
         Mail::send($views, $data, static function (Message $message) use ($data) {
             $message->subject($data['subject'])

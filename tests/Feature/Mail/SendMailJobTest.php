@@ -59,6 +59,26 @@ class SendMailJobTest extends TestCase
         $mail->queue('mailer.default', ['to' => 'user@example.com']);
     }
 
+    public function testTextPartIsNotHtmlEscaped(): void
+    {
+        config(['mail.default' => 'array']);
+
+        app(MailService::class)->sendOrFail('mailer.restore', [
+            'to'       => 'user@example.com',
+            'subject'  => 'Тема',
+            'username' => 'Tom & <Jerry>',
+            'login'    => 'tom',
+            'password' => 'a&b"c',
+        ]);
+
+        $message = app('mailer')->getSymfonyTransport()->messages()->last()->getOriginalMessage();
+
+        // В простом тексте экранировать нечего, в HTML — обязательно
+        self::assertStringContainsString('Tom & <Jerry>', $message->getTextBody());
+        self::assertStringContainsString('a&b"c', $message->getTextBody());
+        self::assertStringContainsString('Tom &amp; &lt;Jerry&gt;', $message->getHtmlBody());
+    }
+
     public function testRetryPolicy(): void
     {
         $job = new SendMailJob('mailer.default', ['to' => 'user@example.com']);
