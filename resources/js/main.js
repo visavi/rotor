@@ -244,6 +244,10 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     })
 
+    // Подсветка цели якоря включается классом (main.css): при открытии страницы —
+    // только после прокрутки к цели, дальше переходы по якорям подсвечиваются сразу
+    const enableAnchorHighlight = () => document.documentElement.classList.add('anchor-ready')
+
     if (window.location.hash) {
         const initialHash = window.location.hash
         if (initialHash === '#comments') {
@@ -252,9 +256,12 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(function () {
             const target = document.querySelector(initialHash)
             if (target) scrollToElement(target, 'instant')
+            enableAnchorHighlight()
         }, 100)
-    } else if (new URLSearchParams(location.search).has('page')) {
-        const commentsEl = document.querySelector('#comments')
+    } else {
+        enableAnchorHighlight()
+
+        const commentsEl = new URLSearchParams(location.search).has('page') && document.querySelector('#comments')
         if (commentsEl) {
             setTimeout(() => scrollToElement(commentsEl, 'instant'), 100)
         }
@@ -508,7 +515,7 @@ function doInsertQuote (editor, authorEl, author, date, message) {
         {
             type: 'blockquote',
             attrs: { author: author ? (authorEl.matches('a') ? '@' : '') + author + (date ? ' ' + date : '') : (date || null) },
-            content: [{ type: 'paragraph', content: [{ type: 'text', text: message }] }],
+            content: message.split('\n').map(line => ({ type: 'paragraph', content: [{ type: 'text', text: line }] })),
         },
         { type: 'paragraph' },
     ]
@@ -525,18 +532,30 @@ function doInsertQuote (editor, authorEl, author, date, message) {
     }
 }
 
+/* Текст записи по строкам, как он показан на странице. innerText раскладывает
+   абзацы, пункты и переносы сам, без разбора тегов — но только у отрисованного
+   элемента, поэтому берём живой блок, а вложенные цитаты на время прячем.
+   textContent склеивал соседние абзацы редактора (</p><p>) в одну строку */
+function quoteText(messageEl) {
+    const nested = [...messageEl.querySelectorAll('blockquote')]
+    nested.forEach(bq => bq.style.display = 'none')
+    const text = messageEl.innerText
+    nested.forEach(bq => bq.style.removeProperty('display'))
+
+    return text.split('\n').map(line => line.trim()).filter(Boolean).join('\n')
+}
+
 /* Автор, дата и текст записи для цитаты; вложенные цитаты в текст не попадают */
 function extractQuote(root) {
-    const authorEl = root?.querySelector('.section-author')
-    const dateEl   = root?.querySelector('.section-date')
-    const clone    = root?.querySelector('.section-message')?.cloneNode(true)
-    clone?.querySelectorAll('blockquote').forEach(bq => bq.remove())
+    const authorEl  = root?.querySelector('.section-author')
+    const dateEl    = root?.querySelector('.section-date')
+    const messageEl = root?.querySelector('.section-message')
 
     return {
         authorEl,
         author:  authorEl?.dataset.login || authorEl?.textContent.trim() || null,
         date:    (dateEl?.dataset.date || dateEl?.textContent || '').trim(),
-        message: clone?.textContent.trim() || '',
+        message: messageEl ? quoteText(messageEl) : '',
     }
 }
 

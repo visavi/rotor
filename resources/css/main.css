@@ -525,7 +525,9 @@ textarea.form-control {
     display: inline-block;
 }
 
-:target {
+/* Подсветка цели якоря. Класс anchor-ready ставит main.js, когда страница уже
+   доехала до цели: иначе анимация шла с открытия страницы и гасла до прокрутки */
+.anchor-ready :target {
     animation: highlight-fade 2s ease-out;
 }
 
@@ -536,7 +538,7 @@ textarea.form-control {
     z-index: 0;
 }
 
-.comment-item:target::before {
+.anchor-ready .comment-item:target::before {
     content: '';
     position: absolute;
     inset: 0 -12px;
