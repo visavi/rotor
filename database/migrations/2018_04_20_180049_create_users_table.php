@@ -56,6 +56,8 @@ return new class extends Migration {
                 $table->index('money');
                 $table->index('rating');
                 $table->index('created_at');
+                $table->index('country');
+                $table->index('city');
             });
         }
     }

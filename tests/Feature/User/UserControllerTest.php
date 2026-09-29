@@ -230,6 +230,64 @@ class UserControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testEditProfileNormalizesPlace(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($user)->post('/profile', [
+            'country' => '  россия ',
+            'city'    => ' нижний   Новгород',
+            'gender'  => User::MALE,
+        ])->assertRedirect('profile');
+
+        $user->refresh();
+        $this->assertSame('Россия', $user->country);
+        $this->assertSame('Нижний Новгород', $user->city);
+    }
+
+    public function testProfileFormSuggestsPlaces(): void
+    {
+        $this->actingAs($this->makeUser(['city' => 'Казань']))
+            ->get('/profile')
+            ->assertOk()
+            ->assertSee(route('ajax.places', ['field' => 'country']), false)
+            ->assertSee(route('ajax.places', ['field' => 'city']), false)
+            ->assertSee('<option value="Казань" selected>Казань</option>', false);
+    }
+
+    public function testPlaceSuggestions(): void
+    {
+        $user = $this->makeUser(['city' => 'Москва']);
+        User::factory()->create(['city' => 'Москва']);
+        User::factory()->create(['city' => 'Мозырь']);
+        User::factory()->create(['city' => 'Казань']);
+
+        $this->actingAs($user)
+            ->getJson(route('ajax.places', ['field' => 'city', 'query' => 'М']))
+            ->assertOk()
+            ->assertExactJson([]);
+
+        // Частые первыми, регистр запроса не важен
+        $this->actingAs($user)
+            ->getJson(route('ajax.places', ['field' => 'city', 'query' => 'мо']))
+            ->assertOk()
+            ->assertExactJson([
+                ['value' => 'Москва', 'label' => 'Москва'],
+                ['value' => 'Мозырь', 'label' => 'Мозырь'],
+            ]);
+
+        // % в запросе ищется буквально, а не как шаблон
+        $this->actingAs($user)
+            ->getJson(route('ajax.places', ['field' => 'city', 'query' => 'М%']))
+            ->assertOk()
+            ->assertExactJson([]);
+
+        // Подсказки только по городу и стране
+        $this->actingAs($user)
+            ->getJson('/ajax/places/login?query=pl')
+            ->assertNotFound();
+    }
+
     public function testEditProfileWithInvalidSiteFails(): void
     {
         $user = $this->makeUser();

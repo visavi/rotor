@@ -62,15 +62,28 @@ $inputGender  = old('gender', $user->gender);
                     <div class="invalid-feedback">{{ textError('birthday') }}</div>
                 </div>
 
+                {{-- Страна и город — свободный ввод с подсказками из анкет других пользователей.
+                     data-max="1" — можно выбрать одно значение, сменить через крестик.
+                     Пустая опция нужна, чтобы после крестика не отправилось прежнее значение --}}
                 <div class="col-md-6 mb-3{{ hasError('country') }}">
                     <label for="inputCountry" class="form-label">{{ __('users.country') }}:</label>
-                    <input class="form-control" id="inputCountry" name="country" maxlength="30" value="{{ old('country', $user->country) }}">
+                    <select class="form-select input-tag" id="inputCountry" name="country" data-server="{{ route('ajax.places', ['field' => 'country']) }}" data-max="1" data-placeholder="{{ __('users.country_placeholder') }}">
+                        <option value=""></option>
+                        @if ($country = old('country', $user->country))
+                            <option value="{{ $country }}" selected>{{ $country }}</option>
+                        @endif
+                    </select>
                     <div class="invalid-feedback">{{ textError('country') }}</div>
                 </div>
 
                 <div class="col-md-6 mb-3{{ hasError('city') }}">
                     <label for="inputCity" class="form-label">{{ __('users.city') }}:</label>
-                    <input class="form-control" id="inputCity" name="city" maxlength="50" value="{{ old('city', $user->city) }}">
+                    <select class="form-select input-tag" id="inputCity" name="city" data-server="{{ route('ajax.places', ['field' => 'city']) }}" data-max="1" data-placeholder="{{ __('users.city_placeholder') }}">
+                        <option value=""></option>
+                        @if ($city = old('city', $user->city))
+                            <option value="{{ $city }}" selected>{{ $city }}</option>
+                        @endif
+                    </select>
                     <div class="invalid-feedback">{{ textError('city') }}</div>
                 </div>
 

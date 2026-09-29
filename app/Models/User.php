@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\HtmlCast;
+use App\Casts\PlaceCast;
 use App\Services\UserService;
 use App\Support\Registry;
 use App\Traits\SearchableTrait;
@@ -181,6 +182,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [
             'info'       => HtmlCast::class . ':nullable',
+            'country'    => PlaceCast::class . ':nullable',
+            'city'       => PlaceCast::class . ':nullable',
             'updated_at' => 'datetime',
             'timeban'    => 'datetime',
             'timebonus'  => 'datetime',
@@ -305,6 +308,34 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return new HtmlString('<i class="fa fa-male fa-lg"></i>');
+    }
+
+    /**
+     * Места из анкет по началу названия: [название => число анкет], частые первыми
+     *
+     * Подсказки города и страны в анкете и в модулях (город объявления).
+     * $min отсекает единичные варианты вроде «в деревне у бабушки»
+     *
+     * @return array<string, int>
+     */
+    public static function placeCounts(string $field, string $prefix, int $min = 1, int $limit = 10): array
+    {
+        if (! in_array($field, ['city', 'country'], true)) {
+            throw new \InvalidArgumentException('Unknown place field: ' . $field);
+        }
+
+        return self::query()
+            ->selectRaw($field . ', count(*) as total')
+            ->where($field, 'like', addcslashes($prefix, '%_\\') . '%')
+            ->groupBy($field)
+            ->having('total', '>=', $min)
+            ->orderByDesc('total')
+            ->orderBy($field)
+            ->limit($limit)
+            ->toBase()
+            ->pluck('total', $field)
+            ->map(static fn ($total) => (int) $total)
+            ->all();
     }
 
     /**

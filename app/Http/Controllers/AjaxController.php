@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Sticker;
+use App\Models\User;
 use App\Services\ComplaintService;
 use App\Services\FileService;
 use App\Services\RatingService;
@@ -12,6 +13,7 @@ use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AjaxController extends Controller
 {
@@ -187,6 +189,22 @@ class AjaxController extends Controller
         return response()->json([
             'success' => true,
         ]);
+    }
+
+    /**
+     * Подсказки города и страны для анкеты: что уже вписали другие, частое первым
+     */
+    public function places(string $field, Request $request): JsonResponse
+    {
+        $query = $request->string('query')->trim()->value();
+
+        if (Str::length($query) < 2) {
+            return response()->json([]);
+        }
+
+        $places = array_map('strval', array_keys(User::placeCounts($field, $query)));
+
+        return response()->json(array_map(static fn (string $place) => ['value' => $place, 'label' => $place], $places));
     }
 
     /**
