@@ -13,6 +13,7 @@ use App\Services\MailService;
 use App\Services\MigrationService;
 use App\Services\QueueService;
 use App\Services\ScheduleService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -45,13 +46,13 @@ class AdminController extends Controller
         // Планировщик чинит только владелец — остальным о кроне знать незачем.
         // Шаблону нужен и факт остановки, и время последнего запуска, поэтому
         // сервис отдаётся целиком, а не парой переменных
-        $scheduleStalled = isAdmin(User::BOSS) && $schedule->isStalled() ? $schedule : null;
+        $scheduleStalled = isAdmin(User::BOSS) && $schedule->isStalled() && ! $schedule->isDismissed() ? $schedule : null;
 
         // Почту настраивает владелец — остальным о поломке отправки знать незачем
         $mailFailure = isAdmin(User::BOSS) ? $mail->lastFailure() : null;
 
         // Очередь чинит владелец — остальным о ней знать незачем
-        $queuePending = isAdmin(User::BOSS) && $queue->isStalled()
+        $queuePending = isAdmin(User::BOSS) && $queue->isStalled() && ! $queue->isDismissed()
             ? $queue->pendingCount()
             : 0;
 
@@ -65,5 +66,25 @@ class AdminController extends Controller
             'mailFailure',
             'queuePending',
         ));
+    }
+
+    /**
+     * Скрывает предупреждение панели до следующего случая
+     */
+    public function dismissAlert(
+        string $type,
+        ScheduleService $schedule,
+        QueueService $queue,
+        MailService $mail,
+    ): JsonResponse {
+        match ($type) {
+            'schedule' => $schedule->dismiss(),
+            'queue'    => $queue->dismiss(),
+            // Метка почты и так снимается удачной отправкой — скрыть значит снять её
+            'mail'  => $mail->markSuccess(),
+            default => abort(404),
+        };
+
+        return response()->json(['success' => true]);
     }
 }

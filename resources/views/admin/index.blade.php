@@ -36,7 +36,8 @@
     @endif
 
     @if ($scheduleStalled)
-        <div class="alert alert-warning">
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="btn-close" aria-label="{{ __('main.close') }}" title="{{ __('main.close') }}" data-ajax data-ajax-url="{{ route('admin.alerts.dismiss', ['type' => 'schedule']) }}" data-ajax-remove=".alert"></button>
             <div><i class="fa fa-clock"></i> <b>{{ __('index.schedule_stalled') }}</b></div>
             <div class="small">
                 @if ($lastRun = $scheduleStalled->lastRun())
@@ -50,14 +51,16 @@
     @endif
 
     @if ($queuePending > 0)
-        <div class="alert alert-warning">
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="btn-close" aria-label="{{ __('main.close') }}" title="{{ __('main.close') }}" data-ajax data-ajax-url="{{ route('admin.alerts.dismiss', ['type' => 'queue']) }}" data-ajax-remove=".alert"></button>
             <div><i class="fa fa-layer-group"></i> <b>{{ __('index.queue_stalled') }}</b></div>
             <div class="small">{{ __('index.queue_pending', ['count' => $queuePending]) }}</div>
         </div>
     @endif
 
     @if ($mailFailure)
-        <div class="alert alert-warning">
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="btn-close" aria-label="{{ __('main.close') }}" title="{{ __('main.close') }}" data-ajax data-ajax-url="{{ route('admin.alerts.dismiss', ['type' => 'mail']) }}" data-ajax-remove=".alert"></button>
             <div><i class="fa fa-envelope"></i> <b>{{ __('index.mail_failed') }}</b></div>
             @if ($mailFailure['time'])
                 <div class="small">{{ __('index.mail_failed_time', ['date' => dateFixed($mailFailure['time'])]) }}</div>

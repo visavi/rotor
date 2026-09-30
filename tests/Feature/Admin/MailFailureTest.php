@@ -82,4 +82,17 @@ class MailFailureTest extends TestCase
             ->assertOk()
             ->assertDontSee(__('index.mail_failed'));
     }
+
+    public function testDismissHidesWarning(): void
+    {
+        app(MailService::class)->markFailure(new RuntimeException('Connection refused'));
+
+        $this->actingAs($this->boss)
+            ->postJson(route('admin.alerts.dismiss', ['type' => 'mail']))
+            ->assertJson(['success' => true]);
+
+        $this->get('/admin')
+            ->assertOk()
+            ->assertDontSee(__('index.mail_failed'));
+    }
 }

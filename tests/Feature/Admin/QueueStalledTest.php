@@ -23,6 +23,16 @@ class QueueStalledTest extends TestCase
         $this->boss = User::factory()->boss()->create(['login' => 'boss_queue']);
 
         config(['queue.default' => 'database']);
+
+        // Отметка скрытия живёт файлом и переживает тесты
+        @unlink(storage_path('framework/queue-dismissed'));
+    }
+
+    protected function tearDown(): void
+    {
+        @unlink(storage_path('framework/queue-dismissed'));
+
+        parent::tearDown();
     }
 
     public function testWarningHiddenWhenQueueEmpty(): void
@@ -87,5 +97,26 @@ class QueueStalledTest extends TestCase
             'available_at' => $createdAt,
             'created_at'   => $createdAt,
         ]);
+    }
+
+    public function testDismissHidesWarningUntilNewStall(): void
+    {
+        $this->pushJob(now()->timestamp - QueueService::STALLED - 60);
+
+        $this->actingAs($this->boss)
+            ->postJson(route('admin.alerts.dismiss', ['type' => 'queue']))
+            ->assertJson(['success' => true]);
+
+        $this->get('/admin')
+            ->assertOk()
+            ->assertDontSee(__('index.queue_stalled'));
+
+        // Старую задачу разобрали, очередь встала на новой — предупреждение возвращается
+        DB::table('jobs')->delete();
+        $this->pushJob(now()->timestamp - QueueService::STALLED - 60);
+
+        $this->get('/admin')
+            ->assertOk()
+            ->assertSee(__('index.queue_stalled'));
     }
 }

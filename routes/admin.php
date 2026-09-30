@@ -135,6 +135,11 @@ Route::middleware(['check.admin', 'admin.logger'])
 
         /* Босс */
         Route::middleware('check.admin:boss')->group(function () {
+            /* Скрытие предупреждений панели */
+            Route::post('/alerts/{type}/dismiss', [AdminController::class, 'dismissAlert'])
+                ->whereIn('type', ['schedule', 'queue', 'mail'])
+                ->name('alerts.dismiss');
+
             /* Проверка обновлений */
             Route::controller(UpgradeController::class)
                 ->prefix('upgrade')

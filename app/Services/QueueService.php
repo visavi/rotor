@@ -46,6 +46,32 @@ class QueueService
     }
 
     /**
+     * Скрывает предупреждение до следующего затора
+     *
+     * Запоминается самая старая задача: когда её разберут и очередь встанет
+     * снова, первой будет другая задача, и предупреждение вернётся
+     */
+    public function dismiss(): void
+    {
+        file_put_contents($this->dismissedPath(), (string) DB::table('jobs')->min('id'));
+    }
+
+    /**
+     * Скрыто ли предупреждение о текущем заторе
+     */
+    public function isDismissed(): bool
+    {
+        $path = $this->dismissedPath();
+
+        return is_file($path) && (int) file_get_contents($path) === (int) DB::table('jobs')->min('id');
+    }
+
+    private function dismissedPath(): string
+    {
+        return storage_path('framework/queue-dismissed');
+    }
+
+    /**
      * Работает ли очередь через таблицу
      *
      * При sync задач не бывает вовсе, при redis и прочих драйверах

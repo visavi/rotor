@@ -50,9 +50,10 @@ class FeedResource extends JsonResource
             'comments_count' => $post->getAttribute('count_comments') ?? $post->getAttribute('count_posts'),
             'user'           => $source?->user ? AuthorResource::make($source->user) : null,
             // Медиа идут в галерею, остальные вложения — списком, как в вёрстке сайта
-            'media'      => FileResource::collection($this->resolveMedia($source)),
-            'files'      => FileResource::collection($this->resolveFiles($source)),
-            'created_at' => dateFixed($post->created_at, 'c', true),
+            'media' => FileResource::collection($this->resolveMedia($source)),
+            'files' => FileResource::collection($this->resolveFiles($source)),
+            // Время события, как в вёрстке: у темы — время последнего сообщения
+            'created_at' => dateFixed(($source ?? $post)->created_at, 'c', true),
         ], isset($config['api']) ? ($config['api'])($post) : []);
     }
 

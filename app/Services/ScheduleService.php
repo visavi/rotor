@@ -62,10 +62,36 @@ class ScheduleService
     }
 
     /**
+     * Скрывает предупреждение до следующей остановки
+     *
+     * Запоминается время последнего запуска: заработавший и снова вставший
+     * крон сдвинет его, и предупреждение вернётся
+     */
+    public function dismiss(): void
+    {
+        file_put_contents($this->dismissedPath(), (string) ($this->lastRun()->timestamp ?? 0));
+    }
+
+    /**
+     * Скрыто ли предупреждение о текущей остановке
+     */
+    public function isDismissed(): bool
+    {
+        $path = $this->dismissedPath();
+
+        return is_file($path) && (int) file_get_contents($path) === ($this->lastRun()->timestamp ?? 0);
+    }
+
+    /**
      * Путь к метке запуска
      */
     private function path(): string
     {
         return storage_path('framework/schedule-run');
+    }
+
+    private function dismissedPath(): string
+    {
+        return storage_path('framework/schedule-dismissed');
     }
 }

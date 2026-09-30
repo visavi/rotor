@@ -11,10 +11,13 @@
 
 <p align="center">
   <a href="https://php.net"><img src="https://img.shields.io/packagist/php-v/visavi/rotor" alt="PHP Version"></a>
-  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://poser.pugx.org/visavi/rotor/v/stable" alt="Latest Stable Version"></a>
-  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://poser.pugx.org/visavi/rotor/downloads" alt="Total Downloads"></a>
-  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://poser.pugx.org/visavi/rotor/license" alt="License"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/packagist/dependency-v/visavi/rotor/laravel/framework?label=laravel" alt="Laravel Version"></a>
+  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://img.shields.io/packagist/v/visavi/rotor" alt="Latest Stable Version"></a>
+  <a href="https://github.com/visavi/rotor/releases"><img src="https://img.shields.io/github/downloads/visavi/rotor/total" alt="Total Downloads"></a>
+  <a href="https://packagist.org/packages/visavi/rotor"><img src="https://img.shields.io/packagist/l/visavi/rotor" alt="License"></a>
+  <a href="https://github.com/visavi/rotor/actions/workflows/tests.yml"><img src="https://github.com/visavi/rotor/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <a href="https://coveralls.io/github/visavi/rotor?branch=master"><img src="https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master" alt="Coverage Status"></a>
+  <a href="https://phpstan.org"><img src="https://img.shields.io/badge/PHPStan-level%205-brightgreen" alt="PHPStan"></a>
 </p>
 
 <p align="center">

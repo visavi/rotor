@@ -15,6 +15,8 @@ class ScheduleStalledTest extends TestCase
 
     private string $path;
 
+    private string $dismissedPath;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,14 +25,17 @@ class ScheduleStalledTest extends TestCase
 
         $this->boss = User::factory()->boss()->create(['login' => 'boss_schedule']);
         $this->path = storage_path('framework/schedule-run');
+        $this->dismissedPath = storage_path('framework/schedule-dismissed');
 
         // Метка живёт файлом и переживает тесты, поэтому убираем её заранее
         @unlink($this->path);
+        @unlink($this->dismissedPath);
     }
 
     protected function tearDown(): void
     {
         @unlink($this->path);
+        @unlink($this->dismissedPath);
 
         parent::tearDown();
     }
@@ -77,5 +82,44 @@ class ScheduleStalledTest extends TestCase
             ->get('/admin')
             ->assertOk()
             ->assertDontSee(__('index.schedule_stalled'));
+    }
+
+    public function testDismissHidesWarning(): void
+    {
+        $this->actingAs($this->boss)
+            ->postJson(route('admin.alerts.dismiss', ['type' => 'schedule']))
+            ->assertJson(['success' => true]);
+
+        $this->get('/admin')
+            ->assertOk()
+            ->assertDontSee(__('index.schedule_stalled'));
+    }
+
+    public function testWarningReturnsAfterNewStall(): void
+    {
+        app(ScheduleService::class)->markRun();
+        touch($this->path, time() - ScheduleService::STALLED - 60);
+        clearstatcache();
+
+        $this->actingAs($this->boss)->postJson(route('admin.alerts.dismiss', ['type' => 'schedule']));
+
+        // Крон заработал и снова встал — это уже другая остановка
+        touch($this->path, time() - ScheduleService::STALLED - 30);
+        clearstatcache();
+
+        $this->get('/admin')
+            ->assertOk()
+            ->assertSee(__('index.schedule_stalled'));
+    }
+
+    public function testDismissForbiddenForAdmin(): void
+    {
+        $admin = User::factory()->admin()->create(['login' => 'admin_schedule']);
+
+        $this->actingAs($admin)
+            ->post(route('admin.alerts.dismiss', ['type' => 'schedule']))
+            ->assertForbidden();
+
+        $this->assertFileDoesNotExist($this->dismissedPath);
     }
 }
