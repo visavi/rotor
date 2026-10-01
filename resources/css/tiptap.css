@@ -449,8 +449,8 @@ blockquote::before {
    свой HTML): класс .image ставит только tiptap, ограничения нужны и без него */
 .image,
 .section-message img:not(.sticker):not(.avatar) {
-    max-width: min(600px, 100%);
-    max-height: 450px;
+    max-width: min(var(--media-max-width), 100%);
+    max-height: var(--media-max-height);
     height: auto;
     border-radius: 4px;
     margin: 1px;
@@ -461,8 +461,8 @@ blockquote::before {
     display: grid;
     place-items: center;
     color: #ccc;
-    max-width: 600px;
-    max-height: 450px;
+    max-width: var(--media-max-width);
+    max-height: var(--media-max-height);
     aspect-ratio: 16 / 9;
     margin: 10px 0;
     background: #000;

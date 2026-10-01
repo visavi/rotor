@@ -4,21 +4,13 @@
  * это нужно и темам без сборки (см. resources/views/themes/simple).
  */
 
-/* Подложка сайта: фон страницы под блоками, форм, облачков переписки.
-   Темы переопределяют; тема без своего значения берёт это */
+/* Цвета, зависящие от темы */
 :root,
 [data-bs-theme="light"] {
+    /* Подложка сайта */
     --base-bg: #f2f2f2;
-}
 
-[data-bs-theme="dark"] {
-    --base-bg: #282c34;
-}
-
-/* Палитра подсветки кода для resources/css/prettify.css. Фон кода — --code-bg,
-   без неё код лежит на подложке сайта */
-:root,
-[data-bs-theme="light"] {
+    /* Подсветка кода (prettify.css) */
     --base-color: #000;
     --base-tag: #00f;
     --base-emphasis: #a8a8a2;
@@ -36,6 +28,8 @@
 }
 
 [data-bs-theme="dark"] {
+    --base-bg: #282c34;
+
     --base-color: #f8f8f2;
     --base-tag: #66d9ef;
     --base-emphasis: #a8a8a2;
@@ -52,30 +46,30 @@
     --base-dec: #75715e;
 }
 
+/* Не зависят от темы */
+:root {
+    /* Фокус от акцента темы: Bootstrap запекает свой цвет при компиляции */
+    --bs-focus-ring-color: rgba(var(--bs-primary-rgb), 0.25);
+
+    /* Голосование и подсветка при наведении */
+    --rating-up: #78c062;
+    --rating-down: #f75c48;
+    --hover-bg: rgba(128, 128, 128, .15);
+
+    /* Аватар по умолчанию, обёртки переопределяют */
+    --avatar-size: 4rem;
+
+    /* Рамка картинок и видео */
+    --media-max-width: 700px;
+    --media-max-height: 90vh;
+}
+
 /* Иконка переключателя темы. Какую показать, решает data-bs-theme на <html>:
    без выбранной темы его ставит скрипт в head до отрисовки, и иконка верна
    с первого кадра. От корня — чтобы data-bs-theme на вложенном блоке не мешал */
 :root[data-bs-theme="dark"] .theme-icon-light,
 :root:not([data-bs-theme="dark"]) .theme-icon-dark {
     display: none;
-}
-
-/*
- * Компоненты, которым Bootstrap запекает акцентный цвет при компиляции.
- * Тема задаёт только --bs-primary, поэтому связываем их с ним здесь —
- * файл подключается после Bootstrap, значит перекрывает его значения
- */
-:root {
-    --bs-focus-ring-color: rgba(var(--bs-primary-rgb), 0.25);
-}
-
-/* Цвета голосования и подсветка строк/плиток при наведении. Подсветка — полупрозрачная
-   накладка, а не переменная темы: --bs-tertiary-bg в тёмной теме почти не отличается
-   от подложки, и наведение там не читалось */
-:root {
-    --rating-up: #78c062;
-    --rating-down: #f75c48;
-    --hover-bg: rgba(128, 128, 128, .15);
 }
 
 .form-check-input:checked,
@@ -223,12 +217,6 @@ body.modal-open {
     margin-bottom: 1.25rem;
 }
 
-/* Размер аватара задаёт --avatar-size на обёртке: от него считаются буква заглушки
-   и значок «онлайн». Без обёртки действует размер из :root */
-:root {
-    --avatar-size: 4rem;
-}
-
 .avatar-default {
     width: var(--avatar-size);
     height: var(--avatar-size);
@@ -301,13 +289,13 @@ textarea.form-control {
 }
 
 .media-file {
-    max-width: 600px;
+    max-width: var(--media-max-width);
     margin-bottom: 1rem;
 }
 
 .media-file img,
 .media-file video {
-    max-height: 450px;
+    max-height: var(--media-max-height);
 }
 
 .is-invalid .form-control,
@@ -420,9 +408,12 @@ textarea.form-control {
     margin-bottom: 10px;
 }
 
-.form-required .form-label:after {
+/* У переключателя подпись — само название поля; у радиокнопок подписи — варианты, им звезда не нужна */
+.form-required .form-label::after,
+.form-required .form-switch .form-check-label::after {
     content: "*";
-    color: red;
+    margin-left: .25em;
+    color: var(--bs-danger);
 }
 
 /* Fix input width in form-group */
