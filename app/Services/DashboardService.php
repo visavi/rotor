@@ -265,8 +265,6 @@ class DashboardService
             ...self::trends([
                 ['label' => '404', 'color' => '#dc3545', 'query' => Error::query()->where('code', 404)],
                 ['label' => '403', 'color' => '#fd7e14', 'query' => Error::query()->where('code', 403)],
-                // 666 — код автобанов, своей таблицы у них нет
-                ['label' => __('admin.errors.autobans'), 'color' => '#6f42c1', 'query' => Error::query()->where('code', 666)],
             ], $days),
         ];
     }
