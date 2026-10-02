@@ -32,6 +32,10 @@ class ModuleMigrate extends Command
             $this->info(sprintf('Module "%s" migrated.', $module->name));
         }
 
+        // Миграции модулей добавляют настройки, а кэш их не видит:
+        // без сброса setting() отдавал бы null до сохранения настроек в админке
+        clearCache('settings');
+
         return SymfonyCommand::SUCCESS;
     }
 }

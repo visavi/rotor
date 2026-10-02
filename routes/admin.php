@@ -197,7 +197,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->name('modules.')
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
-                    Route::get('/module', 'module')->name('module');
+                    // @deprecated до 15.0: старый адрес ?module=Name
+                    Route::get('/module', 'legacyModule');
                     Route::get('/marketplace', 'marketplace')->name('marketplace');
                     Route::get('/upload', 'upload')->name('upload');
                     Route::post('/upload', 'uploadZip')->name('upload.zip');
@@ -205,6 +206,11 @@ Route::middleware(['check.admin', 'admin.logger'])
                     Route::post('/install', 'install')->name('install');
                     Route::post('/uninstall', 'uninstall')->name('uninstall');
                     Route::post('/delete', 'deleteFiles')->name('delete');
+
+                    // Последним: иначе перехватит marketplace и upload.
+                    // Заглавные пропускаем ради модулей, что строят ссылку именем каталога
+                    // (Gift) — их уводит редирект на kebab. В 15.0 сузить до [a-z]
+                    Route::get('/{module}', 'module')->name('module')->where('module', '[A-Za-z][\w\-]*');
                 });
 
             /* Реестры модулей */

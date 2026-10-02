@@ -69,7 +69,7 @@
                      data-released="{{ $moduleConfig['released_at'] }}"
                      data-sort-status="{{ $sortStatus }}">
                     <div class="section-title">
-                        <i class="fas fa-cube {{ $isActive ? 'text-success' : 'text-muted' }}"></i> <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
+                        <i class="fas fa-cube {{ $isActive ? 'text-success' : 'text-muted' }}"></i> <a class="fw-bold" href="{{ route('admin.modules.module', ['module' => Str::kebab($name)]) }}">{{ $moduleConfig['name'] ?? $name }}</a> ({{ $name }})
                     </div>
 
                     <div class="section-content">

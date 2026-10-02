@@ -21,6 +21,9 @@ class ModuleControllerTest extends TestCase
 
     private const FIXTURE_VERSION = '1.2.3';
 
+    /** Адрес страницы модуля — имя каталога в kebab-case */
+    private const FIXTURE_SLUG = 'test-fixture';
+
     private User $boss;
 
     private string $fixturePath;
@@ -239,6 +242,44 @@ class ModuleControllerTest extends TestCase
         ]);
     }
 
+    public function testModulePageOpensByKebabName(): void
+    {
+        $this->actingAs($this->boss)
+            ->get('/admin/modules/' . self::FIXTURE_SLUG)
+            ->assertOk()
+            ->assertSee('Модуль-фикстура');
+    }
+
+    public function testModulePageRedirectsDirectoryNameToKebab(): void
+    {
+        // Модули строят ссылку route() с именем каталога — адрес приводится к канону
+        $this->actingAs($this->boss)
+            ->get('/admin/modules/' . self::FIXTURE)
+            ->assertStatus(301)
+            ->assertRedirect(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
+    }
+
+    public function testLegacyModuleUrlRedirects(): void
+    {
+        $this->actingAs($this->boss)
+            ->get('/admin/modules/module?module=' . self::FIXTURE)
+            ->assertStatus(301)
+            ->assertRedirect(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
+
+        $this->actingAs($this->boss)
+            ->get('/admin/modules/module')
+            ->assertStatus(301)
+            ->assertRedirect(route('admin.modules.index'));
+    }
+
+    public function testServicePagesAreNotTakenForModule(): void
+    {
+        $this->actingAs($this->boss)
+            ->get(route('admin.modules.upload'))
+            ->assertOk()
+            ->assertDontSee(__('admin.modules.module_not_found'));
+    }
+
     public function testDownloadAppliesUpdateOfInstalledModule(): void
     {
         Module::query()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => false]);
@@ -250,7 +291,7 @@ class ModuleControllerTest extends TestCase
             'url' => 'https://files.example.com/module.zip',
         ]);
 
-        $response->assertRedirect('/admin/modules/module?module=' . self::FIXTURE);
+        $response->assertRedirect(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
         $this->assertContains(__('admin.modules.module_success_updated'), (array) session('success'));
 
         // Файлы распакованы и версия зафиксирована в БД одним действием
@@ -267,7 +308,7 @@ class ModuleControllerTest extends TestCase
         $this->fakeDownload($zip);
 
         $response = $this->actingAs($this->boss)
-            ->from('/admin/modules/module?module=' . self::FIXTURE)
+            ->from(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]))
             ->post(route('admin.modules.download'), ['url' => 'https://files.example.com/module.zip']);
 
         $response->assertSessionHas('danger');
@@ -288,7 +329,7 @@ class ModuleControllerTest extends TestCase
             'url' => 'https://files.example.com/module.zip',
         ]);
 
-        $response->assertRedirect('/admin/modules/module?module=' . self::FIXTURE);
+        $response->assertRedirect(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
         $this->assertContains(__('admin.modules.module_success_installed'), (array) session('success'));
         $this->assertSame('2.0.0', Module::query()->where('name', self::FIXTURE)->value('version'));
 
@@ -359,7 +400,7 @@ class ModuleControllerTest extends TestCase
         ]);
         ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
-        $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE]));
+        $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 
         $response->assertOk();
         $response->assertSee(__('admin.modules.update_to', ['version' => '2.0.0']));
@@ -389,7 +430,7 @@ class ModuleControllerTest extends TestCase
         ]);
         ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
-        $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE]));
+        $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 
         $response->assertOk();
         // Кнопка обновления есть, но ведёт на применение, а не на скачивание
@@ -473,7 +514,7 @@ class ModuleControllerTest extends TestCase
             'update' => 1,
         ]);
 
-        $response->assertRedirect('admin/modules/module?module=' . self::FIXTURE);
+        $response->assertRedirect(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 
         $this->assertTrue(Schema::hasTable('test_fixture_items'));
         $this->assertSame(self::FIXTURE_VERSION, Module::query()->where('name', self::FIXTURE)->value('version'));
@@ -503,7 +544,7 @@ class ModuleControllerTest extends TestCase
         ]);
         ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
-        $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE]));
+        $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 
         $response->assertOk();
         $response->assertSee(__('admin.modules.update_to', ['version' => self::FIXTURE_VERSION]));

@@ -10,6 +10,7 @@ use App\Providers\ModuleServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use ZipArchive;
 
@@ -65,14 +66,22 @@ class ModuleController extends AdminController
 
     /**
      * Просмотр модуля
+     *
+     * Адрес — имя модуля в kebab-case (/admin/modules/social-auth), каталог
+     * восстанавливается через studly. Модули строят ссылку route() с именем
+     * каталога (SocialAuth) — такой адрес уводим на канонический
      */
-    public function module(Request $request): View
+    public function module(string $module): View|RedirectResponse
     {
-        $moduleName = $request->string('module')->value();
+        $moduleName = Str::studly($module);
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
             abort(200, __('admin.modules.module_not_found'));
+        }
+
+        if ($module !== Str::kebab($moduleName)) {
+            return $this->toModule($moduleName, 301);
         }
 
         $moduleConfig = include $modulePath . '/module.php';
@@ -142,6 +151,30 @@ class ModuleController extends AdminController
     }
 
     /**
+     * Старый адрес страницы модуля (?module=Name) — для закладок и чужих ссылок
+     *
+     * @deprecated до 15.0: удалить вместе с маршрутом /admin/modules/module
+     */
+    public function legacyModule(Request $request): RedirectResponse
+    {
+        $moduleName = $request->string('module')->value();
+
+        if (! preg_match('|^[A-Za-z][\w\-]*$|', $moduleName)) {
+            return redirect()->route('admin.modules.index', status: 301);
+        }
+
+        return $this->toModule($moduleName, 301);
+    }
+
+    /**
+     * Редирект на страницу модуля по каноническому адресу
+     */
+    private function toModule(string $moduleName, int $status = 302): RedirectResponse
+    {
+        return redirect()->route('admin.modules.module', ['module' => Str::kebab($moduleName)], $status);
+    }
+
+    /**
      * Установка модуля
      */
     public function install(Request $request): RedirectResponse
@@ -160,13 +193,13 @@ class ModuleController extends AdminController
         $moduleConfig = include $modulePath . '/module.php';
 
         if ($requires = $this->incompatibleWith($moduleConfig)) {
-            return redirect('admin/modules/module?module=' . $moduleName)
+            return $this->toModule($moduleName)
                 ->with('danger', __('admin.modules.requires') . ' ' . $requires . '!');
         }
 
         $result = $this->applyModule($module, $moduleConfig, (bool) $enable, (bool) $update);
 
-        return redirect('admin/modules/module?module=' . $moduleName)
+        return $this->toModule($moduleName)
             ->with('success', $result);
     }
 
@@ -311,7 +344,7 @@ class ModuleController extends AdminController
             ? __('admin.modules.update_extracted')
             : __('admin.modules.upload_success_extracted');
 
-        return redirect('/admin/modules/module?module=' . $moduleName)
+        return $this->toModule($moduleName)
             ->with('success', $extracted);
     }
 
@@ -400,7 +433,7 @@ class ModuleController extends AdminController
         // Несовместимую версию не применяем, но файлы уже распакованы: модуль
         // остаётся в промежуточном состоянии, о чём и говорит сообщение
         if ($requires = $this->incompatibleWith($moduleConfig)) {
-            return redirect('/admin/modules/module?module=' . $moduleName)
+            return $this->toModule($moduleName)
                 ->with('danger', __('admin.modules.requires') . ' ' . $requires . '! ' . __('admin.modules.update_extracted'));
         }
 
@@ -410,7 +443,7 @@ class ModuleController extends AdminController
         // старой схемой БД
         $result = $this->applyModule($module, $moduleConfig, false, true);
 
-        return redirect('/admin/modules/module?module=' . $moduleName)
+        return $this->toModule($moduleName)
             ->with('success', $result);
     }
 
@@ -605,7 +638,7 @@ class ModuleController extends AdminController
             $result = __('admin.modules.module_success_disabled');
         } else {
             if (config('modules.safe_mode')) {
-                return redirect('admin/modules/module?module=' . $moduleName)
+                return $this->toModule($moduleName)
                     ->with('danger', __('admin.modules.safe_mode_enabled'));
             }
 
@@ -619,7 +652,7 @@ class ModuleController extends AdminController
         // После смены статуса модуля — пересборка соберёт роуты без него
         refreshCaches();
 
-        return redirect('admin/modules/module?module=' . $moduleName)
+        return $this->toModule($moduleName)
             ->with('success', $result);
     }
 }

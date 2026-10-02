@@ -75,7 +75,7 @@
                     <div class="text-break" style="min-width: 0">
                         <i class="fas fa-cube"></i>
                         @if ($localExists)
-                            <a class="fw-bold" href="/admin/modules/module?module={{ $name }}">{{ $info['name'] ?? $name }}</a>
+                            <a class="fw-bold" href="{{ route('admin.modules.module', ['module' => Str::kebab($name)]) }}">{{ $info['name'] ?? $name }}</a>
                         @else
                             <span class="fw-bold">{{ $info['name'] ?? $name }}</span>
                         @endif
