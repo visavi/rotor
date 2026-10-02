@@ -46,7 +46,8 @@
                     {{ __('index.schedule_never') }}
                 @endif
             </div>
-            <code class="d-block mt-1 user-select-all">* * * * * php {{ base_path('artisan') }} schedule:run >> /dev/null 2>&1</code>
+            <div class="small mt-2">{{ __('index.schedule_cron') }}</div>
+            <code class="d-block mt-1 user-select-all">{{ base_path('cron.php') }}</code>
         </div>
     @endif
 

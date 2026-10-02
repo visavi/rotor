@@ -125,6 +125,8 @@ php artisan serve
 * * * * * php /path-to-site/artisan schedule:run >>/dev/null 2>&1
 ```
 
+Если хостинг принимает в cron только путь к PHP-файлу, укажите `/path-to-site/cron.php` с запуском раз в минуту.
+
 ### Apache
 
 На обычном хостинге работают два варианта размещения:

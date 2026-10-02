@@ -46,7 +46,8 @@ class ScheduleStalledTest extends TestCase
             ->get('/admin')
             ->assertOk()
             ->assertSee(__('index.schedule_stalled'))
-            ->assertSee(__('index.schedule_never'));
+            ->assertSee(__('index.schedule_never'))
+            ->assertSee(base_path('cron.php'));
     }
 
     public function testWarningHiddenAfterRun(): void

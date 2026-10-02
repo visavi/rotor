@@ -16,7 +16,7 @@
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
-<Files ~ ".env|artisan">
+<Files ~ ".env|artisan|cron\.php">
     Order allow,deny
     Deny from all
 </Files>

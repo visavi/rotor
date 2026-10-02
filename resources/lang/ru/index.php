@@ -69,6 +69,7 @@ return [
     'schedule_stalled'     => 'Планировщик задач не запускается',
     'schedule_last_run'    => 'Последний запуск: :date',
     'schedule_never'       => 'Планировщик не запускался ни разу.',
+    'schedule_cron'        => 'Добавьте в cron с запуском раз в минуту:',
     'mail_failed'          => 'Письма не отправляются',
     'mail_failed_time'     => 'Последняя ошибка: :date',
     'queue_stalled'        => 'Очередь задач не обрабатывается',

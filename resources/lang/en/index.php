@@ -69,6 +69,7 @@ return [
     'schedule_stalled'     => 'Task scheduler is not running',
     'schedule_last_run'    => 'Last run: :date',
     'schedule_never'       => 'The scheduler has never run.',
+    'schedule_cron'        => 'Add to cron to run every minute:',
     'mail_failed'          => 'Emails are not being sent',
     'mail_failed_time'     => 'Last error: :date',
     'queue_stalled'        => 'The job queue is not being processed',

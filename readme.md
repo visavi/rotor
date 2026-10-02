@@ -125,6 +125,8 @@ Then open `http://localhost:8000`.
 * * * * * php /path-to-site/artisan schedule:run >>/dev/null 2>&1
 ```
 
+If the hosting accepts only a path to a PHP file in cron, set `/path-to-site/cron.php` to run every minute.
+
 ### Apache
 
 Two layouts work on typical shared hosting:

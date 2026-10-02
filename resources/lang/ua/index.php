@@ -69,6 +69,7 @@ return [
     'schedule_stalled'     => 'Планувальник завдань не запускається',
     'schedule_last_run'    => 'Останній запуск: :date',
     'schedule_never'       => 'Планувальник не запускався жодного разу.',
+    'schedule_cron'        => 'Додайте в cron із запуском щохвилини:',
     'mail_failed'          => 'Листи не надсилаються',
     'mail_failed_time'     => 'Остання помилка: :date',
     'queue_stalled'        => 'Черга завдань не обробляється',
