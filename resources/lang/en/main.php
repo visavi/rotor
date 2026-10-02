@@ -3,6 +3,8 @@
 return [
     'lang'              => 'English',
     'write'             => 'Write',
+    'write_message'     => 'Write a message…',
+    'write_comment'     => 'Write a comment…',
     'rules'             => 'Rules',
     'site_rules'        => 'Site rules',
     'stickers'          => 'Stickers',
@@ -133,6 +135,8 @@ return [
     'valid_media_extensions' => 'Valid media extensions',
     'attached_files'         => 'Attached files',
     'attach_files'           => 'Attach files',
+    'attach_limit'           => 'Up to :files, :size each',
+    'attach_limit_files'     => 'file,files,files',
     'attach_file'            => 'Attach file',
     'attach_image'           => 'Attach image',
     'file_not_found'         => 'File not found',

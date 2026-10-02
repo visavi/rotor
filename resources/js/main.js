@@ -363,6 +363,17 @@ document.addEventListener('click', function (e) {
     if (hide) hide.style.display = 'none'
 })
 
+/* Свёрнутая форма: data-compact показывает одно поле ввода,
+ * первый фокус в форме раскрывает её насовсем. data-expanded запускает
+ * анимацию раскрытия — у формы, открытой с сервера, её нет */
+document.addEventListener('focusin', function (e) {
+    const form = e.target.closest('[data-compact]')
+    if (!form) return
+
+    form.removeAttribute('data-compact')
+    form.setAttribute('data-expanded', '')
+})
+
 /* Переход к форме ввода */
 window.postJump = function () {
     const form = document.querySelector('.section-form')
@@ -424,11 +435,6 @@ window.openReplyForm = function (id, callback) {
 /* Закрыть форму ответа */
 window.closeReplyForm = function (id) {
     document.getElementById('reply-form-' + id)?.classList.add('d-none')
-}
-
-/* Тогл панели форматирования в форме ответа */
-window.toggleReplyToolbar = function (btn) {
-    btn.closest('.reply-form').classList.toggle('toolbar-visible')
 }
 
 /* AJAX отправка формы ответа на комментарий */

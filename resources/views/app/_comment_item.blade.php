@@ -113,15 +113,10 @@
                         @csrf
                         <input type="hidden" name="parent_id" value="{{ $comment->id }}">
                         <div class="mb-1 reply-editor-wrap border rounded overflow-hidden">
-                            <textarea class="form-control form-control-sm border-0 shadow-none rounded-0" id="reply-textarea-{{ $comment->id }}" name="msg" rows="4" maxlength="{{ setting('comment_text_max') }}" data-relate-type="{{ \App\Models\Comment::$morphName }}" data-relate-id="0" required></textarea>
-                            <div class="d-flex justify-content-between align-items-center px-2 py-1">
-                                <button type="button" class="btn btn-sm btn-link p-0" onclick="toggleReplyToolbar(this)" title="Форматирование">
-                                    <i class="fa fa-font text-muted fa-lg"></i>
-                                </button>
-                                <div class="d-flex gap-1">
-                                    <button type="button" class="btn btn-sm btn-secondary" onclick="closeReplyForm({{ $comment->id }})">{{ __('main.cancel') }}</button>
-                                    <button class="btn btn-sm btn-success">{{ __('main.write') }}</button>
-                                </div>
+                            <textarea class="form-control form-control-sm border-0 shadow-none rounded-0" id="reply-textarea-{{ $comment->id }}" name="msg" rows="3" maxlength="{{ setting('comment_text_max') }}" data-relate-type="{{ \App\Models\Comment::$morphName }}" data-relate-id="0" required></textarea>
+                            <div class="d-flex justify-content-end gap-1 px-2 py-1">
+                                <button type="button" class="btn btn-sm btn-secondary" onclick="closeReplyForm({{ $comment->id }})">{{ __('main.cancel') }}</button>
+                                <button class="btn btn-sm btn-success">{{ __('main.write') }}</button>
                             </div>
                         </div>
                         <div class="reply-error text-danger small mt-1"></div>

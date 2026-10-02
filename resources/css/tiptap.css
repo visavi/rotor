@@ -611,15 +611,5 @@ a.user:hover {
     box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
 }
 
-/* ── Reply form toolbar (hidden by default, toggled via button) ───────────── */
-
-.reply-form .tiptap-toolbar {
-    display: none;
-}
-
-.reply-form.toolbar-visible .tiptap-toolbar {
-    display: flex;
-}
-
 /* ── Link bubble menu ────────────────────────────────────────────────────── */
 

@@ -212,6 +212,62 @@ body.modal-open {
     --bs-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
 
+/* Лимиты вложений под списком файлов — только когда что-то прикреплено или грузится */
+.js-files:not(:has(.js-file, .js-file-pending)) + .attach-limits {
+    display: none;
+}
+
+/* Свёрнутая форма: видно только поле .compact-field высотой в строку,
+   main.js снимает data-compact при первом фокусе */
+[data-compact] > :not(.compact-field),
+[data-compact] .compact-field > :not(textarea, .tiptap-wrapper),
+[data-compact] .tiptap-toolbar {
+    display: none;
+}
+
+[data-compact] .compact-field {
+    margin-bottom: 0 !important;
+}
+
+/* Высоту по rows редактор пишет инлайн-стилем */
+[data-compact] .tiptap-editor-content {
+    height: auto !important;
+    min-height: 0 !important;
+    resize: none;
+}
+
+[data-compact] .tiptap-editor-content .ProseMirror {
+    min-height: 0;
+}
+
+[data-compact] .compact-field textarea {
+    height: calc(1.5em + .75rem + calc(var(--bs-border-width) * 2));
+    overflow: hidden;
+    resize: none;
+}
+
+/* Раскрытие: редактор дорастает от строки до высоты по rows (анимация без
+   конечного кадра идёт к обычному значению), остальное проявляется */
+@media (prefers-reduced-motion: no-preference) {
+    [data-expanded] .tiptap-editor-content {
+        animation: compact-grow .2s ease-out;
+    }
+
+    [data-expanded] > :not(.compact-field),
+    [data-expanded] .tiptap-toolbar {
+        animation: compact-fade .2s ease-out;
+    }
+}
+
+@keyframes compact-grow {
+    /* Высота свёрнутого редактора; min-height он тоже пишет инлайн */
+    from { height: 2.7rem; min-height: 2.7rem; }
+}
+
+@keyframes compact-fade {
+    from { opacity: 0; }
+}
+
 .section-media {
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;

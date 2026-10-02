@@ -4,11 +4,15 @@
     @endif
 
     @if (getUser())
-        <form action="{{ $action }}" method="post" class="mb-3">
+        @php
+            // Свёрнута в одно поле, пока нечего показывать: после ошибки или с прикреплёнными файлами открыта
+            $compact = ! $errors->any() && ! old('msg') && $files->isEmpty();
+        @endphp
+
+        <form action="{{ $action }}" method="post" class="mb-3"@if ($compact) data-compact @endif>
             @csrf
-            <div class="mb-3{{ hasError('msg') }}">
-                <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Comment::$morphName }}" data-relate-id="0" required>{{ old('msg') }}</textarea>
+            <div class="mb-3 compact-field{{ hasError('msg') }}">
+                <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Comment::$morphName }}" data-relate-id="0" placeholder="{{ __('main.write_comment') }}" required>{{ old('msg') }}</textarea>
                 <div class="invalid-feedback">{{ textError('msg') }}</div>
                 <span class="js-textarea-counter"></span>
             </div>

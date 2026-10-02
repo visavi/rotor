@@ -25,6 +25,39 @@
     </div>
     <hr>
 
+    {{-- Новые сообщения сверху, форма над ними. Свёрнута в одно поле,
+         пока нечего показывать: после ошибки или с прикреплёнными файлами открыта --}}
+    @if ($user->exists)
+        @php
+            $compact = ! $errors->any() && ! old('msg') && $files->isEmpty();
+        @endphp
+
+        <div class="section-form mb-3 shadow">
+            <form action="/messages/send?user={{ $user->login }}" method="post"@if ($compact) data-compact @endif>
+                @csrf
+                <div class="mb-3 compact-field{{ hasError('msg') }}">
+                    <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Message::$morphName }}" data-relate-id="0" placeholder="{{ __('main.write_message') }}" required>{{ old('msg') }}</textarea>
+                    <div class="invalid-feedback">{{ textError('msg') }}</div>
+                    <span class="js-textarea-counter"></span>
+                </div>
+
+                @include('app/_upload_file', [
+                    'model' => App\Models\Message::getModel(),
+                    'files' => $files,
+                ])
+
+                @if (getUser('point') < setting('privatprotect'))
+                    {{ getCaptcha() }}
+                @endif
+
+                {{-- Кнопки модулей рядом с отправкой --}}
+                @hook('messageFormEnd', $user)
+
+                <button class="btn btn-primary">{{ __('main.write') }}</button>
+            </form>
+        </div>
+    @endif
+
     @if ($messages->isNotEmpty())
         <div class="mb-3">
             @foreach ($messages as $data)
@@ -97,34 +130,6 @@
                 <i class="far fa-comments fa-2x mb-2"></i>
                 {{ __('messages.empty_dialogue') }}
             </div>
-        </div>
-    @endif
-
-    @if ($user->exists)
-        <div class="section-form mb-3 shadow">
-            <form action="/messages/send?user={{ $user->login }}" method="post">
-                @csrf
-                <div class="mb-3{{ hasError('msg') }}">
-                    <label for="msg" class="form-label">{{ __('main.message') }}:</label>
-                    <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Message::$morphName }}" data-relate-id="0" placeholder="{{ __('main.message') }}" required>{{ old('msg') }}</textarea>
-                    <div class="invalid-feedback">{{ textError('msg') }}</div>
-                    <span class="js-textarea-counter"></span>
-                </div>
-
-                @include('app/_upload_file', [
-                    'model' => App\Models\Message::getModel(),
-                    'files' => $files,
-                ])
-
-                @if (getUser('point') < setting('privatprotect'))
-                    {{ getCaptcha() }}
-                @endif
-
-                {{-- Кнопки модулей рядом с отправкой --}}
-                @hook('messageFormEnd', $user)
-
-                <button class="btn btn-primary">{{ __('main.write') }}</button>
-            </form>
         </div>
     @endif
 

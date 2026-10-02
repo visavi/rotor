@@ -3,6 +3,8 @@
 return [
     'lang'              => 'Русский',
     'write'             => 'Написать',
+    'write_message'     => 'Написать сообщение…',
+    'write_comment'     => 'Написать комментарий…',
     'rules'             => 'Правила',
     'site_rules'        => 'Правила сайта',
     'stickers'          => 'Стикеры',
@@ -133,6 +135,8 @@ return [
     'valid_media_extensions' => 'Допустимые расширения медиафайлов',
     'attached_files'         => 'Прикрепленные файлы',
     'attach_files'           => 'Прикрепить файлы',
+    'attach_limit'           => 'До :files по :size',
+    'attach_limit_files'     => 'файла,файлов,файлов',
     'attach_file'            => 'Прикрепить файл',
     'attach_image'           => 'Прикрепить медиафайл',
     'file_not_found'         => 'Файл не найден',

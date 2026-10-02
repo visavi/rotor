@@ -13,7 +13,7 @@
                         data-relate-type="{{ \App\Models\Comment::$morphName }}"
                         data-relate-id="0"></textarea>
 
-                    @include('app/_upload_file', ['model' => new \App\Models\Comment(), 'files' => collect(), 'showForm' => true])
+                    @include('app/_upload_file', ['model' => new \App\Models\Comment(), 'files' => collect()])
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('main.close') }}</button>
