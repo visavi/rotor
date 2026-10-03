@@ -284,9 +284,9 @@ class ApiController extends Controller
 
         $message = $recipient->sendMessage($user, $validated['text']);
 
-        // Через FileService, а не uploadFile: он конвертирует видео и забирает файлы, загруженные заранее
-        $files->attachUploaded($message, $request->file('files', []));
-        $files->attachPending($message);
+        // Через FileService, а не uploadFile: он конвертирует видео.
+        // Загруженные заранее сообщение не берёт — они не знают получателя
+        $files->attach($message, $request->file('files', []));
 
         $flood->saveState();
 

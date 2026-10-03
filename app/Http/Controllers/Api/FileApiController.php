@@ -12,6 +12,7 @@ use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Validation\ValidationException;
 
 class FileApiController extends Controller
 {
@@ -41,7 +42,8 @@ class FileApiController extends Controller
 
     /**
      * Загрузка вложения, id = 0 — запись еще не создана,
-     * такие файлы привяжутся к ней при сохранении
+     * такие файлы привяжутся к ней при сохранении. Личным сообщениям
+     * так нельзя — их файлы передаются в самом запросе
      */
     public function store(Request $request, Validator $validator): JsonResponse
     {
@@ -51,9 +53,15 @@ class FileApiController extends Controller
             'file' => ['required', 'file'],
         ]);
 
+        $type = $request->string('type')->value();
+
+        if (! $request->integer('id') && ! FileService::acceptsPending($type)) {
+            throw ValidationException::withMessages(['id' => __('validator.files_in_request')]);
+        }
+
         $result = $this->uploader->upload(
             $request->file('file'),
-            $request->string('type')->value(),
+            $type,
             $request->integer('id'),
             $validator,
         );

@@ -4,6 +4,7 @@ namespace Tests\Feature\Api;
 
 use App\Models\Comment;
 use App\Models\File;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -80,6 +81,18 @@ class FileTest extends TestCase
             ['type' => 'unknown', 'file' => UploadedFile::fake()->image('screen.jpg')],
             $this->headers(),
         )->assertStatus(422)->assertJsonValidationErrors('type');
+    }
+
+    public function testMessageFileIsNotUploadedAhead(): void
+    {
+        // Ожидающий файл сообщения не знает получателя — только в самом запросе
+        $this->post(
+            '/api/files',
+            ['type' => Message::$morphName, 'id' => 0, 'file' => UploadedFile::fake()->createWithContent('note.txt', 'text')],
+            $this->headers() + ['Accept' => 'application/json'],
+        )->assertStatus(422)->assertJsonValidationErrors('id');
+
+        $this->assertDatabaseMissing('files', ['relate_type' => Message::$morphName]);
     }
 
     public function testForeignFileIsNotDeleted(): void

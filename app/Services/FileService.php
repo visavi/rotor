@@ -9,6 +9,7 @@ use App\Models\File;
 use App\Models\Message;
 use App\Support\Registry;
 use App\Support\Validator;
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
@@ -72,6 +73,17 @@ class FileService
             static fn (string $ext) => strtolower(trim($ext)),
             explode(',', (string) setting($setting)),
         )));
+    }
+
+    /**
+     * Принимает ли тип в API файлы, загруженные до создания записи
+     *
+     * Личным сообщениям нельзя: ожидающий файл не знает получателя, и брошенный
+     * в одном диалоге на сайте ушёл бы в другой. Их файлы — только в самом запросе
+     */
+    public static function acceptsPending(string $type): bool
+    {
+        return $type !== Message::$morphName;
     }
 
     /**
@@ -157,14 +169,31 @@ class FileService
      *
      * Набор расширений зависит от того, куда грузят: галерея принимает медиа,
      * файловые разделы — остальное. Лимит общий с файлами, загруженными
-     * заранее: они тоже лягут в запись, иначе вложений выходило вдвое больше
+     * заранее, если тип их принимает: они тоже лягут в запись. Считаются
+     * только когда файлы пришли — запрос без них не платит
      */
     public static function rules(string $type): array
     {
-        $pending = getUser() ? File::query()->pending($type, getUser('id'))->count() : 0;
+        $max = (int) setting('maxfiles');
 
         return [
-            'files'   => ['nullable', 'array', 'max:' . max(0, setting('maxfiles') - $pending)],
+            'files' => [
+                'nullable',
+                'array',
+                static function (string $attribute, mixed $value, Closure $fail) use ($type, $max) {
+                    if (! is_array($value)) {
+                        return;
+                    }
+
+                    $taken = self::acceptsPending($type)
+                        ? File::query()->pending($type, getUser('id'))->count()
+                        : 0;
+
+                    if (count($value) + $taken > $max) {
+                        $fail(__('validator.files_max', ['max' => $max]));
+                    }
+                },
+            ],
             'files.*' => ['file', 'max:' . self::maxFileSize(), 'mimes:' . implode(',', self::extensions($type))],
         ];
     }
@@ -177,6 +206,24 @@ class FileService
     public static function maxFileSize(): int
     {
         return (int) (setting('filesize') / 1024);
+    }
+
+    /**
+     * Прикладывает к новой записи все её вложения: загруженные заранее и из запроса
+     *
+     * Загруженные заранее — только если тип их принимает (`acceptsPending`).
+     * Сначала они: файлы из запроса считают sort от уже привязанных и встают
+     * после них. В обратном порядке sort у групп совпадал, и вложения перемешивались
+     *
+     * @param array<int, UploadedFile> $files
+     */
+    public function attach(Model $model, array $files): void
+    {
+        if (self::acceptsPending($model->getMorphClass())) {
+            $this->attachPending($model);
+        }
+
+        $this->attachUploaded($model, $files);
     }
 
     /**

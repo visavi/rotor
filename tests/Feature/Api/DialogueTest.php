@@ -3,8 +3,11 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Dialogue;
+use App\Models\File;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -94,6 +97,47 @@ class DialogueTest extends TestCase
     public function testUnknownUserIsNotFound(): void
     {
         $this->deleteJson('/api/talk/nobody', [], $this->headers())->assertStatus(404);
+    }
+
+    public function testSendIgnoresPendingFiles(): void
+    {
+        // Файл, брошенный в другом диалоге на сайте, не знает получателя:
+        // в сообщение уходят только файлы из запроса, и лимит их не учитывает
+        $this->overrideSetting('comment_text_min', 1);
+        $this->overrideSetting('comment_text_max', 1000);
+        $this->overrideSetting('file_extensions', 'txt');
+        $this->overrideSetting('filesize', 1024 * 1024);
+        $this->overrideSetting('maxfiles', 1);
+
+        $pending = File::query()->create([
+            'relate_id'   => 0,
+            'relate_type' => Message::$morphName,
+            'path'        => '/uploads/messages/other.txt',
+            'name'        => 'other.txt',
+            'size'        => 1024,
+            'extension'   => 'txt',
+            'mime_type'   => 'text/plain',
+            'user_id'     => $this->user->id,
+        ]);
+
+        $id = $this->post('/api/talk/' . $this->author->login, [
+            'text'  => 'Привет',
+            'files' => [UploadedFile::fake()->createWithContent('note.txt', 'text')],
+        ], $this->headers() + ['Accept' => 'application/json'])
+            ->assertStatus(201)
+            ->json('data.id');
+
+        $files = Message::query()->find($id)->files()->get();
+
+        try {
+            $this->assertSame(['note.txt'], $files->pluck('name')->all());
+            $this->assertSame(0, $pending->fresh()->relate_id);
+        } finally {
+            // Файл из запроса реально лёг в public/uploads
+            foreach ($files as $file) {
+                @unlink(public_path($file->path));
+            }
+        }
     }
 
     /**

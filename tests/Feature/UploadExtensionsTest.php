@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Services\FileService;
 use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class UploadExtensionsTest extends TestCase
@@ -89,11 +91,36 @@ class UploadExtensionsTest extends TestCase
     {
         // Файлы, загруженные заранее, тоже лягут в запись — лимит общий
         $this->overrideSetting('maxfiles', 3);
+        $this->overrideSetting('file_extensions', 'pdf');
 
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        foreach (range(1, 2) as $i) {
+        $this->createPending($user, 2);
+
+        $rules = FileService::rules(Comment::$morphName);
+
+        $one = ['files' => [UploadedFile::fake()->create('a.pdf', 1, 'application/pdf')]];
+        $two = ['files' => [
+            UploadedFile::fake()->create('a.pdf', 1, 'application/pdf'),
+            UploadedFile::fake()->create('b.pdf', 1, 'application/pdf'),
+        ]];
+
+        $this->assertTrue(Validator::make($one, $rules)->passes());
+
+        $errors = Validator::make($two, $rules)->errors();
+        $this->assertSame(__('validator.files_max', ['max' => 3]), $errors->first('files'));
+    }
+
+    public function testPendingWithoutUserFindsNothing(): void
+    {
+        // Без пользователя scope не падает TypeError, а ничего не находит
+        $this->assertSame(0, File::query()->pending(Comment::$morphName, null)->count());
+    }
+
+    private function createPending(User $user, int $count): void
+    {
+        foreach (range(1, $count) as $i) {
             File::query()->create([
                 'relate_id'   => 0,
                 'relate_type' => Comment::$morphName,
@@ -103,9 +130,8 @@ class UploadExtensionsTest extends TestCase
                 'extension'   => 'pdf',
                 'mime_type'   => 'application/pdf',
                 'user_id'     => $user->id,
+                'sort'        => $i,
             ]);
         }
-
-        $this->assertContains('max:1', FileService::rules(Comment::$morphName)['files']);
     }
 }
