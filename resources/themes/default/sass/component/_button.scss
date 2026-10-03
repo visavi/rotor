@@ -10,12 +10,5 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
   }
   &[disabled] { cursor: not-allowed; }
-  .fas,
-  .far,
-  .icon {
-    font-size: 0.875rem;
-    margin-right: 5px;
-    vertical-align: middle;
-  }
 }
 

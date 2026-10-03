@@ -335,6 +335,28 @@ class DashboardWidgetTest extends TestCase
             ->assertSee('stat-tile-diff text-danger', false);
     }
 
+    public function testUnchangedWidgetIsNeutral(): void
+    {
+        foreach ([false, true] as $inverse) {
+            Registry::widget('flat_' . (int) $inverse, static fn (): array => [
+                'label'    => 'Ровная метрика',
+                'value'    => 5,
+                'previous' => 5,
+                'series'   => [1, 2],
+                'inverse'  => $inverse,
+            ]);
+        }
+
+        // Без изменений — не рост: серый цвет и прочерк вместо стрелки
+        $this->actingAs($this->admin)
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee('stat-tile-diff text-secondary', false)
+            ->assertSee('fa-minus', false)
+            ->assertDontSee('stat-tile-diff text-success', false)
+            ->assertDontSee('stat-tile-diff text-danger', false);
+    }
+
     public function testTrendCanSumColumnInsteadOfCounting(): void
     {
         User::factory()->create(['created_at' => now(), 'point' => 30]);

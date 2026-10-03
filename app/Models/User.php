@@ -69,7 +69,7 @@ use Illuminate\Support\Str;
  * @property string               $apikey
  * @property string|null          $subscribe
  * @property string               $remember_token
- * @property string               $confirm_token
+ * @property string|null          $confirm_token
  * @property CarbonImmutable|null $timeban
  * @property CarbonImmutable|null $timebonus
  * @property CarbonImmutable|null $updated_at

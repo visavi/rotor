@@ -24,12 +24,18 @@
         <span class="stat-tile-period">{{ __('index.widget_period', ['days' => $widget['days']]) }}</span>
 
         @isset($widget['diff'])
-            @php $good = $widget['inverse'] ? $widget['diff'] <= 0 : $widget['diff'] >= 0; @endphp
+            {{-- Ноль (и -0.0 после округления) — без изменений, не рост --}}
+            @php
+                $diff = $widget['diff'];
+                $good = $widget['inverse'] ? $diff < 0 : $diff > 0;
+                $color = $diff == 0 ? 'text-secondary' : ($good ? 'text-success' : 'text-danger');
+                $icon = $diff == 0 ? 'minus' : ($diff > 0 ? 'caret-up' : 'caret-down');
+            @endphp
 
-            <span class="stat-tile-diff {{ $good ? 'text-success' : 'text-danger' }}"
+            <span class="stat-tile-diff {{ $color }}"
                   title="{{ __('index.widget_previous', ['value' => $widget['previous']]) }}">
-                <i class="fas fa-caret-{{ $widget['diff'] >= 0 ? 'up' : 'down' }}"></i>
-                {{ abs($widget['diff']) }}%
+                <i class="fas fa-{{ $icon }}"></i>
+                {{ abs($diff) }}%
             </span>
         @endisset
     </div>

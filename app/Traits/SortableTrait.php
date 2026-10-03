@@ -21,7 +21,9 @@ trait SortableTrait
     {
         $options = static::sortableFields();
 
-        $sort = isset($options[$sort]) ? $sort : 'date';
+        // Незнакомый ключ — сортировка по умолчанию: date, а у моделей без него первая
+        $default = isset($options['date']) ? 'date' : array_key_first($options);
+        $sort = isset($options[$sort]) ? $sort : $default;
         $order = in_array($order, ['asc', 'desc']) ? $order : 'desc';
 
         $options[$sort]['badge'] = 'success';

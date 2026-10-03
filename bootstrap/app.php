@@ -89,12 +89,18 @@ return Application::configure(basePath: dirname(__DIR__))
             ->skip(static fn () => config('queue.default') === 'sync');
 
         // Метка живого крона: по ней панель понимает, что планировщик запускается.
-        // Раз в пять минут хватает — порог остановки втрое больше
+        // Ставится каждый запуск — «Последний запуск» в панели точен до минуты
         $schedule->call(static fn () => app(ScheduleService::class)->markRun())
-            ->everyFiveMinutes()
+            ->everyMinute()
             ->name('schedule-ping');
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        // Api отвечает json на любую ошибку, даже без Accept: application/json.
+        // Html-страница ошибки там не отрисуется: тема для api не подключается
+        $exceptions->shouldRenderJsonWhen(
+            static fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
+        );
+
         $exceptions->reportable(function (Throwable $exception) {
             $statusCode = $exception instanceof HttpExceptionInterface
                 ? $exception->getStatusCode()

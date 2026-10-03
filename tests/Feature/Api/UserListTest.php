@@ -66,6 +66,17 @@ class UserListTest extends TestCase
             ->assertJsonPath('data.0.login', $rich->login);
     }
 
+    public function testUnknownSortFallsBackToDefault(): void
+    {
+        $rich = User::factory()->create(['point' => 100]);
+        User::factory()->create(['point' => 1]);
+
+        // У пользователей нет ключа date: незнакомая сортировка берёт первую, по активу
+        $this->getJson('/api/users?sort=created_at')
+            ->assertOk()
+            ->assertJsonPath('data.0.login', $rich->login);
+    }
+
     public function testSearchNeedsTwoCharacters(): void
     {
         User::factory()->create(['login' => 'visavi']);

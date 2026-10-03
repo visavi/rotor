@@ -35,6 +35,15 @@ class UserControllerTest extends TestCase
         ], $attributes));
     }
 
+    public function testUserListIgnoresUnknownSort(): void
+    {
+        $this->makeUser();
+
+        $this->get('/users?sort=created_at')
+            ->assertOk()
+            ->assertSee('plain_user');
+    }
+
     public function testProfilePageIsShown(): void
     {
         $user = $this->makeUser();
