@@ -1,5 +1,8 @@
 @php
 $files ??= $model->files;
+// Список по типу записи — тот же, что проверит сервер
+$extensions = \App\Services\FileService::extensions($model->getMorphClass());
+$accept = implode(',', array_map(static fn ($ext) => '.' . $ext, $extensions));
 @endphp
 
 {{-- Миниатюры перетаскиваются: порядок сразу уходит на сервер, форма записи его не несёт --}}
@@ -30,7 +33,7 @@ $files ??= $model->files;
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" accept="image/*,video/*" multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input id="file" type="file" name="file" accept="{{ $accept }}" multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>
@@ -38,6 +41,6 @@ $files ??= $model->files;
 <p class="text-muted fst-italic">
     {{ __('main.max_file_upload') }}: {{ setting('maxfiles') }}<br>
     {{ __('main.max_file_weight') }}: {{ formatSize(setting('filesize')) }}<br>
-    {{ __('main.valid_file_extensions') }}: {{ str_replace(',', ', ', setting('media_extensions')) }}<br>
+    {{ __('main.valid_file_extensions') }}: {{ implode(', ', $extensions) }}<br>
     {{ __('main.min_image_size') }}: 100px
 </p>

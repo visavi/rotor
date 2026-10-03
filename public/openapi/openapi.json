@@ -2173,7 +2173,14 @@
                                                     "items": {
                                                         "type": "string"
                                                     },
-                                                    "description": "Разрешённые расширения файлов"
+                                                    "description": "Разрешённые расширения для типов из types.file"
+                                                },
+                                                "media_extensions": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": "Разрешённые расширения для типов из types.media"
                                                 }
                                             }
                                         },

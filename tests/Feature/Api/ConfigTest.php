@@ -25,7 +25,7 @@ class ConfigTest extends TestCase
             ->assertOk()
             ->assertJsonStructure([
                 'site',
-                'upload',
+                'upload'  => ['max_files', 'max_file_size', 'extensions', 'media_extensions'],
                 'account' => ['login_min', 'password_min', 'captcha_type', 'confirm_email'],
                 'types'   => ['search', 'comment', 'rating', 'media', 'file'],
             ]);

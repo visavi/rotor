@@ -280,9 +280,7 @@ class ApiController extends Controller
                     }
                 },
             ],
-            'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*' => ['file', 'max:' . FileService::maxFileSize(), 'mimes:' . setting('file_extensions')],
-        ]);
+        ] + FileService::rules(Message::$morphName));
 
         $message = $recipient->sendMessage($user, $validated['text']);
 
@@ -451,7 +449,9 @@ class ApiController extends Controller
             'upload' => [
                 'max_files'     => setting('maxfiles'),
                 'max_file_size' => setting('filesize'),
-                'extensions'    => explode(',', setting('file_extensions')),
+                // extensions — для типов из types.file, media_extensions — для types.media
+                'extensions'       => FileService::extensionList('file_extensions'),
+                'media_extensions' => FileService::extensionList('media_extensions'),
             ],
             'message' => [
                 'text_min' => setting('comment_text_min'),

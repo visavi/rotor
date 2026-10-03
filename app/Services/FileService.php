@@ -50,16 +50,28 @@ class FileService
     /**
      * Расширения, которые принимает тип
      *
-     * Один источник для сервера и формы: гостевая и новости принимают медиа,
-     * но подключают форму файлов, и та предлагала то, что сервер отклонит
+     * Один источник для проверки, правил api и форм: окно выбора файлов
+     * не должно предлагать то, что сервер отклонит. Регистр приводится к
+     * нижнему — расширение загруженного файла сравнивается так же
      *
      * @return array<int, string>
      */
     public static function extensions(string $type): array
     {
-        $setting = in_array($type, self::mediaTypes(), true) ? 'media_extensions' : 'file_extensions';
+        return self::extensionList(in_array($type, self::mediaTypes(), true) ? 'media_extensions' : 'file_extensions');
+    }
 
-        return array_values(array_filter(array_map('trim', explode(',', (string) setting($setting)))));
+    /**
+     * Список расширений из настройки: без пробелов, пустых и в нижнем регистре
+     *
+     * @return array<int, string>
+     */
+    public static function extensionList(string $setting): array
+    {
+        return array_values(array_filter(array_map(
+            static fn (string $ext) => strtolower(trim($ext)),
+            explode(',', (string) setting($setting)),
+        )));
     }
 
     /**

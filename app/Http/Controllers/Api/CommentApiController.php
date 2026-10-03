@@ -64,9 +64,7 @@ class CommentApiController extends Controller
                 },
             ],
             'parent_id' => ['nullable', 'integer', 'min:1'],
-            'files'     => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*'   => ['file', 'max:' . FileService::maxFileSize(), 'mimes:' . setting('file_extensions')],
-        ]);
+        ] + FileService::rules(Comment::$morphName));
 
         $model = $this->findRecord($validated['type'], (int) $validated['id']);
 
