@@ -2,7 +2,8 @@
 $files ??= $model->files;
 // На странице бывает несколько форм с вложениями (комментарий и его правка в модалке)
 $inputId = 'attach-' . uniqid();
-$extensions = array_map('trim', explode(',', setting('file_extensions')));
+// Список по типу записи — тот же, что проверит сервер
+$extensions = \App\Services\FileService::extensions($model->getMorphClass());
 // Окно выбора показывает только допустимые файлы
 $accept = implode(',', array_map(static fn ($ext) => '.' . $ext, $extensions));
 $limits = __('main.attach_limit', [

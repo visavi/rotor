@@ -48,6 +48,21 @@ class FileService
     }
 
     /**
+     * Расширения, которые принимает тип
+     *
+     * Один источник для сервера и формы: гостевая и новости принимают медиа,
+     * но подключают форму файлов, и та предлагала то, что сервер отклонит
+     *
+     * @return array<int, string>
+     */
+    public static function extensions(string $type): array
+    {
+        $setting = in_array($type, self::mediaTypes(), true) ? 'media_extensions' : 'file_extensions';
+
+        return array_values(array_filter(array_map('trim', explode(',', (string) setting($setting)))));
+    }
+
+    /**
      * Загружает вложение к записи, id = 0 — запись еще не создана
      *
      * @return array{success: bool, message?: string, file?: File, data?: array}
@@ -91,12 +106,10 @@ class FileService
         }
 
         if ($validator->isValid()) {
-            $allowedExt = setting($isImageType ? 'media_extensions' : 'file_extensions');
-
             $rules = [
                 'minweight'  => 100,
                 'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', $allowedExt),
+                'extensions' => self::extensions($type),
             ];
 
             $validator->file($file, $rules, __('validator.file_upload_failed'));
@@ -123,11 +136,9 @@ class FileService
      */
     public static function rules(string $type): array
     {
-        $extensions = in_array($type, self::mediaTypes(), true) ? 'media_extensions' : 'file_extensions';
-
         return [
             'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
-            'files.*' => ['file', 'max:' . self::maxFileSize(), 'mimes:' . setting($extensions)],
+            'files.*' => ['file', 'max:' . self::maxFileSize(), 'mimes:' . implode(',', self::extensions($type))],
         ];
     }
 
