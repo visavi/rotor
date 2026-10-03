@@ -22,11 +22,11 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\ViewErrorBag;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -95,11 +95,13 @@ return Application::configure(basePath: dirname(__DIR__))
             ->name('schedule-ping');
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        // Api отвечает json на любую ошибку, даже без Accept: application/json.
-        // Html-страница ошибки там не отрисуется: тема для api не подключается
-        $exceptions->shouldRenderJsonWhen(
-            static fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
-        );
+        // Одно условие json для всех ошибок. Api отвечает json даже без Accept:
+        // html-страница ошибки там не отрисуется, тема для api не подключается.
+        // Сайт — как в Laravel по умолчанию: ajax без Accept тоже получает json,
+        // иначе подгрузка ленты вставила бы в неё страницу ошибки целиком
+        $wantsJson = static fn (Request $request): bool => $request->is('api/*') || $request->expectsJson();
+
+        $exceptions->shouldRenderJsonWhen($wantsJson);
 
         $exceptions->reportable(function (Throwable $exception) {
             $statusCode = $exception instanceof HttpExceptionInterface
@@ -109,35 +111,37 @@ return Application::configure(basePath: dirname(__DIR__))
             saveErrorLog($statusCode, $exception->getMessage());
         });
 
-        $exceptions->renderable(function (HttpExceptionInterface $exception, Request $request) {
-            saveErrorLog($exception->getStatusCode(), $exception->getMessage());
+        $exceptions->renderable(function (HttpExceptionInterface $exception, Request $request) use ($wantsJson) {
+            $statusCode = $exception->getStatusCode();
 
-            if (
-                $exception instanceof TokenMismatchException
-                || ($exception->getPrevious() instanceof TokenMismatchException)
-            ) {
-                if (! $request->expectsJson()) {
-                    return redirect()->back()
-                        ->withInput($request->except('_token'))
-                        ->withErrors(['token' => __('validator.token')]);
-                }
+            saveErrorLog($statusCode, $exception->getMessage());
 
-                return response()->json([
-                    'message' => __('validator.token'),
-                ]);
+            // TokenMismatchException сюда не доходит: Laravel ещё до колбэков
+            // превращает его в HttpException(419) с исходным в previous
+            $tokenExpired = $exception->getPrevious() instanceof TokenMismatchException;
+
+            if ($wantsJson($request)) {
+                $message = $tokenExpired
+                    ? __('validator.token')
+                    : ($exception->getMessage() ?: __('errors.error'));
+
+                return response()->json(['message' => $message], $statusCode, $exception->getHeaders());
             }
 
-            if ($request->wantsJson() || $request->is('api/*')) {
-                return response()->json([
-                    'message' => $exception->getMessage() ?: __('errors.error'),
-                ], $exception->getStatusCode());
+            if ($tokenExpired) {
+                return redirect()->back()
+                    ->withInput($request->except('_token'))
+                    ->withErrors(['token' => __('validator.token')]);
             }
 
-            if (! view()->exists('errors.' . $exception->getStatusCode())) {
-                return response()->view('errors.default', ['exception' => $exception]);
-            }
+            // Рисуем сами, а не стандартным обработчиком: его неймспейс errors:: видит
+            // только config('view.paths') и пропустил бы шаблоны ошибок из темы
+            $view = view()->exists('errors.' . $statusCode) ? 'errors.' . $statusCode : 'errors.default';
 
-            return (new Handler(app()))->render($request, $exception);
+            return response()->view($view, [
+                'errors'    => new ViewErrorBag(),
+                'exception' => $exception,
+            ], $statusCode, $exception->getHeaders());
         });
     })
     ->create();
