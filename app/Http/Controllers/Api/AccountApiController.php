@@ -265,7 +265,7 @@ class AccountApiController extends Controller
                 'required',
                 'image',
                 'max:' . FileService::maxFileSize(),
-                'mimes:' . setting('media_extensions'),
+                'mimes:' . implode(',', FileService::extensionList('media_extensions')),
                 'dimensions:min_width=100,min_height=100',
             ],
         ]);

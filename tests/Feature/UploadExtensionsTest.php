@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Comment;
+use App\Models\File;
+use App\Models\User;
 use App\Services\FileService;
 use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,5 +71,41 @@ class UploadExtensionsTest extends TestCase
         $this->overrideSetting('file_extensions', ' PDF, Zip ,,jpg');
 
         $this->assertSame(['pdf', 'zip', 'jpg'], FileService::extensions(Comment::$morphName));
+    }
+
+    public function testEmptyListOmitsAccept(): void
+    {
+        // Пустой accept браузер понимает как «любые файлы»
+        $this->overrideSetting('file_extensions', '');
+
+        $this->assertNull(FileService::accept(Comment::$morphName));
+
+        $html = view('app/_upload_file', ['model' => new Comment(), 'files' => collect()])->render();
+
+        $this->assertStringNotContainsString('accept=', $html);
+    }
+
+    public function testRulesCountPendingFiles(): void
+    {
+        // Файлы, загруженные заранее, тоже лягут в запись — лимит общий
+        $this->overrideSetting('maxfiles', 3);
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        foreach (range(1, 2) as $i) {
+            File::query()->create([
+                'relate_id'   => 0,
+                'relate_type' => Comment::$morphName,
+                'path'        => '/uploads/comments/' . $i . '.pdf',
+                'name'        => $i . '.pdf',
+                'size'        => 1024,
+                'extension'   => 'pdf',
+                'mime_type'   => 'application/pdf',
+                'user_id'     => $user->id,
+            ]);
+        }
+
+        $this->assertContains('max:1', FileService::rules(Comment::$morphName)['files']);
     }
 }

@@ -72,9 +72,7 @@ trait HandlesComments
 
         $files = $user
             ? File::query()
-                ->where('relate_type', Comment::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $user->id)
+                ->pending(Comment::$morphName, $user->id)
                 ->ordered()
                 ->get()
             : collect();

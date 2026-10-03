@@ -75,6 +75,18 @@ class FileService
     }
 
     /**
+     * Строка для атрибута accept: расширения типа с точкой
+     *
+     * null при пустой настройке — пустой accept браузер понимает как «любые файлы»
+     */
+    public static function accept(string $type): ?string
+    {
+        $extensions = self::extensions($type);
+
+        return $extensions ? implode(',', array_map(static fn ($ext) => '.' . $ext, $extensions)) : null;
+    }
+
+    /**
      * Загружает вложение к записи, id = 0 — запись еще не создана
      *
      * @return array{success: bool, message?: string, file?: File, data?: array}
@@ -144,12 +156,15 @@ class FileService
      * Правила валидации файлов, переданных прямо в запросе
      *
      * Набор расширений зависит от того, куда грузят: галерея принимает медиа,
-     * файловые разделы — остальное
+     * файловые разделы — остальное. Лимит общий с файлами, загруженными
+     * заранее: они тоже лягут в запись, иначе вложений выходило вдвое больше
      */
     public static function rules(string $type): array
     {
+        $pending = getUser() ? File::query()->pending($type, getUser('id'))->count() : 0;
+
         return [
-            'files'   => ['nullable', 'array', 'max:' . setting('maxfiles')],
+            'files'   => ['nullable', 'array', 'max:' . max(0, setting('maxfiles') - $pending)],
             'files.*' => ['file', 'max:' . self::maxFileSize(), 'mimes:' . implode(',', self::extensions($type))],
         ];
     }
@@ -189,9 +204,7 @@ class FileService
     public function attachPending(Model $model, ?int $userId = null): int
     {
         return File::query()
-            ->where('relate_type', $model->getMorphClass())
-            ->where('relate_id', 0)
-            ->where('user_id', $userId ?? getUser('id'))
+            ->pending($model->getMorphClass(), $userId ?? getUser('id'))
             ->update(['relate_id' => $model->getKey()]);
     }
 

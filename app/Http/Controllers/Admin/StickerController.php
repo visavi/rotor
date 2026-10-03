@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Sticker;
 use App\Models\StickersCategory;
+use App\Services\FileService;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -169,7 +170,7 @@ class StickerController extends AdminController
                 'maxsize'    => setting('stickermaxsize'),
                 'maxweight'  => setting('stickermaxweight'),
                 'minweight'  => setting('stickerminweight'),
-                'extensions' => explode(',', setting('media_extensions')),
+                'extensions' => FileService::extensionList('media_extensions'),
             ];
 
             $validator->file($sticker, $rules, ['sticker' => __('validator.image_upload_failed')]);

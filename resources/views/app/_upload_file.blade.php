@@ -5,14 +5,14 @@ $inputId = 'attach-' . uniqid();
 // Список по типу записи — тот же, что проверит сервер
 $extensions = \App\Services\FileService::extensions($model->getMorphClass());
 // Окно выбора показывает только допустимые файлы
-$accept = implode(',', array_map(static fn ($ext) => '.' . $ext, $extensions));
+$accept = \App\Services\FileService::accept($model->getMorphClass());
 $limits = __('main.attach_limit', [
     'files' => plural(setting('maxfiles'), __('main.attach_limit_files')),
     'size'  => formatSize(setting('filesize')),
 ]) . ': ' . implode(', ', $extensions);
 @endphp
 
-<input type="file" id="{{ $inputId }}" name="file" multiple accept="{{ $accept }}" data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+<input type="file" id="{{ $inputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
 
 {{-- Ссылка сразу открывает выбор файлов, лимиты в подсказке --}}
 <label for="{{ $inputId }}" class="float-end link-primary cursor-pointer" title="{{ $limits }}">

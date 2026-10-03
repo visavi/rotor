@@ -6,6 +6,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\FileService;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class PictureController extends Controller
 
             $rules = [
                 'maxsize'    => setting('filesize'),
-                'extensions' => explode(',', setting('media_extensions')),
+                'extensions' => FileService::extensionList('media_extensions'),
                 'minweight'  => 100,
             ];
             $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);

@@ -2,7 +2,7 @@
 $files ??= $model->files;
 // Список по типу записи — тот же, что проверит сервер
 $extensions = \App\Services\FileService::extensions($model->getMorphClass());
-$accept = implode(',', array_map(static fn ($ext) => '.' . $ext, $extensions));
+$accept = \App\Services\FileService::accept($model->getMorphClass());
 @endphp
 
 {{-- Миниатюры перетаскиваются: порядок сразу уходит на сервер, форма записи его не несёт --}}
@@ -33,7 +33,7 @@ $accept = implode(',', array_map(static fn ($ext) => '.' . $ext, $extensions));
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" accept="{{ $accept }}" multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input id="file" type="file" name="file" @if ($accept) accept="{{ $accept }}" @endif multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>

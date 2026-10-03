@@ -259,7 +259,7 @@ class ApiController extends Controller
     /**
      * Отправляет приватное сообщение
      */
-    public function createTalk(string $login, Request $request, Flood $flood): JsonResponse
+    public function createTalk(string $login, Request $request, Flood $flood, FileService $files): JsonResponse
     {
         $user = getUser();
         $recipient = getUserByLogin($login);
@@ -284,9 +284,9 @@ class ApiController extends Controller
 
         $message = $recipient->sendMessage($user, $validated['text']);
 
-        foreach ($request->file('files', []) as $file) {
-            $message->uploadFile($file);
-        }
+        // Через FileService, а не uploadFile: он конвертирует видео и забирает файлы, загруженные заранее
+        $files->attachUploaded($message, $request->file('files', []));
+        $files->attachPending($message);
 
         $flood->saveState();
 

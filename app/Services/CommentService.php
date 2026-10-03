@@ -56,9 +56,7 @@ class CommentService
 
         // Файлы, загруженные до отправки, ждут с relate_id = 0
         File::query()
-            ->where('relate_type', Comment::$morphName)
-            ->where('relate_id', 0)
-            ->where('user_id', $user->id)
+            ->pending(Comment::$morphName, $user->id)
             ->update(['relate_id' => $comment->id]);
 
         $user->increment('point', setting('comment_point'));

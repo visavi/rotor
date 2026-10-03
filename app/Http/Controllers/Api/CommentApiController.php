@@ -45,7 +45,7 @@ class CommentApiController extends Controller
     /**
      * Добавление комментария к записи любого раздела
      */
-    public function store(Request $request, Flood $flood): JsonResponse
+    public function store(Request $request, Flood $flood, FileService $files): JsonResponse
     {
         $user = getUser();
 
@@ -84,9 +84,8 @@ class CommentApiController extends Controller
             isset($validated['parent_id']) ? (int) $validated['parent_id'] : null,
         );
 
-        foreach ($request->file('files', []) as $file) {
-            $comment->uploadFile($file);
-        }
+        // Файлы, загруженные заранее, забирает CommentService::create
+        $files->attachUploaded($comment, $request->file('files', []));
 
         $flood->saveState();
 

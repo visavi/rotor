@@ -106,9 +106,7 @@ class MessageController extends Controller
             ->update(['reading' => 1]);
 
         $files = File::query()
-            ->where('relate_type', Message::$morphName)
-            ->where('relate_id', 0)
-            ->where('user_id', $this->user->id)
+            ->pending(Message::$morphName, $this->user->id)
             ->ordered()
             ->get();
 
@@ -145,9 +143,7 @@ class MessageController extends Controller
             $message = $user->sendMessage($this->user, (string) $msg);
 
             File::query()
-                ->where('relate_type', Message::$morphName)
-                ->where('relate_id', 0)
-                ->where('user_id', $this->user->id)
+                ->pending(Message::$morphName, $this->user->id)
                 ->update(['relate_id' => $message->id]);
 
             $flood->saveState();

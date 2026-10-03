@@ -63,6 +63,17 @@ class File extends Model
     }
 
     /**
+     * Вложения, загруженные до создания записи: ждут её с relate_id = 0
+     */
+    public function scopePending(Builder $query, string $type, int $userId): Builder
+    {
+        return $query
+            ->where('relate_type', $type)
+            ->where('relate_id', 0)
+            ->where('user_id', $userId);
+    }
+
+    /**
      * Возвращает связь пользователя
      */
     public function user(): BelongsTo
