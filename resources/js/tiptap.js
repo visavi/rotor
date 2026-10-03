@@ -14,7 +14,7 @@ import { Selection, TextSelection } from '@tiptap/pm/state'
 import { __ } from './translate.js'
 import { notyf } from './globals.js'
 import { csrfToken } from './ajax.js'
-import { renderFile, renderPending, takeAllowed } from './attachments.js'
+import { renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
 
 // Ссылка: inclusive=false чтобы пробел после ссылки не входил в неё
 const CustomLink = Link.extend({
@@ -1256,6 +1256,7 @@ function initEditor(textarea) {
                 // Файл попадает и в список вложений под формой — на место своей заглушки
                 const scope = textarea.closest('form') ?? document
                 renderFile(scope, scope.querySelector('.js-files'), data, pending)
+                renderFileInPool(scope, data)
 
                 // Позиция сразу за вставленным — туда встанет следующий файл пачки.
                 // Путь у каждой загрузки свой, по нему узел и находится

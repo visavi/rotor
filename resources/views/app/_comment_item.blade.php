@@ -115,10 +115,18 @@
                         <div class="mb-1 reply-editor-wrap border rounded overflow-hidden">
                             <textarea class="form-control form-control-sm border-0 shadow-none rounded-0" id="reply-textarea-{{ $comment->id }}" name="msg" rows="3" maxlength="{{ setting('comment_text_max') }}" data-relate-type="{{ \App\Models\Comment::$morphName }}" data-relate-id="0" required></textarea>
                             <div class="d-flex justify-content-end gap-1 px-2 py-1">
+                                <label for="reply-attach-{{ $comment->id }}" class="btn btn-sm btn-link link-secondary me-auto" title="{{ __('main.attach_files') }}"><i class="fas fa-paperclip"></i></label>
                                 <button type="button" class="btn btn-sm btn-secondary" onclick="closeReplyForm({{ $comment->id }})">{{ __('main.cancel') }}</button>
                                 <button class="btn btn-sm btn-success">{{ __('main.write') }}</button>
                             </div>
                         </div>
+
+                        {{-- Файлы из редактора ответа: без списка картинка, убранная из текста,
+                             оставалась невидимой и уезжала в следующий комментарий.
+                             Файлы, ждущие комментария, копирует сюда открытие ответа.
+                             Выбор файлов — скрепкой в строке кнопок --}}
+                        @include('app/_upload_file', ['model' => new \App\Models\Comment(), 'files' => collect(), 'attachInputId' => 'reply-attach-' . $comment->id])
+
                         <div class="reply-error text-danger small mt-1"></div>
                     </form>
                 </div>

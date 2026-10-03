@@ -21,6 +21,49 @@ export function takeAllowed(scope, files, fail) {
     return files.slice(0, allowed)
 }
 
+/* Остальные списки того же набора файлов: формы с тем же типом и id в поле загрузки.
+   Файлы новой записи (id = 0) у пользователя общие — их заберёт любая из её форм,
+   поэтому основная форма комментария и формы ответа показывают один набор.
+   id берётся из поля, а не из разметки: модалка правки переключает его на свой комментарий */
+export function poolLists(form) {
+    const input = form?.matches?.('form') && form.querySelector('input[type="file"][data-type]')
+
+    if (! input) {
+        return []
+    }
+
+    return [...document.querySelectorAll('input[type="file"][data-type]')]
+        .filter(other => other.dataset.type === input.dataset.type && other.dataset.id === input.dataset.id)
+        .map(other => other.closest('form'))
+        .filter(other => other && other !== form)
+        .map(other => [other, other.querySelector('.js-files')])
+        .filter(([, list]) => list)
+}
+
+/* Загруженный файл появляется и в остальных списках набора.
+   Свёрнутая форма разворачивается — как на сервере: с файлами она открыта,
+   иначе пришедший файл прятался бы до клика в поле */
+export function renderFileInPool(form, file) {
+    for (const [other, list] of poolLists(form)) {
+        if (! list.querySelector(`.js-file[data-key="${file.id}"]`)) {
+            renderFile(other, list, file)
+            other.removeAttribute('data-compact')
+        }
+    }
+}
+
+/* Список формы — копия видимого списка набора. Скрытые формы (другие ответы,
+   модалка правки) могли не получить файлы, загруженные с сервера */
+export function copyPool(form) {
+    const list = form?.querySelector('.js-files')
+    // offsetParent, а не checkVisibility: того нет в старых Safari
+    const source = poolLists(form).find(([other]) => other.offsetParent !== null)?.[1]
+
+    if (list && source) {
+        list.replaceChildren(...[...source.querySelectorAll(':scope > .js-file')].map(file => file.cloneNode(true)))
+    }
+}
+
 /* Заглушка файла, пока он грузится: рамка миниатюры со спиннером.
    Загруженный файл встаёт на её место, поэтому порядок в списке — порядок выбора */
 export function renderPending(container, name) {

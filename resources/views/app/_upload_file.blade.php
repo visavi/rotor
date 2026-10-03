@@ -1,7 +1,10 @@
 @php
 $files ??= $model->files;
+// Форма со своей кнопкой выбора файлов (скрепка в форме ответа) передаёт id поля — ссылки тогда нет.
+// Имя редкое: @include наследует переменные родителя
+$ownPicker = isset($attachInputId);
 // На странице бывает несколько форм с вложениями (комментарий и его правка в модалке)
-$inputId = 'attach-' . uniqid();
+$attachInputId ??= 'attach-' . uniqid();
 // Список по типу записи — тот же, что проверит сервер
 $extensions = \App\Services\FileService::extensions($model->getMorphClass());
 // Окно выбора показывает только допустимые файлы
@@ -12,12 +15,14 @@ $limits = __('main.attach_limit', [
 ]) . ': ' . implode(', ', $extensions);
 @endphp
 
-<input type="file" id="{{ $inputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+<input type="file" id="{{ $attachInputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
 
-{{-- Ссылка сразу открывает выбор файлов, лимиты в подсказке --}}
-<label for="{{ $inputId }}" class="float-end link-primary cursor-pointer" title="{{ $limits }}">
-    <i class="fas fa-paperclip"></i> {{ __('main.attach_files') }}
-</label>
+@unless ($ownPicker)
+    {{-- Ссылка сразу открывает выбор файлов, лимиты в подсказке --}}
+    <label for="{{ $attachInputId }}" class="float-end link-primary cursor-pointer" title="{{ $limits }}">
+        <i class="fas fa-paperclip"></i> {{ __('main.attach_files') }}
+    </label>
+@endunless
 
 {{-- Файлы перетаскиваются: порядок сразу уходит на сервер, форма записи его не несёт --}}
 <div class="js-files mb-3" data-sortable data-sortable-url="/ajax/file/sort?type={{ $model->getMorphClass() }}">

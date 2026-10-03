@@ -87,6 +87,19 @@ class UploadExtensionsTest extends TestCase
         $this->assertStringNotContainsString('accept=', $html);
     }
 
+    public function testOwnPickerHidesLink(): void
+    {
+        // Форма ответа рисует скрепку сама и передаёт id поля — ссылки в списке нет
+        $html = view('app/_upload_file', ['model' => new Comment(), 'files' => collect(), 'attachInputId' => 'reply-attach-1'])->render();
+
+        $this->assertStringContainsString('id="reply-attach-1"', $html);
+        $this->assertStringNotContainsString(__('main.attach_files'), $html);
+
+        $html = view('app/_upload_file', ['model' => new Comment(), 'files' => collect()])->render();
+
+        $this->assertStringContainsString(__('main.attach_files'), $html);
+    }
+
     public function testRulesCountPendingFiles(): void
     {
         // Файлы, загруженные заранее, тоже лягут в запись — лимит общий

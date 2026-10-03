@@ -2,7 +2,7 @@ import * as bootstrap from 'bootstrap'
 import { __ } from './translate.js'
 import { ajax } from './ajax.js'
 import { confirm } from './dialogs.js'
-import { renderFile, renderPending, takeAllowed } from './attachments.js'
+import { copyPool, renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
 import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
 import './sortable-list.js'
@@ -422,6 +422,8 @@ window.openReplyForm = function (id, callback) {
     const form = document.getElementById('reply-form-' + id)
     if (!form) return false
 
+    // Ответ заберёт все файлы, ждущие комментария, — показываем их до отправки
+    copyPool(form.querySelector('form'))
     form.classList.remove('d-none')
 
     ensureEditor(form.querySelector('textarea')).then(editor => {
@@ -766,7 +768,12 @@ window.submitFile = async function (el) {
 
         ajax({
             data: form, type: 'post', dataType: 'json', url: '/ajax/file/upload',
-            success: data => data.success ? renderFile(scope, filesContainer, data, pending) : failed(data.message),
+            success: data => {
+                if (! data.success) return failed(data.message)
+
+                renderFile(scope, filesContainer, data, pending)
+                renderFileInPool(scope, data)
+            },
             error: (_, textStatus) => failed(__('file_upload_failed') + ' ' + textStatus),
             complete: resolve,
         })
@@ -818,8 +825,9 @@ window.deleteFile = function (el) {
                 if (!data.success) { notyf.error(data.message); return }
                 if (data.path) cutMedia(data.path)
                 // Удаляем, а не прячем: скрытый файл считался бы в лимите
-                // и уходил бы в порядок перетаскивания
+                // и уходил бы в порядок перетаскивания. Копии в других формах набора — тоже
                 el.closest('.js-file').remove()
+                document.querySelectorAll(`.js-files .js-file[data-key="${el.dataset.id}"]`).forEach(file => file.remove())
             },
             error: (_, textStatus) => notyf.error(__('file_delete_failed') + ' ' + textStatus)
         })
