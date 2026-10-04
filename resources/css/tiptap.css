@@ -320,11 +320,12 @@
     cursor: text;
 }
 
+/* Высоту даёт контейнер (rows поля или min-height), flex: 1 тянет текст на всю
+   его высоту. Своя min-height больше контейнера давала прокрутку в форме ответа */
 .tiptap-editor-content .ProseMirror {
     flex: 1;
     outline: none;
     padding: 10px 12px;
-    min-height: 100px;
     word-break: break-word;
     cursor: text;
 }

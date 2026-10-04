@@ -2,7 +2,7 @@ import * as bootstrap from 'bootstrap'
 import { __ } from './translate.js'
 import { ajax } from './ajax.js'
 import { confirm } from './dialogs.js'
-import { copyPool, renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
+import { copyPool, placeMedia, renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
 import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
 import './sortable-list.js'
@@ -785,6 +785,27 @@ window.submitFile = async function (el) {
         await upload(file, pending)
     }
 }
+
+/* Миниатюра вложения, отпущенная над редактором своей формы, вставляется в текст,
+   а уже вставленная переезжает на это место.
+   Список тянет Sortable в режиме fallback — нативного переноса картинки нет,
+   и редактор бросок не видит. Место смотрим по точке, где отпустили кнопку */
+document.addEventListener('sortable:end', function (e) {
+    const list = e.target.closest?.('.js-files')
+    const media = e.detail.item?.querySelector('img[src], video[src]')
+    const point = e.detail.originalEvent?.changedTouches?.[0] ?? e.detail.originalEvent
+    if (!list || !media || point?.clientX === undefined) return
+
+    const dom = document.elementFromPoint(point.clientX, point.clientY)?.closest('.ProseMirror')
+    const editor = dom?.editor
+    if (!editor || dom.closest('form') !== list.closest('form')) return
+
+    const pos = editor.view.posAtCoords({ left: point.clientX, top: point.clientY })?.pos ?? editor.state.selection.from
+    placeMedia(editor, {
+        type: media.tagName === 'VIDEO' ? 'video' : 'image',
+        attrs: { src: media.getAttribute('src') },
+    }, pos)
+})
 
 /* Удаление медиафайла (изображения или видео) из редактора */
 window.cutMedia = function (path) {

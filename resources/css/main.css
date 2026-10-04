@@ -236,10 +236,6 @@ body.modal-open {
     resize: none;
 }
 
-[data-compact] .tiptap-editor-content .ProseMirror {
-    min-height: 0;
-}
-
 [data-compact] .compact-field textarea {
     height: calc(1.5em + .75rem + calc(var(--bs-border-width) * 2));
     overflow: hidden;

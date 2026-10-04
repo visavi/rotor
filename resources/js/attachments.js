@@ -64,6 +64,28 @@ export function copyPool(form) {
     }
 }
 
+/* Ставит прикреплённую картинку или видео в текст редактора. Уже вставленная
+   переезжает на новое место, а не копируется: один файл — одно место в тексте.
+   Одна транзакция — Ctrl+Z возвращает картинку назад целиком */
+export function placeMedia(editor, media, pos = null) {
+    const pathOf = src => { try { return new URL(src, location.href).pathname } catch { return src } }
+    const path = pathOf(media.attrs.src)
+
+    editor.chain().focus().command(({ tr, commands }) => {
+        const found = []
+
+        tr.doc.descendants((node, at) => {
+            if (['image', 'video'].includes(node.type.name) && pathOf(node.attrs.src) === path) {
+                found.push([at, node.nodeSize])
+            }
+        })
+
+        found.reverse().forEach(([at, size]) => tr.delete(at, at + size))
+
+        return commands.insertContentAt(tr.mapping.map(pos ?? tr.selection.from), media)
+    }).run()
+}
+
 /* Заглушка файла, пока он грузится: рамка миниатюры со спиннером.
    Загруженный файл встаёт на её место, поэтому порядок в списке — порядок выбора */
 export function renderPending(container, name) {

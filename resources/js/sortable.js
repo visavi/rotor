@@ -56,6 +56,9 @@ export function initSortable(lists) {
                 save()
 
                 if (evt.oldIndex !== evt.newIndex) send()
+
+                // Куда отпустили элемент, решают сами страницы (миниатюра на редакторе — вставка)
+                list.dispatchEvent(new CustomEvent('sortable:end', { bubbles: true, detail: evt }))
             },
         })
 

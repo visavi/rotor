@@ -14,7 +14,7 @@ import { Selection, TextSelection } from '@tiptap/pm/state'
 import { __ } from './translate.js'
 import { notyf } from './globals.js'
 import { csrfToken } from './ajax.js'
-import { renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
+import { placeMedia, renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
 
 // Ссылка: inclusive=false чтобы пробел после ссылки не входил в неё
 const CustomLink = Link.extend({
@@ -1296,9 +1296,71 @@ function initEditor(textarea) {
     }
     // ============================
 
+    /* Картинка, уже прикреплённая к форме: перенос её миниатюры или копия со страницы
+       вставляет ту же ссылку, а не грузит файл заново. Браузер кладёт в перенос и саму
+       картинку под серверным именем — загрузчик принимал её за новый файл,
+       а защита от повтора по имени её не узнавала.
+       Только перенос из одной картинки: кусок текста с картинкой вставляет сам
+       редактор, иначе текст терялся бы */
+    function attachedMedia(dataTransfer) {
+        if (!dataTransfer) return null
+
+        const pathOf = src => { try { return new URL(src, location.href).pathname } catch { return null } }
+        let source = null
+
+        const html = dataTransfer.getData('text/html')
+        if (html) {
+            const body = new DOMParser().parseFromString(html, 'text/html').body
+            const found = body.querySelectorAll('img[src], video[src]')
+            if (found.length !== 1 || body.textContent.trim()) return null
+
+            source = found[0].getAttribute('src')
+        } else {
+            const links = (dataTransfer.getData('text/uri-list') || '')
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line && !line.startsWith('#'))
+            if (links.length !== 1) return null
+
+            source = links[0]
+        }
+
+        const path = pathOf(source)
+        if (!path) return null
+
+        const scope = textarea.closest('form') ?? document
+        const media = [...scope.querySelectorAll('.js-files img[src], .js-files video[src]')]
+            .find(el => pathOf(el.getAttribute('src')) === path)
+
+        return media
+            ? { type: media.tagName === 'VIDEO' ? 'video' : 'image', attrs: { src: pathOf(media.getAttribute('src')) } }
+            : null
+    }
+
     const editor = new Editor({
         element: editorEl,
         editorProps: {
+            // Прикреплённая картинка вставляется ссылкой, загрузчик её не видит,
+            // уже стоящая в тексте — переезжает. moved — перенос внутри редактора, его ProseMirror делает сам
+            handleDrop(view, event, slice, moved) {
+                const media = !moved && attachedMedia(event.dataTransfer)
+                if (!media) return false
+
+                const pos = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? view.state.selection.from
+                event.preventDefault()
+                placeMedia(editor, media, pos)
+
+                return true
+            },
+            handlePaste(view, event) {
+                const media = attachedMedia(event.clipboardData)
+                if (!media) return false
+
+                event.preventDefault()
+                placeMedia(editor, media)
+
+                return true
+            },
             // Клик по ссылке открывает диалог правки. У ссылок pointer-events: none,
             // поэтому event.target — абзац, и попадание проверяется по геометрии.
             // Выделение здесь ещё старое: ProseMirror переставит курсор только после
