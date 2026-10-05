@@ -18,7 +18,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('app/_meta_og')
     <title>@yield('title') - {{ setting('title') }}</title>
-    <link rel="canonical" href="@yield('canonical', request()->url())">
+    <link rel="canonical" href="@yield('canonical', canonicalUrl())">
     <link rel="icon" href="/favicon.ico">
     <link rel="icon" type="image/svg+xml" href="/assets/img/images/icon.svg">
     <link rel="icon" type="image/png" href="/assets/img/images/icon.png" sizes="128x128">

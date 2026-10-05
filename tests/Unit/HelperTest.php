@@ -8,6 +8,7 @@ use App\Models\Online;
 use App\Models\User;
 use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class HelperTest extends TestCase
         // Мост совместимости для модулей с timestamp-полями
         self::assertSame('01.06.2005 / 12:00', dateFixed(1117612800));
         self::assertSame('01.06.2005 / 12:00', dateFixed('1117612800'));
-        self::assertIsInt(SITETIME);
+        self::assertGreaterThan(0, SITETIME);
     }
 
     public function testCheck(): void
@@ -670,6 +671,29 @@ class HelperTest extends TestCase
 
         self::assertNotEmpty($log);
         self::assertStringContainsString("'abc'", end($log)['query']);
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function canonicalProvider(): array
+    {
+        return [
+            'страница списка'   => ['/topics?page=2&x=1', 'http://localhost/topics?page=2'],
+            'первая страница'   => ['/topics?page=1', 'http://localhost/topics'],
+            'без страницы'      => ['/topics?pid=5', 'http://localhost/topics'],
+            'пустая страница'   => ['/topics?page=', 'http://localhost/topics'],
+            'страница массивом' => ['/topics?page[]=3', 'http://localhost/topics'],
+        ];
+    }
+
+    #[DataProvider('canonicalProvider')]
+    public function testCanonicalUrl(string $uri, string $expected): void
+    {
+        // Без номера страницы страницы 2+ выглядят для поисковика дублями первой
+        $this->app->instance('request', Request::create('http://localhost' . $uri));
+
+        self::assertSame($expected, canonicalUrl());
     }
 
     public function testSetting(): void

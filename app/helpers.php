@@ -1052,3 +1052,14 @@ function absolutizeUrls(string $text): string
 
     return preg_replace('/(href|src)="(\/[^"]*)"/', '$1="' . $base . '$2"', $text);
 }
+
+/**
+ * Канонический URL текущей страницы: без query, но с номером страницы списка —
+ * иначе страницы 2+ выглядят для поисковика дублями первой
+ */
+function canonicalUrl(): string
+{
+    $page = int(request()->query('page'));
+
+    return request()->url() . ($page > 1 ? '?page=' . $page : '');
+}

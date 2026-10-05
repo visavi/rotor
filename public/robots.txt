@@ -31,6 +31,8 @@ Disallow: /index.php*
 Disallow: /forums/active/*
 Disallow: /downs/active/*
 Disallow: /articles/active/*
+Disallow: /*?pid=
+Disallow: /*&pid=
 
 Sitemap: /sitemap.xml
 

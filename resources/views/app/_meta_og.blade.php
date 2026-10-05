@@ -7,7 +7,7 @@
      */
     $ogTitle = trim($__env->yieldContent('title')) ?: setting('title');
     $ogDescription = trim($__env->yieldContent('description')) ?: setting('description');
-    $ogUrl = trim($__env->yieldContent('canonical')) ?: request()->url();
+    $ogUrl = trim($__env->yieldContent('canonical')) ?: canonicalUrl();
     $ogImage = trim($__env->yieldContent('image')) ?: '/assets/img/images/icon512.png';
     $ogType = trim($__env->yieldContent('og_type')) ?: 'website';
 @endphp
