@@ -160,7 +160,8 @@ class CommentService
 
         $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
 
-        if ($replyUser && ! in_array($replyUser->login, $skip, true) && $replyUser->notify_reply && $replyUser->id !== getUser('id')) {
+        // Автору записи пишут только без родителя, поэтому дубля с ним здесь не бывает
+        if ($replyUser && $replyUser->notify_reply && $replyUser->id !== getUser('id')) {
             $login = getUser('login');
             $replyUser->sendMessage(null, textNotice('comment_reply', compact('login', 'url', 'title') + ['text' => $text]));
             $skip[] = $replyUser->login;
