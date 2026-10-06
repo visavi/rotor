@@ -52,6 +52,10 @@ class CommentFeedTest extends TestCase
         $own = $this->createComment($this->user, now());
         $this->createComment(User::factory()->create(), now());
 
+        // Списки пользователя — только с токеном, как страницы сайта
+        $this->getJson('/api/comments?user=' . $this->user->login)->assertForbidden();
+        $this->actingAs($this->user);
+
         $this->getJson('/api/comments?user=' . $this->user->login)
             ->assertOk()
             ->assertJsonCount(1, 'data')

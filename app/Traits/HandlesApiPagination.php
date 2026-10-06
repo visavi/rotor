@@ -31,12 +31,17 @@ trait HandlesApiPagination
     }
 
     /**
-     * Автор из ?user= — списки «записи пользователя»; неизвестный логин — 404
+     * Автор из ?user= — списки «записи пользователя»; неизвестный логин — 404.
+     * Как и на сайте, такие списки только с токеном
      */
     protected function apiUser(Request $request): ?User
     {
         if (! $request->filled('user')) {
             return null;
+        }
+
+        if (! getUser()) {
+            abort(403, __('main.not_authorized'));
         }
 
         $user = getUserByLogin($request->string('user')->value());

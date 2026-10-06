@@ -1796,6 +1796,17 @@ a.profile-stat:hover {
     color: var(--bs-primary);
 }
 
+/* Карточка без ссылок (гостю, раздел закрыт) — не откликается на наведение */
+.profile-link.is-static:hover {
+    background: none;
+    border-color: var(--bs-border-color);
+    transform: none;
+}
+
+.profile-link.is-static:hover .profile-link-main i {
+    color: var(--bs-secondary-color);
+}
+
 .profile-link-main,
 .profile-link-main:hover {
     display: flex;
