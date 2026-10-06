@@ -19,25 +19,6 @@
             }
         },
         "parameters": {
-            "Sort": {
-                "name": "sort",
-                "in": "query",
-                "schema": {
-                    "type": "string",
-                    "enum": [
-                        "date",
-                        "name",
-                        "title",
-                        "price",
-                        "visits",
-                        "loads",
-                        "rating",
-                        "comments"
-                    ],
-                    "default": "date"
-                },
-                "description": "Поле сортировки; набор зависит от раздела, неизвестное значение игнорируется"
-            },
             "CategoryId": {
                 "name": "category_id",
                 "in": "query",

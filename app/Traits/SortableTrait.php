@@ -30,7 +30,8 @@ trait SortableTrait
         $options[$sort]['inverse'] = $order === 'asc' ? 'desc' : 'asc';
         $options[$sort]['icon'] = $order === 'asc' ? ' ↑' : ' ↓';
 
-        $orderBy = [$options[$sort]['field'], $order];
+        // С таблицей: в запросах с join (голос пользователя, capped) created_at и rating есть и у polls
+        $orderBy = [static::query()->qualifyColumn($options[$sort]['field']), $order];
 
         return [$options, $orderBy];
     }
