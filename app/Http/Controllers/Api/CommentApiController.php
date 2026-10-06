@@ -10,7 +10,9 @@ use App\Models\Comment;
 use App\Models\Flood;
 use App\Services\CommentService;
 use App\Services\FileService;
+use App\Traits\HandlesApiPagination;
 use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
@@ -19,8 +21,34 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CommentApiController extends Controller
 {
+    use HandlesApiPagination;
+
     public function __construct(private readonly CommentService $comments)
     {
+    }
+
+    /**
+     * Новые комментарии: всех разделов или одного (?type=), с ?user= — комментарии пользователя
+     */
+    public function index(Request $request): JsonResource
+    {
+        $type = $request->validate([
+            'type' => ['nullable', 'string', 'in:' . implode(',', CommentService::types())],
+        ])['type'] ?? null;
+
+        $user = $this->apiUser($request);
+
+        // Общая лента — первые 1000, как на сайте; комментарии автора листаются целиком
+        $comments = Comment::query()
+            ->withUserVote()
+            ->when($type, static fn (Builder $query) => $query->where('comments.relate_type', $type))
+            ->when($user, static fn (Builder $query) => $query->where('comments.user_id', $user->id))
+            ->with('user', 'files', 'relate')
+            ->orderBy('comments.created_at', $this->apiOrder($request, 'desc'))
+            ->when(! $user, static fn (Builder $query) => $query->capped())
+            ->paginate($this->apiPerPage($request, (int) setting('comments_per_page')));
+
+        return CommentResource::collection($comments);
     }
 
     /**

@@ -26,29 +26,27 @@ class RatingService
      * Голосует за запись
      *
      * Возвращает результат голосования, а не готовый ответ: форму ответа
-     * выбирает вызывающий — сайту нужен перерисованный блок, API — числа
+     * выбирает вызывающий — сайту нужен перерисованный блок, API — числа.
+     * У отказа есть HTTP-статус: клиенту API по нему видно, что случилось
      *
-     * @return array{success: bool, message?: string, cancel?: bool, post?: Model, vote?: string|null}
+     * @return array{success: bool, status?: int, message?: string, cancel?: bool, post?: Model, vote?: string|null}
      */
     public function vote(User $user, ?string $type, int $id, ?string $vote): array
     {
-        if (! in_array($type, self::types(), true)) {
-            return ['success' => false, 'message' => 'Type invalid'];
-        }
-
-        if (! in_array($vote, ['+', '-'], true)) {
-            return ['success' => false, 'message' => 'Invalid rating'];
+        if (! in_array($type, self::types(), true) || ! in_array($vote, ['+', '-'], true)) {
+            return ['success' => false, 'status' => 422, 'message' => __('main.vote_invalid')];
         }
 
         /** @var class-string<Model> $model */
         $model = Relation::getMorphedModel($type);
-        $post = $model::query()
-            ->where('id', $id)
-            ->where('user_id', '<>', $user->id)
-            ->first();
+        $post = $model::query()->find($id);
 
         if (! $post) {
-            return ['success' => false, 'message' => __('main.record_not_found')];
+            return ['success' => false, 'status' => 404, 'message' => __('main.record_not_found')];
+        }
+
+        if ((int) $post->getAttribute('user_id') === $user->id) {
+            return ['success' => false, 'status' => 403, 'message' => __('main.vote_own')];
         }
 
         $poll = $this->pollRelation($post, $user)->firstOrNew();
@@ -56,7 +54,7 @@ class RatingService
 
         if ($poll->exists) {
             if ($poll->vote === $vote) {
-                return ['success' => false];
+                return ['success' => false, 'status' => 422, 'message' => __('main.vote_repeat')];
             }
 
             $isCancel = true;
@@ -81,7 +79,7 @@ class RatingService
             'success' => true,
             'cancel'  => $isCancel,
             'post'    => $post,
-            // Голос после операции: повторный клик по своей стрелке его снимает
+            // Голос после операции: голос в другую сторону снимает прежний
             'vote' => $isCancel ? null : $vote,
         ];
     }

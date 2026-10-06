@@ -26,6 +26,8 @@ return new class extends Migration {
                 $table->index('created_at');
                 $table->index(['rating', 'created_at']);
                 $table->index(['relate_type', 'relate_id']);
+                // Ленты новых комментариев раздела
+                $table->index(['relate_type', 'created_at']);
                 // Счётчик комментариев пользователя в анкете считается по разделам
                 $table->index(['user_id', 'relate_type']);
             });

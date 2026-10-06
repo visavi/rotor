@@ -58,6 +58,8 @@ Route::controller(PageApiController::class)->group(function () {
 
 // Чтение комментария открыто, как и страница записи
 Route::get('/comments/{id}', [CommentApiController::class, 'show'])->whereNumber('id');
+// Токен необязателен: с ним в ленте приходит голос пользователя
+Route::get('/comments', [CommentApiController::class, 'index'])->middleware('check.token.optional');
 
 Route::middleware('check.token')->group(function () {
     Route::post('/comments', [CommentApiController::class, 'store']);

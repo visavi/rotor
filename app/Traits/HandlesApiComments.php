@@ -8,7 +8,6 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
 /**
@@ -33,12 +32,7 @@ trait HandlesApiComments
             ->withoutGlobalScope('active')
             ->where('comments.relate_type', $model->getMorphClass())
             ->where('comments.relate_id', $model->getKey())
-            ->select('comments.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('comments.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Comment::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
+            ->withUserVote()
             // Родитель нужен для контекста ответа, мягко удалённый — тоже
             ->with(['user', 'files', 'parent' => static function ($query) {
                 $query->withoutGlobalScope('active')->with('user');

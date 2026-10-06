@@ -11,7 +11,6 @@ use App\Services\CommentService;
 use App\Support\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -79,13 +78,8 @@ trait HandlesComments
 
         $allComments = $this->commentsRelation($model)
             ->withoutGlobalScope('active')
-            ->select('comments.*', 'polls.vote')
-            ->leftJoin('polls', static function (JoinClause $join) {
-                $join->on('comments.id', 'polls.relate_id')
-                    ->where('polls.relate_type', Comment::$morphName)
-                    ->where('polls.user_id', getUser('id'));
-            })
-            ->orderBy('created_at')
+            ->withUserVote()
+            ->orderBy('comments.created_at')
             ->with(['user', 'files'])
             ->get();
 

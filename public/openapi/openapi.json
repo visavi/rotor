@@ -316,6 +316,24 @@
                             }
                         }
                     },
+                    "relate": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "description": "Только в GET /comments: запись, к которой оставлен комментарий (null — запись удалена)",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "integer"
+                            },
+                            "title": {
+                                "type": "string"
+                            }
+                        }
+                    },
                     "deleted": {
                         "type": "boolean",
                         "description": "Удалённый комментарий: text и user пустые, запись остаётся заглушкой, чтобы ветка ответов не рвалась"
@@ -1749,6 +1767,81 @@
             }
         },
         "/comments": {
+            "get": {
+                "tags": [
+                    "Комментарии"
+                ],
+                "summary": "Новые комментарии",
+                "description": "Комментарии всех разделов или одного (type) — новые первыми, у каждого запись, к которой он оставлен. С параметром user — комментарии пользователя. Общая лента ограничена 1000 последними. Токен необязателен: с ним в vote.value приходит голос пользователя.",
+                "operationId": "getComments",
+                "security": [
+                    {
+                        "BearerToken": []
+                    },
+                    []
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "description": "Раздел — vote.type записи (articles, downs, news, photos…)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user",
+                        "in": "query",
+                        "required": false,
+                        "description": "Логин автора комментариев",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/PerPage"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Order"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Comment"
+                                            }
+                                        },
+                                        "links": {
+                                            "$ref": "#/components/schemas/PaginationLinks"
+                                        },
+                                        "meta": {
+                                            "$ref": "#/components/schemas/PaginationMeta"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Пользователь не найден"
+                    },
+                    "422": {
+                        "description": "Неизвестный раздел"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Комментарии"
@@ -2099,8 +2192,62 @@
                     "401": {
                         "description": "Неверный токен"
                     },
+                    "403": {
+                        "description": "Голос за свою запись",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Запись не найдена",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "422": {
-                        "description": "Голос не принят (свой пост, неверный тип или запись не найдена)"
+                        "description": "Голос не принят: уже проголосовано в эту сторону, неверный тип записи или голос",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     },
                     "429": {
                         "description": "Превышен общий лимит запросов"

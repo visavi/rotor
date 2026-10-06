@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use App\Support\Registry;
+use App\Traits\CappableTrait;
 use App\Traits\FileableTrait;
 use App\Traits\PollableTrait;
 use App\Traits\SearchableTrait;
@@ -45,6 +46,7 @@ use Illuminate\Support\Str;
  */
 class Comment extends Model
 {
+    use CappableTrait;
     use PollableTrait;
     use FileableTrait;
     use SearchableTrait;

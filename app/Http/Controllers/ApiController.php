@@ -24,6 +24,7 @@ use App\Services\RatingService;
 use App\Services\SearchService;
 use App\Services\UserService;
 use App\Support\Registry;
+use App\Traits\HandlesApiPagination;
 use Closure;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
@@ -37,6 +38,8 @@ use Illuminate\View\View;
 
 class ApiController extends Controller
 {
+    use HandlesApiPagination;
+
     /**
      * Главная страница
      */
@@ -112,7 +115,7 @@ class ApiController extends Controller
             ]);
         }
 
-        $posts = SearchService::paginate($terms, $type, $sort, $this->getPerPage($request));
+        $posts = SearchService::paginate($terms, $type, $sort, $this->apiPerPage($request));
         $posts->setPath(url('/api/search'));
         $posts->appends($request->only(['query', 'q', 'type', 'sort', 'per_page']));
 
@@ -138,7 +141,7 @@ class ApiController extends Controller
         );
 
         if (! $result['success']) {
-            return response()->json(['success' => false, 'message' => $result['message'] ?? null], 422);
+            return response()->json(['success' => false, 'message' => $result['message'] ?? null], $result['status'] ?? 422);
         }
 
         // Клиенту API нужны числа, а не разметка сайта
@@ -202,8 +205,8 @@ class ApiController extends Controller
             })
             ->where('d.user_id', $user->id)
             ->with('author')
-            ->orderBy('d.created_at', $this->getOrder($request))
-            ->paginate($this->getPerPage($request));
+            ->orderBy('d.created_at', $this->apiOrder($request, 'desc'))
+            ->paginate($this->apiPerPage($request));
 
         return DialogueResource::collection($dialogues);
     }
@@ -239,9 +242,9 @@ class ApiController extends Controller
             })
             ->where('d.user_id', $user->id)
             ->where('d.author_id', $author->id)
-            ->orderBy('d.created_at', $this->getOrder($request))
+            ->orderBy('d.created_at', $this->apiOrder($request, 'desc'))
             ->with('user', 'author', 'files')
-            ->paginate($this->getPerPage($request));
+            ->paginate($this->apiPerPage($request));
 
         Dialogue::query()
             ->where('user_id', $user->id)
@@ -502,25 +505,5 @@ class ApiController extends Controller
         }
 
         return $labels;
-    }
-
-    /**
-     * Get order direction from request
-     */
-    private function getOrder(Request $request, string $default = 'desc'): string
-    {
-        $order = $request->input('order', $default);
-
-        return in_array($order, ['asc', 'desc']) ? $order : $default;
-    }
-
-    /**
-     * Get per page from request
-     */
-    private function getPerPage(Request $request): int
-    {
-        $perPage = $request->integer('per_page', 10);
-
-        return max(1, min($perPage, 100));
     }
 }

@@ -50,7 +50,7 @@ class AjaxRatingTest extends TestCase
         $this->assertSame(1, $comment->fresh()->rating);
     }
 
-    public function testRepeatedVoteCancelsAndDropsActiveState(): void
+    public function testRepeatedVoteIsRejectedWithReason(): void
     {
         $comment = $this->createComment();
 
@@ -59,9 +59,24 @@ class AjaxRatingTest extends TestCase
         $this->actingAs($this->voter)->postJson('/ajax/rating', $payload)->assertOk();
         $response = $this->actingAs($this->voter)->postJson('/ajax/rating', $payload);
 
-        // Повторный клик по своей стрелке снимает голос, ответ без пояснения
+        // Повторный голос в ту же сторону не проходит — с пояснением, а не молча
         $response->assertJsonPath('success', false);
-        $this->assertNull($response->json('message'));
+        $response->assertJsonPath('message', __('main.vote_repeat'));
+        $this->assertSame(1, $comment->fresh()->rating);
+    }
+
+    public function testOppositeVoteCancelsPrevious(): void
+    {
+        $comment = $this->createComment();
+
+        $payload = ['type' => Comment::$morphName, 'id' => $comment->id];
+
+        $this->actingAs($this->voter)->postJson('/ajax/rating', $payload + ['vote' => '+'])->assertOk();
+        $response = $this->actingAs($this->voter)->postJson('/ajax/rating', $payload + ['vote' => '-']);
+
+        $response->assertJsonPath('success', true);
+        $this->assertStringNotContainsString(' active', $response->json('html'));
+        $this->assertSame(0, $comment->fresh()->rating);
     }
 
     public function testOwnRecordIsNotVotable(): void
