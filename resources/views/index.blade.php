@@ -7,7 +7,7 @@
     @hook('advertIndexTop')
 
     @if ($homepage)
-        {{ $homepage }}
+        {{ $homepage() }}
     @else
         <div id="feed-container">
             {{ (new FeedService())->getFeed() }}

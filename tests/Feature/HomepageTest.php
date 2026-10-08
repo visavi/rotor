@@ -24,7 +24,7 @@ class HomepageTest extends TestCase
         Registry::$homepages = [];
 
         $file = sys_get_temp_dir() . '/rotor-test-homepage.blade.php';
-        file_put_contents($file, '<div id="test-homepage"></div>');
+        file_put_contents($file, "@push('styles')<link id=\"test-homepage-style\">@endpush<div id=\"test-homepage\"></div>");
         Registry::homepage('test', 'Тестовая главная', static fn () => view()->file($file));
     }
 
@@ -53,6 +53,15 @@ class HomepageTest extends TestCase
             ->assertOk()
             ->assertSee('<div id="test-homepage"></div>', false)
             ->assertDontSee('feed-container', false);
+    }
+
+    public function testHomepagePushesReachLayout(): void
+    {
+        $this->overrideSetting('homepage', 'test');
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('<link id="test-homepage-style">', false);
     }
 
     public function testFeedIsShownWhenModuleIsDisabled(): void

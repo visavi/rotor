@@ -15,7 +15,6 @@ use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\HtmlString;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,7 +28,8 @@ class HomeController extends Controller
         // Главная выключенного модуля не зарегистрирована — показывается лента
         $homepage = Registry::$homepages[(string) setting('homepage')] ?? null;
 
-        return view('index', ['homepage' => $homepage ? new HtmlString((string) ($homepage['view'])()) : null]);
+        // Колбэк, а не готовая вью: рендер внутри шаблона сохраняет её @push
+        return view('index', ['homepage' => $homepage['view'] ?? null]);
     }
 
     /**
