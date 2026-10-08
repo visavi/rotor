@@ -54,6 +54,7 @@ class SettingSeeder extends Seeder
             ['name' => 'file_extensions', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,webp,mp3,mp4,webm,pdf'],
             ['name' => 'media_extensions', 'value' => 'jpg,jpeg,gif,png,webp,mp4,webm'],
             ['name' => 'guestsuser', 'value' => __('seeds.settings.guest_user')],
+            ['name' => 'homepage', 'value' => 'feed'],
             ['name' => 'ipbanlist', 'value' => 10],
             ['name' => 'language', 'value' => __('seeds.settings.language')],
             ['name' => 'language_fallback', 'value' => 'ru'],

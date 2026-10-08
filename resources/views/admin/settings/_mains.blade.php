@@ -90,6 +90,19 @@
         <div class="invalid-feedback">{{ textError('sets[themes]') }}</div>
     </div>
 
+    <?php $inputHomepage = old('sets.homepage', $settings['homepage'] ?? 'feed'); ?>
+
+    <div class="mb-3{{ hasError('sets[homepage]') }}">
+        <label for="homepage" class="form-label">{{ __('settings.homepage') }}:</label>
+        <select class="form-select" id="homepage" name="sets[homepage]">
+            @foreach ($homepages as $key => $label)
+                <option value="{{ $key }}"{{ $inputHomepage === $key ? ' selected' : '' }}>{{ $label }}</option>
+            @endforeach
+        </select>
+        <div class="invalid-feedback">{{ textError('sets[homepage]') }}</div>
+        <div class="form-text">{{ __('settings.homepage_hint') }}</div>
+    </div>
+
     <?php $inputSite = old('sets.closedsite', $settings['closedsite']); ?>
 
     <div class="mb-3{{ hasError('sets[closedsite]') }}">

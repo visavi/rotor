@@ -19,6 +19,7 @@ class Registry
     public static array $search = [];
     public static array $stats = [];
     public static array $widgets = [];
+    public static array $homepages = [];
     public static array $apiConfig = [];
     public static array $sitemapPages = [];
     public static array $backgroundPaths = [];
@@ -339,6 +340,18 @@ class Registry
     public static function widget(string $key, callable $widget, int $priority = 0): void
     {
         static::$widgets[$key] = ['handler' => $widget, 'priority' => $priority];
+    }
+
+    /**
+     * Регистрирует главную страницу сайта
+     *
+     * Модуль только предлагает главную: показывается та, что выбрана в настройках
+     * сайта. Выключенный модуль её не регистрирует, и на главной снова лента.
+     * Метка — ключ перевода, колбэк вида fn(): View — содержимое страницы
+     */
+    public static function homepage(string $key, string $label, callable $view): void
+    {
+        static::$homepages[$key] = ['label' => $label, 'view' => $view];
     }
 
     /**

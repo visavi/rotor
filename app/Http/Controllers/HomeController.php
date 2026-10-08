@@ -10,10 +10,12 @@ use App\Services\CaptchaService;
 use App\Services\FeedService;
 use App\Services\SearchService;
 use App\Support\Locale;
+use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\HtmlString;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,7 +26,10 @@ class HomeController extends Controller
      */
     public function index(): View
     {
-        return view('index');
+        // Главная выключенного модуля не зарегистрирована — показывается лента
+        $homepage = Registry::$homepages[(string) setting('homepage')] ?? null;
+
+        return view('index', ['homepage' => $homepage ? new HtmlString((string) ($homepage['view'])()) : null]);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Setting;
 use App\Services\UserService;
+use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -87,6 +88,18 @@ class SettingController extends AdminController
 
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/settings/index', compact('settings', 'act', 'statsite', 'protects', 'slugs', 'emailModes'));
+        $homepages = ['feed' => __('settings.homepage_feed')];
+        foreach (Registry::$homepages as $key => $homepage) {
+            $homepages[$key] = __($homepage['label']);
+        }
+
+        // Модуль выбранной главной выключен: пункт остаётся, иначе сохранение
+        // других настроек молча переключит главную на ленту
+        $current = $settings['homepage'] ?? 'feed';
+        if (! isset($homepages[$current])) {
+            $homepages[$current] = __('settings.homepage_unavailable', ['name' => $current]);
+        }
+
+        return view('admin/settings/index', compact('settings', 'act', 'statsite', 'protects', 'slugs', 'emailModes', 'homepages'));
     }
 }
