@@ -211,6 +211,7 @@ class MessageController extends Controller
                 ->where('reading', 0)
                 ->with('author')
                 ->groupBy('author_id')
+                ->orderByDesc('last_created_at')
                 ->limit(3)
                 ->get();
 

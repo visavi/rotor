@@ -18,9 +18,8 @@
                 </ul>
             </div>
             <div class="paper-footer-col">
-                <h5>{{ __('index.mails') }}</h5>
+                <h5>{{ __('index.information') }}</h5>
                 <ul>
-                    <li><a class="footer-item" href="{{ route('mails.index') }}">{{ __('index.mails') }}</a></li>
                     <li><a class="footer-item" href="{{ route('search') }}">{{ __('index.search') }}</a></li>
                     @hook('footerColumnEnd')
                 </ul>

@@ -5,63 +5,26 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\MailService;
-use App\Support\HtmlSanitizer;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Route;
 
 class MailController extends Controller
 {
     /**
-     * Главная страница
+     * Старый адрес обратной связи
+     *
+     * Форма переехала в модуль Feedback. Маршрут остаётся ради ссылок на /mails
+     * и route('mails.index') в старых темах из resources/custom/views: без него
+     * такая тема падала бы на каждой странице
+     *
+     * @deprecated до 15.0
      */
-    public function index(Request $request, Validator $validator, MailService $mail): View|RedirectResponse
+    public function index(): RedirectResponse
     {
-        if ($request->isMethod('post')) {
-            $message = $request->input('message');
-            $name = $request->input('name');
-            $email = $request->input('email');
+        abort_unless(Route::has('feedback.index'), 404);
 
-            if ($user = getUser()) {
-                $name = $user->login;
-                $email = $user->email;
-            }
-
-            $validator->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->length($name, 3, 100, ['name' => __('mails.name_short_or_long')])
-                ->length($message, 5, 50000, ['message' => __('validator.text')])
-                ->email($email, ['email' => __('validator.email')]);
-
-            if ($validator->isValid()) {
-                $subject = __('mails.email_from_site', ['sitename' => setting('title')], setting('language'));
-
-                $message = str_replace(
-                    '/uploads/stickers',
-                    config('app.url') . '/uploads/stickers',
-                    HtmlSanitizer::sanitize($message)
-                );
-
-                $message .= '<br><br>Email: ' . $name . ' &lt;' . $email . '&gt;<br>IP: ' . getIp() . '<br>Browser: ' . getBrowser() . '<br>' . __('main.sent_out', [], setting('language')) . ': ' . dateFixed(now(), 'd.m.y / H:i');
-                $data = [
-                    'to'      => config('app.email'),
-                    'subject' => $subject,
-                    'text'    => $message,
-                    'from'    => [$email, $name],
-                ];
-
-                $mail->queue('mailer.default', $data);
-
-                return redirect('/mails')->with('success', __('mails.success_sent'));
-            }
-
-            return redirect('/mails')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('mails/index');
+        return redirect()->route('feedback.index', status: 301);
     }
 
     /**

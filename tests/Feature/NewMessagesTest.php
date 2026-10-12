@@ -65,6 +65,28 @@ class NewMessagesTest extends TestCase
         }
     }
 
+    public function testDropdownShowsLatestSendersFirst(): void
+    {
+        $authors = User::factory()->count(4)->create();
+
+        // Отправители с меньшим id пишут раньше: без сортировки группы шли бы
+        // по author_id, и limit отрезал бы самого свежего
+        foreach ($authors as $i => $author) {
+            $this->travelTo(now()->addMinutes($i + 1));
+            $this->user->sendMessage($author, 'Письмо');
+        }
+
+        $html = $this->actingAs($this->user)
+            ->getJson('/messages/new', ['X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJsonPath('success', true)
+            ->json('dialogues');
+
+        $positions = $authors->map(static fn (User $author) => strpos($html, '/messages/talk/' . $author->login . '"'));
+
+        $this->assertFalse($positions[0]);
+        $this->assertTrue($positions[3] < $positions[2] && $positions[2] < $positions[1]);
+    }
+
     public function testValueIsNotRemembered(): void
     {
         $this->assertSame(0, $this->user->getCountNewMessages());

@@ -42,7 +42,6 @@ return [
     'added'             => 'Добавил',
     'added_by'          => 'Добавлено',
     'sent'              => 'Отправил',
-    'sent_out'          => 'Отправлено',
     'verification_code' => 'Проверочный код',
     'pages'             => 'Страницы',
     'page_num'          => 'Стр. :page',

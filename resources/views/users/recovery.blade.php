@@ -35,10 +35,12 @@
         {{ __('mails.recovery_text4') }}
     </div>
 
-    <p class="text-muted fst-italic">
-        {{ __('mails.recovery_text1') }}
-        <a href="/mails">{{ __('index.mails') }}</a>
-    </p>
+    @if (Route::has('feedback.index'))
+        <p class="text-muted fst-italic">
+            {{ __('mails.recovery_text1') }}
+            <a href="{{ route('feedback.index') }}">{{ __('index.mails') }}</a>
+        </p>
+    @endif
 
     <div class="auth-links">
         <a href="{{ route('login') }}"><i class="fas fa-right-to-bracket"></i> {{ __('index.login') }}</a>

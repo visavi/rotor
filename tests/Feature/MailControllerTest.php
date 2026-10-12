@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class MailControllerTest extends TestCase
@@ -16,61 +15,19 @@ class MailControllerTest extends TestCase
         parent::setUp();
 
         $this->overrideSetting('app_installed', 1);
-        // captchaVerify() возвращает true только при отключённой капче
-        $this->overrideSetting('captcha_type', 'disable');
-
-        Mail::fake();
     }
 
-    public function testIndexIsShown(): void
+    public function testOldFeedbackAddressWithoutModule(): void
     {
-        $this->get('/mails')->assertOk();
+        // Форма в модуле Feedback: без него старый адрес не ведёт никуда
+        $this->get('/mails')->assertNotFound();
     }
 
-    public function testSendMailAsGuest(): void
+    public function testRecoveryHidesFeedbackLinkWithoutModule(): void
     {
-        $response = $this->post('/mails', [
-            'name'    => 'Тестовый отправитель',
-            'email'   => 'sender@example.com',
-            'message' => 'Текст обращения в поддержку',
-        ]);
-
-        $response->assertRedirect('/mails');
-        $response->assertSessionHas('success');
-    }
-
-    public function testSendMailWithShortMessageFails(): void
-    {
-        $response = $this->post('/mails', [
-            'name'    => 'Тестовый отправитель',
-            'email'   => 'sender@example.com',
-            'message' => 'ab',
-        ]);
-
-        $response->assertSessionHasErrors('message');
-    }
-
-    public function testSendMailWithInvalidEmailFails(): void
-    {
-        $response = $this->post('/mails', [
-            'name'    => 'Тестовый отправитель',
-            'email'   => 'не-адрес',
-            'message' => 'Текст обращения в поддержку',
-        ]);
-
-        $response->assertSessionHasErrors('email');
-    }
-
-    public function testSendMailKeepsInputOnError(): void
-    {
-        $response = $this->post('/mails', [
-            'name'    => 'Тестовый отправитель',
-            'email'   => 'sender@example.com',
-            'message' => 'ab',
-        ]);
-
-        $response->assertSessionHasInput('name', 'Тестовый отправитель');
-        $response->assertSessionHasInput('email', 'sender@example.com');
+        $this->get('/recovery')
+            ->assertOk()
+            ->assertDontSee(__('mails.recovery_text1'));
     }
 
     public function testUnsubscribe(): void

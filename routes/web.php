@@ -133,7 +133,7 @@ Route::controller(UserController::class)
 Route::controller(MailController::class)
     ->name('mails.')
     ->group(function () {
-        Route::match(['get', 'post'], '/mails', 'index')->name('index');
+        Route::get('/mails', 'index')->name('index');
         Route::match(['get', 'post'], '/unsubscribe', 'unsubscribe')->name('unsubscribe');
     });
 

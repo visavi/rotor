@@ -191,15 +191,15 @@
             <div class="section-body">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
-                        <a href="/admin/modules" class="app-tile">
-                            <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-puzzle-piece"></i></div>
-                            <div class="app-tile-label">{{ __('index.modules') }}</div>
-                        </a>
-                    </div>
-                    <div class="col">
                         <a href="/admin/settings" class="app-tile">
                             <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-sliders-h"></i></div>
                             <div class="app-tile-label">{{ __('index.site_settings') }}</div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="/admin/modules" class="app-tile">
+                            <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-puzzle-piece"></i></div>
+                            <div class="app-tile-label">{{ __('index.modules') }}</div>
                         </a>
                     </div>
                     <div class="col">

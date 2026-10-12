@@ -19,9 +19,8 @@
         </div>
 
         <div class="col-sm">
-            <h5>{{ __('index.mails') }}</h5>
+            <h5>{{ __('index.information') }}</h5>
             <ul class="nav flex-column">
-                <li><a class="footer-item" href="{{ route('mails.index') }}">{{ __('index.mails') }}</a></li>
                 <li><a class="footer-item" href="{{ route('search') }}">{{ __('index.search') }}</a></li>
                 @hook('footerColumnEnd')
             </ul>

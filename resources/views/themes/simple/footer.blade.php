@@ -24,9 +24,8 @@
             </div>
 
             <div>
-                <h6>{{ __('index.mails') }}</h6>
+                <h6>{{ __('index.information') }}</h6>
                 <ul>
-                    <li><a href="{{ route('mails.index') }}">{{ __('index.mails') }}</a></li>
                     <li><a href="{{ route('search') }}">{{ __('index.search') }}</a></li>
                     @hook('footerColumnEnd')
                 </ul>
