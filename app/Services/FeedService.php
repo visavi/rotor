@@ -9,6 +9,7 @@ use App\Models\Feed as FeedModel;
 use App\Models\Poll;
 use App\Support\Registry;
 use App\Traits\FileableTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -92,14 +93,7 @@ class FeedService
 
         // Отсекаем невидимые записи каждого типа прямо в запросе,
         // чтобы они не попадали в выборку и не ломали пагинацию
-        foreach ($enabledTypes as $type) {
-            $idQuery = $this->visibleIdsQuery($type, $allTypes[$type]);
-
-            $query->where(function ($q) use ($type, $idQuery) {
-                $q->where('relate_type', '!=', $type)
-                    ->orWhereIn('relate_id', $idQuery);
-            });
-        }
+        $this->whereVisible($query, array_intersect_key($allTypes, array_flip($enabledTypes)), true);
 
         // Дефолт 0: после сброса кеша первый increment на отсутствующем ключе даёт 1,
         // и он должен отличаться от версии, под которой закеширована лента
@@ -109,24 +103,80 @@ class FeedService
         $items = cache()->remember($cacheKey, (int) setting('feed_cache_time'), function () use ($query, $currentPage, $perPage, $allTypes) {
             // Берём на одну запись больше, чтобы Paginator определил наличие следующей страницы без отдельного count()
             $rows = $query->skip(($currentPage - 1) * $perPage)->take($perPage + 1)->get();
-            $grouped = $rows->groupBy('relate_type');
 
-            $loadedModels = [];
-            foreach ($grouped as $type => $typeRows) {
-                $class = $allTypes[$type]['class'];
-                $with = self::eagerLoads($class, $allTypes[$type]['with']);
-                $ids = $typeRows->pluck('relate_id')->all();
-
-                $loadedModels[$type] = $class::with($with)->whereIn('id', $ids)->get()->keyBy('id');
-            }
-
-            return $rows
-                ->map(fn ($row) => $loadedModels[$row->relate_type][$row->relate_id] ?? null)
-                ->filter()
-                ->values();
+            return $this->loadModels($rows, $allTypes);
         });
 
         return new Paginator($items, $perPage, $currentPage);
+    }
+
+    /**
+     * Последние записи выбранных типов, без пагинации и кеша
+     *
+     * Для вывода записей вне ленты: показ типов и минимальный рейтинг
+     * из настроек ленты не учитываются, видимость записей — как в ленте
+     *
+     * @param array<int, string> $types
+     *
+     * @return Collection<int, Model>
+     */
+    public function getLatest(array $types, int $limit): Collection
+    {
+        $selectedTypes = array_intersect_key(self::allTypes(), array_flip($types));
+
+        if (! $selectedTypes) {
+            return collect();
+        }
+
+        $query = FeedModel::query()
+            ->whereIn('relate_type', array_keys($selectedTypes))
+            ->orderByDesc('created_at');
+
+        $this->whereVisible($query, $selectedTypes, false);
+
+        return $this->loadModels($query->limit($limit)->get(), $selectedTypes);
+    }
+
+    /**
+     * Оставляет в выборке ленты только видимые записи каждого типа
+     *
+     * @param Builder<FeedModel> $query
+     */
+    private function whereVisible(Builder $query, array $types, bool $withRating): void
+    {
+        foreach ($types as $type => $info) {
+            $idQuery = $this->visibleIdsQuery($type, $info, $withRating);
+
+            $query->where(function ($q) use ($type, $idQuery) {
+                $q->where('relate_type', '!=', $type)
+                    ->orWhereIn('relate_id', $idQuery);
+            });
+        }
+    }
+
+    /**
+     * Модели записей ленты в порядке строк выборки
+     *
+     * @param Collection<int, FeedModel> $rows
+     *
+     * @return Collection<int, Model>
+     */
+    private function loadModels(Collection $rows, array $types): Collection
+    {
+        $loadedModels = [];
+
+        foreach ($rows->groupBy('relate_type') as $type => $typeRows) {
+            $class = $types[$type]['class'];
+            $with = self::eagerLoads($class, $types[$type]['with']);
+            $ids = $typeRows->pluck('relate_id')->all();
+
+            $loadedModels[$type] = $class::with($with)->whereIn('id', $ids)->get()->keyBy('id');
+        }
+
+        return $rows
+            ->map(fn ($row) => $loadedModels[$row->relate_type][$row->relate_id] ?? null)
+            ->filter()
+            ->values();
     }
 
     /**
@@ -185,8 +235,10 @@ class FeedService
 
     /**
      * Рендер элементов ленты с изоляцией
+     *
+     * @param Collection<int, Model> $items
      */
-    private function render(Collection $items): Collection
+    public function render(Collection $items): Collection
     {
         $polls = $this->loadPolls($items);
         $allowDownload = $this->user || setting('down_guest_download');
@@ -213,9 +265,9 @@ class FeedService
     }
 
     /**
-     * Подзапрос видимых id для типа: scope типа либо минимальный рейтинг
+     * Подзапрос видимых id для типа: scope типа и минимальный рейтинг ленты
      */
-    private function visibleIdsQuery(string $type, array $info)
+    private function visibleIdsQuery(string $type, array $info, bool $withRating)
     {
         /** @var class-string $class */
         $class = $info['class'];
@@ -228,7 +280,7 @@ class FeedService
             ($info['scope'])($idQuery);
         }
 
-        if ($minRating = setting("feed_{$type}_rating")) {
+        if ($withRating && $minRating = setting("feed_{$type}_rating")) {
             $idQuery->where('rating', '>', $minRating);
         }
 

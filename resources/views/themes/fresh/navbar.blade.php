@@ -90,7 +90,7 @@
             <span class="app-topnav__online">{{ showOnline() }}</span>
             <span class="app-topnav__lang">
                 <img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="22" class="flag" onerror="this.remove()">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#languageModal">{{ __('main.lang') }}</a>
+                <a href="#" data-dialog="#languageDialog">{{ __('main.lang') }}</a>
             </span>
         </div>
     </div>

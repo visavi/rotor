@@ -39,7 +39,7 @@
             <span>{{ setting('copy') }}</span>
             <span class="site-footer__meta">
                 {{ showOnline() }}
-                <a href="#" data-bs-toggle="modal" data-bs-target="#languageModal">
+                <a href="#" data-dialog="#languageDialog">
                     <img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="18" class="flag" onerror="this.remove()">
                     {{ __('main.lang') }}
                 </a>

@@ -29,6 +29,5 @@
 @stop
 
 @push('scripts')
-    @include('app/_language_modal')
-    @includeWhen(getUser(), 'app/_comment_edit_modal')
+    @include('app/_language_dialog')
 @endpush

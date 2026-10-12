@@ -44,7 +44,7 @@
             </div>
         @endif
         <div>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#languageModal"><img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="22" class="me-1 flag" onerror="this.remove()"> {{ __('main.lang') }}</a>
+            <a href="#" data-dialog="#languageDialog"><img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="22" class="me-1 flag" onerror="this.remove()"> {{ __('main.lang') }}</a>
         </div>
     </div>
 </div>

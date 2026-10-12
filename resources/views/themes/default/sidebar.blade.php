@@ -78,7 +78,7 @@
             </span>
 
             <img src="/assets/flags/{{ app()->getLocale() }}.svg" alt="" width="22" class="flag" onerror="this.remove()">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#languageModal">{{ __('main.lang') }}</a>
+            <a href="#" data-dialog="#languageDialog">{{ __('main.lang') }}</a>
         </li>
         @hook('sidebarFooterEnd')
     </ul>

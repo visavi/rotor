@@ -443,6 +443,15 @@ textarea.form-control {
     margin-bottom: 0;
 }
 
+.performance > summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+.performance > summary::-webkit-details-marker {
+    display: none;
+}
+
 @media (max-width: 767px) {
     .performance {
         font-size: 0.75rem;
@@ -638,33 +647,166 @@ textarea.form-control {
     width: 960px;
 }
 
-/* Confirm dialog */
-.confirm-dialog {
-    border: none;
-    border-radius: 8px;
-    padding: 20px 24px;
-    width: 500px;
+/* Диалоги на нативном <dialog>: классы — как у Dialog в Bootstrap 6 */
+.dialog {
+    --dialog-width: 500px;
+    width: var(--dialog-width);
     max-width: calc(100% - 32px);
-    margin: 15vh auto auto;
+    max-height: calc(100% - 32px);
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    border: none;
+    border-radius: var(--bs-border-radius-lg);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
     background: var(--bs-body-bg);
     color: var(--bs-body-color);
 }
 
-.confirm-dialog::backdrop {
+.dialog:focus {
+    outline: none;
+}
+
+.dialog-sm {
+    --dialog-width: 300px;
+}
+
+.dialog-lg {
+    --dialog-width: 800px;
+}
+
+/* Сверху, а не по центру: окно с редактором растёт при наборе и не прыгает */
+.dialog-top {
+    margin-top: 1.75rem;
+    max-height: calc(100% - 3.5rem);
+}
+
+.dialog::backdrop {
     background: rgba(0, 0, 0, 0.5);
 }
 
-.confirm-message {
-    margin: 0 0 16px;
-    padding-bottom: 16px;
+/* Сдвиг только на время появления: с transform диалог стал бы опорой
+ * для position: fixed, и меню редактора внутри него съехали бы */
+.dialog[open] {
+    animation: dialog-in .3s ease-out;
+}
+
+.dialog[open]::backdrop {
+    animation: dialog-fade .15s linear;
+}
+
+@keyframes dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+@keyframes dialog-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dialog[open],
+    .dialog[open]::backdrop {
+        animation: none;
+    }
+}
+
+/* Страница под открытым диалогом не прокручивается */
+html:has(.dialog:modal) {
+    overflow: hidden;
+}
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 16px 24px;
     border-bottom: 1px solid var(--bs-border-color);
 }
 
-.confirm-footer {
+.dialog-title {
+    margin: 0;
+}
+
+.dialog-body {
+    padding: 20px 24px;
+}
+
+.dialog-footer {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
+    padding: 12px 24px;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+.confirm-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.confirm-message {
+    margin: 0;
+}
+
+/* Плавное раскрытие <details>: Chrome и Edge 131+, в остальных браузерах
+ * мгновенно, как раньше. interpolate-size только здесь, чтобы не задеть
+ * чужие переходы к auto */
+details {
+    interpolate-size: allow-keywords;
+}
+
+details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size .2s ease, content-visibility .2s allow-discrete;
+}
+
+details[open]::details-content {
+    block-size: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    details::details-content {
+        transition: none;
+    }
+}
+
+/* Аккордеон на <details>, как в Bootstrap 6: состояние берётся из [open],
+ * а не из класса .collapsed на кнопке */
+details.accordion-item > summary {
+    list-style: none;
+}
+
+details.accordion-item > summary::-webkit-details-marker {
+    display: none;
+}
+
+details.accordion-item:not([open]) > .accordion-button {
+    color: var(--bs-accordion-btn-color);
+    background-color: var(--bs-accordion-btn-bg);
+    box-shadow: none;
+}
+
+details.accordion-item:not([open]) > .accordion-button::after {
+    background-image: var(--bs-accordion-btn-icon);
+    transform: none;
+}
+
+details.accordion-item:first-of-type > .accordion-button {
+    border-top-left-radius: var(--bs-accordion-inner-border-radius);
+    border-top-right-radius: var(--bs-accordion-inner-border-radius);
+}
+
+details.accordion-item:last-of-type:not([open]) > .accordion-button {
+    border-bottom-left-radius: var(--bs-accordion-inner-border-radius);
+    border-bottom-right-radius: var(--bs-accordion-inner-border-radius);
 }
 
 /* Print styles */

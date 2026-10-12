@@ -99,19 +99,13 @@ $questions = [
         </div>
     @endif
 
-    <div class="accordion mb-3" id="faqAccordion">
+    {{-- Открыт один вопрос: name объединяет <details> в группу --}}
+    <div class="accordion mb-3">
         @foreach ($questions as $index => $question)
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button{{ $index ? ' collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-{{ $index }}">
-                        {{ __('pages.' . $question . '_title') }}
-                    </button>
-                </h2>
-
-                <div id="faq-{{ $index }}" class="accordion-collapse collapse{{ $index ? '' : ' show' }}" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">{!! __('pages.' . $question) !!}</div>
-                </div>
-            </div>
+            <details class="accordion-item" name="faq" @if (! $index) open @endif>
+                <summary class="accordion-button">{{ __('pages.' . $question . '_title') }}</summary>
+                <div class="accordion-body">{!! __('pages.' . $question) !!}</div>
+            </details>
         @endforeach
     </div>
 @stop

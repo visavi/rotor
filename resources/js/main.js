@@ -1,7 +1,7 @@
 import * as bootstrap from 'bootstrap'
 import { __ } from './translate.js'
 import { ajax } from './ajax.js'
-import { confirm } from './dialogs.js'
+import { confirm, hideDialog, showDialog } from './dialogs.js'
 import { copyPool, placeMedia, renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
 import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
@@ -589,27 +589,27 @@ window.postQuote = function (el) {
     return false
 }
 
-/* Редактирование комментария в модальном окне */
+/* Редактирование комментария в диалоге */
 window.openEditModal = function (el) {
-    const id      = el.dataset.id
-    const baseUrl = el.dataset.url
-    const modalEl = document.getElementById('editCommentModal')
+    const id       = el.dataset.id
+    const baseUrl  = el.dataset.url
+    const dialogEl = document.getElementById('editCommentDialog')
 
     document.getElementById('edit-comment-id').value = id
-    modalEl.dataset.editUrl = baseUrl + '/' + id
+    dialogEl.dataset.editUrl = baseUrl + '/' + id
 
-    modalEl.querySelector('input[type="file"]')?.setAttribute('data-id', id)
+    dialogEl.querySelector('input[type="file"]')?.setAttribute('data-id', id)
     const msgEl = document.getElementById('edit-comment-msg')
     if (msgEl) msgEl.dataset.relateId = id
 
-    const filesContainer = modalEl.querySelector('.js-files')
+    const filesContainer = dialogEl.querySelector('.js-files')
     if (filesContainer) filesContainer.innerHTML = ''
 
     const dataPromise = new Promise(resolve => {
         ajax({
             url: baseUrl + '/' + id,
             success: (data) => {
-                const scope = modalEl.querySelector('form')
+                const scope = dialogEl.querySelector('form')
 
                 data.files?.forEach(file => renderFile(scope, filesContainer, file))
 
@@ -619,9 +619,7 @@ window.openEditModal = function (el) {
         })
     })
 
-    const onShown = async () => {
-        modalEl.removeEventListener('shown.bs.modal', onShown)
-
+    const fillEditor = async () => {
         const text = await dataPromise
         const created = !window._tiptapEditors?.['edit-comment-msg']
         const editor = await ensureEditor(msgEl)
@@ -635,13 +633,13 @@ window.openEditModal = function (el) {
         }
     }
 
-    modalEl.addEventListener('shown.bs.modal', onShown)
-    bootstrap.Modal.getOrCreateInstance(modalEl).show()
+    showDialog(dialogEl)
+    fillEditor()
 
     return false
 }
 
-document.getElementById('editCommentModal')?.addEventListener('hide.bs.modal', function (e) {
+document.getElementById('editCommentDialog')?.addEventListener('cancel', function (e) {
     const editor = window._tiptapEditors?.['edit-comment-msg']
     if (editor?.getIsChanged()) {
         // Закрытие откладывается: ответ диалога придёт колбэком
@@ -650,24 +648,24 @@ document.getElementById('editCommentModal')?.addEventListener('hide.bs.modal', f
         confirm(__('confirm_discard_changes'), (result) => {
             if (!result) return
             editor.resetChanged()
-            bootstrap.Modal.getInstance(this)?.hide()
+            hideDialog(this)
         })
     }
 })
 
 document.getElementById('editCommentForm')?.addEventListener('submit', function (e) {
     e.preventDefault()
-    const modalEl = document.getElementById('editCommentModal')
-    const id      = document.getElementById('edit-comment-id').value
-    const msg     = document.getElementById('edit-comment-msg').value
-    const url     = modalEl?.dataset.editUrl
+    const dialogEl = document.getElementById('editCommentDialog')
+    const id       = document.getElementById('edit-comment-id').value
+    const msg      = document.getElementById('edit-comment-msg').value
+    const url      = dialogEl?.dataset.editUrl
 
     ajax({
         data: { msg },
         dataType: 'json', type: 'patch', url,
         success: function (data) {
             if (data.success) {
-                bootstrap.Modal.getInstance(modalEl)?.hide()
+                hideDialog(dialogEl)
                 window.location.hash = '#comment_' + id
                 window.location.reload()
             } else {

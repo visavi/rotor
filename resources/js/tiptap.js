@@ -820,6 +820,9 @@ function dropdownButton(icon, title, menu, open) {
         closeDropdowns()
         if (!wasOpen) {
             menu._anchorBtn = btn
+            // Меню живёт в body, но в открытом диалоге всё вне его недоступно:
+            // там меню переезжает в диалог
+            floatingHost(btn).appendChild(menu)
             open()
         }
     })
@@ -827,6 +830,11 @@ function dropdownButton(icon, title, menu, open) {
     wrap.appendChild(btn)
     wrap._dropdownBtn = btn
     return wrap
+}
+
+// Куда вешать всплывающее меню редактора: в диалог, если редактор в нём, иначе в body
+function floatingHost(el) {
+    return el.closest('dialog') ?? document.body
 }
 
 function makeDropdown(icon, title, items, extraClass = '') {
@@ -891,7 +899,7 @@ const suggestion = {
                 el.className = 'mention-dropdown'
                 el.style.display = 'none'
                 el.style.position = 'fixed'
-                document.body.appendChild(el)
+                floatingHost(props.editor.view.dom).appendChild(el)
 
                 apply(props)
             },
