@@ -1,28 +1,27 @@
 @php
+    $validation = session()->get('errors')?->all() ?? [];
+
+    // Ошибки валидации — одним уведомлением с остальными ошибками. Списки
+    // переиндексированы: с дырявыми ключами JSON стал бы объектом, а main.js ждёт массив
     $grouped = collect(['success', 'danger', 'warning', 'info'])
-        ->mapWithKeys(fn ($status) => [$status => array_unique((array) session()->get($status, []))])
-        ->filter()
-        ->all();
+        ->mapWithKeys(fn ($status) => [$status => array_values(array_unique([
+            ...($status === 'danger' ? $validation : []),
+            ...array_values((array) session()->get($status, [])),
+        ]))])
+        ->filter();
 @endphp
 
-{{-- Ошибки валидации --}}
-@if ($errors = session()->get('errors'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @foreach ($errors->all() as $error)
-            <div>{{ $error }}</div>
+@if ($grouped->isNotEmpty())
+    {{-- Сообщения показывает notyf (main.js): данные, а не разметка --}}
+    <script type="application/json" class="js-flash">{!! json_encode($grouped->all(), JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+
+    <noscript>
+        @foreach ($grouped as $status => $items)
+            <div class="alert alert-{{ $status }}" role="alert">
+                @foreach ($items as $message)
+                    <div>{{ $message }}</div>
+                @endforeach
+            </div>
         @endforeach
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    </noscript>
 @endif
-
-@foreach ($grouped as $status => $items)
-    {{-- Успех и подсказки закрываются сами, ошибки и предупреждения ждут пользователя --}}
-    <?php $autohide = in_array($status, ['success', 'info'], true) ? ' data-autohide="5000"' : ''; ?>
-
-    <div class="alert alert-{{ $status }} alert-dismissible fade show" role="alert"{!! $autohide !!}>
-        @foreach ($items as $message)
-            <div>{{ $message }}</div>
-        @endforeach
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endforeach

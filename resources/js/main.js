@@ -131,15 +131,24 @@ function applyMask(el, mask) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Алерты с data-autohide гаснут сами, наведение мыши откладывает закрытие
-    document.querySelectorAll('.alert[data-autohide]').forEach(el => {
-        const delay = parseInt(el.dataset.autohide, 10) || 5000
-        let timer = setTimeout(() => bootstrap.Alert.getOrCreateInstance(el).close(), delay)
+    // Флеш-сообщения сервера: гаснут сами, как ответы ajax — поля с ошибками
+    // и так подписаны в форме
+    const flashTypes = { success: 'success', info: 'info', warning: 'warning', danger: 'error' }
 
-        el.addEventListener('mouseenter', () => clearTimeout(timer))
-        el.addEventListener('mouseleave', () => {
-            timer = setTimeout(() => bootstrap.Alert.getOrCreateInstance(el).close(), delay)
+    document.querySelectorAll('.js-flash').forEach(el => {
+        Object.entries(JSON.parse(el.textContent)).forEach(([status, messages]) => {
+            // notyf вставляет текст как HTML: сообщения экранируются
+            const message = messages.map(text => {
+                const div = document.createElement('div')
+                div.textContent = text
+
+                return div.innerHTML
+            }).join('<br>')
+
+            notyf.open({ type: flashTypes[status] ?? 'info', message })
         })
+
+        el.remove()
     })
 
     document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el))

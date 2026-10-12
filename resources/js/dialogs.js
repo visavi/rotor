@@ -31,14 +31,20 @@ function showDialog(el) {
     openDialogs.push(el)
     moveToasts(el)
 
-    // Esc закрывает диалог без нашего кода: уведомления вернутся по событию close
+    // Esc закрывает диалог без нашего кода: уведомления вернутся по событию close.
+    // Событие приходит позже закрытия: если окно уже открыли снова, оно запоздало
     if (!tracked.has(el)) {
         tracked.add(el)
-        el.addEventListener('close', () => forgetDialog(el))
+        el.addEventListener('close', () => {
+            if (!el.open) forgetDialog(el)
+        })
     }
 }
 
 function forgetDialog(el) {
+    // Вопрос без ответа закрывается отменой (answerOnce)
+    el.dismiss?.()
+
     const index = openDialogs.indexOf(el)
     if (index === -1) return
 
@@ -145,12 +151,34 @@ function open(el, message) {
     showDialog(el)
 }
 
+// Ответ приходит ровно один раз: закрытие окна без кнопки (Esc, клик мимо)
+// считается отменой, иначе ожидающий ответа код так и остался бы ждать
+function answerOnce(el, callback, cancelValue) {
+    // Прежний вопрос в этом же окне, оставшийся без ответа, — отмена
+    el.dismiss?.()
+
+    let answered = false
+
+    const answer = (value) => {
+        if (answered) return
+        answered = true
+        el.dismiss = null
+        hideDialog(el)
+        callback(value)
+    }
+
+    el.dismiss = () => answer(cancelValue)
+
+    return answer
+}
+
 /* Подтверждение действия: callback получает true или false */
 const confirmDialogEl = makeDialog()
 
 function confirm(message, callback) {
-    confirmDialogEl.querySelector('.js-confirm-ok').onclick = () => { hideDialog(confirmDialogEl); callback(true) }
-    confirmDialogEl.querySelector('.js-confirm-cancel').onclick = () => { hideDialog(confirmDialogEl); callback(false) }
+    const answer = answerOnce(confirmDialogEl, callback, false)
+    confirmDialogEl.querySelector('.js-confirm-ok').onclick = () => answer(true)
+    confirmDialogEl.querySelector('.js-confirm-cancel').onclick = () => answer(false)
 
     open(confirmDialogEl, message)
 }
@@ -194,8 +222,9 @@ function promptFields(message, fields, callback) {
         return input
     })
 
-    ok.onclick = () => { hideDialog(promptDialogEl); callback(inputs.map(input => input.value)) }
-    promptDialogEl.querySelector('.js-confirm-cancel').onclick = () => { hideDialog(promptDialogEl); callback(null) }
+    const answer = answerOnce(promptDialogEl, callback, null)
+    ok.onclick = () => answer(inputs.map(input => input.value))
+    promptDialogEl.querySelector('.js-confirm-cancel').onclick = () => answer(null)
 
     open(promptDialogEl, message)
     inputs[0]?.select()

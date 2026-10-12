@@ -16,7 +16,8 @@ const notyf = new Notyf({
     types: [
       { type: 'success', background: '#28a745' },
       { type: 'error', background: '#dc3545' },
-      { type: 'warning', background: '#ffc107' }
+      { type: 'warning', background: '#ffc107' },
+      { type: 'info', background: '#17a2b8' }
     ],
 });
 
