@@ -53,6 +53,34 @@ class ErrorPageTest extends TestCase
             ->assertSee('/assets/img/errors/', false);
     }
 
+    public function testErrorBeforeThemeRendersWithoutLayout(): void
+    {
+        $this->overrideSetting('errorlog', 1);
+
+        // Битый UTF-8 отсекает ValidatePathEncoding до ApplyTheme: layout упал бы на theme:: с 500
+        $this->get('/%c0')
+            ->assertStatus(400)
+            ->assertSee(__('errors.bad_request'))
+            ->assertSee('gear-wrap', false)
+            ->assertDontSee('/assets/img/errors/', false);
+
+        $this->assertDatabaseCount('errors', 1);
+        $this->assertDatabaseHas('errors', ['code' => 400]);
+    }
+
+    public function testMaintenanceRendersWithoutLayout(): void
+    {
+        // Драйвер cache на массиве: файловый оставил бы storage/framework/down и закрыл бы рабочий сайт
+        config(['app.maintenance.driver' => 'cache', 'app.maintenance.store' => 'array']);
+        $this->app->maintenanceMode()->activate([]);
+
+        $this->get('/')
+            ->assertStatus(503)
+            ->assertSee(__('errors.service_unavailable'))
+            ->assertSee('gear-wrap', false)
+            ->assertDontSee('/assets/img/errors/', false);
+    }
+
     public function testThemeOverridesErrorTemplate(): void
     {
         // Каталоги переопределений темы создаются на время теста и убираются за собой

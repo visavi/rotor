@@ -1,6 +1,8 @@
 {{-- Общий шаблон страниц ошибок. Код и текст приходят из файла конкретной ошибки:
-     @extends('errors/error', ['code' => 404, 'message' => __('errors.not_found')]) --}}
-@extends('layout')
+     @extends('errors/error', ['code' => 404, 'message' => __('errors.not_found')])
+     Ошибка до ApplyTheme (битый адрес, большой POST, сбой сессии) темы не имеет —
+     layout упал бы на theme:: и превратил её в 500. Такие рисуются без оформления --}}
+@extends(array_key_exists('theme', app('view')->getFinder()->getHints()) ? 'layout' : 'errors.minimal')
 
 @section('title', trim(__('errors.error') . ' ' . ($code ?? '')))
 @section('description', trim(__('errors.error') . ' ' . ($code ?? '')))
