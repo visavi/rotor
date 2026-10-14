@@ -1,13 +1,13 @@
 @extends('layout')
 
-@section('title', __('index.email_templates'))
+@section('title', __('index.notice_templates'))
 
 @section('header')
     <div class="float-end">
         <a class="btn btn-success" href="/admin/notices/create">{{ __('main.add') }}</a>
     </div>
 
-    <h1>{{ __('index.email_templates') }}</h1>
+    <h1>{{ __('index.notice_templates') }}</h1>
 @stop
 
 @section('breadcrumb')
@@ -15,7 +15,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item active">{{ __('index.email_templates') }}</li>
+            <li class="breadcrumb-item active">{{ __('index.notice_templates') }}</li>
         </ol>
     </nav>
 @stop

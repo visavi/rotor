@@ -217,7 +217,7 @@
                     <div class="col">
                         <a href="/admin/notices" class="app-tile">
                             <div class="app-tile-icon" style="background:#d63384"><i class="fas fa-envelope"></i></div>
-                            <div class="app-tile-label">{{ __('index.email_templates') }}</div>
+                            <div class="app-tile-label">{{ __('index.notice_templates') }}</div>
                         </a>
                     </div>
                     <div class="col">

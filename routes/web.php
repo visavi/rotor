@@ -134,7 +134,6 @@ Route::controller(MailController::class)
     ->name('mails.')
     ->group(function () {
         Route::get('/mails', 'index')->name('index');
-        Route::match(['get', 'post'], '/unsubscribe', 'unsubscribe')->name('unsubscribe');
     });
 
 /* Авторизация - регистрация */

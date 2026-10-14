@@ -48,7 +48,6 @@ class Setting extends Model
     {
         return [
             'mains',
-            'mails',
             'info',
             'comments',
             'messages',

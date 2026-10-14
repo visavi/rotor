@@ -78,8 +78,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('delete:polls')->weekly();
         $schedule->command('delete:readers')->weekly();
         $schedule->command('delete:dialogues')->daily();
-        $schedule->command('add:subscribers')->hourly();
-        $schedule->command('add:birthdays')->dailyAt('07:00');
 
         // Воркер поднимается на минуту и выходит: очередь разгребается.
         // При sync задача бессмысленна — письма уходят сразу, очереди нет

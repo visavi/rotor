@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/notices">{{ __('index.email_templates') }}</a></li>
+            <li class="breadcrumb-item"><a href="/admin/notices">{{ __('index.notice_templates') }}</a></li>
             <li class="breadcrumb-item active">{{ __('admin.notices.edit') }}</li>
         </ol>
     </nav>
@@ -37,11 +37,10 @@
                 <div class="invalid-feedback">{{ textError('text') }}</div>
             </div>
 
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input name="protect" class="form-check-input" type="checkbox" value="1"{{ old('protect', $notice->protect) ? ' checked' : '' }}>
-                    {{ __('admin.notices.system_template') }}
-                </label>
+            <div class="form-check form-switch mb-3">
+                <input type="hidden" value="0" name="protect">
+                <input type="checkbox" role="switch" class="form-check-input" value="1" name="protect" id="protect"{{ old('protect', $notice->protect) ? ' checked' : '' }}>
+                <label for="protect" class="form-check-label">{{ __('admin.notices.system_template') }}</label>
             </div>
 
             <button class="btn btn-primary">{{ __('main.save') }}</button>

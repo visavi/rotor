@@ -41,7 +41,7 @@
             <div class="col-md-4">
                 <select class="form-select form-select-sm" data-module-sort>
                     <option value="name">{{ __('main.sort') }}: {{ __('main.title') }}</option>
-                    <option value="status">{{ __('main.sort') }}: {{ __('main.status') }}</option>
+                    <option value="status" selected>{{ __('main.sort') }}: {{ __('main.status') }}</option>
                     <option value="version">{{ __('main.sort') }}: {{ __('main.version') }}</option>
                     <option value="released">{{ __('main.sort') }}: {{ __('main.date') }}</option>
                 </select>

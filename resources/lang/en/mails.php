@@ -12,8 +12,5 @@ return [
     'recovery_instructions'  => 'Password recovery instructions sent to :email',
     'password_not_recovery'  => 'This user did not reset the password!',
     'token_invalid'          => 'The token is invalid!',
-    'token_missing'          => 'Token missing!',
-    'token_expired'          => 'The token is already out of date!',
     'success_recovery'       => 'Password has been successfully recovered! Your new password: :password',
-    'success_unsubscribed'   => 'You have successfully unsubscribed from the newsletter!',
 ];

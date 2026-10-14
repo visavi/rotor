@@ -12,8 +12,5 @@ return [
     'recovery_instructions'  => 'Інструкція відновлення пароля відправлена на :email',
     'password_not_recovery'  => 'Цей користувач не відновлював пароль!',
     'token_invalid'          => 'Токен недійсний!',
-    'token_missing'          => 'Немає токен!',
-    'token_expired'          => 'Токен уже застарів!',
     'success_recovery'       => 'Пароль успішно відновлено! Ваш новий пароль: :password',
-    'success_unsubscribed'   => 'Ви успішно відмовилися від розсилки!',
 ];

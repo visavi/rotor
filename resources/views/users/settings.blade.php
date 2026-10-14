@@ -23,7 +23,6 @@ $notifications = [
     'notify_comment' => ['label' => __('users.notify_comment'),      'hint' => __('users.notify_comment_hint')],
     'notify_reply'   => ['label' => __('users.notify_reply'),        'hint' => __('users.notify_reply_hint')],
     'notify_mention' => ['label' => __('users.notify_mention'),      'hint' => __('users.notify_mention_hint')],
-    'subscribe'      => ['label' => __('users.receive_newsletters'), 'hint' => __('users.newsletters_hint')],
 ];
 @endphp
 

@@ -11,6 +11,9 @@
             const sort    = document.querySelector('[data-module-sort]');
             const buttons = Array.from(document.querySelectorAll('[data-module-filter]'));
             const cards   = Array.from(list.querySelectorAll('[data-module-card]'));
+            // Сортировка по умолчанию — выбранная в разметке, её в адрес не пишем.
+            // Не sort.value: Firefox при перезагрузке восстанавливает прошлый выбор
+            const defaultSort = sort ? (Array.from(sort.options).find(o => o.defaultSelected) ?? sort.options[0]).value : 'name';
             let statusFilter = 'all';
 
             let clearBtn = null;
@@ -103,7 +106,7 @@
                 if (search && search.value.trim()) {
                     params.set('q', search.value.trim());
                 }
-                if (sort && sort.value !== 'name') {
+                if (sort && sort.value !== defaultSort) {
                     params.set('s', sort.value);
                 }
 

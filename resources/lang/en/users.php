@@ -114,8 +114,6 @@ return [
     'notify_reply_hint'   => 'Private message when someone replies to your comment',
     'notify_mention'      => 'Notify about mentions',
     'notify_mention_hint' => 'Private message when you are mentioned in a text',
-    'receive_newsletters' => 'Receive newsletters',
-    'newsletters_hint'    => 'Receive newsletters from the site by email',
 
     'last_registered'  => 'List of last registered',
     'registered'       => 'Registered',

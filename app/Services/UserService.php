@@ -234,9 +234,7 @@ class UserService
             'notify_mention' => $request->input('notify_mention') ? 1 : 0,
             'notify_reply'   => $request->input('notify_reply') ? 1 : 0,
             'notify_comment' => $request->input('notify_comment') ? 1 : 0,
-            // Подписка хранится ключом рассылки, отказ его стирает
-            'subscribe' => $request->input('subscribe') ? Str::random(32) : null,
-            'language'  => $language,
+            'language'       => $language,
         ];
     }
 

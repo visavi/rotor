@@ -13,39 +13,18 @@ class GrantDailyBonus
      */
     public function handle(Request $request, Closure $next)
     {
-        // Уведомление о бонусе ушло бы во флеш-сессию, которую никто не увидит,
-        // а повторно за сутки бонус уже не начислится
-        if (MetrikaService::isBackground($request)) {
+        // Бонус — при открытии страницы: у формы ответ редирект, у ajax — JSON,
+        // уведомление там некому показать. Начислится на следующей странице
+        if (! $request->isMethod('GET') || $request->ajax() || MetrikaService::isBackground($request)) {
             return $next($request);
         }
 
-        $bonus = auth()->user()?->gettingBonus();
-
-        if (! $bonus) {
-            return $next($request);
+        if ($bonus = auth()->user()?->gettingBonus()) {
+            // now(), а не flash(): только эта страница, на следующей не повторится.
+            // Сообщение контроллера с прошлого редиректа остаётся рядом
+            session()->now('success', [...(array) session('success', []), $bonus]);
         }
 
-        // Пишем до контроллера, чтобы уведомление попало в текущий рендер
-        $this->addSuccess($bonus);
-
-        $response = $next($request);
-
-        // Контроллер мог положить своё уведомление через redirect()->with('success'),
-        // перезаписав ключ целиком — возвращаем бонус обратно
-        $this->addSuccess($bonus);
-
-        return $response;
-    }
-
-    /**
-     * Добавляет уведомление, не затирая уже записанные
-     */
-    private function addSuccess(string $message): void
-    {
-        $messages = (array) session()->get('success', []);
-
-        if (! in_array($message, $messages, true)) {
-            session()->flash('success', [...$messages, $message]);
-        }
+        return $next($request);
     }
 }

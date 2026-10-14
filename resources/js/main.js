@@ -135,7 +135,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // и так подписаны в форме
     const flashTypes = { success: 'success', info: 'info', warning: 'warning', danger: 'error' }
 
+    // «Назад/вперёд» достаёт страницу из кеша браузера вместе со старым флешем,
+    // а сообщение уже было показано. Свежий ответ сервера флеш второй раз не отдаёт
+    const fromHistory = performance.getEntriesByType('navigation')[0]?.type === 'back_forward'
+
     document.querySelectorAll('.js-flash').forEach(el => {
+        if (fromHistory) {
+            el.remove()
+
+            return
+        }
+
         Object.entries(JSON.parse(el.textContent)).forEach(([status, messages]) => {
             // notyf вставляет текст как HTML: сообщения экранируются
             const message = messages.map(text => {

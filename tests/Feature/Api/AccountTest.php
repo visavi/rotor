@@ -82,14 +82,12 @@ class AccountTest extends TestCase
             'timezone'       => 3,
             'themes'         => 'default',
             'notify_comment' => true,
-            'subscribe'      => true,
         ], $this->headers())->assertOk();
 
         $user = $this->user->fresh();
 
         $this->assertSame(3, (int) $user->timezone);
         $this->assertSame(1, (int) $user->notify_comment);
-        $this->assertNotNull($user->subscribe);
     }
 
     public function testUnknownLanguageIsRejected(): void

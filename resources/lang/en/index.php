@@ -64,8 +64,9 @@ return [
     'stickers'             => 'Stickers',
     'blacklist'            => 'Blacklist',
     'site_settings'        => 'Site settings',
+    // Delivery 1.0.4 и раньше берёт название отсюда, у новых версий свой перевод. Убрать в 15.0
     'private_mailing'      => 'Private newsletter',
-    'email_templates'      => 'Email templates',
+    'notice_templates'     => 'Notice templates',
     'schedule_stalled'     => 'Task scheduler is not running',
     'schedule_last_run'    => 'Last run: :date',
     'schedule_never'       => 'The scheduler has never run.',

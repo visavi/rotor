@@ -2,7 +2,6 @@
 
 return [
     'mains'    => 'Basic settings',
-    'mails'    => 'Mail and Newsletter',
     'info'     => 'Information output',
     'comments' => 'Comments',
     'messages' => 'Messages',
@@ -41,9 +40,6 @@ return [
     'online_enable'      => 'Online',
     'online_time'        => 'Online counting time (minutes)',
     'online_time_hint'   => 'For how many minutes to remember the users IP',
-
-    'mails_count_days'  => 'Qty. days before sending a private notification by email ',
-    'mails_send_emails' => 'Sending emails in one operation',
 
     'page_title'                   => 'The title of all pages',
     'caption_top'                  => 'Signature above',

@@ -100,8 +100,10 @@ class MailService
     /**
      * Шаблоны письма: HTML и текстовая версия рядом с ним
      *
-     * Текст лежит в mailer/text с тем же именем. Без части text/plain
-     * спам-фильтры занижают рейтинг, а часть клиентов показывает пустоту
+     * Текст лежит в mailer/text с тем же именем, у модуля — в своём
+     * mailer/text (mail_notify::mailer.unread → mail_notify::mailer.text.unread).
+     * Без части text/plain спам-фильтры занижают рейтинг, а часть клиентов
+     * показывает пустоту
      *
      * Текст рендерится здесь и уходит готовой строкой: {{ }} в шаблоне
      * экранирует для HTML, и имя с & в простом тексте пришло бы как &amp;
@@ -111,7 +113,7 @@ class MailService
     private function views(string $view, array $data): array
     {
         $views = ['html' => $view];
-        $text = preg_replace('#^mailer\\.#', 'mailer.text.', $view);
+        $text = preg_replace('#^((?:\w+::)?mailer)\.#', '$1.text.', $view);
 
         if ($text !== $view && View::exists($text)) {
             $views['raw'] = html_entity_decode(View::make($text, $data)->render(), ENT_QUOTES | ENT_HTML5, 'UTF-8');

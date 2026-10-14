@@ -33,7 +33,7 @@ class DailyBonusTest extends TestCase
         $this->assertNotNull($user->timebonus);
     }
 
-    public function testBonusMessageIsFlashed(): void
+    public function testBonusMessageIsShown(): void
     {
         $user = User::factory()->create([
             'login'     => 'bonus_user',
@@ -43,12 +43,42 @@ class DailyBonusTest extends TestCase
 
         $response = $this->actingAs($user)->get('/');
 
-        $this->assertNotEmpty((array) session('success'));
-
-        // И реально отрендерилось на странице
         $response->assertSee(__('main.daily_bonus', [
             'money' => plural(setting('bonusmoney'), setting('moneyname')),
         ]));
+    }
+
+    public function testBonusMessageIsShownOnce(): void
+    {
+        $user = User::factory()->create(['timebonus' => null]);
+        $message = __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]);
+
+        $this->actingAs($user)->get('/')->assertSee($message);
+
+        // Уведомление уже показано на первой странице: следующая его не повторяет
+        $this->actingAs($user)->get('/users')->assertDontSee($message);
+    }
+
+    public function testBonusMessageAfterRedirectIsShownOnce(): void
+    {
+        $user = User::factory()->create(['email' => 'bonus@example.com', 'timebonus' => null]);
+        $message = __('main.daily_bonus', ['money' => plural(setting('bonusmoney'), setting('moneyname'))]);
+
+        // Первый запрос — отправка формы: бонус ждёт страницу, куда ведёт редирект
+        $this->actingAs($user)->post('/accounts/apikey', ['action' => 'create']);
+
+        $this->actingAs($user)->get('/settings')->assertSee($message);
+        $this->actingAs($user)->get('/users')->assertDontSee($message);
+    }
+
+    public function testAjaxDoesNotTakeBonus(): void
+    {
+        $user = User::factory()->create(['money' => 1000, 'timebonus' => null]);
+
+        // JSON уведомление не покажет: бонус ждёт открытия страницы
+        $this->actingAs($user)->get('/users', ['X-Requested-With' => 'XMLHttpRequest']);
+
+        $this->assertSame(1000, (int) $user->fresh()->money);
     }
 
     public function testBonusIsNotGrantedTwiceWithin23Hours(): void
@@ -91,10 +121,10 @@ class DailyBonusTest extends TestCase
         // POST, где контроллер сам кладёт success через redirect()->with()
         $this->actingAs($user)->post('/accounts/apikey', ['action' => 'create']);
 
-        // Оба уведомления лежат в одном ключе success и не затирают друг друга
-        $this->assertCount(2, (array) session('success'));
+        // Отправка формы бонус не начисляет: уведомление некому показать
+        $this->assertSame(1000, (int) $user->fresh()->money);
 
-        // Оба видны на странице, куда ведёт редирект
+        // Бонус начисляется на странице, куда ведёт редирект, — рядом с сообщением контроллера
         $this->actingAs($user)
             ->get('/settings')
             ->assertSee(__('users.token_success_created'))

@@ -204,7 +204,8 @@ class ModuleControllerTest extends TestCase
         $response->assertSee('02.01.2020');
         // Версия без released_at остаётся без даты — в сортировке уходит в конец
         $response->assertSee('data-released=""', false);
-        $response->assertSee('<option value="released">', false);
+        // В маркетплейсе свежие релизы сверху по умолчанию
+        $response->assertSee('<option value="released" selected>', false);
     }
 
     /**

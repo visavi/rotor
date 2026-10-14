@@ -40,7 +40,7 @@
                     <option value="name">{{ __('main.sort') }}: {{ __('main.title') }}</option>
                     <option value="status">{{ __('main.sort') }}: {{ __('main.status') }}</option>
                     <option value="version">{{ __('main.sort') }}: {{ __('main.version') }}</option>
-                    <option value="released">{{ __('main.sort') }}: {{ __('main.date') }}</option>
+                    <option value="released" selected>{{ __('main.sort') }}: {{ __('main.date') }}</option>
                 </select>
             </div>
         </div>
