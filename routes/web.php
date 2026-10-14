@@ -189,7 +189,7 @@ Route::controller(OnlineController::class)
     });
 
 require __DIR__ . '/admin.php';
-Route::get('/boom', fn () => throw new RuntimeException('test'));
+
 if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
     Route::controller(InstallController::class)
         ->prefix('install')
