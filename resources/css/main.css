@@ -1469,9 +1469,10 @@ a.profile-stat:hover {
     display: flex;
     align-items: center;
     gap: .5rem;
-    /* Отрицательные поля съедают паддинг секции (15px), чтобы подсветка шла до её краёв */
+    /* Отрицательные поля съедают паддинг секции (15px), чтобы подсветка шла до её краёв;
+       свой паддинг шире, чтобы иконка и стрелка не липли к краю подсветки */
     margin: 0 -15px;
-    padding: .4rem 15px;
+    padding: .4rem 1.25rem;
     border-bottom: 1px solid var(--bs-border-color);
     text-decoration: none;
     transition: background-color .15s ease;
@@ -1609,8 +1610,9 @@ a.profile-stat:hover {
     height: var(--avatar-size);
 }
 
+/* Фон от цвета текста, а не --base-bg: в тёмных темах подложка почти совпадает с фоном контента */
 .talk-bubble {
-    --talk-bg: var(--base-bg);
+    --talk-bg: color-mix(in srgb, var(--bs-body-color) 8%, var(--bs-body-bg));
     position: relative;
     /* section режет переполнение, а хвостик выходит за край */
     overflow: visible;
@@ -1625,6 +1627,11 @@ a.profile-stat:hover {
 @media (max-width: 768px) {
     .talk-bubble {
         max-width: 85%;
+    }
+
+    /* На узком экране аватар мельче — облаку больше места */
+    .talk-avatar {
+        --avatar-size: 2rem;
     }
 }
 
