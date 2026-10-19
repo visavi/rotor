@@ -6,6 +6,7 @@ namespace App\Traits;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File as FileSystem;
 use Illuminate\Support\Str;
 use Intervention\Image\Alignment;
 use Intervention\Image\ImageManager;
@@ -27,6 +28,10 @@ trait UploadTrait
         $fullPath = public_path($path);
         $isImage = str_starts_with($mimeType, 'image');
         $isVideo = str_starts_with($mimeType, 'video');
+
+        // Каталоги загрузок не хранятся в репозитории: $file->move() создал бы каталог сам,
+        // а $image->save() без каталога падает
+        FileSystem::ensureDirectoryExists(public_path($this->uploadPath));
 
         if ($isImage) {
             $imageManager = app(ImageManager::class);

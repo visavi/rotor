@@ -1,9 +1,30 @@
+{{-- Места для рекламы только в первой порции: в начале, в середине и в конце. Какое занять, решает модуль.
+     Середина и конец — не ближе трёх записей к соседней точке, чтобы короткая лента не превращалась в рекламу --}}
+@php
+    $advertPoints = [];
+
+    if ($posts->currentPage() === 1) {
+        $count = $posts->count();
+
+        if ($count >= 6) {
+            $advertPoints[intdiv($count, 2)] = 'middle';
+        }
+
+        if ($count >= 3) {
+            $advertPoints[$count] = 'end';
+        }
+    }
+@endphp
+
 @forelse ($posts as $post)
+    @if ($posts->currentPage() === 1 && $loop->first)
+        @hook('feedAdvert', 'start')
+    @endif
+
     {!! $post !!}
 
-    {{-- Реклама: одна на порцию ленты, и при подгрузке тоже --}}
-    @if ($loop->iteration === 5)
-        @hook('feedAdvert')
+    @if (isset($advertPoints[$loop->iteration]))
+        @hook('feedAdvert', $advertPoints[$loop->iteration])
     @endif
 @empty
     @include('feeds._welcome')

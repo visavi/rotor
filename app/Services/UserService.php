@@ -12,8 +12,12 @@ use App\Support\Locale;
 use App\Support\Registry;
 use App\Support\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Intervention\Image\Format;
+use Intervention\Image\ImageManager;
 
 /**
  * Регистрация и доступы аккаунта
@@ -35,8 +39,11 @@ class UserService
     /** Почта обязательна, аккаунт ждёт подтверждения по письму */
     public const string EMAIL_CONFIRM = 'confirm';
 
-    public function __construct(private readonly MailService $mail)
-    {
+    public function __construct(
+        private readonly MailService $mail,
+        private readonly ImageManager $imageManager,
+    ) {
+        //
     }
 
     /**
@@ -292,6 +299,40 @@ class UserService
     }
 
     /**
+     * Загрузка фото профиля: старое фото удаляется, аватар — квадратная миниатюра нового
+     */
+    public function savePhoto(User $user, UploadedFile $photo): void
+    {
+        $this->deletePhotoFiles($user);
+
+        $image = $this->imageManager->decode($photo);
+        $image->coverDown(64, 64);
+        $image->encodeUsingFormat(Format::PNG);
+
+        // Каталог не хранится в репозитории, а $image->save() сам его не создаёт
+        $avatar = $user->uploadAvatarPath . '/' . uniqueName('png');
+        File::ensureDirectoryExists(public_path($user->uploadAvatarPath));
+        $image->save(public_path($avatar));
+
+        $file = $user->uploadFile($photo, false);
+
+        $user->update([
+            'picture' => $file['path'],
+            'avatar'  => $avatar,
+        ]);
+    }
+
+    /**
+     * Удаление фото профиля и аватара
+     */
+    public function deletePhoto(User $user): void
+    {
+        $this->deletePhotoFiles($user);
+
+        $user->update(['picture' => null, 'avatar' => null]);
+    }
+
+    /**
      * Проверка смены почты
      */
     public function validateEmailChange(Validator $validator, User $user, string $email, ?string $password): void
@@ -365,5 +406,19 @@ class UserService
             ->delete();
 
         return PasswordReset::query()->where('email', $user->email)->exists();
+    }
+
+    /**
+     * Удаляет файлы фото и аватара, запись пользователя не трогает
+     */
+    private function deletePhotoFiles(User $user): void
+    {
+        if ($user->picture) {
+            deleteFile(public_path($user->picture));
+        }
+
+        if ($user->avatar) {
+            deleteFile(public_path($user->avatar));
+        }
     }
 }

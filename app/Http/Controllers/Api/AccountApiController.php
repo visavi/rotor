@@ -20,8 +20,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Intervention\Image\Format;
-use Intervention\Image\ImageManager;
 
 /**
  * Свой аккаунт
@@ -256,7 +254,7 @@ class AccountApiController extends Controller
     /**
      * Загрузка фото и аватара
      */
-    public function photo(Request $request, ImageManager $imageManager): JsonResponse
+    public function photo(Request $request, UserService $userService): JsonResponse
     {
         $user = getUser();
 
@@ -270,39 +268,19 @@ class AccountApiController extends Controller
             ],
         ]);
 
-        $photo = $request->file('photo');
-
-        if ($user->picture) {
-            deleteFile(public_path($user->picture));
-            deleteFile(public_path($user->avatar));
-        }
-
-        // Аватар — квадратная миниатюра фото, отдельно его не загружают
-        $image = $imageManager->decode($photo);
-        $image->coverDown(64, 64);
-        $image->encodeUsingFormat(Format::PNG);
-
-        $avatar = $user->uploadAvatarPath . '/' . uniqueName('png');
-        $image->save(public_path($avatar));
-
-        $file = $user->uploadFile($photo, false);
-
-        $user->update([
-            'picture' => $file['path'],
-            'avatar'  => $avatar,
-        ]);
+        $userService->savePhoto($user, $request->file('photo'));
 
         return response()->json([
             'message' => __('users.photo_success_uploaded'),
-            'avatar'  => url($avatar),
-            'picture' => url($file['path']),
+            'avatar'  => url($user->avatar),
+            'picture' => url($user->picture),
         ]);
     }
 
     /**
      * Удаление фото и аватара
      */
-    public function deletePhoto(): JsonResponse
+    public function deletePhoto(UserService $userService): JsonResponse
     {
         $user = getUser();
 
@@ -310,10 +288,7 @@ class AccountApiController extends Controller
             abort(422, __('users.photo_not_exist'));
         }
 
-        deleteFile(public_path($user->picture));
-        deleteFile(public_path($user->avatar));
-
-        $user->update(['picture' => null, 'avatar' => null]);
+        $userService->deletePhoto($user);
 
         return response()->json(['message' => __('users.photo_success_deleted')]);
     }

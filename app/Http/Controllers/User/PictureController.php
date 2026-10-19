@@ -7,12 +7,11 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\FileService;
+use App\Services\UserService;
 use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Intervention\Image\Format;
-use Intervention\Image\ImageManager;
 
 class PictureController extends Controller
 {
@@ -38,7 +37,7 @@ class PictureController extends Controller
     public function index(
         Request $request,
         Validator $validator,
-        ImageManager $imageManager,
+        UserService $userService,
     ): View|RedirectResponse {
         if ($request->isMethod('post')) {
             $photo = $request->file('photo');
@@ -51,30 +50,7 @@ class PictureController extends Controller
             $validator->file($photo, $rules, ['photo' => __('validator.image_upload_failed')]);
 
             if ($validator->isValid()) {
-                // -------- Удаляем старое фото и аватар ----------//
-                if ($this->user->picture) {
-                    deleteFile(public_path($this->user->picture));
-                    deleteFile(public_path($this->user->avatar));
-
-                    $this->user->picture = null;
-                    $this->user->avatar = null;
-                    $this->user->save();
-                }
-
-                // -------- Генерируем аватар -------//
-                $image = $imageManager->decode($photo);
-                $image->coverDown(64, 64);
-                $image->encodeUsingFormat(Format::PNG);
-
-                $avatar = $this->user->uploadAvatarPath . '/' . uniqueName('png');
-                $image->save(public_path($avatar));
-
-                // -------- Загружаем фото ----------//
-                $file = $this->user->uploadFile($photo, false);
-
-                $this->user->picture = $file['path'];
-                $this->user->avatar = $avatar;
-                $this->user->save();
+                $userService->savePhoto($this->user, $photo);
 
                 return redirect('profile')
                     ->with('success', __('users.photo_success_uploaded'));
@@ -93,7 +69,7 @@ class PictureController extends Controller
     /**
      * Удаление фотографии
      */
-    public function delete(Validator $validator): RedirectResponse
+    public function delete(Validator $validator, UserService $userService): RedirectResponse
     {
         if (! $this->user->picture) {
             $validator->addError(__('users.photo_not_exist'));
@@ -104,12 +80,7 @@ class PictureController extends Controller
                 ->withErrors($validator->getErrors());
         }
 
-        deleteFile(public_path($this->user->picture));
-        deleteFile(public_path($this->user->avatar));
-
-        $this->user->picture = null;
-        $this->user->avatar = null;
-        $this->user->save();
+        $userService->deletePhoto($this->user);
 
         return redirect('profile')
             ->with('success', __('users.photo_success_deleted'));
