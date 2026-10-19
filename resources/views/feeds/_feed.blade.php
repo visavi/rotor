@@ -1,5 +1,10 @@
 @forelse ($posts as $post)
     {!! $post !!}
+
+    {{-- Реклама: одна на порцию ленты, и при подгрузке тоже --}}
+    @if ($loop->iteration === 5)
+        @hook('feedAdvert')
+    @endif
 @empty
     @include('feeds._welcome')
 @endforelse

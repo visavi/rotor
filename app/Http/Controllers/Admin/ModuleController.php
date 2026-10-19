@@ -9,6 +9,7 @@ use App\Models\ModuleRegistry;
 use App\Providers\ModuleServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -516,9 +517,18 @@ class ModuleController extends AdminController
             $this->deleteDirectory($backupPath);
         }
 
-        // Файлы перезаписаны на диске, но opcache (revalidate_freq) ещё держит
-        // старый module.php — без сброса кнопка обновления и новый код модуля
-        // подхватятся только со следующим запросом после ревалидации
+        // Файлы перезаписаны на диске, но opcache ещё держит старые. opcache_reset()
+        // срабатывает только со следующего запроса, а этот ещё читает module.php
+        // ради версии и собирает кэш роутов — без invalidate в БД запишется старая
+        // версия, и кнопка «Обновить до» останется
+        if (function_exists('opcache_invalidate')) {
+            foreach (File::allFiles($targetPath) as $file) {
+                if ($file->getExtension() === 'php') {
+                    opcache_invalidate($file->getPathname(), true);
+                }
+            }
+        }
+
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
