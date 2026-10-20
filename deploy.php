@@ -16,9 +16,13 @@ add('shared_dirs', [
     'public/uploads',
 ]);
 
+// Подпапки загрузок сайт создаёт сам — писать нужно в корень uploads
 add('writable_dirs', [
-    'public/uploads/*',
+    'public/uploads',
 ]);
+
+// Деплой и php-fpm работают под одним пользователем: ACL не нужен, хватает 755
+set('writable_mode', 'chmod');
 
 // Hosts
 host('production')
