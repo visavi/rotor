@@ -68,6 +68,43 @@ class SettingControllerTest extends TestCase
         ]);
     }
 
+    public function testSaveNotNumericValueWithMultiplierFails(): void
+    {
+        $before = Setting::query()->where('name', 'title')->value('value');
+
+        // Раньше умножение строки падало TypeError и отдавало 500
+        $this->actingAs($this->boss)
+            ->post('/admin/settings?act=mains', [
+                'sets' => ['title' => 'пять'],
+                'mods' => ['title' => 3],
+            ])
+            ->assertSessionHasErrors('sets.title');
+
+        $this->assertSame($before, Setting::query()->where('name', 'title')->value('value'));
+    }
+
+    public function testSaveNumberAboveMaxLengthWithMultiplier(): void
+    {
+        // Число с множителем больше 255 — не ошибка: max без numeric мерил бы значение
+        $this->actingAs($this->boss)
+            ->post('/admin/settings?act=info', [
+                'sets' => ['timeonline' => '300'],
+                'mods' => ['timeonline' => 60],
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('settings', ['name' => 'timeonline', 'value' => '18000']);
+    }
+
+    public function testSaveTooLongValueFails(): void
+    {
+        $this->actingAs($this->boss)
+            ->post('/admin/settings?act=mains', [
+                'sets' => ['title' => str_repeat('а', 256)],
+            ])
+            ->assertSessionHasErrors('sets.title');
+    }
+
     public function testSaveEmptyRequiredSettingFails(): void
     {
         $before = Setting::query()->where('name', 'title')->value('value');
@@ -82,7 +119,7 @@ class SettingControllerTest extends TestCase
             'value' => $before,
         ]);
 
-        $response->assertSessionHasErrors('sets[title]');
+        $response->assertSessionHasErrors(['sets.title' => __('settings.field_required', ['field' => 'title'])]);
     }
 
     public function testSaveEmptyOptionalSetting(): void

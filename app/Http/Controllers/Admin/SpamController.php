@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Spam;
 use App\Support\Registry;
-use App\Support\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,7 +34,9 @@ class SpamController extends AdminController
 
         $type = $request->input('type');
 
+        // Жалобы на записи отключённых модулей не выводятся: их тип не в списке
         $spam = Spam::query()
+            ->whereIn('relate_type', array_keys($this->types))
             ->selectRaw('relate_type, count(*) as total')
             ->groupBy('relate_type')
             ->pluck('total', 'relate_type')
@@ -83,30 +84,29 @@ class SpamController extends AdminController
     /**
      * Удаление жалоб
      */
-    public function delete(Request $request, Validator $validator): JsonResponse
+    public function delete(Request $request): JsonResponse
     {
-        $id = int($request->input('id'));
-
-        $validator
-            ->true($request->ajax(), __('validator.not_ajax'))
-            ->notEmpty($id, __('validator.deletion'));
-
-        if ($validator->isValid()) {
-            $spam = Spam::query()->find($id);
-
-            if ($spam) {
-                $spam->delete();
-            }
-
+        if (! $request->ajax()) {
             return response()->json([
-                'success' => true,
-                'message' => __('main.record_deleted_success'),
+                'success' => false,
+                'message' => __('validator.not_ajax'),
             ]);
         }
 
+        $id = int($request->input('id'));
+
+        if (! $id) {
+            return response()->json([
+                'success' => false,
+                'message' => __('validator.deletion'),
+            ]);
+        }
+
+        Spam::query()->find($id)?->delete();
+
         return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
+            'success' => true,
+            'message' => __('main.record_deleted_success'),
         ]);
     }
 }

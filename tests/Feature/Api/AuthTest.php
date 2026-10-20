@@ -7,8 +7,11 @@ use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\CaptchaService;
 use App\Services\UserService;
+use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Validator;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -50,6 +53,37 @@ class AuthTest extends TestCase
         $this->assertSame($user->apikey, $response->json('token'));
         // Приветственное уведомление в приват, как и на сайте
         $this->assertSame(1, $user->getCountMessages());
+    }
+
+    public function testRegisterRunsModuleHooksLikeSite(): void
+    {
+        $validate = Registry::$onRegisterValidate;
+        $save = Registry::$onRegisterSave;
+        $saved = null;
+
+        // Раньше регистрация через API хуки модулей пропускала
+        Registry::$onRegisterValidate = [static function (Request $request, Validator $validator): void {
+            if (! $request->filled('invite')) {
+                $validator->errors()->add('invite', 'Нужен код приглашения');
+            }
+        }];
+        Registry::$onRegisterSave = [static function (User $user) use (&$saved): void {
+            $saved = $user->login;
+        }];
+
+        try {
+            $this->postJson('/api/register', $this->payload())
+                ->assertStatus(422)
+                ->assertJsonValidationErrors(['invite' => 'Нужен код приглашения']);
+
+            $this->postJson('/api/register', $this->payload() + ['invite' => 'code'])
+                ->assertStatus(201);
+        } finally {
+            Registry::$onRegisterValidate = $validate;
+            Registry::$onRegisterSave = $save;
+        }
+
+        $this->assertSame('newuser', $saved);
     }
 
     public function testRegisterMarksAccountPendingWithConfirmation(): void

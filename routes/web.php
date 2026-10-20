@@ -90,7 +90,8 @@ Route::controller(PictureController::class)
     ->prefix('pictures')
     ->name('pictures.')
     ->group(function () {
-        Route::match(['get', 'post'], '/', 'index')->name('index');
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
         Route::delete('/delete', 'delete')->name('delete');
     });
 
@@ -104,14 +105,15 @@ Route::controller(MessageController::class)
         Route::get('/new', 'newMessages')->name('new');
         Route::get('/talk/{login}', 'talk')->name('talk');
         Route::delete('/delete/{uid}', 'delete')->whereNumber('uid')->name('delete');
-        Route::match(['get', 'post'], '/send', 'send')->name('send');
+        Route::post('/send', 'send')->name('send');
     });
 
 /* API */
 Route::get('/api', [ApiController::class, 'index']);
 
 /* Бан */
-Route::match(['get', 'post'], '/ban', [BanController::class, 'ban'])->name('ban');
+Route::get('/ban', [BanController::class, 'ban'])->name('ban');
+Route::post('/ban', [BanController::class, 'explain'])->name('ban.explain');
 
 /* Страницы сайта */
 Route::get('/files/{page?}', [FileController::class, 'index'])->where('page', '.+');
@@ -140,24 +142,31 @@ Route::controller(MailController::class)
 Route::controller(UserController::class)
     ->group(function () {
         Route::post('/logout', 'logout')->name('logout');
-        Route::match(['get', 'post'], '/verify', 'verify')->name('verify');
+        Route::get('/verify', 'verify')->name('verify');
+        Route::post('/verify', 'resendVerify')->name('verify.send');
         Route::get('/confirm/{token}', 'confirm')->name('confirm')->where('token', '[\w]+');
-        Route::match(['get', 'post'], '/login', 'login')->name('login');
-        Route::match(['get', 'post'], '/register', 'register')->name('register');
-        Route::match(['get', 'post'], '/profile', 'profile')->name('profile');
-        Route::match(['get', 'post'], '/settings', 'setting')->name('settings');
+        Route::get('/login', 'login')->name('login');
+        Route::post('/login', 'authenticate');
+        Route::get('/register', 'register')->name('register');
+        Route::post('/register', 'storeRegister');
+        Route::get('/profile', 'profile')->middleware('check.user')->name('profile');
+        Route::post('/profile', 'updateProfile')->middleware('check.user');
+        Route::get('/settings', 'setting')->middleware('check.user')->name('settings');
+        Route::post('/settings', 'updateSetting')->middleware('check.user');
         Route::post('/check-login', 'checkLogin')->name('check-login');
         Route::get('/search-users', 'searchUsers')->name('search-users');
     });
 
 Route::controller(RecoveryController::class)
     ->group(function () {
-        Route::match(['get', 'post'], '/recovery', 'recovery')->name('recovery');
+        Route::get('/recovery', 'recovery')->name('recovery');
+        Route::post('/recovery', 'sendRecovery');
         Route::get('/restore/{token}', 'restore')->name('restore')->where('token', '[\w]+');
     });
 
 /* Мои данные */
 Route::controller(AccountController::class)
+    ->middleware('check.user')
     ->prefix('accounts')
     ->name('accounts.')
     ->group(function () {

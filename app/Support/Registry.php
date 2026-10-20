@@ -219,7 +219,8 @@ class Registry
     /**
      * Регистрирует колбэк валидации при сохранении профиля пользователя
      *
-     * Колбэк вида fn(User $user, Request $request, Validator $validator, bool $strict): void
+     * Колбэк вида fn(User $user, Request $request, \Illuminate\Validation\Validator $validator, bool $strict): void
+     * зовётся в after() FormRequest; ошибку добавляет $validator->errors()->add('поле', 'текст').
      * $strict = false, когда профиль сохраняет администратор — обязательность полей не проверяется
      */
     public static function onProfileValidate(callable $handler): void
@@ -240,7 +241,8 @@ class Registry
     /**
      * Регистрирует колбэк валидации при сохранении настроек пользователя
      *
-     * Колбэк вида fn(User $user, Request $request, Validator $validator): void
+     * Колбэк вида fn(User $user, Request $request, \Illuminate\Validation\Validator $validator): void
+     * зовётся в after() FormRequest; ошибку добавляет $validator->errors()->add('поле', 'текст')
      */
     public static function onSettingsValidate(callable $handler): void
     {
@@ -260,7 +262,8 @@ class Registry
     /**
      * Регистрирует колбэк валидации полей модуля при регистрации
      *
-     * Колбэк вида fn(Request $request, Validator $validator): void — пользователя ещё нет
+     * Колбэк вида fn(Request $request, \Illuminate\Validation\Validator $validator): void — пользователя ещё нет.
+     * Зовётся в after() FormRequest на сайте и в API; ошибку добавляет $validator->errors()->add('поле', 'текст')
      */
     public static function onRegisterValidate(callable $handler): void
     {

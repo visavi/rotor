@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Http\Resources\DialogueResource;
 use App\Http\Resources\FeedResource;
 use App\Http\Resources\MessageResource;
@@ -269,10 +270,7 @@ class ApiController extends Controller
 
         $validated = $request->validate([
             'text' => [
-                'required',
-                'string',
-                'min:' . setting('comment_text_min'),
-                'max:' . setting('comment_text_max'),
+                ...CommentRequest::textRules(),
                 function (string $attribute, mixed $value, Closure $fail) use ($user, $recipient, $flood) {
                     if (! $recipient) {
                         $fail(__('validator.user'));

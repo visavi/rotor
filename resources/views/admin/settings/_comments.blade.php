@@ -4,45 +4,45 @@
 
 <form method="post">
     @csrf
-    <div class="mb-3{{ hasError('sets[comments_per_page]') }}">
+    <div class="mb-3{{ hasError('sets.comments_per_page') }}">
         <label for="comments_per_page" class="form-label">{{ __('settings.comments_per_page') }}:</label>
         <input type="number" class="form-control" id="comments_per_page" name="sets[comments_per_page]" maxlength="3" value="{{ old('sets.comments_per_page', $settings['comments_per_page']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[comments_per_page]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.comments_per_page') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[chatpost]') }}">
+    <div class="mb-3{{ hasError('sets.chatpost') }}">
         <label for="chatpost" class="form-label">{{ __('settings.chat_per_page') }}:</label>
         <input type="number" class="form-control" id="chatpost" name="sets[chatpost]" maxlength="2" value="{{ old('sets.chatpost', $settings['chatpost']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[chatpost]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.chatpost') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[comment_depth]') }}">
+    <div class="mb-3{{ hasError('sets.comment_depth') }}">
         <label for="comment_depth" class="form-label">{{ __('settings.comment_depth') }}:</label>
         <input type="number" class="form-control" id="comment_depth" name="sets[comment_depth]" maxlength="2" value="{{ old('sets.comment_depth', $settings['comment_depth']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[comment_depth]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.comment_depth') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[comment_point]') }}">
+    <div class="mb-3{{ hasError('sets.comment_point') }}">
         <label for="comment_point" class="form-label">{{ __('settings.comment_point') }}:</label>
         <input type="number" class="form-control" id="comment_point" name="sets[comment_point]" maxlength="2" value="{{ old('sets.comment_point', $settings['comment_point']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[comment_point]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.comment_point') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[comment_money]') }}">
+    <div class="mb-3{{ hasError('sets.comment_money') }}">
         <label for="comment_money" class="form-label">{{ __('settings.comment_money') }}:</label>
         <input type="number" class="form-control" id="comment_money" name="sets[comment_money]" maxlength="2" value="{{ old('sets.comment_money', $settings['comment_money']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[comment_money]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.comment_money') }}</div>
     </div>
 
     <div class="mb-3">
         <label for="comment_text_min" class="form-label">{{ __('settings.comments_symbols') }}:</label>
         <div class="d-flex gap-2">
-            <input type="number" class="form-control{{ hasError('sets[comment_text_min]') }}" id="comment_text_min" name="sets[comment_text_min]" value="{{ old('sets.comment_text_min', $settings['comment_text_min']) }}" placeholder="{{ __('main.min') }}" required>
-            <input type="number" class="form-control{{ hasError('sets[comment_text_max]') }}" name="sets[comment_text_max]" value="{{ old('sets.comment_text_max', $settings['comment_text_max']) }}" placeholder="{{ __('main.max') }}" required>
+            <input type="number" class="form-control{{ hasError('sets.comment_text_min') }}" id="comment_text_min" name="sets[comment_text_min]" value="{{ old('sets.comment_text_min', $settings['comment_text_min']) }}" placeholder="{{ __('main.min') }}" required>
+            <input type="number" class="form-control{{ hasError('sets.comment_text_max') }}" name="sets[comment_text_max]" value="{{ old('sets.comment_text_max', $settings['comment_text_max']) }}" placeholder="{{ __('main.max') }}" required>
         </div>
         <div class="invalid-feedback d-block">
-            <div>{{ textError('sets[comment_text_min]') }}</div>
-            <div>{{ textError('sets[comment_text_max]') }}</div>
+            <div>{{ textError('sets.comment_text_min') }}</div>
+            <div>{{ textError('sets.comment_text_max') }}</div>
         </div>
     </div>
 

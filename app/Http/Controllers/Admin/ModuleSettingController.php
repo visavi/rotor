@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Setting;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 abstract class ModuleSettingController extends AdminController
@@ -52,24 +52,25 @@ abstract class ModuleSettingController extends AdminController
      */
     public function update(Request $request): RedirectResponse
     {
-        // Валидатор не параметром: модули переопределяют update(Request) и сломались бы на новой сигнатуре
-        $validator = new Validator();
         $sets = $request->input('sets', []);
 
-        if (empty($sets)) {
+        if (empty($sets) || ! is_array($sets)) {
             return redirect()->back()
                 ->with('danger', __('settings.settings_empty'));
         }
 
+        // Не FormRequest: модули переопределяют update(Request) и сломались бы на новой сигнатуре.
         // Колонка value — string(255): длиннее строгий MySQL не пропустит
-        foreach ($sets as $name => $value) {
-            $validator->length($value, 0, 255, ['sets[' . $name . ']' => __('validator.text')], false);
-        }
+        $validator = Validator::make($request->only('sets'), [
+            'sets.*' => ['nullable', 'max:255'],
+        ], [
+            'sets.*' => __('validator.text'),
+        ]);
 
-        if (! $validator->isValid()) {
+        if ($validator->fails()) {
             return redirect()->back()
                 ->withInput()
-                ->withErrors($validator->getErrors());
+                ->withErrors($validator);
         }
 
         foreach ($sets as $name => $value) {

@@ -19,12 +19,12 @@ class CheckUserState
         }
 
         // Проверка бана
-        if ($user->isBanned() && ! $request->routeIs('ban', 'rules', 'logout')) {
+        if ($user->isBanned() && ! $request->routeIs('ban', 'ban.explain', 'rules', 'logout')) {
             return redirect('ban?user=' . $user->login);
         }
 
         // Проверка статуса pending
-        if ($user->isPended() && ! $request->routeIs('verify', 'confirm', 'ban', 'logout', 'captcha')) {
+        if ($user->isPended() && ! $request->routeIs('verify', 'verify.send', 'confirm', 'ban', 'ban.explain', 'logout', 'captcha')) {
             return redirect()->route('verify', ['user' => $user->login]);
         }
 

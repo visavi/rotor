@@ -133,6 +133,94 @@ class UserControllerTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
+    public function testEditUserWithForeignEmailFails(): void
+    {
+        $this->makeUser(['login' => 'other_user', 'email' => 'other@example.com']);
+        $user = $this->makeUser();
+
+        $response = $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level' => User::USER,
+                'email' => 'other@example.com',
+            ]);
+
+        $response->assertSessionHasErrors(['email' => __('users.email_already_exists')]);
+
+        $this->assertSame('plain@example.com', $user->fresh()->email);
+    }
+
+    public function testEditUserKeepsOwnEmail(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level' => User::USER,
+                'email' => 'plain@example.com',
+                'name'  => 'Своё имя',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('Своё имя', $user->fresh()->name);
+    }
+
+    public function testEditUserWithTooLongSiteFails(): void
+    {
+        $user = $this->makeUser();
+
+        $response = $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level' => User::USER,
+                'email' => $user->email,
+                'site'  => 'https://example.com/' . str_repeat('a', 50),
+            ]);
+
+        $response->assertSessionHasErrors(['site' => __('validator.site')]);
+    }
+
+    public function testEditUserWithShortPasswordFailsOnField(): void
+    {
+        $user = $this->makeUser();
+
+        $response = $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level'    => User::USER,
+                'email'    => $user->email,
+                'password' => '123',
+            ]);
+
+        $response->assertSessionHasErrors(['password' => __('users.password_length_requirements')]);
+    }
+
+    public function testEditUserWithImpossibleBirthdayFails(): void
+    {
+        $user = $this->makeUser();
+
+        $response = $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level'    => User::USER,
+                'email'    => $user->email,
+                'birthday' => '31.02.2000',
+            ]);
+
+        $response->assertSessionHasErrors(['birthday' => __('validator.date')]);
+    }
+
+    public function testEditUserNormalizesPhone(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level' => User::USER,
+                'email' => $user->email,
+                'phone' => '+7 (912) 345-67-89',
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('+79123456789', $user->fresh()->phone);
+    }
+
     public function testEditUserWithInvalidLevelFails(): void
     {
         $user = $this->makeUser();

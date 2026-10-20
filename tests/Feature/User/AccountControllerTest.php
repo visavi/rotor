@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\User;
 
+use App\Http\Requests\User\StatusRequest;
 use App\Models\BlackList;
 use App\Models\EmailChange;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class AccountControllerTest extends TestCase
@@ -84,6 +86,20 @@ class AccountControllerTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
+    public function testChangeMailToOwnEmailSaysItIsTheSame(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/accounts/changemail', [
+                'email'    => 'ACCOUNT@example.com',
+                'password' => 'secret123',
+            ])
+            ->assertRedirect('settings#tab-account')
+            ->assertSessionHasErrors(['email' => __('users.email_different')]);
+
+        // Свой адрес — не «занят другим»
+        $this->assertNotContains(__('users.email_already_exists'), session('errors')->get('email'));
+    }
+
     public function testChangeMailToBlacklistedEmailFails(): void
     {
         BlackList::query()->create([
@@ -152,6 +168,26 @@ class AccountControllerTest extends TestCase
         $this->assertSame($moneyBefore - (int) setting('editstatusmoney'), $this->user->money);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testEditStatusOfBannedUserFails(): void
+    {
+        // Раньше проверка смотрела на несуществующий атрибут ban и пропускала всех
+        $this->user->update(['level' => User::BANNED, 'timeban' => now()->addDay()]);
+
+        // До формы такого не пустит CheckUserState — проверяем сам запрос
+        $this->actingAs($this->user);
+
+        $request = StatusRequest::create('/accounts/editstatus', 'POST', ['status' => 'Тестовый'])
+            ->setContainer(app())
+            ->setRedirector(app('redirect'));
+
+        try {
+            $request->validateResolved();
+            $this->fail('Забаненный сменил статус');
+        } catch (ValidationException $e) {
+            $this->assertSame(__('users.status_changed_not_ban'), $e->validator->errors()->first('status'));
+        }
     }
 
     public function testEditStatusWithoutEnoughPointsFails(): void
@@ -240,6 +276,33 @@ class AccountControllerTest extends TestCase
         $this->assertSame('', (string) $this->user->apikey);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testEditPasswordEqualToLoginFails(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/accounts/editpassword', [
+                'old_password'     => 'secret123',
+                'new_password'     => 'account_user',
+                'confirm_password' => 'account_user',
+            ])
+            ->assertRedirect('settings#tab-account')
+            ->assertSessionHasErrors(['new_password' => __('users.login_different')]);
+
+        $this->assertTrue(Hash::check('secret123', $this->user->fresh()->password));
+    }
+
+    public function testEditPasswordWithWrongOldPasswordFails(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/accounts/editpassword', [
+                'old_password'     => 'wrong-password',
+                'new_password'     => 'newsecret456',
+                'confirm_password' => 'newsecret456',
+            ])
+            ->assertSessionHasErrors(['old_password' => __('users.password_not_different')]);
+
+        $this->assertTrue(Hash::check('secret123', $this->user->fresh()->password));
     }
 
     public function testEditPassword(): void

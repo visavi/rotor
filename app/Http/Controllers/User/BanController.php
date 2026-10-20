@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\BanExplainRequest;
 use App\Models\Banhist;
 use App\Models\User;
-use App\Support\Validator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BanController extends Controller
@@ -17,15 +17,9 @@ class BanController extends Controller
     /**
      * User Ban
      */
-    public function ban(Request $request, Validator $validator): View|RedirectResponse
+    public function ban(): View|RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        if ($user->level !== User::BANNED) {
-            abort(200, __('users.not_banned'));
-        }
+        $user = $this->bannedUser();
 
         if (! $user->timeban || $user->timeban->lte(now())) {
             $user->update([
@@ -37,43 +31,82 @@ class BanController extends Controller
                 ->with('success', __('users.ban_expired'));
         }
 
-        $banhist = Banhist::query()
+        $banhist = $this->lastBan($user);
+
+        return view('users/bans', compact('user', 'banhist'));
+    }
+
+    /**
+     * Объяснение администрации
+     */
+    public function explain(BanExplainRequest $request): RedirectResponse
+    {
+        $user = $this->bannedUser();
+        $banhist = $this->lastBan($user);
+
+        $error = match (true) {
+            ! $banhist                  => __('users.not_banned'),
+            ! setting('addbansend')     => __('users.explain_forbidden'),
+            (bool) $banhist->explain    => __('users.explain_repeat'),
+            ! $this->admins()->exists() => __('users.admins_not_found'),
+            default                     => null,
+        };
+
+        if ($error) {
+            return redirect('ban')
+                ->withInput()
+                ->withErrors($error);
+        }
+
+        $text = textNotice('explain', ['message' => $request->validated('msg')]);
+
+        foreach ($this->admins()->get() as $admin) {
+            $admin->sendMessage($user, $text, false);
+        }
+
+        $banhist->update([
+            'explain' => 1,
+        ]);
+
+        return redirect('ban')
+            ->with('success', __('users.explain_sent_success'));
+    }
+
+    /**
+     * Текущий пользователь, если он забанен
+     */
+    private function bannedUser(): User
+    {
+        if (! $user = getUser()) {
+            abort(403, __('main.not_authorized'));
+        }
+
+        if ($user->level !== User::BANNED) {
+            abort(200, __('users.not_banned'));
+        }
+
+        return $user;
+    }
+
+    /**
+     * Администрация, которой уходит объяснение
+     *
+     * @return Builder<User>
+     */
+    private function admins(): Builder
+    {
+        return User::query()->whereIn('level', [User::BOSS, User::ADMIN]);
+    }
+
+    /**
+     * Последняя запись о бане или его изменении
+     */
+    private function lastBan(User $user): ?Banhist
+    {
+        return Banhist::query()
             ->where('user_id', $user->id)
             ->whereIn('type', ['ban', 'change'])
             ->orderByDesc('created_at')
             ->first();
-
-        if ($banhist && $request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $admins = User::query()->whereIn('level', [User::BOSS, User::ADMIN])->get();
-
-            $validator
-                ->true(setting('addbansend'), __('users.explain_forbidden'))
-                ->false($banhist->explain, __('users.explain_repeat'))
-                ->true($admins->isNotEmpty(), __('users.admins_not_found'))
-                ->length($msg, 5, 1000, ['text' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $text = textNotice('explain', ['message' => $msg]);
-
-                foreach ($admins as $admin) {
-                    $admin->sendMessage($user, $text, false);
-                }
-
-                $banhist->update([
-                    'explain' => 1,
-                ]);
-
-                return redirect('ban')
-                    ->with('success', __('users.explain_sent_success'));
-            }
-
-            return redirect('ban')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('users/bans', compact('user', 'banhist'));
     }
 }

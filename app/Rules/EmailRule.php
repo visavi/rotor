@@ -17,7 +17,7 @@ class EmailRule implements ValidationRule
         $checkFilter = filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
 
         if (! $checkEmail || ! $checkFilter) {
-            $fail(__('validation.email'));
+            $fail(__('validator.email'));
         }
     }
 }

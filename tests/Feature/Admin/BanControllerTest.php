@@ -220,6 +220,71 @@ class BanControllerTest extends TestCase
         $response->assertSessionHasErrors('timeban');
     }
 
+    public function testChangeBanWithMalformedDateFails(): void
+    {
+        $user = $this->makeBannedUser();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/bans/change?user=' . $user->login, [
+                'timeban' => 'не дата',
+                'reason'  => 'Уточнённая причина бана',
+            ]);
+
+        $response->assertSessionHasErrors(['timeban' => __('admin.bans.time_empty')]);
+
+        $this->assertDatabaseMissing('banhist', [
+            'user_id' => $user->id,
+            'type'    => Banhist::CHANGE,
+        ]);
+    }
+
+    public function testBanWithUnknownTimeUnitFails(): void
+    {
+        $user = User::factory()->create(['login' => 'plain_user']);
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/bans/edit?user=' . $user->login, [
+                'time'   => 5,
+                'type'   => 'years',
+                'reason' => 'Причина бана пользователя',
+            ]);
+
+        $response->assertSessionHasErrors(['type' => __('admin.bans.time_not_selected')]);
+
+        $this->assertDatabaseCount('banhist', 0);
+    }
+
+    public function testBanWithEmptyEditorReasonFails(): void
+    {
+        $user = User::factory()->create(['login' => 'plain_user']);
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/bans/edit?user=' . $user->login, [
+                'time'   => 5,
+                'type'   => 'days',
+                'reason' => '<p></p><p></p>',
+            ]);
+
+        $response->assertSessionHasErrors(['reason' => __('validator.text')]);
+
+        $this->assertDatabaseCount('banhist', 0);
+    }
+
+    public function testBanAdminIsForbidden(): void
+    {
+        $other = User::factory()->admin()->create(['login' => 'other_admin']);
+
+        $this->actingAs($this->admin)
+            ->post('/admin/bans/edit?user=' . $other->login, [
+                'time'   => 5,
+                'type'   => 'days',
+                'reason' => 'Причина бана администратора',
+            ])
+            ->assertSee(__('admin.bans.forbidden_ban'));
+
+        $this->assertDatabaseCount('banhist', 0);
+    }
+
     public function testChangeBanForNotBannedUserIsRejected(): void
     {
         $user = User::factory()->create(['login' => 'plain_user']);

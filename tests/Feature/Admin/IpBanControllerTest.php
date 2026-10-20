@@ -75,7 +75,7 @@ class IpBanControllerTest extends TestCase
 
         $this->assertDatabaseCount('ban', 1);
 
-        $response->assertSessionHasErrors('ip');
+        $response->assertSessionHasErrors(['ip' => __('admin.ipbans.ip_exists')]);
     }
 
     public function testAddShowsErrorOnFormAfterRedirect(): void
@@ -117,7 +117,19 @@ class IpBanControllerTest extends TestCase
 
         $this->assertDatabaseCount('ban', 1);
 
-        $response->assertSessionHasErrors();
+        $response->assertSessionHasErrors(['del' => __('validator.deletion')]);
+    }
+
+    public function testDeleteWithInvalidSelectionFails(): void
+    {
+        $this->makeBan();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/ipbans/delete', ['del' => ['abc']]);
+
+        $this->assertDatabaseCount('ban', 1);
+
+        $response->assertSessionHasErrors('del.0');
     }
 
     public function testClearAsBoss(): void

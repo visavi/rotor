@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\BlackList;
+use App\Http\Requests\User\ProfileRequest;
+use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\SettingsRequest;
+use App\Http\Requests\User\UserRules;
+use App\Http\Requests\User\VerifyRequest;
 use App\Models\Flood;
 use App\Models\User;
-use App\Services\MailService;
 use App\Services\UserService;
 use App\Support\Locale;
-use App\Support\Registry;
-use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -40,7 +42,7 @@ class UserController extends Controller
     /**
      * Registration
      */
-    public function register(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
+    public function register(): View
     {
         if (getUser()) {
             abort(403, __('users.already_registered'));
@@ -50,105 +52,34 @@ class UserController extends Controller
             abort(200, __('users.registration_suspended'));
         }
 
-        if ($request->isMethod('post')) {
-            if ($request->has(['login', 'password'])) {
-                $login = $request->string('login')->value();
-                $password = $request->input('password');
-                $password2 = $request->input('password2');
-                // При скрытом поле присланный адрес игнорируем — его легко подсунуть POST-ом
-                $email = UserService::isEmailHidden()
-                    ? ''
-                    : $request->string('email')->lower()->value();
-                $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-
-                $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-
-                $userService->validateRegistration($validator, $login, $password, $password2, $email);
-
-                foreach (Registry::$onRegisterValidate as $handler) {
-                    $handler($request, $validator);
-                }
-
-                // Регистрация аккаунта
-                if ($validator->isValid()) {
-                    $user = $userService->register($login, $password, $email, $gender);
-
-                    foreach (Registry::$onRegisterSave as $handler) {
-                        $handler($user, $request);
-                    }
-
-                    Auth::login($user, true);
-
-                    return redirect('/')
-                        ->with('success', __('users.welcome', ['login' => $login]));
-                }
-
-                return redirect()->back()
-                    ->withInput()
-                    ->withErrors($validator->getErrors());
-            }
-        }
-
         return view('users/register');
+    }
+
+    /**
+     * Создание аккаунта
+     */
+    public function storeRegister(RegisterRequest $request, UserService $userService): RedirectResponse
+    {
+        $login = $request->validated('login');
+
+        $user = $userService->register($login, $request->validated('password'), $request->email(), $request->gender(), $request);
+
+        Auth::login($user, true);
+
+        return redirect('/')
+            ->with('success', __('users.welcome', ['login' => $login]));
     }
 
     /**
      * Login
      */
-    public function login(Request $request, Validator $validator, Flood $flood): View|RedirectResponse
+    public function login(Request $request, Flood $flood): View|RedirectResponse
     {
         if (Auth::check()) {
             return redirect('/')->with('danger', __('main.already_authorized'));
         }
 
         $isFlood = $flood->isFlood();
-
-        if ($request->isMethod('post')) {
-            if ($request->has(['login', 'password'])) {
-                if ($isFlood) {
-                    $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-                }
-
-                if ($validator->isValid()) {
-                    $login = $request->string('login')->lower()->value();
-                    $password = $request->input('password');
-                    $remember = $request->boolean('remember');
-
-                    $field = strpos($request->input('login'), '@') ? 'email' : 'login';
-
-                    $credentials = [
-                        $field     => $login,
-                        'password' => $password,
-                    ];
-
-                    try {
-                        $authorized = Auth::attempt($credentials, $remember);
-                    } catch (\RuntimeException) {
-                        return redirect('recovery')
-                            ->withInput()
-                            ->with('danger', __('users.password_reset_required'));
-                    }
-
-                    if ($authorized) {
-                        $request->session()->regenerate();
-                        $user = Auth::user();
-
-                        return redirect()->intended()
-                            ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));
-                    }
-
-                    $flood->saveState(300);
-
-                    return redirect('login')
-                        ->withInput()
-                        ->with('danger', __('users.incorrect_login_or_password'));
-                }
-
-                return redirect('login')
-                    ->withInput()
-                    ->withErrors($validator->getErrors());
-            }
-        }
 
         // Запоминаем страницу, с которой пришёл гость, для возврата после входа
         $previous = url()->previous();
@@ -157,6 +88,57 @@ class UserController extends Controller
         }
 
         return view('users/login', compact('isFlood'));
+    }
+
+    /**
+     * Вход по логину или почте
+     */
+    public function authenticate(Request $request, Flood $flood): RedirectResponse
+    {
+        if (Auth::check()) {
+            return redirect('/')->with('danger', __('main.already_authorized'));
+        }
+
+        if (! $request->has(['login', 'password'])) {
+            return redirect('login');
+        }
+
+        // Капча — после неудачных попыток
+        if ($flood->isFlood() && ! captchaVerify()) {
+            return redirect('login')
+                ->withInput()
+                ->withErrors(['protect' => __('validator.captcha')]);
+        }
+
+        $login = $request->string('login')->lower()->value();
+        $field = str_contains($login, '@') ? 'email' : 'login';
+
+        $credentials = [
+            $field     => $login,
+            'password' => $request->string('password')->value(),
+        ];
+
+        try {
+            $authorized = Auth::attempt($credentials, $request->boolean('remember'));
+        } catch (\RuntimeException) {
+            return redirect('recovery')
+                ->withInput()
+                ->with('danger', __('users.password_reset_required'));
+        }
+
+        if ($authorized) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+
+            return redirect()->intended()
+                ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));
+        }
+
+        $flood->saveState(300);
+
+        return redirect('login')
+            ->withInput()
+            ->with('danger', __('users.incorrect_login_or_password'));
     }
 
     /**
@@ -175,92 +157,43 @@ class UserController extends Controller
     /**
      * Profile editing
      */
-    public function profile(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
+    public function profile(): View
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        if ($request->isMethod('post')) {
-            $data = $userService->validateProfile($validator, $user, $request);
-
-            if ($validator->isValid()) {
-                $userService->saveProfile($user, $data, $request);
-
-                return redirect('profile')
-                    ->with('success', __('users.profile_success_changed'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
+        $user = getUser();
 
         return view('users/profile', compact('user'));
     }
 
     /**
+     * Сохранение анкеты
+     */
+    public function updateProfile(ProfileRequest $request, UserService $userService): RedirectResponse
+    {
+        $userService->saveProfile(getUser(), $request->profile(), $request);
+
+        return redirect('profile')
+            ->with('success', __('users.profile_success_changed'));
+    }
+
+    /**
      * Verify registration
      */
-    public function verify(Request $request, Validator $validator, MailService $mail): View|RedirectResponse
+    public function verify(Request $request): View
     {
-        if (! $user = $request->user()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        if (! UserService::isEmailConfirm()) {
-            abort(200, __('users.confirm_registration_disabled'));
-        }
-
-        if ($user->level !== User::PENDED) {
-            abort(403, __('users.profile_not_confirmation'));
-        }
-
-        /* Повторная отправка */
-        if ($request->has('email') && $request->isMethod('post')) {
-            $email = $request->string('email')->lower()->value();
-            $domain = Str::substr(strrchr($email, '@'), 1);
-
-            $validator
-                ->true(captchaVerify(), ['protect' => __('validator.captcha')])
-                ->email($email, ['email' => __('validator.email')]);
-
-            $validator
-                ->false(User::query()->where('login', '<>', $user->login)->where('email', $email)->exists(), ['email' => __('users.email_already_exists')])
-                ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')])
-                ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')]);
-
-            if ($validator->isValid()) {
-                $token = Str::random(32);
-                $confirmUrl = route('confirm', ['token' => $token]);
-
-                $user->update([
-                    'email'         => $email,
-                    'confirm_token' => $token,
-                ]);
-
-                /* Уведомление о регистрации на email */
-                $subject = 'Регистрация на ' . setting('title');
-                $data = [
-                    'to'         => $email,
-                    'subject'    => $subject,
-                    'login'      => $user->login,
-                    'password'   => '*****',
-                    'confirmUrl' => $confirmUrl,
-                ];
-
-                $mail->queue('mailer.register', $data);
-
-                return redirect()->route('verify')
-                    ->with('success', __('users.confirm_code_success_sent'));
-            }
-
-            return redirect()->route('verify')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
+        $user = $this->pendingUser($request);
 
         return view('users/verify', compact('user'));
+    }
+
+    /**
+     * Повторная отправка письма подтверждения
+     */
+    public function resendVerify(VerifyRequest $request, UserService $userService): RedirectResponse
+    {
+        $userService->resendConfirmation($this->pendingUser($request), $request->validated('email'));
+
+        return redirect()->route('verify')
+            ->with('success', __('users.confirm_code_success_sent'));
     }
 
     /**
@@ -284,67 +217,49 @@ class UserController extends Controller
     /**
      * Settings
      */
-    public function setting(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
+    public function setting(): View
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $user = getUser();
 
         $setting['themes'] = getAvailableThemes();
         $setting['languages'] = Locale::available();
-        $setting['timezones'] = range(-12, 12);
-
-        if ($request->isMethod('post')) {
-            $data = $userService->validateSettings($validator, $user, $request);
-
-            if ($validator->isValid()) {
-                $userService->saveSettings($user, $data, $request);
-
-                return redirect('settings')
-                    ->with('success', __('users.settings_success_changed'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
+        $setting['timezones'] = range(-12, 14);
 
         return view('users/settings', compact('user', 'setting'));
     }
 
     /**
+     * Сохранение настроек
+     */
+    public function updateSetting(SettingsRequest $request, UserService $userService): RedirectResponse
+    {
+        $userService->saveSettings(getUser(), $request->settings(), $request);
+
+        return redirect('settings')
+            ->with('success', __('users.settings_success_changed'));
+    }
+
+    /**
      * Проверка доступности логина
      */
-    public function checkLogin(Request $request, Validator $validator): JsonResponse
+    public function checkLogin(Request $request): JsonResponse
     {
-        $login = $request->string('login')->value();
-
-        $validator
-            ->true($request->ajax(), __('validator.not_ajax'))
-            ->regex($login, '|^[a-z0-9\-]+$|i', __('validator.login'))
-            ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', __('users.login_begin_requirements'))
-            ->length($login, 3, 20, __('users.login_length_requirements'))
-            ->false(ctype_digit($login), __('users.field_characters_requirements'))
-            ->false(substr_count($login, '-') > 2, __('users.login_hyphens_requirements'));
-
-        if ($validator->isValid()) {
-            $existLogin = User::query()
-                ->where('login', $login)
-                ->exists();
-
-            $validator
-                ->false($existLogin, __('users.login_already_exists'))
-                ->false(BlackList::isBlacklisted('login', strtolower($login)), __('users.login_is_blacklisted'));
+        if (! $request->ajax()) {
+            return response()->json(['success' => false, 'message' => __('validator.not_ajax')]);
         }
 
-        if ($validator->isValid()) {
-            return response()->json(['success' => true]);
+        // Ajax ждёт {success, message}, а не 422 с errors — проверка без FormRequest
+        $validator = Validator::make(
+            ['login' => $request->string('login')->value()],
+            ['login' => UserRules::login()],
+            UserRules::messages(),
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
-        ]);
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -368,5 +283,25 @@ class UserController extends Controller
             ->get(['login', 'name']);
 
         return response()->json($users);
+    }
+
+    /**
+     * Пользователь, ждущий подтверждения почты
+     */
+    private function pendingUser(Request $request): User
+    {
+        if (! $user = $request->user()) {
+            abort(403, __('main.not_authorized'));
+        }
+
+        if (! UserService::isEmailConfirm()) {
+            abort(200, __('users.confirm_registration_disabled'));
+        }
+
+        if ($user->level !== User::PENDED) {
+            abort(403, __('users.profile_not_confirmation'));
+        }
+
+        return $user;
     }
 }

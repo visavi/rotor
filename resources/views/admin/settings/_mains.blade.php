@@ -4,52 +4,52 @@
 
 <form method="post">
     @csrf
-    <div class="mb-3{{ hasError('sets[title]') }}">
+    <div class="mb-3{{ hasError('sets.title') }}">
         <label for="title" class="form-label">{{ __('settings.page_title') }}:</label>
         <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ old('sets.title', $settings['title']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[title]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.title') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[logos]') }}">
+    <div class="mb-3{{ hasError('sets.logos') }}">
         <label for="logos" class="form-label">{{ __('settings.caption_top') }}:</label>
         <input type="text" class="form-control" id="logos" name="sets[logos]" maxlength="100" value="{{ old('sets.logos', $settings['logos']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[logos]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.logos') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[copy]') }}">
+    <div class="mb-3{{ hasError('sets.copy') }}">
         <label for="copy" class="form-label">{{ __('settings.caption_bottom') }}:</label>
         <input type="text" class="form-control" id="copy" name="sets[copy]" maxlength="100" value="{{ old('sets.copy', $settings['copy']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[copy]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.copy') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[logotip]') }}">
+    <div class="mb-3{{ hasError('sets.logotip') }}">
         <label for="logotip" class="form-label">{{ __('settings.logotype') }}:</label>
         <input type="text" class="form-control" id="logotip" name="sets[logotip]" maxlength="100" value="{{ old('sets.logotip', $settings['logotip']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[logotip]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.logotip') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[floodstime]') }}">
+    <div class="mb-3{{ hasError('sets.floodstime') }}">
         <label for="floodstime" class="form-label">{{ __('settings.antiflood') }}:</label>
         <input type="number" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ old('sets.floodstime', $settings['floodstime']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[floodstime]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.floodstime') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[doslimit]') }}">
+    <div class="mb-3{{ hasError('sets.doslimit') }}">
         <label for="doslimit" class="form-label">{{ __('settings.request_limit') }}:</label>
         <input type="number" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ old('sets.doslimit', $settings['doslimit']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[doslimit]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.doslimit') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[currency]') }}">
+    <div class="mb-3{{ hasError('sets.currency') }}">
         <label for="currency" class="form-label">{{ __('settings.currency') }}:</label>
         <input type="text" class="form-control" id="currency" name="sets[currency]" maxlength="10" value="{{ old('sets.currency', $settings['currency']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[currency]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.currency') }}</div>
     </div>
 
     <?php $languages = array_map('basename', glob(resource_path('lang/*'), GLOB_ONLYDIR)); ?>
     <?php $inputLang = old('language', $settings['language']); ?>
 
-    <div class="mb-3{{ hasError('sets[language]') }}">
+    <div class="mb-3{{ hasError('sets.language') }}">
         <label for="language" class="form-label">{{ __('settings.language') }}:</label>
         <select class="form-select" id="language" name="sets[language]">
             @foreach ($languages as $language)
@@ -58,12 +58,12 @@
             @endforeach
         </select>
 
-        <div class="invalid-feedback">{{ textError('sets[language]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.language') }}</div>
     </div>
 
     <?php $inputLangFallback = old('language_fallback', $settings['language_fallback']); ?>
 
-    <div class="mb-3{{ hasError('sets[language_fallback]') }}">
+    <div class="mb-3{{ hasError('sets.language_fallback') }}">
         <label for="language_fallback" class="form-label">{{ __('settings.fallback_language') }}:</label>
         <select class="form-select" id="language_fallback" name="sets[language_fallback]">
             @foreach ($languages as $language)
@@ -72,14 +72,14 @@
             @endforeach
         </select>
 
-        <div class="invalid-feedback">{{ textError('sets[language_fallback]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.language_fallback') }}</div>
         <div class="form-text">{{ __('settings.fallback_language_hint') }}</div>
     </div>
 
     <?php $themes = array_map('basename', glob(resource_path('views/themes/*'), GLOB_ONLYDIR)); ?>
     <?php $inputThemes = old('sets.themes', $settings['themes']); ?>
 
-    <div class="mb-3{{ hasError('sets[themes]') }}">
+    <div class="mb-3{{ hasError('sets.themes') }}">
         <label for="themes" class="form-label">{{ __('settings.theme') }}:</label>
         <select class="form-select" id="themes" name="sets[themes]">
             @foreach ($themes as $theme)
@@ -87,25 +87,25 @@
                 <option value="{{ $theme }}"{{ $selected }}>{{ $theme }}</option>
             @endforeach
         </select>
-        <div class="invalid-feedback">{{ textError('sets[themes]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.themes') }}</div>
     </div>
 
     <?php $inputHomepage = old('sets.homepage', $settings['homepage'] ?? 'feed'); ?>
 
-    <div class="mb-3{{ hasError('sets[homepage]') }}">
+    <div class="mb-3{{ hasError('sets.homepage') }}">
         <label for="homepage" class="form-label">{{ __('settings.homepage') }}:</label>
         <select class="form-select" id="homepage" name="sets[homepage]">
             @foreach ($homepages as $key => $label)
                 <option value="{{ $key }}"{{ $inputHomepage === $key ? ' selected' : '' }}>{{ $label }}</option>
             @endforeach
         </select>
-        <div class="invalid-feedback">{{ textError('sets[homepage]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.homepage') }}</div>
         <div class="form-text">{{ __('settings.homepage_hint') }}</div>
     </div>
 
     <?php $inputSite = old('sets.closedsite', $settings['closedsite']); ?>
 
-    <div class="mb-3{{ hasError('sets[closedsite]') }}">
+    <div class="mb-3{{ hasError('sets.closedsite') }}">
         <label for="closedsite" class="form-label">{{ __('settings.access_site') }}:</label>
         <select class="form-select" id="closedsite" name="sets[closedsite]">
             @foreach ($statsite as $key => $stat)
@@ -113,7 +113,7 @@
                 <option value="{{ $key }}"{{ $selected }}>{{ $stat }}</option>
             @endforeach
         </select>
-        <div class="invalid-feedback">{{ textError('sets[closedsite]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.closedsite') }}</div>
     </div>
 
     <div class="form-check form-switch mb-3">
@@ -130,7 +130,7 @@
                 <option value="{{ $key }}"{{ $selected }}>{{ $title }}</option>
             @endforeach
         </select>
-        <div class="invalid-feedback">{{ textError('sets[email_mode]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.email_mode') }}</div>
         <div class="form-text">{{ __('settings.registration_email_mode_hint') }}</div>
     </div>
 

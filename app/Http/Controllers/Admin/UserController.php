@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\UserRequest;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Comment;
 use App\Models\User;
-use App\Services\UserService;
 use App\Support\Registry;
 use App\Support\Restatement;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class UserController extends AdminController
@@ -53,15 +51,11 @@ class UserController extends AdminController
     }
 
     /**
-     * Редактирование пользователя
+     * Форма редактирования пользователя
      */
-    public function edit(Request $request, Validator $validator): View|RedirectResponse
+    public function edit(Request $request): View
     {
-        $user = getUserByLogin($request->input('user'));
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
+        $user = $this->findUser($request);
 
         $allThemes = getAvailableThemes();
         $adminGroups = User::ADMIN_GROUPS;
@@ -69,91 +63,6 @@ class UserController extends AdminController
         $allGroups = [];
         foreach (User::ALL_GROUPS as $level) {
             $allGroups[$level] = User::getLevelByKey($level);
-        }
-
-        if ($request->isMethod('post')) {
-            $level = $request->input('level');
-            $password = $request->input('password');
-            $email = $request->input('email');
-            $name = $request->input('name');
-            $country = $request->input('country');
-            $city = $request->input('city');
-            $phone = preg_replace('/[^\d+]/', '', $request->input('phone') ?? '');
-            $site = $request->input('site');
-            $birthday = $request->input('birthday');
-            $point = int($request->input('point'));
-            $money = int($request->input('money'));
-            $status = $request->input('status');
-            $posrating = int($request->input('posrating'));
-            $negrating = int($request->input('negrating'));
-            $themes = $request->input('themes');
-            $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-            $info = $request->input('info');
-
-            $validator
-                ->in($level, User::ALL_GROUPS, ['level' => __('users.user_level_invalid')])
-                ->length($password, 6, 20, __('users.password_length_requirements'), false)
-                ->email($email, ['email' => __('validator.email')], UserService::isEmailRequired())
-                ->phone($phone, ['phone' => __('validator.phone')], false)
-                ->url($site, ['site' => __('validator.url')], false)
-                ->regex($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', ['birthday' => __('validator.date')], false)
-                ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false)
-                ->true(in_array($themes, $allThemes, true) || empty($themes), ['themes' => __('users.theme_not_installed')])
-                ->length($info, 0, 1000, ['info' => __('users.info_yourself_long')]);
-
-            // Для админа обязательность полей не проверяется
-            foreach (Registry::$onProfileValidate as $handler) {
-                $handler($user, $request, $validator, false);
-            }
-
-            if ($validator->isValid()) {
-                if ($password) {
-                    $text = __('users.user_new_password', ['password' => $password]);
-                    $password = Hash::make($password);
-                } else {
-                    $text = null;
-                    $password = $user->password;
-                }
-
-                $name = Str::substr($name, 0, 20);
-                $country = Str::substr($country, 0, 30);
-                $city = Str::substr($city, 0, 50);
-                $rating = $posrating - $negrating;
-
-                $user->update([
-                    'password'  => $password,
-                    'level'     => $level,
-                    'email'     => $email ?: null,
-                    'name'      => $name,
-                    'country'   => $country,
-                    'city'      => $city,
-                    'phone'     => $phone,
-                    'site'      => $site,
-                    'birthday'  => $birthday,
-                    'point'     => $point,
-                    'money'     => $money,
-                    'status'    => $status,
-                    'rating'    => $rating,
-                    'posrating' => $posrating,
-                    'negrating' => $negrating,
-                    'themes'    => $themes,
-                    'gender'    => $gender,
-                    'info'      => $info,
-                ]);
-
-                foreach (Registry::$onProfileSave as $handler) {
-                    $handler($user, $request);
-                }
-
-                clearCache('status');
-
-                return redirect('admin/users/edit?user=' . $user->login)
-                    ->with('success', array_filter([__('users.user_success_changed'), $text]));
-            }
-
-            return redirect('admin/users/edit?user=' . $user->login)
-                ->withInput()
-                ->withErrors($validator->getErrors());
         }
 
         $banhist = Banhist::query()
@@ -166,68 +75,128 @@ class UserController extends AdminController
     }
 
     /**
+     * Редактирование пользователя
+     */
+    public function update(UserRequest $request): RedirectResponse
+    {
+        $user = $request->targetUser() ?? abort(404, __('validator.user'));
+
+        $password = $request->validated('password');
+        $text = $password ? __('users.user_new_password', ['password' => $password]) : null;
+        $posrating = int($request->input('posrating'));
+        $negrating = int($request->input('negrating'));
+
+        $user->update([
+            'password'  => $password ? Hash::make($password) : $user->password,
+            'level'     => $request->validated('level'),
+            'email'     => $request->validated('email') ?: null,
+            'name'      => $request->string('name')->substr(0, 20)->value(),
+            'country'   => $request->string('country')->substr(0, 30)->value(),
+            'city'      => $request->string('city')->substr(0, 50)->value(),
+            'phone'     => $request->validated('phone'),
+            'site'      => $request->validated('site'),
+            'birthday'  => $request->validated('birthday'),
+            'point'     => int($request->input('point')),
+            'money'     => int($request->input('money')),
+            'status'    => $request->validated('status'),
+            'rating'    => $posrating - $negrating,
+            'posrating' => $posrating,
+            'negrating' => $negrating,
+            'themes'    => $request->validated('themes'),
+            'gender'    => $request->input('gender') === User::MALE ? User::MALE : User::FEMALE,
+            'info'      => $request->validated('info'),
+        ]);
+
+        foreach (Registry::$onProfileSave as $handler) {
+            $handler($user, $request);
+        }
+
+        clearCache('status');
+
+        return redirect($this->editUrl($user))
+            ->with('success', array_filter([__('users.user_success_changed'), $text]));
+    }
+
+    /**
+     * Форма удаления пользователя
+     */
+    public function delete(Request $request): View
+    {
+        $user = $this->findUser($request);
+
+        return view('admin/users/delete', compact('user'));
+    }
+
+    /**
      * Удаление пользователя
      */
-    public function delete(Request $request, Validator $validator): View|RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
-        $user = getUserByLogin($request->input('user'));
+        $user = $this->findUser($request);
+
+        if (in_array($user->level, User::ADMIN_GROUPS, true)) {
+            return redirect('admin/users/delete?' . http_build_query(['user' => $user->login]))
+                ->withErrors(__('users.admins_remove_forbidden'));
+        }
+
+        if ($request->boolean('loginblack')) {
+            BlackList::query()->firstOrCreate(
+                ['type' => 'login', 'value' => $user->login],
+                ['user_id' => getUser('id')],
+            );
+        }
+
+        if ($request->boolean('mailblack') && $user->email) {
+            BlackList::query()->firstOrCreate(
+                ['type' => 'email', 'value' => $user->email],
+                ['user_id' => getUser('id')],
+            );
+        }
+
+        foreach (Registry::$onAdminDeleteUser as $handler) {
+            $handler($user, $request);
+        }
+
+        // Удаление комментариев
+        if ($request->boolean('delcomments')) {
+            $comments = Comment::query()
+                ->where('user_id', $user->id)
+                ->get();
+
+            $comments->each(static function (Comment $comment) {
+                $comment->delete();
+            });
+
+            if ($comments->isNotEmpty()) {
+                Restatement::run(array_keys(Restatement::$handlers));
+            }
+        }
+
+        $user->delete();
+
+        return redirect('admin/users')
+            ->with('success', __('users.user_success_deleted'));
+    }
+
+    /**
+     * Возвращает пользователя из ?user= или 404
+     */
+    private function findUser(Request $request): User
+    {
+        $user = getUserByLogin($request->string('user')->value());
 
         if (! $user) {
             abort(404, __('validator.user'));
         }
 
-        if ($request->isMethod('post')) {
-            $loginblack = $request->boolean('loginblack');
-            $mailblack = $request->boolean('mailblack');
-            $delcomments = $request->boolean('delcomments');
+        return $user;
+    }
 
-            $validator->notIn($user->level, User::ADMIN_GROUPS, __('users.admins_remove_forbidden'));
-
-            if ($validator->isValid()) {
-                if ($loginblack) {
-                    BlackList::query()->firstOrCreate(
-                        ['type' => 'login', 'value' => $user->login],
-                        ['user_id' => getUser('id')],
-                    );
-                }
-
-                if ($mailblack && $user->email) {
-                    BlackList::query()->firstOrCreate(
-                        ['type' => 'email', 'value' => $user->email],
-                        ['user_id' => getUser('id')],
-                    );
-                }
-
-                foreach (Registry::$onAdminDeleteUser as $handler) {
-                    $handler($user, $request);
-                }
-
-                // Удаление комментариев
-                if ($delcomments) {
-                    $comments = Comment::query()
-                        ->where('user_id', $user->id)
-                        ->get();
-
-                    $comments->each(static function (Comment $comment) {
-                        $comment->delete();
-                    });
-
-                    if ($comments->isNotEmpty()) {
-                        Restatement::run(array_keys(Restatement::$handlers));
-                    }
-                }
-
-                $user->delete();
-
-                return redirect('admin/users')
-                    ->with('success', __('users.user_success_deleted'));
-            }
-
-            return redirect('admin/users/delete?user=' . $user->login)
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('admin/users/delete', compact('user'));
+    /**
+     * Адрес страницы редактирования пользователя
+     */
+    private function editUrl(User $user): string
+    {
+        return 'admin/users/edit?' . http_build_query(['user' => $user->login]);
     }
 }

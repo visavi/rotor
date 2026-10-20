@@ -22,7 +22,7 @@
 
     <div class="js-resending-form"{!! $display !!}>
     <div class="section-form my-3 shadow">
-        <form method="post" action="{{ route('verify') }}">
+        <form method="post" action="{{ route('verify.send') }}">
             @csrf
             <div class="mb-3{{ hasError('email') }}">
                 <label for="email" class="form-label">{{ __('users.email') }}:</label>

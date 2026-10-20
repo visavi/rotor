@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class FileTest extends TestCase
@@ -74,6 +75,40 @@ class FileTest extends TestCase
         $this->assertDatabaseMissing('files', ['id' => $fileId]);
     }
 
+    public function testWrongExtensionIsRejected(): void
+    {
+        $this->upload(UploadedFile::fake()->create('virus.exe', 1))
+            ->assertStatus(422)
+            ->assertJsonPath('message', __('validator.extension'));
+    }
+
+    public function testSmallImageIsRejected(): void
+    {
+        $this->upload(UploadedFile::fake()->image('tiny.jpg', 50, 50))
+            ->assertStatus(422)
+            ->assertJsonPath('message', __('validator.weight_min', ['weight' => 100]));
+    }
+
+    public function testDuplicateNameIsRejected(): void
+    {
+        $this->upload(UploadedFile::fake()->image('screen.jpg', 300, 300))->assertStatus(201);
+
+        $this->upload(UploadedFile::fake()->image('screen.jpg', 300, 300))
+            ->assertStatus(422)
+            ->assertJsonPath('message', __('validator.file_duplicate'));
+    }
+
+    public function testFilesLimitIsChecked(): void
+    {
+        $this->overrideSetting('maxfiles', 1);
+
+        $this->upload(UploadedFile::fake()->image('first.jpg', 300, 300))->assertStatus(201);
+
+        $this->upload(UploadedFile::fake()->image('second.jpg', 300, 300))
+            ->assertStatus(422)
+            ->assertJsonPath('message', __('validator.files_max', ['max' => 1]));
+    }
+
     public function testUnknownTypeIsRejected(): void
     {
         $this->postJson(
@@ -119,5 +154,14 @@ class FileTest extends TestCase
     private function headers(): array
     {
         return ['Authorization' => 'Bearer ' . $this->user->apikey];
+    }
+
+    private function upload(UploadedFile $file): TestResponse
+    {
+        return $this->post('/api/files', [
+            'type' => Comment::$morphName,
+            'id'   => 0,
+            'file' => $file,
+        ], $this->headers());
     }
 }

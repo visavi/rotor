@@ -84,7 +84,36 @@ class ReglistControllerTest extends TestCase
         $user->refresh();
         $this->assertSame(User::PENDED, $user->level);
 
-        $response->assertSessionHasErrors();
+        $response->assertSessionHasErrors(['choice' => __('admin.reglists.users_not_selected')]);
+    }
+
+    public function testApproveIgnoresNotPendedUsers(): void
+    {
+        $pended = $this->makePendedUser();
+        $other = User::factory()->admin()->create(['login' => 'other_admin']);
+
+        $this->actingAs($this->admin)
+            ->post('/admin/reglists', [
+                'choice' => [$pended->id, $other->id],
+                'action' => 'yes',
+            ])
+            ->assertSessionHas('success');
+
+        $this->assertSame(User::USER, $pended->fresh()->level);
+        $this->assertSame(User::ADMIN, $other->fresh()->level);
+    }
+
+    public function testDeleteIgnoresNotPendedUsers(): void
+    {
+        $other = User::factory()->create(['login' => 'active_user']);
+
+        $this->actingAs($this->admin)
+            ->post('/admin/reglists', [
+                'choice' => [$other->id],
+                'action' => 'no',
+            ]);
+
+        $this->assertNotNull($other->fresh());
     }
 
     public function testWithInvalidActionFails(): void

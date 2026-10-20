@@ -107,7 +107,20 @@ class NoticeControllerTest extends TestCase
 
         $this->assertDatabaseMissing('notices', ['name' => 'Другое название']);
 
-        $response->assertSessionHasErrors('type');
+        $response->assertSessionHasErrors(['type' => __('admin.notices.notice_exists')]);
+    }
+
+    public function testCreateNoticeWithOnlyTagsInTextFails(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/notices/create', [
+            'type' => 'test_notice',
+            'name' => 'Тестовый шаблон',
+            'text' => '<p><strong></strong></p><p></p>',
+        ]);
+
+        $this->assertDatabaseMissing('notices', ['type' => 'test_notice']);
+
+        $response->assertSessionHasErrors(['text' => __('validator.text')]);
     }
 
     public function testCreateNoticeWithShortNameFails(): void
@@ -160,6 +173,22 @@ class NoticeControllerTest extends TestCase
         ]);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testEditNoticeKeepsType(): void
+    {
+        $notice = $this->makeNotice();
+
+        $this->actingAs($this->admin)->post('/admin/notices/edit/' . $notice->id, [
+            'type' => 'other_type',
+            'name' => 'Новое название',
+            'text' => 'Новый текст шаблона',
+        ]);
+
+        $this->assertDatabaseHas('notices', [
+            'id'   => $notice->id,
+            'type' => 'test_notice',
+        ]);
     }
 
     public function testEditMissingNoticeReturns404(): void

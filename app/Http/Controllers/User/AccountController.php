@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\ColorRequest;
+use App\Http\Requests\User\EmailChangeRequest;
+use App\Http\Requests\User\PasswordRequest;
+use App\Http\Requests\User\StatusRequest;
 use App\Models\BlackList;
 use App\Models\EmailChange;
 use App\Models\User;
 use App\Services\UserService;
-use App\Support\Validator;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,23 +23,9 @@ class AccountController extends Controller
     /**
      * Initialize email change
      */
-    public function changeMail(Request $request, Validator $validator, UserService $userService): RedirectResponse
+    public function changeMail(EmailChangeRequest $request, UserService $userService): RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $email = $request->string('email')->lower()->value();
-
-        $userService->validateEmailChange($validator, $user, $email, $request->input('password'));
-
-        if (! $validator->isValid()) {
-            return redirect('settings#tab-account')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        $userService->requestEmailChange($user, $email);
+        $userService->requestEmailChange(getUser(), $request->validated('email'));
 
         return redirect('settings#tab-account')
             ->with('success', __('users.confirm_success_sent'));
@@ -46,11 +34,9 @@ class AccountController extends Controller
     /**
      * Email change
      */
-    public function editMail(string $token, Validator $validator): RedirectResponse
+    public function editMail(string $token): RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $user = getUser();
 
         EmailChange::query()
             ->where('created_at', '<', now()->subHour())
@@ -61,60 +47,36 @@ class AccountController extends Controller
             ->where('user_id', $user->id)
             ->first();
 
-        $validator->notEmpty($emailChange, __('users.changed_code_not_found'));
+        $error = match (true) {
+            ! $emailChange                                               => __('users.changed_code_not_found'),
+            User::query()->where('email', $emailChange->email)->exists() => __('users.email_already_exists'),
+            BlackList::isBlacklisted('email', $emailChange->email)       => __('users.email_is_blacklisted'),
+            default                                                      => null,
+        };
 
-        if ($emailChange) {
-            $isEmailExists = User::query()->where('email', $emailChange->email)->exists();
-            $validator->false($isEmailExists, __('users.email_already_exists'));
-
-            $validator->false(BlackList::isBlacklisted('email', $emailChange->email), __('users.email_is_blacklisted'));
+        if ($error) {
+            return redirect('settings#tab-account')
+                ->withErrors($error);
         }
 
-        if ($validator->isValid()) {
-            $user->update([
-                'email' => $emailChange->email,
-            ]);
+        $user->update([
+            'email' => $emailChange->email,
+        ]);
 
-            $emailChange->delete();
-
-            $flash = ['success', __('users.email_success_changed')];
-        } else {
-            $flash = ['danger', $validator->getErrors()];
-        }
+        $emailChange->delete();
 
         return redirect('settings#tab-account')
-            ->with(...$flash);
+            ->with('success', __('users.email_success_changed'));
     }
 
     /**
      * Status change
      */
-    public function editStatus(Request $request, Validator $validator): RedirectResponse
+    public function editStatus(StatusRequest $request): RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $status = $request->input('status');
-        $status = ! empty($status) ? $status : null;
-        $cost = $status ? setting('editstatusmoney') : 0;
-
-        $validator
-            ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
-            ->notEqual($status, $user->status, ['status' => __('users.status_different')])
-            ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
-            ->gte($user->money, $cost, ['status' => __('users.status_moneys')])
-            ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false);
-
-        if (! $validator->isValid()) {
-            return redirect('settings#tab-appearance')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        $user->update([
-            'status' => $status,
-            'money'  => DB::raw('money - ' . $cost),
+        getUser()->update([
+            'status' => $request->value(),
+            'money'  => DB::raw('money - ' . $request->cost()),
         ]);
 
         clearCache('status');
@@ -126,31 +88,11 @@ class AccountController extends Controller
     /**
      * Color change
      */
-    public function editColor(Request $request, Validator $validator): RedirectResponse
+    public function editColor(ColorRequest $request): RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
-
-        $color = $request->input('color');
-        $color = ! empty($color) ? $color : null;
-        $cost = $color ? setting('editcolormoney') : 0;
-
-        $validator
-            ->notEqual($color, $user->color, ['color' => __('users.color_different')])
-            ->gte($user->point, setting('editcolorpoint'), ['color' => __('users.color_points')])
-            ->gte($user->money, $cost, ['color' => __('users.color_moneys')])
-            ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
-
-        if (! $validator->isValid()) {
-            return redirect('settings#tab-appearance')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        $user->update([
-            'color' => $color,
-            'money' => DB::raw('money - ' . $cost),
+        getUser()->update([
+            'color' => $request->value(),
+            'money' => DB::raw('money - ' . $request->cost()),
         ]);
 
         return redirect('settings#tab-appearance')
@@ -160,33 +102,13 @@ class AccountController extends Controller
     /**
      * Password change
      */
-    public function editPassword(Request $request, Validator $validator, UserService $userService): RedirectResponse
+    public function editPassword(PasswordRequest $request, UserService $userService): RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $userService->changePassword(getUser(), $request->validated('new_password'));
 
-        $newPassword = $request->input('new_password');
+        $request->session()->regenerate();
 
-        $userService->validatePassword(
-            $validator,
-            $user,
-            $request->input('old_password'),
-            $newPassword,
-            $request->input('confirm_password'),
-        );
-
-        if ($validator->isValid()) {
-            $userService->changePassword($user, $newPassword);
-
-            $request->session()->regenerate();
-
-            return redirect('/')->with('success', __('users.password_success_changed'));
-        }
-
-        return redirect('settings#tab-account')
-            ->withErrors($validator->getErrors())
-            ->withInput();
+        return redirect('/')->with('success', __('users.password_success_changed'));
     }
 
     /**
@@ -194,9 +116,7 @@ class AccountController extends Controller
      */
     public function apikey(Request $request): RedirectResponse
     {
-        if (! $user = getUser()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $user = getUser();
 
         $apiKey = Str::random(32);
         $message = __('users.token_success_changed');
@@ -216,45 +136,5 @@ class AccountController extends Controller
 
         return redirect('settings#tab-api')
             ->with('success', $message);
-    }
-
-    /**
-     * Проверка доступности логина
-     */
-    public function checkLogin(Request $request, Validator $validator): JsonResponse
-    {
-        $login = $request->string('login')->value();
-
-        $validator
-            ->true($request->ajax(), __('validator.not_ajax'))
-            ->regex($login, '|^[a-z0-9\-]+$|i', __('validator.login'))
-            ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', __('users.login_begin_requirements'))
-            ->length($login, 3, 20, __('users.login_length_requirements'))
-            ->false(ctype_digit($login), __('users.field_characters_requirements'))
-            ->false(substr_count($login, '-') > 2, __('users.login_hyphens_requirements'));
-
-        if ($validator->isValid()) {
-            $isLoginExists = User::query()
-                ->where('login', $login)
-                ->exists();
-
-            $isLoginBlacklisted = Blacklist::query()
-                ->where('type', 'login')
-                ->where('value', strtolower($login))
-                ->exists();
-
-            $validator
-                ->false($isLoginExists, __('users.login_already_exists'))
-                ->false($isLoginBlacklisted, __('users.login_is_blacklisted'));
-        }
-
-        if ($validator->isValid()) {
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => current($validator->getErrors()),
-        ]);
     }
 }

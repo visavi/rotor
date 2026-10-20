@@ -6,6 +6,7 @@ use App\Models\Sticker;
 use App\Models\StickersCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class StickerControllerTest extends TestCase
@@ -84,6 +85,7 @@ class StickerControllerTest extends TestCase
     public function testCreateCategoryWithShortNameFails(): void
     {
         $response = $this->actingAs($this->admin)
+            ->from('/admin/stickers')
             ->post('/admin/stickers/create', ['name' => 'ab']);
 
         $this->assertDatabaseMissing('stickers_categories', ['name' => 'ab']);
@@ -232,7 +234,7 @@ class StickerControllerTest extends TestCase
             'code' => 'testcode',
         ]);
 
-        $response->assertSessionHasErrors('category');
+        $response->assertSessionHasErrors(['cid' => __('stickers.category_not_exist')]);
     }
 
     public function testEditMissingStickerReturns404(): void
@@ -255,5 +257,123 @@ class StickerControllerTest extends TestCase
         $this->assertDatabaseMissing('stickers', ['id' => $sticker->id]);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testCreateSticker(): void
+    {
+        $category = $this->makeCategory();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/stickers/sticker/create', [
+                'cid'     => $category->id,
+                'code'    => 'NewSticker',
+                'sticker' => UploadedFile::fake()->image('sticker.png', 32, 32),
+            ]);
+
+        $response->assertRedirect('admin/stickers/' . $category->id);
+        $response->assertSessionHas('success');
+
+        $sticker = Sticker::query()->where('code', 'newsticker')->first();
+
+        $this->assertNotNull($sticker);
+        $this->assertSame($category->id, $sticker->category_id);
+        $this->assertFileExists(public_path($sticker->name));
+    }
+
+    public function testCreateStickerWithoutFileFails(): void
+    {
+        $category = $this->makeCategory();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/stickers/sticker/create', [
+                'cid'  => $category->id,
+                'code' => 'nofile',
+            ]);
+
+        $response->assertSessionHasErrors(['sticker' => __('validator.image_upload_failed')]);
+
+        $this->assertDatabaseMissing('stickers', ['code' => 'nofile']);
+    }
+
+    public function testCreateStickerWithWrongExtensionFails(): void
+    {
+        $category = $this->makeCategory();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/stickers/sticker/create', [
+                'cid'     => $category->id,
+                'code'    => 'script',
+                'sticker' => UploadedFile::fake()->create('sticker.php', 1, 'image/png'),
+            ]);
+
+        $response->assertSessionHasErrors(['sticker' => __('validator.extension')]);
+
+        $this->assertDatabaseMissing('stickers', ['code' => 'script']);
+    }
+
+    public function testCreateStickerTooBigImageFails(): void
+    {
+        $category = $this->makeCategory();
+        $max = (int) setting('stickermaxweight');
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/stickers/sticker/create', [
+                'cid'     => $category->id,
+                'code'    => 'bigone',
+                'sticker' => UploadedFile::fake()->image('sticker.png', $max + 1, 32),
+            ]);
+
+        $response->assertSessionHasErrors(['sticker' => __('validator.weight_max', ['weight' => $max])]);
+
+        $this->assertDatabaseMissing('stickers', ['code' => 'bigone']);
+    }
+
+    public function testCreateStickerWithDuplicateCodeFails(): void
+    {
+        $category = $this->makeCategory();
+        $this->makeSticker($category, 'taken');
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/stickers/sticker/create', [
+                'cid'     => $category->id,
+                'code'    => 'TAKEN',
+                'sticker' => UploadedFile::fake()->image('sticker.png', 32, 32),
+            ]);
+
+        $response->assertSessionHasErrors(['code' => __('stickers.sticker_exists')]);
+
+        $this->assertSame(1, Sticker::query()->where('code', 'taken')->count());
+    }
+
+    public function testCreateStickerKeepsSelectedCategoryOnError(): void
+    {
+        $this->makeCategory('Первая');
+        $second = $this->makeCategory('Вторая');
+
+        $this->actingAs($this->admin)
+            ->from('/admin/stickers/sticker/create')
+            ->post('/admin/stickers/sticker/create', [
+                'cid'  => $second->id,
+                'code' => 'x',
+            ]);
+
+        $this->actingAs($this->admin)
+            ->get('/admin/stickers/sticker/create')
+            ->assertOk()
+            ->assertSee('<option value="' . $second->id . '" selected>', false);
+    }
+
+    public function testDeleteStickerOfDeletedCategoryRedirects(): void
+    {
+        $category = $this->makeCategory();
+        $sticker = $this->makeSticker($category);
+
+        StickersCategory::query()->whereKey($category->id)->delete();
+
+        $this->actingAs($this->admin)
+            ->delete('/admin/stickers/sticker/delete/' . $sticker->id)
+            ->assertRedirect('admin/stickers/' . $category->id . '?page=1');
+
+        $this->assertDatabaseMissing('stickers', ['id' => $sticker->id]);
     }
 }

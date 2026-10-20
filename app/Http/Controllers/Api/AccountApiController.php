@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\ColorRequest;
+use App\Http\Requests\User\EmailChangeRequest;
+use App\Http\Requests\User\PasswordRequest;
+use App\Http\Requests\User\PhotoRequest;
+use App\Http\Requests\User\ProfileRequest;
+use App\Http\Requests\User\SettingsRequest;
+use App\Http\Requests\User\StatusRequest;
+use App\Http\Requests\User\VerifyRequest;
 use App\Http\Resources\UserProfileResource;
-use App\Models\BlackList;
 use App\Models\User;
-use App\Services\CaptchaService;
-use App\Services\FileService;
-use App\Services\MailService;
 use App\Services\UserService;
 use App\Support\Locale;
-use App\Support\Validator;
-use App\Traits\HandlesApiValidation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -26,20 +28,14 @@ use Illuminate\Support\Str;
  */
 class AccountApiController extends Controller
 {
-    use HandlesApiValidation;
-
     /**
      * Изменение профиля
      */
-    public function profile(Request $request, Validator $validator, UserService $userService): JsonResource
+    public function profile(ProfileRequest $request, UserService $userService): JsonResource
     {
         $user = getUser();
 
-        $data = $userService->validateProfile($validator, $user, $request);
-
-        $this->throwIfInvalid($validator);
-
-        $userService->saveProfile($user, $data, $request);
+        $userService->saveProfile($user, $request->profile(), $request);
 
         return UserProfileResource::make($user->fresh());
     }
@@ -65,7 +61,7 @@ class AccountApiController extends Controller
             'available' => [
                 'themes'    => array_values(getAvailableThemes()),
                 'languages' => Locale::available(),
-                'timezones' => range(-12, 12),
+                'timezones' => range(-12, 14),
             ],
         ]);
     }
@@ -73,15 +69,9 @@ class AccountApiController extends Controller
     /**
      * Изменение настроек
      */
-    public function updateSettings(Request $request, Validator $validator, UserService $userService): JsonResponse
+    public function updateSettings(SettingsRequest $request, UserService $userService): JsonResponse
     {
-        $user = getUser();
-
-        $data = $userService->validateSettings($validator, $user, $request);
-
-        $this->throwIfInvalid($validator);
-
-        $userService->saveSettings($user, $data, $request);
+        $userService->saveSettings(getUser(), $request->settings(), $request);
 
         return response()->json(['message' => __('users.settings_success_changed')]);
     }
@@ -89,22 +79,9 @@ class AccountApiController extends Controller
     /**
      * Смена пароля
      */
-    public function password(Request $request, Validator $validator, UserService $userService): JsonResponse
+    public function password(PasswordRequest $request, UserService $userService): JsonResponse
     {
-        $user = getUser();
-        $newPassword = $request->string('new_password')->value();
-
-        $userService->validatePassword(
-            $validator,
-            $user,
-            $request->input('old_password'),
-            $newPassword,
-            $request->input('confirm_password'),
-        );
-
-        $this->throwIfInvalid($validator);
-
-        $userService->changePassword($user, $newPassword);
+        $userService->changePassword(getUser(), $request->validated('new_password'));
 
         // Токен остаётся прежним: смена пароля не должна выкидывать приложение
         return response()->json(['message' => __('users.password_success_changed')]);
@@ -113,16 +90,9 @@ class AccountApiController extends Controller
     /**
      * Заявка на смену почты, подтверждение приходит письмом
      */
-    public function email(Request $request, Validator $validator, UserService $userService): JsonResponse
+    public function email(EmailChangeRequest $request, UserService $userService): JsonResponse
     {
-        $user = getUser();
-        $email = $request->string('email')->lower()->value();
-
-        $userService->validateEmailChange($validator, $user, $email, $request->input('password'));
-
-        $this->throwIfInvalid($validator);
-
-        $userService->requestEmailChange($user, $email);
+        $userService->requestEmailChange(getUser(), $request->validated('email'));
 
         return response()->json(['message' => __('users.confirm_success_sent')]);
     }
@@ -130,7 +100,7 @@ class AccountApiController extends Controller
     /**
      * Повторная отправка письма с подтверждением регистрации
      */
-    public function verify(Request $request, Validator $validator, CaptchaService $captcha, MailService $mail): JsonResponse
+    public function verify(VerifyRequest $request, UserService $userService): JsonResponse
     {
         $user = getUser();
 
@@ -142,35 +112,7 @@ class AccountApiController extends Controller
             abort(403, __('users.profile_not_confirmation'));
         }
 
-        $email = $request->string('email', $user->email)->lower()->value();
-        $domain = Str::substr(strrchr($email, '@') ?: '', 1);
-
-        $validator
-            ->true($captcha->verify($request), ['protect' => __('validator.captcha')])
-            ->email($email, ['email' => __('validator.email')])
-            ->false(
-                User::query()->where('login', '<>', $user->login)->where('email', $email)->exists(),
-                ['email' => __('users.email_already_exists')],
-            )
-            ->false(BlackList::isBlacklisted('email', $email), ['email' => __('users.email_is_blacklisted')])
-            ->false(BlackList::isBlacklisted('domain', $domain), ['email' => __('users.domain_is_blacklisted')]);
-
-        $this->throwIfInvalid($validator);
-
-        $token = Str::random(32);
-
-        $user->update([
-            'email'         => $email,
-            'confirm_token' => $token,
-        ]);
-
-        $mail->queue('mailer.register', [
-            'to'         => $email,
-            'subject'    => 'Регистрация на ' . setting('title'),
-            'login'      => $user->login,
-            'password'   => '*****',
-            'confirmUrl' => route('confirm', ['token' => $token]),
-        ]);
+        $userService->resendConfirmation($user, $request->validated('email'));
 
         return response()->json(['message' => __('users.confirm_code_success_sent')]);
     }
@@ -178,25 +120,11 @@ class AccountApiController extends Controller
     /**
      * Смена статуса
      */
-    public function status(Request $request, Validator $validator): JsonResponse
+    public function status(StatusRequest $request): JsonResponse
     {
-        $user = getUser();
-
-        $status = $request->input('status') ?: null;
-        $cost = $status ? setting('editstatusmoney') : 0;
-
-        $validator
-            ->empty($user->ban, ['status' => __('users.status_changed_not_ban')])
-            ->notEqual($status, $user->status, ['status' => __('users.status_different')])
-            ->gte($user->point, setting('editstatuspoint'), ['status' => __('users.status_points')])
-            ->gte($user->money, $cost, ['status' => __('users.status_moneys')])
-            ->length($status, 3, 25, ['status' => __('users.status_short_or_long')], false);
-
-        $this->throwIfInvalid($validator);
-
-        $user->update([
-            'status' => $status,
-            'money'  => DB::raw('money - ' . $cost),
+        getUser()->update([
+            'status' => $request->value(),
+            'money'  => DB::raw('money - ' . $request->cost()),
         ]);
 
         clearCache('status');
@@ -207,24 +135,11 @@ class AccountApiController extends Controller
     /**
      * Смена цвета никнейма
      */
-    public function color(Request $request, Validator $validator): JsonResponse
+    public function color(ColorRequest $request): JsonResponse
     {
-        $user = getUser();
-
-        $color = $request->input('color') ?: null;
-        $cost = $color ? setting('editcolormoney') : 0;
-
-        $validator
-            ->notEqual($color, $user->color, ['color' => __('users.color_different')])
-            ->gte($user->point, setting('editcolorpoint'), ['color' => __('users.color_points')])
-            ->gte($user->money, $cost, ['color' => __('users.color_moneys')])
-            ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
-
-        $this->throwIfInvalid($validator);
-
-        $user->update([
-            'color' => $color,
-            'money' => DB::raw('money - ' . $cost),
+        getUser()->update([
+            'color' => $request->value(),
+            'money' => DB::raw('money - ' . $request->cost()),
         ]);
 
         return response()->json(['message' => __('users.color_success_changed')]);
@@ -254,19 +169,9 @@ class AccountApiController extends Controller
     /**
      * Загрузка фото и аватара
      */
-    public function photo(Request $request, UserService $userService): JsonResponse
+    public function photo(PhotoRequest $request, UserService $userService): JsonResponse
     {
         $user = getUser();
-
-        $request->validate([
-            'photo' => [
-                'required',
-                'image',
-                'max:' . FileService::maxFileSize(),
-                'mimes:' . implode(',', FileService::extensionList('media_extensions')),
-                'dimensions:min_width=100,min_height=100',
-            ],
-        ]);
 
         $userService->savePhoto($user, $request->file('photo'));
 

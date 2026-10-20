@@ -11,6 +11,10 @@ use Illuminate\Http\UploadedFile;
 /**
  * Class Validation data
  *
+ * @deprecated 14.9 Ядро на него не опирается: формы — FormRequest, ajax и проверки
+ *             в методе — Validator::make() из Laravel. Модули переводить попутно,
+ *             удаление — не раньше 15.0
+ *
  * @license Code and contributions have MIT License
  *
  * @link    https://visavi.net

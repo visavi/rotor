@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\RecoveryRequest;
+use App\Http\Requests\User\RegisterRequest;
 use App\Http\Resources\UserProfileResource;
 use App\Models\User;
 use App\Services\CaptchaService;
 use App\Services\UserService;
-use App\Support\Validator;
-use App\Traits\HandlesApiValidation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 /**
@@ -20,8 +19,6 @@ use Illuminate\Support\Str;
  */
 class AuthApiController extends Controller
 {
-    use HandlesApiValidation;
-
     /**
      * Защитная картинка для форм регистрации и восстановления
      */
@@ -33,36 +30,11 @@ class AuthApiController extends Controller
     /**
      * Регистрация
      */
-    public function register(
-        Request $request,
-        Validator $validator,
-        CaptchaService $captcha,
-        UserService $userService,
-    ): JsonResponse {
-        if (! setting('openreg')) {
-            abort(403, __('users.registration_suspended'));
-        }
+    public function register(RegisterRequest $request, UserService $userService): JsonResponse
+    {
+        $login = $request->validated('login');
 
-        $login = $request->string('login')->value();
-        // При скрытом поле присланный адрес игнорируем — его легко подсунуть запросом
-        $email = UserService::isEmailHidden()
-            ? ''
-            : $request->string('email')->lower()->value();
-        $gender = $request->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-
-        $validator->true($captcha->verify($request), ['protect' => __('validator.captcha')]);
-
-        $userService->validateRegistration(
-            $validator,
-            $login,
-            $request->input('password'),
-            $request->input('password2', $request->input('password')),
-            $email,
-        );
-
-        $this->throwIfInvalid($validator);
-
-        $user = $userService->register($login, $request->string('password')->value(), $email, $gender);
+        $user = $userService->register($login, $request->validated('password'), $request->email(), $request->gender(), $request);
 
         // Токен выдаётся сразу: иначе клиенту пришлось бы отдельно логиниться
         $user->update(['apikey' => Str::random(32)]);
@@ -79,28 +51,9 @@ class AuthApiController extends Controller
     /**
      * Восстановление пароля, ссылка уходит на почту
      */
-    public function recovery(
-        Request $request,
-        Validator $validator,
-        CaptchaService $captcha,
-        UserService $userService,
-    ): JsonResponse {
-        $request->validate(['user' => ['required', 'string']]);
-
-        $user = getUserByLoginOrEmail($request->input('user'));
-
-        $validator->true($captcha->verify($request), ['protect' => __('validator.captcha')]);
-        $validator->notEmpty($user, ['user' => __('validator.user')]);
-
-        if ($user) {
-            // Без почты письмо со ссылкой отправить некуда
-            $validator->notEmpty($user->email, ['user' => __('users.email_not_attached')]);
-
-            // Повторная заявка принимается только через час, как и на сайте
-            $validator->false($userService->hasPendingRecovery($user), ['user' => __('mails.password_recovery_time')]);
-        }
-
-        $this->throwIfInvalid($validator);
+    public function recovery(RecoveryRequest $request, UserService $userService): JsonResponse
+    {
+        $user = $request->recoveryUser();
 
         $userService->requestRecovery($user);
 

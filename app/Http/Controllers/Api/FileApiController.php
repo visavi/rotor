@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\FileResource;
 use App\Models\File;
 use App\Services\FileService;
-use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -45,7 +44,7 @@ class FileApiController extends Controller
      * такие файлы привяжутся к ней при сохранении. Личным сообщениям
      * так нельзя — их файлы передаются в самом запросе
      */
-    public function store(Request $request, Validator $validator): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'type' => ['required', 'string', 'in:' . implode(',', FileService::types())],
@@ -63,7 +62,6 @@ class FileApiController extends Controller
             $request->file('file'),
             $type,
             $request->integer('id'),
-            $validator,
         );
 
         if (! $result['success']) {
@@ -79,13 +77,13 @@ class FileApiController extends Controller
     /**
      * Удаление своего вложения
      */
-    public function destroy(int $id, Request $request, Validator $validator): JsonResponse
+    public function destroy(int $id, Request $request): JsonResponse
     {
         $request->validate([
             'type' => ['required', 'string', 'in:' . implode(',', FileService::types())],
         ]);
 
-        $result = $this->uploader->remove($id, $request->string('type')->value(), $validator);
+        $result = $this->uploader->remove($id, $request->string('type')->value());
 
         if (! $result['success']) {
             return response()->json(['message' => $result['message']], 422);

@@ -86,6 +86,6 @@ class BanhistControllerTest extends TestCase
 
         $this->assertDatabaseCount('banhist', 1);
 
-        $response->assertSessionHasErrors();
+        $response->assertSessionHasErrors(['del' => __('validator.deletion')]);
     }
 }

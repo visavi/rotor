@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\SettingRequest;
 use App\Models\Setting;
 use App\Services\UserService;
 use App\Support\Registry;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -17,47 +17,9 @@ class SettingController extends AdminController
     /**
      * Главная страница
      */
-    public function index(Request $request, Validator $validator): View|RedirectResponse
+    public function index(Request $request): View
     {
-        $act = $request->input('act', 'mains');
-
-        if (! in_array($act, Setting::getActions(), true)) {
-            abort(404, __('settings.page_invalid'));
-        }
-
-        if ($request->isMethod('post')) {
-            $sets = $request->input('sets');
-            $mods = $request->input('mods');
-            $opt = $request->input('opt');
-
-            $validator->notEmpty($sets, ['sets' => __('settings.settings_empty')]);
-
-            foreach ((array) $sets as $name => $value) {
-                if (empty($opt[$name]) || ! empty($value)) {
-                    $validator->length($value, 1, 255, ['sets[' . $name . ']' => __('settings.field_required', ['field' => $name])]);
-                }
-            }
-
-            if ($validator->isValid()) {
-                foreach ($sets as $name => $value) {
-                    if (isset($mods[$name])) {
-                        $value *= $mods[$name];
-                    }
-
-                    // Пустое необязательное поле приходит null, а колонка value NOT NULL
-                    Setting::query()->where('name', $name)->update(['value' => (string) $value]);
-                }
-
-                clearCache('settings');
-
-                return redirect()->route('admin.settings', ['act' => $act])
-                    ->with('success', __('settings.settings_success_saved'));
-            }
-
-            return redirect()->route('admin.settings', ['act' => $act])
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
+        $act = $this->action($request);
 
         $statsite = [
             __('settings.site_open'),
@@ -101,5 +63,36 @@ class SettingController extends AdminController
         }
 
         return view('admin/settings/index', compact('settings', 'act', 'statsite', 'protects', 'slugs', 'emailModes', 'homepages'));
+    }
+
+    /**
+     * Сохранение настроек
+     */
+    public function update(SettingRequest $request): RedirectResponse
+    {
+        $act = $this->action($request);
+
+        foreach ($request->settings() as $name => $value) {
+            Setting::query()->where('name', $name)->update(['value' => $value]);
+        }
+
+        clearCache('settings');
+
+        return redirect()->route('admin.settings', ['act' => $act])
+            ->with('success', __('settings.settings_success_saved'));
+    }
+
+    /**
+     * Возвращает раздел настроек из ?act= или 404
+     */
+    private function action(Request $request): string
+    {
+        $act = $request->string('act', 'mains')->value();
+
+        if (! in_array($act, Setting::getActions(), true)) {
+            abort(404, __('settings.page_invalid'));
+        }
+
+        return $act;
     }
 }

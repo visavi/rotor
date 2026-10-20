@@ -5,9 +5,12 @@ namespace Tests\Feature\User;
 use App\Models\BlackList;
 use App\Models\User;
 use App\Services\UserService;
+use App\Support\Registry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Validator;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -63,6 +66,27 @@ class UserControllerTest extends TestCase
             ->assertDontSee('profile-actions');
     }
 
+    public function testAccountPagesAreForbiddenToGuest(): void
+    {
+        // Вход проверяет middleware check.user, а не запросы и контроллеры
+        $routes = [
+            ['get', '/profile'],
+            ['post', '/profile'],
+            ['get', '/settings'],
+            ['post', '/settings'],
+            ['post', '/accounts/changemail'],
+            ['get', '/accounts/editmail/token'],
+            ['post', '/accounts/editstatus'],
+            ['post', '/accounts/editcolor'],
+            ['post', '/accounts/editpassword'],
+            ['post', '/accounts/apikey'],
+        ];
+
+        foreach ($routes as [$method, $uri]) {
+            $this->$method($uri)->assertForbidden();
+        }
+    }
+
     public function testProfileActionsAreShownToOwner(): void
     {
         $user = $this->makeUser();
@@ -97,6 +121,71 @@ class UserControllerTest extends TestCase
         ]);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testRegisterReportsLoginFormat(): void
+    {
+        $this->post('/register', [
+            'login'     => '-newcomer',
+            'password'  => 'secret123',
+            'password2' => 'secret123',
+            'email'     => 'newcomer@example.com',
+        ])->assertSessionHasErrors(['login' => __('users.login_begin_requirements')]);
+
+        $this->assertDatabaseMissing('users', ['login' => '-newcomer']);
+    }
+
+    public function testRegisterWithBlacklistedDomainFails(): void
+    {
+        BlackList::query()->create(['type' => 'domain', 'value' => 'spam.example', 'user_id' => 0]);
+
+        $this->post('/register', [
+            'login'     => 'newcomer',
+            'password'  => 'secret123',
+            'password2' => 'secret123',
+            'email'     => 'newcomer@SPAM.example',
+        ])->assertSessionHasErrors(['email' => __('users.domain_is_blacklisted')]);
+
+        $this->assertDatabaseMissing('users', ['login' => 'newcomer']);
+    }
+
+    public function testRegisterModuleHookAddsError(): void
+    {
+        $handlers = Registry::$onRegisterValidate;
+
+        // Хук получает валидатор Laravel и пишет ошибку в его список
+        Registry::$onRegisterValidate = [static function (Request $request, Validator $validator): void {
+            $validator->errors()->add('invite', 'Нужен код приглашения');
+        }];
+
+        try {
+            $this->post('/register', [
+                'login'     => 'newcomer',
+                'password'  => 'secret123',
+                'password2' => 'secret123',
+                'email'     => 'newcomer@example.com',
+            ])->assertSessionHasErrors(['invite' => 'Нужен код приглашения']);
+        } finally {
+            Registry::$onRegisterValidate = $handlers;
+        }
+
+        $this->assertDatabaseMissing('users', ['login' => 'newcomer']);
+    }
+
+    public function testCheckLoginReportsReason(): void
+    {
+        $this->makeUser();
+
+        $this->postJson('/check-login', ['login' => 'plain_user'], ['X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJson(['success' => false, 'message' => __('validator.login')]);
+
+        $this->postJson('/check-login', ['login' => 'plain-user'], ['X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJson(['success' => true]);
+
+        $this->makeUser(['login' => 'taken-user', 'email' => 'taken@example.com']);
+
+        $this->postJson('/check-login', ['login' => 'taken-user'], ['X-Requested-With' => 'XMLHttpRequest'])
+            ->assertJson(['success' => false, 'message' => __('users.login_already_exists')]);
     }
 
     public function testRegisterWithExistingLoginFails(): void
@@ -347,6 +436,63 @@ class UserControllerTest extends TestCase
         $this->assertSame(3, (int) $user->timezone);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testEditSettingsAcceptsEasternmostTimezone(): void
+    {
+        $user = $this->makeUser();
+
+        // UTC+14 — Кирибати
+        $this->actingAs($user)->post('/settings', [
+            'themes'   => 'default',
+            'timezone' => 14,
+            'language' => setting('language'),
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame(14, (int) $user->fresh()->timezone);
+    }
+
+    public function testSettingsFormOffersEasternmostTimezone(): void
+    {
+        // Список в форме совпадает с проверкой: от UTC−12 до UTC+14
+        $this->actingAs($this->makeUser())
+            ->get('/settings')
+            ->assertOk()
+            ->assertSee('<option value="-12"', false)
+            ->assertSee('<option value="14"', false);
+    }
+
+    public function testEditSettingsWithTimezoneOutOfRangeFails(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($user)->post('/settings', [
+            'themes'   => 'default',
+            'timezone' => 99,
+            'language' => setting('language'),
+        ])->assertSessionHasErrors(['timezone' => __('users.timezone_invalid')]);
+    }
+
+    public function testEditSettingsModuleHookAddsError(): void
+    {
+        $user = $this->makeUser();
+        $handlers = Registry::$onSettingsValidate;
+
+        Registry::$onSettingsValidate = [static function (User $user, Request $request, Validator $validator): void {
+            $validator->errors()->add('module_option', 'Ошибка модуля');
+        }];
+
+        try {
+            $this->actingAs($user)->post('/settings', [
+                'themes'   => 'default',
+                'timezone' => 5,
+                'language' => setting('language'),
+            ])->assertSessionHasErrors(['module_option' => 'Ошибка модуля']);
+        } finally {
+            Registry::$onSettingsValidate = $handlers;
+        }
+
+        $this->assertNotSame(5, (int) $user->fresh()->timezone);
     }
 
     public function testEditSettingsWithUnknownThemeFails(): void

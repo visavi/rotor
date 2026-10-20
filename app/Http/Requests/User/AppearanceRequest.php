@@ -1,0 +1,64 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests\User;
+
+use Illuminate\Foundation\Http\Attributes\RedirectTo;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
+
+/**
+ * Платная смена оформления (статус, цвет ника): одни правила на сайт и API
+ *
+ * Сброс в пустое значение бесплатный, но актив нужен и для него
+ */
+#[RedirectTo('settings#tab-appearance')]
+abstract class AppearanceRequest extends FormRequest
+{
+    /**
+     * Поле формы и колонка пользователя: status или color
+     */
+    abstract protected function field(): string;
+
+    /**
+     * Новое значение, пустое — null
+     */
+    public function value(): ?string
+    {
+        return $this->string($this->field())->value() ?: null;
+    }
+
+    /**
+     * Цена смены
+     */
+    public function cost(): int
+    {
+        return $this->value() ? (int) setting('edit' . $this->field() . 'money') : 0;
+    }
+
+    public function after(): array
+    {
+        return [
+            function (Validator $validator): void {
+                $field = $this->field();
+                $user = getUser();
+
+                if ($validator->errors()->has($field)) {
+                    return;
+                }
+
+                $error = match (true) {
+                    $this->value() === $user->$field                        => 'different',
+                    $user->point < (int) setting('edit' . $field . 'point') => 'points',
+                    $user->money < $this->cost()                            => 'moneys',
+                    default                                                 => null,
+                };
+
+                if ($error) {
+                    $validator->errors()->add($field, __('users.' . $field . '_' . $error));
+                }
+            },
+        ];
+    }
+}

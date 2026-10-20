@@ -50,8 +50,10 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->prefix('bans')
                 ->group(function () {
                     Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/edit', 'edit');
-                    Route::match(['get', 'post'], '/change', 'change');
+                    Route::get('/edit', 'edit');
+                    Route::post('/edit', 'update');
+                    Route::get('/change', 'change');
+                    Route::post('/change', 'updateChange');
                     Route::post('/unban', 'unban');
                 });
 
@@ -59,7 +61,8 @@ Route::middleware(['check.admin', 'admin.logger'])
             Route::get('/banlists', [BanlistController::class, 'index']);
 
             /* Ожидающие */
-            Route::match(['get', 'post'], '/reglists', [ReglistController::class, 'index']);
+            Route::get('/reglists', [ReglistController::class, 'index']);
+            Route::post('/reglists', [ReglistController::class, 'update']);
 
             /* История банов */
             Route::controller(BanhistController::class)
@@ -78,7 +81,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->prefix('rules')
                 ->group(function () {
                     Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/edit', 'edit');
+                    Route::get('/edit', 'edit');
+                    Route::post('/edit', 'update');
                 });
 
             /* IP-бан */
@@ -86,7 +90,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->prefix('ipbans')
                 ->name('ipbans.')
                 ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index')->name('index');
+                    Route::get('/', 'index')->name('index');
+                    Route::post('/', 'store')->name('store');
                     Route::post('/delete', 'delete')->name('delete');
                     Route::post('/clear', 'clear')->name('clear');
                 });
@@ -104,7 +109,8 @@ Route::middleware(['check.admin', 'admin.logger'])
             Route::controller(BlacklistController::class)
                 ->prefix('blacklists')
                 ->group(function () {
-                    Route::match(['get', 'post'], '/', 'index');
+                    Route::get('/', 'index');
+                    Route::post('/', 'store');
                     Route::post('/delete', 'delete');
                 });
 
@@ -114,11 +120,14 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index');
                     Route::get('/{id}', 'category');
-                    Route::post('/create', 'create');
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::post('/create', 'store');
+                    Route::get('/edit/{id}', 'edit');
+                    Route::post('/edit/{id}', 'update');
                     Route::delete('/delete/{id}', 'delete');
-                    Route::match(['get', 'post'], '/sticker/create', 'createSticker');
-                    Route::match(['get', 'post'], '/sticker/edit/{id}', 'editSticker');
+                    Route::get('/sticker/create', 'createSticker');
+                    Route::post('/sticker/create', 'storeSticker');
+                    Route::get('/sticker/edit/{id}', 'editSticker');
+                    Route::post('/sticker/edit/{id}', 'updateSticker');
                     Route::delete('/sticker/delete/{id}', 'deleteSticker');
                 });
 
@@ -127,8 +136,10 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->prefix('status')
                 ->group(function () {
                     Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::match(['get', 'post'], '/edit', 'edit');
+                    Route::get('/create', 'create');
+                    Route::post('/create', 'store');
+                    Route::get('/edit', 'edit');
+                    Route::post('/edit', 'update');
                     Route::delete('/delete', 'delete');
                 });
         });
@@ -152,7 +163,8 @@ Route::middleware(['check.admin', 'admin.logger'])
                 });
 
             /* Настройки */
-            Route::match(['get', 'post'], '/settings', [SettingController::class, 'index'])->name('settings');
+            Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+            Route::post('/settings', [SettingController::class, 'update']);
 
             /* Виджеты панели */
             Route::controller(WidgetController::class)
@@ -169,8 +181,10 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index');
                     Route::get('/search', 'search');
-                    Route::match(['get', 'post'], '/edit', 'edit');
-                    Route::match(['get', 'post'], '/delete', 'delete');
+                    Route::get('/edit', 'edit');
+                    Route::post('/edit', 'update');
+                    Route::get('/delete', 'delete');
+                    Route::post('/delete', 'destroy');
                 });
 
             /* Шаблоны писем */
@@ -178,8 +192,10 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->prefix('notices')
                 ->group(function () {
                     Route::get('/', 'index');
-                    Route::match(['get', 'post'], '/create', 'create');
-                    Route::match(['get', 'post'], '/edit/{id}', 'edit');
+                    Route::get('/create', 'create');
+                    Route::post('/create', 'store');
+                    Route::get('/edit/{id}', 'edit');
+                    Route::post('/edit/{id}', 'update');
                     Route::delete('/delete/{id}', 'delete');
                 });
 

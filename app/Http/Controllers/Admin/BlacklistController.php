@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\BlacklistRequest;
+use App\Http\Requests\Admin\DeleteSelectedRequest;
 use App\Models\BlackList;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -31,51 +32,9 @@ class BlacklistController extends AdminController
     /**
      * Главная страница
      */
-    public function index(Request $request, Validator $validator): View|RedirectResponse
+    public function index(): View
     {
         $type = $this->type;
-
-        if ($request->isMethod('post')) {
-            $value = $request->string('value')->lower()->value();
-
-            $validator->length($value, 1, 100, ['value' => __('validator.text')]);
-
-            if ($type === 'email') {
-                $validator->regex($value, '#^[a-z0-9_.-]+@[a-z0-9_.-]+(\.[a-z0-9]+)+$#', ['value' => __('validator.email')]);
-            }
-
-            if ($type === 'login') {
-                $validator->regex($value, '|^[a-z0-9\-]+$|', ['value' => __('admin.blacklists.invalid_login')])
-                    ->length($value, 3, 20, ['value' => __('validator.text')]);
-            }
-
-            if ($type === 'domain') {
-                if (! preg_match('#^https?://#i', $value)) {
-                    $value = 'https://' . $value;
-                }
-                // Для строки без хоста parse_url() отдаёт false или null
-                $value = (string) parse_url(strtolower($value), PHP_URL_HOST);
-
-                $validator->regex($value, '#^[а-яa-z0-9_.-]+(\.[а-яa-z0-9/]+)+$#u', ['value' => __('validator.site')]);
-            }
-
-            $validator->false(BlackList::isBlacklisted($type, $value), ['value' => __('main.record_exists')]);
-
-            if ($validator->isValid()) {
-                BlackList::query()->create([
-                    'type'    => $type,
-                    'value'   => $value,
-                    'user_id' => getUser('id'),
-                ]);
-
-                return redirect('admin/blacklists?type=' . $type)
-                    ->with('success', __('main.record_added_success'));
-            }
-
-            return redirect('admin/blacklists?type=' . $type)
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
 
         $lists = BlackList::query()
             ->where('type', $type)
@@ -88,26 +47,33 @@ class BlacklistController extends AdminController
     }
 
     /**
+     * Добавление записи
+     */
+    public function store(BlacklistRequest $request): RedirectResponse
+    {
+        BlackList::query()->create([
+            'type'    => $this->type,
+            'value'   => $request->validated('value'),
+            'user_id' => getUser('id'),
+        ]);
+
+        return redirect('admin/blacklists?type=' . $this->type)
+            ->with('success', __('main.record_added_success'));
+    }
+
+    /**
      * Удаление записей
      */
-    public function delete(Request $request, Validator $validator): RedirectResponse
+    public function delete(DeleteSelectedRequest $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
-        $del = intar($request->input('del'));
-        $type = $this->type;
 
-        $validator->true($del, __('validator.deletion'));
+        BlackList::query()
+            ->where('type', $this->type)
+            ->whereIn('id', $request->ids())
+            ->delete();
 
-        $redirect = 'admin/blacklists?type=' . $type . '&page=' . $page;
-
-        if (! $validator->isValid()) {
-            return redirect($redirect)
-                ->withErrors($validator->getErrors());
-        }
-
-        BlackList::query()->where('type', $type)->whereIn('id', $del)->delete();
-
-        return redirect($redirect)
+        return redirect('admin/blacklists?type=' . $this->type . '&page=' . $page)
             ->with('success', __('main.records_deleted_success'));
     }
 }

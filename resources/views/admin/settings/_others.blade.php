@@ -10,48 +10,48 @@
         <label for="errorlog" class="form-check-label">{{ __('settings.log_enable') }}</label>
     </div>
 
-    <div class="mb-3{{ hasError('sets[description]') }}">
+    <div class="mb-3{{ hasError('sets.description') }}">
         <label for="description" class="form-label">{{ __('settings.description') }}:</label>
         <input type="text" class="form-control" id="description" name="sets[description]" maxlength="250" value="{{ old('sets.description', $settings['description']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[description]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.description') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[nocheck]') }}">
+    <div class="mb-3{{ hasError('sets.nocheck') }}">
         <label for="nocheck" class="form-label">{{ __('settings.unscannable_ext') }}:</label>
         <input type="text" class="form-control" id="nocheck" name="sets[nocheck]" maxlength="100" value="{{ old('sets.nocheck', $settings['nocheck']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[nocheck]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.nocheck') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[moneyname]') }}">
+    <div class="mb-3{{ hasError('sets.moneyname') }}">
         <label for="moneyname" class="form-label">{{ __('settings.moneys') }}:</label>
         <input type="text" class="form-control" id="moneyname" name="sets[moneyname]" maxlength="100" value="{{ old('sets.moneyname', $settings['moneyname']) }}" placeholder="{{ __('seeds.settings.moneyname') }}" required>
-        <div class="invalid-feedback">{{ textError('sets[moneyname]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.moneyname') }}</div>
         <div class="form-text">{{ __('settings.moneys_hint') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[scorename]') }}">
+    <div class="mb-3{{ hasError('sets.scorename') }}">
         <label for="scorename" class="form-label">{{ __('settings.points') }}:</label>
         <input type="text" class="form-control" id="scorename" name="sets[scorename]" maxlength="100" value="{{ old('sets.scorename', $settings['scorename']) }}" placeholder="{{ __('seeds.settings.scorename') }}" required>
-        <div class="invalid-feedback">{{ textError('sets[scorename]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.scorename') }}</div>
         <div class="form-text">{{ __('settings.points_hint') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[statusdef]') }}">
+    <div class="mb-3{{ hasError('sets.statusdef') }}">
         <label for="statusdef" class="form-label">{{ __('settings.default_status') }}:</label>
         <input type="text" class="form-control" id="statusdef" name="sets[statusdef]" maxlength="20" value="{{ old('sets.statusdef', $settings['statusdef']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[statusdef]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.statusdef') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[guestsuser]') }}">
+    <div class="mb-3{{ hasError('sets.guestsuser') }}">
         <label for="guestsuser" class="form-label">{{ __('settings.guestsuser') }}:</label>
         <input type="text" class="form-control" id="guestsuser" name="sets[guestsuser]" maxlength="20" value="{{ old('sets.guestsuser', $settings['guestsuser']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[guestsuser]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.guestsuser') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[deleted_user]') }}">
+    <div class="mb-3{{ hasError('sets.deleted_user') }}">
         <label for="deleted_user" class="form-label">{{ __('settings.deleted_user') }}:</label>
         <input type="text" class="form-control" id="deleted_user" name="sets[deleted_user]" maxlength="20" value="{{ old('sets.deleted_user', $settings['deleted_user']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[deleted_user]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.deleted_user') }}</div>
     </div>
 
     <div class="form-check form-switch mb-3">

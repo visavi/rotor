@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UserRules;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\MigrationService;
 use App\Support\Locale;
-use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -225,7 +226,7 @@ class InstallController extends Controller
     /**
      * Создание администратора
      */
-    public function account(Request $request, Validator $validator): View|RedirectResponse
+    public function account(Request $request): View|RedirectResponse
     {
         if (setting('app_installed')) {
             abort(403);
@@ -233,32 +234,24 @@ class InstallController extends Controller
 
         $lang = $request->input('lang', 'ru');
         $login = $request->string('login')->value();
-        $password = $request->input('password');
-        $password2 = $request->input('password2');
+        $password = $request->string('password')->value();
         $email = $request->string('email')->lower()->value();
 
         if ($request->isMethod('post')) {
-            $validator->regex($login, '|^[a-z0-9\-]+$|i', ['login' => __('validator.login')])
-                ->regex(Str::substr($login, 0, 1), '|^[a-z0-9]+$|i', ['login' => __('users.login_begin_requirements')])
-                ->email($email, ['email' => __('validator.email')])
-                ->length($login, 3, 20, ['login' => __('users.login_length_requirements')])
-                ->length($password, 6, 20, ['password' => __('users.password_length_requirements')])
-                ->equal($password, $password2, ['password2' => __('users.passwords_different')])
-                ->false(ctype_digit($login), ['login' => __('users.field_characters_requirements')])
-                ->false(ctype_digit($password), ['password' => __('users.field_characters_requirements')])
-                ->false(substr_count($login, '-') > 2, ['login' => __('users.login_hyphens_requirements')]);
+            // Не FormRequest: установщик удаляется после установки, класс запроса остался бы сиротой.
+            // Правила — те же, что у регистрации
+            $validator = Validator::make($request->all(), [
+                'login'     => UserRules::login(),
+                'password'  => UserRules::password(),
+                'password2' => ['required', 'same:password'],
+                'email'     => UserRules::email(true),
+            ], [
+                ...UserRules::messages(),
+                ...UserRules::passwordMessages('password'),
+                'password2' => __('users.passwords_different'),
+            ]);
 
-            if ($validator->isValid()) {
-                // Проверка логина на существование
-                $checkLogin = User::query()->where('login', $login)->exists();
-                $validator->false($checkLogin, ['login' => __('users.login_already_exists')]);
-
-                // Проверка email на существование
-                $checkMail = User::query()->where('email', $email)->exists();
-                $validator->false($checkMail, ['email' => __('users.email_already_exists')]);
-            }
-
-            if ($validator->isValid()) {
+            if ($validator->passes()) {
                 $user = User::query()->create([
                     'login'     => $login,
                     'password'  => Hash::make($password),
@@ -284,7 +277,7 @@ class InstallController extends Controller
 
             return redirect('/install/account')
                 ->withInput()
-                ->withErrors($validator->getErrors());
+                ->withErrors($validator);
         }
 
         return view('install/account', compact('login', 'email'));

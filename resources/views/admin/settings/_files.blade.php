@@ -4,39 +4,39 @@
 
 <form method="post">
     @csrf
-    <div class="mb-3{{ hasError('sets[filesize]') }}">
+    <div class="mb-3{{ hasError('sets.filesize') }}">
         <label for="filesize" class="form-label">{{ __('main.max_file_weight') }} (Mb):</label>
         <input type="number" class="form-control" id="filesize" name="sets[filesize]" maxlength="3" value="{{ old('sets.filesize', round($settings['filesize'] / 1048576)) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[filesize]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.filesize') }}</div>
 
         <input type="hidden" value="1048576" name="mods[filesize]">
         <div class="form-text">{{ __('main.server_limit') }}: {{ min(ini_get('upload_max_filesize'), ini_get('post_max_size')) }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[maxfiles]') }}">
+    <div class="mb-3{{ hasError('sets.maxfiles') }}">
         <label for="maxfiles" class="form-label">{{ __('settings.loads_max_files') }}:</label>
         <input type="number" class="form-control" id="maxfiles" name="sets[maxfiles]" maxlength="2" value="{{ old('sets.maxfiles', $settings['maxfiles']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[maxfiles]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.maxfiles') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[file_extensions]') }}">
+    <div class="mb-3{{ hasError('sets.file_extensions') }}">
         <label for="file_extensions" class="form-label">{{ __('main.valid_file_extensions') }}:</label>
         <textarea class="form-control" id="file_extensions" name="sets[file_extensions]" required>{{ old('sets.file_extensions', $settings['file_extensions']) }}</textarea>
-        <div class="invalid-feedback">{{ textError('sets[file_extensions]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.file_extensions') }}</div>
         <div class="form-text">{{ __('settings.extensions_hint') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[media_extensions]') }}">
+    <div class="mb-3{{ hasError('sets.media_extensions') }}">
         <label for="media_extensions" class="form-label">{{ __('main.valid_media_extensions') }}:</label>
         <input type="text" class="form-control" id="media_extensions" name="sets[media_extensions]" value="{{ old('sets.media_extensions', $settings['media_extensions']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[media_extensions]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.media_extensions') }}</div>
         <div class="form-text">{{ __('settings.extensions_hint') }}</div>
     </div>
 
-    <div class="mb-3{{ hasError('sets[screensize]') }}">
+    <div class="mb-3{{ hasError('sets.screensize') }}">
         <label for="screensize" class="form-label">{{ __('settings.images_reduction_size') }} (px):</label>
         <input type="number" class="form-control" id="screensize" name="sets[screensize]" maxlength="4" value="{{ old('sets.screensize', $settings['screensize']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets[screensize]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.screensize') }}</div>
     </div>
 
     <div class="form-check form-switch mb-3">
@@ -47,11 +47,11 @@
         <img src="/assets/img/images/watermark.png" alt="watermark" class="d-block mt-2">
     </div>
 
-    <div class="mb-3{{ hasError('sets[archive_file_path]') }}">
+    <div class="mb-3{{ hasError('sets.archive_file_path') }}">
         <label for="archive_file_path" class="form-label">{{ __('settings.archive_file_path') }}:</label>
         <input type="hidden" name="opt[archive_file_path]" value="1">
         <input type="text" class="form-control" id="archive_file_path" name="sets[archive_file_path]" value="{{ old('sets.archive_file_path', $settings['archive_file_path']) }}">
-        <div class="invalid-feedback">{{ textError('sets[archive_file_path]') }}</div>
+        <div class="invalid-feedback">{{ textError('sets.archive_file_path') }}</div>
         <div class="form-text">{{ __('settings.archive_file_path_hint') }}</div>
     </div>
 

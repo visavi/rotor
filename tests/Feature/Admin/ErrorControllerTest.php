@@ -71,5 +71,6 @@ class ErrorControllerTest extends TestCase
         $this->assertDatabaseCount('errors', 1);
 
         $response->assertSessionHasErrors();
+        $this->assertSame(__('main.page_only_owner'), session('errors')->first());
     }
 }

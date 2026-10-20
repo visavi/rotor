@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\RuleRequest;
 use App\Models\Rule;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class RuleController extends AdminController
@@ -33,30 +32,24 @@ class RuleController extends AdminController
     /**
      * Редактирование правил
      */
-    public function edit(Request $request, Validator $validator): View|RedirectResponse
+    public function edit(): View
     {
         $rules = Rule::query()->firstOrNew();
 
-        if ($request->isMethod('post')) {
-            $msg = $request->input('msg');
-
-            $validator->notEmpty($msg, ['msg' => __('admin.rules.rules_empty')]);
-
-            if ($validator->isValid()) {
-                $rules->fill([
-                    'text'       => $msg,
-                    'created_at' => now(),
-                ])->save();
-
-                return redirect('admin/rules')
-                    ->with('success', __('admin.rules.rules_success_saved'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
         return view('admin/rules/edit', compact('rules'));
+    }
+
+    /**
+     * Сохранение правил
+     */
+    public function update(RuleRequest $request): RedirectResponse
+    {
+        Rule::query()->firstOrNew()->fill([
+            'text'       => $request->validated('msg'),
+            'created_at' => now(),
+        ])->save();
+
+        return redirect('admin/rules')
+            ->with('success', __('admin.rules.rules_success_saved'));
     }
 }

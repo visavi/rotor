@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Flood;
 use App\Services\CommentService;
-use App\Support\Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 trait HandlesComments
 {
@@ -117,48 +117,37 @@ trait HandlesComments
 
     /**
      * Добавление комментария (POST-обработчик)
+     *
+     * Форма ответа шлёт запрос с Accept: application/json и ждёт адрес
+     * записи или 422 со списком ошибок, обычная форма — редирект
      */
-    public function storeComment(int $id, Request $request, Validator $validator, Flood $flood): RedirectResponse|JsonResponse
+    public function storeComment(int $id, CommentRequest $request, Flood $flood): RedirectResponse|JsonResponse
     {
         $model = $this->findCommentParent($id);
 
+        $this->checkCommentableModel($model);
+
+        if ($model->getAttribute('closed')) {
+            throw ValidationException::withMessages(['msg' => __('main.closed_comments')]);
+        }
+
         [$viewRoute, $viewParams] = $this->commentableViewRoute($model);
 
-        $user = getUser();
-        $msg = $request->input('msg');
+        $comment = app(CommentService::class)->create(
+            $model,
+            getUser(),
+            $request->validated('msg'),
+            $request->validated('parent_id') ? (int) $request->validated('parent_id') : null,
+            route($viewRoute, $viewParams, false),
+        );
 
-        $validator
-            ->true($user, __('main.not_authorized'))
-            ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-            ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-
-        $validator->empty($model->getAttribute('closed'), ['msg' => __('main.closed_comments')]);
-
-        if ($validator->isValid()) {
-            $comment = app(CommentService::class)->create(
-                $model,
-                $user,
-                (string) $msg,
-                $request->input('parent_id') ? (int) $request->input('parent_id') : null,
-                route($viewRoute, $viewParams, false),
-            );
-
-            $flood->saveState();
-
-            if ($request->wantsJson()) {
-                return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
-            }
-
-            return $this->redirectAfterCommentAdded($model, $comment->id)
-                ->with('success', __('main.comment_added_success'));
-        }
+        $flood->saveState();
 
         if ($request->wantsJson()) {
-            return response()->json(['errors' => $validator->getErrors()], 422);
+            return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
         }
 
-        return redirect()->route($viewRoute, $viewParams)
-            ->withInput()
-            ->withErrors($validator->getErrors());
+        return $this->redirectAfterCommentAdded($model, $comment->id)
+            ->with('success', __('main.comment_added_success'));
     }
 }

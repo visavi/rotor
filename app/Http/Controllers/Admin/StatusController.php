@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\StatusRequest;
 use App\Models\Status;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -23,101 +23,89 @@ class StatusController extends AdminController
     }
 
     /**
+     * Форма добавления статуса
+     */
+    public function create(): View
+    {
+        return view('admin/status/create');
+    }
+
+    /**
      * Добавление статуса
      */
-    public function create(Request $request, Validator $validator): View|RedirectResponse
+    public function store(StatusRequest $request): RedirectResponse
     {
-        if ($request->isMethod('post')) {
-            $topoint = int($request->input('topoint'));
-            $point = int($request->input('point'));
-            $name = $request->input('name');
-            $color = $request->input('color');
+        Status::query()->create($this->fields($request));
 
-            $validator
-                ->length($name, 3, 30, ['name' => __('statuses.status_length')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
+        return redirect('admin/status')
+            ->with('success', __('statuses.status_success_added'));
+    }
 
-            if ($validator->isValid()) {
-                Status::query()->create([
-                    'topoint' => $topoint,
-                    'point'   => $point,
-                    'name'    => $name,
-                    'color'   => $color,
-                ]);
+    /**
+     * Форма редактирования статуса
+     */
+    public function edit(Request $request): View
+    {
+        $status = $this->findStatus($request);
 
-                return redirect('admin/status')
-                    ->with('success', __('statuses.status_success_added'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('admin/status/create');
+        return view('admin/status/edit', compact('status'));
     }
 
     /**
      * Редактирование статуса
      */
-    public function edit(Request $request, Validator $validator): View|RedirectResponse
+    public function update(StatusRequest $request): RedirectResponse
+    {
+        $this->findStatus($request)->update($this->fields($request));
+
+        return redirect('admin/status')
+            ->with('success', __('statuses.status_success_edited'));
+    }
+
+    /**
+     * Удаление статуса
+     */
+    public function delete(Request $request): RedirectResponse
     {
         $id = int($request->input('id'));
 
         $status = Status::query()->find($id);
 
         if (! $status) {
-            abort(404, __('statuses.status_not_found'));
-        }
-
-        if ($request->isMethod('post')) {
-            $topoint = int($request->input('topoint'));
-            $point = int($request->input('point'));
-            $name = $request->input('name');
-            $color = $request->input('color');
-
-            $validator
-                ->length($name, 3, 30, ['name' => __('statuses.status_length')])
-                ->regex($color, '|^#+[A-f0-9]{6}$|', ['color' => __('validator.color')], false);
-
-            if ($validator->isValid()) {
-                $status->update([
-                    'topoint' => $topoint,
-                    'point'   => $point,
-                    'name'    => $name,
-                    'color'   => $color,
-                ]);
-
-                return redirect('admin/status')
-                    ->with('success', __('statuses.status_success_edited'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('admin/status/edit', compact('status'));
-    }
-
-    /**
-     * Удаление статуса
-     */
-    public function delete(Request $request, Validator $validator): RedirectResponse
-    {
-        $id = int($request->input('id'));
-
-        $status = Status::query()->find($id);
-        $validator->notEmpty($status, __('statuses.status_not_found'));
-
-        if (! $validator->isValid()) {
             return redirect('admin/status')
-                ->withErrors($validator->getErrors());
+                ->withErrors(__('statuses.status_not_found'));
         }
 
         $status->delete();
 
         return redirect('admin/status')
             ->with('success', __('statuses.status_success_deleted'));
+    }
+
+    /**
+     * Возвращает статус из запроса или 404
+     */
+    private function findStatus(Request $request): Status
+    {
+        $status = Status::query()->find(int($request->input('id')));
+
+        if (! $status) {
+            abort(404, __('statuses.status_not_found'));
+        }
+
+        return $status;
+    }
+
+    /**
+     * Возвращает поля статуса из запроса
+     */
+    private function fields(StatusRequest $request): array
+    {
+        return [
+            'topoint' => int($request->input('topoint')),
+            'point'   => int($request->input('point')),
+            'name'    => $request->validated('name'),
+            'color'   => $request->validated('color'),
+        ];
     }
 }

@@ -11,7 +11,6 @@ use App\Services\FeedService;
 use App\Services\SearchService;
 use App\Support\Locale;
 use App\Support\Registry;
-use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,7 +58,7 @@ class HomeController extends Controller
     /**
      * Поиск по сайту
      */
-    public function search(Request $request, Validator $validator): View|RedirectResponse
+    public function search(Request $request): View|RedirectResponse
     {
         $posts = paginate([], 10);
         $query = SearchService::clean($request->string('query', $request->input('q'))->value());
@@ -70,15 +69,15 @@ class HomeController extends Controller
         $type = SearchService::type(check($request->input('type')));
 
         if ($query) {
-            $validator->length($searchQuery, SearchService::MIN_LENGTH, SearchService::MAX_LENGTH, ['find' => __('main.request_length')]);
+            $length = mb_strlen($searchQuery);
 
-            if ($validator->isValid()) {
+            if ($length >= SearchService::MIN_LENGTH && $length <= SearchService::MAX_LENGTH) {
                 $posts = SearchService::paginate($searchQuery, $type, $sort, 10)
                     ->appends(compact('query', 'sort', 'type'));
             } else {
                 // GET-страница рендерится сразу, редирект тут неуместен —
-                // flash() пишет в сессию немедленно и корректно истекает
-                session()->flash('danger', $validator->getErrors());
+                // now() показывает сообщение в этом же ответе и не тянет его на следующую страницу
+                session()->now('danger', __('main.request_length'));
             }
         }
 

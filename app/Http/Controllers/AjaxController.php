@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Services\ComplaintService;
 use App\Services\FileService;
 use App\Services\RatingService;
-use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,13 +59,12 @@ class AjaxController extends Controller
     /**
      * Загружает файлы
      */
-    public function uploadFile(Request $request, Validator $validator, FileService $uploader): JsonResponse
+    public function uploadFile(Request $request, FileService $uploader): JsonResponse
     {
         $result = $uploader->upload(
             $request->file('file'),
             $request->string('type')->value(),
             int($request->input('id')),
-            $validator,
         );
 
         if (! $result['success']) {
@@ -99,12 +97,11 @@ class AjaxController extends Controller
     /**
      * Удаляет файлы
      */
-    public function deleteFile(Request $request, Validator $validator, FileService $uploader): JsonResponse
+    public function deleteFile(Request $request, FileService $uploader): JsonResponse
     {
         $result = $uploader->remove(
             int($request->input('id')),
             $request->string('type')->value(),
-            $validator,
         );
 
         return response()->json($result);
@@ -113,12 +110,11 @@ class AjaxController extends Controller
     /**
      * Сохраняет порядок файлов: sort — id через запятую, как их пишет перетаскивание
      */
-    public function sortFiles(Request $request, Validator $validator, FileService $uploader): JsonResponse
+    public function sortFiles(Request $request, FileService $uploader): JsonResponse
     {
         $result = $uploader->sort(
             array_map(int(...), explode(',', $request->string('sort')->value())),
             $request->string('type')->value(),
-            $validator,
         );
 
         return response()->json($result);

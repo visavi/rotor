@@ -102,6 +102,16 @@ class RuleControllerTest extends TestCase
         $response->assertSessionHasErrors('msg');
     }
 
+    public function testEditWithEmptyEditorMarkupFails(): void
+    {
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/rules/edit', ['msg' => '<p></p><p><br></p>']);
+
+        $response->assertSessionHasErrors(['msg' => __('admin.rules.rules_empty')]);
+
+        $this->assertDatabaseMissing('rules', ['text' => '<p></p><p><br></p>']);
+    }
+
     public function testEditShowsErrorOnFormAfterRedirect(): void
     {
         $response = $this->actingAs($this->admin)
@@ -124,5 +134,16 @@ class RuleControllerTest extends TestCase
         $this->actingAs($user)
             ->get('/admin/rules/edit')
             ->assertForbidden();
+    }
+
+    public function testUpdateRequiresAdmin(): void
+    {
+        $user = User::factory()->create(['login' => 'plain_user']);
+
+        $this->actingAs($user)
+            ->post('/admin/rules/edit', ['msg' => 'Чужие-правила'])
+            ->assertForbidden();
+
+        $this->assertDatabaseMissing('rules', ['text' => 'Чужие-правила']);
     }
 }

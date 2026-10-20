@@ -20,16 +20,16 @@
     <div class="section-form mb-3 shadow">
         <form action="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
             @csrf
-            <div class="mb-3{{ hasError('category') }}">
+            <div class="mb-3{{ hasError('cid') }}">
                 <label for="inputCategory" class="form-label">{{ __('stickers.category') }}</label>
 
-                <?php $inputCategory = (int) old('cid', $sticker->category->id); ?>
+                <?php $inputCategory = (int) old('cid', $sticker->category_id); ?>
                 <select class="form-select" id="inputCategory" name="cid">
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}"{{ ($inputCategory === $category->id) ? ' selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
                 </select>
-                <div class="invalid-feedback">{{ textError('category') }}</div>
+                <div class="invalid-feedback">{{ textError('cid') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('code') }}">

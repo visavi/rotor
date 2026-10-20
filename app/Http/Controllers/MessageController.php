@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MessageRequest;
 use App\Models\Dialogue;
 use App\Models\File;
 use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
-use App\Support\Validator;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -119,48 +119,30 @@ class MessageController extends Controller
     /**
      * Отправка сообщений
      */
-    public function send(Request $request, Validator $validator, Flood $flood): RedirectResponse
+    public function send(MessageRequest $request, Flood $flood): RedirectResponse
     {
-        $login = $request->input('user');
-        $msg = $request->input('msg');
-
-        $user = getUserByLogin($login);
+        $user = $request->recipient();
 
         if (! $user) {
             abort(404, __('validator.user'));
         }
 
-        $validator
-            ->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')])
-            ->false($flood->isFlood(), ['msg' => __('validator.flood', ['sec' => $flood->getPeriod()])])
-            ->notEqual($user->id, $this->user->id, __('messages.send_yourself'));
+        $message = $user->sendMessage($this->user, $request->validated('msg'));
 
-        if (! captchaVerify() && $this->user->point < setting('privatprotect')) {
-            $validator->addError(['protect' => __('validator.captcha')]);
-        }
+        File::query()
+            ->pending(Message::$morphName, $this->user->id)
+            ->update(['relate_id' => $message->id]);
 
-        if ($validator->isValid()) {
-            $message = $user->sendMessage($this->user, (string) $msg);
-
-            File::query()
-                ->pending(Message::$morphName, $this->user->id)
-                ->update(['relate_id' => $message->id]);
-
-            $flood->saveState();
-
-            return redirect('messages/talk/' . $user->login)
-                ->with('success', __('messages.success_sent'));
-        }
+        $flood->saveState();
 
         return redirect('messages/talk/' . $user->login)
-            ->withInput()
-            ->withErrors($validator->getErrors());
+            ->with('success', __('messages.success_sent'));
     }
 
     /**
      * Удаление переписки
      */
-    public function delete(int $uid, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $uid, Request $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
@@ -169,13 +151,16 @@ class MessageController extends Controller
             ->where('author_id', $uid)
             ->get();
 
-        $validator
-            ->notEmpty($dialogues->count(), ['user' => __('messages.empty_dialogue')])
-            ->empty($this->user->getCountNewMessages(), __('messages.unread_messages'));
+        // Непрочитанные удалять нельзя: иначе сообщение исчезнет, не дойдя до адресата
+        $error = match (true) {
+            $dialogues->isEmpty()                  => __('messages.empty_dialogue'),
+            $this->user->getCountNewMessages() > 0 => __('messages.unread_messages'),
+            default                                => null,
+        };
 
-        if (! $validator->isValid()) {
+        if ($error) {
             return redirect('messages?page=' . $page)
-                ->withErrors($validator->getErrors());
+                ->withErrors($error);
         }
 
         foreach ($dialogues as $dialogue) {

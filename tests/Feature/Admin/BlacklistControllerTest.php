@@ -89,7 +89,7 @@ class BlacklistControllerTest extends TestCase
 
         $this->assertDatabaseCount('blacklist', 1); // только сидерная domain-запись
 
-        $response->assertSessionHasErrors('value');
+        $response->assertSessionHasErrors(['value' => __('admin.blacklists.invalid_login')]);
     }
 
     public function testAddDomainIsNormalizedToHost(): void
@@ -128,7 +128,26 @@ class BlacklistControllerTest extends TestCase
 
         $this->assertDatabaseCount('blacklist', 2); // сидерная domain + созданная выше
 
-        $response->assertSessionHasErrors('value');
+        $response->assertSessionHasErrors(['value' => __('main.record_exists')]);
+    }
+
+    public function testAddDuplicateDomainFailsAfterNormalization(): void
+    {
+        BlackList::query()->create([
+            'type'       => 'domain',
+            'value'      => 'spam.example.com',
+            'user_id'    => $this->admin->id,
+            'created_at' => now(),
+        ]);
+
+        $before = BlackList::query()->where('type', 'domain')->count();
+
+        $response = $this->actingAs($this->admin)
+            ->post('/admin/blacklists?type=domain', ['value' => 'HTTPS://Spam.Example.com/page']);
+
+        $response->assertSessionHasErrors(['value' => __('main.record_exists')]);
+
+        $this->assertSame($before, BlackList::query()->where('type', 'domain')->count());
     }
 
     public function testAddShowsErrorOnFormAfterRedirect(): void

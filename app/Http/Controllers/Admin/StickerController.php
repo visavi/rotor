@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\StickerCategoryRequest;
+use App\Http\Requests\Admin\StickerRequest;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
-use App\Services\FileService;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,11 +36,7 @@ class StickerController extends AdminController
      */
     public function category(int $id): View
     {
-        $category = StickersCategory::query()->where('id', $id)->first();
-
-        if (! $category) {
-            abort(404, __('stickers.category_not_exist'));
-        }
+        $category = $this->findCategory($id);
 
         $stickers = Sticker::query()
             ->where('category_id', $id)
@@ -55,20 +51,10 @@ class StickerController extends AdminController
     /**
      * Создание категории
      */
-    public function create(Request $request, Validator $validator): RedirectResponse
+    public function store(StickerCategoryRequest $request): RedirectResponse
     {
-        $name = $request->input('name');
-
-        $validator->length($name, 3, 50, ['name' => __('validator.text')]);
-
-        if (! $validator->isValid()) {
-            return redirect('admin/stickers')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
         $category = StickersCategory::query()->create([
-            'name' => $name,
+            'name' => $request->validated('name'),
         ]);
 
         return redirect('admin/stickers/' . $category->id)
@@ -76,57 +62,38 @@ class StickerController extends AdminController
     }
 
     /**
-     * Редактирование категории
+     * Форма редактирования категории
      */
-    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
+    public function edit(int $id): View
     {
-        $category = StickersCategory::query()->find($id);
-
-        if (! $category) {
-            abort(404, __('stickers.category_not_exist'));
-        }
-
-        if ($request->isMethod('post')) {
-            $name = $request->input('name');
-
-            $validator->length($name, 3, 50, ['name' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $category->update([
-                    'name' => $name,
-                ]);
-
-                return redirect('admin/stickers')
-                    ->with('success', __('stickers.category_success_changed'));
-            }
-
-            return redirect('admin/stickers/edit/' . $category->id)
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
+        $category = $this->findCategory($id);
 
         return view('admin/stickers/edit_category', compact('category'));
     }
 
     /**
+     * Редактирование категории
+     */
+    public function update(int $id, StickerCategoryRequest $request): RedirectResponse
+    {
+        $this->findCategory($id)->update([
+            'name' => $request->validated('name'),
+        ]);
+
+        return redirect('admin/stickers')
+            ->with('success', __('stickers.category_success_changed'));
+    }
+
+    /**
      * Удаление категории
      */
-    public function delete(int $id, Request $request, Validator $validator): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
-        $category = StickersCategory::query()->find($id);
+        $category = $this->findCategory($id);
 
-        if (! $category) {
-            abort(404, __('stickers.category_not_exist'));
-        }
-
-        $sticker = Sticker::query()->where('category_id', $category->id)->first();
-        if ($sticker) {
-            $validator->addError(__('stickers.category_has_stickers'));
-        }
-
-        if (! $validator->isValid()) {
+        if (Sticker::query()->where('category_id', $category->id)->exists()) {
             return redirect('admin/stickers')
-                ->withErrors($validator->getErrors());
+                ->withErrors(__('stickers.category_has_stickers'));
         }
 
         $category->delete();
@@ -136,9 +103,9 @@ class StickerController extends AdminController
     }
 
     /**
-     * Добавление стикера
+     * Форма добавления стикера
      */
-    public function createSticker(Request $request, Validator $validator): View|RedirectResponse
+    public function createSticker(Request $request): View
     {
         $cid = int($request->input('cid'));
 
@@ -148,130 +115,122 @@ class StickerController extends AdminController
             abort(200, __('stickers.empty_categories'));
         }
 
-        if (! is_writable(public_path('uploads/stickers'))) {
-            abort(200, __('main.directory_not_writable'));
-        }
-
-        if ($request->isMethod('post')) {
-            $code = $request->string('code')->lower()->value();
-            $sticker = $request->file('sticker');
-
-            $validator
-                ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
-                ->regex($code, '|^[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.valid_sticker_code')]);
-
-            $category = StickersCategory::query()->where('id', $cid)->first();
-            $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
-
-            $duplicate = Sticker::query()->where('code', $code)->first();
-            $validator->empty($duplicate, ['code' => __('stickers.sticker_exists')]);
-
-            $rules = [
-                'maxsize'    => setting('stickermaxsize'),
-                'maxweight'  => setting('stickermaxweight'),
-                'minweight'  => setting('stickerminweight'),
-                'extensions' => FileService::extensionList('media_extensions'),
-            ];
-
-            $validator->file($sticker, $rules, ['sticker' => __('validator.image_upload_failed')]);
-
-            if ($validator->isValid()) {
-                $newName = uniqueName($sticker->getClientOriginalExtension());
-                $path = (new Sticker())->uploadPath . '/' . $newName;
-                $sticker->move(public_path((new Sticker())->uploadPath), $newName);
-
-                Sticker::query()->create([
-                    'category_id' => $cid,
-                    'name'        => $path,
-                    'code'        => $code,
-                ]);
-
-                clearCache(['stickers', 'stickers_map']);
-
-                return redirect('admin/stickers/' . $cid)
-                    ->with('success', __('stickers.sticker_success_created'));
-            }
-
-            return redirect('/admin/stickers/sticker/create')
-                ->withErrors($validator->getErrors())
-                ->withInput();
-        }
+        $this->checkUploadDirectory();
 
         return view('admin/stickers/create_sticker', compact('categories', 'cid'));
     }
 
     /**
-     * Редактирование стикера
+     * Добавление стикера
      */
-    public function editSticker(int $id, Request $request, Validator $validator): View|RedirectResponse
+    public function storeSticker(StickerRequest $request): RedirectResponse
     {
-        $sticker = Sticker::query()->find($id);
+        $this->checkUploadDirectory();
+
+        $cid = (int) $request->validated('cid');
+        $file = $request->file('sticker');
+        $uploadPath = (new Sticker())->uploadPath;
+
+        $newName = uniqueName($file->getClientOriginalExtension());
+        $file->move(public_path($uploadPath), $newName);
+
+        Sticker::query()->create([
+            'category_id' => $cid,
+            'name'        => $uploadPath . '/' . $newName,
+            'code'        => $request->validated('code'),
+        ]);
+
+        clearCache(['stickers', 'stickers_map']);
+
+        return redirect('admin/stickers/' . $cid)
+            ->with('success', __('stickers.sticker_success_created'));
+    }
+
+    /**
+     * Форма редактирования стикера
+     */
+    public function editSticker(int $id, Request $request): View
+    {
+        $sticker = $this->findSticker($id);
         $page = int($request->input('page', 1));
-
-        if (! $sticker) {
-            abort(404, __('stickers.sticker_not_exist'));
-        }
-
-        if ($request->isMethod('post')) {
-            $code = $request->string('code')->lower()->value();
-            $cid = int($request->input('cid'));
-
-            $validator
-                ->length($code, 2, 20, ['code' => __('stickers.sticker_length')])
-                ->regex($code, '|^[\p{L}\p{N}_\-]+$|iu', ['code' => __('stickers.valid_sticker_code')]);
-
-            $duplicate = Sticker::query()->where('code', $code)->where('id', '<>', $sticker->id)->first();
-            $validator->empty($duplicate, ['code' => __('stickers.sticker_exists')]);
-
-            $category = StickersCategory::query()->where('id', $cid)->first();
-            $validator->notEmpty($category, ['category' => __('stickers.category_not_exist')]);
-
-            if ($validator->isValid()) {
-                $sticker->update([
-                    'code'        => $code,
-                    'category_id' => $cid,
-                ]);
-
-                clearCache(['stickers', 'stickers_map']);
-
-                return redirect('admin/stickers/' . $cid . '?page=' . $page)
-                    ->with('success', __('stickers.sticker_success_changed'));
-            }
-
-            return redirect('admin/stickers/sticker/edit/' . $sticker->id . '?page=' . $page)
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
         $categories = StickersCategory::query()->get();
 
         return view('admin/stickers/edit_sticker', compact('sticker', 'categories', 'page'));
     }
 
     /**
+     * Редактирование стикера
+     */
+    public function updateSticker(int $id, StickerRequest $request): RedirectResponse
+    {
+        $cid = (int) $request->validated('cid');
+        $page = int($request->input('page', 1));
+
+        $this->findSticker($id)->update([
+            'code'        => $request->validated('code'),
+            'category_id' => $cid,
+        ]);
+
+        clearCache(['stickers', 'stickers_map']);
+
+        return redirect('admin/stickers/' . $cid . '?page=' . $page)
+            ->with('success', __('stickers.sticker_success_changed'));
+    }
+
+    /**
      * Удаление стикера
-     s*/
+     */
     public function deleteSticker(int $id, Request $request): RedirectResponse
     {
-        if (! is_writable(public_path('uploads/stickers'))) {
-            abort(200, __('main.directory_not_writable'));
-        }
+        $this->checkUploadDirectory();
 
-        $sticker = Sticker::query()->where('id', $id)->first();
-
-        if (! $sticker) {
-            abort(404, __('stickers.sticker_not_exist'));
-        }
-
+        $sticker = $this->findSticker($id);
         $page = int($request->input('page', 1));
-        $category = $sticker->category->id;
 
         deleteFile(public_path($sticker->name));
         $sticker->delete();
 
         clearCache(['stickers', 'stickers_map']);
 
-        return redirect('admin/stickers/' . $category . '?page=' . $page)
+        return redirect('admin/stickers/' . $sticker->category_id . '?page=' . $page)
             ->with('success', __('stickers.sticker_success_deleted'));
+    }
+
+    /**
+     * Возвращает категорию или 404
+     */
+    private function findCategory(int $id): StickersCategory
+    {
+        $category = StickersCategory::query()->find($id);
+
+        if (! $category) {
+            abort(404, __('stickers.category_not_exist'));
+        }
+
+        return $category;
+    }
+
+    /**
+     * Возвращает стикер или 404
+     */
+    private function findSticker(int $id): Sticker
+    {
+        $sticker = Sticker::query()->find($id);
+
+        if (! $sticker) {
+            abort(404, __('stickers.sticker_not_exist'));
+        }
+
+        return $sticker;
+    }
+
+    /**
+     * Останавливает работу, если в папку стикеров нельзя писать
+     */
+    private function checkUploadDirectory(): void
+    {
+        if (! is_writable(public_path('uploads/stickers'))) {
+            abort(200, __('main.directory_not_writable'));
+        }
     }
 }

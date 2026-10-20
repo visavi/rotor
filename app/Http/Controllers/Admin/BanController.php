@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\BanRequest;
+use App\Http\Requests\Admin\ChangeBanRequest;
 use App\Models\Banhist;
 use App\Models\User;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -23,113 +24,81 @@ class BanController extends AdminController
     }
 
     /**
-     * Бан пользователя
+     * Форма бана пользователя
      */
-    public function edit(Request $request, Validator $validator): View|RedirectResponse
+    public function edit(Request $request): View
     {
-        $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
-
-        if (in_array($user->level, User::ADMIN_GROUPS, true)) {
-            abort(200, __('admin.bans.forbidden_ban'));
-        }
-
-        if ($request->isMethod('post')) {
-            $time = int($request->input('time'));
-            $type = $request->input('type');
-            $reason = $request->input('reason');
-            $validator
-                ->false($user->level === User::BANNED && $user->timeban?->isFuture(), __('admin.bans.user_banned'))
-                ->gt($time, 0, ['time' => __('admin.bans.time_not_indicated')])
-                ->in($type, ['minutes', 'hours', 'days'], ['type' => __('admin.bans.time_not_selected')])
-                ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                if ($type === 'days') {
-                    $time *= 86400;
-                } elseif ($type === 'hours') {
-                    $time *= 3600;
-                } else {
-                    $time *= 60;
-                }
-
-                $user->update([
-                    'level'   => User::BANNED,
-                    'timeban' => now()->addSeconds($time),
-                ]);
-
-                Banhist::query()->create([
-                    'user_id'      => $user->id,
-                    'send_user_id' => getUser('id'),
-                    'type'         => Banhist::BAN,
-                    'reason'       => $reason,
-                    'term'         => $time,
-                ]);
-
-                return redirect('admin/bans/edit?user=' . $user->login)
-                    ->with('success', __('admin.bans.success_banned'));
-            }
-
-            return redirect('admin/bans/edit?user=' . $user->login)
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
+        $user = $this->findBannableUser($request);
 
         return view('admin/bans/edit', compact('user'));
     }
 
     /**
-     * Изменение бана
+     * Бан пользователя
      */
-    public function change(Request $request, Validator $validator): View|RedirectResponse
+    public function update(BanRequest $request): RedirectResponse
     {
-        $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
+        $user = $this->findBannableUser($request);
 
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
-
-        if ($user->level !== User::BANNED || ! $user->timeban || $user->timeban->isPast()) {
-            abort(200, __('admin.bans.user_not_banned'));
-        }
-
-        if ($request->isMethod('post')) {
-            $reason = $request->input('reason');
-
-            $timeban = Date::parse($request->input('timeban'));
-            $term = $timeban->timestamp - now()->timestamp;
-
-            $validator
-                ->gt($term, 0, ['timeban' => __('admin.bans.time_empty')])
-                ->length($reason, 5, 1000, ['reason' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $user->update([
-                    'level'   => User::BANNED,
-                    'timeban' => $timeban,
-                ]);
-
-                Banhist::query()->create([
-                    'user_id'      => $user->id,
-                    'send_user_id' => getUser('id'),
-                    'type'         => Banhist::CHANGE,
-                    'reason'       => $reason,
-                    'term'         => $term,
-                ]);
-
-                return redirect('admin/bans/edit?user=' . $user->login)
-                    ->with('success', __('main.record_changed_success'));
-            }
-
-            return redirect('admin/bans/change?user=' . $user->login)
+        if ($user->level === User::BANNED && $user->timeban?->isFuture()) {
+            return redirect($this->editUrl($user))
                 ->withInput()
-                ->withErrors($validator->getErrors());
+                ->withErrors(__('admin.bans.user_banned'));
         }
+
+        $term = $request->term();
+
+        $user->update([
+            'level'   => User::BANNED,
+            'timeban' => now()->addSeconds($term),
+        ]);
+
+        Banhist::query()->create([
+            'user_id'      => $user->id,
+            'send_user_id' => getUser('id'),
+            'type'         => Banhist::BAN,
+            'reason'       => $request->validated('reason'),
+            'term'         => $term,
+        ]);
+
+        return redirect($this->editUrl($user))
+            ->with('success', __('admin.bans.success_banned'));
+    }
+
+    /**
+     * Форма изменения бана
+     */
+    public function change(Request $request): View
+    {
+        $user = $this->findBannedUser($request);
 
         return view('admin/bans/change', compact('user'));
+    }
+
+    /**
+     * Изменение бана
+     */
+    public function updateChange(ChangeBanRequest $request): RedirectResponse
+    {
+        $user = $this->findBannedUser($request);
+
+        $timeban = Date::parse($request->validated('timeban'));
+
+        $user->update([
+            'level'   => User::BANNED,
+            'timeban' => $timeban,
+        ]);
+
+        Banhist::query()->create([
+            'user_id'      => $user->id,
+            'send_user_id' => getUser('id'),
+            'type'         => Banhist::CHANGE,
+            'reason'       => $request->validated('reason'),
+            'term'         => $timeban->timestamp - now()->timestamp,
+        ]);
+
+        return redirect($this->editUrl($user))
+            ->with('success', __('main.record_changed_success'));
     }
 
     /**
@@ -137,15 +106,7 @@ class BanController extends AdminController
      */
     public function unban(Request $request): RedirectResponse
     {
-        $user = User::query()->where('login', $request->input('user'))->with('lastBan')->first();
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
-
-        if ($user->level !== User::BANNED || ! $user->timeban || $user->timeban->isPast()) {
-            abort(200, __('admin.bans.user_not_banned'));
-        }
+        $user = $this->findBannedUser($request);
 
         $user->update([
             'level'   => User::USER,
@@ -158,7 +119,60 @@ class BanController extends AdminController
             'type'         => Banhist::UNBAN,
         ]);
 
-        return redirect('admin/bans/edit?user=' . $user->login)
+        return redirect($this->editUrl($user))
             ->with('success', __('admin.bans.success_unbanned'));
+    }
+
+    /**
+     * Возвращает пользователя из запроса или 404
+     */
+    private function findUser(Request $request): User
+    {
+        $user = User::query()
+            ->where('login', $request->string('user')->value())
+            ->with('lastBan')
+            ->first();
+
+        if (! $user) {
+            abort(404, __('validator.user'));
+        }
+
+        return $user;
+    }
+
+    /**
+     * Возвращает пользователя, которого можно забанить
+     */
+    private function findBannableUser(Request $request): User
+    {
+        $user = $this->findUser($request);
+
+        if (in_array($user->level, User::ADMIN_GROUPS, true)) {
+            abort(200, __('admin.bans.forbidden_ban'));
+        }
+
+        return $user;
+    }
+
+    /**
+     * Возвращает пользователя с действующим баном
+     */
+    private function findBannedUser(Request $request): User
+    {
+        $user = $this->findUser($request);
+
+        if ($user->level !== User::BANNED || ! $user->timeban || $user->timeban->isPast()) {
+            abort(200, __('admin.bans.user_not_banned'));
+        }
+
+        return $user;
+    }
+
+    /**
+     * Адрес страницы бана пользователя
+     */
+    private function editUrl(User $user): string
+    {
+        return 'admin/bans/edit?' . http_build_query(['user' => $user->login]);
     }
 }

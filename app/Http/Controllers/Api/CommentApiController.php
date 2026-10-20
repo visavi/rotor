@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Services\CommentService;
 use App\Services\FileService;
 use App\Traits\HandlesApiPagination;
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -78,19 +78,9 @@ class CommentApiController extends Controller
         $user = getUser();
 
         $validated = $request->validate([
-            'type' => ['required', 'string', 'in:' . implode(',', CommentService::types())],
-            'id'   => ['required', 'integer', 'min:1'],
-            'text' => [
-                'required',
-                'string',
-                'min:' . setting('comment_text_min'),
-                'max:' . setting('comment_text_max'),
-                static function (string $attribute, mixed $value, Closure $fail) use ($flood) {
-                    if ($flood->isFlood()) {
-                        $fail(__('validator.flood', ['sec' => $flood->getPeriod()]));
-                    }
-                },
-            ],
+            'type'      => ['required', 'string', 'in:' . implode(',', CommentService::types())],
+            'id'        => ['required', 'integer', 'min:1'],
+            'text'      => [...CommentRequest::textRules(), CommentRequest::floodRule()],
             'parent_id' => ['nullable', 'integer', 'min:1'],
         ] + FileService::rules(Comment::$morphName));
 
@@ -153,12 +143,7 @@ class CommentApiController extends Controller
         }
 
         $validated = $request->validate([
-            'text' => [
-                'required',
-                'string',
-                'min:' . setting('comment_text_min'),
-                'max:' . setting('comment_text_max'),
-            ],
+            'text' => CommentRequest::textRules(),
         ]);
 
         $this->comments->update($comment, $validated['text']);

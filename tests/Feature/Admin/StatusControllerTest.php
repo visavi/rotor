@@ -86,6 +86,62 @@ class StatusControllerTest extends TestCase
         $response->assertSessionHasErrors('color');
     }
 
+    public function testCreateStatusWithUppercaseColor(): void
+    {
+        $this->actingAs($this->admin)->post('/admin/status/create', [
+            'topoint' => 100,
+            'point'   => 200,
+            'name'    => 'Цветной',
+            'color'   => '#FF00AA',
+        ])->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('status', ['name' => 'Цветной', 'color' => '#FF00AA']);
+    }
+
+    public function testCreateStatusWithMalformedColorFails(): void
+    {
+        foreach (['##ff0000', '#ff00_0', '#ff00[0'] as $color) {
+            $this->actingAs($this->admin)->post('/admin/status/create', [
+                'topoint' => 100,
+                'point'   => 200,
+                'name'    => 'Кривой-цвет',
+                'color'   => $color,
+            ])->assertSessionHasErrors(['color' => __('validator.color')]);
+        }
+
+        $this->assertDatabaseMissing('status', ['name' => 'Кривой-цвет']);
+    }
+
+    public function testCreateStatusCountsTags(): void
+    {
+        // Название — обычный текст: теги считаются, иначе строка не влезла бы в колонку
+        $name = '<b><i><u><s>' . str_repeat('<span>', 6) . 'abc';
+
+        $this->actingAs($this->admin)->post('/admin/status/create', [
+            'topoint' => 100,
+            'point'   => 200,
+            'name'    => $name,
+            'color'   => '#00ff00',
+        ])->assertSessionHasErrors(['name' => __('statuses.status_length')]);
+
+        $this->assertDatabaseMissing('status', ['name' => $name]);
+    }
+
+    public function testCreateStatusWithoutColor(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/status/create', [
+            'topoint' => 100,
+            'point'   => 200,
+            'name'    => 'Бесцветный',
+            'color'   => '',
+        ]);
+
+        $response->assertRedirect('admin/status');
+        $response->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('status', ['name' => 'Бесцветный', 'color' => null]);
+    }
+
     public function testCreateStatusKeepsInputOnError(): void
     {
         $response = $this->actingAs($this->admin)->post('/admin/status/create', [

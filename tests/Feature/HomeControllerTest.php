@@ -31,6 +31,9 @@ class HomeControllerTest extends TestCase
 
         $response->assertOk();
         $response->assertSee(__('main.request_length'));
+
+        // Сообщение — только для этого ответа, на следующую страницу не переходит
+        $this->get('/search')->assertDontSee(__('main.request_length'));
     }
 
     public function testIpbanPageForBannedIp(): void

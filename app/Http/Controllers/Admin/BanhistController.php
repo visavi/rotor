@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\DeleteSelectedRequest;
 use App\Models\Banhist;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -49,24 +49,16 @@ class BanhistController extends AdminController
     /**
      * Удаление банов
      */
-    public function delete(Request $request, Validator $validator): RedirectResponse
+    public function delete(DeleteSelectedRequest $request): RedirectResponse
     {
         $page = int($request->input('page', 1));
-        $del = intar($request->input('del'));
-        $login = $request->input('user');
+        $login = $request->string('user')->value();
 
-        $validator->true($del, __('validator.deletion'));
+        Banhist::query()->whereIn('id', $request->ids())->delete();
 
         $redirect = $login
-            ? 'admin/banhists/view?user=' . $login . '&page=' . $page
+            ? 'admin/banhists/view?' . http_build_query(['user' => $login, 'page' => $page])
             : 'admin/banhists?page=' . $page;
-
-        if (! $validator->isValid()) {
-            return redirect($redirect)
-                ->withErrors($validator->getErrors());
-        }
-
-        Banhist::query()->whereIn('id', $del)->delete();
 
         return redirect($redirect)
             ->with('success', __('main.records_deleted_success'));

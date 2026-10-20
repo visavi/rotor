@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\RecoveryRequest;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\MailService;
 use App\Services\UserService;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -22,41 +21,25 @@ class RecoveryController extends Controller
     /**
      * Восстановление пароля
      */
-    public function recovery(Request $request, Validator $validator, UserService $userService): View|RedirectResponse
+    public function recovery(): View|RedirectResponse
     {
         if (getUser()) {
             return redirect('/')->with('danger', __('main.already_authorized'));
         }
 
-        if ($request->isMethod('post')) {
-            $user = getUserByLoginOrEmail($request->input('user'));
-            if (! $user) {
-                abort(200, __('validator.user'));
-            }
-
-            $validator->true(captchaVerify(), ['protect' => __('validator.captcha')]);
-
-            // Без почты письмо со ссылкой отправить некуда
-            if (! $user->email) {
-                $validator->addError(['user' => __('users.email_not_attached')]);
-            }
-
-            if ($userService->hasPendingRecovery($user)) {
-                $validator->addError(['user' => __('mails.password_recovery_time')]);
-            }
-
-            if ($validator->isValid()) {
-                $userService->requestRecovery($user);
-
-                return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
-            }
-
-            return redirect('recovery')
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
         return view('users/recovery');
+    }
+
+    /**
+     * Заявка на восстановление, ссылка уходит на почту
+     */
+    public function sendRecovery(RecoveryRequest $request, UserService $userService): RedirectResponse
+    {
+        $user = $request->recoveryUser();
+
+        $userService->requestRecovery($user);
+
+        return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
     }
 
     /**

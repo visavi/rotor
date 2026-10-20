@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\NoticeRequest;
 use App\Models\Notice;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class NoticeController extends AdminController
@@ -26,50 +25,85 @@ class NoticeController extends AdminController
     }
 
     /**
+     * Форма создания шаблона
+     */
+    public function create(): View
+    {
+        return view('admin/notices/create');
+    }
+
+    /**
      * Создание шаблона
      */
-    public function create(Request $request, Validator $validator): View|RedirectResponse
+    public function store(NoticeRequest $request): RedirectResponse
     {
-        if ($request->isMethod('post')) {
-            $type = $request->input('type');
-            $name = $request->input('name');
-            $text = $request->input('text');
-            $protect = empty($request->input('protect')) ? 0 : 1;
+        $notice = Notice::query()->create([
+            'type'    => $request->validated('type'),
+            'name'    => $request->validated('name'),
+            'text'    => $request->validated('text'),
+            'user_id' => getUser('id'),
+            'protect' => (int) $request->boolean('protect'),
+        ]);
 
-            $validator
-                ->regex($type, '|^[a-z0-9_\-]+$|i', ['type' => 'Недопустимое название типа шаблона!'])
-                ->length($type, 3, 20, ['type' => __('admin.notices.notice_length')])
-                ->length($name, 5, 100, ['name' => __('validator.text')])
-                ->length($text, 10, 65000, ['text' => __('validator.text')]);
+        return redirect('admin/notices/edit/' . $notice->id)
+            ->with('success', __('admin.notices.notice_success_saved'));
+    }
 
-            $duplicate = Notice::query()->where('type', $type)->first();
-            $validator->empty($duplicate, ['type' => __('admin.notices.notice_exists')]);
+    /**
+     * Форма редактирования шаблона
+     */
+    public function edit(int $id): View
+    {
+        $notice = $this->findNotice($id);
 
-            if ($validator->isValid()) {
-                $notice = Notice::query()->create([
-                    'type'    => $type,
-                    'name'    => $name,
-                    'text'    => $text,
-                    'user_id' => getUser('id'),
-                    'protect' => $protect,
-                ]);
-
-                return redirect('admin/notices/edit/' . $notice->id)
-                    ->with('success', __('admin.notices.notice_success_saved'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('admin/notices/create');
+        return view('admin/notices/edit', compact('notice'));
     }
 
     /**
      * Редактирование шаблона
      */
-    public function edit(int $id, Request $request, Validator $validator): View|RedirectResponse
+    public function update(int $id, NoticeRequest $request): RedirectResponse
+    {
+        $notice = $this->findNotice($id);
+
+        $notice->update([
+            'name'    => $request->validated('name'),
+            'text'    => $request->validated('text'),
+            'user_id' => getUser('id'),
+            'protect' => (int) $request->boolean('protect'),
+        ]);
+
+        return redirect('admin/notices/edit/' . $notice->id)
+            ->with('success', __('admin.notices.notice_success_saved'));
+    }
+
+    /**
+     * Удаление шаблона
+     */
+    public function delete(int $id): RedirectResponse
+    {
+        $notice = Notice::query()->find($id);
+
+        if (! $notice) {
+            return redirect('admin/notices')
+                ->withErrors(__('admin.notices.notice_not_found'));
+        }
+
+        if ($notice->protect) {
+            return redirect('admin/notices')
+                ->withErrors(__('admin.notices.notice_protect'));
+        }
+
+        $notice->delete();
+
+        return redirect('admin/notices')
+            ->with('success', __('admin.notices.notice_success_deleted'));
+    }
+
+    /**
+     * Возвращает шаблон или 404
+     */
+    private function findNotice(int $id): Notice
     {
         $notice = Notice::query()->find($id);
 
@@ -77,56 +111,6 @@ class NoticeController extends AdminController
             abort(404, __('admin.notices.notice_not_found'));
         }
 
-        if ($request->isMethod('post')) {
-            $name = $request->input('name');
-            $text = $request->input('text');
-            $protect = empty($request->input('protect')) ? 0 : 1;
-
-            $validator
-                ->length($name, 5, 100, ['name' => __('validator.text')])
-                ->length($text, 10, 65000, ['text' => __('validator.text')]);
-
-            if ($validator->isValid()) {
-                $notice->update([
-                    'name'    => $name,
-                    'text'    => $text,
-                    'user_id' => getUser('id'),
-                    'protect' => $protect,
-                ]);
-
-                return redirect('admin/notices/edit/' . $notice->id)
-                    ->with('success', __('admin.notices.notice_success_saved'));
-            }
-
-            return redirect()->back()
-                ->withInput()
-                ->withErrors($validator->getErrors());
-        }
-
-        return view('admin/notices/edit', compact('notice'));
-    }
-
-    /**
-     * Удаление шаблона
-     */
-    public function delete(int $id, Validator $validator): RedirectResponse
-    {
-        $notice = Notice::query()->find($id);
-
-        $validator->notEmpty($notice, __('admin.notices.notice_not_found'));
-
-        if ($notice) {
-            $validator->empty($notice->protect, __('admin.notices.notice_protect'));
-        }
-
-        if (! $validator->isValid()) {
-            return redirect('admin/notices')
-                ->withErrors($validator->getErrors());
-        }
-
-        $notice->delete();
-
-        return redirect('admin/notices')
-            ->with('success', __('admin.notices.notice_success_deleted'));
+        return $notice;
     }
 }

@@ -7,13 +7,14 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\Message;
+use App\Rules\ImageDimensionsRule;
 use App\Support\Registry;
-use App\Support\Validator;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 /**
@@ -103,7 +104,7 @@ class FileService
      *
      * @return array{success: bool, message?: string, file?: File, data?: array}
      */
-    public function upload(?UploadedFile $file, string $type, int $id, Validator $validator): array
+    public function upload(?UploadedFile $file, string $type, int $id): array
     {
         if (! in_array($type, self::types(), true)) {
             return ['success' => false, 'message' => 'Type invalid'];
@@ -133,26 +134,16 @@ class FileService
             Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension())
         );
 
-        $validator
-            ->lt($uploadedFiles->count(), setting('maxfiles'), __('validator.files_max', ['max' => setting('maxfiles')]))
-            ->false($duplicate, __('validator.file_duplicate'));
+        // Сам файл проверяется последним: остальное дешевле и ответ на него понятнее
+        $error = match (true) {
+            $uploadedFiles->count() >= setting('maxfiles')                 => __('validator.files_max', ['max' => setting('maxfiles')]),
+            $duplicate                                                     => __('validator.file_duplicate'),
+            $model->id && $model->user_id !== getUser('id') && ! isAdmin() => __('ajax.record_not_author'),
+            default                                                        => $this->fileError($file, $type),
+        };
 
-        if ($model->id) {
-            $validator->true($model->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
-        }
-
-        if ($validator->isValid()) {
-            $rules = [
-                'minweight'  => 100,
-                'maxsize'    => setting('filesize'),
-                'extensions' => self::extensions($type),
-            ];
-
-            $validator->file($file, $rules, __('validator.file_upload_failed'));
-        }
-
-        if (! $validator->isValid()) {
-            return ['success' => false, 'message' => current($validator->getErrors())];
+        if ($error) {
+            return ['success' => false, 'message' => $error];
         }
 
         $fileData = $this->store($model, $file, $isImageType);
@@ -162,6 +153,32 @@ class FileService
             'file'    => File::query()->find($fileData['id']),
             'data'    => $fileData,
         ];
+    }
+
+    /**
+     * Проверяет загружаемый файл: размер, расширение, у картинки — не меньше 100 px
+     *
+     * @return string|null текст ошибки или null, если файл подходит
+     */
+    private function fileError(?UploadedFile $file, string $type): ?string
+    {
+        $validator = Validator::make(['file' => $file], [
+            'file' => [
+                'required',
+                'file',
+                'extensions:' . implode(',', self::extensions($type)),
+                'max:' . self::maxFileSize(),
+                new ImageDimensionsRule(100),
+            ],
+        ], [
+            'file.required'   => __('validator.file_upload_failed'),
+            'file.file'       => __('validator.file_upload_failed'),
+            'file.uploaded'   => __('validator.file_upload_failed'),
+            'file.max'        => __('validator.size_max', ['size' => formatSize(setting('filesize'))]),
+            'file.extensions' => __('validator.extension'),
+        ]);
+
+        return $validator->fails() ? $validator->errors()->first() : null;
     }
 
     /**
@@ -260,7 +277,7 @@ class FileService
      *
      * @return array{success: bool, message?: string, path?: string}
      */
-    public function remove(int $fileId, string $type, Validator $validator): array
+    public function remove(int $fileId, string $type): array
     {
         if (! in_array($type, self::types(), true)) {
             return ['success' => false, 'message' => 'Type invalid'];
@@ -274,10 +291,8 @@ class FileService
             return ['success' => false, 'message' => 'File not found'];
         }
 
-        $validator->true($file->user_id === getUser('id') || isAdmin(), __('ajax.record_not_author'));
-
-        if (! $validator->isValid()) {
-            return ['success' => false, 'message' => current($validator->getErrors())];
+        if ($file->user_id !== getUser('id') && ! isAdmin()) {
+            return ['success' => false, 'message' => __('ajax.record_not_author')];
         }
 
         $file->delete();
@@ -294,7 +309,7 @@ class FileService
      *
      * @return array{success: bool, message?: string}
      */
-    public function sort(array $ids, string $type, Validator $validator): array
+    public function sort(array $ids, string $type): array
     {
         if (! in_array($type, self::types(), true)) {
             return ['success' => false, 'message' => 'Type invalid'];
@@ -311,13 +326,8 @@ class FileService
             return ['success' => false, 'message' => 'File not found'];
         }
 
-        $validator->true(
-            isAdmin() || $files->every(static fn (File $file) => $file->user_id === getUser('id')),
-            __('ajax.record_not_author')
-        );
-
-        if (! $validator->isValid()) {
-            return ['success' => false, 'message' => current($validator->getErrors())];
+        if (! isAdmin() && ! $files->every(static fn (File $file) => $file->user_id === getUser('id'))) {
+            return ['success' => false, 'message' => __('ajax.record_not_author')];
         }
 
         // Id — целые, проверенные запросом выше, поэтому подставляются в SQL напрямую.

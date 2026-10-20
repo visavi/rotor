@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Error;
 use App\Models\User;
-use App\Support\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -60,13 +59,11 @@ class ErrorController extends AdminController
     /**
      * Очистка логов
      */
-    public function clear(Validator $validator): RedirectResponse
+    public function clear(): RedirectResponse
     {
-        $validator->true(isAdmin(User::BOSS), __('main.page_only_admins'));
-
-        if (! $validator->isValid()) {
+        if (! isAdmin(User::BOSS)) {
             return redirect()->route('admin.errors.index')
-                ->withErrors($validator->getErrors());
+                ->withErrors(__('main.page_only_owner'));
         }
 
         Error::query()->truncate();

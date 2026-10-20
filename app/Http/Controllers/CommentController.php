@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use App\Models\File;
 use App\Services\CommentService;
-use App\Support\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
@@ -50,13 +51,11 @@ class CommentController extends Controller
     /**
      * Редактирует комментарий
      */
-    public function update(int $id, Request $request, Validator $validator): JsonResponse
+    public function update(int $id, Request $request): JsonResponse
     {
         if (! $user = getUser()) {
             return response()->json(['success' => false, 'message' => __('main.not_authorized')]);
         }
-
-        $msg = $request->input('msg');
 
         $comment = Comment::query()
             ->where('id', $id)
@@ -71,18 +70,23 @@ class CommentController extends Controller
             return response()->json(['success' => false, 'message' => __('main.editing_impossible')]);
         }
 
-        $validator->length($msg, setting('comment_text_min'), setting('comment_text_max'), ['msg' => __('validator.text')]);
-
-        $relate = $comment->relate;
-        if ($relate && array_key_exists('closed', $relate->getAttributes()) && $relate->getAttribute('closed')) {
+        if ($comment->relate?->getAttribute('closed')) {
             return response()->json(['success' => false, 'message' => __('main.closed_comments')]);
         }
 
-        if (! $validator->isValid()) {
-            return response()->json(['success' => false, 'message' => current($validator->getErrors())]);
+        // Ajax ждёт {success, message}, а не 422 с errors — проверка без FormRequest
+        $validator = Validator::make($request->only('msg'), [
+            'msg' => CommentRequest::textRules(),
+        ], [
+            'msg.required' => __('validator.text'),
+            'msg.string'   => __('validator.text'),
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
         }
 
-        $this->comments->update($comment, (string) $msg);
+        $this->comments->update($comment, $validator->validated()['msg']);
 
         return response()->json([
             'success' => true,
