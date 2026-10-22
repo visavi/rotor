@@ -9,10 +9,13 @@
 @section('header', '')
 
 @section('content')
-    <?php $images = glob(public_path('assets/img/errors/*.{gif,png,jpg,jpeg,webp}'), GLOB_BRACE); ?>
+    {{-- Пустой каталог картинок не должен превращать страницу ошибки в 500 --}}
+    <?php $images = glob(public_path('assets/img/errors/*.{gif,png,jpg,jpeg,webp}'), GLOB_BRACE) ?: []; ?>
 
     <div class="text-center">
-        <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error {{ $code ?? '' }}" class="img-fluid">
+        @if ($images)
+            <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error {{ $code ?? '' }}" class="img-fluid">
+        @endif
 
         <h1>{{ trim(__('errors.error') . ' ' . ($code ?? '')) }}!</h1>
 

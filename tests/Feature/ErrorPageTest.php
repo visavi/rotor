@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
@@ -51,6 +52,22 @@ class ErrorPageTest extends TestCase
         $this->get('/missing-page-for-test')
             ->assertNotFound()
             ->assertSee('/assets/img/errors/', false);
+    }
+
+    public function testErrorWithoutImagesKeepsStatus(): void
+    {
+        // array_rand() на пустом каталоге картинок ронял страницу ошибки в 500
+        $publicPath = storage_path('framework/testing/error-page');
+        File::ensureDirectoryExists($publicPath);
+        $this->app->usePublicPath($publicPath);
+
+        try {
+            $this->get('/missing-page-for-test')
+                ->assertNotFound()
+                ->assertDontSee('/assets/img/errors/', false);
+        } finally {
+            File::deleteDirectory($publicPath);
+        }
     }
 
     public function testErrorBeforeThemeRendersWithoutLayout(): void

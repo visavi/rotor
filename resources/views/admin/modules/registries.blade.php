@@ -54,7 +54,7 @@
                             </button>
                         </form>
                         <form action="{{ route('admin.registries.destroy', $registry->id) }}" method="post"
-                              onsubmit="return confirm('{{ __('admin.registries.confirm_delete') }}')">
+                              onsubmit="return confirmAction(this)" data-confirm="{{ __('admin.registries.confirm_delete') }}">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-outline-danger">

@@ -32,7 +32,7 @@
                         @if ($notice->protect)
                             <i class="fa fa-lock"></i>
                         @else
-                            <form action="/admin/notices/delete/{{ $notice->id }}" method="post" class="d-inline" onsubmit="return confirm('{{ __('admin.notices.confirm_delete') }}')">
+                            <form action="/admin/notices/delete/{{ $notice->id }}" method="post" class="d-inline" onsubmit="return confirmAction(this)" data-confirm="{{ __('admin.notices.confirm_delete') }}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-trash-alt"></i></button>

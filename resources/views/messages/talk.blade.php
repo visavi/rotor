@@ -134,7 +134,7 @@
     @endif
 
     @if ($messages->isNotEmpty())
-        <form class="text-end mb-3" action="/messages/delete/{{ $user->id }}" method="post" onsubmit="return confirm('{{ __('messages.delete_confirm') }}')">
+        <form class="text-end mb-3" action="/messages/delete/{{ $user->id }}" method="post" onsubmit="return confirmAction(this)" data-confirm="{{ __('messages.delete_confirm') }}">
             @csrf
             @method('DELETE')
             <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>

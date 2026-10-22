@@ -230,7 +230,7 @@
                 <button class="btn btn-success">{{ __('main.install') }}</button>
             </form>
             <form action="{{ route('admin.modules.delete') }}" method="post"
-                  onsubmit="return confirm('{{ __('admin.modules.confirm_delete_files') }}')">
+                  onsubmit="return confirmAction(this)" data-confirm="{{ __('admin.modules.confirm_delete_files') }}">
                 @csrf
                 <input type="hidden" name="module" value="{{ $moduleName }}">
                 <button class="btn btn-danger">{{ __('admin.modules.delete_files') }}</button>

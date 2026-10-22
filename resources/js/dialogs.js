@@ -258,7 +258,13 @@ window.confirmAction = function (el) {
 
         if (form) {
             confirmedElements.add(form)
-            form.submit()
+
+            // Кнопка отправляет форму от своего имени: со своими formaction, name и value
+            if (el.matches('button, input[type="submit"]')) {
+                form.requestSubmit(el)
+            } else {
+                form.submit()
+            }
 
             return
         }
