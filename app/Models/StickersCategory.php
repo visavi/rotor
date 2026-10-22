@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,6 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StickersCategory extends Model
 {
+    /** @use HasFactory<\Database\Factories\StickersCategoryFactory> */
+    use HasFactory;
+
     /**
      * The attributes that aren't mass assignable.
      */

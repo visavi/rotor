@@ -23,7 +23,7 @@ class PageTest extends TestCase
     public function testRulesReturnText(): void
     {
         Rule::query()->delete();
-        Rule::query()->create(['text' => 'Правила сайта %SITENAME%', 'created_at' => now()]);
+        Rule::factory()->create(['text' => 'Правила сайта %SITENAME%', 'created_at' => now()]);
 
         // Название сайта подставляется, как и на странице правил
         $this->getJson('/api/rules')
@@ -45,9 +45,9 @@ class PageTest extends TestCase
         Sticker::query()->delete();
         StickersCategory::query()->delete();
 
-        $category = StickersCategory::query()->create(['name' => 'Смайлы']);
+        $category = StickersCategory::factory()->create(['name' => 'Смайлы']);
 
-        Sticker::query()->create([
+        Sticker::factory()->create([
             'category_id' => $category->id,
             'code'        => ':)',
             'name'        => '/uploads/stickers/smile.gif',
@@ -66,8 +66,8 @@ class PageTest extends TestCase
     {
         Status::query()->delete();
 
-        Status::query()->create(['name' => 'Новичок', 'point' => 0, 'topoint' => 10, 'color' => '#000000']);
-        Status::query()->create(['name' => 'Мастер', 'point' => 100, 'topoint' => 1000, 'color' => '#ff0000']);
+        Status::factory()->create(['name' => 'Новичок', 'point' => 0, 'topoint' => 10, 'color' => '#000000']);
+        Status::factory()->create(['name' => 'Мастер', 'point' => 100, 'topoint' => 1000, 'color' => '#ff0000']);
 
         $this->getJson('/api/statuses')
             ->assertOk()

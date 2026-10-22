@@ -109,7 +109,7 @@ class DialogueTest extends TestCase
         $this->overrideSetting('filesize', 1024 * 1024);
         $this->overrideSetting('maxfiles', 1);
 
-        $pending = File::query()->create([
+        $pending = File::factory()->create([
             'relate_id'   => 0,
             'relate_type' => Message::$morphName,
             'path'        => '/uploads/messages/other.txt',

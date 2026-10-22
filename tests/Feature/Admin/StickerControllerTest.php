@@ -26,7 +26,7 @@ class StickerControllerTest extends TestCase
 
     private function makeCategory(string $name = 'Тестовая категория'): StickersCategory
     {
-        return StickersCategory::query()->create([
+        return StickersCategory::factory()->create([
             'name'       => $name,
             'created_at' => now(),
         ]);
@@ -34,7 +34,7 @@ class StickerControllerTest extends TestCase
 
     private function makeSticker(StickersCategory $category, string $code = 'testcode'): Sticker
     {
-        return Sticker::query()->create([
+        return Sticker::factory()->create([
             'category_id' => $category->id,
             'name'        => '/uploads/stickers/nonexistent-test.gif',
             'code'        => $code,

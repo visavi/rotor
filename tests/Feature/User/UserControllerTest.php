@@ -137,7 +137,7 @@ class UserControllerTest extends TestCase
 
     public function testRegisterWithBlacklistedDomainFails(): void
     {
-        BlackList::query()->create(['type' => 'domain', 'value' => 'spam.example', 'user_id' => 0]);
+        BlackList::factory()->create(['type' => 'domain', 'value' => 'spam.example', 'user_id' => 0]);
 
         $this->post('/register', [
             'login'     => 'newcomer',
@@ -176,8 +176,10 @@ class UserControllerTest extends TestCase
     {
         $this->makeUser();
 
+        // ajax ядра сводит 422 к {success: false, message}
         $this->postJson('/check-login', ['login' => 'plain_user'], ['X-Requested-With' => 'XMLHttpRequest'])
-            ->assertJson(['success' => false, 'message' => __('validator.login')]);
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['login' => __('validator.login')]);
 
         $this->postJson('/check-login', ['login' => 'plain-user'], ['X-Requested-With' => 'XMLHttpRequest'])
             ->assertJson(['success' => true]);
@@ -185,7 +187,8 @@ class UserControllerTest extends TestCase
         $this->makeUser(['login' => 'taken-user', 'email' => 'taken@example.com']);
 
         $this->postJson('/check-login', ['login' => 'taken-user'], ['X-Requested-With' => 'XMLHttpRequest'])
-            ->assertJson(['success' => false, 'message' => __('users.login_already_exists')]);
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['login' => __('users.login_already_exists')]);
     }
 
     public function testRegisterWithExistingLoginFails(): void
@@ -222,7 +225,7 @@ class UserControllerTest extends TestCase
     {
         $admin = $this->makeUser(['login' => 'admin_blacklist', 'email' => 'a@example.com']);
 
-        BlackList::query()->create([
+        BlackList::factory()->create([
             'type'       => 'login',
             'value'      => 'newcomer',
             'user_id'    => $admin->id,

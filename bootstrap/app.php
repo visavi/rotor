@@ -40,6 +40,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->throttleApi();
 
+        // Сессия, язык и тема — глобально, а не в группе web: 404 рождается до групп,
+        // и без темы и сессии страница ошибки падала бы в 500 «No hint path defined»
         $middleware->append([
             NormalizeUrl::class,
             EncryptCookies::class,

@@ -1,7 +1,8 @@
 {
     "preset": "psr12",
     "exclude": [
-        "storage"
+        "storage",
+        "bootstrap/cache"
     ],
     "rules": {
         "binary_operator_spaces": {

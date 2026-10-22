@@ -163,6 +163,7 @@ class MakeModule extends Command
 
         if ($model !== '') {
             $files['model.php'] = 'Models/' . $model . '.php';
+            $files['factory.php'] = 'Tests/Factories/' . $model . 'Factory.php';
             $files['migration.create.php'] = sprintf(
                 'database/migrations/%s_create_%s_table.php',
                 date('Y_m_d_His'),

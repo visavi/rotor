@@ -25,7 +25,7 @@ class NoticeControllerTest extends TestCase
 
     private function makeNotice(array $attributes = []): Notice
     {
-        return Notice::query()->create(array_merge([
+        return Notice::factory()->create(array_merge([
             'type'       => 'test_notice',
             'name'       => 'Тестовый шаблон',
             'text'       => 'Текст тестового шаблона',

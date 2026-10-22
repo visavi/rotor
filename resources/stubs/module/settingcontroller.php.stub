@@ -11,4 +11,14 @@ class {{ module }}SettingController extends ModuleSettingController
     protected string $view = '{{ moduleKey }}::admin/settings/_{{ moduleKey }}';
 
     protected string $route = '{{ moduleRoute }}.settings';
+
+    /**
+     * Правила настроек: сохраняются только перечисленные здесь ключи
+     */
+    protected function rules(): array
+    {
+        return [
+            'sets.{{ moduleKey }}_per_page' => ['required', 'integer', 'between:1,100'],
+        ];
+    }
 }

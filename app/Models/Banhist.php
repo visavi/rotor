@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\HtmlCast;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\HtmlString;
@@ -24,6 +25,9 @@ use Illuminate\Support\HtmlString;
  */
 class Banhist extends Model
 {
+    /** @use HasFactory<\Database\Factories\BanhistFactory> */
+    use HasFactory;
+
     /**
      * The table associated with the model.
      */

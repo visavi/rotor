@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 /**
  * Class User
@@ -538,6 +539,38 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
             return $statuses;
         });
+    }
+
+    /**
+     * Списывает деньги, только если на счёте хватает
+     *
+     * Баланс проверяется в самом запросе: два параллельных списания
+     * проходят проверку в коде оба, и без условия счёт ушёл бы в минус
+     */
+    public function chargeMoney(int $amount): bool
+    {
+        if ($amount < 0) {
+            throw new InvalidArgumentException('Сумма списания не может быть отрицательной');
+        }
+
+        // Бесплатная покупка: MySQL считает изменённые строки, а money - 0 строку не меняет
+        if ($amount === 0) {
+            return true;
+        }
+
+        $charged = static::query()
+            ->whereKey($this->id)
+            ->where('money', '>=', $amount)
+            ->decrement('money', $amount);
+
+        if (! $charged) {
+            return false;
+        }
+
+        $this->money -= $amount;
+        $this->syncOriginalAttribute('money');
+
+        return true;
     }
 
     /**

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Jobs\FetchRegistryJob;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\Http;
  */
 class ModuleRegistry extends Model
 {
+    /** @use HasFactory<\Database\Factories\ModuleRegistryFactory> */
+    use HasFactory;
+
     protected $guarded = [];
 
     protected function casts(): array

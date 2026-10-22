@@ -18,7 +18,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -248,16 +247,7 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => __('validator.not_ajax')]);
         }
 
-        // Ajax ждёт {success, message}, а не 422 с errors — проверка без FormRequest
-        $validator = Validator::make(
-            ['login' => $request->string('login')->value()],
-            ['login' => UserRules::login()],
-            UserRules::messages(),
-        );
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()->first()]);
-        }
+        $request->validate(['login' => UserRules::login()], UserRules::messages());
 
         return response()->json(['success' => true]);
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -19,6 +20,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class EmailChange extends Model
 {
+    /** @use HasFactory<\Database\Factories\EmailChangeFactory> */
+    use HasFactory;
+
     /**
      * Indicates if the model should be timestamped.
      */

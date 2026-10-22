@@ -33,7 +33,7 @@ class ModuleRegistryControllerTest extends TestCase
 
     public function testIndexShowsRegistries(): void
     {
-        ModuleRegistry::query()->create([
+        ModuleRegistry::factory()->create([
             'url'        => 'https://registry.example.com/modules.json',
             'created_at' => now(),
         ]);
@@ -58,7 +58,7 @@ class ModuleRegistryControllerTest extends TestCase
 
     public function testStoreWithDuplicateUrlFails(): void
     {
-        ModuleRegistry::query()->create([
+        ModuleRegistry::factory()->create([
             'url'        => 'https://registry.example.com/modules.json',
             'created_at' => now(),
         ]);
@@ -89,7 +89,7 @@ class ModuleRegistryControllerTest extends TestCase
 
     public function testDestroyRegistry(): void
     {
-        $registry = ModuleRegistry::query()->create([
+        $registry = ModuleRegistry::factory()->create([
             'url'        => 'https://registry.example.com/modules.json',
             'created_at' => now(),
         ]);
@@ -109,7 +109,7 @@ class ModuleRegistryControllerTest extends TestCase
         Queue::fake();
         config(['queue.default' => 'database']);
 
-        $registry = ModuleRegistry::query()->create([
+        $registry = ModuleRegistry::factory()->create([
             'url'        => 'https://registry.example.com/modules.json',
             'created_at' => now(),
         ]);
@@ -130,7 +130,7 @@ class ModuleRegistryControllerTest extends TestCase
             '*' => Http::response(['name' => 'Тестовый реестр', 'modules' => []]),
         ]);
 
-        $registry = ModuleRegistry::query()->create([
+        $registry = ModuleRegistry::factory()->create([
             'url'        => 'https://registry.example.com/modules.json',
             'created_at' => now(),
         ]);
@@ -146,7 +146,7 @@ class ModuleRegistryControllerTest extends TestCase
 
     public function testToggleRegistry(): void
     {
-        $registry = ModuleRegistry::query()->create([
+        $registry = ModuleRegistry::factory()->create([
             'url'        => 'https://registry.example.com/modules.json',
             'active'     => 1,
             'created_at' => now(),

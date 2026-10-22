@@ -136,7 +136,7 @@ class AccountTest extends TestCase
 
     public function testSecondEmailChangeIsBlocked(): void
     {
-        EmailChange::query()->create([
+        EmailChange::factory()->create([
             'user_id'    => $this->user->id,
             'email'      => 'other@example.com',
             'token'      => 'token',

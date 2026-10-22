@@ -6,6 +6,7 @@ namespace Modules\{{ module }}\Models;
 
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,6 +21,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class {{ model }} extends Model
 {
+    /** @use HasFactory<\Modules\{{ module }}\Tests\Factories\{{ model }}Factory> */
+    use HasFactory;
+
     /**
      * Morph name
      */

@@ -38,7 +38,7 @@ class HomeControllerTest extends TestCase
 
     public function testIpbanPageForBannedIp(): void
     {
-        Ban::query()->create([
+        Ban::factory()->create([
             'ip'         => '127.0.0.1',
             'user_id'    => 0,
             'created_at' => now()->subHour(),
@@ -54,7 +54,7 @@ class HomeControllerTest extends TestCase
 
     public function testIpbanSelfUnbanWithCaptcha(): void
     {
-        $ban = Ban::query()->create([
+        $ban = Ban::factory()->create([
             'ip'         => '127.0.0.1',
             'user_id'    => 0,
             'created_at' => now()->subHour(),
@@ -71,20 +71,20 @@ class HomeControllerTest extends TestCase
 
     public function testIpbanSelfUnbanMarksLatestAutobanLog(): void
     {
-        Ban::query()->create([
+        Ban::factory()->create([
             'ip'         => '127.0.0.1',
             'user_id'    => 0,
             'created_at' => now()->subHour(),
         ]);
 
-        $old = Error::query()->create([
+        $old = Error::factory()->create([
             'code'       => 666,
             'ip'         => '127.0.0.1',
             'brow'       => 'Test',
             'created_at' => now()->subDay(),
         ]);
 
-        $latest = Error::query()->create([
+        $latest = Error::factory()->create([
             'code'       => 666,
             'ip'         => '127.0.0.1',
             'brow'       => 'Test',
@@ -108,7 +108,7 @@ class HomeControllerTest extends TestCase
             'timebonus' => now(),
         ]);
 
-        $ban = Ban::query()->create([
+        $ban = Ban::factory()->create([
             'ip'         => '127.0.0.1',
             'user_id'    => $admin->id,
             'created_at' => now()->subHour(),

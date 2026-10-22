@@ -133,7 +133,7 @@ class ModuleControllerTest extends TestCase
             ]),
         ]);
 
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
     }
 
     public function testIndexFallsBackToFileDate(): void
@@ -195,7 +195,7 @@ class ModuleControllerTest extends TestCase
             ]),
         ]);
 
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.marketplace'));
 
@@ -283,7 +283,7 @@ class ModuleControllerTest extends TestCase
 
     public function testDownloadAppliesUpdateOfInstalledModule(): void
     {
-        Module::query()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => false]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => false]);
 
         $zip = $this->makeZip('2.0.0');
         $this->fakeDownload($zip);
@@ -303,7 +303,7 @@ class ModuleControllerTest extends TestCase
 
     public function testDownloadDoesNotApplyIncompatibleUpdate(): void
     {
-        Module::query()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => false]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => false]);
 
         $zip = $this->makeZip('2.0.0', '999.0.0');
         $this->fakeDownload($zip);
@@ -371,7 +371,7 @@ class ModuleControllerTest extends TestCase
                 ],
             ]),
         ]);
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.marketplace'));
 
@@ -382,7 +382,7 @@ class ModuleControllerTest extends TestCase
 
     public function testModulePageShowsUpdateButton(): void
     {
-        Module::query()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => true]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => true]);
 
         ModuleRegistry::query()->delete();
         Http::fake([
@@ -399,7 +399,7 @@ class ModuleControllerTest extends TestCase
                 ],
             ]),
         ]);
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 
@@ -412,7 +412,7 @@ class ModuleControllerTest extends TestCase
     {
         // На диске лежит распакованная 1.2.3, в БД ещё 1.0.0 — реестр предлагает
         // ту же 1.2.3: качать нечего, достаточно «Применить обновление»
-        Module::query()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => true]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => true]);
 
         ModuleRegistry::query()->delete();
         Http::fake([
@@ -429,7 +429,7 @@ class ModuleControllerTest extends TestCase
                 ],
             ]),
         ]);
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 
@@ -444,7 +444,7 @@ class ModuleControllerTest extends TestCase
     {
         // На диске распакована 1.2.3, в БД ещё 1.0.0, в реестре та же 1.2.3:
         // качать нечего — маркетплейс предлагает применить
-        Module::query()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => true]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => true]);
 
         ModuleRegistry::query()->delete();
         Http::fake([
@@ -461,7 +461,7 @@ class ModuleControllerTest extends TestCase
                 ],
             ]),
         ]);
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.marketplace'));
 
@@ -475,7 +475,7 @@ class ModuleControllerTest extends TestCase
     public function testMarketplaceStillOffersDownloadOfNewerVersion(): void
     {
         // В реестре версия новее той, что лежит на диске — качать надо
-        Module::query()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => true]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => self::FIXTURE_VERSION, 'active' => true]);
 
         ModuleRegistry::query()->delete();
         Http::fake([
@@ -492,7 +492,7 @@ class ModuleControllerTest extends TestCase
                 ],
             ]),
         ]);
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.marketplace'));
 
@@ -505,7 +505,7 @@ class ModuleControllerTest extends TestCase
     {
         // Выключенный модуль: файлы в public не возвращаем, но схему подтягиваем —
         // версия в БД поднимается, и таблицы модуля не должны от неё отставать
-        Module::query()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => false]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => false]);
         $this->addFixtureMigration();
 
         $this->assertFalse(Schema::hasTable('test_fixture_items'));
@@ -526,7 +526,7 @@ class ModuleControllerTest extends TestCase
     {
         // В БД 1.0.0, на диске непринятая 1.2.3, в реестре 2.0.0 — кнопка одна:
         // сначала закрываем расхождение диска и БД, реестр предложится следующим шагом
-        Module::query()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => true]);
+        Module::factory()->create(['name' => self::FIXTURE, 'version' => '1.0.0', 'active' => true]);
 
         ModuleRegistry::query()->delete();
         Http::fake([
@@ -543,7 +543,7 @@ class ModuleControllerTest extends TestCase
                 ],
             ]),
         ]);
-        ModuleRegistry::query()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
+        ModuleRegistry::factory()->create(['url' => 'https://registry.example.com/modules.json', 'active' => true]);
 
         $response = $this->actingAs($this->boss)->get(route('admin.modules.module', ['module' => self::FIXTURE_SLUG]));
 

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Carbon\CarbonImmutable;
 use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -25,6 +26,9 @@ use Illuminate\Support\Str;
  */
 class Module extends Model
 {
+    /** @use HasFactory<\Database\Factories\ModuleFactory> */
+    use HasFactory;
+
     /**
      * Assets modules path
      */

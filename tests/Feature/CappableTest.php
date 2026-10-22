@@ -17,7 +17,7 @@ class CappableTest extends TestCase
         // Общие ленты листаются по первым N записям: подсчёт и страницы не уходят дальше
         $user = User::factory()->create();
 
-        $ids = collect(range(1, 3))->map(fn (int $i) => Comment::query()->create([
+        $ids = collect(range(1, 3))->map(fn (int $i) => Comment::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => 1,
             'text'        => 'Комментарий ' . $i,

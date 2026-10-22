@@ -24,7 +24,7 @@ class BanhistControllerTest extends TestCase
 
     private function makeBanhist(User $user): Banhist
     {
-        return Banhist::query()->create([
+        return Banhist::factory()->create([
             'user_id'      => $user->id,
             'send_user_id' => $this->admin->id,
             'type'         => Banhist::BAN,

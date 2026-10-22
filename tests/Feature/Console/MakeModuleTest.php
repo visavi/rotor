@@ -61,6 +61,10 @@ class MakeModuleTest extends TestCase
 
         // Модель регистрируется в ядре через module.php
         $this->assertStringContainsString('Task::class', File::get($base . 'module.php'));
+
+        // Фабрика для тестов модуля, её находит TestCase по пространству имён
+        $this->assertStringContainsString('use HasFactory;', $model);
+        $this->assertStringContainsString('class TaskFactory extends Factory', File::get($base . 'Tests/Factories/TaskFactory.php'));
     }
 
     public function testAdminOptionCreatesSettingsPage(): void
@@ -70,8 +74,9 @@ class MakeModuleTest extends TestCase
         $base = base_path('modules/' . self::MODULE . '/');
         $key = 'make_module_fixture';
 
-        $this->assertFileExists($base . 'Http/Controllers/Admin/' . self::MODULE . 'SettingController.php');
-        $this->assertFileExists($base . 'resources/views/admin/settings/_' . $key . '.blade.php');
+        // Правила настроек — в контроллере, ошибка подсвечивает поле по ключу через точку
+        $this->assertStringContainsString("'sets.{$key}_per_page' =>", File::get($base . 'Http/Controllers/Admin/' . self::MODULE . 'SettingController.php'));
+        $this->assertStringContainsString("hasError('sets.{$key}_per_page')", File::get($base . 'resources/views/admin/settings/_' . $key . '.blade.php'));
 
         $migrations = File::glob($base . 'database/migrations/*_insert_' . $key . '_settings.php');
         $this->assertCount(1, $migrations);

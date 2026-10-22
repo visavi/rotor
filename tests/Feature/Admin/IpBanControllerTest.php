@@ -24,7 +24,7 @@ class IpBanControllerTest extends TestCase
 
     private function makeBan(string $ip = '10.11.12.13'): Ban
     {
-        return Ban::query()->create([
+        return Ban::factory()->create([
             'ip'         => $ip,
             'user_id'    => $this->admin->id,
             'created_at' => now(),

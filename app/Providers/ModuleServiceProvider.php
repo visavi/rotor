@@ -66,6 +66,8 @@ class ModuleServiceProvider extends ServiceProvider
                 $files = $data['files'] ?? [];
                 $moduleKey = Str::snake($module);
 
+                // Миграции модуля здесь не подключаются: их накатывает активация модуля
+                // и module:migrate, поэтому artisan migrate и migrate:status их не видят
                 if ($files['views'] ?? false) {
                     $this->loadViewsFrom($base . '/resources/views', $moduleKey);
                 }

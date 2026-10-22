@@ -84,7 +84,7 @@ class FileSortTest extends TestCase
         $files = [];
 
         for ($i = 1; $i <= $count; $i++) {
-            $files[] = File::query()->create([
+            $files[] = File::factory()->create([
                 'relate_type' => Comment::$morphName,
                 'relate_id'   => $relateId,
                 'path'        => '/uploads/comments/test' . $i . '.jpg',
@@ -103,7 +103,7 @@ class FileSortTest extends TestCase
 
     private function createComment(): Comment
     {
-        return Comment::query()->create([
+        return Comment::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => 1,
             'text'        => 'Комментарий с вложениями',

@@ -393,8 +393,8 @@ class HelperTest extends TestCase
         BlackList::query()->delete();
         self::assertSame('0/0/0', statsBlacklist());
 
-        BlackList::query()->create(['type' => 'login', 'value' => 'spammer', 'user_id' => 1, 'created_at' => now()]);
-        BlackList::query()->create(['type' => 'email', 'value' => 'spam@mail.ru', 'user_id' => 1, 'created_at' => now()]);
+        BlackList::factory()->create(['type' => 'login', 'value' => 'spammer', 'user_id' => 1, 'created_at' => now()]);
+        BlackList::factory()->create(['type' => 'email', 'value' => 'spam@mail.ru', 'user_id' => 1, 'created_at' => now()]);
 
         self::assertSame('1/1/0', statsBlacklist());
     }
@@ -403,8 +403,8 @@ class HelperTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Online::query()->create(['uid' => md5('user'), 'ip' => '127.0.0.1', 'brow' => 'Chrome 100', 'user_id' => $user->id]);
-        Online::query()->create(['uid' => md5('guest'), 'ip' => '127.0.0.2', 'brow' => 'Firefox 100', 'user_id' => null]);
+        Online::factory()->create(['uid' => md5('user'), 'ip' => '127.0.0.1', 'brow' => 'Chrome 100', 'user_id' => $user->id]);
+        Online::factory()->create(['uid' => md5('guest'), 'ip' => '127.0.0.2', 'brow' => 'Firefox 100', 'user_id' => null]);
 
         [$users, $guests, $total] = statsOnline();
 
@@ -439,7 +439,7 @@ class HelperTest extends TestCase
     {
         self::assertSame(__('main.text_missing'), textNotice('missing_type'));
 
-        Notice::query()->create([
+        Notice::factory()->create([
             'type'       => 'test',
             'name'       => 'Test',
             'text'       => 'Hello %login%',

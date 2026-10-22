@@ -10,6 +10,7 @@ use App\Traits\ConvertVideoTrait;
 use App\Traits\FileableTrait;
 use App\Traits\UploadTrait;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,6 +33,9 @@ use Illuminate\Support\HtmlString;
  */
 class Message extends Model
 {
+    /** @use HasFactory<\Database\Factories\MessageFactory> */
+    use HasFactory;
+
     use FileableTrait;
     use ConvertVideoTrait;
     use UploadTrait;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Feed extends Model
 {
+    /** @use HasFactory<\Database\Factories\FeedFactory> */
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $guarded = [];

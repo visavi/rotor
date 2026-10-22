@@ -54,7 +54,7 @@ class RecoveryControllerTest extends TestCase
     {
         User::factory()->create(['login' => 'forgetful', 'email' => 'forgetful@example.com']);
 
-        PasswordReset::query()->create([
+        PasswordReset::factory()->create([
             'email'      => 'forgetful@example.com',
             'token'      => 'existing-token',
             'created_at' => now(),
@@ -71,5 +71,15 @@ class RecoveryControllerTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->get('/recovery')
             ->assertRedirect('/');
+    }
+
+    public function testAuthorizedUserCannotSendRecovery(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->post('/recovery', ['user' => 'someone'])
+            ->assertForbidden()
+            ->assertSee(__('main.already_authorized'));
+
+        $this->assertDatabaseCount('password_resets', 0);
     }
 }

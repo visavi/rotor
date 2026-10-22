@@ -383,7 +383,7 @@ class DashboardWidgetTest extends TestCase
 
     private function makeComment(CarbonImmutable|Carbon $date): void
     {
-        Comment::query()->create([
+        Comment::factory()->create([
             'user_id'     => $this->admin->id,
             'relate_type' => 'test',
             'relate_id'   => 1,

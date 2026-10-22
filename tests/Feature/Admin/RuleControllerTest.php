@@ -25,7 +25,7 @@ class RuleControllerTest extends TestCase
     public function testIndexShowsRules(): void
     {
         Rule::query()->delete();
-        Rule::query()->create(['text' => 'Тестовые-правила', 'created_at' => now()]);
+        Rule::factory()->create(['text' => 'Тестовые-правила', 'created_at' => now()]);
 
         $this->actingAs($this->admin)
             ->get('/admin/rules')
@@ -36,7 +36,7 @@ class RuleControllerTest extends TestCase
     public function testIndexReplacesSitenamePlaceholder(): void
     {
         Rule::query()->delete();
-        Rule::query()->create(['text' => 'Правила сайта %SITENAME%', 'created_at' => now()]);
+        Rule::factory()->create(['text' => 'Правила сайта %SITENAME%', 'created_at' => now()]);
 
         $this->actingAs($this->admin)
             ->get('/admin/rules')
@@ -48,7 +48,7 @@ class RuleControllerTest extends TestCase
     public function testEditFormShowsCurrentRules(): void
     {
         Rule::query()->delete();
-        Rule::query()->create(['text' => 'Тестовые-правила', 'created_at' => now()]);
+        Rule::factory()->create(['text' => 'Тестовые-правила', 'created_at' => now()]);
 
         $this->actingAs($this->admin)
             ->get('/admin/rules/edit')
@@ -89,7 +89,7 @@ class RuleControllerTest extends TestCase
     public function testEditWithEmptyTextFails(): void
     {
         Rule::query()->delete();
-        Rule::query()->create(['text' => 'Тестовые-правила', 'created_at' => now()]);
+        Rule::factory()->create(['text' => 'Тестовые-правила', 'created_at' => now()]);
 
         $response = $this->actingAs($this->admin)
             ->post('/admin/rules/edit', ['msg' => '']);

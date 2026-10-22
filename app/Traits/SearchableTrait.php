@@ -51,7 +51,8 @@ trait SearchableTrait
      */
     public function shouldBeSearchable(): bool
     {
-        return (bool) ($this->active ?? true);
+        // Не $this->active: без колонки в атрибутах Laravel позвал бы scope active() модели как связь
+        return (bool) ($this->getAttributes()['active'] ?? true);
     }
 
     /**

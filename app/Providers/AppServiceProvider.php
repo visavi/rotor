@@ -51,7 +51,10 @@ class AppServiceProvider extends ServiceProvider
         Route::pattern('slug', '[a-z0-9-\.]+');
         Route::pattern('login', '[\w\-]+');
 
-        DB::connection()->enableQueryLog();
+        // Лог нужен только блоку производительности: в воркере очереди он копил бы запросы всех задач
+        if (! $this->app->runningInConsole() && setting('performance')) {
+            DB::connection()->enableQueryLog();
+        }
 
         Paginator::$defaultView = 'app/_paginator';
         Paginator::$defaultSimpleView = 'app/_simple_paginator';

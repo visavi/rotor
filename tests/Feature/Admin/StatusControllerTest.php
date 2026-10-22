@@ -24,7 +24,7 @@ class StatusControllerTest extends TestCase
 
     public function testIndexShowsStatuses(): void
     {
-        Status::query()->create([
+        Status::factory()->create([
             'topoint' => 100,
             'point'   => 200,
             'name'    => 'Бывалый',
@@ -179,7 +179,7 @@ class StatusControllerTest extends TestCase
 
     public function testEditStatus(): void
     {
-        $status = Status::query()->create([
+        $status = Status::factory()->create([
             'topoint' => 100,
             'point'   => 200,
             'name'    => 'Старое',
@@ -213,7 +213,7 @@ class StatusControllerTest extends TestCase
 
     public function testEditStatusWithShortNameFails(): void
     {
-        $status = Status::query()->create([
+        $status = Status::factory()->create([
             'topoint' => 100,
             'point'   => 200,
             'name'    => 'Старое',
@@ -237,7 +237,7 @@ class StatusControllerTest extends TestCase
 
     public function testDeleteStatus(): void
     {
-        $status = Status::query()->create([
+        $status = Status::factory()->create([
             'topoint' => 100,
             'point'   => 200,
             'name'    => 'Удаляемый',

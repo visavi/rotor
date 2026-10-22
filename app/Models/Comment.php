@@ -13,6 +13,7 @@ use App\Traits\SearchableTrait;
 use App\Traits\UploadTrait;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -46,6 +47,9 @@ use Illuminate\Support\Str;
  */
 class Comment extends Model
 {
+    /** @use HasFactory<\Database\Factories\CommentFactory> */
+    use HasFactory;
+
     use CappableTrait;
     use PollableTrait;
     use FileableTrait;

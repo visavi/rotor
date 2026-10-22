@@ -8,7 +8,7 @@ use App\Http\Requests\Concerns\ChecksCaptcha;
 use App\Models\User;
 use App\Services\UserService;
 use App\Support\Registry;
-use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -22,9 +22,13 @@ class RegisterRequest extends FormRequest
     /**
      * Регистрация открыта, и пользователь ещё не вошёл
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return ! getUser() && setting('openreg');
+        if (getUser()) {
+            return Response::deny(__('users.already_registered'));
+        }
+
+        return setting('openreg') ? Response::allow() : Response::deny(__('users.registration_suspended'));
     }
 
     public function rules(): array
@@ -73,11 +77,6 @@ class RegisterRequest extends FormRequest
     public function gender(): string
     {
         return $this->input('gender') === User::MALE ? User::MALE : User::FEMALE;
-    }
-
-    protected function failedAuthorization(): void
-    {
-        throw new AuthorizationException(getUser() ? __('users.already_registered') : __('users.registration_suspended'));
     }
 
     protected function prepareForValidation(): void

@@ -39,10 +39,18 @@ export function ajax({ url, type = 'GET', data = null, dataType = 'json', before
     }
 
     fetch(target, options)
-        .then(res => dataType === 'json' ? res.json() : res.text())
+        .then(res => dataType === 'json' ? res.json().then(body => ajaxValidation(res, body)) : res.text())
         .then(responseData => { if (success) success(responseData) })
         .catch(err => { if (error) error(null, err.message, err) })
         .finally(() => { if (complete) complete() })
+}
+
+/* Ошибки FormRequest и $request->validate() приходят 422 с {message, errors}:
+ * приводим к контракту {success, message} — по первой ошибке каждого поля */
+function ajaxValidation(res, body) {
+    if (res.status !== 422 || !body?.errors) return body
+
+    return { success: false, message: Object.values(body.errors).map(messages => messages[0]).join(' ') }
 }
 
 /* Декларативный ajax

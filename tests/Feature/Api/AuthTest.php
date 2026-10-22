@@ -131,7 +131,7 @@ class AuthTest extends TestCase
 
     public function testBlacklistedLoginIsRejected(): void
     {
-        BlackList::query()->create(['type' => 'login', 'value' => 'newuser', 'user_id' => 0, 'created_at' => now()]);
+        BlackList::factory()->create(['type' => 'login', 'value' => 'newuser', 'user_id' => 0, 'created_at' => now()]);
 
         $this->postJson('/api/register', $this->payload())
             ->assertStatus(422)
@@ -153,7 +153,7 @@ class AuthTest extends TestCase
     {
         $user = User::factory()->create();
 
-        PasswordReset::query()->create([
+        PasswordReset::factory()->create([
             'email'      => $user->email,
             'token'      => 'token',
             'created_at' => now(),

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Support\Registry;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -20,6 +21,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Search extends Model
 {
+    /** @use HasFactory<\Database\Factories\SearchFactory> */
+    use HasFactory;
+
     /**
      * The table associated with the model.
      */

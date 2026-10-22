@@ -95,7 +95,7 @@ class UserListTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Online::query()->create([
+        Online::factory()->create([
             'ip'         => '127.0.0.1',
             'brow'       => 'test',
             'uid'        => 'session1',
@@ -103,7 +103,7 @@ class UserListTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        Online::query()->create([
+        Online::factory()->create([
             'ip'         => '127.0.0.2',
             'brow'       => 'test',
             'uid'        => 'session2',
@@ -124,7 +124,7 @@ class UserListTest extends TestCase
         $user = User::factory()->create();
 
         // Два захода одного пользователя: в списке он должен быть один раз
-        Online::query()->create([
+        Online::factory()->create([
             'ip'         => '127.0.0.1',
             'brow'       => 'first',
             'uid'        => 'session1',
@@ -132,7 +132,7 @@ class UserListTest extends TestCase
             'updated_at' => now()->subMinute(),
         ]);
 
-        Online::query()->create([
+        Online::factory()->create([
             'ip'         => '127.0.0.1',
             'brow'       => 'second',
             'uid'        => 'session2',

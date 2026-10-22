@@ -54,7 +54,7 @@ class StatsTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Online::query()->create([
+        Online::factory()->create([
             'ip'         => '127.0.0.1',
             'brow'       => 'test',
             'uid'        => 'session1',
@@ -62,7 +62,7 @@ class StatsTest extends TestCase
             'updated_at' => now(),
         ]);
 
-        Online::query()->create([
+        Online::factory()->create([
             'ip'         => '127.0.0.2',
             'brow'       => 'test',
             'uid'        => 'session2',

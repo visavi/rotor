@@ -134,7 +134,7 @@ class UploadExtensionsTest extends TestCase
     private function createPending(User $user, int $count): void
     {
         foreach (range(1, $count) as $i) {
-            File::query()->create([
+            File::factory()->create([
                 'relate_id'   => 0,
                 'relate_type' => Comment::$morphName,
                 'path'        => '/uploads/comments/' . $i . '.pdf',

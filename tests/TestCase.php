@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\Setting;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
@@ -35,6 +36,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->withoutVite();
+        $this->resolveModuleFactories();
         // flush() сбрасывает и кеш, и процессный memo — иначе настройки протекают между тестами
         Setting::flush();
 
@@ -61,6 +63,22 @@ abstract class TestCase extends BaseTestCase
                 File::delete($path);
             }
         }
+    }
+
+    /**
+     * Фабрики модулей лежат в их тестах: Modules\Forum\Models\Topic → Modules\Forum\Tests\Factories\TopicFactory
+     *
+     * Поиск фабрик нужен только тестам, на сайт он не влияет
+     */
+    private function resolveModuleFactories(): void
+    {
+        Factory::guessFactoryNamesUsing(static function (string $model): string {
+            if (preg_match('/^Modules\\\\(\w+)\\\\Models\\\\(\w+)$/', $model, $match)) {
+                return 'Modules\\' . $match[1] . '\\Tests\\Factories\\' . $match[2] . 'Factory';
+            }
+
+            return 'Database\\Factories\\' . class_basename($model) . 'Factory';
+        });
     }
 
     /**

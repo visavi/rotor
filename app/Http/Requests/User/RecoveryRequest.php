@@ -7,7 +7,7 @@ namespace App\Http\Requests\User;
 use App\Http\Requests\Concerns\ChecksCaptcha;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -20,9 +20,12 @@ class RecoveryRequest extends FormRequest
 
     private ?User $recoveryUser = null;
 
-    public function authorize(): bool
+    /**
+     * Вошедшему восстанавливать нечего
+     */
+    public function authorize(): Response
     {
-        return getUser() === null;
+        return getUser() ? Response::deny(__('main.already_authorized')) : Response::allow();
     }
 
     public function rules(): array
@@ -73,10 +76,5 @@ class RecoveryRequest extends FormRequest
     public function recoveryUser(): ?User
     {
         return $this->recoveryUser ??= getUserByLoginOrEmail($this->string('user')->value());
-    }
-
-    protected function failedAuthorization(): void
-    {
-        throw new AuthorizationException(__('main.already_authorized'));
     }
 }

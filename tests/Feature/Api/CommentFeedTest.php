@@ -32,7 +32,7 @@ class CommentFeedTest extends TestCase
         $old = $this->createComment(User::factory()->create(), now()->subHour());
         $fresh = $this->createComment(User::factory()->create(), now());
 
-        Poll::query()->create([
+        Poll::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => $fresh->id,
             'user_id'     => $this->user->id,
@@ -78,7 +78,7 @@ class CommentFeedTest extends TestCase
 
     private function createComment(User $user, \DateTimeInterface $createdAt, bool $deleted = false): Comment
     {
-        return Comment::query()->create([
+        return Comment::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => 1,
             'text'        => 'Комментарий',

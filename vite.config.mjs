@@ -69,7 +69,8 @@ export default defineConfig({
     },
     build: {
         emptyOutDir: true,
-        // Фикс для старых устройств, чтобы в CSS остался min-width/max-width.
+        // Без него Vite пишет медиазапросы range-синтаксисом (width>=768px), который
+        // не понимают Safari < 16.4 и старые Android: вёрстка разваливается. Не убирать
         cssTarget: ['chrome87', 'edge88', 'firefox78', 'safari13'],
         rollupOptions: {
             checks: {

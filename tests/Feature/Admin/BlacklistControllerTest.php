@@ -24,7 +24,7 @@ class BlacklistControllerTest extends TestCase
 
     public function testIndexShowsRecordsOfType(): void
     {
-        BlackList::query()->create([
+        BlackList::factory()->create([
             'type'       => 'email',
             'value'      => 'spam@example.com',
             'user_id'    => $this->admin->id,
@@ -116,7 +116,7 @@ class BlacklistControllerTest extends TestCase
 
     public function testAddDuplicateFails(): void
     {
-        BlackList::query()->create([
+        BlackList::factory()->create([
             'type'       => 'email',
             'value'      => 'spam@example.com',
             'user_id'    => $this->admin->id,
@@ -133,7 +133,7 @@ class BlacklistControllerTest extends TestCase
 
     public function testAddDuplicateDomainFailsAfterNormalization(): void
     {
-        BlackList::query()->create([
+        BlackList::factory()->create([
             'type'       => 'domain',
             'value'      => 'spam.example.com',
             'user_id'    => $this->admin->id,
@@ -168,7 +168,7 @@ class BlacklistControllerTest extends TestCase
 
     public function testDeleteRecords(): void
     {
-        $record = BlackList::query()->create([
+        $record = BlackList::factory()->create([
             'type'       => 'email',
             'value'      => 'spam@example.com',
             'user_id'    => $this->admin->id,
@@ -197,7 +197,7 @@ class BlacklistControllerTest extends TestCase
 
     public function testDeleteDoesNotTouchOtherType(): void
     {
-        $email = BlackList::query()->create([
+        $email = BlackList::factory()->create([
             'type'       => 'email',
             'value'      => 'spam@example.com',
             'user_id'    => $this->admin->id,

@@ -24,7 +24,7 @@ class SpamControllerTest extends TestCase
 
     private function makeSpam(): Spam
     {
-        return Spam::query()->create([
+        return Spam::factory()->create([
             'relate_type' => 'comments',
             'relate_id'   => 1,
             'user_id'     => $this->admin->id,
@@ -48,7 +48,7 @@ class SpamControllerTest extends TestCase
 
         // Тип отключённого модуля, жалоб на него больше — раньше он выбирался вкладкой по умолчанию
         foreach ([1, 2] as $relateId) {
-            Spam::query()->create([
+            Spam::factory()->create([
                 'relate_type' => 'disabled_module',
                 'relate_id'   => $relateId,
                 'user_id'     => $this->admin->id,

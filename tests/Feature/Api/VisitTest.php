@@ -119,7 +119,7 @@ class VisitTest extends TestCase
 
     public function testStaleOnlineRecordsAreCleaned(): void
     {
-        Online::query()->create([
+        Online::factory()->create([
             'uid'        => md5('stale'),
             'ip'         => '127.0.0.2',
             'brow'       => 'Old browser',

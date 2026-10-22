@@ -8,6 +8,7 @@ use App\Support\Hook;
 use App\Support\Registry;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -25,6 +26,16 @@ abstract class ModuleTestCase extends TestCase
 
         // Таблицы модулей создаются единым migrate:fresh (пути — в CreatesApplication)
         $this->registerModuleResources();
+    }
+
+    protected function tearDown(): void
+    {
+        // Хуки модуля ссылаются на его маршруты, а тест ядра после него
+        // их не регистрирует: пункт меню в общем шаблоне падал бы на route()
+        Hook::flush();
+        Registry::flush();
+
+        parent::tearDown();
     }
 
     /**
@@ -121,6 +132,11 @@ abstract class ModuleTestCase extends TestCase
             require $routesFile;
             $this->app['router']->getRoutes()->refreshNameLookups();
             $this->app['router']->getRoutes()->refreshActionLookups();
+        }
+
+        // Консольные команды модуля, как в провайдере: их зовёт расписание
+        foreach (glob(base_path("modules/{$name}/Console/*.php")) ?: [] as $file) {
+            Artisan::registerCommand($this->app->make('Modules\\' . $name . '\\Console\\' . basename($file, '.php')));
         }
 
         // Морф-типы, секции /api/config и счётчики — те же, что на работающем сайте

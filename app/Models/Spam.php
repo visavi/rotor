@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -21,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  */
 class Spam extends Model
 {
+    /** @use HasFactory<\Database\Factories\SpamFactory> */
+    use HasFactory;
+
     /**
      * The table associated with the model.
      */

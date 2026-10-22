@@ -4,71 +4,33 @@
 
 Rotor — модульная CMS на Laravel 13, PHP 8.3+. Ядро живёт в `app/`, разделы сайта (форум, блоги, галерея и т.д.) — модули в `modules/`.
 
-## Окружение
+## Окружение и проверки
 
-Всё, что трогает БД, запускается в контейнере — с хоста `php artisan` не работает, MySQL живёт в docker:
-
-```bash
-docker compose exec rotor php artisan ...
-```
-
-Статические инструменты (pint) можно гонять и на хосте.
-
-## Тесты и проверки
+MySQL живёт в docker, поэтому artisan, тесты, pint и phpstan — в контейнере. Фронтенд собирается на хосте: `npm run build`.
 
 ```bash
-docker compose exec rotor php artisan test tests/Feature/HomeControllerTest.php
-docker compose exec rotor php artisan test --filter=testName
-docker compose exec rotor php artisan test modules/Forum      # один модуль
-docker compose exec rotor php artisan test                    # всё
-docker compose exec rotor ./vendor/bin/pint --test <пути>
+docker compose exec rotor php artisan test modules/Forum      # файл, --filter=..., модуль или без пути — всё
+docker compose exec rotor composer pint                      # ядро и все модули; composer lint — только проверка
 docker compose exec rotor ./vendor/bin/phpstan analyse <пути> --no-progress
 ```
 
-От узкого к широкому: сначала затронутый файл или модуль, потом полный прогон. Pint и phpstan — по затронутым путям.
+От узкого к широкому: сначала затронутый файл или модуль, потом полный прогон; phpstan — по затронутым путям. Устаревшее API ловит phpstan, остальные запреты — `tests/Unit/ArchitectureTest.php`: сообщение упавшей проверки объясняет, что не так.
 
-Чего не делать:
-
-- `php artisan ... --env=testing` — без `.env.testing` Laravel молча берёт `.env` и бьёт по рабочей базе. Тестовое окружение задаёт `phpunit.xml`.
-- Записи в тестах создавать со всеми NOT NULL-полями: тесты идут в строгом MySQL (`DB_STRICT` в `phpunit.xml`), поле без значения и без `default` — ошибка 1364.
-- `truncate()` и DDL в тестах — неявный COMMIT переживает откат `RefreshDatabase`. Использовать `delete()`.
-
-Тест помечен risky «did not close its own output buffer» — однострочная `@section('name', $expr)` получила `null`. Завершать выражение `?? ''`.
+Тестовое окружение задаёт `phpunit.xml`. Не запускать `php artisan ... --env=testing`: без `.env.testing` Laravel молча берёт `.env` и бьёт по рабочей базе.
 
 ## Модули
 
-- Каталоги в `modules/` могут быть симлинками на соседний репозиторий `rotor-modules`. `grep -r` по `modules/` симлинки не обходит и молча даёт ноль — искать через `grep -R` или прямо в `rotor-modules`.
-- Новый модуль — только через генератор: `php artisan make:module Name --model=Item --admin --api`. Копирование соседнего модуля теряет переводы, changelog и регистрацию модели.
-- Вьюхи модуля адресуются `<snake_ключ>::<файл>` от корня `resources/views` модуля.
-- Миграции модуля накатывает активация в `/admin/modules`. `artisan migrate` и `migrate:status` их не видят (`ModuleServiceProvider` не зовёт `loadMigrationsFrom`). В тестах пути подключает `tests/CreatesApplication.php`.
-- Правки модуля записывать в его `changelog.md` в раздел `## Unreleased`. Версию в `module.php` не поднимать — бамп собирает архив релиза.
-- Модуль выносится из ядра полным комплектом: настройки (контроллер, вид, миграция), переводы, хуки.
-- Настройки модулей — только boss: `ModuleSettingController::getMiddleware()` добавляет `check.admin:boss` поверх маршрута (сохранение пишет любые `sets[]`, включая ключи ядра). Сигнатуру `update(Request)` не менять — модули её переопределяют. Своя проверка настроек в модуле — метод `store(XxxSettingRequest $request)` в маршруте модуля (FormRequest в `Http/Requests/`), а не переопределённый `update()`: наследник не может сузить тип параметра до FormRequest. Общее сохранение после проверки — `parent::update($request)`.
-- Языковые модули называются `Lang<Язык>` (`LangGerman`): все модули лежат в одном плоском `modules/`, префикс защищает от коллизии id.
+- Каталоги в `modules/` — симлинки на соседний репозиторий `rotor-modules`: `grep -r` их не обходит и молча даёт ноль. Искать через `grep -R` или прямо в `rotor-modules`.
+- Новый модуль — только генератором: `php artisan make:module Name --model=Item --admin --api`.
+- Правки модуля — в его `changelog.md` под `## Unreleased`. `version` в `module.php` не поднимать: бамп собирает архив релиза. `requires` поднять, если модуль начал использовать новый класс или метод ядра.
+- Модуль выносится из ядра полным комплектом: настройки, переводы, хуки.
 
-## Миграции ядра
+## Схема ядра
 
-- `database/migrations/` — схема свежей установки.
-- `database/upgrades/` — изменения для существующих сайтов. На свежей установке `InstallController` помечает их выполненными без запуска.
+`database/migrations/` — схема свежей установки, `database/upgrades/` — изменения для установленных сайтов (на свежей установке установщик помечает их выполненными). Изменение схемы = правка `create_*`-миграции в `migrations/` + отдельный файл в `upgrades/`.
 
-Изменение схемы = правка базовой `create_*`-миграции в `migrations/` + отдельный файл в `upgrades/`. Большие таблицы — отдельный upgrade-файл на таблицу.
+## Код
 
-## Соглашения по коду
-
-- Движок работает в строгом MySQL (`DB_STRICT=true`): у счётчиков — `default(0)`, `upsert` с неполным набором колонок не использовать (`INSERT ... ON DUPLICATE KEY` требует все NOT NULL-поля) — массовое обновление через `update()` с `CASE`.
-- Даты — `datetime`-колонки и Carbon. Новых int-таймстампов и `SITETIME` не заводить.
-- Голос текущего пользователя в списке — скоуп `withUserVote()` (`PollableTrait`), а не свой `leftJoin polls`. Автор из `?user=` в API — `apiUser()` (`HandlesApiPagination`), гостю он отвечает 403. Страницы пользователя на сайте (`/{раздел}/active/...`) — `check.user`, карточка в анкете — `components.profile.link` с `'guests' => false`.
-- Общие ленты «новое со всего раздела» — `CappableTrait`: `->orderBy(...)->capped()->paginate()` листает первые 1000 записей в базе. Не `->limit(1000)->get()` + `paginate()`: тот грузит 1000 моделей ради одной страницы.
-- Валидация — `FormRequest`: в ядре `app/Http/Requests/<Раздел>/`, в модуле `Http/Requests/`; правила, общие для сайта и API, — один класс. `authorize()` не писать: без него запрос разрешён, права проверяет middleware маршрута (вход — `check.user`, в API — `check.token`). Адрес возврата при ошибке — атрибутом `#[RedirectTo('settings#tab-account')]` / `#[RedirectToRoute('verify')]`, метод `getRedirectUrl()` — только когда адрес зависит от запроса. Форме — раздельные маршруты на тот же URL: `Route::get('/edit', 'edit')` + `Route::post('/edit', 'update')`, вьюха не меняется. На `Route::match(['get', 'post'])` FormRequest сработал бы и на открытии формы. Длина текста из редактора — `App\Rules\TextLengthRule` (без тегов), не `min`/`max`. Удаление отмеченных чекбоксами `del[]` — `App\Http\Requests\Admin\DeleteSelectedRequest`, id берутся `$request->ids()`. Поля аккаунта (логин, почта, пароль, анкета) — `App\Http\Requests\User\UserRules`, общие для сайта, API и админки. Хуки `onProfileValidate`/`onSettingsValidate`/`onRegisterValidate` зовутся в `after()` запроса и получают `Illuminate\Validation\Validator`. Ключи ошибок массивов — через точку (`hasError('sets.title')`), как у Laravel. Исключения: ajax с ответом `{success, message}` — `Validator::make()` + `fails()` (FormRequest на ajax отдаёт 422 с `errors`, `ajax.js` его не разбирает); бизнес-проверки (капча, «не найдено», «нельзя себе») — `if` в контроллере или `after()` в запросе; `InstallController` — `Validator::make()` в методе: файл удаляется после установки, класс запроса остался бы сиротой. `App\Support\Validator` в новом коде не использовать, старые контроллеры переводить, когда они и так правятся.
-- Флеш-сообщения — `redirect()->with('success', ...)`. `setFlash()` — legacy, новый код на нём не писать.
-- Файлы в запросе валидировать `FileService::rules($type)`, сохранять `$files->attach($model, $files)` — он привязывает загруженные заранее, потом файлы из запроса, иначе sort групп совпадает и вложения перемешиваются. Не `$model->uploadFile()`: тот минует конвертацию видео. Расширения — `FileService::extensions($type)`, вне вложений записей (аватар, стикеры) — `extensionList($setting)`. Файлы, ждущие создания записи, — `File::query()->pending($type, $userId)`, а не ручной `where('relate_id', 0)`. Личные сообщения в API таких файлов не берут (`FileService::acceptsPending()`, его учитывают `rules` и `attach`): ожидающий файл не знает получателя. Своих правил не собирать: `filesize` хранится в байтах, а `max:` у Laravel считает килобайты, и список расширений зависит от типа записи (media или file).
-- Публичные классы ядра — `App\Support\*` (`Registry`, `Hook`, `Validator`, `HtmlSanitizer`). `App\Classes\*` — deprecated-мост до 15.0; в модуле менять импорты попутно, когда он и так правится.
-- Ajax — декларативно, атрибутами `data-ajax` в разметке (контракт — в `resources/js/ajax.js`). Ответ: `{success, message?, html?, redirect?}`. Своих `window.*`-обработчиков не писать: у модулей нет JS-бандла, а `<script>` в ajax-партиале не выполняется. Инлайн-скрипт полной страницы модуля — через `@push('scripts')`, на всех страницах — хуком `footer`.
-- HTML из редактора чистится кастом `App\Casts\HtmlCast` на уровне модели — контроллеры и `renderHtml` выглядят «незащищёнными», но защита на входе есть.
-- Пустое поле формы приходит как `null` (`ConvertEmptyStringsToNull`), а колонки NOT NULL. Пользовательский текст — через каст: `HtmlCast` (HTML из редактора) или `TextCast` (заголовки); оба пишут `null` пустой строкой, где NULL значим — `::class . ':nullable'`. Строку из запроса брать `$request->string('key')->value()` — пустое поле даёт `''`, а не `null`, иначе под `strict_types` функции со `string`-параметром падают `TypeError`. `(string) $request->input()` в модулях менять попутно, когда модуль и так правится.
-- Фильтры текста (`Registry::textFilter()`, модуль `Antimat`) применяются при чтении атрибута этими кастами — в базе оригинал. `antimat()` — deprecated до 15.0, в новом коде не звать.
-- Ссылки наружу (платёжки, вебхуки, письма) — `url()` / `route()`. `asset()` при `ASSET_URL=/` даёт относительный путь.
-- Письма — blade-компоненты: `resources/views/mailer/x.blade.php` + `mailer/text/x.blade.php`, стили только в `components/mail`. Markdown-mail не использовать: он портит логины и пароли с `_` и `*`.
-- Глобальные middleware (сессия, `SetLocale`, `ApplyTheme`) в `bootstrap/app.php` не переносить в группу `web` — 404 вне групп начнёт падать в 500.
+- Готовое в ядре брать, а не писать своё: `App\Rules\TextLengthRule` (длина текста из редактора без тегов), `Admin\DeleteSelectedRequest` (удаление отмеченных `del[]`), `User\UserRules` (поля аккаунта), `FileService::rules()` и `attach()` (вложения), `User::chargeMoney()` (списание денег), касты `HtmlCast` и `TextCast` (пользовательский текст — в них чистка HTML и фильтры вывода).
+- Ajax — атрибутами `data-ajax` в разметке, контракт в `resources/js/ajax.js`; ошибки валидации он показывает сам. Своих `window.*`-обработчиков не писать: у модулей нет JS-бандла.
 - CSS: сначала утилиты Bootstrap, потом общий переиспользуемый класс, правило под одну страницу — в крайнем случае.
-- Фронтенд собирается Vite; `build.cssTarget` в `vite.config.mjs` держит старые `min-width`-медиазапросы для старых Safari и Android — не убирать.

@@ -102,7 +102,7 @@ class AccountControllerTest extends TestCase
 
     public function testChangeMailToBlacklistedEmailFails(): void
     {
-        BlackList::query()->create([
+        BlackList::factory()->create([
             'type'       => 'email',
             'value'      => 'spam@example.com',
             'user_id'    => $this->user->id,
@@ -133,7 +133,7 @@ class AccountControllerTest extends TestCase
 
     public function testEditMailAppliesChange(): void
     {
-        EmailChange::query()->create([
+        EmailChange::factory()->create([
             'user_id'    => $this->user->id,
             'email'      => 'new-account@example.com',
             'token'      => 'token-for-test',

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -29,6 +30,9 @@ use Illuminate\Support\Facades\DB;
  */
 class File extends Model
 {
+    /** @use HasFactory<\Database\Factories\FileFactory> */
+    use HasFactory;
+
     public const array VIDEO_EXTENSIONS = ['mp4', 'webm'];
     public const array AUDIO_EXTENSIONS = ['mp3', 'wav', 'ogg'];
     public const array IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];

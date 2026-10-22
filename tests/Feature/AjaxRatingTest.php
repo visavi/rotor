@@ -94,7 +94,7 @@ class AjaxRatingTest extends TestCase
 
     public function testComplaintIsAccepted(): void
     {
-        $message = Message::query()->create([
+        $message = Message::factory()->create([
             'user_id'    => $this->voter->id,
             'author_id'  => $this->author->id,
             'text'       => 'Сообщение с жалобой',
@@ -114,7 +114,7 @@ class AjaxRatingTest extends TestCase
 
     private function createComment(): Comment
     {
-        return Comment::query()->create([
+        return Comment::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => 1,
             'text'        => 'Комментарий для голосования',

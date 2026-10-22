@@ -90,7 +90,7 @@ class RatingTest extends TestCase
 
     private function createComment(): Comment
     {
-        return Comment::query()->create([
+        return Comment::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => 1,
             'text'        => 'Комментарий для голосования',

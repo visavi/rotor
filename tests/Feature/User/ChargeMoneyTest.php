@@ -1,0 +1,53 @@
+<?php
+
+namespace Tests\Feature\User;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use InvalidArgumentException;
+use Tests\TestCase;
+
+class ChargeMoneyTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function testChargeKeepsModelInSync(): void
+    {
+        $user = User::factory()->create(['money' => 100]);
+
+        $this->assertTrue($user->chargeMoney(30));
+        $this->assertSame(70, $user->money);
+        $this->assertFalse($user->isDirty('money'));
+        $this->assertSame(70, $user->fresh()->money);
+    }
+
+    public function testFreeChargeSucceeds(): void
+    {
+        $user = User::factory()->create(['money' => 0]);
+
+        // Цена 0 разрешена настройками лотереи и подарков: списание ничего не меняет, но проходит
+        $this->assertTrue($user->chargeMoney(0));
+        $this->assertSame(0, $user->fresh()->money);
+    }
+
+    public function testNegativeChargeIsRejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        User::factory()->create(['money' => 0])->chargeMoney(-10);
+    }
+
+    public function testStaleBalanceDoesNotGoNegative(): void
+    {
+        $user = User::factory()->create(['money' => 100]);
+
+        // Модель прочитала баланс, а параллельный запрос уже его потратил
+        User::query()->whereKey($user->id)->update(['money' => 10]);
+
+        $this->assertFalse($user->chargeMoney(50));
+        $this->assertSame(10, $user->fresh()->money);
+
+        $this->assertTrue($user->chargeMoney(10));
+        $this->assertSame(0, $user->fresh()->money);
+    }
+}

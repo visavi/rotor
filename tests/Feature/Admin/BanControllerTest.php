@@ -30,7 +30,7 @@ class BanControllerTest extends TestCase
             'timeban' => now()->addDays(3),
         ]);
 
-        Banhist::query()->create([
+        Banhist::factory()->create([
             'user_id'      => $user->id,
             'send_user_id' => $this->admin->id,
             'type'         => Banhist::BAN,

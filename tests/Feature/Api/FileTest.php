@@ -134,7 +134,7 @@ class FileTest extends TestCase
     {
         $owner = User::factory()->create();
 
-        $file = File::query()->create([
+        $file = File::factory()->create([
             'relate_type' => Comment::$morphName,
             'relate_id'   => 0,
             'path'        => '/uploads/comments/foreign.jpg',

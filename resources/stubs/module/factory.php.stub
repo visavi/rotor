@@ -1,0 +1,27 @@
+<?php
+
+namespace Modules\{{ module }}\Tests\Factories;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\{{ module }}\Models\{{ model }};
+
+/**
+ * Запись с обязательными полями: остальное — значения по умолчанию из миграции
+ *
+ * @extends Factory<{{ model }}>
+ */
+class {{ model }}Factory extends Factory
+{
+    protected $model = {{ model }}::class;
+
+    public function definition(): array
+    {
+        return [
+            'user_id'    => User::factory(),
+            'title'      => $this->faker->sentence(3),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+}

@@ -79,7 +79,7 @@ class UpgradeServiceTest extends TestCase
         // Модуль кладётся на диск сам: в репозитории ядра modules пуст
         $this->fakeModule('UpgradeCheck', ROTOR_VERSION);
 
-        Module::query()->create(['name' => 'UpgradeCheck', 'version' => '1.0.0', 'active' => 1]);
+        Module::factory()->create(['name' => 'UpgradeCheck', 'version' => '1.0.0', 'active' => 1]);
 
         $this->assertSame([], $this->upgrade->outdatedModules('v' . $this->nextMinor()));
 
@@ -94,7 +94,7 @@ class UpgradeServiceTest extends TestCase
     {
         $this->fakeModule('UpgradeReady', $this->nextMajor());
 
-        Module::query()->create(['name' => 'UpgradeReady', 'version' => '2.0.0', 'active' => 1]);
+        Module::factory()->create(['name' => 'UpgradeReady', 'version' => '2.0.0', 'active' => 1]);
 
         $this->assertSame([], $this->upgrade->outdatedModules('v' . $this->nextMajor()));
     }
@@ -121,7 +121,7 @@ class UpgradeServiceTest extends TestCase
 
     public function testUnknownModuleDirectoryIsSkipped(): void
     {
-        Module::query()->create(['name' => 'NoSuchModule', 'version' => '1.0.0', 'active' => 1]);
+        Module::factory()->create(['name' => 'NoSuchModule', 'version' => '1.0.0', 'active' => 1]);
 
         $this->assertSame([], $this->upgrade->outdatedModules('v' . $this->nextMajor()));
     }

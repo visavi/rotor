@@ -24,7 +24,7 @@ class ErrorControllerTest extends TestCase
 
     private function makeError(): Error
     {
-        return Error::query()->create([
+        return Error::factory()->create([
             'code'       => 404,
             'request'    => '/test-not-found',
             'referer'    => '',
