@@ -34,7 +34,7 @@ class StatusRequest extends AppearanceRequest
     {
         return [
             function (Validator $validator): void {
-                if (getUser()->isBanned()) {
+                if (auth()->user()?->isBanned()) {
                     $validator->errors()->add('status', __('users.status_changed_not_ban'));
                 }
             },

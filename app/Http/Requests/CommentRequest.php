@@ -24,7 +24,7 @@ class CommentRequest extends FormRequest
                 self::floodRule(),
                 // Гостю — ошибка формы, а не 403: форма ответа разбирает только errors
                 static function (string $attribute, mixed $value, Closure $fail): void {
-                    if (! getUser()) {
+                    if (auth()->guest()) {
                         $fail(__('main.not_authorized'));
                     }
                 },

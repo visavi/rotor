@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\ComplaintService;
 use App\Services\FileService;
 use App\Services\RatingService;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,10 +34,10 @@ class AjaxController extends Controller
     /**
      * Изменяет рейтинг
      */
-    public function rating(Request $request, RatingService $rating): JsonResponse
+    public function rating(Request $request, RatingService $rating, #[CurrentUser] User $user): JsonResponse
     {
         $result = $rating->vote(
-            getUser(),
+            $user,
             $request->input('type'),
             int($request->input('id')),
             $request->input('vote'),
@@ -136,7 +137,7 @@ class AjaxController extends Controller
             ->toBase()
             ->map(fn ($items, $categoryId) => [
                 'id'       => (int) $categoryId,
-                'name'     => $items->first()->category->name,
+                'name'     => $items->firstOrFail()->category->name,
                 'stickers' => $items->map(fn (Sticker $s) => ['code' => $s->code, 'name' => $s->name])->values()->all(),
             ])
             ->values();

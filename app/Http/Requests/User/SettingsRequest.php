@@ -44,7 +44,7 @@ class SettingsRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 foreach (Registry::$onSettingsValidate as $handler) {
-                    $handler(getUser(), $this, $validator);
+                    $handler(auth()->user(), $this, $validator);
                 }
             },
         ];

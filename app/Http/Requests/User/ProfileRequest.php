@@ -38,7 +38,7 @@ class ProfileRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 foreach (Registry::$onProfileValidate as $handler) {
-                    $handler(getUser(), $this, $validator, true);
+                    $handler(auth()->user(), $this, $validator, true);
                 }
             },
         ];

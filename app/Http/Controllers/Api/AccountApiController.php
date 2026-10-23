@@ -17,6 +17,7 @@ use App\Http\Resources\UserProfileResource;
 use App\Models\User;
 use App\Services\UserService;
 use App\Support\Locale;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,10 +31,8 @@ class AccountApiController extends Controller
     /**
      * Изменение профиля
      */
-    public function profile(ProfileRequest $request, UserService $userService): JsonResource
+    public function profile(ProfileRequest $request, UserService $userService, #[CurrentUser] User $user): JsonResource
     {
-        $user = getUser();
-
         $userService->saveProfile($user, $request->profile(), $request);
 
         return UserProfileResource::make($user->fresh());
@@ -42,10 +41,8 @@ class AccountApiController extends Controller
     /**
      * Настройки аккаунта и доступные значения
      */
-    public function settings(): JsonResponse
+    public function settings(#[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         return response()->json([
             'data' => [
                 'themes'         => $user->themes,
@@ -68,9 +65,9 @@ class AccountApiController extends Controller
     /**
      * Изменение настроек
      */
-    public function updateSettings(SettingsRequest $request, UserService $userService): JsonResponse
+    public function updateSettings(SettingsRequest $request, UserService $userService, #[CurrentUser] User $user): JsonResponse
     {
-        $userService->saveSettings(getUser(), $request->settings(), $request);
+        $userService->saveSettings($user, $request->settings(), $request);
 
         return response()->json(['message' => __('users.settings_success_changed')]);
     }
@@ -78,9 +75,9 @@ class AccountApiController extends Controller
     /**
      * Смена пароля
      */
-    public function password(PasswordRequest $request, UserService $userService): JsonResponse
+    public function password(PasswordRequest $request, UserService $userService, #[CurrentUser] User $user): JsonResponse
     {
-        $userService->changePassword(getUser(), $request->validated('new_password'));
+        $userService->changePassword($user, $request->validated('new_password'));
 
         // Токен остаётся прежним: смена пароля не должна выкидывать приложение
         return response()->json(['message' => __('users.password_success_changed')]);
@@ -89,9 +86,9 @@ class AccountApiController extends Controller
     /**
      * Заявка на смену почты, подтверждение приходит письмом
      */
-    public function email(EmailChangeRequest $request, UserService $userService): JsonResponse
+    public function email(EmailChangeRequest $request, UserService $userService, #[CurrentUser] User $user): JsonResponse
     {
-        $userService->requestEmailChange(getUser(), $request->validated('email'));
+        $userService->requestEmailChange($user, $request->validated('email'));
 
         return response()->json(['message' => __('users.confirm_success_sent')]);
     }
@@ -99,10 +96,8 @@ class AccountApiController extends Controller
     /**
      * Повторная отправка письма с подтверждением регистрации
      */
-    public function verify(VerifyRequest $request, UserService $userService): JsonResponse
+    public function verify(VerifyRequest $request, UserService $userService, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         if (! UserService::isEmailConfirm()) {
             abort(403, __('users.confirm_registration_disabled'));
         }
@@ -141,10 +136,8 @@ class AccountApiController extends Controller
     /**
      * Перегенерация или удаление токена
      */
-    public function apikey(Request $request): JsonResponse
+    public function apikey(Request $request, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         $request->validate(['action' => ['nullable', 'string', 'in:create,change,delete']]);
 
         // Удаление токена закрывает доступ к API — текущий запрос последний
@@ -162,10 +155,8 @@ class AccountApiController extends Controller
     /**
      * Загрузка фото и аватара
      */
-    public function photo(PhotoRequest $request, UserService $userService): JsonResponse
+    public function photo(PhotoRequest $request, UserService $userService, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         $userService->savePhoto($user, $request->file('photo'));
 
         return response()->json([
@@ -178,10 +169,8 @@ class AccountApiController extends Controller
     /**
      * Удаление фото и аватара
      */
-    public function deletePhoto(UserService $userService): JsonResponse
+    public function deletePhoto(UserService $userService, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         if (! $user->picture) {
             abort(422, __('users.photo_not_exist'));
         }

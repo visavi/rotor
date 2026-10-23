@@ -24,7 +24,7 @@ class CommentController extends Controller
     {
         $comment = Comment::query()
             ->where('id', $id)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', auth()->id())
             ->first();
 
         if (! $comment) {
@@ -52,7 +52,7 @@ class CommentController extends Controller
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        if (! $user = getUser()) {
+        if (! $user = auth()->user()) {
             return response()->json(['success' => false, 'message' => __('main.not_authorized')]);
         }
 

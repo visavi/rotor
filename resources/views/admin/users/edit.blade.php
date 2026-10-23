@@ -27,7 +27,7 @@
         </small>
     </h3>
 
-    @if (getUser('id') === $user->id)
+    @if (auth()->id() === $user->id)
         <div class="alert alert-warning">{{ __('users.edit_user_notice') }}</div>
     @endif
 

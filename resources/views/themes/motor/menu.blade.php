@@ -1,4 +1,4 @@
-@if ($user = getUser())
+@if ($user = auth()->user())
     <ul class="menu-nav">
         <li><i class="fa fa-user-circle fa-lg"></i> <a href="{{ route('users.user', ['login' => $user->login]) }}">{{ $user->getName() }}</a></li>
 

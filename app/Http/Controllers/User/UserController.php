@@ -14,6 +14,7 @@ use App\Models\Flood;
 use App\Models\User;
 use App\Services\UserService;
 use App\Support\Locale;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class UserController extends Controller
      */
     public function register(): View
     {
-        if (getUser()) {
+        if (auth()->check()) {
             abort(403, __('users.already_registered'));
         }
 
@@ -130,7 +131,7 @@ class UserController extends Controller
 
         if ($authorized) {
             $request->session()->regenerate();
-            $user = Auth::user();
+            $user = Auth::user() ?? abort(403);
 
             return redirect()->intended()
                 ->with('success', __('users.welcome', ['login' => $user->getName()], $user->language));
@@ -159,19 +160,17 @@ class UserController extends Controller
     /**
      * Profile editing
      */
-    public function profile(): View
+    public function profile(#[CurrentUser] User $user): View
     {
-        $user = getUser();
-
         return view('users/profile', compact('user'));
     }
 
     /**
      * Сохранение анкеты
      */
-    public function updateProfile(ProfileRequest $request, UserService $userService): RedirectResponse
+    public function updateProfile(ProfileRequest $request, UserService $userService, #[CurrentUser] User $user): RedirectResponse
     {
-        $userService->saveProfile(getUser(), $request->profile(), $request);
+        $userService->saveProfile($user, $request->profile(), $request);
 
         return redirect('profile')
             ->with('success', __('users.profile_success_changed'));
@@ -224,10 +223,8 @@ class UserController extends Controller
     /**
      * Settings
      */
-    public function setting(): View
+    public function setting(#[CurrentUser] User $user): View
     {
-        $user = getUser();
-
         $setting['themes'] = getAvailableThemes();
         $setting['languages'] = Locale::available();
         $setting['timezones'] = range(-12, 14);
@@ -238,9 +235,9 @@ class UserController extends Controller
     /**
      * Сохранение настроек
      */
-    public function updateSetting(SettingsRequest $request, UserService $userService): RedirectResponse
+    public function updateSetting(SettingsRequest $request, UserService $userService, #[CurrentUser] User $user): RedirectResponse
     {
-        $userService->saveSettings(getUser(), $request->settings(), $request);
+        $userService->saveSettings($user, $request->settings(), $request);
 
         return redirect('settings')
             ->with('success', __('users.settings_success_changed'));

@@ -13,7 +13,7 @@
 
 @section('content')
     <p>
-    {{ __('users.welcome', ['login' => getUser('login')]) }}<br>
+    {{ __('users.welcome', ['login' => auth()->user()?->login]) }}<br>
     {{ __('users.confirm_enter') }}
     </p>
 

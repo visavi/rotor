@@ -46,7 +46,7 @@
                     'files' => $files,
                 ])
 
-                @if (getUser('point') < setting('privatprotect'))
+                @if (auth()->user()?->point < setting('privatprotect'))
                     {{ getCaptcha() }}
                 @endif
 

@@ -42,7 +42,7 @@ class HtmlRenderer
                 '/<div class="hidden">.*?<\/div>/s',
                 '<div class="hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
                 $html
-            );
+            ) ?? '';
         }
 
         return $html;
@@ -58,7 +58,7 @@ class HtmlRenderer
                 '/<img\s([^>]*)class="image"([^>]*)>/i',
                 '<img $1class="image" data-fancybox="' . $group . '"$2>',
                 $html
-            );
+            ) ?? $html;
         }
 
         return $html;
@@ -75,7 +75,7 @@ class HtmlRenderer
                 '#<a class="user" href="/users/([^"/]+)">@[^<]*</a>#',
                 static fn ($m) => '<a class="user" href="/users/' . $m[1] . '">@' . e($names[$m[1]] ?? $m[1]) . '</a>',
                 $html
-            );
+            ) ?? $html;
         }
 
         return $html;
@@ -96,7 +96,7 @@ class HtmlRenderer
                     ? '<a' . $m[1] . ' target="_blank" rel="noopener nofollow">'
                     : $m[0],
                 $html
-            );
+            ) ?? $html;
         }
 
         return $html;

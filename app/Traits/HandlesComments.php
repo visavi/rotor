@@ -67,7 +67,7 @@ trait HandlesComments
      */
     protected function getCommentsData(Model $model): array
     {
-        $user = getUser();
+        $user = auth()->user();
 
         $files = $user
             ? File::query()
@@ -135,7 +135,7 @@ trait HandlesComments
 
         $comment = app(CommentService::class)->create(
             $model,
-            getUser(),
+            auth()->user() ?? abort(403),
             $request->validated('msg'),
             $request->validated('parent_id') ? (int) $request->validated('parent_id') : null,
             route($viewRoute, $viewParams, false),

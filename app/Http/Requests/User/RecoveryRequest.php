@@ -10,6 +10,7 @@ use App\Services\UserService;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
+use LogicException;
 
 /**
  * Заявка на восстановление пароля: одни правила на сайт и API
@@ -25,7 +26,7 @@ class RecoveryRequest extends FormRequest
      */
     public function authorize(): Response
     {
-        return getUser() ? Response::deny(__('main.already_authorized')) : Response::allow();
+        return auth()->user() ? Response::deny(__('main.already_authorized')) : Response::allow();
     }
 
     public function rules(): array
@@ -52,7 +53,7 @@ class RecoveryRequest extends FormRequest
                     return;
                 }
 
-                $user = $this->recoveryUser();
+                $user = $this->findUser();
 
                 /** @var string|null $error */
                 $error = match (true) {
@@ -72,9 +73,17 @@ class RecoveryRequest extends FormRequest
     }
 
     /**
+     * Пользователь, найденный при проверке: с почтой и без свежей заявки
+     */
+    public function recoveryUser(): User
+    {
+        return $this->findUser() ?? throw new LogicException('Доступно после проверки запроса');
+    }
+
+    /**
      * Пользователь по логину или почте
      */
-    public function recoveryUser(): ?User
+    private function findUser(): ?User
     {
         return $this->recoveryUser ??= getUserByLoginOrEmail($this->string('user')->value());
     }

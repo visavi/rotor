@@ -302,10 +302,10 @@ class ModuleController extends AdminController
         $counts = ['all' => count($available), 'installed' => 0, 'disabled' => 0, 'not-installed' => 0];
         foreach ($available as $name => $info) {
             $localExists = in_array($name, $moduleNames, true);
-            $installed = $modules->has($name) && $localExists;
+            $installed = $modules->get($name);
 
-            if ($installed) {
-                $counts[$modules[$name]->active ? 'installed' : 'disabled']++;
+            if ($installed && $localExists) {
+                $counts[$installed->active ? 'installed' : 'disabled']++;
             } else {
                 $counts['not-installed']++;
             }

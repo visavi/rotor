@@ -24,7 +24,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): Response
     {
-        if (getUser()) {
+        if (auth()->check()) {
             return Response::deny(__('users.already_registered'));
         }
 

@@ -29,6 +29,8 @@ class HomeControllerTest extends TestCase
     {
         // ?sort[]= приходит массивом: типизированные параметры падали с TypeError и страница отдавала 500
         $this->get('/search?query=тест&sort[]=x&type[]=y')->assertOk();
+        $this->get('/search?query[]=x')->assertOk();
+        $this->getJson('/api/search?query[]=x')->assertStatus(422);
         $this->get('/users?sort[]=x&order[]=y&type[]=z&user[]=u')->assertOk();
     }
 

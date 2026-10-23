@@ -26,8 +26,8 @@ trait UploadTrait
         $filename = uniqueName($extension);
         $path = $this->uploadPath . '/' . $filename;
         $fullPath = public_path($path);
-        $isImage = str_starts_with($mimeType, 'image');
-        $isVideo = str_starts_with($mimeType, 'video');
+        $isImage = str_starts_with((string) $mimeType, 'image');
+        $isVideo = str_starts_with((string) $mimeType, 'video');
 
         // Каталоги загрузок не хранятся в репозитории: $file->move() создал бы каталог сам,
         // а $image->save() без каталога падает
@@ -75,7 +75,7 @@ trait UploadTrait
             $sort = File::query()
                 ->where('relate_type', $this->getMorphClass())
                 ->where('relate_id', $relateId)
-                ->when(! $relateId, static fn ($query) => $query->where('user_id', getUser('id')))
+                ->when(! $relateId, static fn ($query) => $query->where('user_id', auth()->id()))
                 ->max('sort');
 
             $upload = File::query()->create([
@@ -86,7 +86,7 @@ trait UploadTrait
                 'size'        => $filesize,
                 'extension'   => $extension,
                 'mime_type'   => $mimeType,
-                'user_id'     => getUser('id'),
+                'user_id'     => auth()->id(),
                 'sort'        => (int) $sort + 1,
             ]);
         }

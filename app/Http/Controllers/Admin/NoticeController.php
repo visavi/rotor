@@ -41,7 +41,7 @@ class NoticeController extends AdminController
             'type'    => $request->validated('type'),
             'name'    => $request->validated('name'),
             'text'    => $request->validated('text'),
-            'user_id' => getUser('id'),
+            'user_id' => auth()->id(),
             'protect' => (int) $request->boolean('protect'),
         ]);
 
@@ -69,7 +69,7 @@ class NoticeController extends AdminController
         $notice->update([
             'name'    => $request->validated('name'),
             'text'    => $request->validated('text'),
-            'user_id' => getUser('id'),
+            'user_id' => auth()->id(),
             'protect' => (int) $request->boolean('protect'),
         ]);
 

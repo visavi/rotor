@@ -69,7 +69,7 @@ class File extends Model
     /**
      * Вложения, загруженные до создания записи: ждут её с relate_id = 0
      */
-    public function scopePending(Builder $query, string $type, ?int $userId): Builder
+    public function scopePending(Builder $query, string $type, int|string|null $userId): Builder
     {
         // Без пользователя ждущих файлов нет: 0 не совпадёт ни с одним user_id
         return $query

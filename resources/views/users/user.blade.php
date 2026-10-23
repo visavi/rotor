@@ -177,8 +177,8 @@ $serviceFields = array_filter([
         @endif
         @hook('userActionMiddle', $user)
 
-        @if (getUser())
-            @if ($user->login === getUser('login'))
+        @if (auth()->check())
+            @if ($user->login === auth()->user()?->login)
                 @hook('userPersonalStart')
                 <x-profile.action icon="fa fa-user-circle" :label="__('index.my_profile')" url="/profile" />
                 <x-profile.action icon="fa fa-wrench" :label="__('index.my_settings')" url="/settings" />

@@ -12,10 +12,10 @@
 @stop
 
 @php
-$point = getUser('point') ?? 0;
+$point = auth()->user()?->point ?? 0;
 // Статус определяется диапазоном topoint..point — так же, как в User::getStatuses()
-$current = getUser() ? $statuses->first(fn ($status) => $point >= $status->topoint && $point <= $status->point) : null;
-$next = getUser() ? $statuses->last(fn ($status) => $status->topoint > $point) : null;
+$current = auth()->check() ? $statuses->first(fn ($status) => $point >= $status->topoint && $point <= $status->point) : null;
+$next = auth()->check() ? $statuses->last(fn ($status) => $status->topoint > $point) : null;
 @endphp
 
 @section('content')

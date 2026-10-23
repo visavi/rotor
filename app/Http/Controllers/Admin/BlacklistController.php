@@ -54,7 +54,7 @@ class BlacklistController extends AdminController
         BlackList::query()->create([
             'type'    => $this->type,
             'value'   => $request->validated('value'),
-            'user_id' => getUser('id'),
+            'user_id' => auth()->id(),
         ]);
 
         return redirect('admin/blacklists?type=' . $this->type)

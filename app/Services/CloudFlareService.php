@@ -52,7 +52,7 @@ class CloudFlareService
      */
     public function isTrustedRequest(): bool
     {
-        return IpUtils::checkIp($this->request->ip(), static::IPS);
+        return IpUtils::checkIp((string) $this->request->ip(), static::IPS);
     }
 
     /**

@@ -23,7 +23,7 @@ class RecoveryController extends Controller
      */
     public function recovery(): View|RedirectResponse
     {
-        if (getUser()) {
+        if (auth()->check()) {
             return redirect('/')->with('danger', __('main.already_authorized'));
         }
 
@@ -39,7 +39,7 @@ class RecoveryController extends Controller
 
         $userService->requestRecovery($user);
 
-        return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail($user->email)]));
+        return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail((string) $user->email)]));
     }
 
     /**
@@ -47,7 +47,7 @@ class RecoveryController extends Controller
      */
     public function restore(string $token, MailService $mail): View|RedirectResponse
     {
-        if (getUser()) {
+        if (auth()->check()) {
             return redirect('/')->with('danger', __('mails.already_authorized'));
         }
 

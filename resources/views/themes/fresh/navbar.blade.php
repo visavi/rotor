@@ -17,7 +17,7 @@
         </li>
         @hook('navbarStart')
 
-        @if ($user = getUser())
+        @if ($user = auth()->user())
             @if (isAdmin())
                 @if (statsSpam())
                     <li>
@@ -53,7 +53,7 @@
                 </a>
                 <ul class="app-notification dropdown-menu dropdown-menu-end">
                     @hook('navbarMenuStart')
-                    <li><a class="dropdown-item" href="{{ route('users.user', ['login' => getUser('login')]) }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
+                    <li><a class="dropdown-item" href="{{ route('users.user', ['login' => $user->login]) }}"><i class="fas fa-user fa-lg"></i> {{ __('index.my_account') }}</a></li>
                     <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user-edit fa-lg"></i> {{ __('index.my_profile') }}</a></li>
                     <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fas fa-cog fa-lg"></i> {{ __('index.my_settings') }}</a></li>
                     @if (isAdmin())

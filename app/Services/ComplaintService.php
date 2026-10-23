@@ -50,7 +50,7 @@ class ComplaintService
         Spam::query()->create([
             'relate_type' => $type,
             'relate_id'   => $model->getKey(),
-            'user_id'     => getUser('id'),
+            'user_id'     => auth()->id(),
             'path'        => $path,
         ]);
 

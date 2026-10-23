@@ -5,7 +5,7 @@ parameters:
     paths:
         - app
         - modules
-    level: 7
+    level: 8
     ignoreErrors:
         # Типы значений массивов и generics связей в docblock: сотни строк шума без пользы для проверки кода
         - identifier: missingType.iterableValue
@@ -14,6 +14,10 @@ parameters:
           reportUnmatched: false
         # artisan() в тестах всегда отдаёт PendingCommand: вывод консоли подменяется, int — только без подмены
         - message: '#Cannot call method \w+\(\) on Illuminate\\Testing\\PendingCommand\|int\.#'
+          path: modules/*/Tests/*
+          reportUnmatched: false
+        # null из fresh() и find() в тесте роняет сам тест: проверка на null там только шум
+        - message: '#\|null( given)?\.$#'
           path: modules/*/Tests/*
           reportUnmatched: false
         # Реестр поиска хранит модели с SearchableTrait: тип «модель с трейтом» не выразить без интерфейса

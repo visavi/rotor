@@ -681,8 +681,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function delete(): ?bool
     {
         return DB::transaction(function () {
-            deleteFile(public_path($this->picture));
-            deleteFile(public_path($this->avatar));
+            deleteFile(public_path((string) $this->picture));
+            deleteFile(public_path((string) $this->avatar));
 
             // Текст сообщения удаляется вместе с последним диалогом, у второй стороны переписка остается
             Dialogue::query()

@@ -53,7 +53,7 @@ class MetrikaService
 
         $this->cleanupOnline();
 
-        $user = getUser();
+        $user = auth()->user();
 
         $newHost = $this->touchVisit($user);
         $hits = (int) session('hits', 1);

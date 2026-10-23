@@ -46,7 +46,7 @@ class PageApiController extends Controller
             ->toBase()
             ->map(static fn ($items, $categoryId) => [
                 'id'       => (int) $categoryId,
-                'name'     => $items->first()->category->name,
+                'name'     => $items->firstOrFail()->category->name,
                 'stickers' => $items
                     ->map(static fn (Sticker $sticker) => [
                         'code' => $sticker->code,

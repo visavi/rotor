@@ -36,7 +36,7 @@ class CommentResource extends JsonResource
                 'type'  => Comment::$morphName,
                 'id'    => $this->id,
                 'value' => $this->getAttribute('vote'),
-                'own'   => $this->user_id === getUser('id'),
+                'own'   => $this->user_id === auth()->id(),
             ],
             'user'       => $deleted ? null : AuthorResource::make($this->user),
             'media'      => FileResource::collection($this->resolveMedia($this->resource)),

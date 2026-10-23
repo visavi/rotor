@@ -17,6 +17,6 @@ class PlaceCast extends TextCast
 {
     protected function input(string $value): string
     {
-        return Str::ucfirst(preg_replace('/\s+/u', ' ', trim($value)));
+        return Str::ucfirst(preg_replace('/\s+/u', ' ', trim($value)) ?? '');
     }
 }

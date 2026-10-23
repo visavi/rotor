@@ -3,7 +3,7 @@
 <aside class="app-sidebar">
     <ul class="app-menu user-menu">
         <li class="treeview">
-        @if ($user = getUser())
+        @if ($user = auth()->user())
             <div class="menu-item" data-bs-toggle="treeview">
                 <div class="app-sidebar__user-avatar">
                     {{ $user->getAvatarImage() }}

@@ -13,6 +13,7 @@ use App\Models\BlackList;
 use App\Models\EmailChange;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,9 +23,9 @@ class AccountController extends Controller
     /**
      * Initialize email change
      */
-    public function changeMail(EmailChangeRequest $request, UserService $userService): RedirectResponse
+    public function changeMail(EmailChangeRequest $request, UserService $userService, #[CurrentUser] User $user): RedirectResponse
     {
-        $userService->requestEmailChange(getUser(), $request->validated('email'));
+        $userService->requestEmailChange($user, $request->validated('email'));
 
         return redirect('settings#tab-account')
             ->with('success', __('users.confirm_success_sent'));
@@ -33,10 +34,8 @@ class AccountController extends Controller
     /**
      * Email change
      */
-    public function editMail(string $token): RedirectResponse
+    public function editMail(string $token, #[CurrentUser] User $user): RedirectResponse
     {
-        $user = getUser();
-
         EmailChange::query()
             ->where('created_at', '<', now()->subHour())
             ->delete();
@@ -53,7 +52,7 @@ class AccountController extends Controller
             default                                                      => null,
         };
 
-        if ($error) {
+        if ($error || ! $emailChange) {
             return redirect('settings#tab-account')
                 ->withErrors($error);
         }
@@ -95,9 +94,9 @@ class AccountController extends Controller
     /**
      * Password change
      */
-    public function editPassword(PasswordRequest $request, UserService $userService): RedirectResponse
+    public function editPassword(PasswordRequest $request, UserService $userService, #[CurrentUser] User $user): RedirectResponse
     {
-        $userService->changePassword(getUser(), $request->validated('new_password'));
+        $userService->changePassword($user, $request->validated('new_password'));
 
         $request->session()->regenerate();
 
@@ -107,10 +106,8 @@ class AccountController extends Controller
     /**
      * Key generation
      */
-    public function apikey(Request $request): RedirectResponse
+    public function apikey(Request $request, #[CurrentUser] User $user): RedirectResponse
     {
-        $user = getUser();
-
         $apiKey = Str::random(32);
         $message = __('users.token_success_changed');
 

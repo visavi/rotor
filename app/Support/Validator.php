@@ -332,7 +332,7 @@ class Validator
             $this->addError([$key => __('validator.size_max', ['size' => formatSize($rules['maxsize'])])]);
         }
 
-        if (str_starts_with($input->getMimeType(), 'image')) {
+        if (str_starts_with((string) $input->getMimeType(), 'image')) {
             [$width, $height] = getimagesize($input->getPathname()) ?: [0, 0];
 
             if (isset($rules['maxweight'])) {

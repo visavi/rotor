@@ -55,7 +55,7 @@ class BanController extends AdminController
 
         Banhist::query()->create([
             'user_id'      => $user->id,
-            'send_user_id' => getUser('id'),
+            'send_user_id' => auth()->id(),
             'type'         => Banhist::BAN,
             'reason'       => $request->validated('reason'),
             'term'         => $term,
@@ -91,7 +91,7 @@ class BanController extends AdminController
 
         Banhist::query()->create([
             'user_id'      => $user->id,
-            'send_user_id' => getUser('id'),
+            'send_user_id' => auth()->id(),
             'type'         => Banhist::CHANGE,
             'reason'       => $request->validated('reason'),
             'term'         => $timeban->getTimestamp() - now()->getTimestamp(),
@@ -115,7 +115,7 @@ class BanController extends AdminController
 
         Banhist::query()->create([
             'user_id'      => $user->id,
-            'send_user_id' => getUser('id'),
+            'send_user_id' => auth()->id(),
             'type'         => Banhist::UNBAN,
         ]);
 

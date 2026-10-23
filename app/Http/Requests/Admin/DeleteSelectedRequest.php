@@ -32,6 +32,6 @@ class DeleteSelectedRequest extends FormRequest
      */
     public function ids(): array
     {
-        return intar($this->validated('del'));
+        return intar($this->validated('del')) ?? [];
     }
 }

@@ -1,7 +1,7 @@
 <!-- Newspaper Sidebar (Right) -->
 <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
 <aside class="app-sidebar">
-    @if ($user = getUser())
+    @if ($user = auth()->user())
         <div class="paper-sidebar-section">
             <div class="paper-sidebar-user">
                 {{ $user->getAvatarImage() }}

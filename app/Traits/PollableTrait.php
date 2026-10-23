@@ -30,7 +30,7 @@ trait PollableTrait
     public function poll(): MorphOne
     {
         return $this->morphOne(Poll::class, 'relate')
-            ->where('user_id', getUser('id'));
+            ->where('user_id', auth()->id());
     }
 
     /**
@@ -49,7 +49,7 @@ trait PollableTrait
             ->leftJoin('polls', static function (JoinClause $join) use ($model) {
                 $join->on($model->getQualifiedKeyName(), 'polls.relate_id')
                     ->where('polls.relate_type', $model->getMorphClass())
-                    ->where('polls.user_id', getUser('id'));
+                    ->where('polls.user_id', auth()->id());
             });
     }
 }

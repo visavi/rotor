@@ -9,9 +9,11 @@ use App\Http\Requests\CommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Flood;
+use App\Models\User;
 use App\Services\CommentService;
 use App\Services\FileService;
 use App\Traits\HandlesApiPagination;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -42,7 +44,7 @@ class CommentApiController extends Controller
         $comments = Comment::query()
             ->withUserVote()
             ->when($type, static fn (Builder $query) => $query->where('comments.relate_type', $type))
-            ->when($user, static fn (Builder $query) => $query->where('comments.user_id', $user->id))
+            ->when($user, static fn (Builder $query, User $user) => $query->where('comments.user_id', $user->id))
             ->with('user', 'files', 'relate')
             ->orderBy('comments.created_at', $this->apiOrder($request, 'desc'))
             ->when(! $user, static fn (Builder $query) => $query->capped())
@@ -73,10 +75,8 @@ class CommentApiController extends Controller
     /**
      * Добавление комментария к записи любого раздела
      */
-    public function store(Request $request, Flood $flood, FileService $files): JsonResponse
+    public function store(Request $request, Flood $flood, FileService $files, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         $validated = $request->validate([
             'type'      => ['required', 'string', 'in:' . implode(',', CommentService::types())],
             'id'        => ['required', 'integer', 'min:1'],
@@ -120,10 +120,8 @@ class CommentApiController extends Controller
     /**
      * Редактирование своего комментария
      */
-    public function update(int $id, Request $request): JsonResponse
+    public function update(int $id, Request $request, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         $comment = Comment::query()
             ->where('id', $id)
             ->where('user_id', $user->id)

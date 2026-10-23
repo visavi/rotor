@@ -37,7 +37,7 @@ class PasswordRequest extends FormRequest
     {
         return [
             function (Validator $validator): void {
-                $user = getUser();
+                $user = auth()->user() ?? abort(403);
                 $new = $this->string('new_password')->value();
 
                 if ($this->filled('old_password') && ! Hash::check($this->string('old_password')->value(), $user->password)) {

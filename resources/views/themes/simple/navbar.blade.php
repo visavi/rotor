@@ -14,7 +14,7 @@
             </li>
             @hook('navbarStart')
 
-            @if ($user = getUser())
+            @if ($user = auth()->user())
                 @if (isAdmin() && statsSpam())
                     <li>
                         <a href="{{ route('admin.spam.index') }}" aria-label="{{ __('index.complains') }}">

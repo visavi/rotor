@@ -17,7 +17,7 @@
   <a href="https://packagist.org/packages/visavi/rotor"><img src="https://img.shields.io/packagist/l/visavi/rotor" alt="License"></a>
   <a href="https://github.com/visavi/rotor/actions/workflows/tests.yml"><img src="https://github.com/visavi/rotor/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <a href="https://coveralls.io/github/visavi/rotor?branch=master"><img src="https://coveralls.io/repos/github/visavi/rotor/badge.svg?branch=master" alt="Coverage Status"></a>
-  <a href="https://phpstan.org"><img src="https://img.shields.io/badge/PHPStan-level%207-brightgreen" alt="PHPStan"></a>
+  <a href="https://phpstan.org"><img src="https://img.shields.io/badge/PHPStan-level%208-brightgreen" alt="PHPStan"></a>
 </p>
 
 <p align="center">

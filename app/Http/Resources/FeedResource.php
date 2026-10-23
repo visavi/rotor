@@ -46,7 +46,7 @@ class FeedResource extends JsonResource
                 'type'  => $voteType,
                 'id'    => $voteId,
                 'value' => $post->getAttribute('user_vote'),
-                'own'   => $source?->getAttribute('user_id') === getUser('id'),
+                'own'   => $source?->getAttribute('user_id') === auth()->id(),
             ] : null,
             'comments_count' => $post->getAttribute('count_comments') ?? $post->getAttribute('count_posts'),
             'user'           => $source?->user ? AuthorResource::make($source->user) : null,

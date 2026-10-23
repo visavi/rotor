@@ -27,6 +27,7 @@ use App\Services\UserService;
 use App\Support\Registry;
 use App\Traits\HandlesApiPagination;
 use Closure;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -104,7 +105,7 @@ class ApiController extends Controller
      */
     public function search(Request $request): JsonResource
     {
-        $query = $request->string('query', $request->input('q'))->value();
+        $query = SearchService::query($request);
         $terms = SearchService::terms($query);
         $type = SearchService::type($request->input('type'));
         $sort = SearchService::sort($request->input('sort'));
@@ -118,7 +119,7 @@ class ApiController extends Controller
 
         $posts = SearchService::paginate($terms, $type, $sort, $this->apiPerPage($request));
         $posts->setPath(url('/api/search'));
-        $posts->appends($request->only(['query', 'q', 'type', 'sort', 'per_page']));
+        $posts->appends($request->only(['query', 'type', 'sort', 'per_page']));
 
         // Список разделов для фильтра клиент берёт из /config (types.search)
         return SearchResource::collection($posts)
@@ -132,10 +133,10 @@ class ApiController extends Controller
     /**
      * Api голосования за запись
      */
-    public function rating(Request $request, RatingService $rating): JsonResponse
+    public function rating(Request $request, RatingService $rating, #[CurrentUser] User $user): JsonResponse
     {
         $result = $rating->vote(
-            getUser(),
+            $user,
             $request->input('type'),
             $request->integer('id'),
             $request->input('vote'),
@@ -156,10 +157,8 @@ class ApiController extends Controller
     /**
      * Api пользователей
      */
-    public function user(): JsonResource
+    public function user(#[CurrentUser] User $user): JsonResource
     {
-        $user = getUser();
-
         return new UserProfileResource($user);
     }
 
@@ -180,10 +179,8 @@ class ApiController extends Controller
     /**
      * Api диалогов
      */
-    public function dialogues(Request $request): JsonResource
+    public function dialogues(Request $request, #[CurrentUser] User $user): JsonResource
     {
-        $user = getUser();
-
         $lastMessage = Dialogue::query()
             ->select(
                 'author_id',
@@ -215,10 +212,8 @@ class ApiController extends Controller
     /**
      * Api приватных сообщений
      */
-    public function talk(string $login, Request $request): JsonResource
+    public function talk(string $login, Request $request, #[CurrentUser] User $user): JsonResource
     {
-        $user = getUser();
-
         if (is_numeric($login)) {
             $author = (new User())->setAttribute('id', $login);
         } else {
@@ -263,9 +258,8 @@ class ApiController extends Controller
     /**
      * Отправляет приватное сообщение
      */
-    public function createTalk(string $login, Request $request, Flood $flood, FileService $files): JsonResponse
+    public function createTalk(string $login, Request $request, Flood $flood, FileService $files, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
         $recipient = getUserByLogin($login);
 
         $validated = $request->validate([
@@ -282,6 +276,11 @@ class ApiController extends Controller
                 },
             ],
         ] + FileService::rules(Message::$morphName));
+
+        // Без получателя проверка text не проходит
+        if (! $recipient) {
+            abort(404, __('validator.user'));
+        }
 
         $message = $recipient->sendMessage($user, $validated['text']);
 
@@ -303,9 +302,8 @@ class ApiController extends Controller
     /**
      * Удаляет переписку с пользователем
      */
-    public function deleteTalk(string $login): JsonResponse
+    public function deleteTalk(string $login, #[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
         $author = getUserByLogin($login);
 
         if (! $author) {
@@ -350,10 +348,8 @@ class ApiController extends Controller
     /**
      * Api новых сообщений
      */
-    public function newMessages(): JsonResponse
+    public function newMessages(#[CurrentUser] User $user): JsonResponse
     {
-        $user = getUser();
-
         $countMessages = Dialogue::query()
             ->where('user_id', $user->id)
             ->where('reading', 0)

@@ -39,7 +39,7 @@ class NormalizeUrl
         $scriptInUrl = $script !== '' && rawurldecode($baseUrl) === $script;
         $basePath = $scriptInUrl ? substr($baseUrl, 0, (int) strrpos($baseUrl, '/')) : $baseUrl;
 
-        $trimmed = trim($path, '/');
+        $trimmed = trim((string) $path, '/');
 
         if ($trimmed !== '') {
             // Один ведущий слэш: //evil.com в Location увёл бы на чужой хост

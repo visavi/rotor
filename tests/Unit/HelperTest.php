@@ -642,6 +642,16 @@ class HelperTest extends TestCase
         self::assertNull(getUser('id'));
     }
 
+    public function testGetUserAuthorized(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        self::assertTrue($user->is(getUser()));
+        self::assertSame($user->login, getUser('login'));
+        self::assertNull(getUser('missing_field'));
+    }
+
     public function testImageBase64(): void
     {
         $path = sys_get_temp_dir() . '/helper_test_' . uniqid() . '.png';

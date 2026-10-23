@@ -19,7 +19,7 @@ class EmailChangeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => UserRules::email(true, getUser()?->id),
+            'email'    => UserRules::email(true, auth()->user()?->id),
             'password' => ['required', 'string'],
         ];
     }
@@ -36,7 +36,7 @@ class EmailChangeRequest extends FormRequest
     {
         return [
             function (Validator $validator): void {
-                $user = getUser();
+                $user = auth()->user() ?? abort(403);
 
                 if ($this->input('email') === $user->email) {
                     $validator->errors()->add('email', __('users.email_different'));

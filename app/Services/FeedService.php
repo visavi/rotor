@@ -22,7 +22,7 @@ class FeedService
 
     public function __construct()
     {
-        $this->user = getUser();
+        $this->user = auth()->user();
     }
 
     /**

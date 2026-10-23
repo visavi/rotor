@@ -44,7 +44,7 @@ trait HandlesApiPagination
             return null;
         }
 
-        if (! getUser()) {
+        if (auth()->guest()) {
             abort(403, __('main.not_authorized'));
         }
 

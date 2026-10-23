@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\Search;
 use App\Support\Registry;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
@@ -33,7 +34,7 @@ class SearchService
      */
     public static function clean(string $query): string
     {
-        return trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $query));
+        return trim(preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $query) ?? '');
     }
 
     /**
@@ -47,6 +48,16 @@ class SearchService
         );
 
         return implode(' ', $words);
+    }
+
+    /**
+     * Текст запроса: ?query[]= приходит массивом, Stringable на нём падал с 500
+     */
+    public static function query(Request $request): string
+    {
+        $query = $request->input('query');
+
+        return is_string($query) ? $query : '';
     }
 
     /**

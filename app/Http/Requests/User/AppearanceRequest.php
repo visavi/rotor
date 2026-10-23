@@ -49,7 +49,7 @@ abstract class AppearanceRequest extends FormRequest
      */
     public function apply(): void
     {
-        $user = getUser();
+        $user = auth()->user() ?? abort(403);
         $field = $this->field();
 
         DB::transaction(function () use ($user, $field): void {
@@ -67,7 +67,7 @@ abstract class AppearanceRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 $field = $this->field();
-                $user = getUser();
+                $user = auth()->user() ?? abort(403);
 
                 if ($validator->errors()->has($field)) {
                     return;

@@ -14,7 +14,7 @@
                 @hook('navbarEnd')
             </ul>
 
-            @if ($user = getUser())
+            @if ($user = auth()->user())
                 @php($unread = $user->getCountNewMessages())
                 <div class="dropdown paper-user">
                     <a href="#" class="paper-user__link" data-bs-toggle="dropdown">

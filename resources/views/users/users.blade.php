@@ -66,7 +66,7 @@
                         <small class="text-muted">{{ $data->getStatus() }}</small>
                     </div>
 
-                    @if (getUser() && $data->id !== getUser('id'))
+                    @if (auth()->check() && $data->id !== auth()->id())
                         <a class="fs-5 p-2 text-muted" href="/messages/talk/{{ $data->login }}" data-bs-toggle="tooltip" title="{{ __('users.send_message') }}">
                             <i class="fas fa-envelope"></i>
                         </a>

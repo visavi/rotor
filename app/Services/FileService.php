@@ -106,11 +106,12 @@ class FileService
      */
     public function upload(?UploadedFile $file, string $type, int $id): array
     {
-        if (! in_array($type, self::types(), true)) {
+        $class = Relation::getMorphedModel($type);
+
+        if (! $class || ! in_array($type, self::types(), true)) {
             return ['success' => false, 'message' => 'Type invalid'];
         }
 
-        $class = Relation::getMorphedModel($type);
         $isImageType = in_array($type, self::mediaTypes(), true);
 
         if ($id) {
@@ -126,7 +127,7 @@ class FileService
         $uploadedFiles = File::query()
             ->where('relate_type', $type)
             ->where('relate_id', $id)
-            ->where('user_id', getUser('id'))
+            ->where('user_id', auth()->id())
             ->get(['name']);
 
         $duplicate = $file && $uploadedFiles->contains(
@@ -134,17 +135,20 @@ class FileService
             Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension())
         );
 
+        $notAuthor = $model->getKey() && $model->getAttribute('user_id') !== auth()->id() && ! isAdmin();
+
         // Сам файл проверяется последним: остальное дешевле и ответ на него понятнее
         /** @var string|null $error */
         $error = match (true) {
-            $uploadedFiles->count() >= setting('maxfiles')                 => __('validator.files_max', ['max' => setting('maxfiles')]),
-            $duplicate                                                     => __('validator.file_duplicate'),
-            $model->id && $model->user_id !== getUser('id') && ! isAdmin() => __('ajax.record_not_author'),
-            default                                                        => $this->fileError($file, $type),
+            $uploadedFiles->count() >= setting('maxfiles') => __('validator.files_max', ['max' => setting('maxfiles')]),
+            $duplicate                                     => __('validator.file_duplicate'),
+            $notAuthor                                     => __('ajax.record_not_author'),
+            default                                        => $this->fileError($file, $type),
         };
 
-        if ($error) {
-            return ['success' => false, 'message' => $error];
+        // Без файла fileError() уже вернул ошибку
+        if ($error || ! $file) {
+            return ['success' => false, 'message' => $error ?? __('validator.file_upload_failed')];
         }
 
         $fileData = $this->store($model, $file, $isImageType);
@@ -199,7 +203,7 @@ class FileService
                     }
 
                     $taken = self::acceptsPending($type)
-                        ? File::query()->pending($type, getUser('id'))->count()
+                        ? File::query()->pending($type, auth()->id())->count()
                         : 0;
 
                     if (count($value) + $taken > $max) {
@@ -286,7 +290,7 @@ class FileService
     public function attachPending(Model $model, ?int $userId = null): int
     {
         return File::query()
-            ->pending($model->getMorphClass(), $userId ?? getUser('id'))
+            ->pending($model->getMorphClass(), $userId ?? auth()->id())
             ->update(['relate_id' => $model->getKey()]);
     }
 
@@ -309,7 +313,7 @@ class FileService
             return ['success' => false, 'message' => 'File not found'];
         }
 
-        if ($file->user_id !== getUser('id') && ! isAdmin()) {
+        if ($file->user_id !== auth()->id() && ! isAdmin()) {
             return ['success' => false, 'message' => __('ajax.record_not_author')];
         }
 
@@ -344,7 +348,7 @@ class FileService
             return ['success' => false, 'message' => 'File not found'];
         }
 
-        if (! isAdmin() && ! $files->every(static fn (File $file) => $file->user_id === getUser('id'))) {
+        if (! isAdmin() && ! $files->every(static fn (File $file) => $file->user_id === auth()->id())) {
             return ['success' => false, 'message' => __('ajax.record_not_author')];
         }
 

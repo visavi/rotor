@@ -39,7 +39,7 @@ class MessageRequest extends FormRequest
     {
         return [
             function (Validator $validator): void {
-                $user = getUser();
+                $user = auth()->user() ?? abort(403);
 
                 if ($this->recipient()?->id === $user->id) {
                     $validator->errors()->add('msg', __('messages.send_yourself'));

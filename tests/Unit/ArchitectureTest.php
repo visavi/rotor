@@ -2,6 +2,15 @@
 
 namespace Tests\Unit;
 
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckToken;
+use App\Http\Middleware\CheckUser;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Container\Attributes\Authenticated;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Support\Facades\Route;
+use ReflectionAttribute;
+use ReflectionParameter;
 use Symfony\Component\Finder\Finder;
 use Tests\TestCase;
 
@@ -36,6 +45,67 @@ class ArchitectureTest extends TestCase
             'SITETIME — мост для старых модулей до 15.0. Даты — datetime-колонки и now()',
             ['app/helpers.php'],
         );
+    }
+
+    public function testNoGetUser(): void
+    {
+        // В PHP устаревший вызов ловит phpstan, шаблоны он не разбирает
+        $this->assertCodeMissing(
+            '/(?<![\w>:$])(?<!function )getUser\s*\(/',
+            ['app', 'modules', 'resources/views'],
+            'getUser() удаляется в 15.0 и прячет null от phpstan. Пользователь — auth()->user(), id — auth()->id(), в экшене контроллера — #[CurrentUser] User $user',
+            ['app/helpers.php'],
+        );
+    }
+
+    public function testCurrentUserDoesNotShadowRouteParameter(): void
+    {
+        $found = [];
+
+        foreach (Route::getRoutes()->getRoutes() as $route) {
+            $names = $route->parameterNames();
+
+            foreach ($route->signatureParameters() as $parameter) {
+                if ($parameter->getAttributes(Authenticated::class, ReflectionAttribute::IS_INSTANCEOF) && in_array($parameter->getName(), $names, true)) {
+                    $found[] = $route->uri() . ' → $' . $parameter->getName();
+                }
+            }
+        }
+
+        $this->assertSame([], $found, 'Сегмент маршрута с тем же именем подставит модель из адреса вместо текущего пользователя. Назовите параметр иначе, например #[CurrentUser] User $me');
+    }
+
+    public function testCurrentUserRoutesRequireAuth(): void
+    {
+        // Алиасы из bootstrap/app.php попадают в роутер, только когда создано HTTP-ядро
+        $this->app->make(HttpKernel::class);
+
+        $found = [];
+
+        foreach (Route::getRoutes()->getRoutes() as $route) {
+            $current = array_filter(
+                $route->signatureParameters(),
+                static fn (ReflectionParameter $parameter): bool => ! $parameter->allowsNull()
+                    && $parameter->getAttributes(Authenticated::class, ReflectionAttribute::IS_INSTANCEOF),
+            );
+
+            if (! $current) {
+                continue;
+            }
+
+            // Классы с учётом withoutMiddleware(): алиас, класс и группа сводятся к одному виду
+            $guarded = array_filter(
+                Route::gatherRouteMiddleware($route),
+                static fn (mixed $middleware): bool => is_string($middleware)
+                    && in_array(explode(':', $middleware)[0], [CheckUser::class, CheckToken::class, CheckAdmin::class, Authenticate::class], true),
+            );
+
+            if (! $guarded) {
+                $found[] = $route->uri();
+            }
+        }
+
+        $this->assertSame([], $found, 'Гость дойдёт до экшена, и #[CurrentUser] получит null — TypeError и 500. Закройте маршрут check.user, check.token или check.admin, либо примите ?User');
     }
 
     public function testMailLinksAreAbsolute(): void
@@ -73,7 +143,7 @@ class ArchitectureTest extends TestCase
                 continue;
             }
 
-            foreach (file($file->getPathname()) as $number => $line) {
+            foreach (file($file->getPathname()) ?: [] as $number => $line) {
                 // Комментарии объясняют запреты и сами упоминают запрещённое
                 if (preg_match('~^\s*(//|\*|/\*)~', $line)) {
                     continue;

@@ -52,7 +52,7 @@ class BanController extends Controller
             default                     => null,
         };
 
-        if ($error) {
+        if ($error || ! $banhist) {
             return redirect('ban')
                 ->withInput()
                 ->withErrors($error);
@@ -77,7 +77,7 @@ class BanController extends Controller
      */
     private function bannedUser(): User
     {
-        if (! $user = getUser()) {
+        if (! $user = auth()->user()) {
             abort(403, __('main.not_authorized'));
         }
 

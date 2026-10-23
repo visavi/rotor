@@ -64,7 +64,7 @@ class CommentService
 
         $model->increment('count_comments');
 
-        $this->notify($model, $comment, $text, $parentComment, $baseUrl);
+        $this->notify($model, $comment, $user, $text, $parentComment, $baseUrl);
 
         return $comment;
     }
@@ -136,7 +136,7 @@ class CommentService
     /**
      * Уведомляет автора записи, автора комментария-родителя и упомянутых
      */
-    private function notify(Model $model, Comment $comment, string $text, ?Comment $parentComment, ?string $baseUrl): void
+    private function notify(Model $model, Comment $comment, User $author, string $text, ?Comment $parentComment, ?string $baseUrl): void
     {
         $baseUrl ??= method_exists($model, 'getViewUrl') ? $model->getViewUrl(false) : null;
 
@@ -152,8 +152,8 @@ class CommentService
         $owner = $model->getRelationValue('user');
         $owner = $owner instanceof User && $owner->exists ? $owner : null;
 
-        if ($owner && $owner->notify_comment && $owner->id !== getUser('id') && $parentComment === null) {
-            $login = getUser('login');
+        if ($owner && $owner->notify_comment && $owner->id !== $author->id && $parentComment === null) {
+            $login = $author->login;
             $owner->sendMessage(null, textNotice('comment_added', compact('login', 'url', 'title') + ['text' => $text]));
             $skip[] = $owner->login;
         }
@@ -161,12 +161,12 @@ class CommentService
         $replyUser = $parentComment?->user?->exists ? $parentComment->user : null;
 
         // Автору записи пишут только без родителя, поэтому дубля с ним здесь не бывает
-        if ($replyUser && $replyUser->notify_reply && $replyUser->id !== getUser('id')) {
-            $login = getUser('login');
+        if ($replyUser && $replyUser->notify_reply && $replyUser->id !== $author->id) {
+            $login = $author->login;
             $replyUser->sendMessage(null, textNotice('comment_reply', compact('login', 'url', 'title') + ['text' => $text]));
             $skip[] = $replyUser->login;
         }
 
-        sendNotify($text, $url, $title, $skip);
+        sendNotify($text, $url, $title, $skip, $author);
     }
 }

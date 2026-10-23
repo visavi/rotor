@@ -50,12 +50,12 @@
             {{-- Действия --}}
             <div class="comment-actions d-flex align-items-center flex-wrap">
                 @if (! $comment->deleted_at)
-                    @php $ownComment = getUser() && getUser('id') === $comment->user_id; @endphp
+                    @php $ownComment = auth()->id() === $comment->user_id; @endphp
 
                     @include('app/_rating', ['model' => $comment, 'vote' => $comment->vote])
 
                     {{-- Инлайн: только ответить + цитировать (чужие комментарии) --}}
-                    @if (getUser() && ! $ownComment)
+                    @if (auth()->check() && ! $ownComment)
                         @if (! ($closed ?? false))
                             <a href="#" onclick="return openReplyForm({{ $comment->id }})">
                                 <i class="fa-regular fa-comment"></i> {{ __('main.reply') }}
@@ -77,7 +77,7 @@
                                     <i class="fas fa-link fa-fw me-1"></i> {{ __('main.copy_link') }}
                                 </a>
                             </li>
-                            @if (getUser())
+                            @if (auth()->check())
                                 @if ($ownComment)
                                     @if ($comment->created_at->gt(now()->subMinutes(10)))
                                         {{-- Окно правки нужно только там, где есть что править --}}
@@ -111,7 +111,7 @@
             </div>
 
             {{-- Форма ответа --}}
-            @if (getUser() && ! ($closed ?? false) && getUser('id') !== $comment->user_id)
+            @if (auth()->check() && ! ($closed ?? false) && auth()->id() !== $comment->user_id)
                 <div class="reply-form d-none mt-2" id="reply-form-{{ $comment->id }}">
                     <form action="{{ $action }}" method="post">
                         @csrf

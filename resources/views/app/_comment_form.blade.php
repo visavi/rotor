@@ -3,7 +3,7 @@
         {{ showError(__('main.empty_comments')) }}
     @endif
 
-    @if (getUser())
+    @if (auth()->check())
         @php
             // Свёрнута в одно поле, пока нечего показывать: после ошибки или с прикреплёнными файлами открыта
             $compact = ! $errors->any() && ! old('msg') && $files->isEmpty();

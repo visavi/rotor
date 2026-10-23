@@ -63,7 +63,7 @@ class Flood extends Model
             return 0;
         }
 
-        $userPoint = getUser('point');
+        $userPoint = auth()->user()?->point;
         $period = setting('floodstime');
 
         if ($userPoint >= 100) {
@@ -132,6 +132,6 @@ class Flood extends Model
      */
     private function getUid(): string
     {
-        return md5((string) (getUser('id') ?? getIp()));
+        return md5((string) (auth()->id() ?? getIp()));
     }
 }

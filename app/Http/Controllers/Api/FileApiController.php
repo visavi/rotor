@@ -32,7 +32,7 @@ class FileApiController extends Controller
         $files = File::query()
             ->where('relate_type', $validated['type'])
             ->where('relate_id', (int) ($validated['id'] ?? 0))
-            ->where('user_id', getUser('id'))
+            ->where('user_id', auth()->id())
             ->ordered()
             ->get();
 

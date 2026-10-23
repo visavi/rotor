@@ -1,7 +1,7 @@
 @php
     $vote = $vote ?? null;
     $type = $model->getMorphClass();
-    $canVote = getUser() && getUser('id') !== $model->user_id;
+    $canVote = auth()->check() && auth()->id() !== $model->user_id;
 @endphp
 {{-- После голоса сервер отдаёт этот же блок целиком, клиент подменяет его по .js-rating --}}
 <span class="js-rating">

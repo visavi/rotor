@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Support\Restatement;
 use Carbon\CarbonImmutable;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
@@ -42,6 +43,10 @@ class AppServiceProvider extends ServiceProvider
         // migrate:fresh, migrate:refresh, migrate:reset и db:wipe на боевом
         // не выполняются: одна опечатка в команде стоила бы всей базы
         DB::prohibitDestructiveCommands($this->app->isProduction());
+
+        // Связь, догружаемая в цикле по коллекции, — N+1: в разработке и тестах падает,
+        // на сайтах пользователей (любое другое окружение) молчит
+        Model::preventLazyLoading($this->app->environment('local', 'testing'));
 
         $this->configureRateLimiting();
 

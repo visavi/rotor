@@ -53,7 +53,7 @@ function dateFixed(
     }
 
     $date = Date::parse($timestamp)->setTimezone(config('app.timezone'));
-    $shift = (int) getUser('timezone');
+    $shift = (int) auth()->user()?->timezone;
     $dateStamp = $date->addHours($shift)->format($format);
 
     if ($original) {
@@ -98,7 +98,7 @@ function check(array|string|null $string, bool $doubleEncode = true): array|stri
             $string[$key] = check($val, $doubleEncode);
         }
     } else {
-        $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $doubleEncode);
+        $string = htmlspecialchars((string) $string, ENT_QUOTES, 'UTF-8', $doubleEncode);
         $search = [chr(0), "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
         $string = str_replace($search, [], $string);
     }
@@ -343,7 +343,7 @@ function statsStickers(): int
  */
 function hideMail(string $email): string
 {
-    return preg_replace('/(?<=.).(?=.*@)/u', '*', $email);
+    return preg_replace('/(?<=.).(?=.*@)/u', '*', $email) ?? '';
 }
 
 /**
@@ -395,9 +395,9 @@ function icons(string $ext): HtmlString
  */
 function truncateDescription(HtmlString|string|null $value, int $words = 20, string $end = ''): string
 {
-    $value = preg_replace('/<[^>]+>/', ' ', (string) $value);
+    $value = preg_replace('/<[^>]+>/', ' ', (string) $value) ?? '';
     $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-    $value = trim(preg_replace('/\s+/', ' ', $value));
+    $value = trim(preg_replace('/\s+/', ' ', $value) ?? '');
 
     return Str::words($value, $words, $end);
 }
@@ -468,10 +468,12 @@ function deleteFile(string $path): bool
 
 /**
  * Отправляет уведомление об упоминании в приват
+ *
+ * @param User|null $author Автор текста, по умолчанию вошедший пользователь
  */
-function sendNotify(string $text, string $url, string $title, array $exclude = []): void
+function sendNotify(string $text, string $url, string $title, array $exclude = [], ?User $author = null): void
 {
-    if (! $login = getUser('login')) {
+    if (! $login = ($author ?? auth()->user())?->login) {
         return;
     }
 
@@ -602,9 +604,9 @@ function saveErrorLog(int $code, ?string $message = null): void
         Error::query()->create([
             'code'    => $code,
             'request' => Str::substr(request()->getRequestUri(), 0, 191),
-            'referer' => Str::substr(request()->header('referer'), 0, 191),
-            'user_id' => getUser('id'),
-            'message' => Str::substr($message, 0, 191),
+            'referer' => Str::substr((string) request()->header('referer'), 0, 191),
+            'user_id' => auth()->id(),
+            'message' => Str::substr((string) $message, 0, 191),
             'ip'      => getIp(),
             'brow'    => getBrowser(),
         ]);
@@ -767,7 +769,7 @@ function getBodyName(string $filename): string
 {
     $name = pathinfo($filename, PATHINFO_FILENAME);
 
-    return preg_replace('/\xc2\xa0/', ' ', $name);
+    return preg_replace('/\xc2\xa0/', ' ', $name) ?? $name;
 }
 
 /**
@@ -889,13 +891,17 @@ function getUserByLogin(?string $login): ?User
  */
 function getUserByLoginOrEmail(?string $login): ?User
 {
-    $field = strpos($login, '@') ? 'email' : 'login';
+    $field = strpos((string) $login, '@') ? 'email' : 'login';
 
     return User::query()->where($field, $login)->first();
 }
 
 /**
  * Возвращает данные пользователя по ключу
+ *
+ * @deprecated будет удалено в 15.0: auth()->user(), auth()->id(), auth()->user()?->поле
+ *
+ * @return ($key is null ? User|null : mixed)
  */
 function getUser(?string $key = null): mixed
 {
@@ -1055,7 +1061,7 @@ function absolutizeUrls(string $text): string
 {
     $base = config('app.url');
 
-    return preg_replace('/(href|src)="(\/[^"]*)"/', '$1="' . $base . '$2"', $text);
+    return preg_replace('/(href|src)="(\/[^"]*)"/', '$1="' . $base . '$2"', $text) ?? $text;
 }
 
 /**

@@ -3,7 +3,7 @@
 </button>
 
 <div class="collapse d-md-flex flex-column nav nav-pills settings-nav js-settings-nav" id="settingsNav">
-    @if (getUser()?->isAdmin(App\Models\User::BOSS))
+    @if (auth()->user()?->isAdmin(App\Models\User::BOSS))
         @foreach (App\Models\Setting::getActions() as $action)
             <a @class(['nav-link', 'active' => ($act ?? null) === $action]) href="{{ route('admin.settings', ['act' => $action]) }}" id="{{ $action }}">{{ __('settings.' . $action) }}</a>
         @endforeach

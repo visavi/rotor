@@ -27,13 +27,14 @@ class HtmlSanitizer
         // в двойных кавычках, а кавычки в тексте и значениях закодированы
         $html = self::filterIframes(self::filterStyles(self::getInstance()->sanitize((string) $text)));
 
+        // preg_* отдаёт null, упёршись в pcre.backtrack_limit: пустая строка вместо неочищенной.
         // Symfony HtmlSanitizer (через DOMDocument) кодирует безопасные символы как числовые
         // HTML-сущности. Декодируем все кроме &(38), <(60), >(62), "(34) — они нужны в HTML.
         return preg_replace_callback('/&#(\d+);/', static function ($m) {
             $code = (int) $m[1];
 
             return in_array($code, [34, 38, 60, 62], true) ? $m[0] : mb_chr($code);
-        }, $html);
+        }, $html) ?? '';
     }
 
     /**
@@ -61,7 +62,7 @@ class HtmlSanitizer
             }
 
             return $kept ? ' style="' . htmlspecialchars(implode('; ', $kept), ENT_QUOTES) . '"' : '';
-        }, $html);
+        }, $html) ?? '';
     }
 
     /**
@@ -90,7 +91,7 @@ class HtmlSanitizer
             }
 
             return '';
-        }, $html);
+        }, $html) ?? '';
     }
 
     private static function getInstance(): SymfonyHtmlSanitizer

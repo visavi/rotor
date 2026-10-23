@@ -58,7 +58,7 @@ class AuthApiController extends Controller
         $userService->requestRecovery($user);
 
         return response()->json([
-            'message' => __('mails.recovery_instructions', ['email' => hideMail($user->email)]),
+            'message' => __('mails.recovery_instructions', ['email' => hideMail((string) $user->email)]),
         ]);
     }
 }

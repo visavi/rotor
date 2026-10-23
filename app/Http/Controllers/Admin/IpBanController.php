@@ -33,7 +33,7 @@ class IpBanController extends AdminController
     {
         Ban::query()->create([
             'ip'         => $request->validated('ip'),
-            'user_id'    => getUser('id'),
+            'user_id'    => auth()->id(),
             'created_at' => now(),
         ]);
 

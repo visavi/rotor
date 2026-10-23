@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
-    public ?User $user;
+    public User $user;
 
     /**
      * Конструктор
@@ -27,7 +27,7 @@ class MessageController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->user = $request->user();
+            $this->user = $request->user() ?? abort(403);
 
             return $next($request);
         });
