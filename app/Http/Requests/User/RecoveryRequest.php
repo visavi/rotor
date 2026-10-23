@@ -54,6 +54,7 @@ class RecoveryRequest extends FormRequest
 
                 $user = $this->recoveryUser();
 
+                /** @var string|null $error */
                 $error = match (true) {
                     ! $user => __('validator.user'),
                     // Без почты письмо со ссылкой отправить некуда

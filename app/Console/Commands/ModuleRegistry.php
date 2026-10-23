@@ -29,6 +29,7 @@ class ModuleRegistry extends Command
      */
     public function handle(): int
     {
+        /** @var string $path */
         $path = $this->argument('path') ?: base_path('modules');
 
         if (! is_dir($path)) {
@@ -41,7 +42,7 @@ class ModuleRegistry extends Command
         $modules = $this->loadExisting();
 
         // Путь — либо один модуль (есть module.php), либо каталог с модулями
-        $dirs = is_file($path . '/module.php') ? [$path] : (array) glob($path . '/*', GLOB_ONLYDIR);
+        $dirs = is_file($path . '/module.php') ? [$path] : (glob($path . '/*', GLOB_ONLYDIR) ?: []);
 
         foreach ($dirs as $dir) {
             $manifest = $dir . '/module.php';
@@ -60,16 +61,22 @@ class ModuleRegistry extends Command
             $modules[$name] = $this->buildModule($modules[$name] ?? null, $name, $dir, $config);
         }
 
+        /** @var string $registryName */
+        $registryName = $this->option('name');
+
         $registry = [
-            'name'    => (string) $this->option('name'),
+            'name'    => $registryName,
             'modules' => array_values($modules),
         ];
 
         // Компактный вывод: реестр качают клиенты, а GitHub отдаёт его без gzip —
         // отступы стоили бы трети веса файла. Читать глазами — через `jq .`
-        $json = json_encode($registry, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $json = json_encode($registry, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
 
-        if ($output = $this->option('output')) {
+        /** @var string|null $output */
+        $output = $this->option('output');
+
+        if ($output) {
             file_put_contents($output, $json . "\n");
             $this->info('Реестр записан: ' . $output . ' (' . count($modules) . ' модулей)');
         } else {
@@ -86,6 +93,7 @@ class ModuleRegistry extends Command
      */
     private function loadExisting(): array
     {
+        /** @var string|null $file */
         $file = $this->option('existing');
 
         if (! $file || ! is_file($file)) {
@@ -205,6 +213,7 @@ class ModuleRegistry extends Command
      */
     private function downloadUrl(string $name, string $version): string
     {
+        /** @var string|null $base */
         $base = $this->option('base-url');
 
         if (! $base) {

@@ -101,6 +101,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public const string BANNED = 'banned'; // Забаненный
 
     /**
+     * Символы управления направлением текста: U+202A–202E и U+2066–2069
+     */
+    private const array BIDI_CONTROLS = [
+        "\u{202A}", "\u{202B}", "\u{202C}", "\u{202D}", "\u{202E}",
+        "\u{2066}", "\u{2067}", "\u{2068}", "\u{2069}",
+    ];
+
+    /**
      * Администраторы
      */
     public const array ADMIN_GROUPS = [
@@ -279,7 +287,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         if ($this->id) {
             $admin = null;
-            $name = check($this->getName());
+            $name = e($this->getName());
 
             if ($this->color) {
                 $name = '<span style="color:' . $this->color . '">' . $name . '</span>';
@@ -525,16 +533,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $statuses = [];
             foreach ($users as $user) {
                 if ($user->status) {
-                    $statuses[$user->id] = '<span style="color:#ff0000">' . check($user->status) . '</span>';
+                    $statuses[$user->id] = '<span style="color:#ff0000">' . e((string) $user->status) . '</span>';
                     continue;
                 }
 
                 if ($user->color) {
-                    $statuses[$user->id] = '<span style="color:' . $user->color . '">' . check($user->name) . '</span>';
+                    $statuses[$user->id] = '<span style="color:' . $user->color . '">' . e((string) $user->name) . '</span>';
                     continue;
                 }
 
-                $statuses[$user->id] = check($user->name);
+                $statuses[$user->id] = e((string) $user->name);
             }
 
             return $statuses;
@@ -549,12 +557,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected function incrementOrDecrement($column, $amount, $extra, $method)
     {
-        return $this->exists ? parent::incrementOrDecrement($column, $amount, $extra, $method) : false;
+        return $this->exists ? parent::incrementOrDecrement($column, $amount, $extra, $method) : 0;
     }
 
     protected function incrementOrDecrementEach(array $columns, array $extra, string $method)
     {
-        return $this->exists ? parent::incrementOrDecrementEach($columns, $extra, $method) : false;
+        return $this->exists ? parent::incrementOrDecrementEach($columns, $extra, $method) : 0;
     }
 
     /**
@@ -626,6 +634,31 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             ->where('user_id', $this->id)
             ->where('reading', 0)
             ->count();
+    }
+
+    /**
+     * Имя без символов управления направлением текста
+     *
+     * Они разворачивают текст на экране: «\u{202E}nimdA» выглядит как «Admin».
+     * Вырезаются при сохранении, поэтому любой путь — сайт, API, админка,
+     * вход через соцсети — пишет уже чистое имя, а вывод экранирует только e()
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::set(static fn (?string $value): ?string => self::stripBidi($value));
+    }
+
+    /**
+     * Статус без символов управления направлением текста, как и имя
+     */
+    protected function status(): Attribute
+    {
+        return Attribute::set(static fn (?string $value): ?string => self::stripBidi($value));
+    }
+
+    private static function stripBidi(?string $value): ?string
+    {
+        return $value === null ? null : str_replace(self::BIDI_CONTROLS, '', $value);
     }
 
     /**

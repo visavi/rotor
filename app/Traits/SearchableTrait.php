@@ -11,7 +11,7 @@ trait SearchableTrait
     /**
      * Поля модели, которые должны быть включены в поиск
      */
-    protected function searchableFields(): array
+    public function searchableFields(): array
     {
         return [];
     }

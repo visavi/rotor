@@ -29,7 +29,7 @@ class RatingService
      * выбирает вызывающий — сайту нужен перерисованный блок, API — числа.
      * У отказа есть HTTP-статус: клиенту API по нему видно, что случилось
      *
-     * @return array{success: bool, status?: int, message?: string, cancel?: bool, post?: Model, vote?: string|null}
+     * @return array{success: false, status: int, message: string}|array{success: true, cancel: bool, post: Model, vote: string|null}
      */
     public function vote(User $user, ?string $type, int $id, ?string $vote): array
     {

@@ -54,7 +54,8 @@ class MakeModule extends Command
      */
     public function handle(): int
     {
-        $name = (string) $this->argument('name');
+        /** @var string $name */
+        $name = $this->argument('name');
 
         if (! preg_match('/^[A-Z][A-Za-z0-9]*$/', $name)) {
             $this->components->error('Название модуля должно быть в StudlyCase, напр. Kanban');
@@ -70,7 +71,8 @@ class MakeModule extends Command
             return SymfonyCommand::FAILURE;
         }
 
-        $model = (string) $this->option('model');
+        /** @var string $model */
+        $model = $this->option('model') ?? '';
 
         if ($model !== '' && ! preg_match('/^[A-Z][A-Za-z0-9]*$/', $model)) {
             $this->components->error('Название модели должно быть в StudlyCase, напр. Task');

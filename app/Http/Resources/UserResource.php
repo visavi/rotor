@@ -26,7 +26,7 @@ class UserResource extends JsonResource
             'themes'    => $this->themes,
             'point'     => $this->point,
             'money'     => $this->money,
-            'status'    => $this->status ? $this->getStatus()->toHtml() : null,
+            'status'    => $this->status ? (string) $this->getStatus() : null,
             'color'     => $this->color,
             'avatar'    => $this->avatar ? url($this->avatar) : null,
             'picture'   => $this->picture ? url($this->picture) : null,

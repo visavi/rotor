@@ -102,7 +102,7 @@ class FileService
     /**
      * Загружает вложение к записи, id = 0 — запись еще не создана
      *
-     * @return array{success: bool, message?: string, file?: File, data?: array}
+     * @return array{success: false, message: string}|array{success: true, file: File, data: array}
      */
     public function upload(?UploadedFile $file, string $type, int $id): array
     {
@@ -135,6 +135,7 @@ class FileService
         );
 
         // Сам файл проверяется последним: остальное дешевле и ответ на него понятнее
+        /** @var string|null $error */
         $error = match (true) {
             $uploadedFiles->count() >= setting('maxfiles')                 => __('validator.files_max', ['max' => setting('maxfiles')]),
             $duplicate                                                     => __('validator.file_duplicate'),
@@ -150,7 +151,7 @@ class FileService
 
         return [
             'success' => true,
-            'file'    => File::query()->find($fileData['id']),
+            'file'    => File::query()->findOrFail((int) $fileData['id']),
             'data'    => $fileData,
         ];
     }
@@ -292,7 +293,7 @@ class FileService
     /**
      * Удаляет вложение
      *
-     * @return array{success: bool, message?: string, path?: string}
+     * @return array{success: false, message: string}|array{success: true, path: string}
      */
     public function remove(int $fileId, string $type): array
     {
@@ -355,7 +356,7 @@ class FileService
             $cases .= ' WHEN ' . $id . ' THEN ' . ($index + 1);
         }
 
-        File::query()->whereKey($ids)->update(['sort' => DB::raw('CASE id' . $cases . ' END')]);
+        File::query()->whereKey($ids)->update(['sort' => DB::raw('CASE id' . $cases . ' END')]); // @phpstan-ignore argument.type (в SQL только целые, собранные выше)
 
         return ['success' => true];
     }
@@ -365,7 +366,8 @@ class FileService
      */
     private function store(object $model, UploadedFile $file, bool $isImageType): array
     {
-        $fileData = $model->uploadFile($file);
+        // Типы вложений — модели с UploadTrait
+        $fileData = $model->uploadFile($file); // @phpstan-ignore method.notFound
 
         if (method_exists($model, 'convertVideo')) {
             $model->convertVideo($fileData);

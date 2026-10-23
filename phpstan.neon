@@ -5,12 +5,30 @@ parameters:
     paths:
         - app
         - modules
-    level: 5
+    level: 7
     ignoreErrors:
+        # Типы значений массивов и generics связей в docblock: сотни строк шума без пользы для проверки кода
+        - identifier: missingType.iterableValue
+          reportUnmatched: false
+        - identifier: missingType.generics
+          reportUnmatched: false
+        # artisan() в тестах всегда отдаёт PendingCommand: вывод консоли подменяется, int — только без подмены
+        - message: '#Cannot call method \w+\(\) on Illuminate\\Testing\\PendingCommand\|int\.#'
+          path: modules/*/Tests/*
+          reportUnmatched: false
+        # Реестр поиска хранит модели с SearchableTrait: тип «модель с трейтом» не выразить без интерфейса
+        - identifiers: [method.notFound, property.notFound]
+          path: app/Console/Commands/SearchImport.php
+        # Устаревший валидатор удаляется в 15.0: тип $label не меняем, его ещё зовут сторонние модули
+        - identifier: missingType.parameter
+          path: app/Support/Validator.php
         # Module-view namespaces (blog::, forum::) не зарегистрированы при статическом анализе
         - message: '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
           path: modules/*
           reportUnmatched: false
+        # Шаблон настроек задаёт модуль, его namespace phpstan тоже не видит
+        - message: '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
+          path: app/Http/Controllers/Admin/ModuleSettingController.php
         # В CI каталог modules пуст, трейты ядра используются только моделями модулей
         - identifier: trait.unused
           path: app/Traits/*

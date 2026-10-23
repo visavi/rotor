@@ -54,7 +54,7 @@ class SettingRequest extends FormRequest
     {
         $mods = (array) $this->input('mods');
 
-        return collect($this->validated('sets'))
+        return collect((array) $this->validated('sets'))
             ->map(static fn (mixed $value, int|string $name) => (string) (isset($mods[$name]) ? $value * $mods[$name] : $value))
             ->all();
     }

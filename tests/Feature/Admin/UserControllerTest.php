@@ -52,6 +52,13 @@ class UserControllerTest extends TestCase
             ->assertSee($user->login);
     }
 
+    public function testSearchWithArrayQueryIsEmpty(): void
+    {
+        $this->actingAs($this->boss)
+            ->get('/admin/users/search?q[]=plain')
+            ->assertOk();
+    }
+
     public function testEditMissingUserReturns404(): void
     {
         $this->actingAs($this->boss)

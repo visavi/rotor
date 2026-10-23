@@ -5,13 +5,14 @@ namespace App\Http\Middleware;
 use App\Services\MetrikaService;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GrantDailyBonus
 {
     /**
      * Начисляет ежедневный бонус и показывает уведомление о нём
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         // Бонус — при открытии страницы: у формы ответ редирект, у ajax — JSON,
         // уведомление там некому показать. Начислится на следующей странице

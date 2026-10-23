@@ -31,7 +31,7 @@ class ModuleController extends AdminController
         $registryModules = ModuleRegistry::getAvailableModules();
 
         $moduleNames = [];
-        $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR);
+        $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR) ?: [];
         foreach ($modulesLoaded as $module) {
             if (file_exists($module . '/module.php')) {
                 $name = basename($module);
@@ -94,7 +94,7 @@ class ModuleController extends AdminController
 
         if (file_exists($modulePath . '/database/migrations')) {
             $migrations = [];
-            foreach (glob($modulePath . '/database/migrations/*.php') as $migration) {
+            foreach (glob($modulePath . '/database/migrations/*.php') ?: [] as $migration) {
                 $migrations[basename($migration)] = file_get_contents($migration);
             }
             $moduleConfig['migrations'] = $migrations;
@@ -130,7 +130,7 @@ class ModuleController extends AdminController
                 $moduleConfig['changelog'] = trim((string) preg_replace(
                     '/^#\s+changelog\s*/ui',
                     '',
-                    file_get_contents($modulePath . '/' . $changelog)
+                    (string) file_get_contents($modulePath . '/' . $changelog)
                 ));
                 break;
             }
@@ -288,7 +288,7 @@ class ModuleController extends AdminController
         // предлагать скачать заново — его хватает применить на странице модуля
         $localVersions = [];
 
-        $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR);
+        $modulesLoaded = glob(base_path('modules/*'), GLOB_ONLYDIR) ?: [];
         foreach ($modulesLoaded as $module) {
             $name = basename($module);
             $moduleNames[] = $name;
@@ -461,7 +461,7 @@ class ModuleController extends AdminController
 
         $topDirs = [];
         for ($i = 0; $i < $zip->numFiles; $i++) {
-            $name = $zip->getNameIndex($i);
+            $name = (string) $zip->getNameIndex($i);
 
             if (str_contains($name, '..')) {
                 $zip->close();

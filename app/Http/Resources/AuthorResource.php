@@ -23,7 +23,7 @@ class AuthorResource extends JsonResource
             'level'  => $this->level,
             'color'  => $this->color,
             'avatar' => $this->avatar ? url($this->avatar) : null,
-            'status' => $this->status ? $this->getStatus()->toHtml() : null,
+            'status' => $this->status ? (string) $this->getStatus() : null,
         ];
     }
 }

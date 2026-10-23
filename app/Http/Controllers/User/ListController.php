@@ -14,12 +14,12 @@ class ListController extends Controller
 {
     public function userlist(Request $request): View
     {
-        $type = check($request->input('type', 'users'));
-        $sort = $request->input('sort', 'point');
-        $order = $request->input('order', 'desc');
-        $user = $request->input('user', '');
+        // Значения уходят обратно в ссылки и поля формы: массив из ?type[]= ронял шаблон
+        $type = in_array($request->input('type'), ['admins', 'birthdays'], true) ? $request->input('type') : 'users';
+        $user = is_string($request->input('user')) ? $request->input('user') : '';
 
-        [$sorting, $orderBy] = User::getSorting($sort, $order);
+        [$sorting, $orderBy, $sort] = User::getSorting($request->input('sort', 'point'), $request->input('order'));
+        $order = $orderBy[1];
 
         $users = User::query()
             ->when($type === 'admins', fn (Builder $q) => $q->whereIn('level', User::ADMIN_GROUPS))

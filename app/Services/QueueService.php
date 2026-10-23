@@ -42,7 +42,7 @@ class QueueService
 
         $oldest = DB::table('jobs')->min('created_at');
 
-        return $oldest !== null && (int) $oldest < now()->timestamp - self::STALLED;
+        return $oldest !== null && (int) $oldest < now()->getTimestamp() - self::STALLED;
     }
 
     /**

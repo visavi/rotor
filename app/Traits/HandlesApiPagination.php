@@ -22,6 +22,10 @@ trait HandlesApiPagination
 
     /**
      * Направление сортировки
+     *
+     * @param 'asc'|'desc' $default
+     *
+     * @return 'asc'|'desc'
      */
     protected function apiOrder(Request $request, string $default = 'asc'): string
     {

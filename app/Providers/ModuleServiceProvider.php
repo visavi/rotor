@@ -8,6 +8,7 @@ use App\Support\Registry;
 use App\Support\Restatement;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
@@ -52,7 +53,7 @@ class ModuleServiceProvider extends ServiceProvider
         // Overlay переводов: FileLoader сворачивает пути через array_replace_recursive,
         // побеждает последний. Покрывает ядро (custom/lang/ru/index.php), модули
         // (custom/lang/vendor/<namespace>/ru/<group>.php) и модули-языки
-        $this->app['translation.loader']->addPath(resource_path('custom/lang'));
+        $this->app->make('translation.loader')->addPath(resource_path('custom/lang'));
 
         foreach ($modules as $module => $data) {
             $base = base_path('modules/' . $module);
@@ -151,7 +152,7 @@ class ModuleServiceProvider extends ServiceProvider
     public static function registerModuleConfig(array $moduleConfig): void
     {
         foreach ($moduleConfig['models'] ?? [] as $model => $config) {
-            /** @var class-string $model */
+            /** @var class-string<Model> $model */
             $morphName = $model::$morphName;
             Relation::morphMap([$morphName => $model]);
 

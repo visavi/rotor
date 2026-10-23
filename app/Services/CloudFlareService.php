@@ -58,11 +58,13 @@ class CloudFlareService
     /**
      * Executes a callback on a trusted request.
      */
-    public function onTrustedRequest(Closure $callback)
+    public function onTrustedRequest(Closure $callback): mixed
     {
         if ($this->isTrustedRequest()) {
             return $callback();
         }
+
+        return null;
     }
 
     /**

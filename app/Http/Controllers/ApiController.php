@@ -142,7 +142,7 @@ class ApiController extends Controller
         );
 
         if (! $result['success']) {
-            return response()->json(['success' => false, 'message' => $result['message'] ?? null], $result['status'] ?? 422);
+            return response()->json(['success' => false, 'message' => $result['message']], $result['status']);
         }
 
         // Клиенту API нужны числа, а не разметка сайта

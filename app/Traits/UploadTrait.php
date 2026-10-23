@@ -65,7 +65,7 @@ trait UploadTrait
             $file->move(public_path($this->uploadPath), $filename);
         }
 
-        $filesize = filesize($fullPath);
+        $filesize = (int) filesize($fullPath);
 
         if ($record) {
             $relateId = $this->id ?? 0;

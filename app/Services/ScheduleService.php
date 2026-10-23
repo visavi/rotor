@@ -58,7 +58,7 @@ class ScheduleService
     {
         $lastRun = $this->lastRun();
 
-        return ! $lastRun || $lastRun->timestamp < now()->timestamp - self::STALLED;
+        return ! $lastRun || $lastRun->getTimestamp() < now()->getTimestamp() - self::STALLED;
     }
 
     /**

@@ -248,7 +248,7 @@ class FeedService
                 $view = Registry::$feeds[$post->getMorphClass()]['view'] ?? 'feeds._' . $post->getMorphClass();
 
                 try {
-                    return view($view, [
+                    return view()->make($view, [
                         'post'          => $post,
                         'polls'         => $polls,
                         'user'          => $this->user,
@@ -267,9 +267,9 @@ class FeedService
     /**
      * Подзапрос видимых id для типа: scope типа и минимальный рейтинг ленты
      */
-    private function visibleIdsQuery(string $type, array $info, bool $withRating)
+    private function visibleIdsQuery(string $type, array $info, bool $withRating): Builder
     {
-        /** @var class-string $class */
+        /** @var class-string<Model> $class */
         $class = $info['class'];
 
         $idQuery = $class::query();
@@ -290,7 +290,7 @@ class FeedService
     /**
      * Load polls
      */
-    private function loadPolls($posts): array
+    private function loadPolls(Collection $posts): array
     {
         if (! $this->user) {
             return [];

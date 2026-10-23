@@ -23,7 +23,9 @@ class LangCompare extends Command
      */
     public function handle(): int
     {
+        /** @var string $lang1 */
         $lang1 = $this->argument('lang1');
+        /** @var string $lang2 */
         $lang2 = $this->argument('lang2');
 
         // Язык может лежать и в модуле-языке, не только в resources/lang

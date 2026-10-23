@@ -335,8 +335,8 @@ class UpgradeService
         }
 
         // If ZIP had single root dir (e.g. rotor-14.0.0/), use that
-        $dirs = array_filter((array) glob($base . '/*'), 'is_dir');
-        $files = array_filter((array) glob($base . '/*'), 'is_file');
+        $dirs = array_filter(glob($base . '/*') ?: [], is_dir(...));
+        $files = array_filter(glob($base . '/*') ?: [], is_file(...));
 
         if (count($dirs) === 1 && empty($files)) {
             return array_values($dirs)[0];

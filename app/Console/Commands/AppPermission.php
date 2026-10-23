@@ -23,8 +23,8 @@ class AppPermission extends Command
      */
     public function handle(Filesystem $filesystem): int
     {
-        $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR);
-        $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
+        $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR) ?: [];
+        $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR) ?: [];
         $dirs = [public_path('uploads'), public_path('assets/modules'), base_path('bootstrap/cache'), base_path('modules')];
 
         $dirs = array_merge($storage, $uploads, $dirs);

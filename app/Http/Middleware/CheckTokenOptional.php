@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Traits\AuthenticatesToken;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckTokenOptional
 {
@@ -13,7 +14,7 @@ class CheckTokenOptional
     /**
      * Авторизует по токену, если он передан. Без токена запрос выполняется как гостевой
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $token = $request->bearerToken();
 

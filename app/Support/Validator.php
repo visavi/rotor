@@ -333,7 +333,7 @@ class Validator
         }
 
         if (str_starts_with($input->getMimeType(), 'image')) {
-            [$width, $height] = getimagesize($input->getPathname());
+            [$width, $height] = getimagesize($input->getPathname()) ?: [0, 0];
 
             if (isset($rules['maxweight'])) {
                 if ($width > $rules['maxweight'] || $height > $rules['maxweight']) {

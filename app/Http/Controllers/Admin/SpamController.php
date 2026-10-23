@@ -45,7 +45,7 @@ class SpamController extends AdminController
         if ($type && isset($this->types[$type])) {
             $this->type = $type;
         } elseif ($spam) {
-            $this->type = array_search(max($spam), $spam, true);
+            $this->type = (string) array_search(max($spam), $spam, true);
         } else {
             $this->type = array_key_first($this->types);
         }

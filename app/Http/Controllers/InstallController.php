@@ -76,8 +76,8 @@ class InstallController extends Controller
             'pgsql' => '9.2',
         ];
 
-        $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR);
-        $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR);
+        $storage = glob(storage_path('{*,*/*,*/*/*}'), GLOB_BRACE | GLOB_ONLYDIR) ?: [];
+        $uploads = glob(public_path('uploads/*'), GLOB_ONLYDIR) ?: [];
         $dirs = [public_path('uploads'), public_path('assets/modules'), base_path('bootstrap/cache'), base_path('modules')];
 
         $dirs = array_merge($storage, $uploads, $dirs);
@@ -294,7 +294,7 @@ class InstallController extends Controller
 
         // Помечаем все апгрейды как выполненные — свежая схема уже содержит все изменения
         $batch = DB::table('migrations')->max('batch') + 1;
-        foreach (glob(database_path('upgrades/*.php')) as $file) {
+        foreach (glob(database_path('upgrades/*.php')) ?: [] as $file) {
             DB::table('migrations')->insertOrIgnore([
                 'migration' => pathinfo($file, PATHINFO_FILENAME),
                 'batch'     => $batch,

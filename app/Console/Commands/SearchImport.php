@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\User;
 use App\Support\Registry;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
@@ -19,11 +20,13 @@ class SearchImport extends Command
      */
     public function handle(): int
     {
+        /** @var array<int, class-string<Model>> $allModels */
         $allModels = array_merge([
             User::class,
             Comment::class,
         ], array_column(Registry::$search, 'class'));
 
+        /** @var string|null $filter */
         $filter = $this->option('model');
 
         if ($filter) {
@@ -59,14 +62,15 @@ class SearchImport extends Command
 
     /**
      * SyncModelRecords
+     *
+     * @param class-string<Model> $modelClass
      */
     protected function syncModelRecords(string $modelClass): void
     {
         $this->line(PHP_EOL . "Processing model: {$modelClass}");
 
         try {
-            $model = new $modelClass();
-            $searchableFields = $model->searchableFields();
+            $searchableFields = (new $modelClass())->searchableFields();
 
             if (empty($searchableFields)) {
                 $this->warn("Skipping {$modelClass} - no searchable fields defined");
@@ -75,14 +79,14 @@ class SearchImport extends Command
             }
 
             $total = 0;
-            $count = $model->count();
+            $count = $modelClass::query()->count();
 
             $this->line("Found {$count} records to index");
 
             $progressBar = $this->output->createProgressBar($count);
             $progressBar->start();
 
-            $model->chunkById(1000, function ($records) use ($progressBar, &$total) {
+            $modelClass::query()->chunkById(1000, function ($records) use ($progressBar, &$total) {
                 $searchData = [];
 
                 foreach ($records as $record) {

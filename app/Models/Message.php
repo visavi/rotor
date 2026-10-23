@@ -10,11 +10,11 @@ use App\Traits\ConvertVideoTrait;
 use App\Traits\FileableTrait;
 use App\Traits\UploadTrait;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
@@ -28,8 +28,8 @@ use Illuminate\Support\HtmlString;
  * @property CarbonImmutable $created_at
  * @property-read User $user
  * @property-read User $author
- * @property-read Collection<File> $files
- * @property-read Collection<Dialogue> $dialogues
+ * @property-read Collection<int, File> $files
+ * @property-read Collection<int, Dialogue> $dialogues
  */
 class Message extends Model
 {

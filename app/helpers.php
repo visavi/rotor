@@ -85,6 +85,11 @@ function dateFixed(
 
 /**
  * Преобразует специальные символы в HTML-сущности
+ *
+ * @deprecated будет удалено в 15.0: экранировать e(), символы направления текста
+ *             в имени и статусе вырезает модель User при сохранении
+ *
+ * @return ($string is array ? array : string)
  */
 function check(array|string|null $string, bool $doubleEncode = true): array|string
 {
@@ -134,7 +139,7 @@ function formatSize(int $bytes, int $precision = 2): string
 {
     $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
     $pow = floor(($bytes ? log($bytes) : 0) / log(1000));
-    $pow = min($pow, count($units) - 1);
+    $pow = (int) min($pow, count($units) - 1);
 
     $bytes /= (1 << (10 * $pow));
 
@@ -147,7 +152,7 @@ function formatSize(int $bytes, int $precision = 2): string
 function formatFileSize(string $file): string
 {
     if (file_exists($file) && is_file($file)) {
-        return formatSize(filesize($file));
+        return formatSize((int) filesize($file));
     }
 
     return formatSize(0);
@@ -245,7 +250,7 @@ function showCounter(): ?HtmlString
 function statsUsers(): string
 {
     return Cache::remember('statUsers', 1800, static function () {
-        $stat = User::query()->count();
+        $stat = (string) User::query()->count();
         $new = User::query()->where('created_at', '>', now()->subDay())->count();
 
         if ($new) {
@@ -927,7 +932,7 @@ function paginate(array|Collection $items, int $perPage, array $appends = []): L
 function imageBase64(string $path, array $params = []): HtmlString
 {
     $type = getExtension($path);
-    $data = file_get_contents($path);
+    $data = (string) file_get_contents($path);
 
     if (! isset($params['class'])) {
         $params['class'] = 'img-fluid';

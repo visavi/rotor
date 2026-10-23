@@ -88,7 +88,7 @@ class Setting extends Model
 
                 return array_map(static function ($value) {
                     if (is_numeric($value)) {
-                        return ! str_contains($value, '.') ? (int) $value : (float) $value;
+                        return ! str_contains((string) $value, '.') ? (int) $value : (float) $value;
                     }
 
                     return $value === '' ? null : $value;

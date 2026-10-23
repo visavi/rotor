@@ -65,8 +65,9 @@ class HomeController extends Controller
         $searchQuery = SearchService::terms($query);
 
         $types = SearchService::types();
-        $sort = SearchService::sort(check($request->input('sort', 'relevance')));
-        $type = SearchService::type(check($request->input('type')));
+        // Значения сверяются со списком, поэтому идут как есть: ?sort[]= — массив, check() его пропускал
+        $sort = SearchService::sort($request->input('sort'));
+        $type = SearchService::type($request->input('type'));
 
         if ($query) {
             $length = mb_strlen($searchQuery);

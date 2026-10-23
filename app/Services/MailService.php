@@ -113,7 +113,8 @@ class MailService
     private function views(string $view, array $data): array
     {
         $views = ['html' => $view];
-        $text = preg_replace('#^((?:\w+::)?mailer)\.#', '$1.text.', $view);
+        /** @var view-string $text */
+        $text = (string) preg_replace('#^((?:\w+::)?mailer)\.#', '$1.text.', $view);
 
         if ($text !== $view && View::exists($text)) {
             $views['raw'] = html_entity_decode(View::make($text, $data)->render(), ENT_QUOTES | ENT_HTML5, 'UTF-8');

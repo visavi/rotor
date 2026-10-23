@@ -81,6 +81,8 @@ class GithubService
 
     /**
      * Получает последние релизы
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getLatestReleases(): array
     {

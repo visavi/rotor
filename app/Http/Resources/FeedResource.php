@@ -19,6 +19,7 @@ class FeedResource extends JsonResource
 
     public function toArray(Request $request): array
     {
+        /** @var Model $post */
         $post = $this->resource;
         $type = $post->getMorphClass();
         $config = FeedService::typeConfig($type);

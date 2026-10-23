@@ -43,7 +43,7 @@ class AjaxController extends Controller
         );
 
         if (! $result['success']) {
-            return response()->json(['success' => false, 'message' => $result['message'] ?? null]);
+            return response()->json(['success' => false, 'message' => $result['message']]);
         }
 
         // Блок рейтинга перерисовывает сервер: стрелки и значение приходят готовыми

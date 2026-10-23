@@ -25,6 +25,13 @@ class HomeControllerTest extends TestCase
         $this->get('/search')->assertOk();
     }
 
+    public function testArrayParametersFallBackToDefaults(): void
+    {
+        // ?sort[]= приходит массивом: типизированные параметры падали с TypeError и страница отдавала 500
+        $this->get('/search?query=тест&sort[]=x&type[]=y')->assertOk();
+        $this->get('/users?sort[]=x&order[]=y&type[]=z&user[]=u')->assertOk();
+    }
+
     public function testSearchWithShortQueryShowsError(): void
     {
         $response = $this->get('/search?query=ab');

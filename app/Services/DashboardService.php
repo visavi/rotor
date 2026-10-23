@@ -319,9 +319,9 @@ class DashboardService
         $total = $sum ? 'COALESCE(SUM(' . $sum . '), 0)' : 'COUNT(*)';
 
         $rows = $query
-            ->selectRaw('DATE(' . $column . ') AS day, ' . $total . ' AS total')
+            ->selectRaw('DATE(' . $column . ') AS day, ' . $total . ' AS total') // @phpstan-ignore argument.type (колонки передаёт код виджета, не запрос)
             ->where($column, '>=', now()->subDays($days - 1)->startOfDay())
-            ->groupBy(DB::raw('DATE(' . $column . ')'))
+            ->groupBy(DB::raw('DATE(' . $column . ')')) // @phpstan-ignore argument.type (колонки передаёт код виджета, не запрос)
             ->pluck('total', 'day')
             ->all();
 

@@ -196,8 +196,8 @@ class CategoryTree
         // Не upsert: INSERT ... ON DUPLICATE KEY в строгом MySQL требует все
         // NOT NULL поля без умолчания, даже когда строка уже есть
         $model::query()->whereKey(array_keys($parents))->update([
-            'parent_id' => DB::raw('CASE id' . $parentCases . ' END'),
-            'sort'      => DB::raw('CASE id' . $sortCases . ' END'),
+            'parent_id' => DB::raw('CASE id' . $parentCases . ' END'), // @phpstan-ignore argument.type (в SQL только целые, собранные выше)
+            'sort'      => DB::raw('CASE id' . $sortCases . ' END'), // @phpstan-ignore argument.type (в SQL только целые, собранные выше)
         ]);
     }
 

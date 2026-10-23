@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\FileViewFinder;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class ApplyTheme
@@ -13,7 +14,7 @@ class ApplyTheme
     /**
      * Подключает тему пользователя и каталоги переопределений шаблонов
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         // Api шаблонов не рендерит, ошибки отдаёт json — перенастраивать
         // finder на каждый запрос там незачем. Стек остаётся глобальным:
@@ -59,6 +60,7 @@ class ApplyTheme
             // Шаблоны ядра идут без неймспейса и ищутся по view.paths, а не по хинтам,
             // поэтому путь темы вставляется туда же — перед resources/views.
             // Список пересобирается из конфига: иначе при смене темы пути копились бы
+            /** @var list<string> $paths */
             $paths = config('view.paths');
 
             if (is_dir($themeViews)) {

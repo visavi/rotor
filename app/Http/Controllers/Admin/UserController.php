@@ -35,7 +35,9 @@ class UserController extends AdminController
      */
     public function search(Request $request): View
     {
-        $q = check($request->input('q'));
+        // ?q[]= — массив: склейка с % падала. Экранирует вывод Blade, check() здесь лишний
+        $q = $request->input('q');
+        $q = is_string($q) ? $q : '';
 
         $users = User::query()
             ->when(

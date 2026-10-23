@@ -94,7 +94,7 @@ class BanController extends AdminController
             'send_user_id' => getUser('id'),
             'type'         => Banhist::CHANGE,
             'reason'       => $request->validated('reason'),
-            'term'         => $timeban->timestamp - now()->timestamp,
+            'term'         => $timeban->getTimestamp() - now()->getTimestamp(),
         ]);
 
         return redirect($this->editUrl($user))

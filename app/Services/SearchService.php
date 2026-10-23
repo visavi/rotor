@@ -52,7 +52,7 @@ class SearchService
     /**
      * Приводит сортировку к допустимой
      */
-    public static function sort(?string $sort): string
+    public static function sort(mixed $sort): string
     {
         return in_array($sort, self::SORTS, true) ? $sort : 'relevance';
     }
@@ -60,9 +60,9 @@ class SearchService
     /**
      * Приводит раздел к допустимому, неизвестный раздел означает поиск везде
      */
-    public static function type(?string $type): ?string
+    public static function type(mixed $type): ?string
     {
-        return isset(self::types()[$type]) ? $type : null;
+        return is_string($type) && isset(self::types()[$type]) ? $type : null;
     }
 
     /**
