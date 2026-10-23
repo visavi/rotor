@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Attributes\NotFoundMessage;
 use App\Casts\HtmlCast;
 use App\Casts\PlaceCast;
 use App\Services\UserService;
@@ -21,6 +22,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -78,6 +80,7 @@ use InvalidArgumentException;
  * @property-read Collection<Dialogue> $dialogues
  * @property-read int $newprivat устарело, будет удалено в 15.0
  */
+#[NotFoundMessage('validator.user')]
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable;
@@ -370,6 +373,18 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getLevel(): string
     {
         return self::getLevelByKey($this->level);
+    }
+
+    /**
+     * Пользователь по логину или 404 с текстом модели; ?user[]= — тоже 404, а не TypeError
+     */
+    public static function findByLoginOrFail(mixed $login): self
+    {
+        if (! is_string($login)) {
+            throw (new ModelNotFoundException())->setModel(self::class);
+        }
+
+        return self::query()->where('login', $login)->firstOrFail();
     }
 
     /**

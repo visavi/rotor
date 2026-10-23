@@ -32,6 +32,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -167,11 +168,7 @@ class ApiController extends Controller
      */
     public function users(string $login): JsonResource
     {
-        $user = getUserByLogin($login);
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
+        $user = User::findByLoginOrFail($login);
 
         return new UserResource($user);
     }
@@ -217,15 +214,11 @@ class ApiController extends Controller
         if (is_numeric($login)) {
             $author = (new User())->setAttribute('id', $login);
         } else {
-            $author = getUserByLogin($login);
-
-            if (! $author) {
-                abort(404, __('validator.user'));
-            }
+            $author = User::findByLoginOrFail($login);
         }
 
         if ($user->id === $author->id) {
-            abort(200, __('messages.empty_dialogue'));
+            abort(404, __('messages.empty_dialogue'));
         }
 
         $messages = Message::query()
@@ -304,11 +297,7 @@ class ApiController extends Controller
      */
     public function deleteTalk(string $login, #[CurrentUser] User $user): JsonResponse
     {
-        $author = getUserByLogin($login);
-
-        if (! $author) {
-            abort(404, __('validator.user'));
-        }
+        $author = User::findByLoginOrFail($login);
 
         // Непрочитанные удалять нельзя: иначе сообщение исчезнет, не дойдя до адресата
         if ($user->getCountNewMessages()) {
@@ -342,7 +331,7 @@ class ApiController extends Controller
 
         $result = $complaint->create($validated['type'], (int) $validated['id'], $request->input('page'));
 
-        return response()->json($result, $result['success'] ? 201 : 422);
+        return response()->json(Arr::except($result, 'status'), $result['success'] ? 201 : $result['status']);
     }
 
     /**

@@ -102,14 +102,14 @@ class FileService
     /**
      * Загружает вложение к записи, id = 0 — запись еще не создана
      *
-     * @return array{success: false, message: string}|array{success: true, file: File, data: array}
+     * @return array{success: false, status: int, message: string}|array{success: true, file: File, data: array}
      */
     public function upload(?UploadedFile $file, string $type, int $id): array
     {
         $class = Relation::getMorphedModel($type);
 
         if (! $class || ! in_array($type, self::types(), true)) {
-            return ['success' => false, 'message' => 'Type invalid'];
+            return ['success' => false, 'status' => 422, 'message' => 'Type invalid'];
         }
 
         $isImageType = in_array($type, self::mediaTypes(), true);
@@ -118,10 +118,14 @@ class FileService
             $model = $class::query()->find($id);
 
             if (! $model) {
-                return ['success' => false, 'message' => 'Service not found'];
+                return ['success' => false, 'status' => 404, 'message' => 'Service not found'];
             }
         } else {
             $model = new $class();
+        }
+
+        if ($model->getKey() && $model->getAttribute('user_id') !== auth()->id() && ! isAdmin()) {
+            return ['success' => false, 'status' => 403, 'message' => __('ajax.record_not_author')];
         }
 
         $uploadedFiles = File::query()
@@ -135,20 +139,17 @@ class FileService
             Str::substr(getBodyName($file->getClientOriginalName()), 0, 50) . '.' . strtolower($file->getClientOriginalExtension())
         );
 
-        $notAuthor = $model->getKey() && $model->getAttribute('user_id') !== auth()->id() && ! isAdmin();
-
         // Сам файл проверяется последним: остальное дешевле и ответ на него понятнее
         /** @var string|null $error */
         $error = match (true) {
             $uploadedFiles->count() >= setting('maxfiles') => __('validator.files_max', ['max' => setting('maxfiles')]),
             $duplicate                                     => __('validator.file_duplicate'),
-            $notAuthor                                     => __('ajax.record_not_author'),
             default                                        => $this->fileError($file, $type),
         };
 
         // Без файла fileError() уже вернул ошибку
         if ($error || ! $file) {
-            return ['success' => false, 'message' => $error ?? __('validator.file_upload_failed')];
+            return ['success' => false, 'status' => 422, 'message' => $error ?? __('validator.file_upload_failed')];
         }
 
         $fileData = $this->store($model, $file, $isImageType);
@@ -297,12 +298,12 @@ class FileService
     /**
      * Удаляет вложение
      *
-     * @return array{success: false, message: string}|array{success: true, path: string}
+     * @return array{success: false, status: int, message: string}|array{success: true, path: string}
      */
     public function remove(int $fileId, string $type): array
     {
         if (! in_array($type, self::types(), true)) {
-            return ['success' => false, 'message' => 'Type invalid'];
+            return ['success' => false, 'status' => 422, 'message' => 'Type invalid'];
         }
 
         $file = File::query()
@@ -310,11 +311,11 @@ class FileService
             ->find($fileId);
 
         if (! $file) {
-            return ['success' => false, 'message' => 'File not found'];
+            return ['success' => false, 'status' => 404, 'message' => 'File not found'];
         }
 
         if ($file->user_id !== auth()->id() && ! isAdmin()) {
-            return ['success' => false, 'message' => __('ajax.record_not_author')];
+            return ['success' => false, 'status' => 403, 'message' => __('ajax.record_not_author')];
         }
 
         $file->delete();
@@ -329,12 +330,12 @@ class FileService
      *
      * @param array<int, int> $ids Id файлов в новом порядке
      *
-     * @return array{success: bool, message?: string}
+     * @return array{success: false, status: int, message: string}|array{success: true}
      */
     public function sort(array $ids, string $type): array
     {
         if (! in_array($type, self::types(), true)) {
-            return ['success' => false, 'message' => 'Type invalid'];
+            return ['success' => false, 'status' => 422, 'message' => 'Type invalid'];
         }
 
         $ids = array_values(array_unique(array_filter($ids)));
@@ -345,11 +346,11 @@ class FileService
             ->get(['id', 'relate_id', 'user_id']);
 
         if (! $ids || $files->count() !== count($ids) || $files->pluck('relate_id')->unique()->count() !== 1) {
-            return ['success' => false, 'message' => 'File not found'];
+            return ['success' => false, 'status' => 404, 'message' => 'File not found'];
         }
 
         if (! isAdmin() && ! $files->every(static fn (File $file) => $file->user_id === auth()->id())) {
-            return ['success' => false, 'message' => __('ajax.record_not_author')];
+            return ['success' => false, 'status' => 403, 'message' => __('ajax.record_not_author')];
         }
 
         // Id — целые, проверенные запросом выше, поэтому подставляются в SQL напрямую.

@@ -12,6 +12,7 @@ use App\Services\RatingService;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -28,7 +29,7 @@ class AjaxController extends Controller
             $request->input('page'),
         );
 
-        return response()->json($result);
+        return $this->serviceResponse($result);
     }
 
     /**
@@ -44,7 +45,7 @@ class AjaxController extends Controller
         );
 
         if (! $result['success']) {
-            return response()->json(['success' => false, 'message' => $result['message']]);
+            return response()->json(['success' => false, 'message' => $result['message']], $result['status']);
         }
 
         // Блок рейтинга перерисовывает сервер: стрелки и значение приходят готовыми
@@ -69,7 +70,7 @@ class AjaxController extends Controller
         );
 
         if (! $result['success']) {
-            return response()->json(['success' => false, 'message' => $result['message']]);
+            return response()->json(['success' => false, 'message' => $result['message']], $result['status']);
         }
 
         $fileData = $result['data'];
@@ -105,7 +106,7 @@ class AjaxController extends Controller
             $request->string('type')->value(),
         );
 
-        return response()->json($result);
+        return $this->serviceResponse($result);
     }
 
     /**
@@ -118,7 +119,7 @@ class AjaxController extends Controller
             $request->string('type')->value(),
         );
 
-        return response()->json($result);
+        return $this->serviceResponse($result);
     }
 
     /**
@@ -221,5 +222,15 @@ class AjaxController extends Controller
         return response()->json([
             'success' => true,
         ]);
+    }
+
+    /**
+     * Ответ сервиса как есть, отказ — с его кодом; сам status в тело не попадает
+     *
+     * @param array{success: true}|array{success: false, status: int} $result
+     */
+    private function serviceResponse(array $result): JsonResponse
+    {
+        return response()->json(Arr::except($result, 'status'), $result['success'] ? 200 : $result['status']);
     }
 }

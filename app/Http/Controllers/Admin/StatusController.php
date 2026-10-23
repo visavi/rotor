@@ -87,11 +87,7 @@ class StatusController extends AdminController
      */
     private function findStatus(Request $request): Status
     {
-        $status = Status::query()->find(int($request->input('id')));
-
-        if (! $status) {
-            abort(404, __('statuses.status_not_found'));
-        }
+        $status = Status::query()->findOrFail(int($request->input('id')));
 
         return $status;
     }

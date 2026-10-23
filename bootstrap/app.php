@@ -1,5 +1,6 @@
 <?php
 
+use App\Attributes\NotFoundMessage;
 use App\Http\Middleware\AdminLogger;
 use App\Http\Middleware\ApplyTheme;
 use App\Http\Middleware\CheckAccessSite;
@@ -19,6 +20,7 @@ use App\Services\ScheduleService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -29,6 +31,7 @@ use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -102,6 +105,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $wantsJson = static fn (Request $request): bool => $request->is('api/*') || $request->expectsJson();
 
         $exceptions->shouldRenderJsonWhen($wantsJson);
+
+        // findOrFail() и firstOrFail() — та же 404, что abort(404, …), с текстом из атрибута модели
+        $exceptions->map(ModelNotFoundException::class, static fn (ModelNotFoundException $exception) => new NotFoundHttpException(NotFoundMessage::for($exception), $exception));
 
         $exceptions->reportable(function (Throwable $exception) {
             $statusCode = $exception instanceof HttpExceptionInterface

@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Banhist;
+use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Facades\File;
@@ -23,6 +25,25 @@ class ErrorPageTest extends TestCase
         Route::get('/test-gone', static fn () => throw new HttpException(410, '', null, ['X-Test' => 'gone']));
         Route::post('/test-token', static fn () => throw new TokenMismatchException());
         Route::get('/test-notice', static fn () => abort(200, 'Разделы еще не созданы!'));
+        Route::get('/test-missing-comment', static fn () => Comment::query()->findOrFail(0));
+        Route::get('/test-missing-banhist', static fn () => Banhist::query()->where('id', 0)->firstOrFail());
+    }
+
+    public function testMissingModelIsNotFoundWithModelMessage(): void
+    {
+        // findOrFail() отвечает как abort(404, …): текст из #[NotFoundMessage] модели
+        $this->get('/test-missing-comment')
+            ->assertNotFound()
+            ->assertSee(__('main.comment_deleted'));
+
+        $this->getJson('/test-missing-comment')
+            ->assertNotFound()
+            ->assertExactJson(['message' => __('main.comment_deleted')]);
+
+        // Без атрибута — общий текст, а не «No query results for model»
+        $this->getJson('/test-missing-banhist')
+            ->assertNotFound()
+            ->assertExactJson(['message' => __('main.record_not_found')]);
     }
 
     public function testAbortWithOkIsNoticeNotError(): void

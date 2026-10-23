@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Attributes\NotFoundMessage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $color
  */
+#[NotFoundMessage('statuses.status_not_found')]
 class Status extends Model
 {
     /** @use HasFactory<\Database\Factories\StatusFactory> */

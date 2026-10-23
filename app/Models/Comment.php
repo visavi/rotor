@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Attributes\NotFoundMessage;
 use App\Casts\HtmlCast;
 use App\Support\Registry;
 use App\Traits\CappableTrait;
@@ -45,6 +46,7 @@ use Illuminate\Support\Str;
  * @property-read Collection<int, Poll>     $polls
  * @property-read Poll                      $poll
  */
+#[NotFoundMessage('main.comment_deleted')]
 class Comment extends Model
 {
     /** @use HasFactory<\Database\Factories\CommentFactory> */

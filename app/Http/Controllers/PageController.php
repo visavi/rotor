@@ -75,11 +75,7 @@ class PageController extends Controller
      */
     public function stickersCategory(int $id): View
     {
-        $category = StickersCategory::query()->where('id', $id)->first();
-
-        if (! $category) {
-            abort(404, __('stickers.category_not_exist'));
-        }
+        $category = StickersCategory::query()->where('id', $id)->firstOrFail();
 
         $stickers = Sticker::query()
             ->where('category_id', $id)

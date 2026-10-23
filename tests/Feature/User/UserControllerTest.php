@@ -579,7 +579,7 @@ class UserControllerTest extends TestCase
             'confirm_token' => 'oldconfirmtoken',
         ]);
 
-        $this->get('/confirm/oldconfirmtoken')->assertOk();
+        $this->get('/confirm/oldconfirmtoken')->assertNotFound();
 
         $this->assertSame(User::MODER, $user->fresh()->level);
     }

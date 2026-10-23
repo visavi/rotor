@@ -146,7 +146,7 @@ class FileTest extends TestCase
         ]);
 
         $this->deleteJson('/api/files/' . $file->id, ['type' => Comment::$morphName], $this->headers())
-            ->assertStatus(422);
+            ->assertForbidden();
 
         $this->assertDatabaseHas('files', ['id' => $file->id]);
     }

@@ -881,9 +881,10 @@ function isAdmin(?string $level = null): bool
 /**
  * Возвращает объект пользователя по логину
  */
-function getUserByLogin(?string $login): ?User
+function getUserByLogin(mixed $login): ?User
 {
-    return User::query()->where('login', $login)->first();
+    // ?user[]= приходит массивом: такого логина нет, а не TypeError
+    return is_string($login) ? User::query()->where('login', $login)->first() : null;
 }
 
 /**

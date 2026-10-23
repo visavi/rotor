@@ -105,11 +105,7 @@ class NoticeController extends AdminController
      */
     private function findNotice(int $id): Notice
     {
-        $notice = Notice::query()->find($id);
-
-        if (! $notice) {
-            abort(404, __('admin.notices.notice_not_found'));
-        }
+        $notice = Notice::query()->findOrFail($id);
 
         return $notice;
     }

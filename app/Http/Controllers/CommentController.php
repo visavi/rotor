@@ -53,7 +53,7 @@ class CommentController extends Controller
     public function update(int $id, Request $request): JsonResponse
     {
         if (! $user = auth()->user()) {
-            return response()->json(['success' => false, 'message' => __('main.not_authorized')]);
+            return response()->json(['success' => false, 'message' => __('main.not_authorized')], 403);
         }
 
         $comment = Comment::query()
@@ -62,15 +62,15 @@ class CommentController extends Controller
             ->first();
 
         if (! $comment) {
-            return response()->json(['success' => false, 'message' => __('main.comment_deleted')]);
+            return response()->json(['success' => false, 'message' => __('main.comment_deleted')], 404);
         }
 
         if (! $this->comments->editable($comment)) {
-            return response()->json(['success' => false, 'message' => __('main.editing_impossible')]);
+            return response()->json(['success' => false, 'message' => __('main.editing_impossible')], 403);
         }
 
         if ($comment->relate?->getAttribute('closed')) {
-            return response()->json(['success' => false, 'message' => __('main.closed_comments')]);
+            return response()->json(['success' => false, 'message' => __('main.closed_comments')], 403);
         }
 
         $validated = $request->validate([
@@ -94,13 +94,13 @@ class CommentController extends Controller
     public function destroy(int $id): JsonResponse
     {
         if (! isAdmin()) {
-            return response()->json(['success' => false, 'message' => __('main.not_authorized')]);
+            return response()->json(['success' => false, 'message' => __('main.not_authorized')], 403);
         }
 
         $comment = Comment::query()->find($id);
 
         if (! $comment) {
-            return response()->json(['success' => false, 'message' => __('main.comment_deleted')]);
+            return response()->json(['success' => false, 'message' => __('main.comment_deleted')], 404);
         }
 
         $softDeleted = $this->comments->delete($comment);

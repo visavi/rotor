@@ -57,12 +57,12 @@ class RecoveryController extends Controller
 
         $reset = PasswordReset::query()->where('token', $token)->first();
         if (! $reset) {
-            abort(200, __('mails.token_invalid'));
+            abort(404, __('mails.token_invalid'));
         }
 
         $user = User::query()->where('email', $reset->email)->first();
         if (! $user) {
-            abort(200, __('mails.password_not_recovery'));
+            abort(404, __('mails.password_not_recovery'));
         }
 
         $password = Str::random();

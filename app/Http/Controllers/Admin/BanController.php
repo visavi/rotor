@@ -131,11 +131,7 @@ class BanController extends AdminController
         $user = User::query()
             ->where('login', $request->string('user')->value())
             ->with('lastBan')
-            ->first();
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
+            ->firstOrFail();
 
         return $user;
     }
@@ -148,7 +144,7 @@ class BanController extends AdminController
         $user = $this->findUser($request);
 
         if (in_array($user->level, User::ADMIN_GROUPS, true)) {
-            abort(200, __('admin.bans.forbidden_ban'));
+            abort(403, __('admin.bans.forbidden_ban'));
         }
 
         return $user;

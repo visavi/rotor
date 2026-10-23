@@ -48,11 +48,7 @@ trait HandlesApiPagination
             abort(403, __('main.not_authorized'));
         }
 
-        $user = getUserByLogin($request->string('user')->value());
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
+        $user = User::findByLoginOrFail($request->input('user'));
 
         return $user;
     }

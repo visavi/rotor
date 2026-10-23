@@ -29,9 +29,7 @@ class UserController extends Controller
      */
     public function index(string $login): View
     {
-        if (! $user = getUserByLogin($login)) {
-            abort(404, __('validator.user'));
-        }
+        $user = User::findByLoginOrFail($login);
 
         $user->load('lastBan');
         $adminGroups = User::ADMIN_GROUPS;
@@ -209,7 +207,7 @@ class UserController extends Controller
             ->where('confirm_token', $token)
             ->first();
         if (! $user) {
-            abort(200, __('users.confirm_code_invalid'));
+            abort(404, __('users.confirm_code_invalid'));
         }
 
         $user->update([
@@ -249,7 +247,7 @@ class UserController extends Controller
     public function checkLogin(Request $request): JsonResponse
     {
         if (! $request->ajax()) {
-            return response()->json(['success' => false, 'message' => __('validator.not_ajax')]);
+            return response()->json(['success' => false, 'message' => __('validator.not_ajax')], 400);
         }
 
         $request->validate(['login' => UserRules::login()], UserRules::messages());

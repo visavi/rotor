@@ -83,7 +83,7 @@ class SpamControllerTest extends TestCase
     {
         $this->actingAs($this->admin)
             ->post('/admin/spam/delete', [], ['X-Requested-With' => 'XMLHttpRequest'])
-            ->assertOk()
+            ->assertUnprocessable()
             ->assertJson([
                 'success' => false,
                 'message' => __('validator.deletion'),

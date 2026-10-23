@@ -78,7 +78,7 @@ class ModuleController extends AdminController
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort(200, __('admin.modules.module_not_found'));
+            abort(404, __('admin.modules.module_not_found'));
         }
 
         if ($module !== Str::kebab($moduleName)) {
@@ -186,7 +186,7 @@ class ModuleController extends AdminController
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort(200, __('admin.modules.module_not_found'));
+            abort(404, __('admin.modules.module_not_found'));
         }
 
         $module = Module::query()->firstOrNew(['name' => $moduleName]);
@@ -545,11 +545,11 @@ class ModuleController extends AdminController
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort(200, __('admin.modules.module_not_found'));
+            abort(404, __('admin.modules.module_not_found'));
         }
 
         if (Module::query()->where('name', $moduleName)->exists()) {
-            abort(200, __('admin.modules.delete_files_not_uninstalled'));
+            abort(403, __('admin.modules.delete_files_not_uninstalled'));
         }
 
         $this->deleteDirectory($modulePath);
@@ -630,12 +630,12 @@ class ModuleController extends AdminController
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
-            abort(200, __('admin.modules.module_not_found'));
+            abort(404, __('admin.modules.module_not_found'));
         }
 
         $module = Module::query()->where('name', $moduleName)->first();
         if (! $module) {
-            abort(200, __('admin.modules.module_not_found'));
+            abort(404, __('admin.modules.module_not_found'));
         }
 
         $module->deleteSymlink();

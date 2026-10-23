@@ -90,7 +90,7 @@ class SpamController extends AdminController
             return response()->json([
                 'success' => false,
                 'message' => __('validator.not_ajax'),
-            ]);
+            ], 400);
         }
 
         $id = int($request->input('id'));
@@ -99,7 +99,7 @@ class SpamController extends AdminController
             return response()->json([
                 'success' => false,
                 'message' => __('validator.deletion'),
-            ]);
+            ], 422);
         }
 
         Spam::query()->find($id)?->delete();

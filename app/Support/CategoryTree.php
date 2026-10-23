@@ -56,11 +56,12 @@ class CategoryTree
     }
 
     /**
-     * Расставляет связь children по загруженному набору и возвращает корни
+     * Расставляет связи children и parent по загруженному набору и возвращает корни
      *
      * Списки разделов показывают дерево целиком, и подгрузка детей на каждый
-     * узел означала бы запрос на строку. Набор приходит одним запросом, связи
-     * раздаются из памяти
+     * узел означала бы запрос на строку, хлебные крошки — запрос на каждого предка.
+     * Набор приходит одним запросом, связи раздаются из памяти. У корня parent —
+     * пустая модель, как у связи с withDefault()
      *
      * @template TModel of Model
      *
@@ -71,15 +72,19 @@ class CategoryTree
     public static function nest(Collection $categories): Collection
     {
         $children = [];
+        $byId = [];
 
         foreach ($categories as $category) {
             $children[(int) $category->getAttribute('parent_id')][] = $category;
+            $byId[(int) $category->getAttribute('id')] = $category;
         }
 
         foreach ($categories as $category) {
             $id = (int) $category->getAttribute('id');
+            $parentId = (int) $category->getAttribute('parent_id');
 
             $category->setRelation('children', new Collection($children[$id] ?? []));
+            $category->setRelation('parent', $byId[$parentId] ?? $category->newInstance());
         }
 
         return new Collection($children[0] ?? []);

@@ -33,18 +33,18 @@ class ComplaintService
     /**
      * Запись жалобы, вторая жалоба на ту же запись не принимается
      *
-     * @return array{success: bool, message: string}
+     * @return array{success: false, status: int, message: string}|array{success: true, message: string}
      */
     public function create(string $type, int $id, mixed $page = null): array
     {
         [$model, $path] = $this->resolve($type, $id, $page);
 
         if (! $model) {
-            return ['success' => false, 'message' => __('main.message_not_found')];
+            return ['success' => false, 'status' => 404, 'message' => __('main.message_not_found')];
         }
 
         if (Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->exists()) {
-            return ['success' => false, 'message' => __('ajax.complaint_already_sent')];
+            return ['success' => false, 'status' => 422, 'message' => __('ajax.complaint_already_sent')];
         }
 
         Spam::query()->create([

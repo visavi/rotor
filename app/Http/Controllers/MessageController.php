@@ -74,11 +74,7 @@ class MessageController extends Controller
         if (is_numeric($login)) {
             $user = (new User())->setAttribute('id', $login);
         } else {
-            $user = getUserByLogin($login);
-
-            if (! $user) {
-                abort(404, __('validator.user'));
-            }
+            $user = User::findByLoginOrFail($login);
         }
 
         if ($user->id === $this->user->id) {

@@ -201,11 +201,7 @@ class StickerController extends AdminController
      */
     private function findCategory(int $id): StickersCategory
     {
-        $category = StickersCategory::query()->find($id);
-
-        if (! $category) {
-            abort(404, __('stickers.category_not_exist'));
-        }
+        $category = StickersCategory::query()->findOrFail($id);
 
         return $category;
     }
@@ -215,11 +211,7 @@ class StickerController extends AdminController
      */
     private function findSticker(int $id): Sticker
     {
-        $sticker = Sticker::query()->find($id);
-
-        if (! $sticker) {
-            abort(404, __('stickers.sticker_not_exist'));
-        }
+        $sticker = Sticker::query()->findOrFail($id);
 
         return $sticker;
     }
@@ -230,7 +222,7 @@ class StickerController extends AdminController
     private function checkUploadDirectory(): void
     {
         if (! is_writable(public_path('uploads/stickers'))) {
-            abort(200, __('main.directory_not_writable'));
+            abort(500, __('main.directory_not_writable'));
         }
     }
 }

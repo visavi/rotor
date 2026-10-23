@@ -66,7 +66,7 @@ class ComplaintTest extends TestCase
         $this->postJson('/api/complaint', [
             'type' => Message::$morphName,
             'id'   => 999999,
-        ], $this->headers())->assertStatus(422);
+        ], $this->headers())->assertNotFound();
     }
 
     public function testUnknownTypeIsRejected(): void

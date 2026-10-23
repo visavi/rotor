@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Attributes\NotFoundMessage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $code
  * @property-read StickersCategory $category
  */
+#[NotFoundMessage('stickers.sticker_not_exist')]
 class Sticker extends Model
 {
     /** @use HasFactory<\Database\Factories\StickerFactory> */

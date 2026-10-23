@@ -63,11 +63,7 @@ class CommentApiController extends Controller
             ->with(['user', 'files', 'parent' => static function ($query) {
                 $query->withoutGlobalScope('active')->with('user');
             }])
-            ->find($id);
-
-        if (! $comment) {
-            abort(404, __('main.comment_deleted'));
-        }
+            ->findOrFail($id);
 
         return CommentResource::make($comment);
     }
@@ -87,12 +83,12 @@ class CommentApiController extends Controller
         $model = $this->findRecord($validated['type'], (int) $validated['id']);
 
         if ($model->getAttribute('closed')) {
-            abort(422, __('main.closed_comments'));
+            abort(403, __('main.closed_comments'));
         }
 
         // Запись, скрытую с сайта, комментировать нельзя
         if (array_key_exists('active', $model->getAttributes()) && ! $model->getAttribute('active')) {
-            abort(422, __('main.record_not_active'));
+            abort(403, __('main.record_not_active'));
         }
 
         $comment = $this->comments->create(
@@ -125,19 +121,15 @@ class CommentApiController extends Controller
         $comment = Comment::query()
             ->where('id', $id)
             ->where('user_id', $user->id)
-            ->first();
-
-        if (! $comment) {
-            abort(404, __('main.comment_deleted'));
-        }
+            ->firstOrFail();
 
         // Правка доступна ограниченное время после публикации
         if (! $this->comments->editable($comment)) {
-            abort(422, __('main.editing_impossible'));
+            abort(403, __('main.editing_impossible'));
         }
 
         if ($comment->relate?->getAttribute('closed')) {
-            abort(422, __('main.closed_comments'));
+            abort(403, __('main.closed_comments'));
         }
 
         $validated = $request->validate([
@@ -165,11 +157,7 @@ class CommentApiController extends Controller
             abort(403, __('main.not_authorized'));
         }
 
-        $comment = Comment::query()->find($id);
-
-        if (! $comment) {
-            abort(404, __('main.comment_deleted'));
-        }
+        $comment = Comment::query()->findOrFail($id);
 
         $softDeleted = $this->comments->delete($comment);
 
@@ -184,12 +172,8 @@ class CommentApiController extends Controller
      */
     private function findRecord(string $type, int $id): Model
     {
-        $class = Relation::getMorphedModel($type);
-        $model = $class ? $class::query()->find($id) : null;
-
-        if (! $model) {
-            abort(404, __('main.record_not_found'));
-        }
+        $class = Relation::getMorphedModel($type) ?? abort(404, __('main.record_not_found'));
+        $model = $class::query()->findOrFail($id);
 
         return $model;
     }

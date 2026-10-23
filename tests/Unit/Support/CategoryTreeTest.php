@@ -84,6 +84,23 @@ class CategoryTreeTest extends TestCase
         self::assertTrue($roots[1]->children->isEmpty());
     }
 
+    public function testNestSetsParentFromSameSet(): void
+    {
+        // Хлебные крошки идут вверх по parent: без связи — запрос на каждого предка
+        $categories = new Collection([
+            $this->node(1, 0),
+            $this->node(2, 1),
+            $this->node(3, 2),
+        ]);
+
+        CategoryTree::nest($categories);
+
+        self::assertSame($categories[1], $categories[2]->getRelation('parent'));
+        self::assertSame($categories[0], $categories[1]->getRelation('parent'));
+        // У корня, как у withDefault(), — пустая модель без id
+        self::assertNull($categories[0]->getRelation('parent')->getKey());
+    }
+
     private function node(int $id, int $parentId, int $count = 0): Model
     {
         $model = new class extends Model {

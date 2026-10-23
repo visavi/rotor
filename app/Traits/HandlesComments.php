@@ -44,10 +44,7 @@ trait HandlesComments
      */
     protected function findCommentParent(int $id): Model
     {
-        $model = ($this->commentableModelClass)::query()->find($id);
-        if (! $model) {
-            abort(404, __('main.record_not_found'));
-        }
+        $model = ($this->commentableModelClass)::query()->findOrFail($id);
 
         return $model;
     }
@@ -58,7 +55,7 @@ trait HandlesComments
     protected function checkCommentableModel(Model $model): void
     {
         if (array_key_exists('active', $model->getAttributes()) && ! $model->getAttribute('active')) {
-            abort(200, __('main.record_not_active'));
+            abort(403, __('main.record_not_active'));
         }
     }
 

@@ -185,11 +185,7 @@ class UserController extends AdminController
      */
     private function findUser(Request $request): User
     {
-        $user = getUserByLogin($request->string('user')->value());
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
+        $user = User::findByLoginOrFail($request->input('user'));
 
         return $user;
     }

@@ -65,7 +65,7 @@ class FileApiController extends Controller
         );
 
         if (! $result['success']) {
-            return response()->json(['message' => $result['message']], 422);
+            return response()->json(['message' => $result['message']], $result['status']);
         }
 
         return response()->json([
@@ -86,7 +86,7 @@ class FileApiController extends Controller
         $result = $this->uploader->remove($id, $request->string('type')->value());
 
         if (! $result['success']) {
-            return response()->json(['message' => $result['message']], 422);
+            return response()->json(['message' => $result['message']], $result['status']);
         }
 
         return response()->json(['message' => __('main.file_deleted_success')]);

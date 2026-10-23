@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\DeleteSelectedRequest;
 use App\Models\Banhist;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -30,11 +31,7 @@ class BanhistController extends AdminController
      */
     public function view(Request $request): View
     {
-        $user = getUserByLogin($request->input('user'));
-
-        if (! $user) {
-            abort(404, __('validator.user'));
-        }
+        $user = User::findByLoginOrFail($request->input('user'));
 
         $banhist = Banhist::query()
             ->where('user_id', $user->id)
