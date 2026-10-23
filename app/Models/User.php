@@ -55,8 +55,8 @@ use InvalidArgumentException;
  * @property string               $timezone
  * @property int                  $point
  * @property int                  $money
- * @property string               $status
- * @property string               $color
+ * @property string|null          $status
+ * @property string|null          $color
  * @property string|null          $avatar
  * @property string|null          $picture
  * @property int                  $rating
@@ -539,6 +539,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
             return $statuses;
         });
+    }
+
+    /**
+     * increment и decrement несохранённого пользователя ничего не меняют
+     *
+     * Связь withDefault отдаёт пустую модель удалённого автора, а Eloquent на ней
+     * обновляет всю таблицу: награда за его запись доставалась всем пользователям
+     */
+    protected function incrementOrDecrement($column, $amount, $extra, $method)
+    {
+        return $this->exists ? parent::incrementOrDecrement($column, $amount, $extra, $method) : false;
+    }
+
+    protected function incrementOrDecrementEach(array $columns, array $extra, string $method)
+    {
+        return $this->exists ? parent::incrementOrDecrementEach($columns, $extra, $method) : false;
     }
 
     /**

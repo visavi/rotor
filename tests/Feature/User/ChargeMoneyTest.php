@@ -37,6 +37,20 @@ class ChargeMoneyTest extends TestCase
         User::factory()->create(['money' => 0])->chargeMoney(-10);
     }
 
+    public function testUnsavedUserChangesNobody(): void
+    {
+        // Связь withDefault отдаёт пустую модель удалённого автора: increment на ней
+        // у Eloquent обновляет всю таблицу, награда доставалась всем пользователям
+        $other = User::factory()->create(['money' => 100, 'point' => 10]);
+
+        (new User())->increment('money', 500);
+        (new User())->decrement('point', 5);
+        (new User())->incrementEach(['money' => 1, 'point' => 1]);
+
+        $this->assertSame(100, $other->fresh()->money);
+        $this->assertSame(10, $other->fresh()->point);
+    }
+
     public function testStaleBalanceDoesNotGoNegative(): void
     {
         $user = User::factory()->create(['money' => 100]);

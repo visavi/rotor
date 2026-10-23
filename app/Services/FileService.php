@@ -163,19 +163,14 @@ class FileService
     private function fileError(?UploadedFile $file, string $type): ?string
     {
         $validator = Validator::make(['file' => $file], [
-            'file' => [
-                'required',
-                'file',
-                'extensions:' . implode(',', self::extensions($type)),
-                'max:' . self::maxFileSize(),
-                new ImageDimensionsRule(100),
-            ],
+            'file' => ['required', ...self::fileRules($type), new ImageDimensionsRule(100)],
         ], [
             'file.required'   => __('validator.file_upload_failed'),
             'file.file'       => __('validator.file_upload_failed'),
             'file.uploaded'   => __('validator.file_upload_failed'),
             'file.max'        => __('validator.size_max', ['size' => formatSize(setting('filesize'))]),
             'file.extensions' => __('validator.extension'),
+            'file.mimes'      => __('validator.extension'),
         ]);
 
         return $validator->fails() ? $validator->errors()->first() : null;
@@ -211,14 +206,29 @@ class FileService
                     }
                 },
             ],
-            // mimes проверяет содержимое, extensions — имя: файл сохраняется с расширением клиента,
-            // и картинка с именем x.html легла бы в uploads исполняемой страницей
-            'files.*' => [
-                'file',
-                'max:' . self::maxFileSize(),
-                'extensions:' . implode(',', self::extensions($type)),
-                'mimes:' . implode(',', self::extensions($type)),
-            ],
+            'files.*' => self::fileRules($type),
+        ];
+    }
+
+    /**
+     * Проверка одного файла — общая для формы, API и ajax-загрузки
+     *
+     * Файл сохраняется с расширением клиента, поэтому решает extensions: картинка
+     * с именем x.html легла бы в uploads исполняемой страницей. Содержимое (mimes)
+     * важно галерее, которая показывает файл картинкой или видео. Файловым
+     * разделам оно не нужно: txt с json или csv внутри — обычный текстовый файл
+     *
+     * @return array<int, string>
+     */
+    private static function fileRules(string $type): array
+    {
+        $extensions = implode(',', self::extensions($type));
+
+        return [
+            'file',
+            'extensions:' . $extensions,
+            ...(in_array($type, self::mediaTypes(), true) ? ['mimes:' . $extensions] : []),
+            'max:' . self::maxFileSize(),
         ];
     }
 

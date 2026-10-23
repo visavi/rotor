@@ -216,6 +216,22 @@ class AccountControllerTest extends TestCase
         $response->assertSessionHasErrors('status');
     }
 
+    public function testEditStatusWithSpentBalanceFails(): void
+    {
+        // Проверка запроса видит баланс начала запроса, а параллельный запрос его уже потратил:
+        // списание по старому балансу уводило в минус
+        $this->actingAs($this->user);
+        User::query()->whereKey($this->user->id)->update(['money' => 0]);
+
+        $this->post('/accounts/editstatus', ['status' => 'Тестовый'])
+            ->assertRedirect('settings#tab-appearance')
+            ->assertSessionHasErrors(['status' => __('users.status_moneys')]);
+
+        $this->user->refresh();
+        $this->assertNull($this->user->status);
+        $this->assertSame(0, $this->user->money);
+    }
+
     public function testEditColor(): void
     {
         $moneyBefore = $this->user->money;

@@ -19,6 +19,9 @@ class UploadExtensionsTest extends TestCase
     /** @var array<int, string> */
     private array $mediaTypes;
 
+    /** @var array<int, string> */
+    private array $tempFiles = [];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,6 +37,8 @@ class UploadExtensionsTest extends TestCase
     protected function tearDown(): void
     {
         Registry::$mediaTypes = $this->mediaTypes;
+
+        array_map(unlink(...), array_filter($this->tempFiles, is_file(...)));
 
         parent::tearDown();
     }
@@ -155,10 +160,51 @@ class UploadExtensionsTest extends TestCase
         }
     }
 
+    public function testFileTypesCheckNameNotContent(): void
+    {
+        // txt с json или csv внутри — обычный текстовый файл, mimes отклонял его
+        // в форме и API, хотя ajax-загрузка принимала
+        $this->overrideSetting('file_extensions', 'txt');
+        $this->actingAs(User::factory()->create());
+
+        $file = $this->realFile('log.txt', '{"a": 1}');
+
+        $this->assertSame('json', $file->guessExtension());
+        $this->assertTrue(Validator::make(['files' => [$file]], FileService::rules(Comment::$morphName))->passes());
+    }
+
+    public function testMediaTypesCheckContent(): void
+    {
+        // Галерея показывает файл картинкой: текст с именем x.jpg не проходит ни формой, ни ajax
+        Registry::mediaType(Comment::$morphName);
+        $this->actingAs(User::factory()->create());
+
+        $file = $this->realFile('x.jpg', 'не картинка');
+
+        $this->assertTrue(Validator::make(['files' => [$file]], FileService::rules(Comment::$morphName))->fails());
+
+        $result = app(FileService::class)->upload($file, Comment::$morphName, 0);
+
+        $this->assertFalse($result['success']);
+        $this->assertSame(__('validator.extension'), $result['message']);
+    }
+
     public function testPendingWithoutUserFindsNothing(): void
     {
         // Без пользователя scope не падает TypeError, а ничего не находит
         $this->assertSame(0, File::query()->pending(Comment::$morphName, null)->count());
+    }
+
+    /**
+     * Файл с настоящим содержимым: fake() берёт тип из имени, а проверяется как раз содержимое
+     */
+    private function realFile(string $name, string $content): UploadedFile
+    {
+        $path = (string) tempnam(sys_get_temp_dir(), 'upl');
+        file_put_contents($path, $content);
+        $this->tempFiles[] = $path;
+
+        return new UploadedFile($path, $name, null, null, true);
     }
 
     private function createPending(User $user, int $count): void

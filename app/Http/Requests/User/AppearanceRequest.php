@@ -6,6 +6,8 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\Attributes\RedirectTo;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 
 /**
@@ -35,6 +37,29 @@ abstract class AppearanceRequest extends FormRequest
     public function cost(): int
     {
         return $this->value() ? (int) setting('edit' . $this->field() . 'money') : 0;
+    }
+
+    /**
+     * Списывает цену и сохраняет новое значение
+     *
+     * after() сверяет баланс, прочитанный в начале запроса, а параллельный запрос
+     * мог его уже потратить: chargeMoney списывает, только пока денег хватает
+     *
+     * @throws ValidationException
+     */
+    public function apply(): void
+    {
+        $user = getUser();
+        $field = $this->field();
+
+        DB::transaction(function () use ($user, $field): void {
+            if (! $user->chargeMoney($this->cost())) {
+                throw ValidationException::withMessages([$field => __('users.' . $field . '_moneys')])
+                    ->redirectTo($this->getRedirectUrl());
+            }
+
+            $user->update([$field => $this->value()]);
+        });
     }
 
     public function after(): array

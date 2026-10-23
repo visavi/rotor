@@ -15,7 +15,6 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AccountController extends Controller
@@ -74,10 +73,7 @@ class AccountController extends Controller
      */
     public function editStatus(StatusRequest $request): RedirectResponse
     {
-        getUser()->update([
-            'status' => $request->value(),
-            'money'  => DB::raw('money - ' . $request->cost()),
-        ]);
+        $request->apply();
 
         clearCache('status');
 
@@ -90,10 +86,7 @@ class AccountController extends Controller
      */
     public function editColor(ColorRequest $request): RedirectResponse
     {
-        getUser()->update([
-            'color' => $request->value(),
-            'money' => DB::raw('money - ' . $request->cost()),
-        ]);
+        $request->apply();
 
         return redirect('settings#tab-appearance')
             ->with('success', __('users.color_success_changed'));

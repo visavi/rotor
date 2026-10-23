@@ -20,7 +20,6 @@ use App\Support\Locale;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -122,10 +121,7 @@ class AccountApiController extends Controller
      */
     public function status(StatusRequest $request): JsonResponse
     {
-        getUser()->update([
-            'status' => $request->value(),
-            'money'  => DB::raw('money - ' . $request->cost()),
-        ]);
+        $request->apply();
 
         clearCache('status');
 
@@ -137,10 +133,7 @@ class AccountApiController extends Controller
      */
     public function color(ColorRequest $request): JsonResponse
     {
-        getUser()->update([
-            'color' => $request->value(),
-            'money' => DB::raw('money - ' . $request->cost()),
-        ]);
+        $request->apply();
 
         return response()->json(['message' => __('users.color_success_changed')]);
     }
