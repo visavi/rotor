@@ -10,6 +10,7 @@ use App\Models\File;
 use App\Models\Flood;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,24 +20,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends Controller
 {
-    public User $user;
-
-    /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->user = $request->user() ?? abort(403);
-
-            return $next($request);
-        });
-    }
-
     /**
      * Главная страница
      */
-    public function index(): View
+    public function index(#[CurrentUser] User $me): View
     {
         $lastMessage = Dialogue::query()
             ->select(
@@ -44,7 +31,7 @@ class MessageController extends Controller
                 DB::raw('max(message_id) as message_id'),
                 DB::raw('min(case when reading then 1 else 0 end) as all_reading')
             )
-            ->where('user_id', $this->user->id)
+            ->where('user_id', $me->id)
             ->groupBy('author_id');
 
         $messages = Message::query()
@@ -58,7 +45,7 @@ class MessageController extends Controller
                 $join->on('d.user_id', 'd3.author_id')
                     ->whereColumn('d.message_id', 'd3.message_id');
             })
-            ->where('d.user_id', $this->user->id)
+            ->where('d.user_id', $me->id)
             ->with('author')
             ->orderByDesc('d.created_at')
             ->paginate(setting('privatpost'));
@@ -69,7 +56,7 @@ class MessageController extends Controller
     /**
      * Диалог
      */
-    public function talk(string $login): View
+    public function talk(string $login, #[CurrentUser] User $me): View
     {
         if (is_numeric($login)) {
             $user = (new User())->setAttribute('id', $login);
@@ -77,7 +64,7 @@ class MessageController extends Controller
             $user = User::findByLoginOrFail($login);
         }
 
-        if ($user->id === $this->user->id) {
+        if ($user->id === $me->id) {
             abort(200, __('messages.empty_dialogue'));
         }
 
@@ -89,24 +76,24 @@ class MessageController extends Controller
                 $join->on('d.user_id', 'd2.author_id')
                     ->whereColumn('d.message_id', 'd2.message_id');
             })
-            ->where('d.user_id', $this->user->id)
+            ->where('d.user_id', $me->id)
             ->where('d.author_id', $user->id)
             ->orderByDesc('d.created_at')
             ->with('user', 'author', 'files')
             ->paginate(setting('privatpost'));
 
         Dialogue::query()
-            ->where('user_id', $this->user->id)
+            ->where('user_id', $me->id)
             ->where('author_id', $user->id)
             ->where('reading', 0)
             ->update(['reading' => 1]);
 
         $files = File::query()
-            ->pending(Message::$morphName, $this->user->id)
+            ->pending(Message::$morphName, $me->id)
             ->ordered()
             ->get();
 
-        $countMessages = $this->user->getCountNewMessages();
+        $countMessages = $me->getCountNewMessages();
         $view = $user->id ? 'messages/talk' : 'messages/talk_system';
 
         return view($view, compact('messages', 'user', 'files', 'countMessages'));
@@ -115,7 +102,7 @@ class MessageController extends Controller
     /**
      * Отправка сообщений
      */
-    public function send(MessageRequest $request, Flood $flood): RedirectResponse
+    public function send(MessageRequest $request, Flood $flood, #[CurrentUser] User $me): RedirectResponse
     {
         $user = $request->recipient();
 
@@ -123,10 +110,10 @@ class MessageController extends Controller
             abort(404, __('validator.user'));
         }
 
-        $message = $user->sendMessage($this->user, $request->validated('msg'));
+        $message = $user->sendMessage($me, $request->validated('msg'));
 
         File::query()
-            ->pending(Message::$morphName, $this->user->id)
+            ->pending(Message::$morphName, $me->id)
             ->update(['relate_id' => $message->id]);
 
         $flood->saveState();
@@ -138,20 +125,20 @@ class MessageController extends Controller
     /**
      * Удаление переписки
      */
-    public function delete(int $uid, Request $request): RedirectResponse
+    public function delete(int $uid, Request $request, #[CurrentUser] User $me): RedirectResponse
     {
         $page = int($request->input('page', 1));
 
         $dialogues = Dialogue::query()
-            ->where('user_id', $this->user->id)
+            ->where('user_id', $me->id)
             ->where('author_id', $uid)
             ->get();
 
         // Непрочитанные удалять нельзя: иначе сообщение исчезнет, не дойдя до адресата
         $error = match (true) {
-            $dialogues->isEmpty()                  => __('messages.empty_dialogue'),
-            $this->user->getCountNewMessages() > 0 => __('messages.unread_messages'),
-            default                                => null,
+            $dialogues->isEmpty()          => __('messages.empty_dialogue'),
+            $me->getCountNewMessages() > 0 => __('messages.unread_messages'),
+            default                        => null,
         };
 
         if ($error) {
@@ -170,14 +157,14 @@ class MessageController extends Controller
     /**
      * New messages
      */
-    public function newMessages(Request $request): Response
+    public function newMessages(Request $request, #[CurrentUser] User $me): Response
     {
         if (! $request->ajax()) {
             return redirect('/');
         }
 
         $countMessages = Dialogue::query()
-            ->where('user_id', $this->user->id)
+            ->where('user_id', $me->id)
             ->where('reading', 0)
             ->count();
 
@@ -188,7 +175,7 @@ class MessageController extends Controller
                     DB::raw('max(created_at) as last_created_at')
                 )
                 ->selectRaw('count(*) as cnt')
-                ->where('user_id', $this->user->id)
+                ->where('user_id', $me->id)
                 ->where('reading', 0)
                 ->with('author')
                 ->groupBy('author_id')

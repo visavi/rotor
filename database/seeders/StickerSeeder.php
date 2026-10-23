@@ -160,5 +160,8 @@ class StickerSeeder extends Seeder
 
         Sticker::query()->truncate();
         Sticker::query()->insert($data);
+
+        // truncate() и insert() событий модели не вызывают
+        clearCache('stickers_map');
     }
 }

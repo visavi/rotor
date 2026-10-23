@@ -8,43 +8,26 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\PhotoRequest;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class PictureController extends Controller
 {
-    public User $user;
-
-    /**
-     * Конструктор
-     */
-    public function __construct()
-    {
-        $this->middleware('check.user');
-
-        $this->middleware(function ($request, $next) {
-            $this->user = auth()->user() ?? abort(403);
-
-            return $next($request);
-        });
-    }
-
     /**
      * Главная страница
      */
-    public function index(): View
+    public function index(#[CurrentUser] User $user): View
     {
-        $user = $this->user;
-
         return view('users/picture', compact('user'));
     }
 
     /**
      * Загрузка фото
      */
-    public function store(PhotoRequest $request, UserService $userService): RedirectResponse
+    public function store(PhotoRequest $request, UserService $userService, #[CurrentUser] User $user): RedirectResponse
     {
-        $userService->savePhoto($this->user, $request->file('photo'));
+        $userService->savePhoto($user, $request->file('photo'));
 
         return redirect('profile')
             ->with('success', __('users.photo_success_uploaded'));
@@ -53,14 +36,14 @@ class PictureController extends Controller
     /**
      * Удаление фотографии
      */
-    public function delete(UserService $userService): RedirectResponse
+    public function delete(UserService $userService, #[CurrentUser] User $user): RedirectResponse
     {
-        if (! $this->user->picture) {
+        if (! $user->picture) {
             return redirect('profile')
                 ->withErrors(__('users.photo_not_exist'));
         }
 
-        $userService->deletePhoto($this->user);
+        $userService->deletePhoto($user);
 
         return redirect('profile')
             ->with('success', __('users.photo_success_deleted'));

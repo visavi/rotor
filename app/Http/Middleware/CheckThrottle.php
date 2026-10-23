@@ -42,18 +42,15 @@ class CheckThrottle
 
         /* Автоматическая блокировка */
         if ($requests > $limit) {
-            $bannedIps = Cache::get('ipBan', []);
+            // Список пересоберёт isBanned(): дописывание в только что сброшенный кэш
+            // оставило бы в нём один этот адрес, и остальные баны перестали бы работать
+            $inserted = Ban::query()->insertOrIgnore([
+                'ip'         => $ip,
+                'created_at' => now(),
+            ]);
 
-            if (! isset($bannedIps[$ip])) {
-                $inserted = Ban::query()->insertOrIgnore([
-                    'ip'         => $ip,
-                    'created_at' => now(),
-                ]);
-
-                if ($inserted) {
-                    $bannedIps[$ip] = true;
-                    Cache::forever('ipBan', $bannedIps);
-                }
+            if ($inserted) {
+                clearCache('ipBan');
             }
 
             clearCache($key);

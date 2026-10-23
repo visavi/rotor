@@ -140,8 +140,6 @@ class StickerController extends AdminController
             'code'        => $request->validated('code'),
         ]);
 
-        clearCache(['stickers', 'stickers_map']);
-
         return redirect('admin/stickers/' . $cid)
             ->with('success', __('stickers.sticker_success_created'));
     }
@@ -171,8 +169,6 @@ class StickerController extends AdminController
             'category_id' => $cid,
         ]);
 
-        clearCache(['stickers', 'stickers_map']);
-
         return redirect('admin/stickers/' . $cid . '?page=' . $page)
             ->with('success', __('stickers.sticker_success_changed'));
     }
@@ -189,8 +185,6 @@ class StickerController extends AdminController
 
         deleteFile(public_path($sticker->name));
         $sticker->delete();
-
-        clearCache(['stickers', 'stickers_map']);
 
         return redirect('admin/stickers/' . $sticker->category_id . '?page=' . $page)
             ->with('success', __('stickers.sticker_success_deleted'));

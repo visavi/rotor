@@ -37,8 +37,6 @@ class IpBanController extends AdminController
             'created_at' => now(),
         ]);
 
-        clearCache('ipBan');
-
         return redirect('admin/ipbans')
             ->with('success', __('admin.ipbans.ip_success_added'));
     }

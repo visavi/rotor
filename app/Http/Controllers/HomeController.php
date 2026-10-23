@@ -107,7 +107,6 @@ class HomeController extends Controller
             && captchaVerify()
         ) {
             $ban->delete();
-            clearCache('ipBan');
             $this->markUnbanned();
 
             return redirect('/')

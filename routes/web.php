@@ -88,6 +88,7 @@ Route::controller(CommentController::class)
 /* Фото профиля */
 Route::controller(PictureController::class)
     ->prefix('pictures')
+    ->middleware('check.user')
     ->name('pictures.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
