@@ -8,7 +8,10 @@ use App\Http\Middleware\CheckUser;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Container\Attributes\Authenticated;
 use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use ReflectionAttribute;
 use ReflectionParameter;
 use Symfony\Component\Finder\Finder;
@@ -115,6 +118,52 @@ class ArchitectureTest extends TestCase
             ['resources/views/mailer', 'modules/*/resources/views/mailer'],
             'asset() при ASSET_URL=/ даёт относительный путь — в письме он не откроется. Ссылки наружу — url() или route()',
         );
+    }
+
+    public function testTranslationKeysExist(): void
+    {
+        // Ключ без перевода выводится как есть, а тест с __() сравнивает его сам с собой
+        $found = [];
+
+        $files = Finder::create()->files()->name('*.php')
+            ->in(array_filter([base_path('app'), base_path('resources/views'), base_path('routes'), ...glob(base_path('modules/*'), GLOB_ONLYDIR) ?: []]))
+            ->followLinks()
+            ->notPath(['vendor', 'lang', 'Tests', 'Docs/resources']);
+
+        foreach ($files as $file) {
+            preg_match_all("/(?:\b__|\btrans|\btrans_choice|@lang)\(\s*'((?:[a-z_]+::)?[a-z_]+\.[\w.\-]+)'(?!\s*\.)/", $file->getContents(), $matches);
+
+            foreach ($matches[1] as $key) {
+                if (! $this->translationExists($key)) {
+                    $found[] = str_replace(base_path() . '/', '', $file->getPathname()) . ' → ' . $key;
+                }
+            }
+        }
+
+        $this->assertSame([], array_values(array_unique($found)), 'Нет перевода: на странице выведется сам ключ. Добавьте ключ в resources/lang/ru или в resources/lang модуля');
+    }
+
+    /**
+     * Ключ модуля ищется в его файлах: перевод выключенного модуля не загружен
+     */
+    private function translationExists(string $key): bool
+    {
+        if (! str_contains($key, '::')) {
+            return Lang::has($key, 'ru', false);
+        }
+
+        [$namespace, $item] = explode('::', $key, 2);
+        [$group, $path] = explode('.', $item, 2);
+
+        foreach (glob(base_path('modules/*'), GLOB_ONLYDIR) ?: [] as $dir) {
+            $file = $dir . '/resources/lang/ru/' . $group . '.php';
+
+            if (Str::snake(basename($dir)) === $namespace && is_file($file)) {
+                return Arr::has((array) require $file, $path);
+            }
+        }
+
+        return false;
     }
 
     /**

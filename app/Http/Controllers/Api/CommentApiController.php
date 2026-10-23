@@ -116,21 +116,10 @@ class CommentApiController extends Controller
     /**
      * Редактирование своего комментария
      */
-    public function update(int $id, Request $request, #[CurrentUser] User $user): JsonResponse
+    public function update(int $id, Request $request): JsonResponse
     {
-        $comment = Comment::query()
-            ->where('id', $id)
-            ->where('user_id', $user->id)
-            ->firstOrFail();
-
-        // Правка доступна ограниченное время после публикации
-        if (! $this->comments->editable($comment)) {
-            abort(403, __('main.editing_impossible'));
-        }
-
-        if ($comment->relate?->getAttribute('closed')) {
-            abort(403, __('main.closed_comments'));
-        }
+        $comment = Comment::query()->findOrFail($id);
+        $this->authorize('update', $comment);
 
         $validated = $request->validate([
             'text' => CommentRequest::textRules(),
@@ -153,9 +142,7 @@ class CommentApiController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (! isAdmin()) {
-            abort(403, __('main.not_authorized'));
-        }
+        $this->authorize('delete', Comment::class);
 
         $comment = Comment::query()->findOrFail($id);
 

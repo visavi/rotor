@@ -79,7 +79,7 @@
                             </li>
                             @if (auth()->check())
                                 @if ($ownComment)
-                                    @if ($comment->created_at->gt(now()->subMinutes(10)))
+                                    @can('update', $comment)
                                         {{-- Окно правки нужно только там, где есть что править --}}
                                         @pushOnce('scripts')
                                             @include('app/_comment_edit_dialog')
@@ -89,7 +89,7 @@
                                                 <i class="fas fa-edit fa-fw me-1"></i> {{ __('main.edit') }}
                                             </a>
                                         </li>
-                                    @endif
+                                    @endcan
                                 @else
                                     <li>
                                         <a class="dropdown-item" href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fas fa-check fa-fw me-1" data-type="{{ $comment->getMorphClass() }}" data-id="{{ $comment->id }}" rel="nofollow">
@@ -97,13 +97,13 @@
                                         </a>
                                     </li>
                                 @endif
-                                @if (isAdmin())
+                                @can('delete', App\Models\Comment::class)
                                     <li>
                                         <a class="dropdown-item text-danger" href="#" data-ajax data-ajax-url="{{ url('comments/' . $comment->id) }}" data-ajax-method="delete" data-ajax-confirm data-ajax-replace=".comment-content">
                                             <i class="fas fa-trash fa-fw me-1"></i> {{ __('main.delete') }}
                                         </a>
                                     </li>
-                                @endif
+                                @endcan
                             @endif
                         </ul>
                     </div>

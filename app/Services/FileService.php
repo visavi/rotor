@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -314,7 +315,7 @@ class FileService
             return ['success' => false, 'status' => 404, 'message' => 'File not found'];
         }
 
-        if ($file->user_id !== auth()->id() && ! isAdmin()) {
+        if (Gate::denies('delete', $file)) {
             return ['success' => false, 'status' => 403, 'message' => __('ajax.record_not_author')];
         }
 
@@ -349,7 +350,7 @@ class FileService
             return ['success' => false, 'status' => 404, 'message' => 'File not found'];
         }
 
-        if (! isAdmin() && ! $files->every(static fn (File $file) => $file->user_id === auth()->id())) {
+        if ($files->contains(static fn (File $file) => Gate::denies('delete', $file))) {
             return ['success' => false, 'status' => 403, 'message' => __('ajax.record_not_author')];
         }
 

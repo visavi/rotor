@@ -52,26 +52,13 @@ class CommentController extends Controller
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        if (! $user = auth()->user()) {
-            return response()->json(['success' => false, 'message' => __('main.not_authorized')], 403);
-        }
-
-        $comment = Comment::query()
-            ->where('id', $id)
-            ->where('user_id', $user->id)
-            ->first();
+        $comment = Comment::query()->find($id);
 
         if (! $comment) {
             return response()->json(['success' => false, 'message' => __('main.comment_deleted')], 404);
         }
 
-        if (! $this->comments->editable($comment)) {
-            return response()->json(['success' => false, 'message' => __('main.editing_impossible')], 403);
-        }
-
-        if ($comment->relate?->getAttribute('closed')) {
-            return response()->json(['success' => false, 'message' => __('main.closed_comments')], 403);
-        }
+        $this->authorize('update', $comment);
 
         $validated = $request->validate([
             'msg' => CommentRequest::textRules(),
@@ -93,9 +80,7 @@ class CommentController extends Controller
      */
     public function destroy(int $id): JsonResponse
     {
-        if (! isAdmin()) {
-            return response()->json(['success' => false, 'message' => __('main.not_authorized')], 403);
-        }
+        $this->authorize('delete', Comment::class);
 
         $comment = Comment::query()->find($id);
 

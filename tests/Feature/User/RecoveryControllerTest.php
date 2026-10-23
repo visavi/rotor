@@ -82,4 +82,13 @@ class RecoveryControllerTest extends TestCase
 
         $this->assertDatabaseCount('password_resets', 0);
     }
+
+    public function testAuthorizedUserCannotRestore(): void
+    {
+        // Раньше вместо текста выводился ключ mails.already_authorized
+        $this->actingAs(User::factory()->create())
+            ->get('/restore/token')
+            ->assertRedirect('/')
+            ->assertSessionHas('danger', 'Вы уже авторизованы!');
+    }
 }

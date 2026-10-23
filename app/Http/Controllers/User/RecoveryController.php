@@ -48,7 +48,7 @@ class RecoveryController extends Controller
     public function restore(string $token, MailService $mail): View|RedirectResponse
     {
         if (auth()->check()) {
-            return redirect('/')->with('danger', __('mails.already_authorized'));
+            return redirect('/')->with('danger', __('main.already_authorized'));
         }
 
         PasswordReset::query()
