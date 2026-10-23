@@ -257,12 +257,15 @@ window.confirmAction = function (el) {
         const form = el.matches('form') ? el : el.closest('form')
 
         if (form) {
-            confirmedElements.add(form)
-
-            // Кнопка отправляет форму от своего имени: со своими formaction, name и value
+            // Кнопка отправляет форму от своего имени: со своими formaction, name и value.
+            // requestSubmit синхронно зовёт onsubmit формы — отметка живёт только на этот вызов:
+            // оставшись, она пропустила бы подтверждение на странице, возвращённой из bfcache
             if (el.matches('button, input[type="submit"]')) {
+                confirmedElements.add(form)
                 form.requestSubmit(el)
+                confirmedElements.delete(form)
             } else {
+                // submit() onsubmit не вызывает, отметка не нужна
                 form.submit()
             }
 

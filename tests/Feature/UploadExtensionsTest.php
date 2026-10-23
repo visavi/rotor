@@ -125,6 +125,36 @@ class UploadExtensionsTest extends TestCase
         $this->assertSame(__('validator.files_max', ['max' => 3]), $errors->first('files'));
     }
 
+    public function testRulesRejectForeignExtensionWithImageContent(): void
+    {
+        // mimes смотрит только на содержимое, а файл сохраняется с расширением клиента:
+        // x.html с заголовком GIF лёг бы в uploads страницей со скриптом
+        $this->actingAs(User::factory()->create());
+
+        $rules = FileService::rules(Comment::$morphName);
+
+        // Настоящий JPEG со скриптом в сегменте комментария: по содержимому это картинка
+        $image = UploadedFile::fake()->image('a.jpg');
+        $jpeg = (string) file_get_contents($image->getPathname());
+        $script = '<script>alert(1)</script>';
+        $polyglot = substr($jpeg, 0, 2) . "\xFF\xFE" . pack('n', strlen($script) + 2) . $script . substr($jpeg, 2);
+
+        // Не fake(): он берёт тип из имени файла, а атака как раз в расхождении имени и содержимого
+        $path = tempnam(sys_get_temp_dir(), 'upl');
+        file_put_contents($path, $polyglot);
+
+        $html = ['files' => [new UploadedFile($path, 'x.html', null, null, true)]];
+        $jpg = ['files' => [new UploadedFile($image->getPathname(), 'photo.jpg', null, null, true)]];
+
+        try {
+            $this->assertSame('jpg', $html['files'][0]->guessExtension());
+            $this->assertTrue(Validator::make($html, $rules)->fails());
+            $this->assertTrue(Validator::make($jpg, $rules)->passes());
+        } finally {
+            unlink($path);
+        }
+    }
+
     public function testPendingWithoutUserFindsNothing(): void
     {
         // Без пользователя scope не падает TypeError, а ничего не находит

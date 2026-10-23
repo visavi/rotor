@@ -80,9 +80,12 @@ class UserController extends Controller
 
         $isFlood = $flood->isFlood();
 
-        // Запоминаем страницу, с которой пришёл гость, для возврата после входа
+        // Запоминаем страницу, с которой пришёл гость, для возврата после входа.
+        // previous() берёт адрес из Referer: ссылка на вход с чужого сайта увела бы туда после входа
         $previous = url()->previous();
-        if (! Str::contains($previous, ['/login', '/register', '/recovery'])) {
+        $isOwnPage = parse_url($previous, PHP_URL_HOST) === $request->getHost();
+
+        if ($isOwnPage && ! Str::contains($previous, ['/login', '/register', '/recovery'])) {
             $request->session()->put('url.intended', $previous);
         }
 
@@ -200,7 +203,12 @@ class UserController extends Controller
      */
     public function confirm(string $token): RedirectResponse
     {
-        $user = User::query()->where('confirm_token', $token)->first();
+        // Только ожидающий аккаунт: старая ссылка из письма после одобрения админом
+        // и повышения ставила бы модератору уровень пользователя
+        $user = User::query()
+            ->where('level', User::PENDED)
+            ->where('confirm_token', $token)
+            ->first();
         if (! $user) {
             abort(200, __('users.confirm_code_invalid'));
         }

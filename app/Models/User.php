@@ -46,7 +46,7 @@ use InvalidArgumentException;
  * @property string               $country
  * @property string               $city
  * @property string               $language
- * @property string               $info
+ * @property string|null          $info
  * @property string               $site
  * @property string               $phone
  * @property string               $gender
@@ -57,8 +57,8 @@ use InvalidArgumentException;
  * @property int                  $money
  * @property string               $status
  * @property string               $color
- * @property string               $avatar
- * @property string               $picture
+ * @property string|null          $avatar
+ * @property string|null          $picture
  * @property int                  $rating
  * @property int                  $posrating
  * @property int                  $negrating

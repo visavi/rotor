@@ -37,7 +37,8 @@ class ReglistController extends AdminController
             ->whereIn('id', $request->ids());
 
         if ($request->validated('action') === 'yes') {
-            $users->update(['level' => User::USER]);
+            // Ссылка из письма больше не нужна: одобренный аккаунт уже активен
+            $users->update(['level' => User::USER, 'confirm_token' => null]);
 
             $message = __('admin.reglists.users_success_approved');
         } else {

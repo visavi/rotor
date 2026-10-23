@@ -9,11 +9,23 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class HtmlSanitizer
 {
+    /**
+     * Свойства style, которые ставит редактор: выравнивание, цвет, фон и размер текста
+     */
+    private const array STYLE_PROPERTIES = ['text-align', 'color', 'background-color', 'font-size'];
+
+    /**
+     * Видеохостинги, которые встраивает редактор (resources/js/tiptap.js, toEmbedUrl)
+     */
+    private const array IFRAME_HOSTS = ['youtube.com', 'youtube-nocookie.com', 'rutube.ru', 'vk.com', 'vkvideo.ru'];
+
     private static ?SymfonyHtmlSanitizer $instance = null;
 
     public static function sanitize(?string $text): string
     {
-        $html = self::getInstance()->sanitize((string) $text);
+        // Фильтры разбирают вывод Symfony до декодирования сущностей: в нём атрибуты
+        // в двойных кавычках, а кавычки в тексте и значениях закодированы
+        $html = self::filterIframes(self::filterStyles(self::getInstance()->sanitize((string) $text)));
 
         // Symfony HtmlSanitizer (через DOMDocument) кодирует безопасные символы как числовые
         // HTML-сущности. Декодируем все кроме &(38), <(60), >(62), "(34) — они нужны в HTML.
@@ -21,6 +33,63 @@ class HtmlSanitizer
             $code = (int) $m[1];
 
             return in_array($code, [34, 38, 60, 62], true) ? $m[0] : mb_chr($code);
+        }, $html);
+    }
+
+    /**
+     * Оставляет в style только свойства редактора
+     *
+     * Symfony чистит атрибуты, но не CSS внутри style: position: fixed и z-index
+     * накрывали страницу блоком из комментария, url() подгружал чужой адрес
+     */
+    private static function filterStyles(string $html): string
+    {
+        return preg_replace_callback('/\sstyle="([^"]*)"/i', static function (array $match): string {
+            $kept = [];
+
+            foreach (explode(';', html_entity_decode($match[1], ENT_QUOTES | ENT_HTML5)) as $declaration) {
+                [$property, $value] = array_map(trim(...), explode(':', $declaration, 2)) + [1 => ''];
+                $property = strtolower($property);
+
+                if (
+                    in_array($property, self::STYLE_PROPERTIES, true)
+                    && preg_match('/^[#\w\s(),.%-]+$/u', $value)
+                    && ! preg_match('/url|expression|var\s*\(/i', $value)
+                ) {
+                    $kept[] = $property . ': ' . $value;
+                }
+            }
+
+            return $kept ? ' style="' . htmlspecialchars(implode('; ', $kept), ENT_QUOTES) . '"' : '';
+        }, $html);
+    }
+
+    /**
+     * Убирает iframe не с видеохостингов
+     *
+     * Symfony проверяет у src только схему, а общий список хостов для медиа отрезал бы
+     * и картинки с других сайтов. Без проверки в запись встраивалась любая страница,
+     * в том числе поддельная форма входа
+     */
+    private static function filterIframes(string $html): string
+    {
+        return preg_replace_callback('#<iframe\b[^>]*>.*?</iframe>#is', static function (array $match): string {
+            preg_match('/\ssrc="([^"]*)"/i', $match[0], $src);
+
+            $url = html_entity_decode($src[1] ?? '', ENT_QUOTES | ENT_HTML5);
+            $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+
+            if (parse_url($url, PHP_URL_SCHEME) !== 'https') {
+                return '';
+            }
+
+            foreach (self::IFRAME_HOSTS as $allowed) {
+                if ($host === $allowed || str_ends_with($host, '.' . $allowed)) {
+                    return $match[0];
+                }
+            }
+
+            return '';
         }, $html);
     }
 

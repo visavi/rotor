@@ -211,7 +211,14 @@ class FileService
                     }
                 },
             ],
-            'files.*' => ['file', 'max:' . self::maxFileSize(), 'mimes:' . implode(',', self::extensions($type))],
+            // mimes проверяет содержимое, extensions — имя: файл сохраняется с расширением клиента,
+            // и картинка с именем x.html легла бы в uploads исполняемой страницей
+            'files.*' => [
+                'file',
+                'max:' . self::maxFileSize(),
+                'extensions:' . implode(',', self::extensions($type)),
+                'mimes:' . implode(',', self::extensions($type)),
+            ],
         ];
     }
 

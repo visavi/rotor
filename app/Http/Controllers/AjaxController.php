@@ -151,7 +151,8 @@ class AjaxController extends Controller
     {
         $url = filter_var($request->string('url')->value(), FILTER_VALIDATE_URL);
 
-        if (! $url) {
+        // FILTER_VALIDATE_URL пропускает file:// и php://: страница читала бы файлы сервера
+        if (! $url || ! in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true)) {
             return response()->json(['image' => null]);
         }
 
@@ -161,7 +162,8 @@ class AjaxController extends Controller
             'user_agent'      => 'Mozilla/5.0',
         ]]);
 
-        $html = @file_get_contents($url, false, $ctx);
+        // og:image стоит в <head>: начала страницы хватает, большой ответ не съест память
+        $html = @file_get_contents($url, false, $ctx, 0, 512 * 1024);
 
         if ($html && preg_match('/<meta[^>]+property=["\']og:image["\'][^>]+content=["\'](https?:[^"\']+)["\']/i', $html, $m)) {
             return response()->json(['image' => $m[1]]);

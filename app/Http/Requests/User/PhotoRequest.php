@@ -22,6 +22,8 @@ class PhotoRequest extends FormRequest
                 'required',
                 'image',
                 'max:' . FileService::maxFileSize(),
+                // Фото сохраняется с расширением клиента: картинка с именем x.html прошла бы mimes
+                'extensions:' . implode(',', FileService::extensionList('media_extensions')),
                 'mimes:' . implode(',', FileService::extensionList('media_extensions')),
                 new ImageDimensionsRule(100),
             ],
@@ -31,11 +33,12 @@ class PhotoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'photo.required' => __('validator.image_upload_failed'),
-            'photo.uploaded' => __('validator.image_upload_failed'),
-            'photo.image'    => __('validator.extension'),
-            'photo.mimes'    => __('validator.extension'),
-            'photo.max'      => __('validator.size_max', ['size' => formatSize(setting('filesize'))]),
+            'photo.required'   => __('validator.image_upload_failed'),
+            'photo.uploaded'   => __('validator.image_upload_failed'),
+            'photo.image'      => __('validator.extension'),
+            'photo.mimes'      => __('validator.extension'),
+            'photo.extensions' => __('validator.extension'),
+            'photo.max'        => __('validator.size_max', ['size' => formatSize(setting('filesize'))]),
         ];
     }
 }

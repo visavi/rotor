@@ -271,6 +271,27 @@ class UserControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testLoginIgnoresForeignReferer(): void
+    {
+        $user = $this->makeUser();
+
+        // Ссылка на вход с чужого сайта не должна уводить туда после входа
+        $this->withHeader('Referer', 'https://evil.example/phishing')->get('/login')->assertOk();
+
+        $this->post('/login', ['login' => $user->login, 'password' => 'secret123'])
+            ->assertRedirect(url('/'));
+    }
+
+    public function testLoginReturnsToPreviousPage(): void
+    {
+        $user = $this->makeUser();
+
+        $this->withHeader('Referer', url('/forums'))->get('/login');
+
+        $this->post('/login', ['login' => $user->login, 'password' => 'secret123'])
+            ->assertRedirect(url('/forums'));
+    }
+
     public function testLoginByEmail(): void
     {
         $user = $this->makeUser();
@@ -329,6 +350,24 @@ class UserControllerTest extends TestCase
         $this->assertSame('Москва', $user->city);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testProfileFieldsAreEscaped(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($user)->post('/profile', [
+            'country' => '<b>Страна</b>',
+            'city'    => '<img src=x onerror=alert(1)>',
+            'gender'  => User::MALE,
+        ])->assertRedirect('profile');
+
+        // Город и страна — свободный ввод, в анкете они выводятся текстом, а не разметкой
+        $this->get('/users/' . $user->login)
+            ->assertOk()
+            ->assertDontSee('<img src=x onerror=alert(1)>', false)
+            ->assertDontSee('<b>Страна</b>', false)
+            ->assertSee('&lt;img src=x onerror=alert(1)&gt;', false);
     }
 
     public function testEditProfileNormalizesPlace(): void
@@ -530,6 +569,19 @@ class UserControllerTest extends TestCase
         $this->assertNull($user->confirm_token);
 
         $response->assertSessionHas('success');
+    }
+
+    public function testConfirmDoesNotDemoteActiveUser(): void
+    {
+        // Админ одобрил регистрацию и назначил модератором, а ссылка из письма осталась
+        $user = $this->makeUser([
+            'level'         => User::MODER,
+            'confirm_token' => 'oldconfirmtoken',
+        ]);
+
+        $this->get('/confirm/oldconfirmtoken')->assertOk();
+
+        $this->assertSame(User::MODER, $user->fresh()->level);
     }
 
     public function testVerifyResendsConfirmation(): void

@@ -35,6 +35,19 @@ class PictureControllerTest extends TestCase
         $this->assertNull($this->user->fresh()->picture);
     }
 
+    public function testImageWithForeignExtensionIsRejected(): void
+    {
+        // Настоящая картинка под именем .html прошла бы mimes и легла бы в uploads страницей
+        $image = UploadedFile::fake()->image('me.jpg', 100, 100);
+        $photo = new UploadedFile($image->getPathname(), 'me.html', null, null, true);
+
+        $this->actingAs($this->user)
+            ->post('/pictures', ['photo' => $photo])
+            ->assertSessionHasErrors(['photo' => __('validator.extension')]);
+
+        $this->assertNull($this->user->fresh()->picture);
+    }
+
     public function testSmallPhotoIsRejected(): void
     {
         $this->actingAs($this->user)

@@ -133,9 +133,10 @@ $serviceFields = array_filter([
             @hook('userStart', $user)
 
             <dl class="profile-fields">
+                {{-- Город и страна — свободный ввод: значения выводятся текстом, иначе разметка из анкеты исполнялась бы у читателя --}}
                 @foreach ($fields as $label => $value)
                     <dt>{{ $label }}</dt>
-                    <dd>{!! $value !!}</dd>
+                    <dd>{{ $value }}</dd>
                 @endforeach
 
                 {{-- Поля модулей идут тем же списком: хук отдаёт пары компонентом profile.field --}}
@@ -143,7 +144,7 @@ $serviceFields = array_filter([
 
                 @foreach ($serviceFields as $label => $value)
                     <dt>{{ $label }}</dt>
-                    <dd>{!! $value !!}</dd>
+                    <dd>{{ $value }}</dd>
                 @endforeach
             </dl>
 

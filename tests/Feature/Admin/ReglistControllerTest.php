@@ -42,6 +42,7 @@ class ReglistControllerTest extends TestCase
     public function testApproveUsers(): void
     {
         $user = $this->makePendedUser();
+        $user->update(['confirm_token' => 'confirmtokentest']);
 
         $response = $this->actingAs($this->admin)
             ->post('/admin/reglists', [
@@ -53,6 +54,7 @@ class ReglistControllerTest extends TestCase
 
         $user->refresh();
         $this->assertSame(User::USER, $user->level);
+        $this->assertNull($user->confirm_token);
 
         $response->assertSessionHas('success');
     }
