@@ -128,7 +128,7 @@ class ArchitectureTest extends TestCase
         $files = Finder::create()->files()->name('*.php')
             ->in(array_filter([base_path('app'), base_path('resources/views'), base_path('routes'), ...glob(base_path('modules/*'), GLOB_ONLYDIR) ?: []]))
             ->followLinks()
-            ->notPath(['vendor', 'lang', 'Tests', 'Docs/resources']);
+            ->notPath(['vendor', '#(^|/)lang/#', '#(^|/)Tests/#', 'Docs/resources']);
 
         foreach ($files as $file) {
             preg_match_all("/(?:\b__|\btrans|\btrans_choice|@lang)\(\s*'((?:[a-z_]+::)?[a-z_]+\.[\w.\-]+)'(?!\s*\.)/", $file->getContents(), $matches);
