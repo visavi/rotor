@@ -128,8 +128,10 @@ class BanController extends AdminController
      */
     private function findUser(Request $request): User
     {
+        $login = $request->input('user');
+
         $user = User::query()
-            ->where('login', $request->string('user')->value())
+            ->where('login', is_string($login) ? $login : '')
             ->with('lastBan')
             ->firstOrFail();
 

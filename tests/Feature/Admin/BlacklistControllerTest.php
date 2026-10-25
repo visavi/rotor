@@ -44,6 +44,14 @@ class BlacklistControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    public function testIndexWithArrayTypeReturns404(): void
+    {
+        // Массив вместо строки в адресе раньше ронял страницу с 500
+        $this->actingAs($this->admin)
+            ->get('/admin/blacklists?type[]=email')
+            ->assertNotFound();
+    }
+
     public function testAddEmail(): void
     {
         $response = $this->actingAs($this->admin)

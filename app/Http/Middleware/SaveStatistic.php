@@ -9,13 +9,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SaveStatistic
 {
+    public function __construct(private readonly MetrikaService $metrika)
+    {
+    }
+
     /**
      * Пишет визит, пропуская фоновые запросы клиента
      */
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->isMethod('GET') && ! MetrikaService::isBackground($request)) {
-            (new MetrikaService())->saveStatistic();
+            $this->metrika->saveStatistic();
         }
 
         return $next($request);

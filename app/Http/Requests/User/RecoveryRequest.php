@@ -43,10 +43,10 @@ class RecoveryRequest extends FormRequest
         ];
     }
 
-    public function after(): array
+    public function after(UserService $users): array
     {
         return [
-            function (Validator $validator): void {
+            function (Validator $validator) use ($users): void {
                 $this->checkCaptcha($validator);
 
                 if ($validator->errors()->has('user')) {
@@ -61,8 +61,8 @@ class RecoveryRequest extends FormRequest
                     // Без почты письмо со ссылкой отправить некуда
                     ! $user->email => __('users.email_not_attached'),
                     // Повторная заявка — только через час
-                    app(UserService::class)->hasPendingRecovery($user) => __('mails.password_recovery_time'),
-                    default                                            => null,
+                    $users->hasPendingRecovery($user) => __('mails.password_recovery_time'),
+                    default                           => null,
                 };
 
                 if ($error) {

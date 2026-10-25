@@ -58,6 +58,14 @@ class BanControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    public function testArrayLoginReturns404(): void
+    {
+        // Массив вместо строки в адресе раньше ронял страницу с 500
+        $this->actingAs($this->admin)
+            ->get('/admin/bans/edit?user[]=nobody')
+            ->assertNotFound();
+    }
+
     public function testBanUser(): void
     {
         $user = User::factory()->create(['login' => 'plain_user']);
@@ -74,7 +82,7 @@ class BanControllerTest extends TestCase
         $user->refresh();
 
         $this->assertSame(User::BANNED, $user->level);
-        $this->assertTrue($user->timeban->isFuture());
+        $this->assertTrue($user->timeban?->isFuture());
 
         $this->assertDatabaseHas('banhist', [
             'user_id'      => $user->id,
@@ -191,7 +199,7 @@ class BanControllerTest extends TestCase
 
         $user->refresh();
 
-        $this->assertTrue($user->timeban->isFuture());
+        $this->assertTrue($user->timeban?->isFuture());
         $this->assertSame(User::BANNED, $user->level);
 
         $this->assertDatabaseHas('banhist', [

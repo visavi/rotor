@@ -48,7 +48,7 @@ class BanhistController extends AdminController
      */
     public function delete(DeleteSelectedRequest $request): RedirectResponse
     {
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
         $login = $request->string('user')->value();
 
         Banhist::query()->whereIn('id', $request->ids())->delete();

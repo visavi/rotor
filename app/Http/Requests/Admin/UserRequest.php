@@ -25,6 +25,11 @@ class UserRequest extends FormRequest
             'email'  => UserRules::email(UserService::isEmailRequired(), $this->targetUser()?->id, blacklist: false),
             'status' => ['nullable', 'string', 'between:3,25'],
             'themes' => ['nullable', Rule::in(getAvailableThemes())],
+            // Счётчики — столбцы int: отрицательное и сверх диапазона отсекаются до записи
+            'point'     => ['nullable', 'integer', 'between:0,2147483647'],
+            'money'     => ['nullable', 'integer', 'between:0,2147483647'],
+            'posrating' => ['nullable', 'integer', 'between:0,2147483647'],
+            'negrating' => ['nullable', 'integer', 'between:0,2147483647'],
             ...UserRules::profile(),
         ];
     }

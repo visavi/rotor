@@ -34,13 +34,13 @@ class HomeController extends Controller
     /**
      * Лента (AJAX)
      */
-    public function feed(Request $request): string|RedirectResponse
+    public function feed(Request $request, FeedService $feed): string|RedirectResponse
     {
         if (! $request->ajax()) {
-            return redirect(url('/') . ($request->has('page') ? '?page=' . $request->input('page') : ''));
+            return redirect(url('/') . ($request->has('page') ? '?page=' . $request->integer('page') : ''));
         }
 
-        return (string) (new FeedService())->getFeed();
+        return (string) $feed->getFeed();
     }
 
     /**

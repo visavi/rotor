@@ -72,6 +72,21 @@ class StatusControllerTest extends TestCase
         $response->assertSessionHasErrors('name');
     }
 
+    public function testCreateStatusWithNegativePointsFails(): void
+    {
+        // Раньше минус молча отбрасывался: -100 записывалось как 100
+        $response = $this->actingAs($this->admin)->post('/admin/status/create', [
+            'topoint' => -100,
+            'point'   => 200,
+            'name'    => 'Отрицательный',
+            'color'   => '#00ff00',
+        ]);
+
+        $this->assertDatabaseMissing('status', ['name' => 'Отрицательный']);
+
+        $response->assertSessionHasErrors('topoint');
+    }
+
     public function testCreateStatusWithInvalidColorFails(): void
     {
         $response = $this->actingAs($this->admin)->post('/admin/status/create', [

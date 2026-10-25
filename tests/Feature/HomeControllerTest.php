@@ -32,6 +32,8 @@ class HomeControllerTest extends TestCase
         $this->get('/search?query[]=x')->assertOk();
         $this->getJson('/api/search?query[]=x')->assertStatus(422);
         $this->get('/users?sort[]=x&order[]=y&type[]=z&user[]=u')->assertOk();
+        $this->get('/feed?page[]=2')->assertRedirect('/?page=1');
+        $this->getJson('/search-users?query[]=x')->assertOk();
     }
 
     public function testSearchWithShortQueryShowsError(): void
@@ -104,10 +106,10 @@ class HomeControllerTest extends TestCase
 
         $this->assertSame(
             __('pages.ip_unbanned_log', ['date' => dateFixed(now(), original: true)]),
-            $latest->fresh()->message,
+            $latest->fresh()?->message,
         );
 
-        $this->assertNull($old->fresh()->message);
+        $this->assertNull($old->fresh()?->message);
     }
 
     public function testIpbanCannotSelfUnbanWhenBannedByAdmin(): void

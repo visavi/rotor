@@ -46,7 +46,7 @@ class IpBanController extends AdminController
      */
     public function delete(DeleteSelectedRequest $request): RedirectResponse
     {
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
 
         Ban::query()->whereIn('id', $request->ids())->delete();
         clearCache('ipBan');

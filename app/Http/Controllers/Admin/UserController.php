@@ -85,8 +85,8 @@ class UserController extends AdminController
 
         $password = $request->validated('password');
         $text = $password ? __('users.user_new_password', ['password' => $password]) : null;
-        $posrating = int($request->input('posrating'));
-        $negrating = int($request->input('negrating'));
+        $posrating = $request->integer('posrating');
+        $negrating = $request->integer('negrating');
 
         $user->update([
             'password'  => $password ? Hash::make($password) : $user->password,
@@ -98,8 +98,8 @@ class UserController extends AdminController
             'phone'     => $request->validated('phone'),
             'site'      => $request->validated('site'),
             'birthday'  => $request->validated('birthday'),
-            'point'     => int($request->input('point')),
-            'money'     => int($request->input('money')),
+            'point'     => $request->integer('point'),
+            'money'     => $request->integer('money'),
             'status'    => $request->validated('status'),
             'rating'    => $posrating - $negrating,
             'posrating' => $posrating,

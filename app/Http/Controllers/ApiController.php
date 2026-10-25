@@ -89,9 +89,8 @@ class ApiController extends Controller
     /**
      * Api ленты
      */
-    public function feed(): JsonResource
+    public function feed(FeedService $feed): JsonResource
     {
-        $feed = new FeedService();
         $posts = $feed->getItems();
         $posts->setPath(url('/api/feed'));
 

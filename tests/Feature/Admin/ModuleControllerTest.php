@@ -146,6 +146,15 @@ class ModuleControllerTest extends TestCase
         $response->assertSee('<option value="released">', false);
     }
 
+    public function testArrayModuleNameIsRejected(): void
+    {
+        // Массив вместо строки в адресе раньше ронял страницу с 500
+        $this->actingAs($this->boss)->get('/admin/modules/module?module[]=Blog')->assertRedirect(route('admin.modules.index'));
+        $this->actingAs($this->boss)->post('/admin/modules/install', ['module' => ['Blog']])->assertNotFound();
+        $this->actingAs($this->boss)->post('/admin/modules/uninstall', ['module' => ['Blog']])->assertNotFound();
+        $this->actingAs($this->boss)->post('/admin/modules/delete', ['module' => ['Blog']])->assertNotFound();
+    }
+
     public function testIndexTakesReleaseDateFromRegistry(): void
     {
         $this->fakeRegistry(self::FIXTURE_VERSION, '2020-01-02');
@@ -239,7 +248,7 @@ class ModuleControllerTest extends TestCase
     private function fakeDownload(string $zipPath): void
     {
         Http::fake([
-            'files.example.com/*' => Http::response(file_get_contents($zipPath)),
+            'files.example.com/*' => Http::response((string) file_get_contents($zipPath)),
         ]);
     }
 

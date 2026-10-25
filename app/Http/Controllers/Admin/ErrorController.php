@@ -20,7 +20,7 @@ class ErrorController extends AdminController
      */
     public function __construct(Request $request)
     {
-        $this->code = int($request->input('code', 404));
+        $this->code = $request->integer('code', 404);
         $this->lists = [
             400 => 400,
             401 => 401,

@@ -34,6 +34,15 @@ class AjaxResolveImageTest extends TestCase
         }
     }
 
+    public function testArrayUrlIsIgnored(): void
+    {
+        // Массив вместо строки в адресе раньше ронял страницу с 500
+        $this->actingAs(User::factory()->create())
+            ->getJson('/ajax/resolve-image?url[]=https://example.com')
+            ->assertOk()
+            ->assertExactJson(['image' => null]);
+    }
+
     public function testGuestIsRejected(): void
     {
         $this->getJson('/ajax/resolve-image?url=' . rawurlencode('https://example.com'))

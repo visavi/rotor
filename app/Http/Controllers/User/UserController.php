@@ -260,9 +260,9 @@ class UserController extends Controller
      */
     public function searchUsers(Request $request): JsonResponse
     {
-        $query = $request->string('query')->value();
+        $query = $request->input('query');
 
-        if (mb_strlen($query) < 2) {
+        if (! is_string($query) || mb_strlen($query) < 2) {
             return response()->json();
         }
 

@@ -25,7 +25,7 @@ class AjaxController extends Controller
     {
         $result = $complaint->create(
             $request->string('type')->value(),
-            int($request->input('id')),
+            $request->integer('id'),
             $request->input('page'),
         );
 
@@ -40,7 +40,7 @@ class AjaxController extends Controller
         $result = $rating->vote(
             $user,
             $request->input('type'),
-            int($request->input('id')),
+            $request->integer('id'),
             $request->input('vote'),
         );
 
@@ -66,7 +66,7 @@ class AjaxController extends Controller
         $result = $uploader->upload(
             $request->file('file'),
             $request->string('type')->value(),
-            int($request->input('id')),
+            $request->integer('id'),
         );
 
         if (! $result['success']) {
@@ -102,7 +102,7 @@ class AjaxController extends Controller
     public function deleteFile(Request $request, FileService $uploader): JsonResponse
     {
         $result = $uploader->remove(
-            int($request->input('id')),
+            $request->integer('id'),
             $request->string('type')->value(),
         );
 
@@ -151,7 +151,8 @@ class AjaxController extends Controller
      */
     public function resolveImage(Request $request): JsonResponse
     {
-        $url = filter_var($request->string('url')->value(), FILTER_VALIDATE_URL);
+        $url = $request->input('url');
+        $url = is_string($url) ? filter_var($url, FILTER_VALIDATE_URL) : false;
 
         // FILTER_VALIDATE_URL пропускает file:// и php://: страница читала бы файлы сервера
         if (! $url || ! in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true)) {

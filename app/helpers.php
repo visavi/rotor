@@ -1071,7 +1071,7 @@ function absolutizeUrls(string $text): string
  */
 function canonicalUrl(): string
 {
-    $page = int(request()->query('page'));
+    $page = request()->integer('page');
 
     return request()->url() . ($page > 1 ? '?page=' . $page : '');
 }

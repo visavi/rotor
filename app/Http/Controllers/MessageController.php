@@ -127,7 +127,7 @@ class MessageController extends Controller
      */
     public function delete(int $uid, Request $request, #[CurrentUser] User $me): RedirectResponse
     {
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
 
         $dialogues = Dialogue::query()
             ->where('user_id', $me->id)

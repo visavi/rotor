@@ -32,10 +32,10 @@ class EmailChangeRequest extends FormRequest
         ];
     }
 
-    public function after(): array
+    public function after(UserService $users): array
     {
         return [
-            function (Validator $validator): void {
+            function (Validator $validator) use ($users): void {
                 $user = auth()->user() ?? abort(403);
 
                 if ($this->input('email') === $user->email) {
@@ -46,7 +46,7 @@ class EmailChangeRequest extends FormRequest
                     $validator->errors()->add('password', __('users.password_not_different'));
                 }
 
-                if (app(UserService::class)->hasPendingEmailChange($user)) {
+                if ($users->hasPendingEmailChange($user)) {
                     $validator->errors()->add('email', __('users.confirm_already_sent'));
                 }
             },

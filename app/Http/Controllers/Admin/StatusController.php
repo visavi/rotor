@@ -67,7 +67,7 @@ class StatusController extends AdminController
      */
     public function delete(Request $request): RedirectResponse
     {
-        $id = int($request->input('id'));
+        $id = $request->integer('id');
 
         $status = Status::query()->find($id);
 
@@ -87,7 +87,7 @@ class StatusController extends AdminController
      */
     private function findStatus(Request $request): Status
     {
-        $status = Status::query()->findOrFail(int($request->input('id')));
+        $status = Status::query()->findOrFail($request->integer('id'));
 
         return $status;
     }
@@ -98,8 +98,8 @@ class StatusController extends AdminController
     private function fields(StatusRequest $request): array
     {
         return [
-            'topoint' => int($request->input('topoint')),
-            'point'   => int($request->input('point')),
+            'topoint' => $request->integer('topoint'),
+            'point'   => $request->integer('point'),
             'name'    => $request->validated('name'),
             'color'   => $request->validated('color'),
         ];

@@ -158,9 +158,9 @@ class ModuleController extends AdminController
      */
     public function legacyModule(Request $request): RedirectResponse
     {
-        $moduleName = $request->string('module')->value();
+        $moduleName = $request->input('module');
 
-        if (! preg_match('|^[A-Za-z][\w\-]*$|', $moduleName)) {
+        if (! is_string($moduleName) || ! preg_match('|^[A-Za-z][\w\-]*$|', $moduleName)) {
             return redirect()->route('admin.modules.index', status: 301);
         }
 
@@ -181,8 +181,9 @@ class ModuleController extends AdminController
     public function install(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
-        $enable = int($request->input('enable'));
-        $update = int($request->input('update'));
+        $moduleName = is_string($moduleName) ? $moduleName : '';
+        $enable = $request->integer('enable');
+        $update = $request->integer('update');
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
@@ -270,7 +271,7 @@ class ModuleController extends AdminController
      */
     public function marketplace(Request $request): View|RedirectResponse
     {
-        $force = (bool) $request->input('refresh');
+        $force = $request->boolean('refresh');
 
         // Реестров может быть несколько, и каждый недоступный стоит десять секунд
         // таймаута. С очередью страница открывается сразу, опрос идёт в фоне
@@ -542,6 +543,7 @@ class ModuleController extends AdminController
     public function deleteFiles(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
+        $moduleName = is_string($moduleName) ? $moduleName : '';
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {
@@ -626,7 +628,8 @@ class ModuleController extends AdminController
     public function uninstall(Request $request): RedirectResponse
     {
         $moduleName = $request->input('module');
-        $disable = int($request->input('disable'));
+        $moduleName = is_string($moduleName) ? $moduleName : '';
+        $disable = $request->integer('disable');
         $modulePath = base_path('modules/' . $moduleName);
 
         if (! preg_match('|^[A-Z][\w\-]+$|', $moduleName) || ! file_exists($modulePath)) {

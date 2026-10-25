@@ -22,11 +22,13 @@ class BlacklistController extends AdminController
     {
         $types = ['email', 'login', 'domain'];
 
-        $this->type = $request->input('type', 'email');
+        $type = $request->input('type', 'email');
 
-        if (! in_array($this->type, $types, true)) {
+        if (! is_string($type) || ! in_array($type, $types, true)) {
             abort(404, __('admin.blacklists.type_not_found'));
         }
+
+        $this->type = $type;
     }
 
     /**
@@ -66,7 +68,7 @@ class BlacklistController extends AdminController
      */
     public function delete(DeleteSelectedRequest $request): RedirectResponse
     {
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
 
         BlackList::query()
             ->where('type', $this->type)

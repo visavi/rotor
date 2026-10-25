@@ -87,9 +87,9 @@ class SettingController extends AdminController
      */
     private function action(Request $request): string
     {
-        $act = $request->string('act', 'mains')->value();
+        $act = $request->input('act', 'mains');
 
-        if (! in_array($act, Setting::getActions(), true)) {
+        if (! is_string($act) || ! in_array($act, Setting::getActions(), true)) {
             abort(404, __('settings.page_invalid'));
         }
 

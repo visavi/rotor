@@ -107,7 +107,7 @@ class StickerController extends AdminController
      */
     public function createSticker(Request $request): View
     {
-        $cid = int($request->input('cid'));
+        $cid = $request->integer('cid');
 
         $categories = StickersCategory::query()->get();
 
@@ -150,7 +150,7 @@ class StickerController extends AdminController
     public function editSticker(int $id, Request $request): View
     {
         $sticker = $this->findSticker($id);
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
         $categories = StickersCategory::query()->get();
 
         return view('admin/stickers/edit_sticker', compact('sticker', 'categories', 'page'));
@@ -162,7 +162,7 @@ class StickerController extends AdminController
     public function updateSticker(int $id, StickerRequest $request): RedirectResponse
     {
         $cid = (int) $request->validated('cid');
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
 
         $this->findSticker($id)->update([
             'code'        => $request->validated('code'),
@@ -181,7 +181,7 @@ class StickerController extends AdminController
         $this->checkUploadDirectory();
 
         $sticker = $this->findSticker($id);
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
 
         deleteFile(public_path($sticker->name));
         $sticker->delete();

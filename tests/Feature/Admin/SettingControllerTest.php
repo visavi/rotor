@@ -37,6 +37,14 @@ class SettingControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    public function testIndexWithArrayActionReturns404(): void
+    {
+        // Массив вместо строки в адресе раньше ронял страницу с 500
+        $this->actingAs($this->boss)
+            ->get('/admin/settings?act[]=mains')
+            ->assertNotFound();
+    }
+
     public function testSaveSettings(): void
     {
         $response = $this->actingAs($this->boss)

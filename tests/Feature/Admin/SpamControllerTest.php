@@ -42,6 +42,16 @@ class SpamControllerTest extends TestCase
             ->assertOk();
     }
 
+    public function testIndexWithArrayTypeOpens(): void
+    {
+        // Массив вместо строки в адресе раньше ронял страницу с 500
+        $this->makeSpam();
+
+        $this->actingAs($this->admin)
+            ->get('/admin/spam?type[]=comments')
+            ->assertOk();
+    }
+
     public function testIndexSkipsTypesOfDisabledModules(): void
     {
         $this->makeSpam();

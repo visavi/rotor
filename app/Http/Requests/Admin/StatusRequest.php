@@ -11,8 +11,10 @@ class StatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => ['required', 'string', 'between:3,30'],
-            'color' => ['nullable', 'regex:/^#[a-f0-9]{6}$/i'],
+            'name'    => ['required', 'string', 'between:3,30'],
+            'color'   => ['nullable', 'regex:/^#[a-f0-9]{6}$/i'],
+            'topoint' => ['nullable', 'integer', 'between:0,2147483647'],
+            'point'   => ['nullable', 'integer', 'between:0,2147483647'],
         ];
     }
 

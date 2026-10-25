@@ -42,7 +42,7 @@ class SpamController extends AdminController
             ->pluck('total', 'relate_type')
             ->all();
 
-        if ($type && isset($this->types[$type])) {
+        if (is_string($type) && isset($this->types[$type])) {
             $this->type = $type;
         } elseif ($spam) {
             $this->type = (string) array_search(max($spam), $spam, true);
@@ -93,7 +93,7 @@ class SpamController extends AdminController
             ], 400);
         }
 
-        $id = int($request->input('id'));
+        $id = $request->integer('id');
 
         if (! $id) {
             return response()->json([

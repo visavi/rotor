@@ -123,6 +123,24 @@ class UserControllerTest extends TestCase
         $this->assertSame(6, (int) $user->rating);
     }
 
+    public function testEditUserWithNegativeMoneyFails(): void
+    {
+        // Раньше минус молча отбрасывался: -100 записывалось как 100
+        $user = $this->makeUser();
+        $money = $user->fresh()?->money;
+
+        $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level'  => User::USER,
+                'email'  => $user->email,
+                'money'  => -100,
+                'themes' => '',
+            ])
+            ->assertSessionHasErrors('money');
+
+        $this->assertSame($money, $user->fresh()?->money);
+    }
+
     public function testEditUserWithInvalidEmailFails(): void
     {
         $user = $this->makeUser();
@@ -153,7 +171,7 @@ class UserControllerTest extends TestCase
 
         $response->assertSessionHasErrors(['email' => __('users.email_already_exists')]);
 
-        $this->assertSame('plain@example.com', $user->fresh()->email);
+        $this->assertSame('plain@example.com', $user->fresh()?->email);
     }
 
     public function testEditUserKeepsOwnEmail(): void
@@ -168,7 +186,7 @@ class UserControllerTest extends TestCase
             ])
             ->assertSessionHasNoErrors();
 
-        $this->assertSame('Своё имя', $user->fresh()->name);
+        $this->assertSame('Своё имя', $user->fresh()?->name);
     }
 
     public function testEditUserWithTooLongSiteFails(): void
@@ -225,7 +243,7 @@ class UserControllerTest extends TestCase
             ])
             ->assertSessionHasNoErrors();
 
-        $this->assertSame('+79123456789', $user->fresh()->phone);
+        $this->assertSame('+79123456789', $user->fresh()?->phone);
     }
 
     public function testEditUserWithInvalidLevelFails(): void

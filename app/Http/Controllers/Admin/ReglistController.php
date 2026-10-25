@@ -29,7 +29,7 @@ class ReglistController extends AdminController
      */
     public function update(ReglistRequest $request): RedirectResponse
     {
-        $page = int($request->input('page', 1));
+        $page = $request->integer('page', 1);
 
         // Только ожидающие: иначе подделанный id одобрил бы или удалил любого
         $users = User::query()

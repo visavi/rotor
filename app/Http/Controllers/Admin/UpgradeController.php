@@ -98,7 +98,7 @@ class UpgradeController extends AdminController
     public function download(Request $request, GithubService $githubService): JsonResponse
     {
         $tag = $request->string('tag')->value();
-        $full = (bool) $request->input('full');
+        $full = $request->boolean('full');
         $asset = $tag ? $this->upgrade->findAsset($githubService, $tag, $full) : null;
 
         if (! $asset) {
