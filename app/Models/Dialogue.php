@@ -81,6 +81,9 @@ class Dialogue extends Model
     public function delete(): ?bool
     {
         return DB::transaction(function () {
+            // Явная загрузка: диалоги удаляются пачкой, а ленивая в пачке запрещена
+            $this->loadMissing('message.dialogues');
+
             // Если сообщение осталось только у одного пользователя
             if ($this->message->dialogues->count() === 1) {
                 $this->message->delete();

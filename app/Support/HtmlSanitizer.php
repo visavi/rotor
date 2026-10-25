@@ -19,13 +19,26 @@ class HtmlSanitizer
      */
     private const array IFRAME_HOSTS = ['youtube.com', 'youtube-nocookie.com', 'rutube.ru', 'vk.com', 'vkvideo.ru'];
 
+    /**
+     * Классы, которые ставит редактор (resources/js/tiptap.js), по тегам
+     */
+    private const array CLASSES = [
+        'a'       => ['user'],
+        'details' => ['spoiler'],
+        'div'     => ['video', 'hidden'],
+        'img'     => ['image', 'sticker'],
+        'pre'     => ['code'],
+        'table'   => ['table'],
+        'video'   => ['video'],
+    ];
+
     private static ?SymfonyHtmlSanitizer $instance = null;
 
     public static function sanitize(?string $text): string
     {
         // Фильтры разбирают вывод Symfony до декодирования сущностей: в нём атрибуты
         // в двойных кавычках, а кавычки в тексте и значениях закодированы
-        $html = self::filterIframes(self::filterStyles(self::getInstance()->sanitize((string) $text)));
+        $html = self::filterIframes(self::filterStyles(self::filterClasses(self::getInstance()->sanitize((string) $text))));
 
         // preg_* отдаёт null, упёршись в pcre.backtrack_limit: пустая строка вместо неочищенной.
         // Symfony HtmlSanitizer (через DOMDocument) кодирует безопасные символы как числовые
@@ -62,6 +75,22 @@ class HtmlSanitizer
             }
 
             return $kept ? ' style="' . htmlspecialchars(implode('; ', $kept), ENT_QUOTES) . '"' : '';
+        }, $html) ?? '';
+    }
+
+    /**
+     * Оставляет в class только классы редактора для этого тега
+     *
+     * На сайте подключён Bootstrap, и класс — тот же стиль: position-fixed с w-100
+     * и h-100 накрывал страницу, как position: fixed, который снимает filterStyles
+     */
+    private static function filterClasses(string $html): string
+    {
+        return preg_replace_callback('/<(\w+)([^>]*?)\sclass="([^"]*)"/i', static function (array $match): string {
+            $allowed = self::CLASSES[strtolower($match[1])] ?? [];
+            $kept = array_intersect(preg_split('/\s+/', $match[3], -1, PREG_SPLIT_NO_EMPTY) ?: [], $allowed);
+
+            return '<' . $match[1] . $match[2] . ($kept ? ' class="' . implode(' ', $kept) . '"' : '');
         }, $html) ?? '';
     }
 

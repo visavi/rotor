@@ -16,6 +16,7 @@
     "copied": "Copied!",
     "request_failed": "Request failed!",
     "file_upload_failed": "File upload error:",
+    "request_too_large": "The file is larger than the server accepts",
     "file_delete_failed": "File deletion error:",
     "buttons": {
         "ok": "OK",

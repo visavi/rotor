@@ -156,6 +156,9 @@ class Message extends Model
     public function delete(): ?bool
     {
         return DB::transaction(function () {
+            // Записи удаляются и пачкой, а ленивая загрузка в пачке запрещена
+            $this->loadMissing('files');
+
             $this->files->each(static function (File $file) {
                 $file->delete();
             });

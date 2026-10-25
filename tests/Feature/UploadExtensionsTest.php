@@ -72,6 +72,20 @@ class UploadExtensionsTest extends TestCase
         $this->assertStringNotContainsString('image/*', $html);
     }
 
+    public function testFormsCarrySizeLimit(): void
+    {
+        // Без лимита в поле тяжёлый файл уходил целиком, nginx отвечал страницей 413,
+        // а скрипт показывал «Unexpected token '<'»
+        $this->overrideSetting('filesize', 5 * 1024 * 1024);
+
+        foreach (['app/_upload_file', 'app/_upload_media'] as $view) {
+            $html = view($view, ['model' => new Comment(), 'files' => collect()])->render();
+
+            $this->assertStringContainsString('data-max-size="5242880"', $html);
+            $this->assertStringContainsString('data-max-size-message="' . e(__('validator.size_max', ['size' => formatSize(5 * 1024 * 1024)])) . '"', $html);
+        }
+    }
+
     public function testExtensionsAreNormalized(): void
     {
         // Validator::file сравнивает расширение файла в нижнем регистре

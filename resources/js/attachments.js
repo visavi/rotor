@@ -1,15 +1,25 @@
 // Список прикреплённых файлов под формой: шаблон разметки лежит во вьюхе
 // (_upload_file / _upload_media), здесь только подстановка данных
 
-/* Сколько из выбранных файлов ещё влезает в лимит. Лимит и текст ошибки несёт
-   поле загрузки формы (data-max, data-max-message). Сервер проверяет сам, здесь —
-   чтобы не рисовать заглушки и не слать запросы, которые он всё равно отклонит */
+/* Сколько из выбранных файлов ещё влезает в лимит. Лимиты и тексты ошибок несёт
+   поле загрузки формы (data-max, data-max-size и их -message). Сервер проверяет сам,
+   здесь — чтобы не рисовать заглушки и не слать запросы, которые он всё равно отклонит.
+   Тяжёлый файл без проверки уходил целиком, и nginx отвечал страницей 413 */
 export function takeAllowed(scope, files, fail) {
     const input = scope?.querySelector('input[type="file"][data-max]')
 
     if (! input) {
         return files
     }
+
+    const maxSize = Number(input.dataset.maxSize) || 0
+    const fitting = maxSize ? files.filter(file => file.size <= maxSize) : files
+
+    if (fitting.length < files.length) {
+        fail(input.dataset.maxSizeMessage)
+    }
+
+    files = fitting
 
     const used = scope.querySelectorAll('.js-files .js-file').length
     const allowed = Math.max(0, Number(input.dataset.max) - used)

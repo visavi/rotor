@@ -47,6 +47,31 @@ class DialogueTest extends TestCase
         ]);
     }
 
+    public function testDialogueWithSeveralMessagesIsDeleted(): void
+    {
+        $this->user->sendMessage($this->author, 'Привет');
+        $this->author->sendMessage($this->user, 'Ответ');
+        $this->markAsRead();
+
+        $this->deleteJson('/api/talk/' . $this->author->login, [], $this->headers())->assertOk();
+
+        $this->assertDatabaseMissing('dialogues', [
+            'user_id'   => $this->user->id,
+            'author_id' => $this->author->id,
+        ]);
+    }
+
+    public function testUserWithSeveralDialoguesIsDeleted(): void
+    {
+        $this->user->sendMessage($this->author, 'Привет');
+        $this->author->sendMessage($this->user, 'Ответ');
+
+        $this->user->delete();
+
+        $this->assertDatabaseMissing('dialogues', ['user_id' => $this->user->id]);
+        $this->assertSame(2, Dialogue::query()->where('user_id', $this->author->id)->count());
+    }
+
     public function testUnreadMessagesBlockDeletion(): void
     {
         $this->user->sendMessage($this->author, 'Привет');
@@ -127,11 +152,11 @@ class DialogueTest extends TestCase
             ->assertStatus(201)
             ->json('data.id');
 
-        $files = Message::query()->find($id)->files()->get();
+        $files = Message::query()->findOrFail((int) $id)->files()->get();
 
         try {
             $this->assertSame(['note.txt'], $files->pluck('name')->all());
-            $this->assertSame(0, $pending->fresh()->relate_id);
+            $this->assertSame(0, $pending->refresh()->relate_id);
         } finally {
             // Файл из запроса реально лёг в public/uploads
             foreach ($files as $file) {

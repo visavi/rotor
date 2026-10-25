@@ -1252,6 +1252,11 @@ function initEditor(textarea) {
                 headers: { 'X-CSRF-TOKEN': csrfToken }
             })
 
+            // Отказ nginx приходит страницей, а не json
+            if (response.status === 413) {
+                return failed(__('request_too_large'))
+            }
+
             const data = await response.json()
 
             if (data.success && data.path) {

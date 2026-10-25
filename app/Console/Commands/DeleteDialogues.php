@@ -29,10 +29,8 @@ class DeleteDialogues extends Command
             ->limit(1000)
             ->get();
 
-        $dialogues->each(function (Dialogue $dialogue) {
-            $dialogue->message->delete();
-            $dialogue->delete();
-        });
+        // Сообщение без второго участника диалог удаляет сам
+        $dialogues->each(static fn (Dialogue $dialogue) => $dialogue->delete());
 
         $this->info('Dialogues successfully deleted.');
 

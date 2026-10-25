@@ -69,6 +69,30 @@ class HtmlCastTest extends TestCase
         );
     }
 
+    public function testClassKeepsOnlyEditorClasses(): void
+    {
+        // Утилиты Bootstrap в class накрывали страницу так же, как position: fixed в style
+        $comment = new Comment(['text' => '<div class="position-fixed top-0 start-0 w-100 h-100 z-3">'
+            . '<a class="stretched-link" href="https://evil.example/login">войти</a></div>'
+            . '<div class="hidden video-x">скрыто</div>'
+            . '<img class="image d-none" src="/uploads/a.png" alt="">'
+            . '<a class="user" href="/users/admin">@admin</a>'
+            . '<pre class="code"><code>x</code></pre>'
+            . '<details class="spoiler"><summary>s</summary></details>'
+            . '<table class="table position-absolute"><tbody><tr><td>1</td></tr></tbody></table>']);
+
+        $this->assertSame(
+            '<div><a href="https://evil.example/login">войти</a></div>'
+            . '<div class="hidden">скрыто</div>'
+            . '<img class="image" src="/uploads/a.png" alt />'
+            . '<a class="user" href="/users/admin">@admin</a>'
+            . '<pre class="code"><code>x</code></pre>'
+            . '<details class="spoiler"><summary>s</summary></details>'
+            . '<table class="table"><tbody><tr><td>1</td></tr></tbody></table>',
+            $comment->getAttributes()['text'],
+        );
+    }
+
     public function testIframeOnlyFromVideoHosts(): void
     {
         $video = '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen="true" frameborder="0" loading="lazy"></iframe>';

@@ -38,8 +38,10 @@ class HtmlRenderer
     protected static function hidden(string $html): string
     {
         if (str_contains($html, 'class="hidden"') && ! auth()->check()) {
+            // Вложенные div считаются рекурсией: ленивый .*? обрывался на первом </div>,
+            // и всё после вложенного блока видел гость. HTML после чистки сбалансирован
             $html = preg_replace(
-                '/<div class="hidden">.*?<\/div>/s',
+                '#<div class="hidden">(?<body>(?:[^<]++|<(?!/?div\b)|<div\b[^>]*>(?&body)</div>)*)</div>#s',
                 '<div class="hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
                 $html
             ) ?? '';

@@ -16,6 +16,7 @@
     "copied": "Скопійовано!",
     "request_failed": "Не вдалося виконати запит!",
     "file_upload_failed": "Помилка завантаження файлу:",
+    "request_too_large": "Файл більший, ніж приймає сервер",
     "file_delete_failed": "Помилка видалення файлу:",
     "buttons": {
         "ok": "OK",

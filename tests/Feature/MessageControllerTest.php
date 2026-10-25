@@ -104,6 +104,20 @@ class MessageControllerTest extends TestCase
         $this->assertDatabaseMissing('dialogues', ['user_id' => $this->user->id, 'author_id' => $this->recipient->id]);
     }
 
+    public function testDeleteDialogueWithSeveralMessages(): void
+    {
+        $this->user->sendMessage($this->recipient, 'Первое сообщение');
+        $this->recipient->sendMessage($this->user, 'Второе сообщение');
+        Dialogue::query()->where('user_id', $this->user->id)->update(['reading' => 1]);
+
+        $this->actingAs($this->user)
+            ->delete('/messages/delete/' . $this->recipient->id)
+            ->assertRedirect('messages?page=1')
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('dialogues', ['user_id' => $this->user->id, 'author_id' => $this->recipient->id]);
+    }
+
     public function testDeleteWithUnreadMessagesFails(): void
     {
         $this->user->sendMessage($this->recipient, 'Непрочитанное сообщение');

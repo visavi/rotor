@@ -15,7 +15,7 @@ $limits = __('main.attach_limit', [
 ]) . ': ' . implode(', ', $extensions);
 @endphp
 
-<input type="file" id="{{ $attachInputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+<input type="file" id="{{ $attachInputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" data-max-size="{{ setting('filesize') }}" data-max-size-message="{{ __('validator.size_max', ['size' => formatSize(setting('filesize'))]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
 
 @unless ($ownPicker)
     {{-- Ссылка сразу открывает выбор файлов, лимиты в подсказке --}}

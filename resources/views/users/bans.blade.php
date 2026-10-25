@@ -4,7 +4,7 @@
 
 @section('content')
     @if ($banhist)
-        <b><span style="color:#ff0000">{{ __('users.reason_ban') }}: {{ $banhist->getReason() }}</span></b><br><br>
+        <b class="text-danger">{{ __('users.reason_ban') }}: {{ $banhist->getReason() }}</b><br><br>
 
         @if (! $banhist->explain && setting('addbansend'))
             <div class="section-form mb-3 shadow">

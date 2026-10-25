@@ -39,15 +39,28 @@ export function ajax({ url, type = 'GET', data = null, dataType = 'json', before
     }
 
     fetch(target, options)
-        .then(res => dataType === 'json' ? res.json().then(body => ajaxValidation(res, body)) : res.text())
+        .then(res => dataType === 'json' ? ajaxJson(res) : res.text())
         .then(responseData => { if (success) success(responseData) })
         .catch(err => { if (error) error(null, err.message, err) })
         .finally(() => { if (complete) complete() })
 }
 
+/* Вместо json бывает страница ошибки nginx или PHP: 413 на большой файл, 502.
+ * Разбор падал с «Unexpected token '<'» — отказ уходит в error с кодом ответа */
+function ajaxJson(res) {
+    return res.json()
+        .catch(() => {
+            throw new Error(res.status === 413 ? __('request_too_large') : 'HTTP ' + res.status)
+        })
+        .then(body => ajaxValidation(res, body))
+}
+
 /* Ошибки FormRequest и $request->validate() приходят 422 с {message, errors}:
- * приводим к контракту {success, message} — по первой ошибке каждого поля */
+ * приводим к контракту {success, message} — по первой ошибке каждого поля.
+ * 413 от Laravel (post_max_size PHP) приходит json без success */
 function ajaxValidation(res, body) {
+    if (res.status === 413) return { success: false, message: __('request_too_large') }
+
     if (res.status !== 422 || !body?.errors) return body
 
     return { success: false, message: Object.values(body.errors).map(messages => messages[0]).join(' ') }

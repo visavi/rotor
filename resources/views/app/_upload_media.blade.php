@@ -33,7 +33,7 @@ $accept = \App\Services\FileService::accept($model->getMorphClass());
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" @if ($accept) accept="{{ $accept }}" @endif multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input id="file" type="file" name="file" @if ($accept) accept="{{ $accept }}" @endif multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" data-max-size="{{ setting('filesize') }}" data-max-size-message="{{ __('validator.size_max', ['size' => formatSize(setting('filesize'))]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>

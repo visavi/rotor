@@ -5,7 +5,7 @@
         @if (isAdmin())
                 <li><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             @if (statsSpam() > 0)
-                    <li><a href="{{ route('admin.spam.index') }}"><span style="color:#ff0000">{{ __('index.complains') }}</span></a></li>
+                    <li><a href="{{ route('admin.spam.index') }}" class="text-danger">{{ __('index.complains') }}</a></li>
             @endif
 
         @endif

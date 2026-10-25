@@ -8,10 +8,12 @@ use App\Models\Sticker;
 use App\Models\User;
 use App\Services\ComplaintService;
 use App\Services\FileService;
+use App\Services\OgImageService;
 use App\Services\RatingService;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -66,9 +68,10 @@ class AjaxController extends Controller
     public function uploadFile(Request $request, FileService $uploader): JsonResponse
     {
         $type = $request->input('type');
+        $file = $request->file('file');
 
         $result = $uploader->upload(
-            $request->file('file'),
+            $file instanceof UploadedFile ? $file : null,
             is_string($type) ? $type : '',
             $request->integer('id'),
         );
@@ -158,30 +161,13 @@ class AjaxController extends Controller
     /**
      * Резолв прямой ссылки на картинку через og:image
      */
-    public function resolveImage(Request $request): JsonResponse
+    public function resolveImage(Request $request, OgImageService $ogImage): JsonResponse
     {
         $url = $request->input('url');
         $url = is_string($url) ? filter_var($url, FILTER_VALIDATE_URL) : false;
 
-        // FILTER_VALIDATE_URL пропускает file:// и php://: страница читала бы файлы сервера
-        if (! $url || ! in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true)) {
-            return response()->json(['image' => null]);
-        }
-
-        $ctx = stream_context_create(['http' => [
-            'timeout'         => 5,
-            'follow_location' => true,
-            'user_agent'      => 'Mozilla/5.0',
-        ]]);
-
-        // og:image стоит в <head>: начала страницы хватает, большой ответ не съест память
-        $html = @file_get_contents($url, false, $ctx, 0, 512 * 1024);
-
-        if ($html && preg_match('/<meta[^>]+property=["\']og:image["\'][^>]+content=["\'](https?:[^"\']+)["\']/i', $html, $m)) {
-            return response()->json(['image' => $m[1]]);
-        }
-
-        return response()->json(['image' => null]);
+        // Схему, порт и адрес проверяет сервис: file:// и php:// читали бы файлы сервера
+        return response()->json(['image' => $url ? $ogImage->find($url) : null]);
     }
 
     /**

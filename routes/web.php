@@ -64,7 +64,8 @@ Route::controller(AjaxController::class)
     ->prefix('ajax')
     ->group(function () {
         Route::get('/getstickers', 'getStickers');
-        Route::get('/resolve-image', 'resolveImage');
+        // Каждый вызов — запрос с сервера наружу
+        Route::get('/resolve-image', 'resolveImage')->middleware('throttle:30,1');
         Route::post('/rating', 'rating');
         Route::post('/complaint', 'complaint');
         Route::post('/file/upload', 'uploadFile');
