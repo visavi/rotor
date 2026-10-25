@@ -55,6 +55,24 @@ class AccountControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testArrayFieldsFailValidation(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/accounts/changemail', ['email' => ['new-account@example.com'], 'password' => ['secret123']])
+            ->assertSessionHasErrors(['email', 'password']);
+
+        $this->actingAs($this->user)
+            ->post('/accounts/editpassword', [
+                'old_password'     => ['secret123'],
+                'new_password'     => ['new_secret'],
+                'confirm_password' => ['new_secret'],
+            ])
+            ->assertSessionHasErrors(['old_password', 'new_password']);
+
+        $this->assertDatabaseCount('email_changes', 0);
+        $this->assertTrue(Hash::check('secret123', (string) $this->user->fresh()?->password));
+    }
+
     public function testChangeMailWithWrongPasswordFails(): void
     {
         $response = $this->actingAs($this->user)
@@ -305,7 +323,7 @@ class AccountControllerTest extends TestCase
             ->assertRedirect('settings#tab-account')
             ->assertSessionHasErrors(['new_password' => __('users.login_different')]);
 
-        $this->assertTrue(Hash::check('secret123', $this->user->fresh()->password));
+        $this->assertTrue(Hash::check('secret123', (string) $this->user->fresh()?->password));
     }
 
     public function testEditPasswordWithWrongOldPasswordFails(): void
@@ -318,7 +336,7 @@ class AccountControllerTest extends TestCase
             ])
             ->assertSessionHasErrors(['old_password' => __('users.password_not_different')]);
 
-        $this->assertTrue(Hash::check('secret123', $this->user->fresh()->password));
+        $this->assertTrue(Hash::check('secret123', (string) $this->user->fresh()?->password));
     }
 
     public function testEditPassword(): void

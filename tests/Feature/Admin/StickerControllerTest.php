@@ -280,6 +280,19 @@ class StickerControllerTest extends TestCase
         $this->assertFileExists(public_path($sticker->name));
     }
 
+    public function testCreateStickerWithArrayCodeFails(): void
+    {
+        $category = $this->makeCategory();
+
+        $this->actingAs($this->admin)
+            ->post('/admin/stickers/sticker/create', [
+                'cid'     => $category->id,
+                'code'    => ['NewSticker'],
+                'sticker' => UploadedFile::fake()->image('sticker.png', 32, 32),
+            ])
+            ->assertSessionHasErrors('code');
+    }
+
     public function testCreateStickerWithoutFileFails(): void
     {
         $category = $this->makeCategory();

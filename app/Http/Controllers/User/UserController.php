@@ -111,12 +111,14 @@ class UserController extends Controller
                 ->withErrors(['protect' => __('validator.captcha')]);
         }
 
-        $login = $request->string('login')->lower()->value();
+        $login = $request->input('login');
+        $password = $request->input('password');
+        $login = is_string($login) ? mb_strtolower($login) : '';
         $field = str_contains($login, '@') ? 'email' : 'login';
 
         $credentials = [
             $field     => $login,
-            'password' => $request->string('password')->value(),
+            'password' => is_string($password) ? $password : '',
         ];
 
         try {

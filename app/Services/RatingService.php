@@ -29,9 +29,11 @@ class RatingService
      * выбирает вызывающий — сайту нужен перерисованный блок, API — числа.
      * У отказа есть HTTP-статус: клиенту API по нему видно, что случилось
      *
+     * Тип и голос — как пришли в запросе: проверяются здесь, массив из ?type[]= даёт отказ
+     *
      * @return array{success: false, status: int, message: string}|array{success: true, cancel: bool, post: Model, vote: string|null}
      */
-    public function vote(User $user, ?string $type, int $id, ?string $vote): array
+    public function vote(User $user, mixed $type, int $id, mixed $vote): array
     {
         if (! in_array($type, self::types(), true) || ! in_array($vote, ['+', '-'], true)) {
             return ['success' => false, 'status' => 422, 'message' => __('main.vote_invalid')];

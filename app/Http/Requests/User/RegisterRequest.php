@@ -81,9 +81,11 @@ class RegisterRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $email = $this->input('email');
+
         $this->merge([
-            // При скрытом поле присланный адрес игнорируем — его легко подсунуть запросом
-            'email' => UserService::isEmailHidden() ? null : ($this->filled('email') ? $this->string('email')->lower()->value() : null),
+            // При скрытом поле присланный адрес игнорируем — его легко подсунуть запросом; не строку отклонит правило
+            'email' => UserService::isEmailHidden() ? null : (is_string($email) ? mb_strtolower($email) : $email),
             // Приложение повтор пароля не присылает
             'password2' => $this->input('password2', $this->input('password')),
         ]);

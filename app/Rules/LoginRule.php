@@ -18,7 +18,7 @@ class LoginRule implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $login = (string) $value;
+        $login = is_scalar($value) ? (string) $value : '';
 
         if (! preg_match('/^[a-z0-9\-]+$/i', $login)) {
             $fail(__('validator.login'));

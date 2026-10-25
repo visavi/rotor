@@ -352,6 +352,16 @@ class UserControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testEditProfileArrayFieldsFailValidation(): void
+    {
+        $this->actingAs($this->makeUser())->post('/profile', [
+            'phone'   => ['89001234567'],
+            'country' => ['Россия'],
+            'city'    => ['Москва'],
+            'gender'  => User::MALE,
+        ])->assertSessionHasErrors(['phone', 'country', 'city']);
+    }
+
     public function testProfileFieldsAreEscaped(): void
     {
         $user = $this->makeUser();
@@ -491,7 +501,7 @@ class UserControllerTest extends TestCase
             'language' => setting('language'),
         ])->assertSessionHasNoErrors();
 
-        $this->assertSame(14, (int) $user->fresh()->timezone);
+        $this->assertSame(14, (int) $user->fresh()?->timezone);
     }
 
     public function testSettingsFormOffersEasternmostTimezone(): void
@@ -534,7 +544,7 @@ class UserControllerTest extends TestCase
             Registry::$onSettingsValidate = $handlers;
         }
 
-        $this->assertNotSame(5, (int) $user->fresh()->timezone);
+        $this->assertNotSame(5, (int) $user->fresh()?->timezone);
     }
 
     public function testEditSettingsWithUnknownThemeFails(): void
@@ -581,7 +591,16 @@ class UserControllerTest extends TestCase
 
         $this->get('/confirm/oldconfirmtoken')->assertNotFound();
 
-        $this->assertSame(User::MODER, $user->fresh()->level);
+        $this->assertSame(User::MODER, $user->fresh()?->level);
+    }
+
+    public function testVerifyWithArrayEmailFails(): void
+    {
+        $this->overrideSetting('email_mode', UserService::EMAIL_CONFIRM);
+
+        $this->actingAs($this->makeUser(['level' => User::PENDED]))
+            ->post('/verify', ['email' => ['confirmed@example.com']])
+            ->assertSessionHasErrors('email');
     }
 
     public function testVerifyResendsConfirmation(): void

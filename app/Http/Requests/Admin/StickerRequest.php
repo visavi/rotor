@@ -60,6 +60,11 @@ class StickerRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $this->merge(['code' => $this->string('code')->lower()->value()]);
+        $code = $this->input('code');
+
+        // Не строку (?code[]=) отклонит правило
+        if (is_string($code)) {
+            $this->merge(['code' => mb_strtolower($code)]);
+        }
     }
 }

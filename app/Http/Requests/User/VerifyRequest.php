@@ -39,6 +39,10 @@ class VerifyRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Приложение может не присылать адрес — письмо уходит на текущий
-        $this->merge(['email' => $this->string('email', auth()->user()?->email)->lower()->value()]);
+        $email = $this->input('email', auth()->user()?->email);
+
+        if (is_string($email)) {
+            $this->merge(['email' => mb_strtolower($email)]);
+        }
     }
 }

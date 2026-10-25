@@ -25,6 +25,11 @@ readonly class NotBlacklistedRule implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        // Не строку отклоняют правила формата поля
+        if (! is_scalar($value)) {
+            return;
+        }
+
         $value = strtolower((string) $value);
 
         if ($this->type === 'domain') {

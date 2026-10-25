@@ -68,6 +68,17 @@ class MessageControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    public function testArrayFieldsDoNotCrash(): void
+    {
+        $this->actingAs($this->user)
+            ->post('/messages/send?user[]=recipient', ['msg' => 'Есть кто-нибудь?'])
+            ->assertNotFound();
+
+        $this->actingAs($this->user)
+            ->post('/messages/send?user=recipient', ['msg' => ['Привет, как дела?']])
+            ->assertSessionHasErrors('msg');
+    }
+
     public function testCaptchaIsRequiredWithLowActivity(): void
     {
         $this->overrideSetting('captcha_type', 'graphical');

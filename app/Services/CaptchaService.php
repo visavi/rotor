@@ -90,10 +90,10 @@ class CaptchaService
             return captchaVerify();
         }
 
-        $key = $request->string('captcha_key')->value();
-        $code = $request->string('protect')->value();
+        $key = $request->input('captcha_key');
+        $code = $request->input('protect');
 
-        if ($key === '' || $code === '') {
+        if (! is_string($key) || ! is_string($code) || $key === '' || $code === '') {
             return false;
         }
 

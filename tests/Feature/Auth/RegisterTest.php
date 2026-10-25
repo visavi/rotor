@@ -57,6 +57,14 @@ class RegisterTest extends TestCase
         $this->assertSame(1, $user->getCountMessages());
     }
 
+    public function testArrayFieldsFailValidation(): void
+    {
+        $this->register(['email' => ['newuser@example.com'], 'login' => ['newuser'], 'protect' => ['abc12']])
+            ->assertSessionHasErrors(['email', 'login', 'protect']);
+
+        $this->assertGuest();
+    }
+
     public function testRegisterDisabledByOpenreg(): void
     {
         $this->overrideSetting('openreg', 0);

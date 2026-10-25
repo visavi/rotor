@@ -23,6 +23,12 @@ readonly class TextLengthRule implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        if (! is_scalar($value)) {
+            $fail(__('validator.text'));
+
+            return;
+        }
+
         $length = mb_strlen(strip_tags((string) $value), 'utf-8');
 
         if ($length < $this->min) {

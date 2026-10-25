@@ -660,8 +660,9 @@ function captchaVerify(): bool
 
     if (in_array(setting('captcha_type'), ['graphical', 'animated'], true)) {
         $sessionCode = (string) $request->session()->pull('protect');
+        $code = $request->input('protect');
 
-        return $sessionCode !== '' && strtolower($request->string('protect')->value()) === strtolower($sessionCode);
+        return $sessionCode !== '' && is_string($code) && strtolower($code) === strtolower($sessionCode);
     }
 
     return true;
@@ -890,9 +891,13 @@ function getUserByLogin(mixed $login): ?User
 /**
  * Возвращает объект пользователя по логину или email
  */
-function getUserByLoginOrEmail(?string $login): ?User
+function getUserByLoginOrEmail(mixed $login): ?User
 {
-    $field = strpos((string) $login, '@') ? 'email' : 'login';
+    if (! is_string($login)) {
+        return null;
+    }
+
+    $field = strpos($login, '@') ? 'email' : 'login';
 
     return User::query()->where($field, $login)->first();
 }

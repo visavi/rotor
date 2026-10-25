@@ -66,7 +66,6 @@ Route::controller(AjaxController::class)
         Route::get('/getstickers', 'getStickers');
         Route::get('/resolve-image', 'resolveImage');
         Route::post('/rating', 'rating');
-        Route::post('/vote', 'vote');
         Route::post('/complaint', 'complaint');
         Route::post('/file/upload', 'uploadFile');
         Route::post('/file/delete', 'deleteFile');

@@ -57,7 +57,7 @@ class MessageRequest extends FormRequest
      */
     public function recipient(): ?User
     {
-        return $this->recipient ??= getUserByLogin($this->string('user')->value());
+        return $this->recipient ??= getUserByLogin($this->input('user'));
     }
 
     protected function getRedirectUrl(): string

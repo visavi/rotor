@@ -38,9 +38,15 @@ class PasswordRequest extends FormRequest
         return [
             function (Validator $validator): void {
                 $user = auth()->user() ?? abort(403);
-                $new = $this->string('new_password')->value();
+                $old = $this->input('old_password');
+                $new = $this->input('new_password');
 
-                if ($this->filled('old_password') && ! Hash::check($this->string('old_password')->value(), $user->password)) {
+                // Хук идёт и после проваленных правил: массив из ?new_password[]= уже отклонён
+                if (! is_string($new)) {
+                    $new = '';
+                }
+
+                if (is_string($old) && ! Hash::check($old, $user->password)) {
                     $validator->errors()->add('old_password', __('users.password_not_different'));
                 }
 

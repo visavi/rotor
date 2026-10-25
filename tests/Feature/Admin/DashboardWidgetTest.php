@@ -223,6 +223,16 @@ class DashboardWidgetTest extends TestCase
         $this->assertStringContainsString('-errors', $value);
     }
 
+    public function testArrayOrderKeepsDefaultOrder(): void
+    {
+        $this->actingAs($this->admin)
+            ->post(route('admin.widgets.update'), [
+                'widgets' => ['comments', 'registrations'],
+                'order'   => ['registrations', 'comments'],
+            ])
+            ->assertRedirect(route('admin.widgets.index'));
+    }
+
     public function testWidgetSettingsPageIgnoresUnknownKeys(): void
     {
         $this->actingAs($this->admin)
@@ -377,8 +387,13 @@ class DashboardWidgetTest extends TestCase
      */
     private function widget(string $label): array
     {
-        return collect(app(DashboardService::class)->widgets())
-            ->keyBy('label')[$label];
+        $widget = collect(app(DashboardService::class)->widgets())
+            ->keyBy('label')
+            ->get($label);
+
+        $this->assertIsArray($widget);
+
+        return $widget;
     }
 
     private function makeComment(CarbonImmutable|Carbon $date): void

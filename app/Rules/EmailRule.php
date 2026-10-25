@@ -11,6 +11,12 @@ class EmailRule implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        if (! is_scalar($value)) {
+            $fail(__('validator.email'));
+
+            return;
+        }
+
         $validator = new EmailValidator();
         $checkEmail = $validator->isValid((string) $value, new RFCValidation());
 

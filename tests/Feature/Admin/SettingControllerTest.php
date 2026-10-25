@@ -62,6 +62,24 @@ class SettingControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testSaveArraySettingFails(): void
+    {
+        $title = setting('title');
+
+        $this->actingAs($this->boss)
+            ->post('/admin/settings?act=mains', [
+                'sets' => ['title' => ['Новое название сайта']],
+            ])
+            ->assertSessionHasErrors('sets.title');
+
+        $this->assertDatabaseHas('settings', ['name' => 'title', 'value' => $title]);
+
+        // Список вместо имён: name = 0 строгий MySQL не сравнивает со строкой
+        $this->actingAs($this->boss)
+            ->post('/admin/settings?act=mains', ['sets' => ['первый', 'второй']])
+            ->assertRedirect('admin/settings?act=mains');
+    }
+
     public function testSaveSettingsAppliesMultiplier(): void
     {
         $this->actingAs($this->boss)

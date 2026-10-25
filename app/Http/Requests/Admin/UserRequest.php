@@ -23,6 +23,7 @@ class UserRequest extends FormRequest
             'password' => ['nullable', 'string', 'between:6,20'],
             // Администратор чёрные списки не проверяет
             'email'  => UserRules::email(UserService::isEmailRequired(), $this->targetUser()?->id, blacklist: false),
+            'name'   => ['nullable', 'string'],
             'status' => ['nullable', 'string', 'between:3,25'],
             'themes' => ['nullable', Rule::in(getAvailableThemes())],
             // Счётчики — столбцы int: отрицательное и сверх диапазона отсекаются до записи
@@ -68,7 +69,7 @@ class UserRequest extends FormRequest
      */
     public function targetUser(): ?User
     {
-        return $this->targetUser ??= getUserByLogin($this->string('user')->value());
+        return $this->targetUser ??= getUserByLogin($this->input('user'));
     }
 
     /**

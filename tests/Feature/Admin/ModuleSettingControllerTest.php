@@ -22,6 +22,8 @@ class ModuleSettingControllerTest extends TestCase
         Route::middleware(['web', 'check.admin'])->group(static function () {
             Route::get('/admin/fixture-settings', static fn () => '')->name('fixture.settings');
             Route::post('/admin/fixture-settings', [FixtureSettingController::class, 'update']);
+            Route::get('/admin/fixture-open-settings', static fn () => '')->name('fixture.open-settings');
+            Route::post('/admin/fixture-open-settings', [FixtureOpenSettingController::class, 'update']);
         });
 
         // Имена маршрутов, добавленных после загрузки приложения, нужно пересобрать
@@ -47,6 +49,25 @@ class ModuleSettingControllerTest extends TestCase
             ->assertSessionHasNoErrors();
 
         $this->assertSame('100000', Setting::query()->where('name', 'fixture_number')->value('value'));
+    }
+
+    public function testArrayValueFails(): void
+    {
+        $this->actingAs(User::factory()->boss()->create())
+            ->post('/admin/fixture-open-settings', ['sets' => ['fixture_text' => ['текст']]])
+            ->assertSessionHasErrors('sets.fixture_text');
+
+        $this->assertNull(Setting::query()->where('name', 'fixture_text')->value('value'));
+    }
+
+    public function testListIsNotSavedAsSettings(): void
+    {
+        // sets[]=x — ключи 0, 1: без пропуска появились бы настройки «0» и «1»
+        $this->actingAs(User::factory()->boss()->create())
+            ->post('/admin/fixture-open-settings', ['sets' => ['первый', 'второй']])
+            ->assertRedirect(route('fixture.open-settings'));
+
+        $this->assertNull(Setting::query()->where('name', '0')->value('value'));
     }
 
     public function testOnlyDeclaredKeysAreSaved(): void
@@ -76,4 +97,14 @@ class FixtureSettingController extends ModuleSettingController
             'sets.fixture_number' => 'nullable|integer|min:1',
         ];
     }
+}
+
+/**
+ * Контроллер настроек модуля без своих правил: сохраняет все поля формы
+ */
+class FixtureOpenSettingController extends ModuleSettingController
+{
+    protected string $view = 'admin/settings/layout';
+
+    protected string $route = 'fixture.open-settings';
 }

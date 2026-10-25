@@ -61,6 +61,27 @@ class ArchitectureTest extends TestCase
         );
     }
 
+    public function testRouteActionsExist(): void
+    {
+        $found = [];
+
+        foreach (Route::getRoutes()->getRoutes() as $route) {
+            $uses = $route->getAction('uses');
+
+            if (! is_string($uses) || ! str_contains($uses, '@')) {
+                continue;
+            }
+
+            [$class, $method] = explode('@', $uses, 2);
+
+            if (! method_exists($class, $method)) {
+                $found[] = $route->uri() . ' → ' . $uses;
+            }
+        }
+
+        $this->assertSame([], $found, 'Маршрут ведёт на метод, которого нет в контроллере: любой запрос по нему отдаёт 500. Удалите маршрут или добавьте метод');
+    }
+
     public function testCurrentUserDoesNotShadowRouteParameter(): void
     {
         $found = [];

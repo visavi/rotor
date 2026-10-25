@@ -9,7 +9,7 @@ class PhoneRule implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! preg_match('#^\+?\d{8,13}$#', $value)) {
+        if (! is_scalar($value) || ! preg_match('#^\+?\d{8,13}$#', (string) $value)) {
             $fail(__('validator.phone'));
         }
     }

@@ -493,6 +493,10 @@ class HelperTest extends TestCase
 
         request()->merge(['protect' => 'wrong']);
         self::assertFalse(captchaVerify());
+
+        session(['protect' => 'AbC12']);
+        request()->merge(['protect' => ['abc12']]);
+        self::assertFalse(captchaVerify());
     }
 
     public function testSetFlash(): void
@@ -634,6 +638,7 @@ class HelperTest extends TestCase
         self::assertTrue($user->is(getUserByLoginOrEmail($user->login)));
         self::assertTrue($user->is(getUserByLoginOrEmail($user->email)));
         self::assertNull(getUserByLoginOrEmail('missing_login'));
+        self::assertNull(getUserByLoginOrEmail(['missing_login']));
     }
 
     public function testGetUserGuest(): void

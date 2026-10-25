@@ -42,7 +42,9 @@ class EmailChangeRequest extends FormRequest
                     $validator->errors()->add('email', __('users.email_different'));
                 }
 
-                if ($this->filled('password') && ! Hash::check($this->string('password')->value(), $user->password)) {
+                $password = $this->input('password');
+
+                if (is_string($password) && ! Hash::check($password, $user->password)) {
                     $validator->errors()->add('password', __('users.password_not_different'));
                 }
 
@@ -55,6 +57,11 @@ class EmailChangeRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge(['email' => $this->string('email')->lower()->value()]);
+        $email = $this->input('email');
+
+        // Не строку (?email[]=) отклонит правило
+        if (is_string($email)) {
+            $this->merge(['email' => mb_strtolower($email)]);
+        }
     }
 }

@@ -61,7 +61,10 @@ final class UserRules
      */
     public static function profile(): array
     {
+        // Длину страны и города не проверяем: лишнее обрезается при сохранении
         return [
+            'country'  => ['nullable', 'string'],
+            'city'     => ['nullable', 'string'],
             'phone'    => ['nullable', new PhoneRule()],
             'site'     => ['nullable', 'string', 'max:50', 'url:http,https'],
             'birthday' => ['nullable', 'date_format:d.m.Y'],
@@ -106,9 +109,11 @@ final class UserRules
 
     /**
      * Телефон хранится цифрами с необязательным +
+     *
+     * Не строку (null, ?phone[]=) оставляет как есть — её разберёт валидация
      */
-    public static function normalizePhone(?string $phone): ?string
+    public static function normalizePhone(mixed $phone): mixed
     {
-        return $phone === null ? null : preg_replace('/[^\d+]/', '', $phone);
+        return is_string($phone) ? preg_replace('/[^\d+]/', '', $phone) : $phone;
     }
 }

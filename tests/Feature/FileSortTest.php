@@ -40,6 +40,19 @@ class FileSortTest extends TestCase
         $this->assertSame([$third->id, $first->id, $second->id], $comment->files()->pluck('id')->all());
     }
 
+    public function testArrayFieldsAreRejected(): void
+    {
+        $this->actingAs($this->author)
+            ->postJson('/ajax/file/sort?type[]=' . Comment::$morphName, ['sort' => '1,2'])
+            ->assertStatus(422);
+        $this->actingAs($this->author)
+            ->postJson('/ajax/file/sort?type=' . Comment::$morphName, ['sort' => ['1', '2']])
+            ->assertJsonPath('success', false);
+        $this->actingAs($this->author)
+            ->postJson('/ajax/file/delete', ['type' => [Comment::$morphName], 'id' => 1])
+            ->assertStatus(422);
+    }
+
     public function testFilesWithoutManualOrderKeepUploadOrder(): void
     {
         $comment = $this->createComment();
@@ -72,8 +85,8 @@ class FileSortTest extends TestCase
             'sort' => $second->id . ',' . $first->id,
         ])->assertJsonPath('success', false);
 
-        $this->assertSame(1, $first->fresh()->sort);
-        $this->assertSame(1, $second->fresh()->sort);
+        $this->assertSame(1, $first->fresh()?->sort);
+        $this->assertSame(1, $second->fresh()?->sort);
     }
 
     /**

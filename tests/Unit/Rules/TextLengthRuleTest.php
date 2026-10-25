@@ -43,4 +43,9 @@ class TextLengthRuleTest extends TestCase
     {
         self::assertSame([], $this->errors(12345, 5, 5));
     }
+
+    public function testFailsOnArray(): void
+    {
+        self::assertSame([__('validator.text')], $this->errors(['test'], 0, 10));
+    }
 }

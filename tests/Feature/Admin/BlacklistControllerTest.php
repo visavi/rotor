@@ -68,6 +68,15 @@ class BlacklistControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testAddArrayValueFails(): void
+    {
+        $this->actingAs($this->admin)
+            ->post('/admin/blacklists?type=domain', ['value' => ['example.com']])
+            ->assertSessionHasErrors('value');
+
+        $this->assertDatabaseMissing('blacklist', ['value' => 'example.com']);
+    }
+
     public function testAddInvalidEmailFails(): void
     {
         $response = $this->actingAs($this->admin)

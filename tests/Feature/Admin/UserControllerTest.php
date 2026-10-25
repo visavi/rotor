@@ -141,6 +141,27 @@ class UserControllerTest extends TestCase
         $this->assertSame($money, $user->fresh()?->money);
     }
 
+    public function testEditUserArrayFieldsFailValidation(): void
+    {
+        $user = $this->makeUser();
+
+        $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user=' . $user->login, [
+                'level'   => User::USER,
+                'email'   => $user->email,
+                'name'    => ['Имя'],
+                'country' => ['Россия'],
+                'city'    => ['Москва'],
+                'phone'   => ['89001234567'],
+                'themes'  => '',
+            ])
+            ->assertSessionHasErrors(['name', 'country', 'city', 'phone']);
+
+        $this->actingAs($this->boss)
+            ->post('/admin/users/edit?user[]=' . $user->login, ['level' => User::USER])
+            ->assertRedirect();
+    }
+
     public function testEditUserWithInvalidEmailFails(): void
     {
         $user = $this->makeUser();

@@ -50,6 +50,16 @@ class LoginTest extends TestCase
         $this->assertAuthenticatedAs($this->user);
     }
 
+    public function testArrayCredentialsAreRejected(): void
+    {
+        $this->post('/login', ['login' => ['testuser'], 'password' => 'password'])
+            ->assertRedirect('/login');
+        $this->post('/login', ['login' => 'testuser', 'password' => ['password']])
+            ->assertRedirect('/login');
+
+        $this->assertGuest();
+    }
+
     public function testLoginWithWrongPassword(): void
     {
         $response = $this->post('/login', [

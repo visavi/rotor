@@ -56,7 +56,14 @@ class BlacklistRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $value = $this->string('value')->lower()->value();
+        $value = $this->input('value');
+
+        // Не строку (?value[]=) отклонит правило
+        if (! is_string($value)) {
+            return;
+        }
+
+        $value = mb_strtolower($value);
 
         if ($this->type() === 'domain') {
             if (! preg_match('#^https?://#i', $value)) {

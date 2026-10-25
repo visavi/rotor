@@ -70,7 +70,8 @@ abstract class ModuleSettingController extends AdminController
         // Правило модуля для ключа заменяет общее sets.*, поэтому длина добавляется
         // к каждому замыканием: max:255 у числового поля сравнивал бы значение, а не длину
         $length = static function (string $attribute, mixed $value, Closure $fail): void {
-            if (is_scalar($value) && mb_strlen((string) $value) > 255) {
+            // Массив (sets[имя][]=) в строковую колонку не запишется
+            if (is_array($value) || (is_scalar($value) && mb_strlen((string) $value) > 255)) {
                 $fail(__('validator.text'));
             }
         };
@@ -97,6 +98,11 @@ abstract class ModuleSettingController extends AdminController
         }
 
         foreach ($sets as $name => $value) {
+            // Список (sets[]=) — не имена настроек: иначе появилась бы настройка «0»
+            if (is_int($name)) {
+                continue;
+            }
+
             // Пустое поле приходит null, а колонка value NOT NULL
             Setting::query()->updateOrCreate(['name' => $name], ['value' => (string) $value]);
         }

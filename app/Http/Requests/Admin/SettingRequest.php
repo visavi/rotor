@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Admin;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -22,11 +23,19 @@ class SettingRequest extends FormRequest
             'mods.*' => ['numeric'],
         ];
 
+        // Массив (sets[name][]=) max:255 пропустил бы: у массива он считает элементы
+        $scalar = static function (string $attribute, mixed $value, Closure $fail): void {
+            if (is_array($value)) {
+                $fail(__('validator.text'));
+            }
+        };
+
         // С numeric правило max сравнивало бы само число, а не длину строки:
         // поле с множителем проверяется только как число, остальные — по длине колонки
         foreach (array_keys((array) $this->input('sets')) as $name) {
             $rules['sets.' . $name] = [
                 $this->input('opt.' . $name) ? 'nullable' : 'required',
+                $scalar,
                 $this->filled('mods.' . $name) ? 'numeric' : 'max:255',
             ];
         }
@@ -54,7 +63,9 @@ class SettingRequest extends FormRequest
     {
         $mods = (array) $this->input('mods');
 
+        // Список (sets[]=) — не имена настроек: name = 0 строгий MySQL не сравнит со строкой
         return collect((array) $this->validated('sets'))
+            ->filter(static fn (mixed $value, int|string $name): bool => is_string($name))
             ->map(static fn (mixed $value, int|string $name) => (string) (isset($mods[$name]) ? $value * $mods[$name] : $value))
             ->all();
     }

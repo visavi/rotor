@@ -47,7 +47,7 @@ class AjaxRatingTest extends TestCase
         $html = $response->json('html');
         $this->assertStringContainsString('post-rating-up active', $html);
         $this->assertStringContainsString('rating-value', $html);
-        $this->assertSame(1, $comment->fresh()->rating);
+        $this->assertSame(1, $comment->fresh()?->rating);
     }
 
     public function testRepeatedVoteIsRejectedWithReason(): void
@@ -62,7 +62,7 @@ class AjaxRatingTest extends TestCase
         // Повторный голос в ту же сторону не проходит — с пояснением, а не молча
         $response->assertJsonPath('success', false);
         $response->assertJsonPath('message', __('main.vote_repeat'));
-        $this->assertSame(1, $comment->fresh()->rating);
+        $this->assertSame(1, $comment->fresh()?->rating);
     }
 
     public function testOppositeVoteCancelsPrevious(): void
@@ -76,7 +76,7 @@ class AjaxRatingTest extends TestCase
 
         $response->assertJsonPath('success', true);
         $this->assertStringNotContainsString(' active', $response->json('html'));
-        $this->assertSame(0, $comment->fresh()->rating);
+        $this->assertSame(0, $comment->fresh()?->rating);
     }
 
     public function testOwnRecordIsNotVotable(): void
@@ -89,7 +89,7 @@ class AjaxRatingTest extends TestCase
             'vote' => '+',
         ])->assertJsonPath('success', false);
 
-        $this->assertSame(0, $comment->fresh()->rating);
+        $this->assertSame(0, $comment->fresh()?->rating);
     }
 
     public function testComplaintIsAccepted(): void
@@ -110,6 +110,21 @@ class AjaxRatingTest extends TestCase
         $response->assertJsonPath('success', true);
         $response->assertJsonPath('message', __('ajax.complaint_success_sent'));
         $this->assertSame(1, Spam::query()->count());
+    }
+
+    public function testArrayFieldsAreRejected(): void
+    {
+        $comment = $this->createComment();
+
+        $this->actingAs($this->voter)
+            ->postJson('/ajax/rating', ['type' => [Comment::$morphName], 'id' => $comment->id, 'vote' => '+'])
+            ->assertStatus(422);
+        $this->actingAs($this->voter)
+            ->postJson('/ajax/rating', ['type' => Comment::$morphName, 'id' => $comment->id, 'vote' => ['+']])
+            ->assertStatus(422);
+        $this->actingAs($this->voter)
+            ->postJson('/ajax/complaint', ['type' => [Comment::$morphName], 'id' => $comment->id])
+            ->assertNotFound();
     }
 
     private function createComment(): Comment

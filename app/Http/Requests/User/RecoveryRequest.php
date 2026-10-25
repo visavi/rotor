@@ -85,6 +85,6 @@ class RecoveryRequest extends FormRequest
      */
     private function findUser(): ?User
     {
-        return $this->recoveryUser ??= getUserByLoginOrEmail($this->string('user')->value());
+        return $this->recoveryUser ??= getUserByLoginOrEmail($this->input('user'));
     }
 }

@@ -107,6 +107,23 @@ class AuthTest extends TestCase
             ->assertJsonValidationErrors('protect');
     }
 
+    public function testArrayCaptchaIsRejected(): void
+    {
+        $payload = $this->payload();
+        $payload['protect'] = [$payload['protect']];
+
+        $this->postJson('/api/register', $payload)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('protect');
+
+        $payload = $this->payload();
+        $payload['captcha_key'] = [$payload['captcha_key']];
+
+        $this->postJson('/api/register', $payload)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('protect');
+    }
+
     public function testCaptchaKeyIsSingleUse(): void
     {
         $payload = $this->payload();

@@ -23,8 +23,10 @@ class AjaxController extends Controller
      */
     public function complaint(Request $request, ComplaintService $complaint): JsonResponse
     {
+        $type = $request->input('type');
+
         $result = $complaint->create(
-            $request->string('type')->value(),
+            is_string($type) ? $type : '',
             $request->integer('id'),
             $request->input('page'),
         );
@@ -63,9 +65,11 @@ class AjaxController extends Controller
      */
     public function uploadFile(Request $request, FileService $uploader): JsonResponse
     {
+        $type = $request->input('type');
+
         $result = $uploader->upload(
             $request->file('file'),
-            $request->string('type')->value(),
+            is_string($type) ? $type : '',
             $request->integer('id'),
         );
 
@@ -101,9 +105,11 @@ class AjaxController extends Controller
      */
     public function deleteFile(Request $request, FileService $uploader): JsonResponse
     {
+        $type = $request->input('type');
+
         $result = $uploader->remove(
             $request->integer('id'),
-            $request->string('type')->value(),
+            is_string($type) ? $type : '',
         );
 
         return $this->serviceResponse($result);
@@ -114,9 +120,12 @@ class AjaxController extends Controller
      */
     public function sortFiles(Request $request, FileService $uploader): JsonResponse
     {
+        $sort = $request->input('sort');
+        $type = $request->input('type');
+
         $result = $uploader->sort(
-            array_map(int(...), explode(',', $request->string('sort')->value())),
-            $request->string('type')->value(),
+            array_map(int(...), explode(',', is_string($sort) ? $sort : '')),
+            is_string($type) ? $type : '',
         );
 
         return $this->serviceResponse($result);
