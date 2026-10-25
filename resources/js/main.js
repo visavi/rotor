@@ -400,7 +400,7 @@ window.postJump = function () {
 }
 
 /* Сворачивание/разворачивание */
-window.toggleComment = function (id) {
+function toggleComment(id) {
     const body = document.getElementById('comment-body-' + id)
     const expandLabel = document.getElementById('comment-expand-' + id)
     const ctrl = document.getElementById('comment-ctrl-' + id)
@@ -434,7 +434,7 @@ async function ensureEditor(textarea) {
 }
 
 /* Открыть форму ответа под комментарием */
-window.openReplyForm = function (id, callback) {
+function openReplyForm(id, callback) {
     document.querySelectorAll('.reply-form').forEach(function (f) {
         f.classList.add('d-none')
     })
@@ -454,7 +454,7 @@ window.openReplyForm = function (id, callback) {
 }
 
 /* Закрыть форму ответа */
-window.closeReplyForm = function (id) {
+function closeReplyForm(id) {
     document.getElementById('reply-form-' + id)?.classList.add('d-none')
 }
 
@@ -504,7 +504,7 @@ document.addEventListener('click', function (e) {
 })
 
 /* Ответ на сообщение (для форумов/стен без вложенных комментариев) */
-window.postReply = function (el) {
+function postReply(el) {
     postJump()
 
     const authorEl = el.closest('.section')?.querySelector('.section-author')
@@ -586,7 +586,7 @@ function extractQuote(root) {
     }
 }
 
-window.postQuote = function (el) {
+function postQuote(el) {
     const commentItem = el.closest('.comment-item')
 
     if (commentItem) {
@@ -609,7 +609,7 @@ window.postQuote = function (el) {
 }
 
 /* Редактирование комментария в диалоге */
-window.openEditModal = function (el) {
+function openEditModal(el) {
     const id       = el.dataset.id
     const baseUrl  = el.dataset.url
     const dialogEl = document.getElementById('editCommentDialog')
@@ -696,10 +696,11 @@ document.getElementById('editCommentForm')?.addEventListener('submit', function 
 })
 
 /* Копирует текст в буфер обмена */
-window.copyToClipboard = function (el) {
+function copyToClipboard(el) {
     const container = el.closest('.input-group') ?? el.parentElement
     const field = container?.querySelector('input, textarea')
-    const text = el.dataset.copy ?? field?.value ?? ''
+    // Пустой data-copy — копируется поле рядом
+    const text = el.dataset.copy || field?.value || ''
 
     const fallback = () => {
         if (field) { field.select(); document.execCommand('copy'); return }
@@ -760,7 +761,7 @@ window.copyToClipboard = function (el) {
 // загруженными, и параллельные запросы проскочили бы проверку вместе.
 // У каждого файла своя заглушка со спиннером, пока он ждёт и грузится.
 // Одинаковая ошибка (лимит у всех оставшихся файлов) показывается один раз
-window.submitFile = async function (el) {
+async function submitFile(el) {
     const scope = el.closest('form') ?? document
     const filesContainer = scope.querySelector('.js-files')
     const shown = new Set()
@@ -852,7 +853,7 @@ window.cutMedia = function (path) {
 }
 
 /* Удаление файла */
-window.deleteFile = function (el) {
+function deleteFile(el) {
     confirm(__('confirm_file_delete'), function (result) {
         if (!result) return
 
@@ -915,7 +916,7 @@ window.getNewMessages = function () {
 }
 
 /* Инициализирует главное изображение слайдера */
-window.initSlideMainImage = function (el) {
+function initSlideMainImage(el) {
     const mainHref = el.getAttribute('href')
     const slider = el.closest('.media-file')
 
@@ -924,7 +925,7 @@ window.initSlideMainImage = function (el) {
 }
 
 /* Инициализирует миниатюру слайдера */
-window.initSlideThumbImage = function (el) {
+function initSlideThumbImage(el) {
     const href = el.getAttribute('href')
     const isVideo = el.dataset.type === 'html5video'
     const fancyboxGroup = el.dataset.fancybox ?? ''
@@ -942,7 +943,7 @@ window.initSlideThumbImage = function (el) {
     } else {
         const alt = (el.querySelector('img')?.getAttribute('alt') ?? '').replace(/"/g, '&quot;')
         mainInner.innerHTML =
-            `<a href="${href}" class="slide-main-link" data-fancybox="${fancyboxGroup}" onclick="return initSlideMainImage(this)">` +
+            `<a href="${href}" class="slide-main-link" data-fancybox="${fancyboxGroup}" data-slide-main>` +
             `<img src="${href}" alt="${alt}" class="img-fluid rounded slide-main-img">` +
             `</a>`
     }
@@ -955,7 +956,7 @@ window.initSlideThumbImage = function (el) {
 
 let checkTimeout
 /* Проверка логина */
-window.checkLogin = function (el) {
+function checkLogin(el) {
     const block = el.closest('.mb-3')
     const message = block?.querySelector('.invalid-feedback')
     const login = el.value.trim()
@@ -986,6 +987,63 @@ window.checkLogin = function (el) {
 
     return false
 }
+
+/* Действия по атрибуту вместо onclick с глобальной функцией: слушатель на document
+ * работает и в подгруженной ленте, и в модалках, а модулю не нужен свой обработчик.
+ * Фаза захвата — как у прежнего onclick: обработчик успевает до Fancybox и Bootstrap
+ *
+ * data-quote           цитировать запись
+ * data-reply           ответить автору записи
+ * data-reply-form="id" открыть форму ответа под комментарием, data-reply-close="id" — закрыть
+ * data-comment-toggle="id" свернуть или развернуть ветку комментария
+ * data-comment-edit    править комментарий в модалке (data-id, data-url)
+ * data-copy            скопировать значение атрибута, пустой — поле рядом
+ * data-file-delete     удалить вложение (data-id, data-type)
+ * data-slide-main, data-slide-thumb  главная картинка и миниатюра слайдера
+ * data-upload          поле файлов: загрузить выбранное (change)
+ * data-check-login     поле логина: проверить занятость при вводе (input)
+ */
+const clickActions = [
+    ['[data-quote]', postQuote],
+    ['[data-reply]', postReply],
+    ['[data-reply-form]', el => openReplyForm(el.dataset.replyForm)],
+    ['[data-reply-close]', el => closeReplyForm(el.dataset.replyClose)],
+    ['[data-comment-toggle]', el => toggleComment(el.dataset.commentToggle)],
+    ['[data-comment-edit]', openEditModal],
+    ['[data-copy]', copyToClipboard],
+    ['[data-file-delete]', deleteFile],
+    ['[data-slide-thumb]', initSlideThumbImage],
+]
+
+document.addEventListener('click', function (e) {
+    // Главная картинка слайдера открывается Fancybox: переход не отменяем
+    const main = e.target.closest('[data-slide-main]')
+    if (main) return initSlideMainImage(main)
+
+    for (const [selector, action] of clickActions) {
+        const el = e.target.closest(selector)
+        if (!el) continue
+
+        e.preventDefault()
+        action(el)
+
+        return
+    }
+}, true)
+
+document.addEventListener('change', function (e) {
+    if (e.target.matches('input[type="file"][data-upload]')) submitFile(e.target)
+})
+
+document.addEventListener('input', function (e) {
+    if (e.target.matches('[data-check-login]')) checkLogin(e.target)
+})
+
+// @deprecated до 15.0: старые шаблоны модулей зовут их из onclick и onchange
+Object.assign(window, {
+    toggleComment, openReplyForm, closeReplyForm, postReply, postQuote, openEditModal,
+    copyToClipboard, submitFile, deleteFile, initSlideMainImage, initSlideThumbImage, checkLogin,
+})
 
 // Кнопка "Загрузить ещё" для ленты
 const feedContainer = document.getElementById('feed-container')

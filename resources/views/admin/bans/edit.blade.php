@@ -33,7 +33,7 @@
 
         <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/change?user={{ $user->login }}">{{ __('main.change') }}</a><br>
         <i class="fa fa-check-circle"></i>
-        <form action="/admin/bans/unban" method="post" class="d-inline" onsubmit="return confirmAction(this)" data-confirm="{{ __('admin.bans.confirm_unban') }}">
+        <form action="/admin/bans/unban" method="post" class="d-inline" data-confirm="{{ __('admin.bans.confirm_unban') }}">
             @csrf
             <input type="hidden" name="user" value="{{ $user->login }}">
             <button class="btn btn-link p-0">{{ __('users.unban') }}</button>

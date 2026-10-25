@@ -40,7 +40,7 @@
                         <div class="float-end">
                             <a data-bs-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
 
-                            <form action="/admin/status/delete" method="post" class="d-inline" onsubmit="return confirmAction(this)" data-confirm="{{ __('statuses.confirm_delete') }}">
+                            <form action="/admin/status/delete" method="post" class="d-inline" data-confirm="{{ __('statuses.confirm_delete') }}">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id" value="{{ $status->id }}">

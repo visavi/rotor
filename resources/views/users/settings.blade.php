@@ -256,7 +256,7 @@ $notifications = [
                                 <label for="apikey" class="form-label">{{ __('users.token') }}:</label>
                                 <div class="input-group">
                                     <input class="form-control" type="text" id="apikey" name="apikey" value="{{ $user->apikey }}">
-                                    <span class="input-group-text" onclick="return copyToClipboard(this)" data-bs-toggle="tooltip" title="{{ __('main.copy') }}"><i class="far fa-clipboard"></i></span>
+                                    <span class="input-group-text" data-copy data-bs-toggle="tooltip" title="{{ __('main.copy') }}"><i class="far fa-clipboard"></i></span>
                                 </div>
                             </div>
 

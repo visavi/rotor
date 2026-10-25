@@ -18,7 +18,7 @@ $accept = \App\Services\FileService::accept($model->getMorphClass());
                         <img src="{{ $file->path }}" class="thumbnail" alt="{{ $file->name }}">
                     @endif
                 </span>
-                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
+                <a href="#" data-file-delete data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}"><i class="fas fa-times"></i></a>
             </span>
         @endforeach
     @endif
@@ -27,13 +27,13 @@ $accept = \App\Services\FileService::accept($model->getMorphClass());
 <div class="js-image-template d-none">
     <span class="js-file">
         <span class="thumbnail-wrap sortable-handle" data-sortable-handle title="{{ __('main.drag_reorder') }}"><img src="" alt="" class="thumbnail"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
+        <a href="#" data-file-delete data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>
 
 <div class="mb-3">
     <label for="file" class="btn btn-sm btn-secondary mb-1 form-label">
-        <input id="file" type="file" name="file" @if ($accept) accept="{{ $accept }}" @endif multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" data-max-size="{{ setting('filesize') }}" data-max-size-message="{{ __('validator.size_max', ['size' => formatSize(setting('filesize'))]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+        <input id="file" type="file" name="file" @if ($accept) accept="{{ $accept }}" @endif multiple data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" data-max-size="{{ setting('filesize') }}" data-max-size-message="{{ __('validator.size_max', ['size' => formatSize(setting('filesize'))]) }}" data-upload data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
         {{ __('main.attach_image') }}&hellip;
     </label>
 </div>

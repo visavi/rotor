@@ -528,7 +528,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $color = '#' . substr(dechex(crc32($this->login)), 0, 6);
         $letter = mb_strtoupper(Str::substr($name, 0, 1), 'utf-8');
 
-        return new HtmlString('<span class="avatar-default rounded-circle" style="background:' . $color . '">' . $letter . '</span>');
+        return new HtmlString('<span class="avatar-default rounded-circle" style="background:' . $color . '">' . e($letter) . '</span>');
     }
 
     /**
@@ -549,7 +549,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $statuses = [];
             foreach ($users as $user) {
                 if ($user->status) {
-                    $statuses[$user->id] = '<span style="color:#ff0000">' . e((string) $user->status) . '</span>';
+                    $statuses[$user->id] = '<span class="text-danger">' . e((string) $user->status) . '</span>';
                     continue;
                 }
 

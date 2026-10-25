@@ -7,7 +7,7 @@
     <div class="comment-left">
         <span class="avatar-mini flex-shrink-0">{{ $comment->user->getAvatarImage() }}</span>
         @if ($hasChildren)
-            <div class="comment-thread-ctrl" onclick="toggleComment({{ $comment->id }})" id="comment-ctrl-{{ $comment->id }}">
+            <div class="comment-thread-ctrl" data-comment-toggle="{{ $comment->id }}" id="comment-ctrl-{{ $comment->id }}">
                 <span class="comment-thread-btn"><i class="fa {{ $collapsed ? 'fa-plus' : 'fa-minus' }}" style="font-size:8px"></i></span>
                 <div class="comment-thread-line{{ $collapsed ? ' d-none' : '' }}"></div>
             </div>
@@ -27,7 +27,7 @@
 
         {{-- Раскрыть ветку — вне comment-body, появляется рядом с [+] при сворачивании --}}
         @if ($hasChildren)
-            <span class="comment-expand-label{{ $collapsed ? '' : ' d-none' }}" id="comment-expand-{{ $comment->id }}" onclick="toggleComment({{ $comment->id }})">{{ __('main.expand_thread') }} ({{ $comment->countAllDescendants() }})</span>
+            <span class="comment-expand-label{{ $collapsed ? '' : ' d-none' }}" id="comment-expand-{{ $comment->id }}" data-comment-toggle="{{ $comment->id }}">{{ __('main.expand_thread') }} ({{ $comment->countAllDescendants() }})</span>
         @endif
 
         {{-- Тело (сворачивается) --}}
@@ -57,11 +57,11 @@
                     {{-- Инлайн: только ответить + цитировать (чужие комментарии) --}}
                     @if (auth()->check() && ! $ownComment)
                         @if (! ($closed ?? false))
-                            <a href="#" onclick="return openReplyForm({{ $comment->id }})">
+                            <a href="#" data-reply-form="{{ $comment->id }}">
                                 <i class="fa-regular fa-comment"></i> {{ __('main.reply') }}
                             </a>
                         @endif
-                        <a href="#" onclick="return postQuote(this)">
+                        <a href="#" data-quote>
                             <i class="fa-solid fa-quote-left"></i> {{ __('main.quote') }}
                         </a>
                     @endif
@@ -73,7 +73,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="{{ $comment->getViewUrl() }}" onclick="copyToClipboard(this); return false" data-copy="{{ $comment->getViewUrl() }}">
+                                <a class="dropdown-item" href="{{ $comment->getViewUrl() }}" data-copy="{{ $comment->getViewUrl() }}">
                                     <i class="fas fa-link fa-fw me-1"></i> {{ __('main.copy_link') }}
                                 </a>
                             </li>
@@ -85,7 +85,7 @@
                                             @include('app/_comment_edit_dialog')
                                         @endPushOnce
                                         <li>
-                                            <a class="dropdown-item" href="#" onclick="return openEditModal(this)" data-id="{{ $comment->id }}" data-url="/comments">
+                                            <a class="dropdown-item" href="#" data-comment-edit data-id="{{ $comment->id }}" data-url="/comments">
                                                 <i class="fas fa-edit fa-fw me-1"></i> {{ __('main.edit') }}
                                             </a>
                                         </li>
@@ -120,7 +120,7 @@
                             <textarea class="form-control form-control-sm border-0 shadow-none rounded-0" id="reply-textarea-{{ $comment->id }}" name="msg" rows="3" maxlength="{{ setting('comment_text_max') }}" data-relate-type="{{ \App\Models\Comment::$morphName }}" data-relate-id="0" required></textarea>
                             <div class="d-flex justify-content-end gap-1 px-2 py-1">
                                 <label for="reply-attach-{{ $comment->id }}" class="btn btn-sm btn-link link-secondary me-auto" title="{{ __('main.attach_files') }}"><i class="fas fa-paperclip"></i></label>
-                                <button type="button" class="btn btn-sm btn-secondary" onclick="closeReplyForm({{ $comment->id }})">{{ __('main.cancel') }}</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-reply-close="{{ $comment->id }}">{{ __('main.cancel') }}</button>
                                 <button class="btn btn-sm btn-success">{{ __('main.write') }}</button>
                             </div>
                         </div>

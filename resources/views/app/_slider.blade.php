@@ -5,7 +5,7 @@
             @if ($file->isVideo())
                 <video src="{{ $file->path }}" class="img-fluid rounded" controls preload="metadata"></video>
             @else
-                <a href="{{ $file->path }}" class="slide-main-link" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}" onclick="return initSlideMainImage(this)">
+                <a href="{{ $file->path }}" class="slide-main-link" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}" data-slide-main>
                     <img src="{{ $file->path }}" alt="{{ $file->name }}" class="img-fluid rounded slide-main-img">
                 </a>
             @endif
@@ -21,7 +21,7 @@
                        data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}"
                        data-type="html5video"
                        aria-label="{{ $file->name }}"
-                       onclick="return initSlideThumbImage(this)">
+                       data-slide-thumb>
                         <div class="slide-thumb-video{{ $loop->first ? ' active' : '' }}">
                             <video src="{{ $file->path }}" preload="metadata" tabindex="-1"></video>
                             <span class="slide-play-icon">▶</span>
@@ -31,7 +31,7 @@
                     <a href="{{ $file->path }}"
                        class="slide-thumb-link"
                        data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}"
-                       onclick="return initSlideThumbImage(this)">
+                       data-slide-thumb>
                         <img src="{{ $file->path }}" alt="{{ $file->name }}" class="slide-thumb-image{{ $loop->first ? ' active' : '' }}">
                     </a>
                 @endif

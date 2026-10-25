@@ -32,5 +32,5 @@ docker compose exec rotor ./vendor/bin/phpstan analyse <пути> --no-progress
 ## Код
 
 - Готовое в ядре брать, а не писать своё: `App\Rules\TextLengthRule` (длина текста из редактора без тегов), `Admin\DeleteSelectedRequest` (удаление отмеченных `del[]`), `User\UserRules` (поля аккаунта), `FileService::rules()` и `attach()` (вложения), `User::chargeMoney()` (списание денег), касты `HtmlCast` и `TextCast` (пользовательский текст — в них чистка HTML и фильтры вывода).
-- Ajax — атрибутами `data-ajax` в разметке, контракт в `resources/js/ajax.js`; ошибки валидации он показывает сам. Свой JS модулю можно (`@push('scripts')` или `resources/assets`), но без глобальных функций для `onclick`: блок показывает `data-bs-toggle="collapse"`, подтверждение — `onsubmit="return confirmAction(this)"` с `data-confirm`.
+- Ajax — атрибутами `data-ajax` в разметке, контракт в `resources/js/ajax.js`; ошибки валидации он показывает сам. Свой JS модулю можно (`@push('scripts')` или `resources/assets`), но без глобальных функций для `onclick`: блок показывает `data-bs-toggle="collapse"`, подтверждение — `data-confirm` на форме или кнопке, готовые действия (цитата, копирование, удаление вложения) — атрибутами из `resources/js/main.js`.
 - CSS: сначала утилиты Bootstrap, потом общий переиспользуемый класс, правило под одну страницу — в крайнем случае.

@@ -86,7 +86,7 @@
                             @if ($incoming)
                                 <span class="talk-actions">
                                     @if ($user->exists)
-                                        <a href="#" onclick="return postQuote(this)" title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
+                                        <a href="#" data-quote title="{{ __('main.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
                                     @endif
 
                                     <a href="#" data-ajax data-ajax-url="/ajax/complaint" data-ajax-confirm="{{ __('main.confirm_complaint') }}" data-ajax-icon="fa fa-check text-muted" data-type="{{ $data->getMorphClass() }}" data-id="{{ $data->id }}" rel="nofollow" title="{{ __('main.complain') }}"><i class="fa fa-bell text-muted"></i></a>
@@ -134,7 +134,7 @@
     @endif
 
     @if ($messages->isNotEmpty())
-        <form class="text-end mb-3" action="/messages/delete/{{ $user->id }}" method="post" onsubmit="return confirmAction(this)" data-confirm="{{ __('messages.delete_confirm') }}">
+        <form class="text-end mb-3" action="/messages/delete/{{ $user->id }}" method="post" data-confirm="{{ __('messages.delete_confirm') }}">
             @csrf
             @method('DELETE')
             <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>

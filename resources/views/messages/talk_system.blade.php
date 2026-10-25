@@ -59,7 +59,7 @@
         </span>
 
         @if ($messages->isNotEmpty())
-            <form action="/messages/delete/0" method="post" onsubmit="return confirmAction(this)" data-confirm="{{ __('messages.delete_confirm') }}">
+            <form action="/messages/delete/0" method="post" data-confirm="{{ __('messages.delete_confirm') }}">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>

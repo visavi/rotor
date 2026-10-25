@@ -50,7 +50,7 @@
                         @endif
                         @hook('navbarMenuEnd')
                         <hr class="dropdown-divider">
-                        <form action="{{ route('logout') }}" method="post" onsubmit="return confirmAction(this)" data-confirm="{{ __('users.confirm_logout') }}">
+                        <form action="{{ route('logout') }}" method="post" data-confirm="{{ __('users.confirm_logout') }}">
                             @csrf
                             <button class="btn btn-link dropdown-item">{{ __('index.logout') }}</button>
                         </form>

@@ -29,7 +29,7 @@
 
             <div id="migrate-output" class="alert alert-secondary d-none"></div>
 
-            <button id="migrate-btn" class="btn btn-primary mb-3" onclick="runMigrations()"
+            <button id="migrate-btn" class="btn btn-primary mb-3"
                 data-label="{{ __('install.migrations_run', ['count' => count($pendingMigrations)]) }}"
                 data-running="{{ __('install.migrations_running') }}"
                 data-done="{{ $isUpdate ? __('install.main_page') : __('install.seeds') }}"
@@ -56,6 +56,8 @@
     </div>
 
     <script>
+    document.getElementById('migrate-btn')?.addEventListener('click', runMigrations);
+
     function runMigrations() {
         const btn = document.getElementById('migrate-btn');
         const output = document.getElementById('migrate-output');

@@ -15,7 +15,7 @@ $limits = __('main.attach_limit', [
 ]) . ': ' . implode(', ', $extensions);
 @endphp
 
-<input type="file" id="{{ $attachInputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" data-max-size="{{ setting('filesize') }}" data-max-size-message="{{ __('validator.size_max', ['size' => formatSize(setting('filesize'))]) }}" onchange="return submitFile(this);" data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
+<input type="file" id="{{ $attachInputId }}" name="file" multiple @if ($accept) accept="{{ $accept }}" @endif data-max="{{ setting('maxfiles') }}" data-max-message="{{ __('validator.files_max', ['max' => setting('maxfiles')]) }}" data-max-size="{{ setting('filesize') }}" data-max-size-message="{{ __('validator.size_max', ['size' => formatSize(setting('filesize'))]) }}" data-upload data-id="{{ $model->id ?? 0 }}" data-type="{{ $model->getMorphClass() }}" hidden>
 
 @unless ($ownPicker)
     {{-- Ссылка сразу открывает выбор файлов, лимиты в подсказке --}}
@@ -42,7 +42,7 @@ $limits = __('main.attach_limit', [
                     {{ icons($file->extension) }} {{ $file->extension }} {{ formatSize($file->size) }}
                 @endif
 
-                <a href="#" onclick="return deleteFile(this);" data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
+                <a href="#" data-file-delete data-id="{{ $file->id }}" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
             </span>
         @endforeach
     @endif
@@ -55,13 +55,13 @@ $limits = __('main.attach_limit', [
     <span class="js-file">
         <span class="text-muted sortable-handle" data-sortable-handle title="{{ __('main.drag_reorder') }}"><i class="fas fa-grip-vertical"></i></span>
         <a href="#" class="js-file-link me-1"></a> <span class="js-file-size"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a><br>
+        <a href="#" data-file-delete data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a><br>
     </span>
 </div>
 
 <div class="js-image-template d-none">
     <span class="js-file">
         <span class="thumbnail-wrap sortable-handle" data-sortable-handle title="{{ __('main.drag_reorder') }}"><img src="" alt="" class="thumbnail"></span>
-        <a href="#" onclick="return deleteFile(this);" data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
+        <a href="#" data-file-delete data-type="{{ $model->getMorphClass() }}" class="js-file-delete"><i class="fas fa-times"></i></a>
     </span>
 </div>

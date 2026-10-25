@@ -140,7 +140,7 @@
 
                 <div id="migrate-output" class="alert alert-secondary d-none"></div>
 
-                <button id="migrate-btn" class="btn btn-warning" onclick="runMigrations()"
+                <button id="migrate-btn" class="btn btn-warning"
                     data-label="{{ __('admin.upgrade.run', ['count' => count($pendingMigrations)]) }}"
                     data-running="{{ __('admin.upgrade.running') }}"
                     data-done="{{ __('admin.upgrade.done_btn') }}"
@@ -191,11 +191,18 @@
 
 @push('scripts')
 <script>
-function runUpdate(btn) {
-    if (! confirm(btn.dataset.confirm)) {
-        return;
-    }
+// Подтверждение по data-confirm спрашивает общий слушатель: сюда клик доходит после «да»
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.btn-update');
 
+    if (btn) {
+        runUpdate(btn);
+    }
+});
+
+document.getElementById('migrate-btn')?.addEventListener('click', runMigrations);
+
+function runUpdate(btn) {
     const tag         = btn.dataset.tag;
     const full        = btn.dataset.full;
     const downloadUrl = btn.dataset.downloadUrl;

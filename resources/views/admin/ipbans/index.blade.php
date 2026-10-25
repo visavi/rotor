@@ -67,7 +67,7 @@
     </div>
 
     @if ($logs->isNotEmpty() && isAdmin('boss'))
-        <form action="/admin/ipbans/clear" method="post" onsubmit="return confirmAction(this)" data-confirm="{{ __('admin.ipbans.confirm_clear') }}">
+        <form action="/admin/ipbans/clear" method="post" data-confirm="{{ __('admin.ipbans.confirm_clear') }}">
             @csrf
             <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
         </form><br>

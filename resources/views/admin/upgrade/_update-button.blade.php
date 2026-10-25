@@ -16,8 +16,7 @@
     data-label-applying="{{ __('admin.upgrade.update_applying') }}"
     data-label-done="{{ __('admin.upgrade.update_done') }}"
     data-label-error="{{ __('admin.upgrade.request_error') }}"
-    data-label-reload="{{ __('admin.upgrade.update_reload') }}"
-    onclick="runUpdate(this)">
+    data-label-reload="{{ __('admin.upgrade.update_reload') }}">
     <i class="fa fa-download"></i> {{ $label }}
     @if ($badge)
         <span class="badge {{ $badge === 'upgrade' ? 'bg-info' : 'bg-secondary' }} ms-1">{{ $badge }}</span>

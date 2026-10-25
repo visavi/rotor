@@ -33,7 +33,7 @@
                         @hook('navbarMenuEnd')
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <form action="{{ route('logout') }}" method="post" class="d-inline" onsubmit="return confirmAction(this)" data-confirm="{{ __('users.confirm_logout') }}">
+                            <form action="{{ route('logout') }}" method="post" class="d-inline" data-confirm="{{ __('users.confirm_logout') }}">
                                 @csrf
                                 <button class="btn btn-link dropdown-item">{{ __('index.logout') }}</button>
                             </form>

@@ -213,7 +213,7 @@
             @endif
 
             <form action="{{ route('admin.modules.uninstall') }}" method="post"
-                  onsubmit="return confirm('{{ __('admin.modules.confirm_delete') }}') && confirm('{{ __('admin.modules.confirm_delete_data') }}')">
+                  data-confirm="{{ __('admin.modules.confirm_delete') }}" data-confirm-again="{{ __('admin.modules.confirm_delete_data') }}">
                 @csrf
                 <input type="hidden" name="module" value="{{ $moduleName }}">
                 <button class="btn btn-danger">{{ __('main.delete') }}</button>
@@ -230,8 +230,7 @@
                 <input type="hidden" name="module" value="{{ $moduleName }}">
                 <button class="btn btn-success">{{ __('main.install') }}</button>
             </form>
-            <form action="{{ route('admin.modules.delete') }}" method="post"
-                  onsubmit="return confirmAction(this)" data-confirm="{{ __('admin.modules.confirm_delete_files') }}">
+            <form action="{{ route('admin.modules.delete') }}" method="post" data-confirm="{{ __('admin.modules.confirm_delete_files') }}">
                 @csrf
                 <input type="hidden" name="module" value="{{ $moduleName }}">
                 <button class="btn btn-danger">{{ __('admin.modules.delete_files') }}</button>

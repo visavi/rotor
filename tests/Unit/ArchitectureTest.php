@@ -151,6 +151,25 @@ class ArchitectureTest extends TestCase
         );
     }
 
+    public function testMarkupDoesNotCallGlobalHandlers(): void
+    {
+        // this.remove() и this.form.submit() — код на месте, а не глобальная функция
+        $this->assertCodeMissing(
+            '/\son[a-z]+="(?:return\s+)?[a-zA-Z_]\w*\(/',
+            ['resources/views', 'modules/*/resources/views'],
+            'Глобальная функция в onclick/onsubmit — мост до 15.0. Действие — data-атрибутом (список в resources/js/main.js, подтверждение — data-confirm), свой JS — слушателем через @push(\'scripts\')',
+        );
+    }
+
+    public function testModulePageLinksAreKebab(): void
+    {
+        $this->assertCodeMissing(
+            "/route\(\s*'admin\.modules\.module',\s*\['module'\s*=>\s*'[^']*[A-Z]/",
+            ['app', 'resources/views', 'modules'],
+            'Страница модуля — /admin/modules/kebab-name: заглавные пропускает только мост до 15.0. Имя модуля — Str::kebab(\'Name\') или строчными',
+        );
+    }
+
     public function testTranslationKeysExist(): void
     {
         // Ключ без перевода выводится как есть, а тест с __() сравнивает его сам с собой

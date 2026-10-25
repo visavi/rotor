@@ -235,55 +235,89 @@ function prompt(message, value, callback) {
     promptFields(message, [{ value }], values => callback(values ? values[0] : null))
 }
 
-/* Подтверждение перед отправкой формы или переходом по ссылке */
+/* Подтверждение по data-confirm: у формы — перед отправкой, у кнопки и ссылки — перед кликом.
+ * Пустой атрибут — стандартный вопрос, data-confirm-again — второй вопрос для необратимого.
+ *
+ * После «да» действие повторяется: форма уходит через requestSubmit со своей кнопкой
+ * (formaction, name и value) и проходит data-ajax и слушатели страницы, клик доходит
+ * до своих обработчиков. Отметка живёт только на этот синхронный повтор: оставшись,
+ * она пропустила бы вопрос на странице, возвращённой из bfcache.
+ * Слушатели в фазе захвата: отказ останавливает событие раньше остальных */
 const confirmedElements = new WeakSet()
 
-window.confirmAction = function (el) {
-    const message = el.dataset.confirm || __('confirm_action')
-
-    // Форма отправляется повторно уже после ответа диалога, и второй заход
-    // пропускается: иначе подтверждение спрашивалось бы по кругу
-    if (confirmedElements.has(el)) {
-        confirmedElements.delete(el)
-
-        return true
-    }
-
-    confirm(message, function (result) {
+function askConfirm(el, proceed) {
+    confirm(el.dataset.confirm || __('confirm_action'), function (result) {
         if (!result) {
             return
         }
 
-        const form = el.matches('form') ? el : el.closest('form')
-
-        if (form) {
-            // Кнопка отправляет форму от своего имени: со своими formaction, name и value.
-            // requestSubmit синхронно зовёт onsubmit формы — отметка живёт только на этот вызов:
-            // оставшись, она пропустила бы подтверждение на странице, возвращённой из bfcache
-            if (el.matches('button, input[type="submit"]')) {
-                confirmedElements.add(form)
-                form.requestSubmit(el)
-                confirmedElements.delete(form)
-            } else {
-                // submit() onsubmit не вызывает, отметка не нужна
-                form.submit()
-            }
-
-            return
+        if (!el.dataset.confirmAgain) {
+            return proceed()
         }
 
-        const href = el.getAttribute('href')
-
-        if (href) {
-            window.location.href = href
-        }
+        confirm(el.dataset.confirmAgain, again => again && proceed())
     })
+}
+
+function repeatConfirmed(el, action) {
+    confirmedElements.add(el)
+    action()
+    confirmedElements.delete(el)
+}
+
+document.addEventListener('submit', function (e) {
+    const form = e.target
+
+    if (!form.matches('form[data-confirm]') || confirmedElements.has(form)) {
+        return
+    }
+
+    e.preventDefault()
+    e.stopImmediatePropagation()
+
+    const submitter = e.submitter ?? undefined
+
+    askConfirm(form, () => repeatConfirmed(form, () => form.requestSubmit(submitter)))
+}, true)
+
+document.addEventListener('click', function (e) {
+    const el = e.target.closest('[data-confirm]:not(form)')
+
+    if (!el || confirmedElements.has(el)) {
+        return
+    }
+
+    e.preventDefault()
+    e.stopImmediatePropagation()
+
+    askConfirm(el, () => repeatConfirmed(el, () => el.click()))
+}, true)
+
+/* @deprecated до 15.0: старые шаблоны модулей зовут из onsubmit и onclick.
+ * Элемент с data-confirm уже спросил общий слушатель — второй раз не спрашиваем */
+window.confirmAction = function (el) {
+    if (el.dataset.confirm !== undefined || confirmedElements.has(el)) {
+        return true
+    }
+
+    askConfirm(el, () => repeatConfirmed(el, () => el.matches('form') ? el.requestSubmit() : el.click()))
 
     return false
 }
 
-/* Запрос значения перед отправкой формы: ответ уходит в поле по data-field */
-window.promptAction = function (el) {
+/* Запрос значения перед отправкой формы по data-prompt: ответ уходит в поле по data-field */
+document.addEventListener('click', function (e) {
+    const el = e.target.closest('[data-prompt]')
+
+    if (!el) {
+        return
+    }
+
+    e.preventDefault()
+    promptAction(el)
+})
+
+function promptAction(el) {
     const form = el.matches('form') ? el : el.closest('form')
     const field = form?.elements[el.dataset.field || 'value']
 
@@ -296,11 +330,15 @@ window.promptAction = function (el) {
             field.value = value
         }
 
-        form?.submit()
+        // requestSubmit, а не submit: форма проходит data-ajax и слушатели страницы
+        form?.requestSubmit()
     })
 
     return false
 }
+
+// @deprecated до 15.0: старые шаблоны модулей зовут из onclick
+window.promptAction = promptAction
 
 /* Запрос значений промисом: строка (askValue) или массив строк (askValues), null при отмене */
 window.askValue = (message, value = '') => new Promise((resolve) => prompt(message, value, resolve))
