@@ -61,6 +61,16 @@ class ArchitectureTest extends TestCase
         );
     }
 
+    public function testServicesAreInjected(): void
+    {
+        // Свои шаблоны в resources/custom не проверяются: документация учит брать там сервис через new
+        $this->assertCodeMissing(
+            '/\bapp\(\s*\\\\?[\w\\\\]*Service::class|\bnew\s+\\\\?[\w\\\\]*Service\b/',
+            ['app/Http/Controllers', 'app/Http/Middleware', 'app/Traits', 'modules/*/Http/Controllers', 'modules/*/Http/Middleware', 'resources/views', 'modules/*/resources/views'],
+            'Сервис из app() или через new прячет зависимость. В экшене — параметр метода, в middleware — конструктор, в шаблон — передать из контроллера или метода модели',
+        );
+    }
+
     public function testRouteActionsExist(): void
     {
         $found = [];

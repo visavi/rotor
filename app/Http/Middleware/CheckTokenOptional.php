@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\MetrikaService;
 use App\Traits\AuthenticatesToken;
 use Closure;
 use Illuminate\Http\Request;
@@ -11,6 +12,12 @@ class CheckTokenOptional
 {
     use AuthenticatesToken;
 
+    public function __construct(
+        private readonly MetrikaService $metrikaService,
+    ) {
+        //
+    }
+
     /**
      * Авторизует по токену, если он передан. Без токена запрос выполняется как гостевой
      */
@@ -19,7 +26,7 @@ class CheckTokenOptional
         $token = $request->bearerToken();
 
         if ($token) {
-            $this->authenticateToken($token);
+            $this->authenticateToken($token, $this->metrikaService);
         }
 
         return $next($request);

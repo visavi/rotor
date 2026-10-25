@@ -13,7 +13,7 @@ trait AuthenticatesToken
     /**
      * Авторизует владельца токена и отмечает визит
      */
-    protected function authenticateToken(string $token): void
+    protected function authenticateToken(string $token, MetrikaService $metrikaService): void
     {
         if (! $user = User::query()->where('apikey', $token)->first()) {
             abort(401, 'Unauthorized');
@@ -28,6 +28,6 @@ trait AuthenticatesToken
         // Язык профиля важнее Accept-Language, который поставила группа api
         Locale::apply($user->language);
 
-        (new MetrikaService())->saveVisit($user);
+        $metrikaService->saveVisit($user);
     }
 }

@@ -118,7 +118,7 @@ trait HandlesComments
      * Форма ответа шлёт запрос с Accept: application/json и ждёт адрес
      * записи или 422 со списком ошибок, обычная форма — редирект
      */
-    public function storeComment(int $id, CommentRequest $request, Flood $flood): RedirectResponse|JsonResponse
+    public function storeComment(int $id, CommentRequest $request, Flood $flood, CommentService $commentService): RedirectResponse|JsonResponse
     {
         $model = $this->findCommentParent($id);
 
@@ -130,7 +130,7 @@ trait HandlesComments
 
         [$viewRoute, $viewParams] = $this->commentableViewRoute($model);
 
-        $comment = app(CommentService::class)->create(
+        $comment = $commentService->create(
             $model,
             auth()->user() ?? abort(403),
             $request->validated('msg'),

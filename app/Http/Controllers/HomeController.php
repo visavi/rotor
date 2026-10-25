@@ -22,13 +22,13 @@ class HomeController extends Controller
     /**
      * Главная страница
      */
-    public function index(): View
+    public function index(FeedService $feed): View
     {
         // Главная выключенного модуля не зарегистрирована — показывается лента
         $homepage = Registry::$homepages[(string) setting('homepage')] ?? null;
 
-        // Колбэк, а не готовая вью: рендер внутри шаблона сохраняет её @push
-        return view('index', ['homepage' => $homepage['view'] ?? null]);
+        // Колбэк и сервис, а не готовая вью: рендер внутри шаблона сохраняет её @push
+        return view('index', ['homepage' => $homepage['view'] ?? null, 'feed' => $feed]);
     }
 
     /**

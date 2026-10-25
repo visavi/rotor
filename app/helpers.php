@@ -272,11 +272,11 @@ function statsAdmins(): int
 }
 
 /**
- * Возвращает количество жалоб
+ * Возвращает количество жалоб, один запрос на страницу
  */
 function statsSpam(): int
 {
-    return Spam::query()->count();
+    return once(static fn (): int => Spam::query()->count());
 }
 
 /**

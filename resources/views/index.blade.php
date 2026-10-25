@@ -1,4 +1,3 @@
-@use('App\Services\FeedService')
 @extends('layout')
 
 @section('title', setting('logos'))
@@ -10,7 +9,7 @@
         {{ $homepage() }}
     @else
         <div id="feed-container">
-            {{ (new FeedService())->getFeed() }}
+            {{ $feed->getFeed() }}
         </div>
         <div id="feed-sentinel"></div>
     @endif

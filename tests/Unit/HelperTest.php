@@ -388,6 +388,16 @@ class HelperTest extends TestCase
         self::assertSame(DB::table('stickers')->count(), statsStickers());
     }
 
+    public function testStatsSpamQueriesOncePerRequest(): void
+    {
+        // Навбар админа спрашивает число жалоб дважды: в условии и в значке
+        DB::enableQueryLog();
+        statsSpam();
+        statsSpam();
+
+        self::assertCount(1, DB::getQueryLog());
+    }
+
     public function testStatsBlacklist(): void
     {
         BlackList::query()->delete();
