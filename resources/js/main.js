@@ -147,15 +147,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         Object.entries(JSON.parse(el.textContent)).forEach(([status, messages]) => {
-            // notyf вставляет текст как HTML: сообщения экранируются
-            const message = messages.map(text => {
-                const div = document.createElement('div')
-                div.textContent = text
-
-                return div.innerHTML
-            }).join('<br>')
-
-            notyf.open({ type: flashTypes[status] ?? 'info', message })
+            // Экранирует сам notyf (globals.js): перенос строки станет <br>
+            notyf.open({ type: flashTypes[status] ?? 'info', message: messages.join('\n') })
         })
 
         el.remove()
