@@ -48,29 +48,31 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Бан / разбан */
             Route::controller(AdminBanController::class)
                 ->prefix('bans')
+                ->name('bans.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/edit', 'edit');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/edit', 'edit')->name('edit');
                     Route::post('/edit', 'update');
-                    Route::get('/change', 'change');
+                    Route::get('/change', 'change')->name('change');
                     Route::post('/change', 'updateChange');
-                    Route::post('/unban', 'unban');
+                    Route::post('/unban', 'unban')->name('unban');
                 });
 
             /* Забаненные */
-            Route::get('/banlists', [BanlistController::class, 'index']);
+            Route::get('/banlists', [BanlistController::class, 'index'])->name('banlists.index');
 
             /* Ожидающие */
-            Route::get('/reglists', [ReglistController::class, 'index']);
+            Route::get('/reglists', [ReglistController::class, 'index'])->name('reglists.index');
             Route::post('/reglists', [ReglistController::class, 'update']);
 
             /* История банов */
             Route::controller(BanhistController::class)
                 ->prefix('banhists')
+                ->name('banhists.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/view', 'view');
-                    Route::post('/delete', 'delete');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/view', 'view')->name('view');
+                    Route::post('/delete', 'delete')->name('delete');
                 });
         });
 
@@ -79,9 +81,10 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Правила */
             Route::controller(RuleController::class)
                 ->prefix('rules')
+                ->name('rules.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/edit', 'edit');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/edit', 'edit')->name('edit');
                     Route::post('/edit', 'update');
                 });
 
@@ -108,39 +111,42 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Черный список */
             Route::controller(BlacklistController::class)
                 ->prefix('blacklists')
+                ->name('blacklists.')
                 ->group(function () {
-                    Route::get('/', 'index');
+                    Route::get('/', 'index')->name('index');
                     Route::post('/', 'store');
-                    Route::post('/delete', 'delete');
+                    Route::post('/delete', 'delete')->name('delete');
                 });
 
             /* Стикеры */
             Route::controller(StickerController::class)
                 ->prefix('stickers')
+                ->name('stickers.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/{id}', 'category');
-                    Route::post('/create', 'store');
-                    Route::get('/edit/{id}', 'edit');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/{id}', 'category')->name('category');
+                    Route::post('/create', 'store')->name('store');
+                    Route::get('/edit/{id}', 'edit')->name('edit');
                     Route::post('/edit/{id}', 'update');
-                    Route::delete('/delete/{id}', 'delete');
-                    Route::get('/sticker/create', 'createSticker');
+                    Route::delete('/delete/{id}', 'delete')->name('delete');
+                    Route::get('/sticker/create', 'createSticker')->name('sticker.create');
                     Route::post('/sticker/create', 'storeSticker');
-                    Route::get('/sticker/edit/{id}', 'editSticker');
+                    Route::get('/sticker/edit/{id}', 'editSticker')->name('sticker.edit');
                     Route::post('/sticker/edit/{id}', 'updateSticker');
-                    Route::delete('/sticker/delete/{id}', 'deleteSticker');
+                    Route::delete('/sticker/delete/{id}', 'deleteSticker')->name('sticker.delete');
                 });
 
             /* Статусы */
             Route::controller(StatusController::class)
                 ->prefix('status')
+                ->name('status.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/create', 'create');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
                     Route::post('/create', 'store');
-                    Route::get('/edit', 'edit');
+                    Route::get('/edit', 'edit')->name('edit');
                     Route::post('/edit', 'update');
-                    Route::delete('/delete', 'delete');
+                    Route::delete('/delete', 'delete')->name('delete');
                 });
         });
 
@@ -178,25 +184,27 @@ Route::middleware(['check.admin', 'admin.logger'])
             /* Пользователи */
             Route::controller(AdminUserController::class)
                 ->prefix('users')
+                ->name('users.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/search', 'search');
-                    Route::get('/edit', 'edit');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/search', 'search')->name('search');
+                    Route::get('/edit', 'edit')->name('edit');
                     Route::post('/edit', 'update');
-                    Route::get('/delete', 'delete');
+                    Route::get('/delete', 'delete')->name('delete');
                     Route::post('/delete', 'destroy');
                 });
 
             /* Шаблоны писем */
             Route::controller(NoticeController::class)
                 ->prefix('notices')
+                ->name('notices.')
                 ->group(function () {
-                    Route::get('/', 'index');
-                    Route::get('/create', 'create');
+                    Route::get('/', 'index')->name('index');
+                    Route::get('/create', 'create')->name('create');
                     Route::post('/create', 'store');
-                    Route::get('/edit/{id}', 'edit');
+                    Route::get('/edit/{id}', 'edit')->name('edit');
                     Route::post('/edit/{id}', 'update');
-                    Route::delete('/delete/{id}', 'delete');
+                    Route::delete('/delete/{id}', 'delete')->name('delete');
                 });
 
             Route::controller(SearchController::class)
@@ -214,7 +222,7 @@ Route::middleware(['check.admin', 'admin.logger'])
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
                     // @deprecated до 15.0: старый адрес ?module=Name
-                    Route::get('/module', 'legacyModule');
+                    Route::get('/module', 'legacyModule')->name('legacy');
                     Route::get('/marketplace', 'marketplace')->name('marketplace');
                     Route::get('/upload', 'upload')->name('upload');
                     Route::post('/upload', 'uploadZip')->name('upload.zip');

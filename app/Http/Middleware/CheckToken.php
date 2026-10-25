@@ -29,7 +29,7 @@ class CheckToken
             abort(400, 'Api token missing');
         }
 
-        $this->authenticateToken($token, $this->metrikaService);
+        $this->authenticateToken($token, $request, $this->metrikaService);
 
         return $next($request);
     }

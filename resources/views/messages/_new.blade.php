@@ -4,7 +4,7 @@
         $login = $dialogue->author->exists ? $dialogue->author->login : $dialogue->author_id;
     ?>
     <li>
-        <a class="app-notification__item" href="/messages/talk/{{ $login }}">
+        <a class="app-notification__item" href="{{ route('messages.talk', ['login' => $login]) }}">
             <span class="app-notification__icon avatar-mini">{{ $dialogue->author->getAvatarImage() }}</span>
             <div>
                 <p class="app-notification__author">{{ $author }}</p>

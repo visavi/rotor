@@ -9,7 +9,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.users') }}</li>
         </ol>
     </nav>
@@ -67,7 +67,7 @@
                     </div>
 
                     @if (auth()->check() && $data->id !== auth()->id())
-                        <a class="fs-5 p-2 text-muted" href="/messages/talk/{{ $data->login }}" data-bs-toggle="tooltip" title="{{ __('users.send_message') }}">
+                        <a class="fs-5 p-2 text-muted" href="{{ route('messages.talk', ['login' => $data->login]) }}" data-bs-toggle="tooltip" title="{{ __('users.send_message') }}">
                             <i class="fas fa-envelope"></i>
                         </a>
                     @endif

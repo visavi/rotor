@@ -5,7 +5,7 @@
 @section('content')
     <div class="container border rounded-3 shadow-sm px-3 px-md-5 my-4" style="max-width: 960px; background: var(--bs-tertiary-bg);">
         <div class="py-4 py-md-5 text-center">
-            <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
+            <a href="{{ route('home') }}"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2 class="mb-1">Mobile CMS</h2>
             <p class="text-secondary mb-0">{{ $isUpdate ? __('install.update') : __('install.install') }} Rotor</p>
         </div>
@@ -187,7 +187,7 @@
                         </div>
                     @endif
 
-                    <a class="btn btn-lg {{ $isUpdate ? 'btn-warning' : 'btn-primary' }}" href="/install/status?lang={{ $lang }}">
+                    <a class="btn btn-lg {{ $isUpdate ? 'btn-warning' : 'btn-primary' }}" href="{{ route('install.status', ['lang' => $lang]) }}">
                         {{ __('install.check_status') }}
                         <span class="badge {{ $isUpdate ? 'bg-dark' : 'bg-light text-dark' }} ms-1">{{ $isUpdate ? __('install.update') : __('install.install') }}</span>
                     </a>

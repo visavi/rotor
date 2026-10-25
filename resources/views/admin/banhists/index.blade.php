@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.ban_history') }}</li>
         </ol>
@@ -14,7 +14,7 @@
 
 @section('content')
     @if ($records->isNotEmpty())
-        <form action="/admin/banhists/delete?page={{ $records->currentPage() }}" method="post">
+        <form action="{{ route('admin.banhists.delete', ['page' => $records->currentPage()]) }}" method="post">
             @csrf
             @foreach ($records as $data)
                 <div class="section mb-3 shadow">
@@ -30,8 +30,8 @@
                         </div>
 
                         <div class="text-end">
-                            <a href="/admin/bans/change?user={{ $data->user->login }}" data-bs-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
-                            <a href="/admin/banhists/view?user={{ $data->user->login }}" data-bs-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
+                            <a href="{{ route('admin.bans.change', ['user' => $data->user->login]) }}" data-bs-toggle="tooltip" title="{{ __('main.change') }}"><i class="fa fa-pencil-alt"></i></a>
+                            <a href="{{ route('admin.banhists.view', ['user' => $data->user->login]) }}" data-bs-toggle="tooltip" title="{{ __('admin.banhists.history') }}"><i class="fa fa-history"></i></a>
                             <input type="checkbox" class="form-check-input" name="del[]" value="{{ $data->id }}">
                         </div>
                     </div>
@@ -58,7 +58,7 @@
     {{ $records->links() }}
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/banhists/view" method="get">
+        <form action="{{ route('admin.banhists.view') }}" method="get">
             <label for="user" class="form-label">{{ __('admin.banhists.search_user') }}:</label>
             <div class="input-group{{ hasError('user') }}">
                 <input type="text" class="form-control" id="user" name="user" maxlength="20" value="{{ old('user') }}" placeholder="{{ __('main.user_login') }}" required>

@@ -6,7 +6,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.panel') }}</li>
         </ol>
     </nav>
@@ -17,7 +17,7 @@
         <i class="fa fa-key fa-lg"></i>
         <b>
             @if(isAdmin('boss'))
-                <a href="/admin/upgrade">{{ __('main.version') }} {{ ROTOR_VERSION }}</a>
+                <a href="{{ route('admin.upgrade.index') }}">{{ __('main.version') }} {{ ROTOR_VERSION }}</a>
             @else
                 {{ __('main.version') }} {{ ROTOR_VERSION }}
             @endif
@@ -103,31 +103,31 @@
             <div class="section-body">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
-                        <a href="/admin/spam" class="app-tile">
+                        <a href="{{ route('admin.spam.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#dc3545"><i class="fas fa-exclamation-triangle"></i></div>
                             <div class="app-tile-label">{{ __('index.complains') }}<span class="badge bg-adaptive app-tile-badge">{{ statsSpam() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/bans" class="app-tile">
+                        <a href="{{ route('admin.bans.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-ban"></i></div>
                             <div class="app-tile-label">{{ __('index.ban_unban') }}</div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/banlists" class="app-tile">
+                        <a href="{{ route('admin.banlists.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#d63384"><i class="fas fa-list"></i></div>
                             <div class="app-tile-label">{{ __('index.banned_list') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBanned() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/reglists" class="app-tile">
+                        <a href="{{ route('admin.reglists.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#20c997"><i class="fas fa-user-clock"></i></div>
                             <div class="app-tile-label">{{ __('index.pending_list') }}<span class="badge bg-adaptive app-tile-badge">{{ statsRegList() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/banhists" class="app-tile">
+                        <a href="{{ route('admin.banhists.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#6c757d"><i class="fas fa-history"></i></div>
                             <div class="app-tile-label">{{ __('index.ban_history') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBanHist() }}</span></div>
                         </a>
@@ -144,37 +144,37 @@
             <div class="section-body">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
-                        <a href="/admin/rules" class="app-tile">
+                        <a href="{{ route('admin.rules.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-gavel"></i></div>
                             <div class="app-tile-label">{{ __('index.site_rules') }}</div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/ipbans" class="app-tile">
+                        <a href="{{ route('admin.ipbans.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#dc3545"><i class="fas fa-shield-alt"></i></div>
                             <div class="app-tile-label">{{ __('index.ip_ban') }}<span class="badge bg-adaptive app-tile-badge">{{ statsIpBanned() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/errors" class="app-tile">
+                        <a href="{{ route('admin.errors.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#fd7e14"><i class="fas fa-bug"></i></div>
                             <div class="app-tile-label">{{ __('index.errors') }}</div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/blacklists" class="app-tile">
+                        <a href="{{ route('admin.blacklists.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#212529"><i class="fas fa-minus-circle"></i></div>
                             <div class="app-tile-label">{{ __('index.blacklist') }}<span class="badge bg-adaptive app-tile-badge">{{ statsBlacklist() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/stickers" class="app-tile">
+                        <a href="{{ route('admin.stickers.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#ffc107"><i class="fas fa-smile"></i></div>
                             <div class="app-tile-label">{{ __('index.stickers') }}<span class="badge bg-adaptive app-tile-badge">{{ statsStickers() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/status" class="app-tile">
+                        <a href="{{ route('admin.status.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#20c997"><i class="fas fa-user-tag"></i></div>
                             <div class="app-tile-label">{{ __('index.user_statuses') }}</div>
                         </a>
@@ -191,13 +191,13 @@
             <div class="section-body">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
                     <div class="col">
-                        <a href="/admin/settings" class="app-tile">
+                        <a href="{{ route('admin.settings') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#0d6efd"><i class="fas fa-sliders-h"></i></div>
                             <div class="app-tile-label">{{ __('index.site_settings') }}</div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/modules" class="app-tile">
+                        <a href="{{ route('admin.modules.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#6f42c1"><i class="fas fa-puzzle-piece"></i></div>
                             <div class="app-tile-label">{{ __('index.modules') }}</div>
                         </a>
@@ -209,19 +209,19 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/users" class="app-tile">
+                        <a href="{{ route('admin.users.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#20c997"><i class="fas fa-users"></i></div>
                             <div class="app-tile-label">{{ __('index.users') }}<span class="badge bg-adaptive app-tile-badge">{{ statsUsers() }}</span></div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/notices" class="app-tile">
+                        <a href="{{ route('admin.notices.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#d63384"><i class="fas fa-envelope"></i></div>
                             <div class="app-tile-label">{{ __('index.notice_templates') }}</div>
                         </a>
                     </div>
                     <div class="col">
-                        <a href="/admin/search" class="app-tile">
+                        <a href="{{ route('admin.search.index') }}" class="app-tile">
                             <div class="app-tile-icon" style="background:#de00de"><i class="fas fa-search"></i></div>
                             <div class="app-tile-label">{{ __('index.search') }}</div>
                         </a>

@@ -5,10 +5,10 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/stickers">{{ __('index.stickers') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/stickers/{{ $sticker->category->id }}">{{ $sticker->category->name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.stickers.index') }}">{{ __('index.stickers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.stickers.category', ['id' => $sticker->category->id]) }}">{{ $sticker->category->name }}</a></li>
             <li class="breadcrumb-item active">{{ __('stickers.edit_sticker') }}</li>
         </ol>
     </nav>
@@ -18,7 +18,7 @@
     <img src="{{ $sticker->name }}" alt=""><br>
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/stickers/sticker/edit/{{ $sticker->id }}?page={{ $page }}" method="post">
+        <form action="{{ route('admin.stickers.sticker.edit', ['id' => $sticker->id, 'page' => $page]) }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('cid') }}">
                 <label for="inputCategory" class="form-label">{{ __('stickers.category') }}</label>

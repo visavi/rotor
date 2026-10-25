@@ -5,10 +5,10 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/users">{{ __('index.users') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/users/edit?user={{ $user->login }}">{{ $user->getName() }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">{{ __('index.users') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.users.edit', ['user' => $user->login]) }}">{{ $user->getName() }}</a></li>
             <li class="breadcrumb-item active">{{ __('users.delete_user') }}</li>
         </ol>
     </nav>
@@ -16,7 +16,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/users/delete?user={{ $user->login }}" method="post">
+        <form action="{{ route('admin.users.delete', ['user' => $user->login]) }}" method="post">
             @csrf
             <b>{{ __('users.add_to_blacklist') }}:</b><br>
             <div class="form-check">

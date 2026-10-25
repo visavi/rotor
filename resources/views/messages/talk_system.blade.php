@@ -5,8 +5,8 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/messages">{{ __('index.messages') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('messages.index') }}">{{ __('index.messages') }}</a></li>
             <li class="breadcrumb-item active">{{ __('messages.notifications') }}</li>
         </ol>
     </nav>
@@ -55,11 +55,11 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <span class="text-muted">
             {{ __('main.total') }}: <b>{{ $messages->total() }}</b>
-            <a class="ms-3" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+            <a class="ms-3" href="{{ route('users.index') }}"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
         </span>
 
         @if ($messages->isNotEmpty())
-            <form action="/messages/delete/0" method="post" data-confirm="{{ __('messages.delete_confirm') }}">
+            <form action="{{ route('messages.delete', ['uid' => '0']) }}" method="post" data-confirm="{{ __('messages.delete_confirm') }}">
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>

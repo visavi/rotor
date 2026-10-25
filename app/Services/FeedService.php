@@ -62,7 +62,7 @@ class FeedService
     public function getFeed(): HtmlString
     {
         $posts = $this->getItems();
-        $posts->setPath(url('/'));
+        $posts->setPath(route('home'));
         $posts->setCollection($this->render($posts->getCollection()));
 
         return new HtmlString((string) view('feeds/_feed', compact('posts')));

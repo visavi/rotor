@@ -7,9 +7,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/users">{{ __('index.users') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">{{ __('index.users') }}</a></li>
             <li class="breadcrumb-item active">{{ __('users.edit_user') }}</li>
         </ol>
     </nav>
@@ -41,7 +41,7 @@
             </div>
         </nav>
 
-        <form method="post" action="/admin/users/edit?user={{ $user->login }}">
+        <form method="post" action="{{ route('admin.users.edit', ['user' => $user->login]) }}">
             @csrf
 
         <div class="tab-content">
@@ -215,6 +215,6 @@
     <br>
 
     @if (! in_array($user->level, $adminGroups, true))
-        <i class="fa fa-times"></i> <a href="/admin/users/delete?user={{ $user->login }}">{{ __('main.delete') }}</a><br>
+        <i class="fa fa-times"></i> <a href="{{ route('admin.users.delete', ['user' => $user->login]) }}">{{ __('main.delete') }}</a><br>
     @endif
 @stop

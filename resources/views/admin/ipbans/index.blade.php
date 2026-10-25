@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.ip_ban') }}</li>
         </ol>
@@ -13,10 +13,10 @@
 @stop
 
 @section('content')
-    <a href="/admin/errors?code=666">{{ __('admin.ipbans.history') }}</a><br>
+    <a href="{{ route('admin.errors.index', ['code' => '666']) }}">{{ __('admin.ipbans.history') }}</a><br>
 
     @if ($logs->isNotEmpty())
-        <form action="/admin/ipbans/delete?page={{ $logs->currentPage() }}" method="post">
+        <form action="{{ route('admin.ipbans.delete', ['page' => $logs->currentPage()]) }}" method="post">
             @csrf
             @foreach ($logs as $log)
                 <div class="section mb-3 shadow">
@@ -56,7 +56,7 @@
     @endif
 
     <div class="py-2 my-2">
-        <form action="/admin/ipbans" method="post">
+        <form action="{{ route('admin.ipbans.store') }}" method="post">
             @csrf
             <div class="input-group{{ hasError('ip') }}">
                 <input type="text" class="form-control" id="ip" name="ip" maxlength="45" value="{{ old('ip') }}" placeholder="IP-address" required>
@@ -67,7 +67,7 @@
     </div>
 
     @if ($logs->isNotEmpty() && isAdmin('boss'))
-        <form action="/admin/ipbans/clear" method="post" data-confirm="{{ __('admin.ipbans.confirm_clear') }}">
+        <form action="{{ route('admin.ipbans.clear') }}" method="post" data-confirm="{{ __('admin.ipbans.confirm_clear') }}">
             @csrf
             <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
         </form><br>

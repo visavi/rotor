@@ -64,7 +64,7 @@ class UserController extends Controller
 
         Auth::login($user, true);
 
-        return redirect('/')
+        return redirect()->route('home')
             ->with('success', __('users.welcome', ['login' => $login]));
     }
 
@@ -74,7 +74,7 @@ class UserController extends Controller
     public function login(Request $request, Flood $flood): View|RedirectResponse
     {
         if (Auth::check()) {
-            return redirect('/')->with('danger', __('main.already_authorized'));
+            return redirect()->route('home')->with('danger', __('main.already_authorized'));
         }
 
         $isFlood = $flood->isFlood();
@@ -97,7 +97,7 @@ class UserController extends Controller
     public function authenticate(Request $request, Flood $flood): RedirectResponse
     {
         if (Auth::check()) {
-            return redirect('/')->with('danger', __('main.already_authorized'));
+            return redirect()->route('home')->with('danger', __('main.already_authorized'));
         }
 
         if (! $request->has(['login', 'password'])) {
@@ -154,7 +154,7 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 
     /**
@@ -217,7 +217,7 @@ class UserController extends Controller
             'confirm_token' => null,
         ]);
 
-        return redirect('/')->with('success', __('users.account_success_activated'));
+        return redirect()->route('home')->with('success', __('users.account_success_activated'));
     }
 
     /**

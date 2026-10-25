@@ -39,7 +39,7 @@
                 <div class="fw-semibold mb-1">{{ __('welcome.step1_title') }}</div>
                 <div class="text-muted small mb-2">{{ __('welcome.step1_text') }}</div>
                 @if (isAdmin())
-                    <a href="/admin/modules" class="btn btn-sm btn-outline-primary text-nowrap">
+                    <a href="{{ route('admin.modules.index') }}" class="btn btn-sm btn-outline-primary text-nowrap">
                         <i class="fas fa-puzzle-piece me-1"></i>{{ __('welcome.step1_btn') }}
                     </a>
                 @endif
@@ -55,7 +55,7 @@
                 <div class="fw-semibold mb-1">{{ __('welcome.step2_title') }}</div>
                 <div class="text-muted small mb-2">{{ __('welcome.step2_text') }}</div>
                 @if (isAdmin())
-                    <a href="/admin/settings" class="btn btn-sm btn-outline-primary text-nowrap">
+                    <a href="{{ route('admin.settings') }}" class="btn btn-sm btn-outline-primary text-nowrap">
                         <i class="fas fa-sliders-h me-1"></i>{{ __('welcome.step2_btn') }}
                     </a>
                 @endif

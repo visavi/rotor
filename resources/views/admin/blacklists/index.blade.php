@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.blacklist') }}</li>
         </ol>
@@ -15,15 +15,15 @@
 @section('content')
     <div class="mb-3">
         <?php $active = ($type === 'email') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=email">{{ __('admin.blacklists.email') }}</a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('admin.blacklists.index', ['type' => 'email']) }}">{{ __('admin.blacklists.email') }}</a>
         <?php $active = ($type === 'login') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=login">{{ __('admin.blacklists.logins') }}</a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('admin.blacklists.index', ['type' => 'login']) }}">{{ __('admin.blacklists.logins') }}</a>
         <?php $active = ($type === 'domain') ? 'primary' : 'adaptive'; ?>
-        <a class="btn btn-{{ $active }} btn-sm" href="/admin/blacklists?type=domain">{{ __('admin.blacklists.domains') }}</a>
+        <a class="btn btn-{{ $active }} btn-sm" href="{{ route('admin.blacklists.index', ['type' => 'domain']) }}">{{ __('admin.blacklists.domains') }}</a>
     </div>
 
     @if ($lists->isNotEmpty())
-        <form action="/admin/blacklists/delete?type={{ $type }}&amp;page={{ $lists->currentPage() }}" method="post">
+        <form action="{{ route('admin.blacklists.delete', ['type' => $type, 'page' => $lists->currentPage()]) }}" method="post">
             @csrf
             @foreach ($lists as $list)
                 <div class="section mb-3 shadow">
@@ -56,7 +56,7 @@
     @endif
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/blacklists?type={{ $type }}" method="post">
+        <form action="{{ route('admin.blacklists.index', ['type' => $type]) }}" method="post">
             @csrf
             <div class="input-group{{ hasError('value') }}">
                 <input type="text" class="form-control" id="value" name="value" maxlength="100" value="{{ old('value') }}" placeholder="{{ __('main.record') }}" required>

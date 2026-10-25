@@ -5,9 +5,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/banhists">{{ __('index.ban_history') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.banhists.index') }}">{{ __('index.ban_history') }}</a></li>
             <li class="breadcrumb-item active">{{ __('admin.banhists.view_history') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
@@ -15,7 +15,7 @@
 
 @section('content')
     @if ($banhist->isNotEmpty())
-        <form action="/admin/banhists/delete?user={{ $user->login }}&amp;page={{ $banhist->currentPage() }}" method="post">
+        <form action="{{ route('admin.banhists.delete', ['user' => $user->login, 'page' => $banhist->currentPage()]) }}" method="post">
             @csrf
             @foreach ($banhist as $data)
                 <div class="section mb-3 shadow">

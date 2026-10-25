@@ -1,14 +1,14 @@
 <div class="section mb-3 shadow">
     <ol class="breadcrumb mb-1">
         <li class="breadcrumb-item">
-            <i class="fa-regular fa-note-sticky"></i> <a href="/users" class="text-muted">{{ __('index.users') }}</a>
+            <i class="fa-regular fa-note-sticky"></i> <a href="{{ route('users.index') }}" class="text-muted">{{ __('index.users') }}</a>
         </li>
     </ol>
 
     <div class="section-header d-flex align-items-start">
         <div class="flex-grow-1">
             <div class="section-title">
-                <h3><a class="post-title" href="/users/{{ $post->login }}">{{ $post->login }}</a></h3>
+                <h3><a class="post-title" href="{{ route('users.user', ['login' => $post->login]) }}">{{ $post->login }}</a></h3>
             </div>
         </div>
     </div>

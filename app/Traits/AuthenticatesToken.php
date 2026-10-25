@@ -7,13 +7,14 @@ namespace App\Traits;
 use App\Models\User;
 use App\Services\MetrikaService;
 use App\Support\Locale;
+use Illuminate\Http\Request;
 
 trait AuthenticatesToken
 {
     /**
      * Авторизует владельца токена и отмечает визит
      */
-    protected function authenticateToken(string $token, MetrikaService $metrikaService): void
+    protected function authenticateToken(string $token, Request $request, MetrikaService $metrikaService): void
     {
         if (! $user = User::query()->where('apikey', $token)->first()) {
             abort(401, 'Unauthorized');
@@ -28,6 +29,6 @@ trait AuthenticatesToken
         // Язык профиля важнее Accept-Language, который поставила группа api
         Locale::apply($user->language);
 
-        $metrikaService->saveVisit($user);
+        $metrikaService->saveVisit($user, $request);
     }
 }

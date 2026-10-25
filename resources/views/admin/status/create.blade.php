@@ -5,9 +5,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/status">{{ __('index.user_statuses') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.status.index') }}">{{ __('index.user_statuses') }}</a></li>
             <li class="breadcrumb-item active">{{ __('statuses.create_status') }}</li>
         </ol>
     </nav>

@@ -5,9 +5,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/notices">{{ __('index.notice_templates') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.notices.index') }}">{{ __('index.notice_templates') }}</a></li>
             <li class="breadcrumb-item active">{{ __('admin.notices.create') }}</li>
         </ol>
     </nav>
@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/notices/create" method="post">
+        <form action="{{ route('admin.notices.create') }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('type') }}">
                 <label for="type" class="form-label">{{ __('main.type') }} (a-z0-9_-):</label>

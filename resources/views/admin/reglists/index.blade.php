@@ -6,7 +6,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.pending_list') }}</li>
         </ol>
@@ -26,7 +26,7 @@
 
     @if ($users->isNotEmpty())
 
-        <form action="/admin/reglists?page={{ $users->currentPage() }}" method="post">
+        <form action="{{ route('admin.reglists.index', ['page' => $users->currentPage()]) }}" method="post">
             @csrf
             @foreach ($users as $user)
                 <div class="section mb-3 shadow">

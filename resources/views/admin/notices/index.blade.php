@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-success" href="/admin/notices/create">{{ __('main.add') }}</a>
+        <a class="btn btn-success" href="{{ route('admin.notices.create') }}">{{ __('main.add') }}</a>
     </div>
 
     <h1>{{ __('index.notice_templates') }}</h1>
@@ -13,7 +13,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.notice_templates') }}</li>
         </ol>
@@ -26,13 +26,13 @@
             <div class="section mb-3 shadow">
                 <div class="section-title">
                     <i class="fa fa-envelope"></i>
-                        <a href="/admin/notices/edit/{{ $notice->id }}">{{ $notice->name }}</a>
+                        <a href="{{ route('admin.notices.edit', ['id' => $notice->id]) }}">{{ $notice->name }}</a>
 
                     <div class="float-end">
                         @if ($notice->protect)
                             <i class="fa fa-lock"></i>
                         @else
-                            <form action="/admin/notices/delete/{{ $notice->id }}" method="post" class="d-inline" data-confirm="{{ __('admin.notices.confirm_delete') }}">
+                            <form action="{{ route('admin.notices.delete', ['id' => $notice->id]) }}" method="post" class="d-inline" data-confirm="{{ __('admin.notices.confirm_delete') }}">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-link p-0"><i class="fa fa-trash-alt"></i></button>

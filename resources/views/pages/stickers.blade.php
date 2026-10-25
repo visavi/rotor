@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.stickers') }}</li>
         </ol>
     </nav>
@@ -15,7 +15,7 @@
     @if ($categories->isNotEmpty())
         <div class="tile-grid">
             @foreach ($categories as $category)
-                <a class="tile sticker-category" href="/stickers/{{ $category->id }}">
+                <a class="tile sticker-category" href="{{ route('stickers.category', ['id' => $category->id]) }}">
                     <span class="sticker-category-title">
                         {{ $category->name }} <span class="badge bg-adaptive">{{ $category->cnt }}</span>
                     </span>

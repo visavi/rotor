@@ -5,8 +5,8 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('users.user', ['login' => $user->login]) }}">{{ $user->getName() }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.my_settings') }}</li>
         </ol>
     </nav>
@@ -69,7 +69,7 @@ $notifications = [
     <div class="tab-content" data-tabs>
         {{-- Настройки отображения и уведомлений — одной формой, как было --}}
         <div class="tab-pane fade show active" id="tab-settings">
-            <form method="post" action="/settings">
+            <form method="post" action="{{ route('settings') }}">
         @csrf
 
         <div class="section-form mb-3 shadow">
@@ -141,7 +141,7 @@ $notifications = [
                     <div class="section-title"><i class="fas fa-award"></i> {{ __('users.status_change') }}</div>
 
                     @if ($user->point >= setting('editstatuspoint'))
-                        <form method="post" action="/accounts/editstatus">
+                        <form method="post" action="{{ route('accounts.edit-status') }}">
                             @csrf
                             <label for="status" class="form-label">{{ __('users.personal_status') }}:</label>
                             <div class="input-group{{ hasError('status') }}">
@@ -166,7 +166,7 @@ $notifications = [
                 <div class="section-title"><i class="fas fa-palette"></i> {{ __('users.color_change') }}</div>
 
                 @if ($user->point >= setting('editcolorpoint'))
-                    <form method="post" action="/accounts/editcolor">
+                    <form method="post" action="{{ route('accounts.edit-color') }}">
                         @csrf
                         <?php $color = old('color', $user->color); ?>
                         <div class="col-sm-4 mb-3{{ hasError('color') }}">
@@ -220,7 +220,7 @@ $notifications = [
             <div class="section-form mb-3 shadow">
                 <div class="section-title"><i class="fas fa-key"></i> {{ __('users.change_password') }}</div>
 
-                <form method="post" action="/accounts/editpassword">
+                <form method="post" action="{{ route('accounts.edit-password') }}">
                     @csrf
                     <div class="mb-3{{ hasError('new_password') }}">
                         <label for="new_password" class="form-label">{{ __('users.new_password') }}:</label>
@@ -249,7 +249,7 @@ $notifications = [
             <div class="section-form mb-3 shadow">
                     <div class="section-title"><i class="fas fa-code"></i> {{ __('users.your_token') }}</div>
 
-                    <form method="post" action="/accounts/apikey">
+                    <form method="post" action="{{ route('accounts.apikey') }}">
                         @csrf
                         @if ($user->apikey)
                             <div class="col-sm-4 mb-3">
@@ -268,7 +268,7 @@ $notifications = [
                     </form>
 
                     <span class="text-muted fst-italic">
-                        {{ __('users.token_required') }} <a href="/api">{{ __('users.api_interface') }}</a>
+                        {{ __('users.token_required') }} <a href="{{ route('api') }}">{{ __('users.api_interface') }}</a>
                     </span>
                 </div>
         </div>

@@ -47,15 +47,15 @@ Route::controller(HomeController::class)
         Route::match(['get', 'post'], '/ipban', 'ipban')->name('ipban')
             ->withoutMiddleware('web');
 
-        Route::get('/403', 'error403');
-        Route::get('/404', 'error404');
+        Route::get('/403', 'error403')->name('errors.403');
+        Route::get('/404', 'error404')->name('errors.404');
     });
 
 /* Карта сайта */
 Route::controller(SitemapController::class)
     ->group(function () {
-        Route::get('/sitemap.xml', 'index');
-        Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+');
+        Route::get('/sitemap.xml', 'index')->name('sitemap');
+        Route::get('/sitemap/{page}.xml', 'page')->where('page', '[a-z]+')->name('sitemap.page');
     });
 
 /* Ajax */
@@ -80,7 +80,7 @@ Route::controller(CommentController::class)
     ->middleware(['check.user'])
     ->prefix('comments')
     ->group(function () {
-        Route::get('/{id}', 'show');
+        Route::get('/{id}', 'show')->name('comments.show');
         Route::patch('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
     });
@@ -110,14 +110,14 @@ Route::controller(MessageController::class)
     });
 
 /* API */
-Route::get('/api', [ApiController::class, 'index']);
+Route::get('/api', [ApiController::class, 'index'])->name('api');
 
 /* Бан */
 Route::get('/ban', [BanController::class, 'ban'])->name('ban');
 Route::post('/ban', [BanController::class, 'explain'])->name('ban.explain');
 
 /* Страницы сайта */
-Route::get('/files/{page?}', [FileController::class, 'index'])->where('page', '.+');
+Route::get('/files/{page?}', [FileController::class, 'index'])->where('page', '.+')->name('files');
 
 /* Рейтинг пользователей */
 Route::prefix('users')
@@ -186,16 +186,16 @@ Route::controller(PageController::class)
         Route::get('/statusfaq', 'statusfaq')->name('statusfaq');
         Route::get('/pages/{page?}', 'index')->where('page', '[\w\-]+')->name('pages');
         Route::get('/rules', 'rules')->name('rules');
-        Route::get('/stickers', 'stickers');
-        Route::get('/stickers/{id}', 'stickersCategory');
+        Route::get('/stickers', 'stickers')->name('stickers');
+        Route::get('/stickers/{id}', 'stickersCategory')->name('stickers.category');
     });
 
 /* Онлайн */
 Route::controller(OnlineController::class)
     ->prefix('online')
     ->group(function () {
-        Route::get('/', 'index');
-        Route::get('/all', 'all');
+        Route::get('/', 'index')->name('online');
+        Route::get('/all', 'all')->name('online.all');
     });
 
 require __DIR__ . '/admin.php';
@@ -206,10 +206,10 @@ if (file_exists(app_path('Http/Controllers/InstallController.php'))) {
         ->withoutMiddleware('web')
         ->group(function () {
             Route::get('/', 'index')->name('install');
-            Route::get('/status', 'status');
-            Route::get('/migrate/next', 'migrateNext');
-            Route::get('/seed', 'seed');
-            Route::match(['get', 'post'], '/account', 'account');
-            Route::get('/finish', 'finish');
+            Route::get('/status', 'status')->name('install.status');
+            Route::get('/migrate/next', 'migrateNext')->name('install.migrate-next');
+            Route::get('/seed', 'seed')->name('install.seed');
+            Route::match(['get', 'post'], '/account', 'account')->name('install.account');
+            Route::get('/finish', 'finish')->name('install.finish');
         });
 }

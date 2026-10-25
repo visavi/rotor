@@ -6,7 +6,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.register') }}</li>
         </ol>
     </nav>
@@ -26,7 +26,7 @@
     <div class="section-form mb-3 shadow">
         <div class="section-title"><i class="fa-solid fa-pen-to-square"></i> {{ __('index.register') }}</div>
 
-        <form action="/register" method="post">
+        <form action="{{ route('register') }}" method="post">
             @csrf
             <div class="mb-3{{ hasError('login') }}">
                 <label for="inputLogin" class="form-label">{{ __('users.login') }}:</label>

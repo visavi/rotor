@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('pages.online') }}</li>
         </ol>
     </nav>
@@ -61,8 +61,8 @@
 
     <i class="fa fa-users"></i>
     @if ($guests)
-        <a href="/online">{{ __('pages.hide_guests') }}</a><br>
+        <a href="{{ route('online') }}">{{ __('pages.hide_guests') }}</a><br>
     @else
-        <a href="/online/all">{{ __('pages.show_guests') }}</a><br>
+        <a href="{{ route('online.all') }}">{{ __('pages.show_guests') }}</a><br>
     @endif
 @stop

@@ -155,7 +155,7 @@
             <span class="dot"></span>
         </div>
         <br>
-        <a href="/" class="btn">{{ __('errors.to_main') }}</a>
+        <a href="{{ route('home') }}" class="btn">{{ __('errors.to_main') }}</a>
     </div>
 </body>
 </html>

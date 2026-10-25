@@ -24,7 +24,7 @@ class RecoveryController extends Controller
     public function recovery(): View|RedirectResponse
     {
         if (auth()->check()) {
-            return redirect('/')->with('danger', __('main.already_authorized'));
+            return redirect()->route('home')->with('danger', __('main.already_authorized'));
         }
 
         return view('users/recovery');
@@ -39,7 +39,7 @@ class RecoveryController extends Controller
 
         $userService->requestRecovery($user);
 
-        return redirect('/')->with('success', __('mails.recovery_instructions', ['email' => hideMail((string) $user->email)]));
+        return redirect()->route('home')->with('success', __('mails.recovery_instructions', ['email' => hideMail((string) $user->email)]));
     }
 
     /**
@@ -48,7 +48,7 @@ class RecoveryController extends Controller
     public function restore(string $token, MailService $mail): View|RedirectResponse
     {
         if (auth()->check()) {
-            return redirect('/')->with('danger', __('main.already_authorized'));
+            return redirect()->route('home')->with('danger', __('main.already_authorized'));
         }
 
         PasswordReset::query()
@@ -86,7 +86,7 @@ class RecoveryController extends Controller
             ->where('created_at', '<', now()->subHour())
             ->delete();
 
-        return redirect('/')
+        return redirect()->route('home')
             ->with('success', __('mails.success_recovery', ['password' => $password]));
     }
 }

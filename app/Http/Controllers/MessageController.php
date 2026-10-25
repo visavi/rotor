@@ -160,7 +160,7 @@ class MessageController extends Controller
     public function newMessages(Request $request, #[CurrentUser] User $me): Response
     {
         if (! $request->ajax()) {
-            return redirect('/');
+            return redirect()->route('home');
         }
 
         $countMessages = Dialogue::query()

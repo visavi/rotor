@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.upload_photo') }}</li>
         </ol>
     </nav>
@@ -19,7 +19,7 @@
             <img class="img-fluid rounded" src="/assets/img/images/photo.svg" alt="Photo">
         @endif
 
-        <form action="/pictures" method="post" enctype="multipart/form-data">
+        <form action="{{ route('pictures.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3{{ hasError('photo') }}">
                 <label class="btn btn-sm btn-secondary" for="inputPhoto">

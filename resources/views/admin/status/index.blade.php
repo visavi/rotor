@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-success" href="/admin/status/create">{{ __('main.create') }}</a>
+        <a class="btn btn-success" href="{{ route('admin.status.create') }}">{{ __('main.create') }}</a>
     </div>
 
     <h1>{{ __('index.user_statuses') }}</h1>
@@ -13,7 +13,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.user_statuses') }}</li>
         </ol>
@@ -38,9 +38,9 @@
                         <small>({{ $status->topoint }} - {{ $status->point }})</small>
 
                         <div class="float-end">
-                            <a data-bs-toggle="tooltip" title="{{ __('main.edit') }}" href="/admin/status/edit?id={{ $status->id }}"><i class="fa fa-pencil-alt text-muted"></i></a>
+                            <a data-bs-toggle="tooltip" title="{{ __('main.edit') }}" href="{{ route('admin.status.edit', ['id' => $status->id]) }}"><i class="fa fa-pencil-alt text-muted"></i></a>
 
-                            <form action="/admin/status/delete" method="post" class="d-inline" data-confirm="{{ __('statuses.confirm_delete') }}">
+                            <form action="{{ route('admin.status.delete') }}" method="post" class="d-inline" data-confirm="{{ __('statuses.confirm_delete') }}">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id" value="{{ $status->id }}">

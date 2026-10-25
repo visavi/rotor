@@ -1,1 +1,1 @@
-@php redirect('/install/status?lang=' . $lang)->send(); @endphp
+@php redirect()->route('install.status', ['lang' => $lang])->send(); @endphp

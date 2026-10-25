@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">{{ __('index.messages') }}</li>
         </ol>
     </nav>
@@ -13,14 +13,14 @@
 
 @section('content')
     <div class="text-end mb-2">
-        <a class="d-inline-flex align-items-center gap-1" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+        <a class="d-inline-flex align-items-center gap-1" href="{{ route('users.index') }}"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
     </div>
 
     @if ($messages->isNotEmpty())
         <div class="section mb-3 shadow dialogue-list">
             @foreach ($messages as $data)
                 <?php $login = $data->author->exists ? $data->author->login : $data->author_id ?>
-                <div class="dialogue-row" data-href="/messages/talk/{{ $login }}">
+                <div class="dialogue-row" data-href="{{ route('messages.talk', ['login' => $login]) }}">
                     <div class="dialogue-avatar">
                         @if ($data->author_id)
                             {{ $data->author->getAvatar() }}

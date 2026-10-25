@@ -71,6 +71,16 @@ class ArchitectureTest extends TestCase
         );
     }
 
+    public function testRequestIsInjected(): void
+    {
+        // Хелперы, хуки меню и шаблоны request() берут законно: им запрос не передать
+        $this->assertCodeMissing(
+            '/\brequest\(\)/',
+            ['app/Http', 'app/Services', 'app/Traits', 'modules/*/Http', 'modules/*/Services'],
+            'request() прячет зависимость от запроса. В экшене и middleware — параметр Request $request, данные формы — FormRequest, в сервис — передать аргументом',
+        );
+    }
+
     public function testRouteActionsExist(): void
     {
         $found = [];
@@ -90,6 +100,40 @@ class ArchitectureTest extends TestCase
         }
 
         $this->assertSame([], $found, 'Маршрут ведёт на метод, которого нет в контроллере: любой запрос по нему отдаёт 500. Удалите маршрут или добавьте метод');
+    }
+
+    public function testPagesHaveRouteNames(): void
+    {
+        // Форма на тот же адрес имени не требует: route('login') годится и для POST.
+        // Имя с точкой на конце — префикс группы без своего имени у маршрута
+        $routes = Route::getRoutes()->getRoutes();
+        $named = [];
+
+        foreach ($routes as $route) {
+            $name = (string) $route->getName();
+
+            if ($name !== '' && ! str_ends_with($name, '.')) {
+                $named[$route->uri()] = true;
+            }
+        }
+
+        $found = [];
+
+        foreach ($routes as $route) {
+            $uses = $route->getAction('uses');
+
+            // Редиректы, замыкания, /up фреймворка, API и ajax ссылками из шаблонов не строятся
+            if (! is_string($uses) || ! str_contains($uses, '@') || str_starts_with($uses, 'Illuminate\\')
+                || str_starts_with($route->uri(), 'api/') || str_starts_with($route->uri(), 'ajax/')) {
+                continue;
+            }
+
+            if (! isset($named[$route->uri()])) {
+                $found[] = implode('|', $route->methods()) . ' ' . $route->uri();
+            }
+        }
+
+        $this->assertSame([], $found, 'У адреса нет имени маршрута — ссылку на него приходится писать строкой. Добавьте ->name(): страница — route(\'раздел.действие\'), POST на тот же адрес имени не требует');
     }
 
     public function testCurrentUserDoesNotShadowRouteParameter(): void

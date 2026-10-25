@@ -100,7 +100,7 @@ class AccountController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/')->with('success', __('users.password_success_changed'));
+        return redirect()->route('home')->with('success', __('users.password_success_changed'));
     }
 
     /**

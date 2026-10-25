@@ -69,10 +69,10 @@ class MetrikaService
     /**
      * Сохраняет визит пользователя, авторизованного по api-токену
      */
-    public function saveVisit(User $user): void
+    public function saveVisit(User $user, Request $request): void
     {
         // Фоновый опрос клиента не означает, что человек за экраном
-        if (request()->is(...self::backgroundPaths())) {
+        if ($request->is(...self::backgroundPaths())) {
             return;
         }
 

@@ -9,7 +9,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">Как создать свои страницы</li>
         </ol>
     </nav>
@@ -75,8 +75,8 @@
 @@section('breadcrumb')
     &lt;nav>
         &lt;ol class="breadcrumb">
-            &lt;li class="breadcrumb-item">&lt;a href="/">&lt;i class="fas fa-home">&lt;/i>&lt;/a>&lt;li>
-            &lt;li class="breadcrumb-item">&lt;a href="/files">Файлы&lt;/a>&lt;/li>
+            &lt;li class="breadcrumb-item">&lt;a href="{{ route('home') }}">&lt;i class="fas fa-home">&lt;/i>&lt;/a>&lt;li>
+            &lt;li class="breadcrumb-item">&lt;a href="{{ route('files') }}">Файлы&lt;/a>&lt;/li>
             &lt;li class="breadcrumb-item active">Активная страница&lt;/li>
         &lt;/ol>
     &lt;/nav>
@@ -148,5 +148,5 @@
         </div>
     </div>
 
-    <a class="btn btn-primary mb-3" href="/files/example"><i class="fas fa-eye"></i> Посмотреть пример страницы</a>
+    <a class="btn btn-primary mb-3" href="{{ route('files', ['page' => 'example']) }}"><i class="fas fa-eye"></i> Посмотреть пример страницы</a>
 @stop

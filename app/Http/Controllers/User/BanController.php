@@ -27,7 +27,7 @@ class BanController extends Controller
                 'timeban' => null,
             ]);
 
-            return redirect('/')
+            return redirect()->route('home')
                 ->with('success', __('users.ban_expired'));
         }
 

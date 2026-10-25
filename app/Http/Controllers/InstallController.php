@@ -272,10 +272,11 @@ class InstallController extends Controller
                 $text = __('install.text_message', ['login' => $login]);
                 $user->sendMessage(null, $text);
 
-                return redirect('/install/finish');
+                // Язык мастера идёт дальше: без него финал открывался по-русски
+                return redirect()->route('install.finish', ['lang' => $lang]);
             }
 
-            return redirect('/install/account')
+            return redirect()->route('install.account', ['lang' => $lang])
                 ->withInput()
                 ->withErrors($validator);
         }

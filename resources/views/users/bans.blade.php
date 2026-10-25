@@ -8,7 +8,7 @@
 
         @if (! $banhist->explain && setting('addbansend'))
             <div class="section-form mb-3 shadow">
-                <form method="post" action="/ban">
+                <form method="post" action="{{ route('ban.explain') }}">
                     @csrf
                     <div class="mb-3{{ hasError('msg') }}">
                         <label for="msg" class="form-label">{{ __('users.explanation') }}:</label>
@@ -24,6 +24,6 @@
     @endif
 
     {{ __('users.ending_ban') }}: <b>{{ formatTime((int) now()->diffInSeconds($user->timeban)) }}</b><br><br>
-    {{ __('users.read_section') }} <b><a href="/rules">{{ __('main.site_rules') }}</a></b><br><br>
+    {{ __('users.read_section') }} <b><a href="{{ route('rules') }}">{{ __('main.site_rules') }}</a></b><br><br>
     {!! __('users.ban_text2') !!}<br>
 @stop

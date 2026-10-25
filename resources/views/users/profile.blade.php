@@ -5,8 +5,8 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/users/{{ $user->login }}">{{ $user->getName() }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('users.user', ['login' => $user->login]) }}">{{ $user->getName() }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.my_profile') }}</li>
         </ol>
     </nav>
@@ -34,16 +34,16 @@ $inputGender  = old('gender', $user->gender);
 
             <div>
                 @if ($hasPicture)
-                    <a class="btn btn-sm btn-adaptive" href="/pictures"><i class="fas fa-rotate"></i> {{ __('main.change') }}</a>
+                    <a class="btn btn-sm btn-adaptive" href="{{ route('pictures.index') }}"><i class="fas fa-rotate"></i> {{ __('main.change') }}</a>
                     <button class="btn btn-sm btn-danger" form="delete-picture-form"><i class="fas fa-trash"></i> {{ __('main.delete') }}</button>
                 @else
-                    <a class="btn btn-sm btn-primary" href="/pictures"><i class="fas fa-upload"></i> {{ __('main.upload') }}</a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('pictures.index') }}"><i class="fas fa-upload"></i> {{ __('main.upload') }}</a>
                 @endif
             </div>
         </div>
     </div>
 
-    <form method="post" action="/profile">
+    <form method="post" action="{{ route('profile') }}">
         @csrf
 
         <div class="section-form mb-3 shadow">
@@ -134,7 +134,7 @@ $inputGender  = old('gender', $user->gender);
         <button class="btn btn-primary">{{ __('main.change') }}</button>
     </form>
 
-    <form id="delete-picture-form" action="/pictures/delete" method="post" class="d-none">
+    <form id="delete-picture-form" action="{{ route('pictures.delete') }}" method="post" class="d-none">
         @csrf
         @method('DELETE')
     </form>

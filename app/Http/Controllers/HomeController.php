@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function feed(Request $request, FeedService $feed): string|RedirectResponse
     {
         if (! $request->ajax()) {
-            return redirect(url('/') . ($request->has('page') ? '?page=' . $request->integer('page') : ''));
+            return redirect()->route('home', $request->has('page') ? ['page' => $request->integer('page')] : []);
         }
 
         return (string) $feed->getFeed();
@@ -49,7 +49,7 @@ class HomeController extends Controller
     public function closed(): Response
     {
         if (setting('closedsite') !== 2) {
-            return redirect('/');
+            return redirect()->route('home');
         }
 
         return response()->view('pages/closed', [], 503);
@@ -97,7 +97,7 @@ class HomeController extends Controller
         if (! $ban) {
             clearCache('ipBan');
 
-            return redirect('/');
+            return redirect()->route('home');
         }
 
         if (
@@ -109,7 +109,7 @@ class HomeController extends Controller
             $ban->delete();
             $this->markUnbanned();
 
-            return redirect('/')
+            return redirect()->route('home')
                 ->with('success', __('pages.ip_success_unbanned'));
         }
 

@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-success" href="/admin/rules/edit">Редактировать</a>
+        <a class="btn btn-success" href="{{ route('admin.rules.edit') }}">Редактировать</a>
     </div>
 
     <h1>{{ __('index.site_rules') }}</h1>
@@ -13,7 +13,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.site_rules') }}</li>
         </ol>

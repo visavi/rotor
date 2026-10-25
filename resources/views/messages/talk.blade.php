@@ -5,8 +5,8 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-            <li class="breadcrumb-item"><a href="/messages">{{ __('index.messages') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('messages.index') }}">{{ __('index.messages') }}</a></li>
             <li class="breadcrumb-item active">{{ __('messages.dialogue') }}</li>
         </ol>
     </nav>
@@ -21,7 +21,7 @@
             @hook('messageActions', $user)
         @endif
 
-        <a class="ms-auto d-inline-flex align-items-center gap-1" href="/users"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
+        <a class="ms-auto d-inline-flex align-items-center gap-1" href="{{ route('users.index') }}"><i class="fa fa-search"></i> {{ __('index.user_search') }}</a>
     </div>
     <hr>
 
@@ -33,7 +33,7 @@
         @endphp
 
         <div class="section-form mb-3 shadow">
-            <form action="/messages/send?user={{ $user->login }}" method="post"@if ($compact) data-compact @endif>
+            <form action="{{ route('messages.send', ['user' => $user->login]) }}" method="post"@if ($compact) data-compact @endif>
                 @csrf
                 <div class="mb-3 compact-field{{ hasError('msg') }}">
                     <textarea class="form-control tiptap" maxlength="{{ setting('comment_text_max') }}" id="msg" rows="5" name="msg" data-relate-type="{{ \App\Models\Message::$morphName }}" data-relate-id="0" placeholder="{{ __('main.write_message') }}" required>{{ old('msg') }}</textarea>
@@ -134,7 +134,7 @@
     @endif
 
     @if ($messages->isNotEmpty())
-        <form class="text-end mb-3" action="/messages/delete/{{ $user->id }}" method="post" data-confirm="{{ __('messages.delete_confirm') }}">
+        <form class="text-end mb-3" action="{{ route('messages.delete', ['uid' => $user->id]) }}" method="post" data-confirm="{{ __('messages.delete_confirm') }}">
             @csrf
             @method('DELETE')
             <button class="btn btn-sm btn-outline-danger"><i class="fa fa-times"></i> {{ __('messages.delete_talk') }}</button>

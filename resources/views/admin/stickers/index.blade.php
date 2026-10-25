@@ -4,7 +4,7 @@
 
 @section('header')
     <div class="float-end">
-        <a class="btn btn-success" href="/admin/stickers/sticker/create">{{ __('main.upload') }}</a>
+        <a class="btn btn-success" href="{{ route('admin.stickers.sticker.create') }}">{{ __('main.upload') }}</a>
     </div>
 
     <h1>{{ __('index.stickers') }}</h1>
@@ -13,7 +13,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.stickers') }}</li>
         </ol>
@@ -25,12 +25,12 @@
         @foreach ($categories as $category)
             <div class="section mb-3 shadow">
                 <div class="section-title">
-                    <i class="far fa-smile"></i>  <b><a href="/admin/stickers/{{ $category->id }}">{{ $category->name }}</a></b> <span class="badge bg-adaptive">{{ $category->cnt }}</span>
+                    <i class="far fa-smile"></i>  <b><a href="{{ route('admin.stickers.category', ['id' => $category->id]) }}">{{ $category->name }}</a></b> <span class="badge bg-adaptive">{{ $category->cnt }}</span>
 
                     <div class="float-end">
-                        <a href="/admin/stickers/edit/{{ $category->id }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                        <a href="{{ route('admin.stickers.edit', ['id' => $category->id]) }}" data-bs-toggle="tooltip" title="{{ __('main.edit') }}"><i class="fa fa-pencil-alt"></i></a>
 
-                        <form action="/admin/stickers/delete/{{ $category->id }}" method="post" class="d-inline" data-confirm="{{ __('stickers.confirm_delete_category') }}">
+                        <form action="{{ route('admin.stickers.delete', ['id' => $category->id]) }}" method="post" class="d-inline" data-confirm="{{ __('stickers.confirm_delete_category') }}">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-link p-0" data-bs-toggle="tooltip" title="{{ __('main.delete') }}"><i class="fa fa-times"></i></button>
@@ -44,7 +44,7 @@
     @endif
 
     <div class="section-form mb-3 shadow">
-        <form action="/admin/stickers/create" method="post">
+        <form action="{{ route('admin.stickers.store') }}" method="post">
             @csrf
             <div class="input-group{{ hasError('name') }}">
                 <input type="text" class="form-control" id="name" name="name" maxlength="50" value="{{ old('name') }}" placeholder="{{ __('stickers.category') }}" required>

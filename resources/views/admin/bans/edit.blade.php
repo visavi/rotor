@@ -5,9 +5,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/bans">{{ __('index.ban_unban') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.bans.index') }}">{{ __('index.ban_unban') }}</a></li>
             <li class="breadcrumb-item active">{{ __('admin.bans.user_ban') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
@@ -23,7 +23,7 @@
         {{ __('users.reason_ban') }}: {{ $user->lastBan->getReason() }}<br>
     @endif
 
-    <i class="fa fa-history"></i> <b><a href="/admin/banhists/view?user={{ $user->login }}">{{ __('index.ban_history') }}</a></b><br><br>
+    <i class="fa fa-history"></i> <b><a href="{{ route('admin.banhists.view', ['user' => $user->login]) }}">{{ __('index.ban_history') }}</a></b><br><br>
 
     @if ($user->level === 'banned' && $user->timeban?->isFuture())
         <div class="section shadow mb-3">
@@ -31,16 +31,16 @@
             {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}<br>
         </div>
 
-        <i class="fa fa-pencil-alt"></i> <a href="/admin/bans/change?user={{ $user->login }}">{{ __('main.change') }}</a><br>
+        <i class="fa fa-pencil-alt"></i> <a href="{{ route('admin.bans.change', ['user' => $user->login]) }}">{{ __('main.change') }}</a><br>
         <i class="fa fa-check-circle"></i>
-        <form action="/admin/bans/unban" method="post" class="d-inline" data-confirm="{{ __('admin.bans.confirm_unban') }}">
+        <form action="{{ route('admin.bans.unban') }}" method="post" class="d-inline" data-confirm="{{ __('admin.bans.confirm_unban') }}">
             @csrf
             <input type="hidden" name="user" value="{{ $user->login }}">
             <button class="btn btn-link p-0">{{ __('users.unban') }}</button>
         </form><hr>
     @else
         <div class="section-form mb-3 shadow">
-            <form method="post" action="/admin/bans/edit?user={{ $user->login }}">
+            <form method="post" action="{{ route('admin.bans.edit', ['user' => $user->login]) }}">
                 @csrf
                 <div class="mb-3{{ hasError('time') }}">
                     <label for="time" class="form-label">{{ __('admin.bans.time_ban') }}:</label>

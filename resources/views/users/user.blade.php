@@ -18,7 +18,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.account') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
@@ -102,7 +102,7 @@ $serviceFields = array_filter([
                 </div>
 
                 <div class="profile-badges">
-                    <a class="badge bg-adaptive" href="/statusfaq">{{ $user->getStatus() }}</a>
+                    <a class="badge bg-adaptive" href="{{ route('statusfaq') }}">{{ $user->getStatus() }}</a>
 
                     @if (in_array($user->level, $adminGroups, true))
                         <span class="badge bg-info">{{ $user->getLevel() }}</span>

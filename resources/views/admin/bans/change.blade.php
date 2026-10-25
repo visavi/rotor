@@ -5,9 +5,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/bans">{{ __('index.ban_unban') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.bans.index') }}">{{ __('index.ban_unban') }}</a></li>
             <li class="breadcrumb-item active">{{ __('admin.bans.change_ban') }} {{ $user->getName() }}</li>
         </ol>
     </nav>
@@ -26,7 +26,7 @@
     {{ __('users.ending_ban') }}: {{ formatTime((int) now()->diffInSeconds($user->timeban)) }}<br>
 
     <div class="section-form mb-3 shadow">
-        <form method="post" action="/admin/bans/change?user={{ $user->login }}">
+        <form method="post" action="{{ route('admin.bans.change', ['user' => $user->login]) }}">
             @csrf
             <div class="col-sm-4 mb-3{{ hasError('timeban') }}">
                 <label for="timeban" class="form-label">{{ __('admin.bans.time_ban') }}:</label>

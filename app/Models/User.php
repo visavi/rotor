@@ -301,7 +301,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
                 $admin = ' <i class="fas fa-xs fa-star text-info" title="' . $this->getLevel() . '"></i>';
             }
 
-            $html = '<a class="section-author fw-bold" href="/users/' . $this->login . '" data-login="' . $this->login . '">' . $name . '</a>';
+            $html = '<a class="section-author fw-bold" href="' . route('users.user', ['login' => $this->login]) . '" data-login="' . $this->login . '">' . $name . '</a>';
 
             return new HtmlString($html . $admin);
         }
@@ -492,7 +492,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $avatar = $this->getAvatarDefault();
         }
 
-        return new HtmlString('<a href="/users/' . $this->login . '">' . $avatar . '</a> ');
+        return new HtmlString('<a href="' . route('users.user', ['login' => $this->login]) . '">' . $avatar . '</a> ');
     }
 
     /**

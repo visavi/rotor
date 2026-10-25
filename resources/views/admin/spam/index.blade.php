@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.complains') }}</li>
         </ol>
@@ -16,7 +16,7 @@
 
     <div class="mb-3">
         @foreach ($types as $key => $value)
-            <a class="badge bg-{{ $key === $type ? 'success' : 'adaptive' }}" href="/admin/spam?type={{ $key }}">{{ $value }} {{ $total[$key] }}</a>
+            <a class="badge bg-{{ $key === $type ? 'success' : 'adaptive' }}" href="{{ route('admin.spam.index', ['type' => $key]) }}">{{ $value }} {{ $total[$key] }}</a>
         @endforeach
     </div>
 

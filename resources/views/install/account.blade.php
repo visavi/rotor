@@ -5,7 +5,7 @@
 @section('content')
     <div class="container border rounded-3 shadow-sm px-3 px-md-5 my-4" style="max-width: 960px; background: var(--bs-tertiary-bg);">
         <div class="py-5 text-center">
-            <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
+            <a href="{{ route('home') }}"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2>Mobile CMS</h2>
         </div>
 
@@ -16,7 +16,7 @@
         {{ __('install.delete_install') }}<br><br>
 
         <div class="section-form mb-3 shadow">
-            <form method="post" action="/install/account?lang={{ $lang }}">
+            <form method="post" action="{{ route('install.account', ['lang' => $lang]) }}">
                 <div class="mb-3{{ hasError('login') }}">
                     <label for="login" class="form-label">{{ __('users.login') }} (max20):</label>
                     <input type="text" class="form-control" name="login" id="login" maxlength="20" value="{{ old('login', $login) }}">

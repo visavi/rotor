@@ -26,7 +26,7 @@ class CheckTokenOptional
         $token = $request->bearerToken();
 
         if ($token) {
-            $this->authenticateToken($token, $this->metrikaService);
+            $this->authenticateToken($token, $request, $this->metrikaService);
         }
 
         return $next($request);

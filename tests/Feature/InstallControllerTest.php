@@ -39,7 +39,8 @@ class InstallControllerTest extends TestCase
             'email'     => 'installboss@example.com',
         ]);
 
-        $response->assertRedirect('/install/finish');
+        // Язык мастера не теряется по дороге к финалу
+        $response->assertRedirect('/install/finish?lang=ru');
 
         $user = User::query()->where('login', 'installboss')->first();
 
@@ -106,7 +107,7 @@ class InstallControllerTest extends TestCase
                 'email'     => 'installboss@example.com',
             ]);
 
-        $response->assertRedirect('/install/account');
+        $response->assertRedirect('/install/account?lang=ru');
 
         $this->get('/install/account')
             ->assertOk()

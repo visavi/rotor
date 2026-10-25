@@ -5,9 +5,9 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
-            <li class="breadcrumb-item"><a href="/admin/stickers">{{ __('index.stickers') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.stickers.index') }}">{{ __('index.stickers') }}</a></li>
             <li class="breadcrumb-item active">{{ __('stickers.create_sticker') }}</li>
         </ol>
     </nav>
@@ -15,7 +15,7 @@
 
 @section('content')
     <div class="section-form mb-3 shadow">
-        <form action="/admin/stickers/sticker/create" method="post" enctype="multipart/form-data">
+        <form action="{{ route('admin.stickers.sticker.create') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="mb-3{{ hasError('cid') }}">
                 <label for="inputCategory" class="form-label">{{ __('stickers.category') }}</label>

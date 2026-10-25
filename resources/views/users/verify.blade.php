@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item active">{{ __('index.confirm_register') }}</li>
         </ol>
     </nav>
@@ -50,7 +50,7 @@
     </p>
 
     <div class="auth-links">
-        <form action="/logout" method="post">
+        <form action="{{ route('logout') }}" method="post">
             @csrf
             <button class="btn btn-link p-0"><i class="fa fa-times"></i> {{ __('users.logout') }}</button>
         </form>

@@ -5,7 +5,7 @@
 @section('content')
     <div class="container border rounded-3 shadow-sm px-3 px-md-5 my-4" style="max-width: 960px; background: var(--bs-tertiary-bg);">
         <div class="py-5 text-center">
-            <a href="/"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
+            <a href="{{ route('home') }}"><img class="d-block mx-auto mb-3" src="/assets/img/images/logo_big.png" alt=""></a>
             <h2>Mobile CMS</h2>
         </div>
 
@@ -34,7 +34,7 @@
                 data-running="{{ __('install.migrations_running') }}"
                 data-done="{{ $isUpdate ? __('install.main_page') : __('install.seeds') }}"
                 data-all-done="{{ __('install.migrations_all_done') }}"
-                data-next="/install/migrate/next?lang={{ $lang }}"
+                data-next="{{ route('install.migrate-next', ['lang' => $lang]) }}"
                 data-error="{{ __('install.migrations_error') }}">
                 <i class="fa fa-play"></i> {{ __('install.migrations_run', ['count' => count($pendingMigrations)]) }}
             </button>
@@ -44,9 +44,9 @@
             </div>
 
             @if ($isUpdate)
-                <a class="btn btn-primary" href="/">{{ __('install.main_page') }}</a>
+                <a class="btn btn-primary" href="{{ route('home') }}">{{ __('install.main_page') }}</a>
             @else
-                <a class="btn btn-primary" href="/install/seed?lang={{ $lang }}">{{ __('install.seeds') }}</a>
+                <a class="btn btn-primary" href="{{ route('install.seed', ['lang' => $lang]) }}">{{ __('install.seeds') }}</a>
             @endif
         @endif
 
@@ -99,9 +99,9 @@
                     const doneLabel = btn.dataset.done;
                     const allDone = btn.dataset.allDone;
                     @if($isUpdate)
-                        btn.outerHTML = '<a href="/" class="btn btn-primary mb-3">' + doneLabel + '</a>';
+                        btn.outerHTML = '<a href="{{ route('home') }}" class="btn btn-primary mb-3">' + doneLabel + '</a>';
                     @else
-                        btn.outerHTML = '<a href="/install/seed?lang={{ $lang }}" class="btn btn-primary mb-3">' + doneLabel + '</a>';
+                        btn.outerHTML = '<a href="{{ route('install.seed', ['lang' => $lang]) }}" class="btn btn-primary mb-3">' + doneLabel + '</a>';
                     @endif
                     output.innerHTML += '<br><strong>' + allDone + '</strong>';
                 } else if (data.migration) {

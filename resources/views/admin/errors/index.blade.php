@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">{{ __('index.panel') }}</a></li>
             <li class="breadcrumb-item active">{{ __('index.errors') }}</li>
         </ol>
@@ -20,7 +20,7 @@
     <div class="mb-3">
         {{ __('admin.errors.errors') }}:
         @foreach ($lists as $key => $value)
-            <a class="badge bg-{{ $key === $code ? 'success' : 'adaptive' }}" href="/admin/errors?code={{ $key }}">{{ $value }}</a>
+            <a class="badge bg-{{ $key === $code ? 'success' : 'adaptive' }}" href="{{ route('admin.errors.index', ['code' => $key]) }}">{{ $value }}</a>
         @endforeach
     </div>
 
@@ -51,7 +51,7 @@
         </div>
 
         @if (isAdmin('boss'))
-            <form action="/admin/errors/clear" method="post" data-confirm="{{ __('admin.errors.confirm_clear') }}">
+            <form action="{{ route('admin.errors.clear') }}" method="post" data-confirm="{{ __('admin.errors.confirm_clear') }}">
                 @csrf
                 <button type="submit" class="btn btn-danger"><i class="fa fa-trash-alt"></i> {{ __('main.clear') }}</button>
             </form><br>
