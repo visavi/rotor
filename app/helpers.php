@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
@@ -108,6 +109,9 @@ function check(array|string|null $string, bool $doubleEncode = true): array|stri
 
 /**
  * Преобразует в положительное число
+ *
+ * @deprecated будет удалено в 15.0: (int) или $request->integer() — abs() молча
+ *             превращает минус в плюс
  */
 function int(array|int|string|null $num): int
 {
@@ -116,6 +120,9 @@ function int(array|int|string|null $num): int
 
 /**
  * Преобразует все элементы массива в int
+ *
+ * @deprecated будет удалено в 15.0: array_map(intval(...), $request->array('del')) —
+ *             массив, а не null, и '0' не теряется
  */
 function intar(array|int|string|null $numbers): ?array
 {
@@ -148,6 +155,8 @@ function formatSize(int $bytes, int $precision = 2): string
 
 /**
  * Возвращает размер файла человеко-читаемом формате
+ *
+ * @deprecated будет удалено в 15.0: formatSize(filesize($file))
  */
 function formatFileSize(string $file): string
 {
@@ -403,14 +412,14 @@ function truncateDescription(HtmlString|string|null $value, int $words = 20, str
 }
 
 /**
- * Форматирует вывод числа
+ * Форматирует вывод числа: плюс зелёным, минус красным, цвета берутся из темы
  */
 function formatNum(int|float $num): HtmlString
 {
     if ($num > 0) {
-        $data = '<span style="color:#00aa00">+' . $num . '</span>';
+        $data = '<span class="text-success">+' . $num . '</span>';
     } elseif ($num < 0) {
-        $data = '<span style="color:#ff0000">' . $num . '</span>';
+        $data = '<span class="text-danger">' . $num . '</span>';
     } else {
         $data = '<span>0</span>';
     }
@@ -441,6 +450,8 @@ function formatShortNum(int $num): int|string
 
 /**
  * Удаляет директорию рекурсивно
+ *
+ * @deprecated будет удалено в 15.0: File::deleteDirectory()
  */
 function deleteDir(string $dir): void
 {
@@ -456,6 +467,8 @@ function deleteDir(string $dir): void
 
 /**
  * Удаляет файл
+ *
+ * @deprecated будет удалено в 15.0: File::delete() — отсутствующий файл тоже не ошибка
  */
 function deleteFile(string $path): bool
 {
@@ -757,6 +770,8 @@ function sendMail(string $view, array $data): bool
 
 /**
  * Возвращает расширение файла
+ *
+ * @deprecated будет удалено в 15.0: pathinfo($filename, PATHINFO_EXTENSION) или File::extension()
  */
 function getExtension(string $filename): string
 {
@@ -940,10 +955,13 @@ function paginate(array|Collection $items, int $perPage, array $appends = []): L
 
 /**
  * Возвращает сформированный код base64 картинки
+ *
+ * Картинка встраивается в страницу: файл может лежать рядом с шаблоном, вне public
  */
 function imageBase64(string $path, array $params = []): HtmlString
 {
-    $type = getExtension($path);
+    // Тип по содержимому: из расширения svg и jpg вышли бы несуществующие image/svg и image/jpg
+    $type = File::mimeType($path) ?: 'image/' . pathinfo($path, PATHINFO_EXTENSION);
     $data = (string) file_get_contents($path);
 
     if (! isset($params['class'])) {
@@ -956,12 +974,12 @@ function imageBase64(string $path, array $params = []): HtmlString
 
     $strParams = [];
     foreach ($params as $key => $param) {
-        $strParams[] = $key . '="' . $param . '"';
+        $strParams[] = e($key) . '="' . e($param) . '"';
     }
 
     $strParams = implode(' ', $strParams);
 
-    return new HtmlString('<img src="data:image/' . $type . ';base64,' . base64_encode($data) . '" ' . $strParams . '>');
+    return new HtmlString('<img src="data:' . $type . ';base64,' . base64_encode($data) . '" ' . $strParams . '>');
 }
 
 /**

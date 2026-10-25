@@ -176,8 +176,8 @@ class HelperTest extends TestCase
 
     public function testFormatNum(): void
     {
-        self::assertSame('<span style="color:#00aa00">+5</span>', formatNum(5)->toHtml());
-        self::assertSame('<span style="color:#ff0000">-3</span>', formatNum(-3)->toHtml());
+        self::assertSame('<span class="text-success">+5</span>', formatNum(5)->toHtml());
+        self::assertSame('<span class="text-danger">-3</span>', formatNum(-3)->toHtml());
         self::assertSame('<span>0</span>', formatNum(0)->toHtml());
     }
 
@@ -683,6 +683,20 @@ class HelperTest extends TestCase
         self::assertStringContainsString('class="thumb"', $custom);
         self::assertStringContainsString('alt="Picture"', $custom);
         self::assertStringContainsString('width="10"', $custom);
+
+        unlink($path);
+    }
+
+    public function testImageBase64EscapesAttributesAndDetectsType(): void
+    {
+        // Тип — по содержимому: из расширения svg вышло бы data:image/svg, и браузер картинку не покажет
+        $path = sys_get_temp_dir() . '/rotor-test-image.svg';
+        file_put_contents($path, '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>');
+
+        $img = (string) imageBase64($path, ['alt' => 'Рис. "1"']);
+
+        self::assertStringContainsString('data:image/svg+xml;base64,', $img);
+        self::assertStringContainsString('alt="Рис. &quot;1&quot;"', $img);
 
         unlink($path);
     }

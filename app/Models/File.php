@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File as FileSystem;
 
 /**
  * Class File
@@ -132,7 +133,7 @@ class File extends Model
     public function delete(): ?bool
     {
         return DB::transaction(function () {
-            deleteFile(public_path($this->path));
+            FileSystem::delete(public_path($this->path));
 
             return parent::delete();
         });

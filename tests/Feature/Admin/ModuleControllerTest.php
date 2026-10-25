@@ -6,6 +6,7 @@ use App\Models\Module;
 use App\Models\ModuleRegistry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -64,6 +65,7 @@ class ModuleControllerTest extends TestCase
         if (is_dir($this->fixturePath)) {
             @unlink($this->fixturePath . '/module.php');
             File::deleteDirectory($this->fixturePath . '/database');
+            File::deleteDirectory($this->fixturePath . '/screenshots');
             @rmdir($this->fixturePath);
         }
 
@@ -258,6 +260,19 @@ class ModuleControllerTest extends TestCase
             ->get('/admin/modules/' . self::FIXTURE_SLUG)
             ->assertOk()
             ->assertSee('Модуль-фикстура');
+    }
+
+    public function testModuleScreenshotTypeComesFromContent(): void
+    {
+        // Из расширения jpg вышел бы несуществующий тип image/jpg
+        File::ensureDirectoryExists($this->fixturePath . '/screenshots');
+        $image = UploadedFile::fake()->image('shot.jpg');
+        File::copy($image->getPathname(), $this->fixturePath . '/screenshots/shot.jpg');
+
+        $this->actingAs($this->boss)
+            ->get('/admin/modules/' . self::FIXTURE_SLUG)
+            ->assertOk()
+            ->assertSee('src="data:image/jpeg;base64,', false);
     }
 
     public function testModulePageRedirectsDirectoryNameToKebab(): void

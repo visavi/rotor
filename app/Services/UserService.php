@@ -298,11 +298,11 @@ class UserService
     private function deletePhotoFiles(User $user): void
     {
         if ($user->picture) {
-            deleteFile(public_path($user->picture));
+            File::delete(public_path($user->picture));
         }
 
         if ($user->avatar) {
-            deleteFile(public_path($user->avatar));
+            File::delete(public_path($user->avatar));
         }
     }
 }

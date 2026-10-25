@@ -124,7 +124,7 @@ class AjaxController extends Controller
         $type = $request->input('type');
 
         $result = $uploader->sort(
-            array_map(int(...), explode(',', is_string($sort) ? $sort : '')),
+            array_map(intval(...), explode(',', is_string($sort) ? $sort : '')),
             is_string($type) ? $type : '',
         );
 

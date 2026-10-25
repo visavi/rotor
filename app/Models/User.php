@@ -32,6 +32,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File as FileSystem;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -696,8 +697,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function delete(): ?bool
     {
         return DB::transaction(function () {
-            deleteFile(public_path((string) $this->picture));
-            deleteFile(public_path((string) $this->avatar));
+            FileSystem::delete([public_path((string) $this->picture), public_path((string) $this->avatar)]);
 
             // Текст сообщения удаляется вместе с последним диалогом, у второй стороны переписка остается
             Dialogue::query()

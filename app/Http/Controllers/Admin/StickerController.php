@@ -11,6 +11,7 @@ use App\Models\StickersCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
 class StickerController extends AdminController
@@ -183,7 +184,7 @@ class StickerController extends AdminController
         $sticker = $this->findSticker($id);
         $page = $request->integer('page', 1);
 
-        deleteFile(public_path($sticker->name));
+        File::delete(public_path($sticker->name));
         $sticker->delete();
 
         return redirect('admin/stickers/' . $sticker->category_id . '?page=' . $page)

@@ -31,6 +31,6 @@ class ReglistRequest extends FormRequest
      */
     public function ids(): array
     {
-        return intar($this->validated('choice')) ?? [];
+        return array_map(intval(...), $this->safe()->array('choice'));
     }
 }

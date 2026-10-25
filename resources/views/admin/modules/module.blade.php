@@ -1,3 +1,4 @@
+@use('Illuminate\Support\Facades\File')
 @extends('layout')
 
 @section('title', __('admin.modules.module') . ' ' . ($moduleConfig['name'] ?? $moduleName))
@@ -92,7 +93,7 @@
         <div class="f-carousel media-file my-3" style="--f-carousel-slide-width: 100%; --f-carousel-spacing: 8px;">
             <div class="f-carousel__viewport">
                 @foreach ($moduleConfig['screenshots'] as $screenshot)
-                    @php $src = 'data:image/' . getExtension($screenshot) . ';base64,' . base64_encode(file_get_contents($screenshot)); @endphp
+                    @php $src = 'data:' . File::mimeType($screenshot) . ';base64,' . base64_encode(file_get_contents($screenshot)); @endphp
                     <div class="f-carousel__slide">
                         <a href="{{ $src }}" data-fancybox="module-screens">
                             <img src="{{ $src }}" alt="{{ basename($screenshot) }}" class="d-block w-100" style="max-height: 420px; object-fit: contain;">
