@@ -56,6 +56,20 @@ class HtmlCastTest extends TestCase
         $this->assertStringContainsString('текст', $comment->getAttributes()['text']);
     }
 
+    public function testUnknownTagKeepsText(): void
+    {
+        $comment = new Comment(['text' => '<h2>Заголовок</h2><p><b>жирный</b> и <i>курсив</i></p><section>блок</section><hr>']);
+
+        $this->assertSame('Заголовок<p>жирный и курсив</p>блок', $comment->getAttributes()['text']);
+    }
+
+    public function testScriptIsDroppedWithContent(): void
+    {
+        $comment = new Comment(['text' => '<p>текст</p><script>alert(1)</script>']);
+
+        $this->assertSame('<p>текст</p>', $comment->getAttributes()['text']);
+    }
+
     public function testStyleKeepsOnlyEditorProperties(): void
     {
         // Стиль без белого списка позволял накрыть страницу своим блоком с фальшивой формой

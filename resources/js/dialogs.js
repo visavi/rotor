@@ -7,10 +7,20 @@ import { __ } from './translate.js'
 /* Открытые диалоги, последний — верхний */
 const openDialogs = []
 
-// Открытый диалог лежит в верхнем слое, остальная страница под ним недоступна:
-// уведомления переезжают в верхний диалог, иначе их не видно
+// Открытый диалог лежит в верхнем слое, остальная страница под ним недоступна.
+// Плашки — popover: повторный показ кладёт их поверх окна. Внутрь окна их не переносим,
+// там они въезжали вместе с окном. Объявления для читалки переезжают: страница не озвучивается
 function moveToasts(host) {
-    document.querySelectorAll('.notyf, .notyf-announcer').forEach(el => host.appendChild(el))
+    document.querySelectorAll('.notyf-announcer').forEach(el => host.appendChild(el))
+
+    const toasts = document.querySelector('.notyf')
+    if (host === document.body || !toasts?.showPopover) return
+
+    toasts.popover = 'manual'
+    toasts.togglePopover(false)
+    toasts.showPopover()
+    // Повторный показ перезапускает анимацию появления — показанная плашка моргала бы
+    toasts.getAnimations({ subtree: true }).forEach(animation => animation.finish())
 }
 
 /* Диалоги, у которых уже есть слушатель закрытия */

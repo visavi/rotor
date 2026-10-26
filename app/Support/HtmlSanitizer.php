@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Support;
 
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer as SymfonyHtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerAction;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 
 class HtmlSanitizer
@@ -127,6 +128,10 @@ class HtmlSanitizer
     {
         if (self::$instance === null) {
             $config = (new HtmlSanitizerConfig())
+                // Неразрешённый тег убирается, текст остаётся: <h2>, <b>, <section> из API
+                // или старых клиентов теряли слова, а не только оформление
+                ->defaultAction(HtmlSanitizerAction::Block)
+                ->dropElement('script')
                 ->allowRelativeLinks()
                 ->allowRelativeMedias()
                 // Текст

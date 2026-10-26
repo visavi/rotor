@@ -1421,6 +1421,10 @@ function initEditor(textarea) {
             StarterKit.configure({
                 blockquote: false,
                 codeBlock: { HTMLAttributes: { class: 'code' } },
+                // Кнопок нет, а HtmlSanitizer вырезает h1–h6 и hr вместе с текстом:
+                // «## » и «---» иначе превращались бы в то, что при сохранении пропадёт
+                heading: false,
+                horizontalRule: false,
                 link: false,
             }),
             CustomLink.configure({
