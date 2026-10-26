@@ -24,6 +24,8 @@ class Registry
     public static array $sitemapPages = [];
     public static array $backgroundPaths = [];
     public static array $textFilters = [];
+    public static array $faqAbilities = [];
+    public static array $faqRewards = [];
 
     // Обработчики событий
     public static array $onRegisterValidate = [];
@@ -365,5 +367,27 @@ class Registry
         /** @var class-string $class */
         $morphName = $class::$morphName;
         static::$search[$morphName] = ['class' => $class, 'view' => $view, 'with' => $with];
+    }
+
+    /**
+     * Регистрирует строку FAQ «что открывает актив»
+     *
+     * Метка — ключ перевода, порог — имя настройки: оба читаются при выводе,
+     * строка с пустым порогом не показывается
+     */
+    public static function faqAbility(string $label, string $point): void
+    {
+        static::$faqAbilities[] = ['label' => $label, 'point' => $point];
+    }
+
+    /**
+     * Регистрирует строку FAQ «за что начисляют актив и деньги»
+     *
+     * Метка — ключ перевода, суммы — имена настроек: читаются при выводе,
+     * строка без обеих сумм не показывается
+     */
+    public static function faqReward(string $label, ?string $point, ?string $money = null): void
+    {
+        static::$faqRewards[] = ['label' => $label, 'point' => $point, 'money' => $money];
     }
 }

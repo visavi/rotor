@@ -94,7 +94,6 @@ return [
     'blacklist_per_page'    => 'Даних на сторінку в чорному списку',
     'reglist_per_page'      => 'Користувачів у списку тих, хто очікує',
 
-    'points_advert_hide'  => 'Актив для приховання реклами',
     'points_status_edit'  => 'Актив для зміни статусу',
     'moneys_status_edit'  => 'Вартість зміни статусу',
     'points_color_edit'   => 'Актив для зміни кольору',

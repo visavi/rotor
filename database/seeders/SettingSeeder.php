@@ -15,7 +15,6 @@ class SettingSeeder extends Seeder
         $data = [
             ['name' => 'app_installed', 'value' => 0],
             ['name' => 'addbansend', 'value' => 1],
-            ['name' => 'advertpoint', 'value' => 1000],
             ['name' => 'archive_file_path', 'value' => ''],
             ['name' => 'avtorlist', 'value' => 10],
             ['name' => 'banlist', 'value' => 10],

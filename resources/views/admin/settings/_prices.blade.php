@@ -4,12 +4,6 @@
 
 <form method="post">
     @csrf
-    <div class="mb-3{{ hasError('sets.advertpoint') }}">
-        <label for="advertpoint" class="form-label">{{ __('settings.points_advert_hide') }}:</label>
-        <input type="number" class="form-control" id="advertpoint" name="sets[advertpoint]" maxlength="4" value="{{ old('sets.advertpoint', $settings['advertpoint']) }}" required>
-        <div class="invalid-feedback">{{ textError('sets.advertpoint') }}</div>
-    </div>
-
     <div class="mb-3{{ hasError('sets.editstatuspoint') }}">
         <label for="editstatuspoint" class="form-label">{{ __('settings.points_status_edit') }}:</label>
         <input type="number" class="form-control" id="editstatuspoint" name="sets[editstatuspoint]" maxlength="4" value="{{ old('sets.editstatuspoint', $settings['editstatuspoint']) }}" required>

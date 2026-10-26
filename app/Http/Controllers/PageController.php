@@ -8,6 +8,7 @@ use App\Models\Rule;
 use App\Models\Status;
 use App\Models\Sticker;
 use App\Models\StickersCategory;
+use App\Support\Registry;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
@@ -92,7 +93,35 @@ class PageController extends Controller
      */
     public function faq(): View
     {
-        return view('pages/faq');
+        // Возможности, открывающиеся при наборе актива: показываются только настроенные
+        $abilities = collect([
+            ['label' => 'pages.faq_active_text2', 'point' => 'privatprotect'],
+            ['label' => 'pages.faq_active_text4', 'point' => 'editcolorpoint'],
+            ['label' => 'pages.faq_active_text10', 'point' => 'editstatuspoint'],
+            ...Registry::$faqAbilities,
+        ])
+            ->map(static fn (array $item): array => [
+                'point' => (int) setting($item['point']),
+                'text'  => __($item['label']),
+            ])
+            ->filter(static fn (array $item): bool => $item['point'] > 0)
+            ->sortBy('point');
+
+        // Начисления за действия: строка показывается, если задан актив или деньги
+        $rewards = collect([
+            ['label' => 'pages.faq_money_comment', 'point' => 'comment_point', 'money' => 'comment_money'],
+            ...Registry::$faqRewards,
+            ['label' => 'pages.faq_money_register', 'point' => null, 'money' => 'registermoney'],
+            ['label' => 'pages.faq_money_bonus', 'point' => null, 'money' => 'bonusmoney'],
+        ])
+            ->map(static fn (array $item): array => [
+                'point' => $item['point'] ? (int) setting($item['point']) : 0,
+                'money' => $item['money'] ? (int) setting($item['money']) : 0,
+                'text'  => __($item['label']),
+            ])
+            ->filter(static fn (array $item): bool => $item['point'] > 0 || $item['money'] > 0);
+
+        return view('pages/faq', compact('abilities', 'rewards'));
     }
 
     /**

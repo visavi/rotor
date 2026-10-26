@@ -12,30 +12,6 @@
 @stop
 
 @php
-// Возможности, открывающиеся при наборе актива: показываются только настроенные
-$abilities = collect([
-    ['point' => setting('rekuserpoint'),     'text' => __('pages.faq_active_text1')],
-    ['point' => setting('privatprotect'),    'text' => __('pages.faq_active_text2')],
-    ['point' => setting('addofferspoint'),   'text' => __('pages.faq_active_text3')],
-    ['point' => setting('sendmoneypoint'),   'text' => __('pages.faq_active_text5')],
-    ['point' => setting('editratingpoint'),  'text' => __('pages.faq_active_text6')],
-    ['point' => setting('editforumpoint'),   'text' => __('pages.faq_active_text7')],
-    ['point' => setting('advertpoint'),      'text' => __('pages.faq_active_text8')],
-    ['point' => setting('editcolorpoint'),   'text' => __('pages.faq_active_text4')],
-    ['point' => setting('editstatuspoint'),  'text' => __('pages.faq_active_text10')],
-])->filter(fn ($item) => $item['point'])->sortBy('point');
-
-// Начисления за действия: строка показывается, если задан актив или деньги
-$rewards = collect([
-    ['point' => setting('comment_point'),   'money' => setting('comment_money'),   'text' => __('pages.faq_money_comment')],
-    ['point' => setting('guestbook_point'), 'money' => setting('guestbook_money'), 'text' => __('pages.faq_money_guestbook')],
-    ['point' => setting('down_point'),      'money' => setting('down_money'),      'text' => __('pages.faq_money_down')],
-    ['point' => setting('blog_point'),      'money' => setting('blog_money'),      'text' => __('pages.faq_money_blog')],
-    ['point' => setting('forum_point'),     'money' => setting('forum_money'),     'text' => __('pages.faq_money_forum')],
-    ['point' => 0,                          'money' => setting('registermoney'),   'text' => __('pages.faq_money_register')],
-    ['point' => 0,                          'money' => setting('bonusmoney'),      'text' => __('pages.faq_money_bonus')],
-])->filter(fn ($item) => $item['point'] || $item['money']);
-
 $questions = [
     'why_register',
     'how_is_registration',
@@ -83,11 +59,11 @@ $questions = [
                                     <td class="w-100">{{ $reward['text'] }}</td>
                                     <td class="text-nowrap text-end">
                                         @if ($reward['point'])
-                                            <span class="badge bg-adaptive">+{{ plural((int) $reward['point'], setting('scorename')) }}</span>
+                                            <span class="badge bg-adaptive">+{{ plural($reward['point'], setting('scorename')) }}</span>
                                         @endif
 
                                         @if ($reward['money'])
-                                            <span class="badge bg-adaptive">+{{ plural((int) $reward['money'], setting('moneyname')) }}</span>
+                                            <span class="badge bg-adaptive">+{{ plural($reward['money'], setting('moneyname')) }}</span>
                                         @endif
                                     </td>
                                 </tr>
