@@ -22,12 +22,12 @@ return [
     'closed_text1' => 'We apologize for the temporary inconvenience',
     'closed_text2' => 'The site will resume work soon',
 
-    'faq'               => 'Site FAQ',
-    'faq_active'        => 'When you set a certain amount of asset, the user opens up new opportunities',
-    'faq_active_text2'  => 'Disable captcha for some actions',
-    'faq_active_text4'  => 'Ability to set name color',
-    'faq_active_text9'  => 'Also, the more points the less the time of anti-flood',
-    'faq_active_text10' => 'The ability to set a personal status',
+    'faq'                  => 'Site FAQ',
+    'faq_active'           => 'When you set a certain amount of asset, the user opens up new opportunities',
+    'faq_active_captcha'   => 'Disable captcha for some actions',
+    'faq_active_color'     => 'Ability to set name color',
+    'faq_active_antiflood' => 'Also, the more points the less the time of anti-flood',
+    'faq_active_status'    => 'The ability to set a personal status',
 
     'faq_money'          => 'Accrual of assets and money',
     'faq_money_comment'  => 'Adding a comment',

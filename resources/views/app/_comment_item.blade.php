@@ -112,7 +112,7 @@
 
             {{-- Форма ответа --}}
             @if (auth()->check() && ! ($closed ?? false) && auth()->id() !== $comment->user_id)
-                <div class="reply-form d-none mt-2" id="reply-form-{{ $comment->id }}">
+                <div class="reply-form d-none mt-2" id="reply-form-{{ $comment->id }}" style="--depth: {{ $comment->depth }}">
                     <form action="{{ $action }}" method="post">
                         @csrf
                         <input type="hidden" name="parent_id" value="{{ $comment->id }}">

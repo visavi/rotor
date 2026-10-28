@@ -4,7 +4,8 @@ import { __ } from './translate.js'
 import { notyf } from './globals.js'
 import { confirm } from './dialogs.js'
 
-export const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
+// let: после истёкшей сессии токен меняется, импорт (загрузка файлов в tiptap) видит новый
+export let csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
 
 /* Транспорт: колбэки вместо промисов — так его зовут со всего сайта */
 export function ajax({ url, type = 'GET', data = null, dataType = 'json', beforeSend, complete, success, error }) {
@@ -39,10 +40,32 @@ export function ajax({ url, type = 'GET', data = null, dataType = 'json', before
     }
 
     fetch(target, options)
+        .then(res => ajaxRetryExpired(res, () => {
+            // Поле _token сервер читает раньше заголовка: старое в теле снова дало бы 419
+            if (options.body?.has?.('_token')) options.body.set('_token', csrfToken)
+            options.headers['X-CSRF-TOKEN'] = csrfToken
+
+            return fetch(target, options)
+        }))
         .then(res => dataType === 'json' ? ajaxJson(res) : res.text())
         .then(responseData => { if (success) success(responseData) })
         .catch(err => { if (error) error(null, err.message, err) })
         .finally(() => { if (complete) complete() })
+}
+
+/* Вкладка простояла дольше сессии: 419 приносит токен новой сессии. Подставляем его
+ * в страницу и повторяем запрос один раз — набранный текст не пропадает */
+async function ajaxRetryExpired(res, repeat) {
+    if (res.status !== 419) return res
+
+    const token = await res.clone().json().then(body => body?.token, () => null)
+    if (!token) return res
+
+    csrfToken = token
+    document.querySelector('meta[name="csrf-token"]')?.setAttribute('content', token)
+    document.querySelectorAll('input[name="_token"]').forEach(input => { input.value = token })
+
+    return repeat()
 }
 
 /* Вместо json бывает страница ошибки nginx или PHP: 413 на большой файл, 502.
@@ -52,18 +75,27 @@ function ajaxJson(res) {
         .catch(() => {
             throw new Error(res.status === 413 ? __('request_too_large') : 'HTTP ' + res.status)
         })
-        .then(body => ajaxValidation(res, body))
+        .then(body => ajaxResult(res, body))
 }
 
-/* Ошибки FormRequest и $request->validate() приходят 422 с {message, errors}:
- * приводим к контракту {success, message} — по первой ошибке каждого поля.
- * 413 от Laravel (post_max_size PHP) приходит json без success */
-function ajaxValidation(res, body) {
+/* Ошибки приходят в том же виде, что и отказы действий: {success: false, message}.
+ * Laravel шлёт их без success: 419 (истёкшая сессия), 403, 404, 429 — {message},
+ * 422 — {message, errors}. У 422 message — по первой ошибке каждого поля, errors
+ * остаются для подсветки полей. Успешный ответ — как прислал сервер */
+function ajaxResult(res, body) {
     if (res.status === 413) return { success: false, message: __('request_too_large') }
 
-    if (res.status !== 422 || !body?.errors) return body
+    if (res.ok || !body || typeof body !== 'object' || Array.isArray(body)) return body
 
-    return { success: false, message: Object.values(body.errors).map(messages => messages[0]).join(' ') }
+    const result = { ...body, success: false }
+
+    if (res.status === 422 && body.errors) {
+        result.message = Object.values(body.errors).map(messages => messages[0]).join(' ')
+    }
+
+    if (!result.message) result.message = __('request_failed')
+
+    return result
 }
 
 /* Декларативный ajax

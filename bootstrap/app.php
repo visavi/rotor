@@ -127,11 +127,13 @@ return Application::configure(basePath: dirname(__DIR__))
             $tokenExpired = $exception->getPrevious() instanceof TokenMismatchException;
 
             if ($wantsJson($request)) {
-                $message = $tokenExpired
-                    ? __('validator.token')
-                    : ($exception->getMessage() ?: __('errors.error'));
+                // Свежий токен текущей сессии: ajax() подставит его и повторит запрос,
+                // и вкладка, простоявшая ночь, не теряет набранный текст
+                $data = $tokenExpired
+                    ? ['message' => __('validator.token'), 'token' => csrf_token()]
+                    : ['message' => $exception->getMessage() ?: __('errors.error')];
 
-                return response()->json(['message' => $message], $statusCode, $exception->getHeaders());
+                return response()->json($data, $statusCode, $exception->getHeaders());
             }
 
             if ($tokenExpired) {

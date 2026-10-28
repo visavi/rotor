@@ -41,7 +41,7 @@ $questions = [
                     </table>
                 </div>
 
-                <div class="text-muted mt-2">{{ __('pages.faq_active_text9') }}</div>
+                <div class="text-muted mt-2">{{ __('pages.faq_active_antiflood') }}</div>
             </div>
         </div>
     @endif

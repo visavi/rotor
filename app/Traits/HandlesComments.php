@@ -116,7 +116,7 @@ trait HandlesComments
      * Добавление комментария (POST-обработчик)
      *
      * Форма ответа шлёт запрос с Accept: application/json и ждёт адрес
-     * записи или 422 со списком ошибок, обычная форма — редирект
+     * записи или 422 с ошибками, обычная форма — редирект
      */
     public function storeComment(int $id, CommentRequest $request, Flood $flood, CommentService $commentService): RedirectResponse|JsonResponse
     {
@@ -141,7 +141,10 @@ trait HandlesComments
         $flood->saveState();
 
         if ($request->wantsJson()) {
-            return response()->json(['redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id]);
+            return response()->json([
+                'success'  => true,
+                'redirect' => route($viewRoute, $viewParams) . '#comment_' . $comment->id,
+            ]);
         }
 
         return $this->redirectAfterCommentAdded($model, $comment->id)

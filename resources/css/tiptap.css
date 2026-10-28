@@ -32,8 +32,15 @@
     border-bottom: 1px solid var(--bs-border-color);
     border-radius: calc(var(--bs-border-radius) - 1px) calc(var(--bs-border-radius) - 1px) 0 0;
     overflow-x: auto;
-    scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
+}
+
+/* Webkit-правила, как у сайдбара: со scrollbar-width Chrome их игнорирует и рисует
+   стандартную полосу с дорожкой. Тонкая полоса — только Firefox, где webkit-правил нет */
+@supports not selector(::-webkit-scrollbar) {
+    .tiptap-toolbar {
+        scrollbar-width: thin;
+    }
 }
 
 .tiptap-toolbar::-webkit-scrollbar {

@@ -591,10 +591,17 @@ textarea.form-control {
     z-index: 0;
 }
 
+/* Ответы лежат внутри комментария: низ подсветки — по его тексту, без ветки.
+   Свёрнутый или без поддержки anchor() — на весь блок */
+.comment-item:target > .comment-right > .comment-body > .comment-content {
+    anchor-name: --comment-target;
+}
+
 .anchor-ready .comment-item:target::before {
     content: '';
     position: absolute;
     inset: 0 -12px;
+    bottom: calc(anchor(--comment-target bottom, 0.5rem) - 0.5rem);
     border-radius: 0.375rem;
     pointer-events: none;
     z-index: -1;
@@ -921,7 +928,7 @@ details.accordion-item:last-of-type:not([open]) > .accordion-button {
     transition: background .15s;
 }
 
-.comment-children .comment-left::before {
+.comment-children .comment-left::after {
     content: '';
     position: absolute;
     left: -21px;
@@ -931,11 +938,10 @@ details.accordion-item:last-of-type:not([open]) > .accordion-button {
     border-left: 1px solid var(--bs-border-color);
     border-bottom: 1px solid var(--bs-border-color);
     border-bottom-left-radius: 12px;
-    z-index: 2;
     transition: border-color .15s;
 }
 
-.comment-children > .comment-item:last-child > .comment-left::after {
+.comment-children > .comment-item:last-child > .comment-left::before {
     content: '';
     position: absolute;
     left: -22px;
@@ -943,10 +949,9 @@ details.accordion-item:last-of-type:not([open]) > .accordion-button {
     bottom: -10px;
     width: 5px;
     background: var(--bs-body-bg);
-    z-index: 1;
 }
 
-.comment-left:has(.comment-thread-ctrl:hover) + .comment-right > .comment-body > .comment-children > .comment-item > .comment-left::before {
+.comment-left:has(.comment-thread-ctrl:hover) + .comment-right > .comment-body > .comment-children > .comment-item > .comment-left::after {
     border-color: var(--bs-primary);
 }
 
@@ -954,6 +959,26 @@ details.accordion-item:last-of-type:not([open]) > .accordion-button {
     flex-grow: 1;
     min-width: 0;
     padding-left: 8px;
+}
+
+/* Форма ответа выходит из отступов ветки на всю ширину: на мобиле всегда, на компьютере —
+   где слева нет линий (без своих ответов, сама и предки — последние в ветках).
+   Шаг — колонка аватара и отступ .comment-right, --depth ставит шаблон. Фон закрывает линии */
+.reply-form {
+    --comment-step: 33px;
+    position: relative;
+    background: var(--bs-body-bg);
+}
+
+.comment-item:not(:has(.comment-children)) .reply-form:not(.comment-children > :not(:last-child) .reply-form) {
+    margin-left: calc((var(--depth) + 1) * var(--comment-step) * -1);
+}
+
+@media (max-width: 768px) {
+    .reply-form {
+        --comment-step: 23px;
+        margin-left: calc((var(--depth) + 1) * var(--comment-step) * -1);
+    }
 }
 
 .comment-header {
@@ -1100,13 +1125,13 @@ details.accordion-item:last-of-type:not([open]) > .accordion-button {
         --avatar-size: 1.25rem;
     }
 
-    .comment-children .comment-left::before {
+    .comment-children .comment-left::after {
         left: -16px;
         width: 11px;
         height: 13px;
     }
 
-    .comment-children > .comment-item:last-child > .comment-left::after {
+    .comment-children > .comment-item:last-child > .comment-left::before {
         left: -17px;
     }
 

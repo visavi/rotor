@@ -95,9 +95,9 @@ class PageController extends Controller
     {
         // Возможности, открывающиеся при наборе актива: показываются только настроенные
         $abilities = collect([
-            ['label' => 'pages.faq_active_text2', 'point' => 'privatprotect'],
-            ['label' => 'pages.faq_active_text4', 'point' => 'editcolorpoint'],
-            ['label' => 'pages.faq_active_text10', 'point' => 'editstatuspoint'],
+            ['label' => 'pages.faq_active_captcha', 'point' => 'privatprotect'],
+            ['label' => 'pages.faq_active_color', 'point' => 'editcolorpoint'],
+            ['label' => 'pages.faq_active_status', 'point' => 'editstatuspoint'],
             ...Registry::$faqAbilities,
         ])
             ->map(static fn (array $item): array => [

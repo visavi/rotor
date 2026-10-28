@@ -466,19 +466,21 @@ document.addEventListener('submit', function (e) {
 
     ajax({
         url: form.action, type: 'POST', data: new FormData(form),
-        // Ответ приходит адресом записи при успехе и списком ошибок при отказе
+        // Успех приходит адресом записи; страница та же, поэтому хеш и перезагрузка
         success: function (data) {
-            if (data.redirect) {
+            if (data.success && data.redirect) {
                 window.location.hash = data.redirect.includes('#') ? data.redirect.split('#')[1] : ''
                 window.location.reload()
 
                 return
             }
 
-            if (errorEl) errorEl.textContent = Object.values(data.errors || {}).flat().join(', ')
+            if (errorEl) errorEl.textContent = data.message || ''
             if (submitBtn) submitBtn.disabled = false
         },
-        error: function () {
+        // Текст причины передаёт ajax(): «слишком большой запрос», код ответа
+        error: function (_, message) {
+            if (errorEl) errorEl.textContent = message || __('request_failed')
             if (submitBtn) submitBtn.disabled = false
         },
     })

@@ -166,7 +166,7 @@ class ErrorPageTest extends TestCase
     {
         $this->postJson('/test-token')
             ->assertStatus(419)
-            ->assertExactJson(['message' => __('validator.token')]);
+            ->assertExactJson(['message' => __('validator.token'), 'token' => session()->token()]);
     }
 
     public function testJsonErrorKeepsHeaders(): void
