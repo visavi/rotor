@@ -77,11 +77,14 @@ class CategoryTreeTest extends TestCase
         ]);
 
         $roots = CategoryTree::nest($categories);
+        [$first, $second] = $roots->all();
 
         self::assertSame([1, 4], $roots->pluck('id')->all());
-        self::assertSame([2], $roots[0]->children->pluck('id')->all());
-        self::assertSame([3], $roots[0]->children[0]->children->pluck('id')->all());
-        self::assertTrue($roots[1]->children->isEmpty());
+        [$child] = $this->children($first)->all();
+
+        self::assertSame([2], $this->children($first)->pluck('id')->all());
+        self::assertSame([3], $this->children($child)->pluck('id')->all());
+        self::assertTrue($this->children($second)->isEmpty());
     }
 
     public function testNestSetsParentFromSameSet(): void
@@ -94,11 +97,12 @@ class CategoryTreeTest extends TestCase
         ]);
 
         CategoryTree::nest($categories);
+        [$root, $child, $grandchild] = $categories->all();
 
-        self::assertSame($categories[1], $categories[2]->getRelation('parent'));
-        self::assertSame($categories[0], $categories[1]->getRelation('parent'));
+        self::assertSame($child, $grandchild->getRelation('parent'));
+        self::assertSame($root, $child->getRelation('parent'));
         // У корня, как у withDefault(), — пустая модель без id
-        self::assertNull($categories[0]->getRelation('parent')->getKey());
+        self::assertNull($root->getRelation('parent')->getKey());
     }
 
     public function testBranchIdsCollectNodeAndAllDescendants(): void
@@ -132,13 +136,24 @@ class CategoryTreeTest extends TestCase
         self::assertSame([1, 2], $branch);
     }
 
+    /**
+     * @return Collection<int, Model>
+     */
+    private function children(Model $node): Collection
+    {
+        $children = $node->getRelation('children');
+        self::assertInstanceOf(Collection::class, $children);
+
+        return $children;
+    }
+
     private function node(int $id, int $parentId, int $count = 0): Model
     {
         $model = new class extends Model {
         };
-        $model->id = $id;
-        $model->parent_id = $parentId;
-        $model->count = $count;
+        $model->setAttribute('id', $id);
+        $model->setAttribute('parent_id', $parentId);
+        $model->setAttribute('count', $count);
 
         return $model;
     }
