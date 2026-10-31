@@ -56,6 +56,41 @@ class CategoryTree
     }
 
     /**
+     * Id узла и всех его потомков по загруженному набору
+     *
+     * Форма правки не даёт выбрать родителем узел из этой ветки, иначе раздел
+     * замкнётся сам на себя и пропадёт из дерева. Кольцо, уже записанное в базу,
+     * обход не вешает: каждый узел посещается один раз
+     *
+     * @param Collection<int, Model> $categories
+     *
+     * @return list<int>
+     */
+    public static function branchIds(Collection $categories, int $id): array
+    {
+        $children = [];
+
+        foreach ($categories as $category) {
+            $children[(int) $category->getAttribute('parent_id')][] = (int) $category->getAttribute('id');
+        }
+
+        $branch = [$id => true];
+        $queue = [$id];
+
+        // Указатель вместо array_shift: тот перенумеровывает очередь на каждом шаге
+        for ($i = 0; $i < count($queue); $i++) {
+            foreach ($children[$queue[$i]] ?? [] as $childId) {
+                if (! isset($branch[$childId])) {
+                    $branch[$childId] = true;
+                    $queue[] = $childId;
+                }
+            }
+        }
+
+        return array_keys($branch);
+    }
+
+    /**
      * Расставляет связи children и parent по загруженному набору и возвращает корни
      *
      * Списки разделов показывают дерево целиком, и подгрузка детей на каждый
@@ -210,14 +245,15 @@ class CategoryTree
      * Проверяет, не замыкается ли цепочка родителей на себя
      *
      * SortableJS не даёт уронить узел в собственное поддерево, но строка
-     * приходит от клиента, и доверия ей нет
+     * приходит от клиента, и доверия ей нет. Той же проверкой форма правки
+     * раздела отсекает родителя из собственной ветки (CategoryParentRule)
      *
      * Карта должна быть полной (состояние базы плюс присланные пары), иначе
      * подъём упрётся в звено, которого в карте нет, и цикл останется незамеченным
      *
      * @param array<int, int> $parents Карта «узел → родитель» по всем записям
      */
-    private static function hasCycle(int $id, array $parents): bool
+    public static function hasCycle(int $id, array $parents): bool
     {
         $current = $parents[$id] ?? 0;
 

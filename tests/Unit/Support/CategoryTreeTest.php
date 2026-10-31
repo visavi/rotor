@@ -101,6 +101,37 @@ class CategoryTreeTest extends TestCase
         self::assertNull($categories[0]->getRelation('parent')->getKey());
     }
 
+    public function testBranchIdsCollectNodeAndAllDescendants(): void
+    {
+        $categories = new Collection([
+            $this->node(1, 0),
+            $this->node(2, 1),
+            $this->node(3, 2),
+            $this->node(4, 1),
+            $this->node(5, 0),
+        ]);
+
+        $branch = CategoryTree::branchIds($categories, 1);
+        sort($branch);
+
+        self::assertSame([1, 2, 3, 4], $branch);
+        self::assertSame([5], CategoryTree::branchIds($categories, 5));
+    }
+
+    public function testBranchIdsStopOnCycle(): void
+    {
+        // Кольцо, уже записанное в базу, не должно вешать обход
+        $categories = new Collection([
+            $this->node(1, 2),
+            $this->node(2, 1),
+        ]);
+
+        $branch = CategoryTree::branchIds($categories, 1);
+        sort($branch);
+
+        self::assertSame([1, 2], $branch);
+    }
+
     private function node(int $id, int $parentId, int $count = 0): Model
     {
         $model = new class extends Model {

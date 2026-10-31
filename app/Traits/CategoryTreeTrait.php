@@ -6,18 +6,28 @@ namespace App\Traits;
 
 use App\Support\CategoryTree;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 
 trait CategoryTreeTrait
 {
     /**
-     * Get parents
+     * Цепочка от корня до самого раздела — для хлебных крошек
+     *
+     * Подъём останавливается на уже пройденном разделе: кольцо, записанное
+     * в базу до проверки родителя в формах, иначе уводило в бесконечную рекурсию
      */
     public function getParents(): Collection
     {
-        $flat = $this->buildParentCategoriesFlat($this);
+        $chain = [];
+        $seen = [];
+        $category = $this;
 
-        return Collection::make($flat);
+        while ($category->getKey() && ! isset($seen[$category->getKey()])) {
+            $seen[$category->getKey()] = true;
+            $chain[] = $category;
+            $category = $category->parent;
+        }
+
+        return Collection::make(array_reverse($chain));
     }
 
     /**
@@ -30,21 +40,5 @@ trait CategoryTreeTrait
             ->get();
 
         return CategoryTree::flatten($categories);
-    }
-
-    /**
-     * Build parent categories flat
-     *
-     * @param self $category
-     */
-    private function buildParentCategoriesFlat(Model $category, array &$tree = []): array
-    {
-        if ($category->parent->id) {
-            $this->buildParentCategoriesFlat($category->parent, $tree);
-        }
-
-        $tree[] = $category;
-
-        return $tree;
     }
 }
