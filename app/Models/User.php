@@ -52,7 +52,7 @@ use InvalidArgumentException;
  * @property string|null          $info
  * @property string               $site
  * @property string               $phone
- * @property string               $gender
+ * @property string|null          $gender
  * @property string               $birthday
  * @property string               $themes
  * @property string               $timezone
@@ -312,15 +312,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Возвращает пол пользователя
+     * Иконка пола пользователя; пол не указан — пусто
      */
     public function getGender(): HtmlString
     {
-        if ($this->gender === 'female') {
-            return new HtmlString('<i class="fa fa-female fa-lg"></i>');
-        }
-
-        return new HtmlString('<i class="fa fa-male fa-lg"></i>');
+        return new HtmlString(match ($this->gender) {
+            self::FEMALE => '<i class="fa fa-female fa-lg"></i>',
+            self::MALE   => '<i class="fa fa-male fa-lg"></i>',
+            default      => '',
+        });
     }
 
     /**

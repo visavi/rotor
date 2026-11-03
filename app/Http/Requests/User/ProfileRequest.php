@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\User;
 
-use App\Models\User;
 use App\Support\Registry;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -53,7 +52,7 @@ class ProfileRequest extends FormRequest
     {
         return [
             'name'     => $this->validated('name'),
-            'gender'   => $this->input('gender') === User::MALE ? User::MALE : User::FEMALE,
+            'gender'   => $this->validated('gender'),
             'country'  => $this->string('country')->substr(0, 30)->value(),
             'city'     => $this->string('city')->substr(0, 50)->value(),
             'phone'    => $this->validated('phone'),

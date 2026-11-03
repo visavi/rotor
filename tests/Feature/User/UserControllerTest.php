@@ -352,6 +352,27 @@ class UserControllerTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function testGenderCanBeLeftUnset(): void
+    {
+        $user = $this->makeUser(['gender' => User::MALE]);
+
+        // Выпадающий список: «не указан» — пустой пункт, выбранный пол отмечен
+        $this->actingAs($user)->get('/profile')
+            ->assertOk()
+            ->assertSee('<select class="form-select" name="gender"', false)
+            ->assertSee('<option value="male" selected>', false);
+
+        // Пол необязателен: «не указан» — пустое значение, а не женский по умолчанию
+        $this->actingAs($user)->post('/profile', ['gender' => ''])->assertRedirect('profile');
+        $this->assertNull($user->refresh()->gender);
+
+        $this->get('/users/' . $user->login)
+            ->assertOk()
+            ->assertDontSee(__('main.female'));
+
+        $this->actingAs($user)->post('/profile', ['gender' => 'other'])->assertSessionHasErrors('gender');
+    }
+
     public function testEditProfileArrayFieldsFailValidation(): void
     {
         $this->actingAs($this->makeUser())->post('/profile', [

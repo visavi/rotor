@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Requests\User;
 
 use App\Http\Requests\Concerns\ChecksCaptcha;
-use App\Models\User;
 use App\Services\UserService;
 use App\Support\Registry;
 use Illuminate\Auth\Access\Response;
@@ -38,6 +37,8 @@ class RegisterRequest extends FormRequest
             'password'  => UserRules::password(),
             'password2' => ['required', 'same:password'],
             'email'     => UserRules::email(UserService::isEmailRequired()),
+            // Форма сайта пол не спрашивает; API-клиент может передать его по желанию
+            'gender' => UserRules::profile()['gender'],
         ];
     }
 
@@ -74,9 +75,12 @@ class RegisterRequest extends FormRequest
         return (string) $this->validated('email');
     }
 
-    public function gender(): string
+    /**
+     * Пол, если его передали: без него — «не указан», а не женский
+     */
+    public function gender(): ?string
     {
-        return $this->input('gender') === User::MALE ? User::MALE : User::FEMALE;
+        return $this->validated('gender');
     }
 
     protected function prepareForValidation(): void

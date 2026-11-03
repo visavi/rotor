@@ -128,6 +128,9 @@ class HtmlSanitizer
     {
         if (self::$instance === null) {
             $config = (new HtmlSanitizerConfig())
+                // Длину проверяют правила форм. Своя граница Symfony (20 000 байт) резала
+                // кириллицу посреди буквы, и длинный текст сохранялся пустой строкой
+                ->withMaxInputLength(-1)
                 // Неразрешённый тег убирается, текст остаётся: <h2>, <b>, <section> из API
                 // или старых клиентов теряли слова, а не только оформление
                 ->defaultAction(HtmlSanitizerAction::Block)

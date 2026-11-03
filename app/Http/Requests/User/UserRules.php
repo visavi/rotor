@@ -69,6 +69,8 @@ final class UserRules
             'site'     => ['nullable', 'string', 'max:50', 'url:http,https'],
             'birthday' => ['nullable', 'date_format:d.m.Y'],
             'info'     => ['nullable', 'string', new TextLengthRule(0, 1000)],
+            // Пол необязателен: пустое значение — «не указан»
+            'gender' => ['nullable', Rule::in([User::MALE, User::FEMALE])],
         ];
     }
 

@@ -47,7 +47,11 @@ $langName = $langName === 'main.lang' ? strtoupper($language) : $langName;
 // Список разбит надвое — между частями встают поля модулей: они продолжают
 // рассказ о человеке, а настройки отображения и даты замыкают список
 $fields = array_filter([
-    __('users.gender')   => $user->gender === 'male' ? __('main.male') : __('main.female'),
+    __('users.gender')   => match ($user->gender) {
+        'male'   => __('main.male'),
+        'female' => __('main.female'),
+        default  => null,
+    },
     __('users.country')  => $user->country,
     __('users.city')     => $user->city,
     __('users.birthday') => $user->birthday,

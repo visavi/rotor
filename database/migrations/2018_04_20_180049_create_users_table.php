@@ -22,7 +22,7 @@ return new class extends Migration {
                 $table->text('info')->nullable();
                 $table->string('site', 50)->nullable();
                 $table->string('phone', 15)->nullable();
-                $table->enum('gender', [User::MALE, User::FEMALE]);
+                $table->enum('gender', [User::MALE, User::FEMALE])->nullable();
                 $table->string('birthday', 10)->nullable();
                 $table->string('themes', 20)->nullable();
                 $table->string('timezone', 3)->default('0');

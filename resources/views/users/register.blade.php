@@ -32,14 +32,14 @@
                 <label for="inputLogin" class="form-label">{{ __('users.login') }}:</label>
                 <input data-check-login class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ old('login') }}" required>
                 <div class="invalid-feedback">{{ textError('login') }}</div>
-                <span class="text-muted fst-italic">{{ __('users.login_requirements') }}</span>
+                <div class="form-text">{{ __('users.login_requirements') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('password') }}">
                 <label for="inputPassword" class="form-label">{{ __('users.password') }}:</label>
                 <input class="form-control" name="password" type="password" id="inputPassword" maxlength="20" value="{{ old('password') }}" required>
                 <div class="invalid-feedback">{{ textError('password') }}</div>
-                <span class="text-muted fst-italic">{{ __('users.password_requirements') }}</span>
+                <div class="form-text">{{ __('users.password_requirements') }}</div>
             </div>
 
             <div class="mb-3{{ hasError('password2') }}">
@@ -55,29 +55,10 @@
                     <input class="form-control" name="email" id="inputEmail" maxlength="50" value="{{ old('email') }}"{{ $emailRequired ? ' required' : '' }}>
                     <div class="invalid-feedback">{{ textError('email') }}</div>
                     @if (! $emailRequired)
-                        <span class="text-muted fst-italic">{{ __('users.email_optional_hint') }}</span>
+                        <div class="form-text">{{ __('users.email_optional_hint') }}</div>
                     @endif
                 </div>
             @endunless
-
-            <?php $inputGender = old('gender', 'male'); ?>
-            <div class="mb-3{{ hasError('gender') }}">
-                <label class="form-label">{{ __('users.gender') }}:</label>
-
-                <div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
-                        <label class="form-check-label" for="inputGenderMale"><i class="fa fa-male"></i> {{ __('main.male') }}</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
-                        <label class="form-check-label" for="inputGenderFemale"><i class="fa fa-female"></i> {{ __('main.female') }}</label>
-                    </div>
-                </div>
-
-                <div class="invalid-feedback">{{ textError('gender') }}</div>
-            </div>
 
             {{-- Поля модулей: проверяет Registry::onRegisterValidate, сохраняет onRegisterSave --}}
             @hook('registerFields')

@@ -25,6 +25,16 @@ class SpecTest extends TestCase
         $this->assertArrayNotHasKey('/news', $paths);
     }
 
+    public function testCoreConfigDescribesOnlyItsSections(): void
+    {
+        // Разделы модулей описывают сами модули: выключенный не должен висеть в доке
+        $sections = $this->getJson('/api/openapi.json')
+            ->assertOk()
+            ->json('paths./config.get.responses.200.content.application/json.schema.properties');
+
+        $this->assertSame(['site', 'upload', 'account', 'message', 'types'], array_keys($sections));
+    }
+
     public function testCoreKeepsOnlyItsOwnSchemas(): void
     {
         $schemas = $this->getJson('/api/openapi.json')->assertOk()->json('components.schemas');

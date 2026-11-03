@@ -84,7 +84,7 @@ class UserService
      *
      * Хуки onRegisterSave здесь, а не в контроллерах: любая точка регистрации их не потеряет
      */
-    public function register(string $login, string $password, string $email, string $gender, Request $request): User
+    public function register(string $login, string $password, string $email, ?string $gender, Request $request): User
     {
         // Ссылка подтверждения ведёт на сайт: письмо открывают в браузере, а не в приложении
         $confirmToken = self::isEmailConfirm() ? Str::random(32) : null;

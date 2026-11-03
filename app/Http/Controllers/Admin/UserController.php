@@ -105,7 +105,7 @@ class UserController extends AdminController
             'posrating' => $posrating,
             'negrating' => $negrating,
             'themes'    => $request->validated('themes'),
-            'gender'    => $request->input('gender') === User::MALE ? User::MALE : User::FEMALE,
+            'gender'    => $request->validated('gender'),
             'info'      => $request->validated('info'),
         ]);
 

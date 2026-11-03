@@ -25,7 +25,6 @@ class RegisterTest extends TestCase
         'password'  => 'secret123',
         'password2' => 'secret123',
         'email'     => 'newuser@example.com',
-        'gender'    => User::MALE,
         'protect'   => 'abc12',
     ];
 
@@ -55,6 +54,16 @@ class RegisterTest extends TestCase
 
         // Приветственное уведомление в приват
         $this->assertSame(1, $user->getCountMessages());
+
+        // Пол при регистрации не спрашивается: для работы сайта он не нужен
+        $this->assertNull($user->gender);
+    }
+
+    public function testRegisterFormDoesNotAskGender(): void
+    {
+        $this->get('/register')
+            ->assertOk()
+            ->assertDontSee('name="gender"', false);
     }
 
     public function testArrayFieldsFailValidation(): void

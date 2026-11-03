@@ -101,20 +101,12 @@ $inputGender  = old('gender', $user->gender);
                 </div>
 
                 <div class="col-md-6 mb-3{{ hasError('gender') }}">
-                    <label class="form-label">{{ __('users.gender') }}:</label>
-
-                    <div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="inputGenderMale" name="gender" value="male"{{ $inputGender === 'male' ? ' checked' : '' }}>
-                            <label class="form-check-label" for="inputGenderMale"><i class="fa fa-male"></i> {{ __('main.male') }}</label>
-                        </div>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="inputGenderFemale" name="gender" value="female"{{ $inputGender === 'female' ? ' checked' : '' }}>
-                            <label class="form-check-label" for="inputGenderFemale"><i class="fa fa-female"></i> {{ __('main.female') }}</label>
-                        </div>
-                    </div>
-
+                    <label for="inputGender" class="form-label">{{ __('users.gender') }}:</label>
+                    <select class="form-select" name="gender" id="inputGender">
+                        <option value="">{{ __('main.not_specified') }}</option>
+                        <option value="male"{{ $inputGender === 'male' ? ' selected' : '' }}>{{ __('main.male') }}</option>
+                        <option value="female"{{ $inputGender === 'female' ? ' selected' : '' }}>{{ __('main.female') }}</option>
+                    </select>
                     <div class="invalid-feedback">{{ textError('gender') }}</div>
                 </div>
             </div>

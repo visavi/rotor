@@ -214,6 +214,39 @@ class ArchitectureTest extends TestCase
         );
     }
 
+    public function testModuleConfigSectionsAreDescribed(): void
+    {
+        // Клиент узнаёт поля /api/config из документации: раздел модуля без описания
+        // для него не существует, а описанное поле, которого нет, ломает разбор ответа
+        $found = [];
+
+        foreach (glob(base_path('modules/*/module.php')) ?: [] as $file) {
+            $module = basename(dirname($file));
+            $config = include $file;
+            $sections = is_array($config) ? ($config['api'] ?? []) : [];
+
+            if (! $sections) {
+                continue;
+            }
+
+            $specFile = dirname($file) . '/openapi.json';
+            $spec = file_exists($specFile) ? json_decode((string) file_get_contents($specFile), true) : [];
+
+            foreach ($sections as $section => $settings) {
+                $actual = array_keys($settings);
+                $described = array_keys($spec['x-config-sections'][$section]['properties'] ?? []);
+                sort($actual);
+                sort($described);
+
+                if ($actual !== $described) {
+                    $found[] = $module . ' → ' . $section . ': отдаётся [' . implode(', ', $actual) . '], описано [' . implode(', ', $described) . ']';
+                }
+            }
+        }
+
+        $this->assertSame([], $found, 'Раздел /api/config модуля описывается в его openapi.json ключом x-config-sections с теми же полями, что в секции api файла module.php');
+    }
+
     public function testTranslationKeysExist(): void
     {
         // Ключ без перевода выводится как есть, а тест с __() сравнивает его сам с собой

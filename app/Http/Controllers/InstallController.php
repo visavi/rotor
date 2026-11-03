@@ -257,7 +257,6 @@ class InstallController extends Controller
                     'password'  => Hash::make($password),
                     'email'     => $email,
                     'level'     => User::BOSS,
-                    'gender'    => User::MALE,
                     'themes'    => 'default',
                     'point'     => 500,
                     'money'     => 100000,

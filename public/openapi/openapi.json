@@ -87,31 +87,31 @@
                     "country": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "city": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "info": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "site": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "gender": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "enum": [
                             "male",
@@ -122,7 +122,7 @@
                     "birthday": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "themes": {
@@ -140,27 +140,27 @@
                     "status": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "color": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "description": "Цвет имени пользователя"
                     },
                     "avatar": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "uri"
                     },
                     "picture": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "uri"
                     },
@@ -176,21 +176,21 @@
                     "lastlogin": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "date-time"
                     },
                     "email": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "email"
                     },
                     "phone": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "allprivat": {
@@ -438,37 +438,37 @@
                     "country": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "city": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "info": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "site": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "gender": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "birthday": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "themes": {
@@ -483,26 +483,26 @@
                     "status": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "color": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ]
                     },
                     "avatar": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "uri"
                     },
                     "picture": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "uri"
                     },
@@ -518,7 +518,7 @@
                     "lastlogin": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "date-time"
                     }
@@ -966,14 +966,14 @@
                     "prev": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "uri"
                     },
                     "next": {
                         "type": [
                             "string",
-                            null
+                            "null"
                         ],
                         "format": "uri"
                     }
@@ -1047,7 +1047,7 @@
                     "from": {
                         "type": [
                             "integer",
-                            null
+                            "null"
                         ]
                     },
                     "last_page": {
@@ -1059,7 +1059,7 @@
                     "to": {
                         "type": [
                             "integer",
-                            null
+                            "null"
                         ]
                     },
                     "total": {
@@ -1262,7 +1262,7 @@
                     "Авторизация"
                 ],
                 "summary": "Регистрация",
-                "description": "В ответе приходят готовый токен и профиль нового пользователя — отдельно авторизовываться не нужно.\n\nЕсли на сайте включено подтверждение регистрации, аккаунт приходит с pending: true:\nдо перехода по ссылке из письма писать на сайте нельзя, повторить письмо можно через /user/verify.\n",
+                "description": "В ответе приходят готовый токен и профиль нового пользователя — отдельно авторизовываться не нужно.\n\nЕсли на сайте включено подтверждение регистрации, аккаунт приходит с pending: true:\nдо перехода по ссылке из письма писать на сайте нельзя, повторить письмо можно через /user/verify.\n\nВключённые модули могут требовать свои поля, например согласие на обработку данных: они перечислены в схеме запроса, ошибка приходит с кодом 422.\n",
                 "operationId": "register",
                 "security": [],
                 "requestBody": {
@@ -1273,8 +1273,7 @@
                                 "type": "object",
                                 "required": [
                                     "login",
-                                    "password",
-                                    "email"
+                                    "password"
                                 ],
                                 "properties": {
                                     "login": {
@@ -1296,14 +1295,16 @@
                                     },
                                     "email": {
                                         "type": "string",
-                                        "format": "email"
+                                        "format": "email",
+                                        "description": "Обязательна, если в /config account.email_required; при account.email_hidden поле не показывать — присланный адрес отбрасывается"
                                     },
                                     "gender": {
                                         "type": "string",
                                         "enum": [
-                                            "М",
-                                            "Ж"
-                                        ]
+                                            "male",
+                                            "female"
+                                        ],
+                                        "description": "Необязателен: форма сайта пол не спрашивает. Без поля пол не указан"
                                     },
                                     "captcha_key": {
                                         "type": "string",
@@ -2263,6 +2264,7 @@
                     "Конфигурация"
                 ],
                 "summary": "Настройки загрузки файлов и лимиты текста",
+                "description": "Кроме разделов ядра, включённые модули добавляют свои под собственным ключом: лимиты форм, адреса страниц и т.п. Набор разделов зависит от сайта — по наличию раздела приложение понимает, что модуль включён. Что в разделе, описано у метода, который его использует, например поле privacy у регистрации.",
                 "operationId": "getConfig",
                 "security": [],
                 "responses": {
@@ -2299,10 +2301,6 @@
                                                 "registration_open": {
                                                     "type": "boolean",
                                                     "description": "Регистрация открыта"
-                                                },
-                                                "invite_only": {
-                                                    "type": "boolean",
-                                                    "description": "Регистрация только по инвайтам"
                                                 }
                                             }
                                         },
@@ -2357,6 +2355,14 @@
                                                     "type": "boolean",
                                                     "description": "Регистрация требует подтверждения по почте"
                                                 },
+                                                "email_required": {
+                                                    "type": "boolean",
+                                                    "description": "Почта обязательна при регистрации; false — поле можно оставить пустым"
+                                                },
+                                                "email_hidden": {
+                                                    "type": "boolean",
+                                                    "description": "Поле почты не показывать: аккаунт заводится без адреса"
+                                                },
                                                 "status_point": {
                                                     "type": "integer",
                                                     "description": "Баллов для смены статуса"
@@ -2372,56 +2378,6 @@
                                                 "color_money": {
                                                     "type": "integer",
                                                     "description": "Стоимость смены цвета"
-                                                }
-                                            }
-                                        },
-                                        "forum": {
-                                            "type": "object",
-                                            "properties": {
-                                                "title_min": {
-                                                    "type": "integer",
-                                                    "description": "Минимальная длина названия темы"
-                                                },
-                                                "title_max": {
-                                                    "type": "integer",
-                                                    "description": "Максимальная длина названия темы"
-                                                },
-                                                "text_min": {
-                                                    "type": "integer",
-                                                    "description": "Минимальная длина текста поста"
-                                                },
-                                                "text_max": {
-                                                    "type": "integer",
-                                                    "description": "Максимальная длина текста поста"
-                                                }
-                                            }
-                                        },
-                                        "vote": {
-                                            "type": "object",
-                                            "properties": {
-                                                "title_min": {
-                                                    "type": "integer",
-                                                    "description": "Минимальная длина вопроса голосования"
-                                                },
-                                                "title_max": {
-                                                    "type": "integer",
-                                                    "description": "Максимальная длина вопроса голосования"
-                                                },
-                                                "answer_min": {
-                                                    "type": "integer",
-                                                    "description": "Минимальная длина варианта ответа"
-                                                },
-                                                "answer_max": {
-                                                    "type": "integer",
-                                                    "description": "Максимальная длина варианта ответа"
-                                                },
-                                                "answers_min": {
-                                                    "type": "integer",
-                                                    "description": "Минимальное количество вариантов"
-                                                },
-                                                "answers_max": {
-                                                    "type": "integer",
-                                                    "description": "Максимальное количество вариантов"
                                                 }
                                             }
                                         },
@@ -2531,7 +2487,7 @@
                     "Аккаунт"
                 ],
                 "summary": "Изменение профиля",
-                "description": "Поля профиля, добавленные модулями, принимаются вместе с остальными",
+                "description": "Анкета перезаписывается целиком: поле, которого нет в запросе, очищается — передавайте все поля анкеты, а не только изменённые.\n\nПоля профиля, добавленные модулями, принимаются вместе с остальными",
                 "operationId": "updateProfile",
                 "requestBody": {
                     "required": true,
@@ -2546,11 +2502,16 @@
                                         "maxLength": 20
                                     },
                                     "gender": {
-                                        "type": "string",
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
                                         "enum": [
-                                            "М",
-                                            "Ж"
-                                        ]
+                                            "male",
+                                            "female",
+                                            null
+                                        ],
+                                        "description": "null или пустая строка — пол не указан"
                                     },
                                     "country": {
                                         "type": "string",

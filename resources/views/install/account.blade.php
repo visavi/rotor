@@ -20,7 +20,7 @@
                 <div class="mb-3{{ hasError('login') }}">
                     <label for="login" class="form-label">{{ __('users.login') }} (max20):</label>
                     <input type="text" class="form-control" name="login" id="login" maxlength="20" value="{{ old('login', $login) }}">
-                    <span class="text-muted fst-italic">{{ __('users.login_requirements') }}</span>
+                    <div class="form-text">{{ __('users.login_requirements') }}</div>
                     <div class="invalid-feedback">{{ textError('login') }}</div>
                 </div>
                 <div class="mb-3{{ hasError('password') }}">
