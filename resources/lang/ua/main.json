@@ -62,6 +62,7 @@
         "sticker": "Стікер",
         "clear_format": "Очистити форматування",
         "invalid_url": "Введіть коректний URL (має починатися з http:// або https://)",
+        "invalid_link": "Посилання має починатися з https://, mailto: або tel:",
         "size_xs": "Дуже малий",
         "size_sm": "Малий",
         "size_md": "Нормальний",

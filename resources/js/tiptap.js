@@ -578,10 +578,20 @@ function cleanPastedAttrs(el) {
     if (classes.length) el.setAttribute('class', classes.join(' '))
 }
 
+// Медиа грузится только по http(s), ссылка может вести ещё на почту и телефон
 function validateUrl(url) {
     if (!url) return false
     if (!/^https?:\/\//i.test(url)) {
         notyf.error(__('editor.invalid_url'))
+        return false
+    }
+    return true
+}
+
+function validateLink(url) {
+    if (!url) return false
+    if (!/^(https?:\/\/|mailto:|tel:)/i.test(url)) {
+        notyf.error(__('editor.invalid_link'))
         return false
     }
     return true
@@ -595,7 +605,7 @@ async function insertLink(editor) {
     const selected = editor.state.doc.textBetween(from, to, '')
     const url = await window.askValue(__('editor.url_link') + ':', selected)
 
-    if (url === null || !validateUrl(url)) return
+    if (url === null || !validateLink(url)) return
 
     if (selected) {
         editor.chain().focus().setLink(linkMark(url).attrs).run()
@@ -627,7 +637,7 @@ async function editLink(editor) {
         return
     }
 
-    if (!validateUrl(url)) return
+    if (!validateLink(url)) return
 
     // Текст не менялся — только адрес, чтобы не потерять форматирование внутри ссылки
     if (!newText || newText === text) {

@@ -23,4 +23,13 @@ class HtmlSanitizerTest extends TestCase
     {
         $this->assertSame('<p>до слово после</p>', HtmlSanitizer::sanitize('<p>до <b>слово</b> после</p><script>alert(1)</script>'));
     }
+
+    public function testMailAndPhoneLinksAreKept(): void
+    {
+        // Редактор ставит ссылки на почту и телефон: например, контакт в тексте согласия
+        $html = '<p><a href="mailto:admin@example.com">почта</a> <a href="tel:+79001234567">телефон</a></p>';
+
+        $this->assertSame($html, HtmlSanitizer::sanitize($html));
+        $this->assertSame('<p><a>ссылка</a></p>', HtmlSanitizer::sanitize('<p><a href="javascript:alert(1)">ссылка</a></p>'));
+    }
 }
