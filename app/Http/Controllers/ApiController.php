@@ -465,14 +465,9 @@ class ApiController extends Controller
 
         // Секции модулей: какие свои настройки отдавать, модуль объявляет в module.php
         foreach (Registry::$apiConfig as $section => $settings) {
-            // Строка — имя настройки, замыкание считается при запросе (адрес страницы и т.п.),
-            // остальное отдаётся как есть. Именно Closure: is_callable принял бы 'date' за функцию
+            // Строка — имя настройки, любое другое значение отдаётся как есть
             $data[$section] = array_map(
-                static fn (mixed $value) => match (true) {
-                    $value instanceof Closure => $value(),
-                    is_string($value)         => setting($value),
-                    default                   => $value,
-                },
+                static fn (mixed $value) => is_string($value) ? setting($value) : $value,
                 $settings,
             );
         }

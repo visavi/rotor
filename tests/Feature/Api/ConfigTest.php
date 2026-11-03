@@ -81,21 +81,6 @@ class ConfigTest extends TestCase
         }
     }
 
-    public function testModuleSectionValueCanBeComputed(): void
-    {
-        // Адрес страницы — не настройка: строку ядро приняло бы за имя настройки и отдало null
-        Registry::apiConfig('demo', [
-            'url'    => static fn (): string => url('/demo'),
-            'format' => 'date',
-        ]);
-
-        $this->getJson('/api/config')
-            ->assertOk()
-            ->assertJsonPath('demo.url', url('/demo'))
-            // Строка с именем PHP-функции остаётся именем настройки, а не вызывается
-            ->assertJsonPath('demo.format', null);
-    }
-
     public function testCoreConfigHasNoModuleSections(): void
     {
         // Без модулей в ответе не должно быть секций форума
