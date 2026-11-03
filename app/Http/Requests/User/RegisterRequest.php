@@ -37,8 +37,6 @@ class RegisterRequest extends FormRequest
             'password'  => UserRules::password(),
             'password2' => ['required', 'same:password'],
             'email'     => UserRules::email(UserService::isEmailRequired()),
-            // Форма сайта пол не спрашивает; API-клиент может передать его по желанию
-            'gender' => UserRules::profile()['gender'],
         ];
     }
 
@@ -73,14 +71,6 @@ class RegisterRequest extends FormRequest
     public function email(): string
     {
         return (string) $this->validated('email');
-    }
-
-    /**
-     * Пол, если его передали: без него — «не указан», а не женский
-     */
-    public function gender(): ?string
-    {
-        return $this->validated('gender');
     }
 
     protected function prepareForValidation(): void

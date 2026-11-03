@@ -60,7 +60,7 @@ class UserController extends Controller
     {
         $login = $request->validated('login');
 
-        $user = $userService->register($login, $request->validated('password'), $request->email(), $request->gender(), $request);
+        $user = $userService->register($login, $request->validated('password'), $request->email(), $request);
 
         Auth::login($user, true);
 

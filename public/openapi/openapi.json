@@ -1298,14 +1298,6 @@
                                         "format": "email",
                                         "description": "Обязательна, если в /config account.email_required; при account.email_hidden поле не показывать — присланный адрес отбрасывается"
                                     },
-                                    "gender": {
-                                        "type": "string",
-                                        "enum": [
-                                            "male",
-                                            "female"
-                                        ],
-                                        "description": "Необязателен: форма сайта пол не спрашивает. Без поля пол не указан"
-                                    },
                                     "captcha_key": {
                                         "type": "string",
                                         "description": "Ключ задания из /captcha"

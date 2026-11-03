@@ -53,24 +53,17 @@ class AuthTest extends TestCase
         $this->assertSame($user->apikey, $response->json('token'));
         // Приветственное уведомление в приват, как и на сайте
         $this->assertSame(1, $user->getCountMessages());
-        $this->assertSame(User::MALE, $user->gender);
     }
 
-    public function testRegisterWithoutGenderLeavesItUnset(): void
+    public function testRegisterIgnoresGender(): void
     {
-        // Раньше отсутствующий пол записывался женским: всё, что не male, считалось female
-        $payload = $this->payload();
-        unset($payload['gender']);
-
-        $this->postJson('/api/register', $payload)
+        // Пол при регистрации не спрашивается, как и на сайте: его указывают потом в анкете.
+        // Старое приложение, которое присылает пол, не получает ошибку
+        $this->postJson('/api/register', ['gender' => User::MALE] + $this->payload())
             ->assertStatus(201)
             ->assertJsonPath('user.gender', null);
 
         $this->assertNull(User::query()->where('login', 'newuser')->value('gender'));
-
-        $this->postJson('/api/register', ['gender' => 'other'] + $this->payload())
-            ->assertStatus(422)
-            ->assertJsonValidationErrors('gender');
     }
 
     public function testRegisterRunsModuleHooksLikeSite(): void
@@ -247,7 +240,6 @@ class AuthTest extends TestCase
             'password'  => 'secret123',
             'password2' => 'secret123',
             'email'     => 'newuser@example.com',
-            'gender'    => User::MALE,
         ] + $this->captcha();
     }
 }

@@ -34,7 +34,7 @@ class AuthApiController extends Controller
     {
         $login = $request->validated('login');
 
-        $user = $userService->register($login, $request->validated('password'), $request->email(), $request->gender(), $request);
+        $user = $userService->register($login, $request->validated('password'), $request->email(), $request);
 
         // Токен выдаётся сразу: иначе клиенту пришлось бы отдельно логиниться
         $user->update(['apikey' => Str::random(32)]);
