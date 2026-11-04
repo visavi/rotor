@@ -107,10 +107,11 @@ return [
     'captcha_public'        => 'Public key',
     'captcha_private'       => 'The secret key',
 
-    'stickers_size'       => 'Maximum Sticker Weight',
-    'stickers_max_weight' => 'Maximum Sticker Size',
-    'stickers_min_weight' => 'Minimum sticker size',
-    'stickers_per_page'   => 'Stickers on page',
+    'stickers_size'          => 'Maximum Sticker Weight',
+    'stickers_max_weight'    => 'Maximum Sticker Size',
+    'stickers_min_weight'    => 'Minimum sticker size',
+    'stickers_per_page'      => 'Stickers on page',
+    'stickers_per_page_hint' => 'A multiple of 12 keeps rows of stickers full on any screen width',
 
     'page_invalid'           => 'Invalid page!',
     'settings_empty'         => 'Settings not transferred',

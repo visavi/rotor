@@ -77,7 +77,7 @@ class SettingSeeder extends Seeder
             ['name' => 'scorename', 'value' => __('seeds.settings.scorename')],
             ['name' => 'screensize', 'value' => 1500],
             ['name' => 'slug_template', 'value' => '%id%'],
-            ['name' => 'stickerlist', 'value' => 20],
+            ['name' => 'stickerlist', 'value' => 24],
             ['name' => 'stickermaxsize', 'value' => 1048576],
             ['name' => 'stickermaxweight', 'value' => 500],
             ['name' => 'stickerminweight', 'value' => 16],

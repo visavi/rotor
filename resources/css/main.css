@@ -1383,9 +1383,18 @@ a.app-tile:hover {
 /* Сетка стикеров категории */
 .sticker-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    /* Колонок 3, 4 или 6: при числе стикеров на странице, кратном 12, ряды полные */
+    grid-template-columns: repeat(3, 1fr);
     gap: .5rem;
     margin-bottom: 1rem;
+}
+
+@media (min-width: 576px) {
+    .sticker-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (min-width: 992px) {
+    .sticker-grid { grid-template-columns: repeat(6, 1fr); }
 }
 
 .sticker-item {

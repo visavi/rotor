@@ -107,10 +107,11 @@ return [
     'captcha_public'        => 'Публичный ключ',
     'captcha_private'       => 'Секретный ключ',
 
-    'stickers_size'       => 'Максимальный вес стикера',
-    'stickers_max_weight' => 'Максимальный размер стикера',
-    'stickers_min_weight' => 'Минимальный размер стикера',
-    'stickers_per_page'   => 'Стикеров на стр.',
+    'stickers_size'          => 'Максимальный вес стикера',
+    'stickers_max_weight'    => 'Максимальный размер стикера',
+    'stickers_min_weight'    => 'Минимальный размер стикера',
+    'stickers_per_page'      => 'Стикеров на стр.',
+    'stickers_per_page_hint' => 'Кратно 12 — тогда ряды стикеров полные на экране любой ширины',
 
     'page_invalid'           => 'Недопустимая страница!',
     'settings_empty'         => 'Не переданы настройки',

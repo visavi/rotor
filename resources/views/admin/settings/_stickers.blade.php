@@ -28,6 +28,7 @@
         <label for="stickerlist" class="form-label">{{ __('settings.stickers_per_page') }}:</label>
         <input type="number" class="form-control" id="stickerlist" name="sets[stickerlist]" maxlength="2" value="{{ old('sets.stickerlist', $settings['stickerlist']) }}" required>
         <div class="invalid-feedback">{{ textError('sets.stickerlist') }}</div>
+        <div class="form-text">{{ __('settings.stickers_per_page_hint') }}</div>
     </div>
 
     <button class="btn btn-primary">{{ __('main.save') }}</button>

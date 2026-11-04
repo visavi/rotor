@@ -107,10 +107,11 @@ return [
     'captcha_public'        => 'Публічний ключ',
     'captcha_private'       => 'Секретний ключ',
 
-    'stickers_size'       => 'Максимальна вага стікера',
-    'stickers_max_weight' => 'Максимальний розмір стікера',
-    'stickers_min_weight' => 'Мінімальний розмір стікера',
-    'stickers_per_page'   => 'Стікерів на стор.',
+    'stickers_size'          => 'Максимальна вага стікера',
+    'stickers_max_weight'    => 'Максимальний розмір стікера',
+    'stickers_min_weight'    => 'Мінімальний розмір стікера',
+    'stickers_per_page'      => 'Стікерів на стор.',
+    'stickers_per_page_hint' => 'Кратно 12 — тоді ряди стікерів повні на екрані будь-якої ширини',
 
     'page_invalid'           => 'Неприпустима сторінка!',
     'settings_empty'         => 'Не передано налаштування',
