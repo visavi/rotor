@@ -28,20 +28,26 @@ AddDefaultCharset UTF-8
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# Кэш статики. Сборка Vite (/build/) — с хэшем в имени, её кэшируем на год без перепроверки.
+# Остальное (custom.css, аватары, загрузки) может смениться под тем же именем — на месяц
 <IfModule mod_expires.c>
-    <filesmatch ".(ico|jpg|gif|png|css|js)$">
-        ExpiresActive on
+    <FilesMatch "\.(css|js|woff2?|ttf|ico|svg|jpe?g|png|gif|webp|avif|mp4|webm|mov|mp3|ogg)$">
+        ExpiresActive On
         ExpiresDefault "access plus 1 month"
-    </filesmatch>
+
+        <If "%{REQUEST_URI} =~ m#/build/#">
+            ExpiresDefault "access plus 1 year"
+        </If>
+    </FilesMatch>
 </IfModule>
 
 <IfModule mod_headers.c>
-    <FilesMatch .*\.(js|css)$>
-        Header set Cache-control: private
-    </FilesMatch>
+    <FilesMatch "\.(css|js|woff2?|ttf|ico|svg|jpe?g|png|gif|webp|avif|mp4|webm|mov|mp3|ogg)$">
+        Header set Cache-Control "public, max-age=2592000"
 
-    <FilesMatch .*\.(gif|jpg|png)$>
-        Header set Cache-control: public
+        <If "%{REQUEST_URI} =~ m#/build/#">
+            Header set Cache-Control "public, max-age=31536000, immutable"
+        </If>
     </FilesMatch>
 </IfModule>
 

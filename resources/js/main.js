@@ -3,10 +3,9 @@ import { __ } from './translate.js'
 import { ajax } from './ajax.js'
 import { confirm, hideDialog, showDialog } from './dialogs.js'
 import { copyPool, placeMedia, renderFile, renderFileInPool, renderPending, takeAllowed } from './attachments.js'
-import { notyf, tags, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
+import { notyf, fancybox, fancyCarousel, fancyCarouselPlugins } from './globals.js'
 import './tiptap-editor.js'
 import './sortable-list.js'
-import './prettify.js'
 
 // Уведомления зовут из разметки: inline-скрипты шаблонов и модулей делают
 // notyf.error(...) прямо на странице. Остальные библиотеки нужны только здесь
@@ -67,7 +66,7 @@ function queueShortView(el) {
         shortViewFrame = null
         const queue = [...shortViewQueue]
         shortViewQueue.clear()
-        queue.forEach(updateShortView)
+        updateShortViews(queue)
     }, 50)
 }
 
@@ -86,35 +85,73 @@ function createShortViewButton(el) {
     return btn
 }
 
-function updateShortView(el) {
-    if (!el.isConnected || el.classList.contains('expanded')) {
-        return
-    }
+// Сначала замеряем все блоки, потом меняем DOM: замер после правки
+// заставляет браузер пересчитывать вёрстку заново на каждый пост
+function updateShortViews(elements) {
+    const measured = elements
+        .filter(el => el.isConnected && !el.classList.contains('expanded'))
+        .map(el => {
+            // scrollHeight отдаёт полную высоту содержимого и в свёрнутом виде
+            const maxHeight = parseFloat(getComputedStyle(el).getPropertyValue('--short-view-max')) || 0
 
-    // scrollHeight отдаёт полную высоту содержимого и в свёрнутом виде
-    const maxHeight = parseFloat(getComputedStyle(el).getPropertyValue('--short-view-max')) || 0
-    const btn = el.nextElementSibling?.classList.contains('short-view-toggle') ? el.nextElementSibling : null
+            return { el, isLong: maxHeight > 0 && el.scrollHeight - maxHeight > 100 }
+        })
 
-    if (maxHeight && el.scrollHeight - maxHeight > 100) {
-        el.classList.add('clamped')
-        if (!btn) {
-            el.after(createShortViewButton(el))
+    measured.forEach(({ el, isLong }) => {
+        const btn = el.nextElementSibling?.classList.contains('short-view-toggle') ? el.nextElementSibling : null
+
+        if (isLong) {
+            el.classList.add('clamped')
+            if (!btn) {
+                el.after(createShortViewButton(el))
+            }
+        } else {
+            el.classList.remove('clamped')
+            btn?.remove()
         }
-    } else {
-        el.classList.remove('clamped')
-        btn?.remove()
-    }
+    })
 }
 
 function initShortView(container = document) {
-    container.querySelectorAll('.section-content.short-view:not(.expanded)').forEach(function (el) {
-        if (el.dataset.shortView) {
-            return
-        }
+    const elements = [...container.querySelectorAll('.section-content.short-view:not(.expanded)')]
+        .filter(el => !el.dataset.shortView)
 
+    updateShortViews(elements)
+
+    elements.forEach(el => {
         el.dataset.shortView = '1'
         shortViewObserver.observe(el)
-        updateShortView(el)
+    })
+}
+
+function initTags(Tags) {
+    // Свободный ввод с подсказками: адрес поиска и лимит задаются через data-server и data-max
+    Tags.init('.input-tag', {
+        allowNew: true,
+        liveServer: true,
+        clearEnd: true,
+        allowClear: true,
+        suggestionsThreshold: 2,
+        separator: [','],
+        addOnBlur: true,
+    })
+
+    // Выбор пользователей, адрес поиска задается через data-server
+    Tags.init('.input-user', {
+        allowNew: false,
+        liveServer: true,
+        clearEnd: true,
+        allowClear: true,
+        suggestionsThreshold: 2,
+        max: 10,
+        // Ищем и по логину, и по имени, иначе список фильтруется только по логину
+        searchFields: ['login', 'name'],
+        // В подсказках показываем «логин — имя», как в упоминаниях tiptap
+        onRenderItem: (item, label, inst) => {
+            const text = item.name && item.name !== item.login ? `${item.login} — ${item.name}` : item.login
+
+            return inst.config('sanitizer')(text)
+        },
     })
 }
 
@@ -281,36 +318,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     initShortView()
 
-    prettyPrint()
+    // Подсветка кода и поля с подсказками нужны немногим страницам: библиотеки
+    // грузятся отдельными чанками, только когда на странице есть что обрабатывать
+    if (document.querySelector('pre.code, code.code')) {
+        import('./prettify.js').then(() => window.prettyPrint())
+    }
 
-    // Свободный ввод с подсказками: адрес поиска и лимит задаются через data-server и data-max
-    tags.init('.input-tag', {
-        allowNew: true,
-        liveServer: true,
-        clearEnd: true,
-        allowClear: true,
-        suggestionsThreshold: 2,
-        separator: [','],
-        addOnBlur: true,
-    })
-
-    // Выбор пользователей, адрес поиска задается через data-server
-    tags.init('.input-user', {
-        allowNew: false,
-        liveServer: true,
-        clearEnd: true,
-        allowClear: true,
-        suggestionsThreshold: 2,
-        max: 10,
-        // Ищем и по логину, и по имени, иначе список фильтруется только по логину
-        searchFields: ['login', 'name'],
-        // В подсказках показываем «логин — имя», как в упоминаниях tiptap
-        onRenderItem: (item, label, inst) => {
-            const text = item.name && item.name !== item.login ? `${item.login} — ${item.name}` : item.login
-
-            return inst.config('sanitizer')(text)
-        },
-    })
+    if (document.querySelector('.input-tag, .input-user')) {
+        import('bootstrap5-tags').then(({ default: Tags }) => initTags(Tags))
+    }
 
     fancybox.bind('[data-fancybox]:not(.fancybox-exclude)', {})
 
