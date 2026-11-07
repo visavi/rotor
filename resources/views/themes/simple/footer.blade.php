@@ -34,6 +34,8 @@
 
         <div class="site-footer__counter">{{ showCounter() }}</div>
 
+        <div class="mb-3">@include('app/_social')</div>
+
         <div class="site-footer__bottom">
             <span>{{ setting('copy') }}</span>
             <span class="site-footer__meta">

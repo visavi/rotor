@@ -37,4 +37,6 @@ footer { padding: 20px 28px; }
 }
 
 .paper-footer-social { a { color: $ink-gray; margin-left: 10px; font-size: 1.1rem; &:hover { color: $ink-red; } } }
+// Общий шаблон соцсетей даёт fa-2x, газете иконки мельче — как прежний fa-lg
+.paper-footer-social .fa-2x { font-size: 1.25em; }
 .paper-footer-copy { font-family: $ui-font; font-size: 0.78rem; color: $ink-gray; font-style: italic; }

@@ -159,6 +159,13 @@ body.modal-open {
     padding-block: .125rem;
 }
 
+/* Соцсети в футере (app/_social). Цвет на классе, а не в style:
+   тема перебивает его своим правилом, как newspaper и simple.
+   Цвета брендов подобраны с контрастом от 3:1 и на светлом, и на тёмном фоне */
+.social-telegram { color: #0088cc; }
+.social-vk { color: #0077ff; }
+.social-facebook { color: #1877f2; }
+
 .flag {
     vertical-align: middle;
     box-shadow: 0 0 0 1px rgba(128, 128, 128, .3);
