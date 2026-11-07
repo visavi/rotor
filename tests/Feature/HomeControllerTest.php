@@ -59,7 +59,7 @@ class HomeControllerTest extends TestCase
         $this->get('/ipban')->assertStatus(429);
     }
 
-    public function testIpbanPageHasNoAdverts(): void
+    public function testIpbanPageHasNoAdvertsOrFooter(): void
     {
         // Хуки живут в статике весь процесс: свои убрать, чужие вернуть
         $hooks = Hook::getHooks();
@@ -69,17 +69,21 @@ class HomeControllerTest extends TestCase
 
         try {
             // Реклама гасится секциями макета темы: каждая встроенная тема должна их объявлять
+            // и гасить футер с копирайтом, даже если копирайт стоит прямо в макете
+            $this->overrideSetting('copy', 'site-copyright');
+
             foreach (glob(resource_path('views/themes/*'), GLOB_ONLYDIR) ?: [] as $dir) {
                 $this->overrideSetting('themes', basename($dir));
 
-                $this->get('/search')->assertSee('advert-top')->assertSee('advert-bottom');
+                $this->get('/search')->assertSee('advert-top')->assertSee('advert-bottom')->assertSee('site-copyright');
 
                 $ban = Ban::factory()->create(['ip' => '127.0.0.1', 'user_id' => 0, 'created_at' => now()->subHour()]);
 
                 $this->get('/ipban')
                     ->assertStatus(429)
                     ->assertDontSee('advert-top')
-                    ->assertDontSee('advert-bottom');
+                    ->assertDontSee('advert-bottom')
+                    ->assertDontSee('site-copyright');
 
                 $ban->delete();
                 clearCache('ipBan');

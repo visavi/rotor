@@ -56,9 +56,9 @@ class SliderLoadingTest extends TestCase
 
         // Кадр — превью по ширине блока, миниатюры — квадрат, галерея открывает оригинал
         $this->assertStringContainsString('<a href="/uploads/a.jpg" class="slide-main-link"', $html);
-        $this->assertStringContainsString('<img src="/uploads/thumbnails/700/a.jpg"', $html);
-        $this->assertStringContainsString('data-preview="/uploads/thumbnails/700/a.jpg"', $html);
-        $this->assertStringContainsString('<img src="/uploads/thumbnails/150/a.jpg"', $html);
+        $this->assertStringContainsString('<img src="/uploads/thumbnails/700/a.webp"', $html);
+        $this->assertStringContainsString('data-preview="/uploads/thumbnails/700/a.webp"', $html);
+        $this->assertStringContainsString('<img src="/uploads/thumbnails/150/a.webp"', $html);
 
         // Gif без превью: анимация не переживает пересохранение
         $this->assertStringContainsString('<img src="/uploads/b.gif"', $html);

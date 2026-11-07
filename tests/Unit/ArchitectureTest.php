@@ -40,6 +40,15 @@ class ArchitectureTest extends TestCase
         );
     }
 
+    public function testHtmlStringGetsRenderedView(): void
+    {
+        $this->assertCodeMissing(
+            '/new HtmlString\(\s*view\((?!.*->render\(\))/',
+            ['app', 'modules'],
+            'HtmlString ждёт строку: с объектом View работает только {{ }} в Blade, а (string) и склейка падают с TypeError. Добавьте ->render()',
+        );
+    }
+
     public function testNoSitetime(): void
     {
         $this->assertCodeMissing(

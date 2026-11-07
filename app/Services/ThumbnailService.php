@@ -7,6 +7,7 @@ namespace App\Services;
 use FilesystemIterator;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\File as FileSystem;
+use Intervention\Image\Format;
 use Intervention\Image\ImageManager;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -17,7 +18,10 @@ use Throwable;
  *
  * Создаётся при первом выводе картинки и ложится в public рядом с оригиналами,
  * дальше его отдаёт веб-сервер как обычную статику. Исходники при загрузке
- * уже ужаты до screensize, поэтому обработка на выводе страницы недорогая
+ * уже ужаты до screensize, поэтому обработка на выводе страницы недорогая.
+ * Превью сохраняется в webp: обычно он вдвое легче jpeg и в разы легче png.
+ * Формат оригинала остаётся, если webp вышел тяжелее исходника (скриншот текста в png)
+ * или GD собран без webp
  */
 final class ThumbnailService
 {
@@ -52,13 +56,17 @@ final class ThumbnailService
             return $path;
         }
 
-        $thumbnail = self::DIRECTORY . '/' . $size . '/' . $relative;
+        foreach (self::names($relative) as $name) {
+            $thumbnail = self::DIRECTORY . '/' . $size . '/' . $name;
 
-        if (is_file(public_path($thumbnail)) || self::make($size, $relative, public_path($thumbnail))) {
-            return '/' . $thumbnail;
+            if (is_file(public_path($thumbnail))) {
+                return '/' . $thumbnail;
+            }
         }
 
-        return $path;
+        $thumbnail = self::make($size, $relative);
+
+        return $thumbnail === null ? $path : '/' . $thumbnail;
     }
 
     /**
@@ -73,7 +81,9 @@ final class ThumbnailService
         }
 
         foreach (self::SIZES as $size) {
-            FileSystem::delete(public_path(self::DIRECTORY . '/' . $size . '/' . $relative));
+            foreach (self::names($relative) as $name) {
+                FileSystem::delete(public_path(self::DIRECTORY . '/' . $size . '/' . $name));
+            }
         }
     }
 
@@ -118,15 +128,15 @@ final class ThumbnailService
     }
 
     /**
-     * Создаёт превью, false — не вышло, страница покажет оригинал.
+     * Создаёт превью и возвращает его путь внутри public, null — не вышло, страница покажет оригинал.
      * Любая ошибка здесь не должна ронять страницу
      */
-    private static function make(int $size, string $relative, string $target): bool
+    private static function make(int $size, string $relative): ?string
     {
         $source = public_path('uploads/' . $relative);
 
         if (! is_file($source)) {
-            return false;
+            return null;
         }
 
         // Сразу после деплоя превью нет ни одного: без лимита первый показ
@@ -135,7 +145,7 @@ final class ThumbnailService
         $made = Context::getHidden('thumbnails_made', 0);
 
         if ($made >= self::MAX_PER_REQUEST) {
-            return false;
+            return null;
         }
 
         Context::addHidden('thumbnails_made', $made + 1);
@@ -146,41 +156,87 @@ final class ThumbnailService
             $info = getimagesize($source);
 
             if ($info === false) {
-                return false;
+                return null;
             }
-
-            FileSystem::ensureDirectoryExists(dirname($target));
-
-            // Пишем во временный файл и переименовываем: параллельный запрос
-            // не отдаст недописанное превью
-            $temp = dirname($target) . '/.' . uniqid('', true) . '.' . pathinfo($target, PATHINFO_EXTENSION);
 
             $fits = $size === self::SQUARE
                 ? $info[0] <= $size && $info[1] <= $size
                 : $info[0] <= $size;
 
-            $image = $fits ? null : app(ImageManager::class)->decode($source);
+            $extension = strtolower(pathinfo($relative, PATHINFO_EXTENSION));
+            $manager = app(ImageManager::class);
+            $toWebp = $extension !== 'webp' && $manager->driver->supports(Format::WEBP);
 
-            // Маленькую картинку не пересохраняем: копия не хуже, а jpeg не теряет качество
-            if ($image === null || $image->isAnimated()) {
-                FileSystem::copy($source, $temp);
-            } else {
+            // Маленькую картинку, которую не во что переводить, копируем без decode
+            $image = $fits && ! $toWebp ? null : $manager->decode($source);
+
+            // Анимация не переживает пересохранение
+            if ($image?->isAnimated()) {
+                $image = null;
+            }
+
+            if ($image !== null && ! $fits) {
                 $size === self::SQUARE
                     ? $image->coverDown($size, $size)
                     : $image->scaleDown(width: $size);
-
-                $image->save($temp, quality: self::QUALITY);
             }
 
-            return rename($temp, $target);
+            $name = $relative;
+            $data = null;
+
+            if ($image !== null && $toWebp) {
+                $webp = (string) $image->encodeUsingFileExtension('webp', quality: self::QUALITY);
+
+                if (strlen($webp) < filesize($source)) {
+                    $name = self::webpName($relative);
+                    $data = $webp;
+                }
+            }
+
+            // Webp не вышел: уменьшенную картинку сохраняем в формате оригинала, маленькую копируем
+            if ($data === null && $image !== null && ! $fits) {
+                $data = (string) $image->encodeUsingFileExtension($extension, quality: self::QUALITY);
+            }
+
+            $thumbnail = self::DIRECTORY . '/' . $size . '/' . $name;
+            $target = public_path($thumbnail);
+            FileSystem::ensureDirectoryExists(dirname($target));
+
+            // Пишем во временный файл и переименовываем: параллельный запрос
+            // не отдаст недописанное превью
+            $temp = dirname($target) . '/.' . uniqid('', true);
+
+            $written = $data === null
+                ? FileSystem::copy($source, $temp)
+                : file_put_contents($temp, $data) !== false;
+
+            return $written && rename($temp, $target) ? $thumbnail : null;
         } catch (Throwable) {
-            return false;
+            return null;
         } finally {
             // После rename файла уже нет, остаётся только от неудачной попытки
             if ($temp !== null) {
                 FileSystem::delete($temp);
             }
         }
+    }
+
+    /**
+     * Имена, под которыми лежит превью: webp или формат оригинала
+     *
+     * @return list<string>
+     */
+    private static function names(string $relative): array
+    {
+        return array_values(array_unique([self::webpName($relative), $relative]));
+    }
+
+    /**
+     * Имя превью в webp: имена загрузок уникальны, поэтому a.jpg и a.png не встречаются
+     */
+    private static function webpName(string $relative): string
+    {
+        return substr($relative, 0, -strlen(pathinfo($relative, PATHINFO_EXTENSION))) . 'webp';
     }
 
     /**

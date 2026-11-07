@@ -235,7 +235,7 @@ function showOnline(): ?HtmlString
     if (setting('onlines')) {
         $online = statsOnline();
 
-        return new HtmlString(view('app/_online', compact('online')));
+        return new HtmlString(view('app/_online', compact('online'))->render());
     }
 
     return null;
@@ -548,7 +548,7 @@ function performance(): ?HtmlString
         $queries = getQueryLog();
         $timeQueries = array_sum(array_column($queries, 'time'));
 
-        return new HtmlString(view('app/_performance', compact('queries', 'timeQueries')));
+        return new HtmlString(view('app/_performance', compact('queries', 'timeQueries'))->render());
     }
 
     return null;
@@ -633,7 +633,7 @@ function showError(string|array $errors): HtmlString
 {
     $errors = (array) $errors;
 
-    return new HtmlString(view('app/_error', compact('errors')));
+    return new HtmlString(view('app/_error', compact('errors'))->render());
 }
 
 /**
@@ -641,7 +641,7 @@ function showError(string|array $errors): HtmlString
  */
 function getCaptcha(): HtmlString
 {
-    return new HtmlString(view('app/_captcha'));
+    return new HtmlString(view('app/_captcha')->render());
 }
 
 /**

@@ -1,5 +1,5 @@
-<div class="footer">
-    <div class="footer-text">
-        {{ setting('copy') }}
-    </div>
+<div class="small" id="down">
+    {{ showCounter() }}
+    {{ showOnline() }}
+    {{ performance() }}
 </div>
