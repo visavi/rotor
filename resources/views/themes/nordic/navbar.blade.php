@@ -6,7 +6,7 @@
         <li class="app-search">
             <form action="{{ route('search') }}" method="get">
                 <input name="query" class="form-control app-search__input" type="search" placeholder="{{ __('main.search') }}" minlength="3" maxlength="64" required>
-                <button class="app-search__button"><i class="fa fa-search"></i></button>
+                <button class="app-search__button" aria-label="{{ __('main.search') }}"><i class="fa fa-search"></i></button>
             </form>
         </li>
         <li>

@@ -152,6 +152,13 @@ body.modal-open {
     padding-right: 0 !important;
 }
 
+/* Ссылки футера идут столбиком: строки стоят вплотную, и по нужной
+   на телефоне не попасть пальцем. Минимальный зазор — 24px на строку */
+.footer-item {
+    display: inline-block;
+    padding-block: .125rem;
+}
+
 .flag {
     vertical-align: middle;
     box-shadow: 0 0 0 1px rgba(128, 128, 128, .3);

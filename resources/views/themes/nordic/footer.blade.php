@@ -26,9 +26,9 @@
         <div class="col-12 py-3">
             {{ showCounter() }}
             <div class="float-end">
-                <a target="_blank" href="https://telegram.me/visavinet"><i class="fab fa-telegram fa-2x" style="color: #0088cc"></i></a>
-                <a target="_blank" href="https://vk.com/visavinet"><i class="fab fa-vk fa-2x" style="color: #45668e"></i></a>
-                <a target="_blank" href="https://www.facebook.com/groups/visavinet"><i class="fab fa-facebook-square fa-2x" style="color: #3b5998"></i></a>
+                <a target="_blank" href="https://telegram.me/visavinet" aria-label="Telegram"><i class="fab fa-telegram fa-2x" style="color: #0088cc"></i></a>
+                <a target="_blank" href="https://vk.com/visavinet" aria-label="VK"><i class="fab fa-vk fa-2x" style="color: #45668e"></i></a>
+                <a target="_blank" href="https://www.facebook.com/groups/visavinet" aria-label="Facebook"><i class="fab fa-facebook-square fa-2x" style="color: #3b5998"></i></a>
             </div>
             <div class="text-muted">{{ setting('copy') }}</div>
         </div>

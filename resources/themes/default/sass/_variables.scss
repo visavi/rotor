@@ -46,6 +46,8 @@ $sidebar-color: #1e272e;
     --bs-link-color: #297dad;
     --bs-link-color-rgb: 41, 125, 173;
     --bs-link-hover-color: #1f6086;
+    // Ссылки Bootstrap красит из -rgb: без неё наведение брало синий самого Bootstrap
+    --bs-link-hover-color-rgb: 31, 96, 134;
 
     // $body-bg
     --bs-body-bg: #fff;
@@ -79,6 +81,12 @@ $sidebar-color: #1e272e;
 // $body-bg-dark
 [data-bs-theme="dark"] {
     --bs-body-bg: #2b3035;
+
+    // Основной цвет на тёмном фоне не дотягивает до контраста 4.5, ссылки светлее.
+    // --bs-link-hover-color не трогаем: от него фон кнопок при наведении
+    --bs-link-color: #5fa8d3;
+    --bs-link-color-rgb: 95, 168, 211;
+    --bs-link-hover-color-rgb: 140, 195, 227;
 }
 
 // $headings-font-weight: bold

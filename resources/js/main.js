@@ -191,7 +191,15 @@ document.addEventListener('DOMContentLoaded', function () {
         el.remove()
     })
 
-    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el))
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+        // Иконке без текста Bootstrap ставит aria-label из подсказки,
+        // а у span без роли этот атрибут запрещён: читалка его пропустит
+        if (el.matches('span, i, div') && !el.hasAttribute('role') && !el.textContent.trim()) {
+            el.setAttribute('role', 'img')
+        }
+
+        new bootstrap.Tooltip(el)
+    })
 
     // Вкладки переживают перезагрузку: форма с ошибкой уводит на ту же страницу,
     // и без этого пользователь оказался бы на первой вкладке, не увидев, где ошибка

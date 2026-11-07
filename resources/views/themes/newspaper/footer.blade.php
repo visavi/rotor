@@ -28,9 +28,9 @@
         <div class="paper-footer-bottom">
             {{ showCounter() }}
             <div class="paper-footer-social">
-                <a target="_blank" href="https://telegram.me/visavinet"><i class="fab fa-telegram fa-lg"></i></a>
-                <a target="_blank" href="https://vk.com/visavinet"><i class="fab fa-vk fa-lg"></i></a>
-                <a target="_blank" href="https://www.facebook.com/groups/visavinet"><i class="fab fa-facebook-square fa-lg"></i></a>
+                <a target="_blank" href="https://telegram.me/visavinet" aria-label="Telegram"><i class="fab fa-telegram fa-lg"></i></a>
+                <a target="_blank" href="https://vk.com/visavinet" aria-label="VK"><i class="fab fa-vk fa-lg"></i></a>
+                <a target="_blank" href="https://www.facebook.com/groups/visavinet" aria-label="Facebook"><i class="fab fa-facebook-square fa-lg"></i></a>
             </div>
             <div class="paper-footer-copy">{{ setting('copy') }}</div>
         </div>

@@ -29,6 +29,8 @@ $topnav-active: $primary-color;
     --bs-link-color: #27ae60;
     --bs-link-color-rgb: 39, 174, 96;
     --bs-link-hover-color: #1e8449;
+    // Ссылки Bootstrap красит из -rgb: без неё наведение брало синий самого Bootstrap
+    --bs-link-hover-color-rgb: 30, 132, 73;
 
     // Высота шапки и горизонтального меню: от них считается отступ контента
     --header-height: 3.125rem;

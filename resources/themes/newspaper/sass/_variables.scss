@@ -60,6 +60,8 @@ $sidebar-light-color: $ink-black;
     --bs-link-color: #{$ink-red};
     --bs-link-color-rgb: 139, 0, 0;
     --bs-link-hover-color: #6f0000;
+    // Ссылки Bootstrap красит из -rgb: без неё наведение брало синий самого Bootstrap
+    --bs-link-hover-color-rgb: 111, 0, 0;
 
     // Высота шапки (masthead + меню) и ширина сайдбара
     // Высота шапки = masthead + меню (всё в rem, растёт со шрифтом)

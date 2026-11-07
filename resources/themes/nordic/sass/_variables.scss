@@ -67,6 +67,8 @@ $sidebar-light-link-color: #374151;
     --bs-link-color: #4338ca;
     --bs-link-color-rgb: 67, 56, 202;
     --bs-link-hover-color: #3730a3;
+    // Ссылки Bootstrap красит из -rgb: без неё наведение брало синий самого Bootstrap
+    --bs-link-hover-color-rgb: 55, 48, 163;
 
     // Высота шапки и ширина сайдбара: от них считаются отступы контента
     --navbar-height: 3.5rem;
@@ -87,6 +89,12 @@ $sidebar-light-link-color: #374151;
 // $body-bg-dark
 [data-bs-theme="dark"] {
     --bs-body-bg: #111827;
+
+    // Основной цвет на тёмном фоне не дотягивает до контраста 4.5, ссылки светлее.
+    // --bs-link-hover-color не трогаем: от него фон кнопок при наведении
+    --bs-link-color: #818cf8;
+    --bs-link-color-rgb: 129, 140, 248;
+    --bs-link-hover-color-rgb: 165, 180, 252;
 }
 
 // $headings-font-weight: 600
