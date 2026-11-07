@@ -34,14 +34,18 @@
 
     @yield('flash')
 
-    <div class="mb-2">
-        @hook('advertTop')
-    </div>
+    @section('advertTop')
+        <div class="mb-2">
+            @hook('advertTop')
+        </div>
+    @show
 
     @hook('contentStart')
     @yield('content')
     @hook('contentEnd')
-    @hook('advertBottom')
+    @section('advertBottom')
+        @hook('advertBottom')
+    @show
 </main>
 @yield('sidebar')
 </div>

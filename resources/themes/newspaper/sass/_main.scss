@@ -89,3 +89,6 @@ blockquote { border-left: 4px solid $ink-red; padding-left: 16px; font-style: it
 .code { font-size: 0.75rem; }
 hr { border-color: $paper-border; opacity: 1; margin: 16px 0; }
 :focus-visible { outline: 2px solid $ink-red; outline-offset: 1px; box-shadow: none; }
+
+// Страница без шапки (бан по IP, закрытый сайт): отступ под неё не нужен
+body:not(:has(.app-header)) .app-body { margin-top: 0; }

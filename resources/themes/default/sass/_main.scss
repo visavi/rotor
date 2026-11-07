@@ -156,4 +156,6 @@ h3 {
   }
 }
 
-
+// Страница без шапки и меню (бан по IP, закрытый сайт): отступы под них не нужны
+body:not(:has(.app-header)) .app-content { margin-top: 0; }
+body:not(:has(.app-sidebar)) .app-content { margin-left: 0; }

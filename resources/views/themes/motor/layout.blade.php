@@ -63,7 +63,9 @@
         <div class="backgr">
             <div class="bcontent">
                 <div class="mcontentwide">
-                    @hook('advertTop')
+                    @section('advertTop')
+                        @hook('advertTop')
+                    @show
 
                     @hook('header')
 
@@ -74,7 +76,9 @@
                     @yield('content')
                     @hook('contentEnd')
 
-                    @hook('advertBottom')
+                    @section('advertBottom')
+                        @hook('advertBottom')
+                    @show
 
                     <div class="small" id="down">
                         {{ showCounter() }}

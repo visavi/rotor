@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Ban;
 use App\Models\Error;
 use App\Models\User;
+use App\Support\Hook;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -56,6 +57,42 @@ class HomeControllerTest extends TestCase
         ]);
 
         $this->get('/ipban')->assertStatus(429);
+    }
+
+    public function testIpbanPageHasNoAdverts(): void
+    {
+        // Хуки живут в статике весь процесс: свои убрать, чужие вернуть
+        $hooks = Hook::getHooks();
+        Hook::flush();
+        Hook::add('advertTop', static fn () => '<b>advert-top</b>');
+        Hook::add('advertBottom', static fn () => '<b>advert-bottom</b>');
+
+        try {
+            // Реклама гасится секциями макета темы: каждая встроенная тема должна их объявлять
+            foreach (glob(resource_path('views/themes/*'), GLOB_ONLYDIR) ?: [] as $dir) {
+                $this->overrideSetting('themes', basename($dir));
+
+                $this->get('/search')->assertSee('advert-top')->assertSee('advert-bottom');
+
+                $ban = Ban::factory()->create(['ip' => '127.0.0.1', 'user_id' => 0, 'created_at' => now()->subHour()]);
+
+                $this->get('/ipban')
+                    ->assertStatus(429)
+                    ->assertDontSee('advert-top')
+                    ->assertDontSee('advert-bottom');
+
+                $ban->delete();
+                clearCache('ipBan');
+            }
+        } finally {
+            Hook::flush();
+
+            foreach ($hooks as $name => $items) {
+                foreach ($items as $hook) {
+                    Hook::add($name, $hook['value'], $hook['priority']);
+                }
+            }
+        }
     }
 
     public function testIpbanRedirectsWhenNotBanned(): void

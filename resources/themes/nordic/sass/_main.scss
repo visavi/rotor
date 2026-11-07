@@ -107,3 +107,6 @@ h3 { font-size: 1.0625rem; font-weight: 600; }
   &:hover { background: darken($primary-color, 10%); }
   &:before { font-size: 1.25rem; }
 }
+
+// Страница без шапки (бан по IP, закрытый сайт): отступ под неё не нужен
+body:not(:has(.app-header)) .app-body { margin-top: 0; }

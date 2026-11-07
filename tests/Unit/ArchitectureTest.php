@@ -270,6 +270,70 @@ class ArchitectureTest extends TestCase
         $this->assertSame([], array_values(array_unique($found)), 'Нет перевода: на странице выведется сам ключ. Добавьте ключ в resources/lang/ru или в resources/lang модуля');
     }
 
+    public function testTranslationsMatchRussian(): void
+    {
+        // Проверка выше сверяет ключи только с ru: дыра в en или ua видна лишь на сайте
+        $found = [];
+
+        foreach ([base_path('resources/lang'), ...glob(base_path('modules/*/resources/lang'), GLOB_ONLYDIR) ?: []] as $root) {
+            // JSON — строки для скриптов через @translation
+            $russian = [];
+
+            foreach (glob($root . '/ru/*.{php,json}', GLOB_BRACE) ?: [] as $ru) {
+                $russian[basename($ru)] = $this->translationFileKeys($ru);
+            }
+
+            foreach (glob($root . '/*', GLOB_ONLYDIR) ?: [] as $dir) {
+                if (basename($dir) === 'ru') {
+                    continue;
+                }
+
+                foreach ($russian as $name => $keys) {
+                    $file = $dir . '/' . $name;
+                    $missing = array_diff_key($keys, is_file($file) ? $this->translationFileKeys($file) : []);
+
+                    foreach (array_keys($missing) as $key) {
+                        $found[] = str_replace(base_path() . '/', '', $file) . ' → ' . $key;
+                    }
+                }
+            }
+        }
+
+        $this->assertSame([], $found, 'Ключ есть в ru, но не в этом языке: на странице выведется сам ключ. Добавьте перевод');
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private function translationFileKeys(string $file): array
+    {
+        $lines = str_ends_with($file, '.json')
+            ? json_decode((string) file_get_contents($file), true, flags: JSON_THROW_ON_ERROR)
+            : require $file;
+
+        return $this->translationKeys((array) $lines);
+    }
+
+    /**
+     * Ключи перевода через точку; список строк — одно значение
+     *
+     * @return array<string, true>
+     */
+    private function translationKeys(array $lines, string $prefix = ''): array
+    {
+        $keys = [];
+
+        foreach ($lines as $key => $value) {
+            if (is_array($value) && $value !== [] && ! array_is_list($value)) {
+                $keys += $this->translationKeys($value, $prefix . $key . '.');
+            } else {
+                $keys[$prefix . $key] = true;
+            }
+        }
+
+        return $keys;
+    }
+
     /**
      * Ключ модуля ищется в его файлах: перевод выключенного модуля не загружен
      */
