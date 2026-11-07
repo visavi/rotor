@@ -953,9 +953,11 @@ function initSlideThumbImage(el) {
         mainInner.innerHTML = `<video src="${href}" class="img-fluid rounded" controls preload="metadata"></video>`
     } else {
         const alt = (el.querySelector('img')?.getAttribute('alt') ?? '').replace(/"/g, '&quot;')
+        // В кадре — превью, полный размер открывается по клику
+        const preview = el.dataset.preview ?? href
         mainInner.innerHTML =
             `<a href="${href}" class="slide-main-link" data-fancybox="${fancyboxGroup}" data-slide-main>` +
-            `<img src="${href}" alt="${alt}" class="img-fluid rounded slide-main-img">` +
+            `<img src="${preview}" alt="${alt}" class="img-fluid rounded slide-main-img">` +
             `</a>`
     }
 

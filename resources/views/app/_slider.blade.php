@@ -1,3 +1,4 @@
+@use('App\Services\ThumbnailService')
 <div class="media-file">
     <div class="slide-main">
         @php $file = $files->first(); @endphp
@@ -5,8 +6,15 @@
             @if ($file->isVideo())
                 <video src="{{ $file->path }}" class="img-fluid rounded" controls preload="metadata"></video>
             @else
+                @php
+                    // Первая картинка на странице обычно LCP: грузим сразу и с высоким приоритетом.
+                    // Остальные лениво, иначе на мобильном они делят канал с первой.
+                    // Отметка в запросе, а не @once: лента рендерит каждый пост отдельно
+                    $isFirstImage = ! request()->attributes->has('slider_image_shown');
+                    request()->attributes->set('slider_image_shown', true);
+                @endphp
                 <a href="{{ $file->path }}" class="slide-main-link" data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}" data-slide-main>
-                    <img src="{{ $file->path }}" alt="{{ $file->name }}" class="img-fluid rounded slide-main-img">
+                    <img src="{{ $file->thumbnail(ThumbnailService::MEDIA) }}" alt="{{ $file->name }}" class="img-fluid rounded slide-main-img" @if ($isFirstImage) fetchpriority="high" @else loading="lazy" @endif>
                 </a>
             @endif
         </div>
@@ -31,8 +39,9 @@
                     <a href="{{ $file->path }}"
                        class="slide-thumb-link"
                        data-fancybox="{{ $model->getMorphClass() }}-{{ $model->id }}"
+                       data-preview="{{ $file->thumbnail(ThumbnailService::MEDIA) }}"
                        data-slide-thumb>
-                        <img src="{{ $file->path }}" alt="{{ $file->name }}" class="slide-thumb-image{{ $loop->first ? ' active' : '' }}">
+                        <img src="{{ $file->thumbnail(ThumbnailService::SQUARE) }}" alt="{{ $file->name }}" class="slide-thumb-image{{ $loop->first ? ' active' : '' }}" loading="lazy">
                     </a>
                 @endif
             @endforeach

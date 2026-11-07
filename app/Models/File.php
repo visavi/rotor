@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Services\ThumbnailService;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -104,6 +105,15 @@ class File extends Model
     }
 
     /**
+     * Адрес превью картинки, ThumbnailService::MEDIA или ::SQUARE.
+     * Для файлов без превью (gif, svg, не картинки) — исходный адрес
+     */
+    public function thumbnail(int $size): string
+    {
+        return ThumbnailService::url($this->path, $size);
+    }
+
+    /**
      * Является ли файл картинкой
      */
     public function isImage(): bool
@@ -134,6 +144,7 @@ class File extends Model
     {
         return DB::transaction(function () {
             FileSystem::delete(public_path($this->path));
+            ThumbnailService::delete($this->path);
 
             return parent::delete();
         });
