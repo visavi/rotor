@@ -145,6 +145,32 @@ class ThumbnailTest extends TestCase
         $this->assertFileDoesNotExist(public_path('uploads/thumbnails/150/forums/big.jpg'));
     }
 
+    public function testClearRemovesAllThumbnailsAndKeepsOriginals(): void
+    {
+        $this->putImage('forums/big.jpg', 1500, 1000);
+        $this->url('/uploads/forums/big.jpg', 700);
+        $this->url('/uploads/forums/big.jpg', 150);
+
+        // Брошенный временный файл тоже считается и удаляется
+        file_put_contents(public_path('uploads/thumbnails/700/forums/.tmp.jpg'), 'xx');
+
+        $stats = ThumbnailService::stats();
+        $this->assertSame(['150', '700'], array_map('strval', array_keys($stats)));
+        $this->assertSame(2, $stats[700]['count']);
+
+        $this->assertTrue(ThumbnailService::clear());
+
+        $this->assertDirectoryDoesNotExist(public_path('uploads/thumbnails'));
+        $this->assertFileExists(public_path('uploads/forums/big.jpg'));
+
+        // Чистить нечего — тоже успех
+        $this->assertTrue(ThumbnailService::clear());
+        $this->assertSame([], ThumbnailService::stats());
+
+        // После очистки превью создаётся заново
+        $this->assertSame('/uploads/thumbnails/700/forums/big.jpg', $this->url('/uploads/forums/big.jpg', 700));
+    }
+
     private function url(string $path, int $size): string
     {
         return ThumbnailService::url($path, $size);

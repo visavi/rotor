@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use FilesystemIterator;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\File as FileSystem;
 use Intervention\Image\ImageManager;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Throwable;
 
 /**
@@ -72,6 +75,46 @@ final class ThumbnailService
         foreach (self::SIZES as $size) {
             FileSystem::delete(public_path(self::DIRECTORY . '/' . $size . '/' . $relative));
         }
+    }
+
+    /**
+     * Удаляет все превью сайта: они создадутся заново при показе картинок.
+     * false — часть файлов удалить не удалось, например нет прав
+     */
+    public static function clear(): bool
+    {
+        $directory = public_path(self::DIRECTORY);
+
+        return ! is_dir($directory) || FileSystem::deleteDirectory($directory);
+    }
+
+    /**
+     * Сколько файлов и байт в каждом каталоге превью.
+     * Считается всё, что удалит clear(): и каталоги размеров, которых больше нет, и брошенные временные файлы
+     *
+     * @return array<int|string, array{count: int, size: int}> Ключ — имя каталога, обычно размер
+     */
+    public static function stats(): array
+    {
+        $stats = [];
+
+        foreach (glob(public_path(self::DIRECTORY) . '/*', GLOB_ONLYDIR) ?: [] as $directory) {
+            $count = $size = 0;
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS));
+
+            foreach ($files as $file) {
+                if ($file->isFile()) {
+                    $count++;
+                    $size += $file->getSize();
+                }
+            }
+
+            $stats[basename($directory)] = ['count' => $count, 'size' => $size];
+        }
+
+        ksort($stats, SORT_NATURAL);
+
+        return $stats;
     }
 
     /**
