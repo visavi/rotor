@@ -16,12 +16,15 @@
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
-<Files ~ ".env|artisan|cron\.php">
+# Скрытые файлы: .env, .git
+<FilesMatch "^\.">
     Order allow,deny
     Deny from all
-</Files>
+</FilesMatch>
 
-<FilesMatch "^\.">
+# Служебные файлы — только точные имена: правило действует и на public,
+# без якорей под него попадали test_cron.php и greenville.jpg
+<FilesMatch "^(artisan|cron\.php)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
