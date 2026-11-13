@@ -38,11 +38,14 @@ class HtmlRenderer
     protected static function hidden(string $html): string
     {
         if (str_contains($html, 'class="hidden"') && ! auth()->check()) {
+            // Заглушка через callback: строка замены preg_replace читала бы $ и \ из перевода как ссылки на группы
+            $stub = '<div class="hidden"><em>' . __('main.hidden_content', ['url' => route('login')]) . '</em></div>';
+
             // Вложенные div считаются рекурсией: ленивый .*? обрывался на первом </div>,
             // и всё после вложенного блока видел гость. HTML после чистки сбалансирован
-            $html = preg_replace(
+            $html = preg_replace_callback(
                 '#<div class="hidden">(?<body>(?:[^<]++|<(?!/?div\b)|<div\b[^>]*>(?&body)</div>)*)</div>#s',
-                '<div class="hidden"><em>Содержимое скрыто. Войдите, чтобы увидеть.</em></div>',
+                static fn (): string => $stub,
                 $html
             ) ?? '';
         }

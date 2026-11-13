@@ -253,6 +253,7 @@ return [
     'comment_removed'            => '[Comment deleted]',
     'already_authorized'         => 'You are already logged in!',
     'not_authorized'             => 'You must be logged in to perform actions!',
+    'hidden_content'             => 'Content is hidden. <a href=":url">Log in</a> to see it.',
     'page_only_owner'            => 'Only the owner has access to the page!',
     'page_only_admins'           => 'Only administrators have access to the page!',
     'deleted_only_admins'        => 'Only administrators can delete entries!',

@@ -22,6 +22,14 @@ class HtmlRendererTest extends TestCase
         $this->assertStringContainsString('<p>после</p>', $html);
     }
 
+    public function testGuestSeesLoginLinkInsteadOfHiddenBlock(): void
+    {
+        $html = (string) HtmlRenderer::html('<div class="hidden">секрет</div>');
+
+        $this->assertStringContainsString(__('main.hidden_content', ['url' => route('login')]), $html);
+        $this->assertStringContainsString('href="' . route('login') . '"', $html);
+    }
+
     public function testHiddenBlockIsShownToUsers(): void
     {
         $this->actingAs(new User(['id' => 1]));
